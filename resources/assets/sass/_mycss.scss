@@ -1,0 +1,27 @@
+div.panel.panel-default {
+  height: 800px;
+}
+
+.hidden.menu {
+   display: none;
+}
+
+.masthead.segment {
+  padding: 1em 0em;
+}
+
+
+
+.ui.menu .logs .ui.button {
+  margin-left: 0.5em;
+}
+
+@media only screen and (max-width: 700px) {
+  .ui.fixed.menu {
+    display: none !important;
+  }
+  .secondary.pointing.menu .item,
+  .secondary.pointing.menu .menu {
+    display: none;
+  }
+}
