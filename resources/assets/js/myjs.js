@@ -19,11 +19,11 @@ $(document)
             .sidebar('attach events', '.toc.item')
         ;
 
-        $('.ui.normal.dropdown')
-            .dropdown({
-                maxSelections: 3
-            })
+        //Login form toogle
+        $('.ui.toggle.checkbox')
+            .checkbox()
         ;
+
 
     })
 ;
