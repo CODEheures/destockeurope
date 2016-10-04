@@ -28557,8 +28557,8 @@ html.ios body {
 /*******************************
          Site Overrides
 *******************************/
-div.panel.panel-default {
-  height: 800px; }
+.main.container {
+  margin-top: 4rem; }
 
 .hidden.menu {
   display: none; }
@@ -28566,11 +28566,18 @@ div.panel.panel-default {
 .masthead.segment {
   padding: 1em 0em; }
 
-form.login {
-  padding-top: 5rem; }
+form.login, form.register {
+  padding-top: 2rem; }
 
 .ui.menu .logs .ui.button {
   margin-left: 0.5em; }
+
+.row.social a.button {
+  margin-bottom: 0.75rem; }
+
+@media only screen and (max-width: 767px) {
+  .ui.form .fields {
+    margin-bottom: 1em; } }
 
 @media only screen and (max-width: 700px) {
   .ui.fixed.menu {

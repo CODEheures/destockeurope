@@ -15,7 +15,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'confirmation_token',
+        'confirmed',
+        'facebook_id',
+        'google_id',
+        'twitter_id',
+        'github_id',
+        'linkedin_id',
+        'avatar',
     ];
 
     /**
@@ -26,4 +36,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function oAuthProvider($providers) {
+        $refOauth = '';
+        foreach ($providers as $testId) {
+            $column = $testId.'_id';
+            if($this->$column){
+                $refOauth = $testId;
+            }
+        }
+        return $refOauth;
+    }
 }

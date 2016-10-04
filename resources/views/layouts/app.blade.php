@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,8 +31,16 @@
         <!-- Menu BAR -->
         @include('menus.top.master')
 
-        <!-- main content -->
-        @yield('content')
+    <!-- main content -->
+        <div class="ui main container">
+
+            <!-- Erreurs -->
+            <div class="row">
+               @include('messages.flash')
+            </div>
+
+            @yield('content')
+        </div>
 
     </div>
 

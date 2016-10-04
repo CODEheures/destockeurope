@@ -1,15 +1,16 @@
 <div class="logs">
     @if (Auth::guest())
-        <a class="item" href="{{ url('/login') }}">Login</a>
-        <a class="item" href="{{ url('/register') }}">Register</a>
+        <a class="item" href="{{ url('/login') }}">{{ trans('strings.menu_login') }}</a>
+        <a class="item" href="{{ url('/register') }}">{{ trans('strings.menu_register') }}</a>
     @else
-        <div class="ui dropdown buttons">
-            <span class="text">{{ Auth::user()->name }}</span>
-            <a class="item" href="{{ url('/logout') }}"
-               onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                Logout
-            </a>
-        </div>
+        <a class="item" href="{{ url('/logout') }}"
+           onclick="event.preventDefault();
+           document.getElementById('logout-form2').submit();">
+           {{ trans('strings.menu_logout') }}
+        </a>
+        <form id="logout-form2" action="{{ url('/logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     @endif
+
 </div>

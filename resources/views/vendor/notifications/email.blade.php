@@ -140,7 +140,8 @@ $style = [
 
                                         <!-- Salutation -->
                                         <p style="{{ $style['paragraph'] }}">
-                                            Regards,<br>{{ config('app.name') }}
+                                            {{ trans('strings.notification_regards1') }},<br>
+                                            {{ trans('strings.notification_regards2', ['teamname' => config('app.name')]) }}
                                         </p>
 
                                         <!-- Sub Copy -->
@@ -149,8 +150,7 @@ $style = [
                                                 <tr>
                                                     <td style="{{ $fontFamily }}">
                                                         <p style="{{ $style['paragraph-sub'] }}">
-                                                            If you’re having trouble clicking the "{{ $actionText }}" button,
-                                                            copy and paste the URL below into your web browser:
+                                                            {{ trans('strings.notification_action-text', ['actiontext' => $actionText]) }}
                                                         </p>
 
                                                         <p style="{{ $style['paragraph-sub'] }}">
@@ -177,7 +177,7 @@ $style = [
                                         <p style="{{ $style['paragraph-sub'] }}">
                                             &copy; {{ date('Y') }}
                                             <a style="{{ $style['anchor'] }}" href="{{ url('/') }}" target="_blank">{{ config('app.name') }}</a>.
-                                            All rights reserved.
+                                            {{ trans('strings.notification_rights') }}.
                                         </p>
                                     </td>
                                 </tr>

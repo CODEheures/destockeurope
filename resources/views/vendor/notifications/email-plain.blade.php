@@ -18,5 +18,5 @@ if (! empty($outroLines)) {
     echo implode("\n", $outroLines), "\n\n";
 }
 
-echo 'Regards,', "\n";
-echo config('app.name'), "\n";
+echo trans('strings.notification_regards1') , "\n";
+echo trans('strings.notification_regards2',['teamname' => config('app.name')]), "\n";

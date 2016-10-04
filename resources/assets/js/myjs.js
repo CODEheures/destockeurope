@@ -19,11 +19,25 @@ $(document)
             .sidebar('attach events', '.toc.item')
         ;
 
+        //dropdowns
+        $('.ui.dropdown')
+            .dropdown()
+        ;
+
         //Login form toogle
         $('.ui.toggle.checkbox')
             .checkbox()
         ;
 
+        //fermeture des messages
+        $('.message .close')
+            .on('click', function() {
+                $(this)
+                    .closest('.message')
+                    .transition('fade')
+                ;
+            })
+        ;
 
     })
 ;

@@ -1,82 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+    <h2 class="ui center aligned icon header"><i
+                class="circular add user icon"></i> {{ trans('strings.menu_register') }} </h2>
+    <div class="ui centered grid">
+        <div class="row">
+            <form method="POST" action="{{ url('/register') }}" class="ui ten wide column form register">
+                {{ csrf_field() }}
+                <div class="fields">
+                    <div class="eight wide field">
+                        <label>{{ trans('strings.form_label_name') }}</label>
+                        <input id="name" type="text" name="name" value="{{ old('name') }}" autofocus>
+                    </div>
+                    <div class="eight wide field">
+                        <label>{{ trans('strings.form_label_email') }}</label>
+                        <input id="email" type="email" name="email" value="{{ old('email') }}">
+                    </div>
                 </div>
-            </div>
+                <div class="fields">
+                    <div class="eight wide field">
+                        <label>{{ trans('strings.form_label_password') }}</label>
+                        <input id="password" type="password" name="password">
+
+                    </div>
+                    <div class="eight wide field">
+                        <label>{{ trans('strings.form_label_confimr_password') }}</label>
+                        <input id="password-confirm" type="password" name="password_confirmation">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <button type="submit" class="ui primary button">
+                            {{ trans('strings.menu_register') }}
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
+
     </div>
-</div>
+    <div class="ui horizontal divider">{{ trans('strings.divider_register') }} </div>
+    <div class="ui centered grid">
+        <div class="row social">
+            <a href="{{ route('social.login', ['provider' => 'facebook']) }}" class="ui facebook button"><i class="facebook icon"></i> Facebook</a>
+            <a href="{{ route('social.login', ['provider' => 'twitter']) }}" class="ui twitter button"><i class="twitter icon"></i> Twitter</a>
+            <a href="{{ route('social.login', ['provider' => 'google']) }}" class="ui google plus button"><i class="google plus icon"></i> Google Plus</a>
+        </div>
+
+    </div>
+
+
 @endsection

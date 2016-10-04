@@ -16,5 +16,14 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function() {
+    Route::get('social/{provider}', ['as' => 'social.login', 'uses' => 'SocialiteController@redirectToProvider'])
+        ->where(['provider' => '[a-zA-Z]+']);
+    Route::get('social/callback/{provider}', ['as' => 'social.callback', 'uses' => 'SocialiteController@handleProviderCallback'])
+        ->where(['provider' => '[a-zA-Z]+']);
+
+    //Account confirmation
+    Route::get('account-confirm/{id}/{token}', ['as' => 'account.confirm', 'uses' => 'RegisterController@accountConfirm']);
+});
 
 Route::get('/home', 'HomeController@index');
