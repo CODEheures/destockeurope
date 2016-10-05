@@ -21,7 +21,7 @@
     </script>
 </head>
 <body>
-
+    <?php $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName() ?>
     <!-- Side menu -->
     @include('menus.side.main')
 
@@ -38,7 +38,6 @@
             <div class="row">
                @include('messages.flash')
             </div>
-
             @yield('content')
         </div>
 

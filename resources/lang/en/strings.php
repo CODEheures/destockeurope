@@ -9,6 +9,7 @@ return [
     'menu_login' => 'Login',
     'menu_logout' => 'Logout',
     'menu_register' => 'Register',
+    'menu_account' => 'My account',
 
     'title_reset_password' => 'Reset Password',
     'title_new_password' => 'New Password',

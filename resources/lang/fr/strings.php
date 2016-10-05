@@ -9,6 +9,7 @@ return [
     'menu_login' => 'S\'identifier',
     'menu_logout' => 'Se déconnecter',
     'menu_register' => 'S\'enregistrer',
+    'menu_account' => 'Mon compte',
 
     'title_reset_password' => 'Renouvellement du mot de passe',
     'title_new_password' => 'Nouveau mot de passe',

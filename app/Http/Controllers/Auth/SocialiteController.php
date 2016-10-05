@@ -15,7 +15,7 @@ class SocialiteController extends Controller
     use CreateUser;
 
     private $isNewOauthUser = false;
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.

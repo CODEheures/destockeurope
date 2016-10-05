@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
-class HomeController extends Controller
+
+use Illuminate\Contracts\Auth\Guard;
+
+class UserController extends Controller
 {
+
+    private $auth;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Guard $auth)
     {
         $this->middleware('auth');
+        $this->auth = $auth;
     }
 
     /**
@@ -23,6 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = $this->auth->user();
+        return view('user.account', compact('user'));
     }
 }

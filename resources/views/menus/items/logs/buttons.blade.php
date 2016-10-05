@@ -7,6 +7,7 @@
             {{ Auth::user()->name }}
             <i class="dropdown icon"></i>
             <div class="menu">
+                <a class="item" href="{{ route('user.account') }}" > {{ trans('strings.menu_account') }} </a>
                 <a class="item" href="{{ url('/logout') }}"
                    onclick="event.preventDefault();
                    document.getElementById('logout-form1').submit();">
