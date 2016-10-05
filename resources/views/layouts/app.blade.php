@@ -25,7 +25,7 @@
     <!-- Side menu -->
     @include('menus.side.main')
 
-    <div class="pusher">
+    <div class="pusher stackable container">
         <!-- fixed menu bar -->
         @include('menus.top.fixed')
         <!-- Menu BAR -->

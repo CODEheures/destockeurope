@@ -1,5 +1,5 @@
 <div class="ui vertical inverted sidebar menu left">
-    @include('menus.items.logo')
+    @include('menus.items.logos.side')
 
     <a href="{{ route('home') }}" class="{{ $routeName == 'home' ? 'active' : '' }} item">{{ trans('strings.menu_home') }}</a>
     <a class="item">{{ trans('strings.menu_sells') }}</a>

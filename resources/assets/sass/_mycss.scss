@@ -1,3 +1,5 @@
+
+
 .main.container {
   margin-top: 4rem;
 }
@@ -8,6 +10,12 @@
 
 .masthead.segment {
   padding: 1em 0em;
+
+
+}
+
+.ui.secondary.menu .right.item {
+  display: none;
 }
 
 form {
@@ -22,6 +30,12 @@ form {
 
 .row.social a.button {
   margin-bottom: 0.75rem;
+}
+
+@media only screen and (min-width: 470px){
+  .ui.secondary.menu .right.item {
+    display: flex;
+  }
 }
 
 @media only screen and (max-width: 767px) {

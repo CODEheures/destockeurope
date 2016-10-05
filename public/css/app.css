@@ -28566,6 +28566,9 @@ html.ios body {
 .masthead.segment {
   padding: 1em 0em; }
 
+.ui.secondary.menu .right.item {
+  display: none; }
+
 form.login, form.register {
   padding-top: 2rem; }
 
@@ -28574,6 +28577,11 @@ form.login, form.register {
 
 .row.social a.button {
   margin-bottom: 0.75rem; }
+
+@media only screen and (min-width: 470px) {
+  .ui.secondary.menu .right.item {
+    display: -webkit-box;
+    display: flex; } }
 
 @media only screen and (max-width: 767px) {
   .ui.form .fields {
