@@ -14,8 +14,13 @@ require('./myjs');
  * the application, or feel free to tweak this setup for your needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+// Vue.component('example', require('./components/Example.vue'));
+Vue.component('category-vertical-menu', require('./components/categoryVerticalMenu.vue'));
+Vue.component('category-updatable', require('./components/categoryUpdatable.vue'));
+// Vue.component('example', function (resolve) {
+//     require(['./components/Example.vue'], resolve);
+// });
 
 const app = new Vue({
-    el: 'body'
+    el: '#app'
 });

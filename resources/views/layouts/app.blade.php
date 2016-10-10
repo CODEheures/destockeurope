@@ -22,10 +22,11 @@
 </head>
 <body>
     <?php $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName() ?>
+    <?php $colorHeader = 'inverted' ?>
     <!-- Side menu -->
     @include('menus.side.main')
 
-    <div class="pusher stackable container">
+    <div class="pusher stackable container" id="app">
         <!-- fixed menu bar -->
         @include('menus.top.fixed')
         <!-- Menu BAR -->
@@ -38,7 +39,9 @@
             <div class="row">
                @include('messages.flash')
             </div>
-            @yield('content')
+            <div class="row">
+                @yield('content')
+            </div>
         </div>
 
     </div>

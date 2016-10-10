@@ -2,6 +2,9 @@
 
 return [
 
+    'meta_menu_common' => 'Annonces',
+    'meta_menu_admin' => 'Admin',
+    'meta_menu_user' => 'Utilisateur',
     'menu_home' => 'Accueil',
     'menu_sells' => 'Ventes',
     'menu_research' => 'Recherche',
@@ -10,6 +13,7 @@ return [
     'menu_logout' => 'Se déconnecter',
     'menu_register' => 'S\'enregistrer',
     'menu_account' => 'Mon compte',
+    'menu_category' => 'Catégories',
 
     'title_reset_password' => 'Renouvellement du mot de passe',
     'title_new_password' => 'Nouveau mot de passe',
@@ -37,6 +41,9 @@ return [
     'form_label_remember_me' => 'Se souvenir de moi',
     'form_button_new_password' => 'Valider le nouveau mot de passe',
 
+    'modal_yes' => 'Oui',
+    'modal_no' => 'Non',
+
     'link_forgot_password' => 'Mot de passe oublié',
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',
 
@@ -52,4 +59,18 @@ return [
     'auth_register_oauth_success' => 'Bienvenu sur :appname :username. Merci de votre confiance. Vous pouvez desormais profiter de votre espace client',
 
     'divider_register' => 'ou utiliser',
+
+    'middleware_admin' => 'Vous n\'avez pas les droits nécéssaires pour acceder à cette page...',
+
+    'view_all_error_load_message' => 'Ho non! Erreur de chargement :-( , essayez de rafraichir la page',
+    'view_all_error_add_message' => 'Ho non! L\'ajout a échoué',
+    'view_all_error_del_message' => 'Ho non! La suppression a échoué',
+    'view_all_error_patch_message' => 'Ho non! La modification a échoué',
+    'view_category_add_exist' => 'Cette catégorie existe déjà',
+    'view_category_patch_exist' => 'Cette catégorie existe déjà',
+    'view_category_patch_not_exist' => 'Cette catégorie n\'existe pas',
+    'view_category_del_not_exist' => 'Cette catégorie n\'existe pas',
+    'view_category_index_header' => 'Gestion des catégories',
+    'view_category_index_modal_del_header' => 'Supprimer la Categorie',
+    'view_category_index_modal_del_description' => 'ATTENTION!! La suppression de la catégorie entraine la suppression de toutes les annonces associées. Confirmez-vous cette suppression?',
 ];

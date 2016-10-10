@@ -1,23 +1,34 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Example Component</div>
-
-                    <div class="panel-body">
-                        I'm an example component!
-                    </div>
+    <div>
+        <div v-for="message in messages" class="item">
+            <i class="large minus square icon"></i>
+            <div class="content">
+                <div class="ui transparent input">
+                    <input type="text" :name="message" class="header"
+                           :value="message"/>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
+
 <script>
     export default {
-        ready() {
-            console.log('Component ready.')
-        }
+        data: () => {
+            return {messages: ['toto', 'tata']} ;
+        },
+//        mounted () {
+//            this.$http.get('http://destockeurope.progress/metaCategory')
+//                    .then(
+//                            (response) => {
+//                                console.log(response.data);
+//                                this.props.items = response.data;
+//                            },
+//                            (response) => {
+//                                console.log('erreur');
+//                            }
+//                    );
+//        }
     }
 </script>

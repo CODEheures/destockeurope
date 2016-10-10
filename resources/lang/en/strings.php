@@ -2,6 +2,9 @@
 
 return [
 
+    'meta_menu_common' => 'Adverts',
+    'meta_menu_admin' => 'Admin',
+    'meta_menu_user' => 'User',
     'menu_home' => 'Home',
     'menu_sells' => 'Sales',
     'menu_research' => 'Research',
@@ -10,6 +13,7 @@ return [
     'menu_logout' => 'Logout',
     'menu_register' => 'Register',
     'menu_account' => 'My account',
+    'menu_category' => 'Categories',
 
     'title_reset_password' => 'Reset Password',
     'title_new_password' => 'New Password',
@@ -37,6 +41,9 @@ return [
     'form_label_remember_me' => 'Remember me',
     'form_button_new_password' => 'Valide new password',
 
+    'modal_yes' => 'Yes',
+    'modal_no' => 'No',
+
     'link_forgot_password' => 'Forgot your password',
     'link_send_reset_link' => 'Send reset link',
 
@@ -52,4 +59,18 @@ return [
     'auth_register_oauth_success' => 'Welcome on :appname :username. Thank you for your trust. You can henceforth enjoy your customer area',
 
     'divider_register' => 'or use',
+
+    'middleware_admin' => 'You do not have the correct security credentials to access this page...',
+
+    'view_all_error_load_message' => 'Ho no! Load error :-( , try to refresh the page',
+    'view_all_error_add_message' => 'Ho no! Adding Fails error :-(',
+    'view_all_error_del_message' => 'Ho no! Delete Fails error :-(',
+    'view_all_error_patch_message' => 'Ho non! The update fail',
+    'view_category_add_exist' => 'This category is already exist',
+    'view_category_patch_exist' => 'This category is already exist',
+    'view_category_patch_not_exist' => 'This category is not exist',
+    'view_category_del_not_exist' => 'This category is not exist',
+    'view_category_index_header' => 'Categories settings',
+    'view_category_index_modal_del_header' => 'Delete Category',
+    'view_category_index_modal_del_description' => 'WARNING!! The deletion of the category entails the removal of all associated ads. Can you confirm this deletion?',
 ];

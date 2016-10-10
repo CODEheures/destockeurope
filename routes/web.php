@@ -44,3 +44,7 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function() {
 Route::group(['prefix' => 'users'], function() {
     Route::get('account', ['as' => 'user.account', 'uses' => 'UserController@index']);
 });
+
+//Categories
+Route::resource('category', 'CategoryController');
+Route::resource('metaCategory', 'MetaCategoryController');
