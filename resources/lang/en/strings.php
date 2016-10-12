@@ -73,4 +73,8 @@ return [
     'view_category_index_header' => 'Categories settings',
     'view_category_index_modal_del_header' => 'Delete Category',
     'view_category_index_modal_del_description' => 'WARNING!! The deletion of the category entails the removal of all associated ads. Can you confirm this deletion?',
+
+    'view_filter_ribbon' => 'Filters',
+    'view_filter_price_title' => 'Range Price',
+
 ];

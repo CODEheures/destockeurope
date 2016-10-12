@@ -73,4 +73,8 @@ return [
     'view_category_index_header' => 'Gestion des catégories',
     'view_category_index_modal_del_header' => 'Supprimer la Categorie',
     'view_category_index_modal_del_description' => 'ATTENTION!! La suppression de la catégorie entraine la suppression de toutes les annonces associées. Confirmez-vous cette suppression?',
+
+    'view_filter_ribbon' => 'Filtres',
+    'view_filter_price_title' => 'Tranche de Prix',
+
 ];

@@ -2,16 +2,27 @@
 
 @section('content')
     <div class="ui grid">
+        <div class="mobile only tablet only row">
+            <div class="ui one column grid">
+                <categories-dropdown-menu
+                        load-error-message="{{ trans('strings.view_all_error_load_message') }}"
+                        route-meta-category="{{ route('metaCategory.index') }}"
+                        first-menu-name="{{ trans('strings.menu_category') }}">
+                </categories-dropdown-menu>
+            </div>
+        </div>
         <div class="row">
             <div class="computer only four wide column">
-                <category-vertical-menu
+                <categories-vertical-menu
                         load-error-message="{{ trans('strings.view_all_error_load_message') }}"
                         route-meta-category="{{ route('metaCategory.index') }}">
-                </category-vertical-menu>
+                </categories-vertical-menu>
              </div>
             <div class="sixteen wide tablet twelve wide computer column">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae cumque ea expedita explicabo fugit inventore ipsa laboriosam minima nisi, quidem? Beatae, et inventore omnis sed soluta tempora tempore unde vitae!</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium atque dolor expedita fugiat itaque laboriosam, magni maiores minus modi, nobis nostrum optio placeat quia quisquam quo rem reprehenderit soluta veniam.</p>
+                <advert-filter
+                    filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
+                    filter-price-title ="{{ trans('strings.view_filter_price_title') }}">
+                </advert-filter>
             </div>
         </div>
     </div>

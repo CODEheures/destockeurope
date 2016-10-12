@@ -5,7 +5,7 @@
         <div class="column">
             <h2 class="ui header">{{ trans('strings.view_category_index_header') }}</h2>
             <div class="one wide column">
-                <category-updatable
+                <categories-updatable
                         csrf-token="{{ csrf_token() }}"
                         load-error-message="{{ trans('strings.view_all_error_load_message') }}"
                         add-error-message="{{ trans('strings.view_all_error_add_message') }}"
@@ -17,7 +17,7 @@
                         modal-del-description = "{{ trans('strings.view_category_index_modal_del_description') }}"
                         route-meta-category="{{ route('metaCategory.index') }}"
                         route-category="{{ route('category.index') }}">
-                </category-updatable>
+                </categories-updatable>
             </div>
         </div>
     </div>

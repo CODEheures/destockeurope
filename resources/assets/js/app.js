@@ -13,13 +13,13 @@ require('./myjs');
  * the body of the page. From here, you may begin adding components to
  * the application, or feel free to tweak this setup for your needs.
  */
+Vue.component('categories-vertical-menu', require('./components/categories/categoriesVerticalMenu.vue'));
+Vue.component('categories-dropdown-menu', require('./components/categories/categoriesDropdownMenu.vue'));
+Vue.component('categories-updatable', require('./components/categories/categoriesUpdatable.vue'));
 
-// Vue.component('example', require('./components/Example.vue'));
-Vue.component('category-vertical-menu', require('./components/categoryVerticalMenu.vue'));
-Vue.component('category-updatable', require('./components/categoryUpdatable.vue'));
-// Vue.component('example', function (resolve) {
-//     require(['./components/Example.vue'], resolve);
-// });
+//Filters
+Vue.component('advert-filter', require('./components/filters/advertsFilter.vue'));
+Vue.component('range-filter', require('./components/filters/rangeFilter.vue'));
 
 const app = new Vue({
     el: '#app'
