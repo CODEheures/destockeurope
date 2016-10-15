@@ -14,6 +14,7 @@ return [
     'menu_register' => 'Register',
     'menu_account' => 'My account',
     'menu_category' => 'Categories',
+    'menu_advert_to_approve' => 'Advert to Validate',
 
     'title_reset_password' => 'Reset Password',
     'title_new_password' => 'New Password',
@@ -40,6 +41,8 @@ return [
     'form_label_confimr_password' => 'Confirm Password',
     'form_label_remember_me' => 'Remember me',
     'form_button_new_password' => 'Valide new password',
+    'form_button_validation' => 'Send',
+    'form_pointing_minimun_chars' => ' characters minimum',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
@@ -73,6 +76,24 @@ return [
     'view_category_index_header' => 'Categories settings',
     'view_category_index_modal_del_header' => 'Delete Category',
     'view_category_index_modal_del_description' => 'WARNING!! The deletion of the category entails the removal of all associated ads. Can you confirm this deletion?',
+
+    'view_advert_create_header' => 'Create new advert',
+    'view_advert_form_title_label' => 'Advert Title',
+    'view_advert_form_description_label' => 'Advert description',
+    'view_advert_form_price_label' => 'Sell Price',
+    'view_advert_list_type_dropdown_label' => 'Advert type',
+    'view_advert_list_type_bid' => 'bid',
+    'view_advert_list_type_request' => 'request',
+    'advert_create_success' => 'Your advert is being created. It will be validated by our teams soon',
+
+    'view_advert_approve_header' => 'Approve this adverts',
+    'view_advert_approve_toggle_label' => 'I approve this advert',
+    'view_advert_disapprove_toggle_label' => 'I disapprove this advert',
+    'view_advert_approve_modal_valid_header' => 'Approve all actions',
+    'view_advert_approve_modal_valid_description' => 'WARNING!! The validation of all actions resulting sending mails approval or disapproval to customers.',
+    'view_advert_approve_error' => 'Advert approve error',
+
+    'view_advert_by_link_label' => 'See Advert',
 
     'view_filter_ribbon' => 'Filters',
     'view_filter_price_title' => 'Range Price',

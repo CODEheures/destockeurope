@@ -48,3 +48,9 @@ Route::group(['prefix' => 'users'], function() {
 //Categories
 Route::resource('category', 'CategoryController');
 Route::resource('metaCategory', 'MetaCategoryController');
+
+Route::get('advert/get-list-type', ['as' => 'advert.getListType', 'uses' => 'AdvertController@getListType']);
+Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
+Route::get('advert/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
+Route::post('advert/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
+Route::resource('advert', 'AdvertController');

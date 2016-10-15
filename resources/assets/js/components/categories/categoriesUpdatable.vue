@@ -104,7 +104,6 @@
 <script>
     export default {
         props: [
-            'csrfToken',
             'loadErrorMessage',
             'addErrorMessage',
             'delErrorMessage',
@@ -155,7 +154,7 @@
                     this.isLoaded = false;
                     let postValue= this.metaCategoryName;
                     this.metaCategoryName = '';
-                    this.$http.post(this.routeMetaCategory, {title: postValue}, {headers: {'X-CSRF-TOKEN': this.csrfToken}})
+                    this.$http.post(this.routeMetaCategory, {title: postValue}, {})
                             .then(
                                     (response) => {
                                         this.hasAddError = false;
@@ -178,7 +177,7 @@
                         closable: false,
                         onApprove: function () {
                             that.isLoaded = false;
-                            that.$http.delete(that.routeMetaCategory + '/' + event.target.dataset.id, {headers: {'X-CSRF-TOKEN': that.csrfToken}})
+                            that.$http.delete(that.routeMetaCategory + '/' + event.target.dataset.id, {})
                                     .then(
                                             (response) => {
                                                 that.hasDelError = false;
@@ -206,7 +205,7 @@
                             if(that.oldUpdateMetaCategory == event.target.value) {
                                 that.oldUpdateMetaCategory = '';
                                 clearTimeout(myInterval);
-                                that.$http.patch(that.routeMetaCategory + '/' + event.target.name, {title: event.target.value}, {headers: {'X-CSRF-TOKEN': that.csrfToken}})
+                                that.$http.patch(that.routeMetaCategory + '/' + event.target.name, {title: event.target.value}, {})
                                         .then(
                                                 (response) => {
                                                     that.hasPatchError = false;
@@ -235,7 +234,7 @@
                     let metaCategoryId = event.target.dataset.metaCategoryId;
                     let postValueName= this.categoryName[metaCategoryId];
                     this.categoryName[metaCategoryId] = '';
-                    this.$http.post(this.routeCategory, {title: postValueName, metaCategoryId: metaCategoryId}, {headers: {'X-CSRF-TOKEN': this.csrfToken}})
+                    this.$http.post(this.routeCategory, {title: postValueName, metaCategoryId: metaCategoryId}, {})
                             .then(
                                     (response) => {
                                         this.hasAddError = false;
@@ -253,20 +252,26 @@
             },
             delCategory: function (event) {
                 if(event.target.dataset.id != undefined && event.target.dataset.id > 0) {
-                    this.isLoaded = false;
-                    this.$http.delete(this.routeCategory + '/' +  event.target.dataset.id, {headers: {'X-CSRF-TOKEN': this.csrfToken}})
-                            .then(
-                                    (response) => {
-                                        this.hasDelError = false;
-                                        this.getMetaCategories();
-                                    },
-                                    (response) => {
-                                        if(response.status==409) {
-                                            this.delErrorMessage = response.body;
-                                        }
-                                        this.hasDelError = true;
-                                    }
-                            );
+                    var that = this;
+                    $('.ui.basic.modal').modal({
+                        closable: false,
+                        onApprove: function () {
+                            that.isLoaded = false;
+                            that.$http.delete(that.routeCategory + '/' + event.target.dataset.id, {})
+                                    .then(
+                                            (response) => {
+                                                that.hasDelError = false;
+                                                that.getMetaCategories();
+                                            },
+                                            (response) => {
+                                                if (response.status == 409) {
+                                                    that.delErrorMessage = response.body;
+                                                }
+                                                that.hasDelError = true;
+                                            }
+                                    );
+                        }
+                    }).modal('show');
                 }
             },
             updateCategory: function (event) {
@@ -279,7 +284,7 @@
                             if(that.oldUpdateCategory == event.target.value) {
                                 that.oldUpdateCategory = '';
                                 clearTimeout(myInterval);
-                                that.$http.patch(that.routeCategory + '/' + event.target.name, {title: event.target.value}, {headers: {'X-CSRF-TOKEN': that.csrfToken}})
+                                Vue.http.patch(that.routeCategory + '/' + event.target.name, {title: event.target.value}, {})
                                         .then(
                                                 (response) => {
                                                     that.hasPatchError = false;

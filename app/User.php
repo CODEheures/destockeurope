@@ -47,4 +47,8 @@ class User extends Authenticatable
         }
         return $refOauth;
     }
+
+    public function adverts() {
+        return $this->hasMany('App\Advert');
+    }
 }

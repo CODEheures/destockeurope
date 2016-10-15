@@ -19,13 +19,13 @@ $(document)
             .sidebar('attach events', '.toc.item')
         ;
 
-        //dropdowns
-        $('.ui.dropdown')
+        //menu user dropdowns
+        $('.logs .ui.dropdown')
             .dropdown()
         ;
 
         //Login form toogle
-        $('.ui.toggle.checkbox')
+        $('.login .ui.toggle.checkbox')
             .checkbox()
         ;
 
@@ -38,6 +38,5 @@ $(document)
                 ;
             })
         ;
-
     })
 ;

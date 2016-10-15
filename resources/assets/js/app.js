@@ -17,9 +17,19 @@ Vue.component('categories-vertical-menu', require('./components/categories/categ
 Vue.component('categories-dropdown-menu', require('./components/categories/categoriesDropdownMenu.vue'));
 Vue.component('categories-updatable', require('./components/categories/categoriesUpdatable.vue'));
 
-//Filters
-Vue.component('advert-filter', require('./components/filters/advertsFilter.vue'));
+//Generics
 Vue.component('range-filter', require('./components/filters/rangeFilter.vue'));
+
+//adverts
+Vue.component('advert-filter', require('./components/adverts/advertsFilter.vue'));
+Vue.component('type-advert-dropdown', require('./components/adverts/typeDropdown.vue'));
+Vue.component('type-radio-button', require('./components/adverts/typeRadioButton.vue'));
+Vue.component('create-advert-form', require('./components/adverts/forms/createAdvert.vue'));
+Vue.component('approve-advert-form', require('./components/adverts/forms/approveAdvert.vue'));
+Vue.component('adverts-by', require('./components/adverts/list/advertsBy.vue'));
+
+//Welcome page vue
+Vue.component('welcome', require('./components/welcome/welcome.vue'));
 
 const app = new Vue({
     el: '#app'

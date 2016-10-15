@@ -12,5 +12,12 @@ class Advert extends Model
     protected $fillable = [ 'user_id', 'category_id', 'type', 'title', 'description', 'price'];
     protected $dates = ['deleted_at'];
 
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+
+    public function category() {
+        return $this->belongsTo('App\Category');
+    }
 
 }

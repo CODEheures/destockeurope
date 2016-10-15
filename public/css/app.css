@@ -28723,6 +28723,16 @@ form.login, form.register {
 .row.social a.button {
   margin-bottom: 0.75rem; }
 
+.p-fade-enter-active, .p-fade-leave-active {
+  -webkit-transition: opacity 0.8s !important;
+  transition: opacity 0.8s !important; }
+
+.p-fade-enter, .p-fade-leave-active {
+  opacity: 0 !important; }
+
+.row.filters {
+  margin-bottom: 2rem; }
+
 @media only screen and (min-width: 470px) {
   .ui.secondary.menu .right.item {
     display: -webkit-box;

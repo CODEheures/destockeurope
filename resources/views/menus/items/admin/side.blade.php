@@ -3,6 +3,13 @@
         <div class="ui {{ $colorHeader }} header"><i class="settings icon"></i> {{ trans('strings.meta_menu_admin') }}</div>
         <div class="menu">
             <a href="{{ route('category.index') }}" class="{{ $routeName == 'category.index' ? 'active' : '' }} item">{{ trans('strings.menu_category') }}</a>
+            <a href="{{ route('advert.toApprove') }}" class="{{ $routeName == 'advert.toApprove' ? 'active' : '' }} item">
+                {{ trans('strings.menu_advert_to_approve') }}
+                <?php $count = \App\Common\DBUtils::getCountItems('adverts','isValid', null); ?>
+                @if($count > 0)
+                    <div class="ui circular red label">{{ $count }}</div>
+                @endif
+            </a>
         </div>
     </div>
 @endif

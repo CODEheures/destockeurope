@@ -12,7 +12,7 @@ class MetaCategoryController extends Controller
 {
 
     public function __construct() {
-        $this->middleware('isAdminUser');
+        $this->middleware('isAdminUser', ['except' => ['index']]);
     }
 
     /**
@@ -128,6 +128,10 @@ class MetaCategoryController extends Controller
             if(!$existMetaCategory) {
                 return response(trans('strings.view_category_del_not_exist'), 409);
             } else {
+                $categories = $existMetaCategory->categories;
+                foreach ($categories as $category){
+                    $category->delete();
+                }
                 $existMetaCategory->delete();
                 return response('ok',200);
             }

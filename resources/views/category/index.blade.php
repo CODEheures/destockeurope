@@ -6,7 +6,6 @@
             <h2 class="ui header">{{ trans('strings.view_category_index_header') }}</h2>
             <div class="one wide column">
                 <categories-updatable
-                        csrf-token="{{ csrf_token() }}"
                         load-error-message="{{ trans('strings.view_all_error_load_message') }}"
                         add-error-message="{{ trans('strings.view_all_error_add_message') }}"
                         del-error-message="{{ trans('strings.view_all_error_del_message') }}"

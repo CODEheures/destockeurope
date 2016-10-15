@@ -15,4 +15,8 @@ class Category extends Model
     public function metaCategory() {
         return $this->belongsTo('App\MetaCategory');
     }
+
+    public function adverts() {
+        return $this->hasMany('App\Advert');
+    }
 }

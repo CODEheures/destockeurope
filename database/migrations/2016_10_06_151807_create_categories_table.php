@@ -18,8 +18,8 @@ class CreateCategoriesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->integer('meta_category_id')->unsigned()->index();
-            $table->string('title',25);
-            $table->string('description',100)->nullable()->default(null);
+            $table->string('title',config('db_limits.categories.maxTitle'));
+            $table->string('description',config('db_limits.categories.maxDescription'))->nullable()->default(null);
         });
     }
 

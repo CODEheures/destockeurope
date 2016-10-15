@@ -14,6 +14,7 @@ return [
     'menu_register' => 'S\'enregistrer',
     'menu_account' => 'Mon compte',
     'menu_category' => 'Catégories',
+    'menu_advert_to_approve' => 'Annonce à valider',
 
     'title_reset_password' => 'Renouvellement du mot de passe',
     'title_new_password' => 'Nouveau mot de passe',
@@ -40,6 +41,8 @@ return [
     'form_label_confimr_password' => 'Confirmation mot de passe',
     'form_label_remember_me' => 'Se souvenir de moi',
     'form_button_new_password' => 'Valider le nouveau mot de passe',
+    'form_button_validation' => 'Soumettre',
+    'form_pointing_minimun_chars' => ' caractères minimum',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
@@ -73,6 +76,24 @@ return [
     'view_category_index_header' => 'Gestion des catégories',
     'view_category_index_modal_del_header' => 'Supprimer la Categorie',
     'view_category_index_modal_del_description' => 'ATTENTION!! La suppression de la catégorie entraine la suppression de toutes les annonces associées. Confirmez-vous cette suppression?',
+
+    'view_advert_create_header' => 'Créer une annonce',
+    'view_advert_form_title_label' => 'Titre de l\'annonce',
+    'view_advert_form_description_label' => 'Description de l\'annonce',
+    'view_advert_form_price_label' => 'Prix de vente',
+    'view_advert_list_type_dropdown_label' => 'Type d\'annonce',
+    'view_advert_list_type_bid' => 'offre',
+    'view_advert_list_type_request' => 'demande',
+    'advert_create_success' => 'Votre annonce est créée. Elle sera validée très prochainement par nos équipes',
+
+    'view_advert_approve_header' => 'Approuver les annonces',
+    'view_advert_approve_toggle_label' => 'J\'approuve cette annonce',
+    'view_advert_disapprove_toggle_label' => 'Je désapprouve cette annonce',
+    'view_advert_approve_modal_valid_header' => 'Valider toutes les actions',
+    'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',
+    'view_advert_approve_error' => 'Une erreur est survenue pendant l\'approbation d\'une annonce',
+
+    'view_advert_by_link_label' => 'Voir l\'annonce',
 
     'view_filter_ribbon' => 'Filtres',
     'view_filter_price_title' => 'Tranche de Prix',

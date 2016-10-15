@@ -36,8 +36,10 @@
         <div class="ui main container">
 
             <!-- Erreurs -->
-            <div class="row">
-               @include('messages.flash')
+            <div class="one column row">
+                <div class="column">
+                    @include('messages.flash')
+                </div>
             </div>
             <div class="row">
                 @yield('content')

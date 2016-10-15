@@ -17,8 +17,8 @@ class CreateMetaCategoriesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->softDeletes();
-            $table->string('title',25);
-            $table->string('description',100)->nullable()->default(null);
+            $table->string('title',config('db_limits.meta_categories.maxTitle'));
+            $table->string('description',config('db_limits.meta_categories.maxDescription'))->nullable()->default(null);
         });
     }
 

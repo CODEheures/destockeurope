@@ -20,10 +20,10 @@ class CreateAdvertsTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->integer('category_id')->unsigned()->index();
             $table->enum('type', ['bid', 'request']);
-            $table->string('title',50);
+            $table->string('title',config('db_limits.adverts.maxTitle'));
             $table->text('description');
             $table->integer('price');
-            
+            $table->boolean('isValid')->nullable()->default(null);
         });
     }
 

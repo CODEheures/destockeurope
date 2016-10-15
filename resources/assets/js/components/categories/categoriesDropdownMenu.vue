@@ -1,5 +1,5 @@
 <template>
-    <div id="category-vertical-menu">
+    <div id="category-dropdown-menu">
         <div class="ui dropdown button" v-if="!hasError">
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
@@ -11,8 +11,8 @@
                     <span class="text">{{ metaCategory.title }}</span>
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <div v-for="category in metaCategory.categories" class="item">
-                            {{ category.title }}
+                        <div v-for="category in metaCategory.categories" class="item" :data-value="category.id">
+                            {{ metaCategory.title}} {{ category.title }}
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,9 @@
         props: [
             'loadErrorMessage',
             'routeMetaCategory',
-            'firstMenuName'],
+            'firstMenuName',
+            'oldChoice'
+        ],
         data: () => {
             return {
                 metaCategories: [],
@@ -40,7 +42,6 @@
         },
         mounted () {
             this.getMetaCategories();
-
         },
         methods: {
             getMetaCategories: function (withLoadIndicator) {
@@ -58,6 +59,28 @@
                                 }
                         );
             }
+        },
+        updated () {
+            var that = this;
+            if(that.oldChoice != ''){
+                $('#category-dropdown-menu .ui.dropdown')
+                        .dropdown('set selected',  that.oldChoice)
+                        .dropdown({
+                            onChange: function(value, text, $selectedItem) {
+                                that.$parent.$emit('categoryChoice', {id: value});
+                            }
+                        })
+                ;
+            } else {
+                $('#category-dropdown-menu .ui.dropdown')
+                        .dropdown({
+                            onChange: function(value, text, $selectedItem) {
+                                that.$parent.$emit('categoryChoice', {id: value});
+                            }
+                        })
+                ;
+            }
+
         }
     }
 </script>
