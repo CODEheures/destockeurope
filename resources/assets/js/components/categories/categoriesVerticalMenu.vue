@@ -1,20 +1,19 @@
 <template>
     <div id="category-vertical-menu">
-        <div class="ui vertical menu" v-if="!hasError">
+        <div class="ui vertical menu">
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
-            <div v-for="metaCategory in metaCategories" class="item">
-                <div class="header">{{ metaCategory.title }}</div>
-                <div class="menu">
-                    <div v-for="category in metaCategory.categories" class="item">
-                        {{ category.title }}
-                    </div>
+            <div v-for="metaCategory in metaCategories">
+                <div v-for="(description, locale) in metaCategory.description" class="item" v-if="locale==actualLocale">
+                    <div class="header">{{ description }}</div>
+                    <recursive-categories-vertical-menu
+                        :parent-categories="metaCategory.categories"
+                        :actual-locale="actualLocale"
+                        :parent-id="parentId">
+                    </recursive-categories-vertical-menu>
                 </div>
             </div>
-        </div>
-        <div class="ui message error" v-else>
-            <p>{{ loadErrorMessage }}</p>
         </div>
     </div>
 </template>
@@ -23,13 +22,14 @@
 <script>
     export default {
         props: [
-            'loadErrorMessage',
-            'routeMetaCategory'],
+            'routeMetaCategory',
+            'actualLocale'
+        ],
         data: () => {
             return {
                 metaCategories: [],
                 isLoaded: false,
-                hasError: false
+                parentId: 0
             } ;
         },
         mounted () {
@@ -46,8 +46,7 @@
                                     this.isLoaded = true;
                                 },
                                 (response) => {
-                                    this.hasError = true;
-                                    this.isLoaded = true;
+                                    this.$parent.$emit('loadError');
                                 }
                         );
             }

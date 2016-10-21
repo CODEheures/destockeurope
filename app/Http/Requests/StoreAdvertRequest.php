@@ -3,8 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Common\DBUtils;
+use App\Http\Controllers\UtilsController;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
 
 class StoreAdvertRequest extends FormRequest
 {
@@ -25,7 +28,6 @@ class StoreAdvertRequest extends FormRequest
      */
     public function rules()
     {
-        $this->sanitize();
 
         $inType = DBUtils::getEnumValues('adverts', 'type');
         $line='';
@@ -38,18 +40,30 @@ class StoreAdvertRequest extends FormRequest
 
         }
 
+
+        $currencies = new ISOCurrencies();
+        $listCodeCurrencies=[];
+        foreach ($currencies as $currency) {
+            $listCodeCurrencies[$currency->getCode()] = $currency->getCode();
+        }
+
+        $line2='';
+        foreach ($listCodeCurrencies as $key => $currency) {
+            if ($line2 == '') {
+                $line2 = $key;
+            } else {
+                $line2 = $line2 . ',' . $key;
+            }
+
+        }
+
         return [
-            'category' => 'required|numeric|exists:categories,id',
             'type' => 'required|in:'.$line,
+            'category' => 'required|numeric|exists:categories,id',
             'title' => 'required|min:'. config('db_limits.adverts.minTitle') . '|max:'. config('db_limits.adverts.maxTitle') ,
             'description' => 'required|min:' . config('db_limits.adverts.minDescription') . '|max:' . config('db_limits.adverts.maxDescription'),
             'price' => 'required|numeric|min:0.01',
+            'currency' => 'required|in:'.$line2
         ];
-    }
-
-    public function sanitize() {
-        $input = $this->all();
-        $input['price'] = (int)  ($input['price']*100);
-        $this->replace($input);
     }
 }

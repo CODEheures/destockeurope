@@ -8,6 +8,7 @@ window._ = require('lodash');
  */
 
 window.$ = window.jQuery = require('jquery');
+window.moment = require('moment');
 window.noUiSlider = require('./nouislider');
 /*require('bootstrap-sass');*/
 
@@ -19,6 +20,7 @@ window.noUiSlider = require('./nouislider');
 
 window.Vue = require('vue');
 require('vue-resource');
+require('vue-focus');
 
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of

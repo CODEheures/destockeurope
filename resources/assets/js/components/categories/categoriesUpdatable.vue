@@ -1,101 +1,56 @@
 <template>
     <div>
-        <div class="ui basic modal">
-            <i class="close icon"></i>
-            <div class="header">
-                {{ modalDelHeader }}
-            </div>
-            <div class="image content">
-                <div class="image">
-                    <i class="trash icon"></i>
-                </div>
-                <div class="description">
-                    <p>{{ modalDelDescription }}</p>
-                </div>
-            </div>
-            <div class="actions">
-                <div class="two fluid ui inverted buttons">
-                    <div class="ui cancel red basic inverted button">
-                        <i class="remove icon"></i>
-                        {{ modalNo }}
+        <div v-for="category in parentCategories" class="accordion" v-if="category.parent_id==parentId">
+            <div class="title">
+                <i class="dropdown icon"></i>
+                <i class="large blue minus square icon" v-on:click="delCategory" :data-id="category.id"></i>
+                <span v-for="locale in availablesDatasLocalesList">
+                    <div class="ui mini labeled input">
+                        <div class="ui label">{{ locale }}</div>
+                        <input type="text"
+                               :name="category.id + '_' + locale"
+                               :data-id="category.id"
+                               :data-key="locale"
+                               v-model="category['description'][locale]"
+                               v-on:keyup.enter="updateCategory"
+                               v-on:focus="focused={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
+                               v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
+                        />
                     </div>
-                    <div class="ui ok green basic inverted button">
-                        <i class="checkmark icon"></i>
-                        {{ modalYes }}
-                    </div>
-                </div>
+                </span>
+            </div>
+            <div class="content">
+                <categories-updatable
+                        :route-category="routeCategory"
+                        :parent-categories="childsCategories(category)"
+                        :availables-locales-list="availablesLocalesList"
+                        :meta-category-id="metaCategoryId"
+                        :parent-id="category.id">
+                </categories-updatable>
             </div>
         </div>
-        <div class="ui message close error" v-show="hasAddError">
-            <p>{{ addErrorMessage }}</p>
-        </div>
-        <div class="ui message close error" v-show="hasDelError">
-            <p>{{ delErrorMessage }}</p>
-        </div>
-        <div class="ui message close error" v-show="hasPatchError">
-            <p>{{ patchErrorMessage }}</p>
-        </div>
-        <div class="ui divided list" v-if="!hasError">
-            <div class="ui active inverted dimmer" v-if="!isLoaded">
-                <div class="ui large text loader">Loading</div>
-            </div>
-            <div v-for="metaCategory in metaCategories" class="item">
-                <i class="big teal minus square icon" v-on:click="delMetaCategory" :data-id="metaCategory.id"></i>
-                <div class="content">
-                    <div class="ui huge transparent input">
-                        <input type="text" :name="metaCategory.id" :data-id="metaCategory.id" class="header"
-                               :value="metaCategory.title" v-on:input="updateMetaCategory"/>
-                    </div>
-                    <div class="ui divided list">
-                        <div v-for="category in metaCategory.categories" class="item">
-                            <i class="large blue minus square icon" v-on:click="delCategory" :data-id="category.id"></i>
-                            <div class="content">
-                                <div class="ui transparent input">
-                                    <input type="text" :name="category.id" :data-id="category.id" class="header"
-                                           :value="category.title" v-on:input="updateCategory"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <i class="large blue add square icon" v-on:click="addCategory" :data-value="categoryName[metaCategory.id]" :data-meta-category-id="metaCategory.id"></i>
-                            <div class="content">
-                                <div class="description">
-                                    <div class="ui transparent input">
-                                        <input type="text"
-                                               name="newCategory"
-                                               class="header"
-                                               placeholder="Nouvelle sous-catégorie"
-                                               :data-meta-category-id="metaCategory.id"
-                                               v-on:keyup.enter="addCategory"
-                                               v-model:value="categoryName[metaCategory.id]"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <i class="big teal add square icon" v-on:click="addMetaCategory" :data-value="metaCategoryName"></i>
-                <div class="content">
-                    <div class="description">
-                        <div class="ui huge transparent input">
-                            <input type="text"
-                                   name="newMetaCategory"
-                                   class="header"
-                                   placeholder="Nouvelle Catégorie"
-                                   v-on:keyup.enter="addMetaCategory"
-                                   v-model:value="metaCategoryName"
+        <div class="ui blue segment">
+            <i class="large blue add square icon"
+               :data-value="categoryName"
+               :data-meta-category-id="metaCategoryId"
+               :data-parent-id="parentId"
+               v-on:click="addCategory" >
+            </i>
+            <span v-for="locale in availablesDatasLocalesList">
+                        <div class="ui mini labeled input">
+                            <div class="ui label">{{ locale }}</div>
+                            <input type="text" placeholder="Nouvelle sous-catégorie"
+                                   :name="'newCategory_' + locale"
+                                   :data-meta-category-id="metaCategoryId"
+                                   :data-parent-id="parentId"
+                                   :data-key="locale"
+                                   v-on:keyup.enter="addCategory"
+                                   v-model:value="categoryName[locale]"
+                                   v-on:focus="focused={}"
+                                   v-on:blur="blured={}"
                             />
                         </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="ui message error" v-else>
-            <p>{{ loadErrorMessage }}</p>
+                    </span>
         </div>
     </div>
 </template>
@@ -103,155 +58,94 @@
 
 <script>
     export default {
-        props: [
-            'loadErrorMessage',
-            'addErrorMessage',
-            'delErrorMessage',
-            'patchErrorMessage',
-            'modalYes',
-            'modalNo',
-            'modalDelHeader',
-            'modalDelDescription',
-            'routeMetaCategory',
-            'routeCategory'],
+        props: {
+            routeCategory: String,
+            parentCategories: Array,
+            availablesLocalesList: String,
+            metaCategoryId: Number,
+            parentId: Number,
+        },
         data: () => {
             return {
-                metaCategories: [],
                 isLoaded: false,
-                hasError: false,
-                hasAddError: false,
-                hasDelError: false,
-                hasPatchError: false,
-                metaCategoryName: '',
                 categoryName: [],
-                inProgressUpdateMetaCategory: false,
                 oldUpdateMetaCategory: '',
                 inProgressUpdateCategory: false,
-                oldUpdateCategory: ''
-            } ;
+                oldUpdateCategory: '',
+                availablesDatasLocalesList: {},
+                dataCategories: {},
+                focused: {},
+                blured: {}
+            };
         },
         mounted () {
-            this.getMetaCategories();
+            this.availablesDatasLocalesList = JSON.parse(this.availablesLocalesList);
+            this.isLoaded=true;
+            this.$on('addError', function (message) {
+                this.$parent.$emit('addError', message);
+            });
+            this.$on('delError', function (message) {
+                this.$parent.$emit('delError', message);
+            });
+            this.$on('patchError', function (message) {
+                this.$parent.$emit('patchError', message);
+            });
+            this.$on('patchSuccess', function (message) {
+                this.$parent.$emit('patchSuccess', message);
+            });
+            this.$on('getMetaCategories', function (param) {
+                this.$parent.$emit('getMetaCategories', param);
+            });
+            this.$watch('blured', function () {
+                if(this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
+                    this.updateCategory();
+                }
+            });
         },
         methods: {
-            getMetaCategories: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeMetaCategory)
-                        .then(
-                                (response) => {
-                                    this.metaCategories = response.data;
-                                    this.isLoaded = true;
-                                },
-                                (response) => {
-                                    this.hasError = true;
-                                    this.isLoaded = true;
-                                }
-                        );
-            },
-            addMetaCategory: function (event) {
-                if(this.metaCategoryName != undefined && this.metaCategoryName !='') {
-                    this.isLoaded = false;
-                    let postValue= this.metaCategoryName;
-                    this.metaCategoryName = '';
-                    this.$http.post(this.routeMetaCategory, {title: postValue}, {})
-                            .then(
-                                    (response) => {
-                                        this.hasAddError = false;
-                                        this.getMetaCategories();
-                                    },
-                                    (response) => {
-                                        if(response.status==409) {
-                                            this.addErrorMessage = response.body;
-                                        }
-                                        this.hasAddError = true;
-                                    }
-                            );
-                }
-
-            },
-            delMetaCategory: function (event) {
-                if(event.target.dataset.id != undefined && event.target.dataset.id > 0) {
-                    var that = this;
-                    $('.ui.basic.modal').modal({
-                        closable: false,
-                        onApprove: function () {
-                            that.isLoaded = false;
-                            that.$http.delete(that.routeMetaCategory + '/' + event.target.dataset.id, {})
-                                    .then(
-                                            (response) => {
-                                                that.hasDelError = false;
-                                                that.getMetaCategories();
-                                            },
-                                            (response) => {
-                                                if (response.status == 409) {
-                                                    that.delErrorMessage = response.body;
-                                                }
-                                                that.hasDelError = true;
-                                            }
-                                    );
-                        }
-                    }).modal('show');
-                }
-            },
-            updateMetaCategory: function (event) {
-                if(event.target.name != undefined && event.target.value != undefined && event.target.name > 0 && event.target.value != '') {
-
-                    if(!this.inProgressUpdateMetaCategory){
-                        this.inProgressUpdateMetaCategory= true;
-                        this.oldUpdateMetaCategory = '';
-                        var that = this;
-                        var myInterval = setInterval(function () {
-                            if(that.oldUpdateMetaCategory == event.target.value) {
-                                that.oldUpdateMetaCategory = '';
-                                clearTimeout(myInterval);
-                                that.$http.patch(that.routeMetaCategory + '/' + event.target.name, {title: event.target.value}, {})
-                                        .then(
-                                                (response) => {
-                                                    that.hasPatchError = false;
-                                                    that.getMetaCategories(false);
-                                                    that.inProgressUpdateMetaCategory= false;
-                                                },
-                                                (response) => {
-                                                    that.getMetaCategories(false);
-                                                    that.hasPatchError = true;
-                                                    if(response.status==409) {
-                                                        that.patchErrorMessage = response.body;
-                                                    }
-                                                    that.inProgressUpdateMetaCategory= false;
-                                                }
-                                        );
-                            } else {
-                                that.oldUpdateMetaCategory = event.target.value;
-                            }
-                        }, 1000);
+            childsCategories: function (category) {
+                var listCategories=[];
+                for(var cats in this.parentCategories){
+                    if(this.parentCategories[cats].parent_id == category.id){
+                        listCategories.push(this.parentCategories[cats]);
                     }
                 }
+                return listCategories;
             },
             addCategory: function (event) {
-                if(this.categoryName != undefined && this.categoryName !='') {
-                    this.isLoaded = false;
-                    let metaCategoryId = event.target.dataset.metaCategoryId;
-                    let postValueName= this.categoryName[metaCategoryId];
-                    this.categoryName[metaCategoryId] = '';
-                    this.$http.post(this.routeCategory, {title: postValueName, metaCategoryId: metaCategoryId}, {})
-                            .then(
-                                    (response) => {
-                                        this.hasAddError = false;
-                                        this.getMetaCategories();
-                                    },
-                                    (response) => {
-                                        if(response.status==409) {
-                                            this.addErrorMessage = response.body;
+                if (this.categoryName != undefined) {
+                    let isEmpty = true;
+                    let postValue = {};
+                    for (let category in this.categoryName) {
+                        postValue[category] = this.categoryName[category];
+                        if (this.categoryName[category] != '') {
+                            isEmpty = false;
+                        }
+                    }
+
+                    if (!isEmpty) {
+                        this.isLoaded = false;
+                        this.categoryName = [];
+                        this.$http.post(this.routeCategory, {descriptions: postValue, metaCategoryId: event.target.dataset.metaCategoryId, parentId: event.target.dataset.parentId})
+                                .then(
+                                        (response) => {
+                                            this.$parent.$emit('getMetaCategories');
+                                        },
+                                        (response) => {
+                                            this.isLoaded = true;
+                                            if (response.status == 409) {
+                                                this.$parent.$emit('addError', response.body);
+                                            } else {
+                                                this.$parent.$emit('addError');
+                                            }
                                         }
-                                        this.hasAddError = true;
-                                    }
-                            );
+                                );
+                    }
                 }
 
             },
             delCategory: function (event) {
-                if(event.target.dataset.id != undefined && event.target.dataset.id > 0) {
+                if (event.target.dataset.id != undefined && event.target.dataset.id > 0) {
                     var that = this;
                     $('.ui.basic.modal').modal({
                         closable: false,
@@ -260,14 +154,16 @@
                             that.$http.delete(that.routeCategory + '/' + event.target.dataset.id, {})
                                     .then(
                                             (response) => {
-                                                that.hasDelError = false;
-                                                that.getMetaCategories();
+                                                that.$parent.$emit('getMetaCategories');
                                             },
                                             (response) => {
+                                                that.isLoaded = true;
                                                 if (response.status == 409) {
-                                                    that.delErrorMessage = response.body;
+                                                    that.$parent.$emit('delError', response.body);
+                                                } else {
+                                                    that.$parent.$emit('delError');
                                                 }
-                                                that.hasDelError = true;
+
                                             }
                                     );
                         }
@@ -275,36 +171,38 @@
                 }
             },
             updateCategory: function (event) {
-                if(event.target.name != undefined && event.target.value != undefined && event.target.name > 0 && event.target.value != '') {
-                    if(!this.inProgressUpdateCategory){
-                        this.inProgressUpdateCategory= true;
-                        this.oldUpdateCategory = '';
-                        var that = this;
-                        var myInterval = setInterval(function () {
-                            if(that.oldUpdateCategory == event.target.value) {
-                                that.oldUpdateCategory = '';
-                                clearTimeout(myInterval);
-                                Vue.http.patch(that.routeCategory + '/' + event.target.name, {title: event.target.value}, {})
-                                        .then(
-                                                (response) => {
-                                                    that.hasPatchError = false;
-                                                    that.getMetaCategories(false);
-                                                    that.inProgressUpdateCategory= false;
-                                                },
-                                                (response) => {
-                                                    that.getMetaCategories(false);
-                                                    that.hasPatchError = true;
-                                                    if(response.status==409) {
-                                                        that.patchErrorMessage = response.body;
-                                                    }
-                                                    that.inProgressUpdateCategory= false;
-                                                }
-                                        );
-                            } else {
-                                that.oldUpdateCategory = event.target.value;
-                            }
-                        }, 1000);
-                    }
+                let postValue = {};
+                let key ='';
+                let id = '';
+                if(event == undefined) {
+                    id = this.blured.id;
+                    key = this.blured.locale;
+                    postValue[key] = this.blured.value;
+                } else if((event instanceof KeyboardEvent) && event.key=="Enter") {
+                    id = event.target.dataset.id;
+                    key = event.target.dataset.key;
+                    postValue[key] = event.target.value;
+                    this.focused.value = event.target.value;
+                }
+                if(postValue[key] != undefined && postValue[key] != ''){
+                    this.$http.patch(this.routeCategory + '/' + id, {description: postValue})
+                            .then(
+                                    (response) => {
+                                        this.$parent.$emit('getMetaCategories', false);
+                                        this.$parent.$emit('patchSuccess');
+                                    },
+                                    (response) => {
+                                        this.$parent.$emit('getMetaCategories', false);
+                                        if (response.status == 409) {
+                                            this.$parent.$emit('patchError', response.body);
+                                        } else {
+                                            this.$parent.$emit('patchError');
+                                        }
+                                    }
+                            );
+                } else {
+                    this.$parent.$emit('getMetaCategories', false);
+                    this.$parent.$emit('patchError');
                 }
             }
         }

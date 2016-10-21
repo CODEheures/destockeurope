@@ -8,12 +8,16 @@ use App\Common\DBUtils;
 use App\Http\Requests\StoreAdvertRequest;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Money;
+use Money\Parser\DecimalMoneyParser;
 
 class AdvertController extends Controller
 {
 
     public function __construct() {
-        $this->middleware('auth', ['only' => ['create', 'getListType']]);
+        $this->middleware('auth', ['only' => ['create', 'getListType', 'getListCurrencies']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
     }
 
@@ -25,6 +29,7 @@ class AdvertController extends Controller
     public function index()
     {
         $adverts = Advert::where('isValid', true)->get();
+        //dd($adverts[0]->price);
         return response()->json($adverts);
     }
 
@@ -54,7 +59,13 @@ class AdvertController extends Controller
             $advert->type = $request->type;
             $advert->title = $request->title;
             $advert->description = $request->description;
-            $advert->price = $request->price;
+            $advert->currency=$request->currency;
+
+            $currencies = new ISOCurrencies();
+            $moneyParser = new DecimalMoneyParser($currencies);
+
+            $advert->price = $moneyParser->parse($request->price,$request->currency)->getAmount();
+
             $advert->save();
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         }

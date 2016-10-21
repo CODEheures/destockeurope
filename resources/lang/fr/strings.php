@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'meta_menu_common' => 'Annonces',
     'meta_menu_admin' => 'Admin',
     'meta_menu_user' => 'Utilisateur',
@@ -43,6 +42,7 @@ return [
     'form_button_new_password' => 'Valider le nouveau mot de passe',
     'form_button_validation' => 'Soumettre',
     'form_pointing_minimun_chars' => ' caractères minimum',
+    'form_input_search_label' => 'Cherchez ...',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
@@ -69,7 +69,9 @@ return [
     'view_all_error_add_message' => 'Ho non! L\'ajout a échoué',
     'view_all_error_del_message' => 'Ho non! La suppression a échoué',
     'view_all_error_patch_message' => 'Ho non! La modification a échoué',
+    'view_all_success_patch_message' => 'Modification enregistrée',
     'view_category_add_exist' => 'Cette catégorie existe déjà',
+    'view_category_add_parent_not_exist' => 'La catégorie parente n\'existe pas',
     'view_category_patch_exist' => 'Cette catégorie existe déjà',
     'view_category_patch_not_exist' => 'Cette catégorie n\'existe pas',
     'view_category_del_not_exist' => 'Cette catégorie n\'existe pas',
@@ -92,10 +94,17 @@ return [
     'view_advert_approve_modal_valid_header' => 'Valider toutes les actions',
     'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',
     'view_advert_approve_error' => 'Une erreur est survenue pendant l\'approbation d\'une annonce',
+    'view_advert_approve_success' => 'Approbations des annonces envoyées',
 
     'view_advert_by_link_label' => 'Voir l\'annonce',
 
+    'view_user_account_preferences_label' => 'Préférences',
+    'view_user_account_patch_success' => 'Mise à jour OK',
+    'view_user_account_currency_dropdown_label' => 'Monnaie',
+    'view_user_account_currency_patch_error' => 'La monnaie choisie n\'est pas valide',
+    'view_user_account_locale_dropdown_label' => 'Localisation',
+    'view_user_account_locale_patch_error' => 'La localisation choisie n\'est pas valide',
+
     'view_filter_ribbon' => 'Filtres',
     'view_filter_price_title' => 'Tranche de Prix',
-
 ];

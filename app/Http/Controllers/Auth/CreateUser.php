@@ -64,6 +64,7 @@ trait CreateUser {
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'locale' => \Locale::acceptFromHttp($this->request->server('HTTP_ACCEPT_LANGUAGE'))
         ]);
 
         self::setNewToken($user);
@@ -98,7 +99,8 @@ trait CreateUser {
                     'email' => $user->email,
                     $keyId => $user->id,
                     'avatar' => $user->avatar,
-                    'confirmed' => true
+                    'confirmed' => true,
+                    'locale' => \Locale::acceptFromHttp($this->request->server('HTTP_ACCEPT_LANGUAGE'))
                 ]);
                 $this->isNewOauthUser = true;
                 return $newUser;

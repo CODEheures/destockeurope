@@ -30,11 +30,68 @@ form {
   margin-bottom: 0.75rem;
 }
 
+#metaCategory-accordion .ui.labeled.input {
+  margin-right: 0.5rem;
+}
+
+#toast {
+  position: absolute;
+  right: 0;
+  width: 20em;
+  z-index: 2000;
+}
+
+#welcome-skycrapper {
+  margin-top: 2rem;
+}
+
+//transitions vuejs
 .p-fade-enter-active, .p-fade-leave-active {
   transition: opacity 0.8s !important;
 }
 .p-fade-enter, .p-fade-leave-active {
   opacity: 0 !important;
+}
+
+.appear-right-enter-active {
+  animation: appear-right-in .5s !important;
+}
+.appear-right-leave-active {
+  animation: appear-right-out .5s !important;
+}
+@keyframes appear-right-in {
+  0% {
+    position: absolute;
+    right: 0;
+    width: 20em;
+    transform: translate3d(100%,0,0);
+  }
+  80% {
+    position: absolute;
+    right: 0;
+    width: 20em;
+    transform: translate3d(-13%,0,0);
+  }
+  100% {
+    position: absolute;
+    right: 0;
+    width: 20em;
+    transform: translate3d(0,0,0);
+  }
+}
+@keyframes appear-right-out {
+  0% {
+    position: absolute;
+    right: 0;
+    width: 20em;
+    transform: translate3d(0,0,0);
+  }
+  100% {
+    position: absolute;
+    right: 0;
+    width: 20em;
+    transform: translate3d(100%,0,0);
+  }
 }
 
 .row.filters {

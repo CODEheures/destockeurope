@@ -26,6 +26,8 @@ class User extends Authenticatable
         'github_id',
         'linkedin_id',
         'avatar',
+        'currency',
+        'locale'
     ];
 
     /**

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'meta_menu_common' => 'Adverts',
     'meta_menu_admin' => 'Admin',
     'meta_menu_user' => 'User',
@@ -43,6 +42,7 @@ return [
     'form_button_new_password' => 'Valide new password',
     'form_button_validation' => 'Send',
     'form_pointing_minimun_chars' => ' characters minimum',
+    'form_input_search_label' => 'Search issues...',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
@@ -69,7 +69,9 @@ return [
     'view_all_error_add_message' => 'Ho no! Adding Fails error :-(',
     'view_all_error_del_message' => 'Ho no! Delete Fails error :-(',
     'view_all_error_patch_message' => 'Ho non! The update fail',
+    'view_all_success_patch_message' => 'Modification save',
     'view_category_add_exist' => 'This category is already exist',
+    'view_category_add_parent_not_exist' => 'The parent category is not exist',
     'view_category_patch_exist' => 'This category is already exist',
     'view_category_patch_not_exist' => 'This category is not exist',
     'view_category_del_not_exist' => 'This category is not exist',
@@ -92,10 +94,17 @@ return [
     'view_advert_approve_modal_valid_header' => 'Approve all actions',
     'view_advert_approve_modal_valid_description' => 'WARNING!! The validation of all actions resulting sending mails approval or disapproval to customers.',
     'view_advert_approve_error' => 'Advert approve error',
+    'view_advert_approve_success' => 'Advert approve send',
 
     'view_advert_by_link_label' => 'See Advert',
 
+    'view_user_account_preferences_label' => 'Preferences',
+    'view_user_account_patch_success' => 'Update OK',
+    'view_user_account_currency_dropdown_label' => 'Currency',
+    'view_user_account_currency_patch_error' => 'The select currency is not available',
+    'view_user_account_locale_dropdown_label' => 'Localization',
+    'view_user_account_locale_patch_error' => 'The select localization is not available',
+
     'view_filter_ribbon' => 'Filters',
     'view_filter_price_title' => 'Range Price',
-
 ];

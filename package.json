@@ -13,9 +13,11 @@
     "lodash": "^4.14.0",
     "semantic-ui-css": "^2.2.4",
     "vue": "^2.0.0",
+    "vue-focus": "^2.0.0",
     "vue-resource": "^1.0.3"
   },
   "dependencies": {
+    "moment": "^2.15.1",
     "semantic-ui": "^2.2.4"
   }
 }

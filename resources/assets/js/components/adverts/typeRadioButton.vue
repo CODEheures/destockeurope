@@ -1,6 +1,6 @@
 <template>
     <div id="advert-type-dropdown">
-        <div class="inline fields" v-if="!hasError">
+        <div class="inline fields">
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
@@ -12,9 +12,6 @@
                 </div>
             </div>
         </div>
-        <div class="ui message error" v-else>
-            <p>{{ loadErrorMessage }}</p>
-        </div>
     </div>
 </template>
 
@@ -22,7 +19,6 @@
 <script>
     export default {
         props: [
-            'loadErrorMessage',
             'routeGetListType',
             'firstMenuName',
             'oldChoice'
@@ -30,8 +26,7 @@
         data: () => {
             return {
                 listType: [],
-                isLoaded: false,
-                hasError: false
+                isLoaded: false
             } ;
         },
         mounted () {
@@ -46,8 +41,7 @@
                                     this.isLoaded = true;
                                 },
                                 (response) => {
-                                    this.hasError = true;
-                                    this.isLoaded = true;
+                                    this.$parent.$emit('loadError');
                                 }
                         );
             }

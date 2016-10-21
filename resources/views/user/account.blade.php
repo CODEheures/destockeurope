@@ -1,9 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="ui center grid">
-        <h2 class="ui header"><img src="{{ asset('/images/matt.jpg') }}" alt="" class="ui circular image">{{ $user->name }}</h2>
 
+            <user-account
+                    load-error-message="{{ trans('strings.view_all_error_load_message') }}"
+                    route-list-currencies="{{ route('utils.getListCurrencies') }}"
+                    currencies-first-menu-name="{{ trans('strings.view_user_account_currency_dropdown_label') }}"
+                    route-user-set-pref-currency="{{ route('user.currency') }}"
+                    route-list-locales="{{ route('utils.getListLocales') }}"
+                    locales-first-menu-name="{{ trans('strings.view_user_account_locale_dropdown_label') }}"
+                    route-user-set-pref-locale="{{ route('user.locale') }}"
+                    account-patch-success="{{ trans('strings.view_user_account_patch_success') }}"
+                    account-preferences-label="{{ trans('strings.view_user_account_preferences_label') }}"
+                    route-avatar="{{ asset('/images/matt.jpg') }}"
+                    input-search-label="{{ trans('strings.form_input_search_label') }}"
+                    user-name="{{ $user->name }}">
+            </user-account>
 
-    </div>
 @endsection

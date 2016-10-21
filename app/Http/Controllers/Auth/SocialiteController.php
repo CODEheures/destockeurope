@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class SocialiteController extends Controller
@@ -15,6 +16,7 @@ class SocialiteController extends Controller
     use CreateUser;
 
     private $isNewOauthUser = false;
+    private $request;
     protected $redirectTo = '/';
 
     /**
@@ -22,9 +24,10 @@ class SocialiteController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('guest');
+        $this->request = $request;
     }
 
     /**

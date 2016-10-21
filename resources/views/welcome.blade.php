@@ -11,6 +11,7 @@
             advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
             advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-price-label="{{ trans('strings.view_advert_form_price_label') }}"
-            see-advert-link-label="{{ trans('strings.view_advert_by_link_label') }}">
+            see-advert-link-label="{{ trans('strings.view_advert_by_link_label') }}"
+            actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}">
     </welcome>
 @endsection

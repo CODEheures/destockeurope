@@ -23,6 +23,7 @@ class CreateAdvertsTable extends Migration
             $table->string('title',config('db_limits.adverts.maxTitle'));
             $table->text('description');
             $table->integer('price');
+            $table->string('currency', 3);
             $table->boolean('isValid')->nullable()->default(null);
         });
     }

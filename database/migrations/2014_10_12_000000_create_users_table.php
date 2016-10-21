@@ -26,6 +26,8 @@ class CreateUsersTable extends Migration
             $table->string('twitter_id')->unique()->nullable()->default(null);
             $table->string('github_id')->unique()->nullable()->default(null);
             $table->string('avatar')->nullable()->default(null);
+            $table->string('currency', 3)->default("EUR");
+            $table->string('locale',50)->default("fr_FR");
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

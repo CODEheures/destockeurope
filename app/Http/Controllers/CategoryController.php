@@ -49,27 +49,41 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $title = $request->title;
+        $descriptions = $request->descriptions;
+        $parentId = $request->parentId;
         $metaCategoryId = $request->metaCategoryId;
-        if($title && $metaCategoryId && $title !='' && $metaCategoryId > 0) {
-            $existMetaCategory = MetaCategory::find($metaCategoryId);
-            if($existMetaCategory) {
-                $existCategory = Category::where('meta_category_id', '=', $metaCategoryId)->where('title', 'LIKE', $title)->first();
-                if($existCategory) {
-                    return response(trans('strings.view_category_add_exist'), 409);
-                } else {
-                    $category = new Category;
-                    $category->meta_category_id = $metaCategoryId;
-                    $category->title = $title;
-                    $category->save();
-                    return response('ok',201);
-                }
-            } else {
+
+        //1 test langages in lang
+        foreach ($descriptions as $lang=>$description){
+            if(!in_array($lang,config('app.locales'))){
                 return response('error', 500);
             }
-        } else {
-            return response('error', 500);
         }
+
+        //2 test exist MetaCategory
+        $existMetaCategory = MetaCategory::find($metaCategoryId);
+        if(!$existMetaCategory){
+            return response(trans('strings.view_category_add_parent_not_exist'), 409);
+        }
+
+        //3 test exist category
+        foreach ($descriptions as $lang=>$description){
+            $existCategory = Category::where('meta_category_id', '=', $metaCategoryId)
+                ->where('parent_id', '=', $parentId)
+                ->where('description', 'LIKE', '%"' .$lang .'":"' .$description.'"%')
+                ->first();
+            if($existCategory){
+                return response(trans('strings.view_category_add_exist'), 409);
+            }
+        }
+
+        //Finaly
+        $cat = new Category();
+        $cat->description = $descriptions;
+        $cat->metaCategory()->associate($metaCategoryId);
+        $cat->parent_id = $parentId;
+        $cat->save();
+        return response('ok',201);
     }
 
     /**
@@ -103,25 +117,29 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $title = $request->title;
-        if($id && $title && $id > 0 && $title !='') {
-            $existCategory = Category::where('title', 'LIKE', $title)->first();
-            if($existCategory) {
-                return response(trans('strings.view_category_patch_exist'), 409);
-            } else {
-                $updateCategory = Category::find($id);
-                if($updateCategory) {
-                    $updateCategory->title = $title;
-                    $updateCategory->save();
-                    return response('ok',201);
-                } else {
-                    return response(trans('strings.view_category_patch_not_exist'), 409);
-                }
+        $descriptions = $request->description;
 
+        //1 test langages in lang
+        foreach ($descriptions as $lang=>$description){
+            if(!in_array($lang,config('app.locales'))){
+                return response('error', 500);
             }
-        } else {
-            return response('error', 500);
         }
+
+        //2 test exist MetaCategories
+        $existCategory = Category::find($id);
+        if(!$existCategory){
+            return response(trans('strings.view_category_patch_not_exist'), 409);
+        }
+
+        //Finaly
+        $existDescription = $existCategory->description;
+        foreach ($descriptions as $lang=>$description){
+            $existDescription[$lang] = $description;
+        }
+        $existCategory->description = $existDescription;
+        $existCategory->save();
+        return response('ok',201);
     }
 
     /**
@@ -137,6 +155,7 @@ class CategoryController extends Controller
             if(!$existCategory) {
                 return response(trans('strings.view_category_del_not_exist'), 409);
             } else {
+                Category::where('parent_id', '=', $id)->delete();
                 $existCategory->delete();
                 return response('ok',200);
             }

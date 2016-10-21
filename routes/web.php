@@ -43,6 +43,16 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function() {
 
 Route::group(['prefix' => 'users'], function() {
     Route::get('account', ['as' => 'user.account', 'uses' => 'UserController@index']);
+    //User Preferences settings
+    Route::patch('currency', ['as' => 'user.currency', 'uses' => 'UserController@setCurrency']);
+    Route::patch('locale', ['as' => 'user.locale', 'uses' => 'UserController@setLocale']);
+});
+
+//Utils
+
+Route::group(['prefix' => 'utils'] , function () {
+    Route::get('/get-list-currencies', ['as' => 'utils.getListCurrencies', 'uses' => 'UtilsController@getListCurrencies']);
+    Route::get('/get-list-locales', ['as' => 'utils.getListLocales', 'uses' => 'UtilsController@getListLocales']);
 });
 
 //Categories

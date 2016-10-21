@@ -1,6 +1,6 @@
 <template>
     <div id="category-dropdown-menu">
-        <div class="ui dropdown button" v-if="!hasError">
+        <div class="ui dropdown button">
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
@@ -18,9 +18,6 @@
                 </div>
             </div>
         </div>
-        <div class="ui message error" v-else>
-            <p>{{ loadErrorMessage }}</p>
-        </div>
     </div>
 </template>
 
@@ -28,7 +25,6 @@
 <script>
     export default {
         props: [
-            'loadErrorMessage',
             'routeMetaCategory',
             'firstMenuName',
             'oldChoice'
@@ -36,8 +32,7 @@
         data: () => {
             return {
                 metaCategories: [],
-                isLoaded: false,
-                hasError: false
+                isLoaded: false
             } ;
         },
         mounted () {
@@ -54,8 +49,7 @@
                                     this.isLoaded = true;
                                 },
                                 (response) => {
-                                    this.hasError = true;
-                                    this.isLoaded = true;
+                                    this.$parent.$emit('loadError');
                                 }
                         );
             }

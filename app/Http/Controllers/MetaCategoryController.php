@@ -24,9 +24,6 @@ class MetaCategoryController extends Controller
     {
         $metaCategories = MetaCategory::all();
         $metaCategories->load('categories');
-        if($request->isXmlHttpRequest()) {
-            return response()->json($metaCategories);
-        }
         return response()->json($metaCategories);
     }
 
@@ -48,18 +45,30 @@ class MetaCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $title = $request->only('title');
-        if($title && $title !='') {
-            $existMetaCategory = MetaCategory::where('title', 'LIKE', $title)->first();
-            if($existMetaCategory) {
-                return response(trans('strings.view_category_add_exist'), 409);
-            } else {
-                MetaCategory::create($request->only('title'));
-                return response('ok',201);
+
+
+        $descriptions = $request->descriptions;
+
+        //1 test langages in lang
+        foreach ($descriptions as $lang=>$description){
+            if(!in_array($lang,config('app.locales'))){
+                return response('error', 500);
             }
-        } else {
-            return response('error', 500);
         }
+
+        //2 test exist MetaCategories
+        foreach ($descriptions as $lang=>$description){
+            $existMetaCategory = MetaCategory::where('description', 'LIKE', '%"' .$lang .'":"' .$description.'"%')->first();
+            if($existMetaCategory){
+                return response(trans('strings.view_category_add_exist'), 409);
+            }
+        }
+
+        //Finaly
+        $meta = new MetaCategory();
+        $meta->description = $descriptions;
+        $meta->save();
+        return response('ok',201);
 
     }
 
@@ -94,25 +103,31 @@ class MetaCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $title = $request->title;
-        if($id && $title && $id > 0 && $title !='') {
-            $existMetaCategory = MetaCategory::where('title',  'LIKE', $title)->first();
-            if($existMetaCategory) {
-                return response(trans('strings.view_category_patch_exist'), 409);
-            } else {
-                $updateCategory = MetaCategory::find($id);
-                if($updateCategory) {
-                    $updateCategory->title = $title;
-                    $updateCategory->save();
-                    return response('ok',201);
-                } else {
-                    return response(trans('strings.view_category_patch_not_exist'), 409);
-                }
 
+        $descriptions = $request->description;
+
+        //1 test langages in lang
+        foreach ($descriptions as $lang=>$description){
+            if(!in_array($lang,config('app.locales'))){
+                return response('error', 500);
             }
-        } else {
-            return response('error', 500);
         }
+
+        //2 test exist MetaCategories
+        $existMetaCategory = MetaCategory::find($id);
+        if(!$existMetaCategory){
+            return response(trans('strings.view_category_patch_not_exist'), 409);
+        }
+
+        //Finaly
+        $existDescription = $existMetaCategory->description;
+        foreach ($descriptions as $lang=>$description){
+            $existDescription[$lang] = $description;
+        }
+        $existMetaCategory->description = $existDescription;
+        $existMetaCategory->save();
+        return response('ok',201);
+
     }
 
     /**
