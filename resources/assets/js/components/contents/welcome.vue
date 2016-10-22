@@ -5,7 +5,8 @@
             <div class="ui one column grid">
                 <categories-dropdown-menu
                         :route-meta-category="routeMetaCategory"
-                        :first-menu-name="categoriesDropdownMenuFirstMenuName">
+                        :first-menu-name="categoriesDropdownMenuFirstMenuName"
+                        :actual-locale="actualLocale">
                 </categories-dropdown-menu>
             </div>
         </div>
