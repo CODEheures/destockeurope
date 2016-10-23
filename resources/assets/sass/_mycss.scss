@@ -45,6 +45,14 @@ form {
   margin-top: 2rem;
 }
 
+.ui.dropdown .menu .item .right.dropdown.icon {
+  float: right;
+}
+
+.ui.dropdown .menu .item .right.dropdown.icon:before {
+  content: "\f0da";
+}
+
 //transitions vuejs
 .p-fade-enter-active, .p-fade-leave-active {
   transition: opacity 0.8s !important;

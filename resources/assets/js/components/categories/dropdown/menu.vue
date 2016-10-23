@@ -3,18 +3,22 @@
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <div class="ui dropdown button">
-            <input type="hidden" name="categorie">
+        <div class="ui floating dropdown button">
             <div class="text">{{ firstMenuName }}</div>
             <i class="dropdown icon"></i>
             <div class="menu">
+                <div class="item" v-if="withAll">
+                    Tous
+                </div>
                 <div v-for="metaCategory in metaCategories" class="item" >
                     <i class="dropdown icon" v-if="metaCategory.categories.length>0"></i>
                     <span class="text">{{ metaCategory['description'][actualLocale] }}</span>
                     <recursive-categories-dropdown-menu
                             :parent-categories="metaCategory.categories"
                             :actual-locale="actualLocale"
-                            :parent-id="parentId">
+                            :parent-id="parentId"
+                            :with-all="withAll"
+                            :left="false">
                     </recursive-categories-dropdown-menu>
                 </div>
             </div>
@@ -25,12 +29,13 @@
 
 <script>
     export default {
-        props: [
-            'routeMetaCategory',
-            'firstMenuName',
-            'actualLocale',
-            'oldChoice'
-        ],
+        props: {
+            routeMetaCategory: String,
+            firstMenuName: String,
+            actualLocale: String,
+            oldChoice: String,
+            withAll: Boolean
+        },
         data: () => {
             return {
                 metaCategories: [],
@@ -49,12 +54,27 @@
                         .then(
                                 (response) => {
                                     this.metaCategories = response.data;
+                                    this.setChildsCategories();
                                     this.isLoaded = true;
                                 },
                                 (response) => {
                                     this.$parent.$emit('loadError');
                                 }
                         );
+            },
+            setChildsCategories: function () {
+                for(var index in this.metaCategories){
+                    let metaCategory =  this.metaCategories[index];
+                    for(var index2 in metaCategory.categories) {
+                        let category = metaCategory.categories[index2];
+                        category.children=[];
+                        for(var index3 in metaCategory.categories){
+                            if(metaCategory.categories[index3].parent_id==category.id){
+                                category.children.push(metaCategory.categories[index3]);
+                            }
+                        }
+                    }
+                }
             }
         },
         updated () {

@@ -19,7 +19,9 @@
                     <categories-dropdown-menu
                             :route-meta-category="categoryRouteMetaCategory"
                             :first-menu-name="categoryFirstMenuName"
-                            :old-choice="oldCategoryId">
+                            :actual-locale="actualLocale"
+                            :old-choice="oldCategoryId"
+                            :with-all="false">
                     </categories-dropdown-menu>
                 </div>
                 <div class="required field">
@@ -77,7 +79,8 @@
             'formPointingMinimumChars',
             'old',
             'routeListCurrencies',
-            'currenciesFirstMenuName'
+            'currenciesFirstMenuName',
+            'actualLocale'
         ],
         data: () => {
             return {

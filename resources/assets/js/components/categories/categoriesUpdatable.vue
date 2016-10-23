@@ -22,7 +22,7 @@
             <div class="content">
                 <categories-updatable
                         :route-category="routeCategory"
-                        :parent-categories="childsCategories(category)"
+                        :parent-categories="category.children"
                         :availables-locales-list="availablesLocalesList"
                         :meta-category-id="metaCategoryId"
                         :parent-id="category.id">
@@ -75,7 +75,7 @@
                 availablesDatasLocalesList: {},
                 dataCategories: {},
                 focused: {},
-                blured: {}
+                blured: {},
             };
         },
         mounted () {
@@ -103,15 +103,6 @@
             });
         },
         methods: {
-            childsCategories: function (category) {
-                var listCategories=[];
-                for(var cats in this.parentCategories){
-                    if(this.parentCategories[cats].parent_id == category.id){
-                        listCategories.push(this.parentCategories[cats]);
-                    }
-                }
-                return listCategories;
-            },
             addCategory: function (event) {
                 if (this.categoryName != undefined) {
                     let isEmpty = true;

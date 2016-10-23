@@ -22,8 +22,8 @@ Vue.component('locales-dropdown', require('./components/generics/locales/locales
 Vue.component('toast', require('./components/generics/messages/toast.vue'));
 
 //Catégories
-Vue.component('categories-vertical-menu', require('./components/categories/lateral/menu.vue'));
-Vue.component('recursive-categories-vertical-menu', require('./components/categories/lateral/recursive.vue'));
+Vue.component('categories-lateral-menu', require('./components/categories/lateral/menu.vue'));
+Vue.component('recursive-categories-lateral-menu', require('./components/categories/lateral/recursive.vue'));
 Vue.component('categories-dropdown-menu', require('./components/categories/dropdown/menu.vue'));
 Vue.component('recursive-categories-dropdown-menu', require('./components/categories/dropdown/recursive.vue'));
 Vue.component('categories-updatable', require('./components/categories/categoriesUpdatable.vue'));

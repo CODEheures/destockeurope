@@ -179,6 +179,7 @@
                         .then(
                                 (response) => {
                                     this.metaCategories = response.data;
+                                    this.setChildsCategories();
                                     this.isLoaded = true;
                                 },
                                 (response) => {
@@ -275,6 +276,20 @@
                 } else {
                     this.getMetaCategories(false);
                     this.sendToast(this.patchErrorMessage, 'error');
+                }
+            },
+            setChildsCategories: function () {
+                for(var index in this.metaCategories){
+                    let metaCategory =  this.metaCategories[index];
+                    for(var index2 in metaCategory.categories) {
+                        let category = metaCategory.categories[index2];
+                        category.children=[];
+                        for(var index3 in metaCategory.categories){
+                            if(metaCategory.categories[index3].parent_id==category.id){
+                                category.children.push(metaCategory.categories[index3]);
+                            }
+                        }
+                    }
                 }
             },
             sendToast: function (message, type) {

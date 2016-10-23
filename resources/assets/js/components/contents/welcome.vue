@@ -6,16 +6,17 @@
                 <categories-dropdown-menu
                         :route-meta-category="routeMetaCategory"
                         :first-menu-name="categoriesDropdownMenuFirstMenuName"
-                        :actual-locale="actualLocale">
+                        :actual-locale="actualLocale"
+                        :with-all="true">
                 </categories-dropdown-menu>
             </div>
         </div>
         <div class="row">
             <div class="computer only four wide column">
-                <categories-vertical-menu
+                <categories-lateral-menu
                         :route-meta-category="routeMetaCategory"
                         :actual-locale="actualLocale">
-                </categories-vertical-menu>
+                </categories-lateral-menu>
                 <div id="welcome-skycrapper" class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
             </div>
             <div class="sixteen wide tablet twelve wide computer column">

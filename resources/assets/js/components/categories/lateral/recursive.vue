@@ -1,15 +1,22 @@
 <template>
     <div :class="isLastLevel ? 'menu' : 'menu'">
-        <div v-for="category in parentCategories" :class="(childsCategories(category)).length==0 ? 'item' : 'ui dropdown item lateral other'" v-if="category.parent_id==parentId">
-            {{ category['description'][actualLocale] }}
-            <i class="dropdown icon" v-if="(childsCategories(category)).length>0"></i>
-            <recursive-categories-vertical-menu
-                    v-if="(childsCategories(category)).length>0"
-                    :parent-categories="childsCategories(category)"
-                    :actual-locale="actualLocale"
-                    :parent-id="category.id"
-            ></recursive-categories-vertical-menu>
-        </div>
+        <a class="item" :data-value="parentId">
+            Tous
+        </a>
+        <template v-for="category in parentCategories" v-if="category.parent_id==parentId">
+            <a class="item" v-if="category.children.length==0">
+                {{ category['description'][actualLocale] }}
+            </a>
+            <div class="ui dropdown item lateral other" v-else>
+                {{ category['description'][actualLocale] }}
+                <i class="dropdown icon"></i>
+                <recursive-categories-lateral-menu
+                        :parent-categories="category.children"
+                        :actual-locale="actualLocale"
+                        :parent-id="category.id"
+                ></recursive-categories-lateral-menu>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -33,15 +40,6 @@
             $('.ui.dropdown.lateral.other').dropdown();
         },
         methods: {
-            childsCategories: function (category) {
-                var listCategories=[];
-                for(var cats in this.parentCategories){
-                    if(this.parentCategories[cats].parent_id == category.id){
-                        listCategories.push(this.parentCategories[cats]);
-                    }
-                }
-                return listCategories;
-            },
             setIsLastLevel: function () {
                 var countLevels = 0;
                 var levels = [];

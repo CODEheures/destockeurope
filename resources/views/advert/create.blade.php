@@ -21,6 +21,7 @@
             form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimun_chars') }}"
             route-list-currencies="{{ route('utils.getListCurrencies') }}"
             currencies-first-menu-name="{{ trans('strings.view_user_account_currency_dropdown_label') }}"
+            actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
             @if(count(old())>0)
                 old="{{ json_encode(old()) }}"
             @endif>

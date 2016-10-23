@@ -1,13 +1,19 @@
 <template>
-    <div class="menu">
-        <div v-for="category in parentCategories" class="item"  v-if="category.parent_id==parentId">
-            <i class="dropdown icon" v-if="(childsCategories(category)).length>0"></i>
+    <div :class="left ? 'left menu' : 'menu'">
+        <div class="item" :data-value="parentId" v-if="withAll">
+            <span class="text">Tous</span>
+        </div>
+        <div v-for="category in parentCategories" class="item" :data-value="category.id"  v-if="category.parent_id==parentId">
+            <i :class="left ? 'right dropdown icon' : 'left dropdown icon'" v-if="category.children.length>0"></i>
             <span class="text">{{ category['description'][actualLocale] }}</span>
             <recursive-categories-dropdown-menu
-                    v-if="(childsCategories(category)).length>0"
-                    :parent-categories="childsCategories(category)"
+                    v-if="category.children.length>0"
+                    :parent-categories="category.children"
                     :actual-locale="actualLocale"
-                    :parent-id="category.id">
+                    :parent-id="category.id"
+                    :with-all="withAll"
+                    :level="level+1"
+                    :left="!left">
             </recursive-categories-dropdown-menu>
         </div>
     </div>
@@ -19,7 +25,9 @@
         props: {
             parentCategories: Array,
             parentId: Number,
-            actualLocale: String
+            actualLocale: String,
+            withAll: Boolean,
+            left: Boolean
         },
         data: () => {
             return {
@@ -27,18 +35,10 @@
             } ;
         },
         mounted () {
-
+            console.log(this.left);
         },
         methods: {
-            childsCategories: function (category) {
-                var listCategories=[];
-                for(var cats in this.parentCategories){
-                    if(this.parentCategories[cats].parent_id == category.id){
-                        listCategories.push(this.parentCategories[cats]);
-                    }
-                }
-                return listCategories;
-            }
+
         }
     }
 </script>

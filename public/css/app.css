@@ -28734,6 +28734,12 @@ form.login, form.register {
 #welcome-skycrapper {
   margin-top: 2rem; }
 
+.ui.dropdown .menu .item .right.dropdown.icon {
+  float: right; }
+
+.ui.dropdown .menu .item .right.dropdown.icon:before {
+  content: "\f0da"; }
+
 .p-fade-enter-active, .p-fade-leave-active {
   -webkit-transition: opacity 0.8s !important;
   transition: opacity 0.8s !important; }
