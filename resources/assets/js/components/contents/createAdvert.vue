@@ -116,7 +116,7 @@
                 this.oldCategoryId = JSON.parse(this.old).category;
                 this.title = JSON.parse(this.old).title;
                 this.description = JSON.parse(this.old).description;
-                this.price = JSON.parse(this.old).price / 100;
+                this.price = JSON.parse(this.old).price;
                 this.type = JSON.parse(this.old).type;
                 this.oldType = JSON.parse(this.old).type;
                 this.currency=JSON.parse(this.old).currency;
