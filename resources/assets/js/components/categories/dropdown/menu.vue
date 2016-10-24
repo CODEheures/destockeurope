@@ -16,8 +16,9 @@
                     <recursive-categories-dropdown-menu
                             :parent-description="metaCategory['description'][actualLocale]"
                             :parent-categories="metaCategory.categories"
+                            parent-type="metaCategory"
                             :actual-locale="actualLocale"
-                            :parent-id="parentId"
+                            :parent-id="metaCategory.id"
                             :with-all="withAll"
                             :all-item="allItem"
                             :left="false">
@@ -48,6 +49,12 @@
         },
         mounted () {
             this.getMetaCategories();
+            this.$on('categoryChoice', function (event) {
+                this.$parent.$emit('categoryChoice', {id: event.id});
+            });
+            this.$on('metaCategoryChoice', function (event) {
+                this.$parent.$emit('metaCategoryChoice', {id: event.id});
+            });
         },
         methods: {
             getMetaCategories: function (withLoadIndicator) {
@@ -87,7 +94,13 @@
                         .dropdown('set selected',  that.oldChoice)
                         .dropdown({
                             onChange: function(value, text, $selectedItem) {
-                                that.$parent.$emit('categoryChoice', {id: value});
+                                var type = value.split('_')[0];
+                                var val = value.split('_')[1];
+                                if(type == 'category') {
+                                    that.$parent.$emit('categoryChoice', {id: val});
+                                } else if(type=='metaCategory'){
+                                    that.$parent.$emit('metaCategoryChoice', {id: val});
+                                }
                             }
                         })
                 ;
@@ -95,7 +108,13 @@
                 $('#category-dropdown-menu .ui.dropdown')
                         .dropdown({
                             onChange: function(value, text, $selectedItem) {
-                                that.$parent.$emit('categoryChoice', {id: value});
+                                var type = value.split('_')[0];
+                                var val = value.split('_')[1];
+                                if(type == 'category') {
+                                    that.$parent.$emit('categoryChoice', {id: val});
+                                } else if(type=='metaCategory'){
+                                    that.$parent.$emit('metaCategoryChoice', {id: val});
+                                }
                             }
                         })
                 ;
