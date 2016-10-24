@@ -43,6 +43,7 @@ return [
     'form_button_validation' => 'Send',
     'form_pointing_minimun_chars' => ' characters minimum',
     'form_input_search_label' => 'Search issues...',
+    'form_dropdown_all_item' => 'All',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',

@@ -80,7 +80,14 @@ class MetaCategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $metaCategory = MetaCategory::find($id);
+        if($metaCategory){
+            $metaCategory->load('categories');
+            return response()->json($metaCategory);
+        } else {
+            return response('error',500);
+        }
+
     }
 
     /**

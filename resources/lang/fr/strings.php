@@ -43,6 +43,7 @@ return [
     'form_button_validation' => 'Soumettre',
     'form_pointing_minimun_chars' => ' caractères minimum',
     'form_input_search_label' => 'Cherchez ...',
+    'form_dropdown_all_item' => 'Tous',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',

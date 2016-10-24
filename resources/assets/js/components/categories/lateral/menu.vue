@@ -4,15 +4,14 @@
             <div class="ui large text loader">Loading</div>
         </div>
         <div class="ui vertical menu">
-            <a class="item">
-                Tous
-            </a>
+            <a class="item" v-on:click="emitMetaCategoryChoice(0)">{{ allItem }}</a>
             <div v-for="metaCategory in metaCategories" class="item">
                 {{ metaCategory['description'][actualLocale] }}
                 <recursive-categories-lateral-menu
                         :parent-categories="metaCategory.categories"
                         :actual-locale="actualLocale"
-                        :parent-id="parentId"
+                        :parent-id="metaCategory.id"
+                        :all-item="allItem"
                 ></recursive-categories-lateral-menu>
             </div>
         </div>
@@ -24,7 +23,8 @@
     export default {
         props: [
             'routeMetaCategory',
-            'actualLocale'
+            'actualLocale',
+            'allItem'
         ],
         data: () => {
             return {
@@ -35,6 +35,12 @@
         },
         mounted () {
             this.getMetaCategories();
+            this.$on('categoryChoice', function (event) {
+                this.$parent.$emit('categoryChoice', {id: event.id});
+            });
+            this.$on('metaCategoryChoice', function (event) {
+                this.$parent.$emit('metaCategoryChoice', {id: event.id});
+            });
         },
         methods: {
             getMetaCategories: function (withLoadIndicator) {
@@ -65,7 +71,11 @@
                         }
                     }
                 }
+            },
+            emitMetaCategoryChoice: function(value){
+                this.$parent.$emit('metaCategoryChoice', {id: value});
             }
+
         }
     }
 </script>

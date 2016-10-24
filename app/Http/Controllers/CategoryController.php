@@ -31,6 +31,40 @@ class CategoryController extends Controller
         return view('category.index');
     }
 
+    public function getParentInfo($id) {
+        if(!$id || $id==0) {
+            return response()->json([]);
+        } else {
+            $category = Category::find($id);
+            if($category) {
+                $metaCategory = $category->metaCategory;
+                $metaCategory->load('categories');
+
+                $list = [];
+                foreach ($metaCategory->categories as $cats) {
+                    if($cats->id==$id){
+                        $list[] = $cats;
+                        $rewindCategory=$cats;
+                        while($rewindCategory->parent_id!=$metaCategory->id){
+                            foreach ($metaCategory->categories as $cats2) {
+                                if($cats2->id == $rewindCategory->parent_id){
+                                    $list[] = $cats2;
+                                    $rewindCategory = $cats2;
+                                }
+                            }
+                        }
+                        $list[] = $metaCategory;
+                    }
+                }
+
+                return response()->json(array_reverse($list));
+            } else {
+                return response('error', 500);
+            }
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -56,6 +56,7 @@ Route::group(['prefix' => 'utils'] , function () {
 });
 
 //Categories
+Route::get('category/get-parent-info/{id?}',  ['as' => 'category.parentInfo', 'uses' =>'CategoryController@getParentInfo']);
 Route::resource('category', 'CategoryController');
 Route::resource('metaCategory', 'MetaCategoryController');
 

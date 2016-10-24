@@ -1,19 +1,16 @@
 <template>
-    <div :class="isLastLevel ? 'menu' : 'menu'">
-        <a class="item" :data-value="parentId">
-            Tous
-        </a>
+    <div class="menu">
+        <a class="item" :data-value="parentId" v-on:click="emitMetaCategoryChoice(parentId)">{{ allItem }}</a>
         <template v-for="category in parentCategories" v-if="category.parent_id==parentId">
-            <a class="item" v-if="category.children.length==0">
-                {{ category['description'][actualLocale] }}
-            </a>
-            <div class="ui dropdown item lateral other" v-else>
+            <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)" v-if="category.children.length==0">{{ category['description'][actualLocale] }}</a>
+            <div class="ui dropdown item lateral other" :data-value="category.id" v-else>
                 {{ category['description'][actualLocale] }}
                 <i class="dropdown icon"></i>
                 <recursive-categories-lateral-menu
                         :parent-categories="category.children"
                         :actual-locale="actualLocale"
                         :parent-id="category.id"
+                        :all-item="allItem"
                 ></recursive-categories-lateral-menu>
             </div>
         </template>
@@ -26,31 +23,31 @@
         props: {
             parentCategories: Array,
             parentId: Number,
-            actualLocale: String
+            actualLocale: String,
+            allItem: String
         },
         data: () => {
             return {
-                isLastLevel: false
+
             } ;
         },
         mounted () {
-            this.setIsLastLevel();
-        },
-        updated () {
-            $('.ui.dropdown.lateral.other').dropdown();
+            this.$on('categoryChoice', function (event) {
+                this.$parent.$emit('categoryChoice', {id: event.id});
+            });
+            var that = this;
+            $('.ui.dropdown.lateral.other').dropdown({
+                onChange: function(value, text, $selectedItem) {
+                    that.$parent.$emit('categoryChoice', {id: value});
+                }
+            });
         },
         methods: {
-            setIsLastLevel: function () {
-                var countLevels = 0;
-                var levels = [];
-                for(var category in this.parentCategories){
-                    if(!_.includes(levels, this.parentCategories[category].parent_id)){
-                        levels.push(this.parentCategories[category].parent_id)
-                    }
-                }
-
-                this.isLastLevel = levels.length == 1;
-                return null;
+            emitCategoryChoice: function (value) {
+                this.$parent.$emit('categoryChoice', {id: value});
+            },
+            emitMetaCategoryChoice: function(value){
+                this.$parent.$emit('metaCategoryChoice', {id: value});
             }
         }
     }

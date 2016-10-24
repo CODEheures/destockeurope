@@ -16,6 +16,10 @@
   display: none;
 }
 
+.row.breadcrumb {
+  margin-bottom: 1rem;
+}
+
 form {
   &.login, &.register {
     padding-top: 2rem;
@@ -35,7 +39,8 @@ form {
 }
 
 #toast {
-  position: absolute;
+  position: fixed;
+  top: 12em;
   right: 0;
   width: 20em;
   z-index: 2000;
@@ -69,19 +74,22 @@ form {
 }
 @keyframes appear-right-in {
   0% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     transform: translate3d(100%,0,0);
   }
   80% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     transform: translate3d(-13%,0,0);
   }
   100% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     transform: translate3d(0,0,0);
@@ -89,13 +97,15 @@ form {
 }
 @keyframes appear-right-out {
   0% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     transform: translate3d(0,0,0);
   }
   100% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     transform: translate3d(100%,0,0);

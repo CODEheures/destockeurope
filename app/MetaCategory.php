@@ -20,7 +20,7 @@ class MetaCategory extends Model
     }
 
     public function parentCategories() {
-        return $this->categories()->where('parent_id', 0);
+        return $this->categories()->where('parent_id', $this->id);
     }
 
 }

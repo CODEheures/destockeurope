@@ -64,7 +64,7 @@
                                     :parent-categories="metaCategory.categories"
                                     :availables-locales-list="availablesLocalesList"
                                     :meta-category-id="metaCategory.id"
-                                    :parent-id="parentId">
+                                    :parent-id="metaCategory.id">
                             </categories-updatable>
                         </div>
                     </div>

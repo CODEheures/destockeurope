@@ -1,18 +1,19 @@
 <template>
     <div :class="left ? 'left menu' : 'menu'">
-        <div class="item" :data-value="parentId" v-if="withAll">
-            <span class="text">Tous</span>
+        <div class="item" :data-value="parentId" :data-text="parentDescription + ' > ' + allItem" v-if="withAll">
+            <span class="text">{{ allItem }}</span>
         </div>
-        <div v-for="category in parentCategories" class="item" :data-value="category.id"  v-if="category.parent_id==parentId">
+        <div v-for="category in parentCategories" class="item" :data-value="category.id" :data-text="parentDescription + ' > ' + category['description'][actualLocale]" v-if="category.parent_id==parentId">
             <i :class="left ? 'right dropdown icon' : 'left dropdown icon'" v-if="category.children.length>0"></i>
             <span class="text">{{ category['description'][actualLocale] }}</span>
             <recursive-categories-dropdown-menu
                     v-if="category.children.length>0"
+                    :parent-description="parentDescription + ' > ' + category['description'][actualLocale]"
                     :parent-categories="category.children"
                     :actual-locale="actualLocale"
                     :parent-id="category.id"
                     :with-all="withAll"
-                    :level="level+1"
+                    :all-item="allItem"
                     :left="!left">
             </recursive-categories-dropdown-menu>
         </div>
@@ -23,11 +24,13 @@
 <script>
     export default {
         props: {
+            parentDescription: String,
             parentCategories: Array,
             parentId: Number,
             actualLocale: String,
             withAll: Boolean,
-            left: Boolean
+            left: Boolean,
+            allItem: String
         },
         data: () => {
             return {
@@ -35,7 +38,7 @@
             } ;
         },
         mounted () {
-            console.log(this.left);
+
         },
         methods: {
 

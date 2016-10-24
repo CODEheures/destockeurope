@@ -28713,6 +28713,9 @@ html.ios body {
 .ui.secondary.menu .right.item {
   display: none; }
 
+.row.breadcrumb {
+  margin-bottom: 1rem; }
+
 form.login, form.register {
   padding-top: 2rem; }
 
@@ -28726,7 +28729,8 @@ form.login, form.register {
   margin-right: 0.5rem; }
 
 #toast {
-  position: absolute;
+  position: fixed;
+  top: 12em;
   right: 0;
   width: 20em;
   z-index: 2000; }
@@ -28757,19 +28761,22 @@ form.login, form.register {
 
 @-webkit-keyframes appear-right-in {
   0% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(100%, 0, 0);
     transform: translate3d(100%, 0, 0); }
   80% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(-13%, 0, 0);
     transform: translate3d(-13%, 0, 0); }
   100% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(0, 0, 0);
@@ -28777,19 +28784,22 @@ form.login, form.register {
 
 @keyframes appear-right-in {
   0% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(100%, 0, 0);
     transform: translate3d(100%, 0, 0); }
   80% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(-13%, 0, 0);
     transform: translate3d(-13%, 0, 0); }
   100% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(0, 0, 0);
@@ -28797,13 +28807,15 @@ form.login, form.register {
 
 @-webkit-keyframes appear-right-out {
   0% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
   100% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(100%, 0, 0);
@@ -28811,13 +28823,15 @@ form.login, form.register {
 
 @keyframes appear-right-out {
   0% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0); }
   100% {
-    position: absolute;
+    position: fixed;
+    top: 12em;
     right: 0;
     width: 20em;
     -webkit-transform: translate3d(100%, 0, 0);

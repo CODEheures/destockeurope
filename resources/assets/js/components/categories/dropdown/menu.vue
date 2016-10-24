@@ -8,16 +8,18 @@
             <i class="dropdown icon"></i>
             <div class="menu">
                 <div class="item" v-if="withAll">
-                    Tous
+                    {{ allItem }}
                 </div>
                 <div v-for="metaCategory in metaCategories" class="item" >
                     <i class="dropdown icon" v-if="metaCategory.categories.length>0"></i>
                     <span class="text">{{ metaCategory['description'][actualLocale] }}</span>
                     <recursive-categories-dropdown-menu
+                            :parent-description="metaCategory['description'][actualLocale]"
                             :parent-categories="metaCategory.categories"
                             :actual-locale="actualLocale"
                             :parent-id="parentId"
                             :with-all="withAll"
+                            :all-item="allItem"
                             :left="false">
                     </recursive-categories-dropdown-menu>
                 </div>
@@ -34,7 +36,8 @@
             firstMenuName: String,
             actualLocale: String,
             oldChoice: String,
-            withAll: Boolean
+            withAll: Boolean,
+            allItem: String
         },
         data: () => {
             return {
