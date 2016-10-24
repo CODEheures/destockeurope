@@ -12,7 +12,7 @@ class MetaCategoryController extends Controller
 {
 
     public function __construct() {
-        $this->middleware('isAdminUser', ['except' => ['index']]);
+        $this->middleware('isAdminUser', ['except' => ['index', 'show']]);
     }
 
     /**
