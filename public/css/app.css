@@ -28738,6 +28738,10 @@ form.login, form.register {
 #welcome-skycrapper {
   margin-top: 2rem; }
 
+.ui.list > .item.advert > .image:not(:only-child):not(img) {
+  padding-right: 0em;
+  margin-right: 0.5em; }
+
 .ui.dropdown .menu .item .right.dropdown.icon {
   float: right; }
 

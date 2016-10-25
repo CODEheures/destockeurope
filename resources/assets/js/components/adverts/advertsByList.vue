@@ -4,14 +4,19 @@
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
-            <div v-for="advert in advertsList" class="item">
-                <img class="ui small bordered rounded top aligned image" src="/images/jenny.jpg">
+            <a v-for="advert in advertsList" class="item advert">
+                <div class="ui image">
+                    <div class="ui right blue corner label"><i class="icon">3</i></div>
+                    <img  class="ui top aligned small bordered rounded image" src="/images/jenny.jpg">
+                </div>
+
                 <div class="content">
+
                     <div class="header">{{ advert.title }}</div>
                     <p class="ui teal tag label">{{ advert.price }} {{ advert.currency }}</p>
                     <a class="ui primary button">{{ seeAdvertLinkLabel }}</a>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </template>
