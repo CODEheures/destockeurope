@@ -31,7 +31,7 @@
             <h2 class="ui header">{{ contentHeader }}</h2>
         </div>
         <div class="column">
-            <div id="metaCategory-accordion" class="ui fluid styled accordion">
+            <div id="category-accordion" class="ui fluid styled accordion">
                 <div class="ui active inverted dimmer" v-if="!isLoaded">
                     <div class="ui large text loader">Loading</div>
                 </div>
@@ -39,46 +39,44 @@
                     <i class="dropdown icon"></i>
                 </div>
                 <div class="active content">
-                    <div v-for="metaCategory in metaCategories" class="accordion">
+                    <div v-for="category in categories" class="accordion">
                         <div class="title">
                             <i class="dropdown icon"></i>
-                            <i class="big teal minus square icon" v-on:click="delMetaCategory"
-                               :data-id="metaCategory.id"></i>
+                            <i class="big teal minus square icon" v-on:click="delCategory"
+                               :data-id="category.id"></i>
                             <span v-for="locale in availablesDatasLocalesList">
                                 <div class="ui labeled input">
                                     <div class="ui label">{{ locale }}</div>
                                     <input type="text"
-                                           :name="metaCategory.id + '_' + locale"
-                                           :data-id="metaCategory.id"
+                                           :name="category.id + '_' + locale"
+                                           :data-id="category.id"
                                            :data-key="locale"
-                                           v-model="metaCategory['description'][locale]"
-                                           v-on:keyup.enter="updateMetaCategory"
-                                           v-on:focus="focused={'id': metaCategory.id, 'locale': locale, 'value': metaCategory['description'][locale]}"
-                                           v-on:blur="blured={'id': metaCategory.id, 'locale': locale, 'value': metaCategory['description'][locale]}" />
+                                           v-model="category['description'][locale]"
+                                           v-on:keyup.enter="updateCategory"
+                                           v-on:focus="focused={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
+                                           v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}" />
                                 </div>
                             </span>
                         </div>
                         <div class="content">
                             <categories-updatable
-                                    :route-category="routeCategory"
-                                    :parent-categories="metaCategory.categories"
+                                    :categories="category.children"
                                     :availables-locales-list="availablesLocalesList"
-                                    :meta-category-id="metaCategory.id"
-                                    :parent-id="metaCategory.id">
+                                    :parent-id="category.id">
                             </categories-updatable>
                         </div>
                     </div>
                     <div class="ui teal segment">
-                        <i class="big teal add square icon" v-on:click="addMetaCategory"
-                           :data-value="metaCategoryName"></i>
+                        <i class="big teal add square icon" v-on:click="addCategory"
+                           :data-value="categoryName"></i>
                         <span v-for="locale in availablesDatasLocalesList">
                             <div class="ui labeled input">
                                 <div class="ui mini label">{{ locale }}</div>
                                 <input type="text" placeholder="Nouvelle Catégorie"
-                                       :name="'newMetaCategory_' + locale"
+                                       :name="'newCategory_' + locale"
                                        :data-key="locale"
-                                       v-on:keyup.enter="addMetaCategory"
-                                       v-model:value="metaCategoryName[locale]"
+                                       v-on:keyup.enter="addCategory"
+                                       v-model:value="categoryName[locale]"
                                        v-on:focus="focused={}"
                                        v-on:blur="blured={}"
                                 />
@@ -106,26 +104,24 @@
             modalNo: String,
             modalDelHeader: String,
             modalDelDescription: String,
-            routeMetaCategory: String,
             routeCategory: String,
             availablesLocalesList: String
         },
         data: () => {
             return {
-                metaCategories: [],
                 isLoaded: false,
-                metaCategoryName: [],
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
                 availablesDatasLocalesList: {},
-                parentId: 0,
                 focused: {},
-                blured: {}
+                blured: {},
+                categories: {},
+                categoryName: []
             };
         },
         mounted () {
-            this.getMetaCategories();
+            this.getCategories();
             this.availablesDatasLocalesList = JSON.parse(this.availablesLocalesList);
             $('.accordion').each(function () {
                 $(this).accordion({
@@ -134,22 +130,17 @@
                     }
                 });
             });
-            this.$on('getMetaCategories', function (param) {
-                this.getMetaCategories(param);
+            this.$on('getCategories', function (withLoadIndicator) {
+                this.getCategories(withLoadIndicator);
             });
-            this.$on('addError', function ($message) {
-                if($message != undefined && $message != ''){
-                    this.sendToast($message, 'error');
-                } else {
-                    this.sendToast(this.addErrorMessage, 'error');
-                }
+            this.$on('addCategory', function (postValue) {
+               this.addCategory(null, postValue);
             });
-            this.$on('delError', function ($message) {
-                if($message != undefined && $message != ''){
-                    this.sendToast($message, 'error');
-                } else {
-                    this.sendToast(this.delErrorMessage, 'error');
-                }
+            this.$on('delCategory', function (id) {
+                this.delCategory(null, id);
+            });
+            this.$on('updateCategory', function (postValue) {
+                this.updateCategory(null, postValue);
             });
             this.$on('patchError', function ($message) {
                 if($message != undefined && $message != ''){
@@ -158,28 +149,20 @@
                     this.sendToast(this.patchErrorMessage, 'error');
                 }
             });
-            this.$on('patchSuccess', function ($message) {
-                if($message != undefined && $message != ''){
-                    this.sendToast($message, 'success');
-                } else {
-                    this.sendToast(this.patchSuccessMessage, 'success');
-                }
-            });
             this.$watch('blured', function () {
                 if(this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
-                    this.updateMetaCategory();
+                    this.updateCategory();
                 }
             });
         },
         methods: {
-            getMetaCategories: function (withLoadIndicator) {
+            getCategories: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeMetaCategory)
+                this.$http.get(this.routeCategory)
                         .then(
                                 (response) => {
-                                    this.metaCategories = response.data;
-                                    this.setChildsCategories();
+                                    this.categories = response.data;
                                     this.isLoaded = true;
                                 },
                                 (response) => {
@@ -187,48 +170,59 @@
                                 }
                         );
             },
-            addMetaCategory: function (event) {
-                if (this.metaCategoryName != undefined) {
-                    let isEmpty = true;
-                    let postValue = {};
-                    for (let metaCategory in this.metaCategoryName) {
-                        postValue[metaCategory] = this.metaCategoryName[metaCategory];
-                        if (this.metaCategoryName[metaCategory] != '') {
+            addCategory: function (event, emitPostValue) {
+                let isEmpty = true;
+                let postValue = {};
+                if(emitPostValue != undefined){
+                    postValue = emitPostValue;
+                    isEmpty = false;
+                } else if (this.categoryName != undefined) {
+                    postValue['descriptions']={};
+                    for (let lang in this.categoryName) {
+                        postValue['descriptions'][lang] = this.categoryName[lang];
+                        if (this.categoryName[lang] != '') {
                             isEmpty = false;
                         }
                     }
 
-                    if (!isEmpty) {
-                        this.isLoaded = false;
-                        this.metaCategoryName = [];
-                        this.$http.post(this.routeMetaCategory, {descriptions: postValue})
-                                .then(
-                                        (response) => {
-                                            this.getMetaCategories();
-                                        },
-                                        (response) => {
-                                            this.isLoaded = true;
-                                            if (response.status == 409) {
-                                                this.sendToast(response.body, 'error');
-                                            } else {
-                                                this.sendToast(this.addErrorMessage, 'error');
-                                            }
+                }
+                if (!isEmpty) {
+                    this.isLoaded = false;
+                    this.categoryName = [];
+                    this.$http.post(this.routeCategory, postValue)
+                            .then(
+                                    (response) => {
+                                        this.getCategories();
+                                    },
+                                    (response) => {
+                                        this.isLoaded = true;
+                                        if (response.status == 409) {
+                                            this.sendToast(response.body, 'error');
+                                        } else {
+                                            this.sendToast(this.addErrorMessage, 'error');
                                         }
-                                );
-                    }
+                                    }
+                            );
                 }
             },
-            delMetaCategory: function (event) {
-                if (event.target.dataset.id != undefined && event.target.dataset.id > 0) {
+            delCategory: function (event, id) {
+                var categoryId = undefined;
+                if (event != undefined && event.target.dataset.id != undefined && event.target.dataset.id > 0) {
+                    categoryId = event.target.dataset.id;
+                } else if (id != undefined && id > 0) {
+                    categoryId = id;
+                }
+
+                if(categoryId != undefined && categoryId > 0) {
                     var that = this;
                     $('.ui.basic.modal').modal({
                         closable: false,
                         onApprove: function () {
                             that.isLoaded = false;
-                            that.$http.delete(that.routeMetaCategory + '/' + event.target.dataset.id, {})
+                            that.$http.delete(that.routeCategory + '/' + categoryId)
                                     .then(
                                             (response) => {
-                                                that.getMetaCategories();
+                                                that.getCategories();
                                             },
                                             (response) => {
                                                 that.isLoaded = true;
@@ -243,25 +237,31 @@
                     }).modal('show');
                 }
             },
-            updateMetaCategory: function (event) {
+            updateCategory: function (event, emitPostValue) {
                 let postValue = {};
                 let key ='';
                 let id = '';
-                if(event == undefined) {
-                    id = this.blured.id;
-                    key = this.blured.locale;
-                    postValue[key] = this.blured.value;
-                } else if((event instanceof KeyboardEvent) && event.key=="Enter") {
-                    id = event.target.dataset.id;
-                    key = event.target.dataset.key;
-                    postValue[key] = event.target.value;
-                    this.focused.value = event.target.value;
+                if(emitPostValue != undefined) {
+                    postValue = emitPostValue.postValue;
+                    key = emitPostValue.key;
+                    id = emitPostValue.id;
+                } else {
+                    if(event == undefined) {
+                        id = this.blured.id;
+                        key = this.blured.locale;
+                        postValue[key] = this.blured.value;
+                    } else if((event instanceof KeyboardEvent) && event.key=="Enter") {
+                        id = event.target.dataset.id;
+                        key = event.target.dataset.key;
+                        postValue[key] = event.target.value;
+                        this.focused.value = event.target.value;
+                    }
                 }
                 if(postValue[key] != undefined && postValue[key] != ''){
-                    this.$http.patch(this.routeMetaCategory + '/' + id, {description: postValue})
+                    this.$http.patch(this.routeCategory + '/' + id, {description: postValue})
                             .then(
                                     (response) => {
-                                        this.getMetaCategories(false);
+                                        this.getCategories(false);
                                         this.sendToast(this.patchSuccessMessage, 'success');
                                     },
                                     (response) => {
@@ -274,22 +274,8 @@
                                     }
                             );
                 } else {
-                    this.getMetaCategories(false);
+                    this.getCategories(false);
                     this.sendToast(this.patchErrorMessage, 'error');
-                }
-            },
-            setChildsCategories: function () {
-                for(var index in this.metaCategories){
-                    let metaCategory =  this.metaCategories[index];
-                    for(var index2 in metaCategory.categories) {
-                        let category = metaCategory.categories[index2];
-                        category.children=[];
-                        for(var index3 in metaCategory.categories){
-                            if(metaCategory.categories[index3].parent_id==category.id){
-                                category.children.push(metaCategory.categories[index3]);
-                            }
-                        }
-                    }
                 }
             },
             sendToast: function (message, type) {

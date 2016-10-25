@@ -17,9 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('meta_category_id')->unsigned()->index();
-            $table->integer('parent_id')->unsigned()->default(0);
             $table->text('description');
+            \Kalnoy\Nestedset\NestedSet::columns($table);
         });
     }
 

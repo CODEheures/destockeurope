@@ -2,7 +2,7 @@
 
 @section('content')
 
-        <meta-categories-updatable
+        <manage-categories
                 content-header="{{ trans('strings.view_category_index_header') }}"
                 load-error-message="{{ trans('strings.view_all_error_load_message') }}"
                 add-error-message="{{ trans('strings.view_all_error_add_message') }}"
@@ -13,9 +13,8 @@
                 modal-no="{{ trans('strings.modal_no') }}"
                 modal-del-header = "{{ trans('strings.view_category_index_modal_del_header') }}"
                 modal-del-description = "{{ trans('strings.view_category_index_modal_del_description') }}"
-                route-meta-category="{{ route('metaCategory.index') }}"
                 route-category="{{ route('category.index') }}"
                 availables-locales-list="{{ json_encode(config('app.locales')) }}">
-        </meta-categories-updatable>
+        </manage-categories>
 
 @endsection

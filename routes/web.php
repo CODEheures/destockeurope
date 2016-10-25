@@ -56,9 +56,9 @@ Route::group(['prefix' => 'utils'] , function () {
 });
 
 //Categories
-Route::get('category/get-parent-info/{id?}',  ['as' => 'category.parentInfo', 'uses' =>'CategoryController@getParentInfo']);
+Route::get('categories/manage',  ['as' => 'category.manage', 'uses' =>'CategoryController@manage']);
 Route::resource('category', 'CategoryController');
-Route::resource('metaCategory', 'MetaCategoryController');
+
 
 Route::get('advert/get-list-type', ['as' => 'advert.getListType', 'uses' => 'AdvertController@getListType']);
 Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);

@@ -4,13 +4,13 @@
             <div class="ui large text loader">Loading</div>
         </div>
         <div class="ui vertical menu">
-            <a class="item" v-on:click="emitMetaCategoryChoice(0)">{{ allItem }}</a>
-            <div v-for="metaCategory in metaCategories" class="item">
-                {{ metaCategory['description'][actualLocale] }}
+            <a class="item" v-on:click="emitCategoryChoice(0)">{{ allItem }}</a>
+            <div v-for="category in categories" class="item">
+                {{ category['description'][actualLocale] }}
                 <recursive-categories-lateral-menu
-                        :parent-categories="metaCategory.categories"
+                        :categories="category.children"
                         :actual-locale="actualLocale"
-                        :parent-id="metaCategory.id"
+                        :parent-id="category.id"
                         :all-item="allItem"
                 ></recursive-categories-lateral-menu>
             </div>
@@ -22,35 +22,31 @@
 <script>
     export default {
         props: [
-            'routeMetaCategory',
+            'routeCategory',
             'actualLocale',
             'allItem'
         ],
         data: () => {
             return {
-                metaCategories: [],
+                categories: [],
                 isLoaded: false,
                 parentId: 0
             } ;
         },
         mounted () {
-            this.getMetaCategories();
+            this.getCategories();
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });
-            this.$on('metaCategoryChoice', function (event) {
-                this.$parent.$emit('metaCategoryChoice', {id: event.id});
-            });
         },
         methods: {
-            getMetaCategories: function (withLoadIndicator) {
+            getCategories: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeMetaCategory)
+                this.$http.get(this.routeCategory)
                         .then(
                                 (response) => {
-                                    this.metaCategories = response.data;
-                                    this.setChildsCategories();
+                                    this.categories = response.data;
                                     this.isLoaded = true;
                                 },
                                 (response) => {
@@ -58,24 +54,9 @@
                                 }
                         );
             },
-            setChildsCategories: function () {
-                for(var index in this.metaCategories){
-                    let metaCategory =  this.metaCategories[index];
-                    for(var index2 in metaCategory.categories) {
-                        let category = metaCategory.categories[index2];
-                        category.children=[];
-                        for(var index3 in metaCategory.categories){
-                            if(metaCategory.categories[index3].parent_id==category.id){
-                                category.children.push(metaCategory.categories[index3]);
-                            }
-                        }
-                    }
-                }
-            },
-            emitMetaCategoryChoice: function(value){
-                this.$parent.$emit('metaCategoryChoice', {id: value});
+            emitCategoryChoice: function(value){
+                this.$parent.$emit('categoryChoice', {id: value});
             }
-
         }
     }
 </script>

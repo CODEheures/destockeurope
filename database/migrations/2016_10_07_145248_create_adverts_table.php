@@ -19,6 +19,7 @@ class CreateAdvertsTable extends Migration
             $table->softDeletes();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('category_id')->unsigned()->index();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->enum('type', ['bid', 'request']);
             $table->string('title',config('db_limits.adverts.maxTitle'));
             $table->text('description');

@@ -39,7 +39,7 @@ Vue.component('welcome', require('./components/contents/welcome.vue'));
 //User page
 Vue.component('user-account', require('./components/contents/userAccount.vue'));
 //Categories page
-Vue.component('meta-categories-updatable', require('./components/contents/metaCategoriesUpdatable.vue'));
+Vue.component('manage-categories', require('./components/contents/manageCategories.vue'));
 //createAdvert page
 Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
 //approve advert page
