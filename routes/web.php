@@ -53,10 +53,13 @@ Route::group(['prefix' => 'users'], function() {
 Route::group(['prefix' => 'utils'] , function () {
     Route::get('/get-list-currencies', ['as' => 'utils.getListCurrencies', 'uses' => 'UtilsController@getListCurrencies']);
     Route::get('/get-list-locales', ['as' => 'utils.getListLocales', 'uses' => 'UtilsController@getListLocales']);
+    Route::get('/fixtree', 'CategoryController@fixTree');
 });
 
 //Categories
 Route::get('categories/manage',  ['as' => 'category.manage', 'uses' =>'CategoryController@manage']);
+Route::patch('category/shiftUp',  ['as' => 'category.shiftUp', 'uses' =>'CategoryController@shiftUp']);
+Route::patch('category/shiftDown',  ['as' => 'category.shiftDown', 'uses' =>'CategoryController@shiftDown']);
 Route::resource('category', 'CategoryController');
 
 

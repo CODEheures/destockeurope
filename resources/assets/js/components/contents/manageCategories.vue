@@ -39,7 +39,7 @@
                     <i class="dropdown icon"></i>
                 </div>
                 <div class="active content">
-                    <div v-for="category in categories" class="accordion">
+                    <div v-for="(category,index) in categories" class="accordion">
                         <div class="title">
                             <i class="dropdown icon"></i>
                             <i class="big teal minus square icon" v-on:click="delCategory"
@@ -54,8 +54,30 @@
                                            v-model="category['description'][locale]"
                                            v-on:keyup.enter="updateCategory"
                                            v-on:focus="focused={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
-                                           v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}" />
+                                           v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"/>
                                 </div>
+                            </span>
+                            <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
+                                <template v-if="index==0">
+                                    <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                                </template>
+                                <template v-if="index==categories.length-1">
+                                    <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                                </template>
+                                <template v-if="index!=0 && index!=categories.length-1">
+                                    <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                                    <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                                </template>
+                            </span>
+                            <span class="change-category">
+                                <categories-dropdown-menu
+                                        :route-category="routeCategory"
+                                        :first-menu-name="categoriesDropdownMenuFirstMenuName"
+                                        :all-item="categoriesAllItem"
+                                        :actual-locale="actualLocale"
+                                        :allow-category-selection="true"
+                                        :is-button="false">
+                                </categories-dropdown-menu>
                             </span>
                         </div>
                         <div class="content">
@@ -105,7 +127,12 @@
             modalDelHeader: String,
             modalDelDescription: String,
             routeCategory: String,
-            availablesLocalesList: String
+            routeShiftUpCategory: String,
+            routeShiftDownCategory: String,
+            availablesLocalesList: String,
+            categoriesDropdownMenuFirstMenuName: String,
+            categoriesAllItem: String,
+            actualLocale: String
         },
         data: () => {
             return {
@@ -126,7 +153,7 @@
             $('.accordion').each(function () {
                 $(this).accordion({
                     selector: {
-                        trigger: '.title .icon'
+                        trigger: '.title > .dropdown.icon'
                     }
                 });
             });
@@ -134,7 +161,7 @@
                 this.getCategories(withLoadIndicator);
             });
             this.$on('addCategory', function (postValue) {
-               this.addCategory(null, postValue);
+                this.addCategory(null, postValue);
             });
             this.$on('delCategory', function (id) {
                 this.delCategory(null, id);
@@ -142,15 +169,21 @@
             this.$on('updateCategory', function (postValue) {
                 this.updateCategory(null, postValue);
             });
+            this.$on('shiftDown', function (event) {
+                this.shiftCategory(event, 'down');
+            });
+            this.$on('shiftUp', function (event) {
+                this.shiftCategory(event, 'up');
+            });
             this.$on('patchError', function ($message) {
-                if($message != undefined && $message != ''){
+                if ($message != undefined && $message != '') {
                     this.sendToast($message, 'error');
                 } else {
                     this.sendToast(this.patchErrorMessage, 'error');
                 }
             });
             this.$watch('blured', function () {
-                if(this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
+                if (this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
                     this.updateCategory();
                 }
             });
@@ -161,23 +194,25 @@
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 this.$http.get(this.routeCategory)
                         .then(
-                                (response) => {
+                                function (response) {
                                     this.categories = response.data;
                                     this.isLoaded = true;
-                                },
-                                (response) => {
+                                }
+                                ,
+                                function (response) {
                                     this.sendToast(this.loadErrorMessage, 'error');
                                 }
-                        );
+                        )
+                ;
             },
             addCategory: function (event, emitPostValue) {
                 let isEmpty = true;
                 let postValue = {};
-                if(emitPostValue != undefined){
+                if (emitPostValue != undefined) {
                     postValue = emitPostValue;
                     isEmpty = false;
                 } else if (this.categoryName != undefined) {
-                    postValue['descriptions']={};
+                    postValue['descriptions'] = {};
                     for (let lang in this.categoryName) {
                         postValue['descriptions'][lang] = this.categoryName[lang];
                         if (this.categoryName[lang] != '') {
@@ -191,10 +226,11 @@
                     this.categoryName = [];
                     this.$http.post(this.routeCategory, postValue)
                             .then(
-                                    (response) => {
+                                    function (response) {
                                         this.getCategories();
-                                    },
-                                    (response) => {
+                                    }
+                                    ,
+                                    function (response) {
                                         this.isLoaded = true;
                                         if (response.status == 409) {
                                             this.sendToast(response.body, 'error');
@@ -202,7 +238,8 @@
                                             this.sendToast(this.addErrorMessage, 'error');
                                         }
                                     }
-                            );
+                            )
+                    ;
                 }
             },
             delCategory: function (event, id) {
@@ -213,7 +250,7 @@
                     categoryId = id;
                 }
 
-                if(categoryId != undefined && categoryId > 0) {
+                if (categoryId != undefined && categoryId > 0) {
                     var that = this;
                     $('.ui.basic.modal').modal({
                         closable: false,
@@ -221,10 +258,11 @@
                             that.isLoaded = false;
                             that.$http.delete(that.routeCategory + '/' + categoryId)
                                     .then(
-                                            (response) => {
+                                            function (response) {
                                                 that.getCategories();
-                                            },
-                                            (response) => {
+                                            }
+                                            ,
+                                            function (response) {
                                                 that.isLoaded = true;
                                                 if (response.status == 409) {
                                                     that.sendToast(response.body, 'error');
@@ -232,47 +270,50 @@
                                                     that.sendToast(that.delErrorMessage, 'error');
                                                 }
                                             }
-                                    );
+                                    )
+                            ;
                         }
                     }).modal('show');
                 }
             },
             updateCategory: function (event, emitPostValue) {
                 let postValue = {};
-                let key ='';
+                let key = '';
                 let id = '';
-                if(emitPostValue != undefined) {
+                if (emitPostValue != undefined) {
                     postValue = emitPostValue.postValue;
                     key = emitPostValue.key;
                     id = emitPostValue.id;
                 } else {
-                    if(event == undefined) {
+                    if (event == undefined) {
                         id = this.blured.id;
                         key = this.blured.locale;
                         postValue[key] = this.blured.value;
-                    } else if((event instanceof KeyboardEvent) && event.key=="Enter") {
+                    } else if ((event instanceof KeyboardEvent) && event.key == "Enter") {
                         id = event.target.dataset.id;
                         key = event.target.dataset.key;
                         postValue[key] = event.target.value;
                         this.focused.value = event.target.value;
                     }
                 }
-                if(postValue[key] != undefined && postValue[key] != ''){
+                if (postValue[key] != undefined && postValue[key] != '') {
                     this.$http.patch(this.routeCategory + '/' + id, {description: postValue})
                             .then(
-                                    (response) => {
+                                    function (response) {
                                         this.getCategories(false);
                                         this.sendToast(this.patchSuccessMessage, 'success');
-                                    },
-                                    (response) => {
-                                        this.getMetaCategories(false);
+                                    }
+                                    ,
+                                    function (response) {
+                                        this.getCategories(false);
                                         if (response.status == 409) {
                                             this.sendToast(response.body, 'error');
                                         } else {
                                             this.sendToast(this.patchErrorMessage, 'error');
                                         }
                                     }
-                            );
+                            )
+                    ;
                 } else {
                     this.getCategories(false);
                     this.sendToast(this.patchErrorMessage, 'error');
@@ -282,6 +323,75 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
+            },
+            shiftUp: function (event) {
+                this.shiftCategory(event, 'up');
+            },
+            shiftDown: function (event) {
+                this.shiftCategory(event, 'down');
+            },
+            shiftCategory(event, way){
+                var animTime = 600;
+                var me = $(event.target).closest('.accordion');
+
+                var sibling = null;
+                if (way == 'down') {
+                    sibling = $(me).next('.accordion');
+                } else {
+                    sibling = $(me).prev('.accordion');
+                }
+
+                var meTop = ($(me).position()).top;
+                var siblingTop = ($(sibling).position()).top;
+
+                //Animation
+                $(me).addClass('main-action');
+                $(sibling).addClass('sub-action');
+                $(me).animate(
+                        {top: siblingTop - meTop},
+                        {
+                            duration: animTime,
+                            complete: function () {
+                                $(me).removeClass('main-action');
+                            }
+                        }
+                );
+                var that = this;
+                $(sibling).animate(
+                        {top: meTop - siblingTop},
+                        {
+                            duration: animTime,
+                            complete: function () {
+                                $(sibling).removeClass('sub-action');
+                                var route = null;
+                                if (way == 'down') {
+                                    route = that.routeShiftDownCategory;
+                                } else {
+                                    route = that.routeShiftUpCategory;
+                                }
+                                that.$http.patch(route, {id: event.target.dataset.value})
+                                        .then(
+                                                function (response) {
+                                                    that.getCategories(false);
+                                                    $(me).css('top', 0);
+                                                    $(sibling).css('top', 0);
+                                                    that.sendToast(that.patchSuccessMessage, 'success');
+                                                },
+                                                function (response) {
+                                                    that.getCategories(false);
+                                                    $(me).animate('top', 0);
+                                                    $(sibling).animate('top', 0);
+                                                    if (response.status == 409) {
+                                                        that.sendToast(response.body, 'error');
+                                                    } else {
+                                                        that.sendToast(this.patchErrorMessage, 'error');
+                                                    }
+                                                }
+                                        );
+                            }
+                        }
+                );
+
             }
         }
     }

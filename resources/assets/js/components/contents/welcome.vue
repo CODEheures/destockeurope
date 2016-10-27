@@ -8,7 +8,8 @@
                         :first-menu-name="categoriesDropdownMenuFirstMenuName"
                         :all-item="categoriesAllItem"
                         :actual-locale="actualLocale"
-                        :with-all="true">
+                        :with-all="true"
+                        :old-choice="filter.id">
                 </categories-dropdown-menu>
             </div>
         </div>
@@ -22,7 +23,8 @@
                 <categories-lateral-menu
                         :route-category="routeCategory"
                         :all-item="categoriesAllItem"
-                        :actual-locale="actualLocale">
+                        :actual-locale="actualLocale"
+                        :old-choice="filter.id">
                 </categories-lateral-menu>
                 <div id="welcome-skycrapper" class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
             </div>
@@ -70,7 +72,7 @@
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
-                filter: {}
+                filter: {'id' : 0},
             }
         },
         mounted () {
@@ -79,11 +81,13 @@
             });
             this.$on('categoryChoice', function (event) {
                 if(event.id != undefined && event.id > 0) {
-                    this.setBreadCrumbItems(event.id);
-                    this.filter['id'] = event.id;
+                    if(parseInt(event.id) != this.filter['id']) {
+                        this.setBreadCrumbItems(event.id);
+                        this.filter['id'] = parseInt(event.id);
+                    }
                 } else {
                     this.breadcrumbItems= [];
-                    this.filter={};
+                    this.filter['id'] = 0;
                 }
             });
         },

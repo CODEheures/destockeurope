@@ -3,9 +3,9 @@
         <a class="item" :data-value="parentId" v-on:click="emitCategoryChoice(parentId)">{{ allItem }}</a>
         <template v-for="category in categories">
             <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)" v-if="category.children.length==0">{{ category['description'][actualLocale] }}</a>
-            <div class="ui dropdown item lateral other" :data-value="category.id" v-else>
-                {{ category['description'][actualLocale] }}
+            <div class="ui left pointing dropdown link item lateral other" :data-value="category.id" v-else>
                 <i class="dropdown icon"></i>
+                {{ category['description'][actualLocale] }}
                 <recursive-categories-lateral-menu
                         :categories="category.children"
                         :actual-locale="actualLocale"
@@ -36,11 +36,7 @@
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });
             var that = this;
-            $('.ui.dropdown.lateral.other').dropdown({
-                onChange: function(value, text, $selectedItem) {
-                    that.$parent.$emit('categoryChoice', {id: value});
-                }
-            });
+            $('.ui.dropdown.lateral.other').dropdown();
         },
         methods: {
             emitCategoryChoice: function (value) {

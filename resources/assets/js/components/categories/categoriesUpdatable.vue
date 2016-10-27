@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="category in categories" class="accordion">
+        <div v-for="(category,index) in categories" class="accordion">
             <div class="title">
                 <i class="dropdown icon"></i>
                 <i class="large blue minus square icon" v-on:click="delCategory" :data-id="category.id"></i>
@@ -18,6 +18,18 @@
                         />
                     </div>
                 </span>
+                <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
+                    <template v-if="index==0">
+                        <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                    </template>
+                    <template v-if="index==categories.length-1">
+                        <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                    </template>
+                    <template v-if="index!=0 && index!=categories.length-1">
+                        <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                        <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                    </template>
+                </span>
             </div>
             <div class="content">
                 <categories-updatable
@@ -31,7 +43,7 @@
             <i class="large blue add square icon"
                :data-value="categoryName"
                :data-parent-id="parentId"
-               v-on:click="addCategory" >
+               v-on:click="addCategory">
             </i>
             <span v-for="locale in availablesDatasLocalesList">
                         <div class="ui mini labeled input">
@@ -70,35 +82,42 @@
         },
         mounted () {
             this.availablesDatasLocalesList = JSON.parse(this.availablesLocalesList);
-            this.isLoaded=true;
-            this.$on('getCategories', function(withLoadIndicator) {
+            this.isLoaded = true;
+            this.$on('getCategories', function (withLoadIndicator) {
                 this.$parent.$emit('getCategories', withLoadIndicator);
             });
-            this.$on('addCategory', function(postValue) {
+            this.$on('addCategory', function (postValue) {
                 this.$parent.$emit('addCategory', postValue);
             });
-            this.$on('delCategory', function(id) {
+            this.$on('delCategory', function (id) {
                 this.$parent.$emit('delCategory', id);
             });
-            this.$on('updateCategory', function(postValue) {
+            this.$on('updateCategory', function (postValue) {
                 this.$parent.$emit('updateCategory', postValue);
+            });
+            this.$on('shiftDown', function (event) {
+                this.$parent.$emit('shiftDown', event);
+            });
+            this.$on('shiftUp', function (event) {
+                this.$parent.$emit('shiftUp', event);
             });
             this.$on('patchError', function (message) {
                 this.$parent.$emit('patchError', message);
             });
             this.$watch('blured', function () {
-                if(this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
+                if (this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
                     this.updateCategory();
                 }
             });
+
         },
         methods: {
             addCategory: function (event) {
                 if (this.categoryName != undefined) {
                     let isEmpty = true;
                     let postValue = {};
-                    postValue['descriptions']={};
-                    postValue['parentId']= this.parentId;
+                    postValue['descriptions'] = {};
+                    postValue['parentId'] = this.parentId;
                     for (let category in this.categoryName) {
                         postValue['descriptions'][category] = this.categoryName[category];
                         if (this.categoryName[category] != '') {
@@ -120,24 +139,30 @@
             },
             updateCategory: function (event) {
                 let postValue = {};
-                let key ='';
+                let key = '';
                 let id = '';
-                if(event == undefined) {
+                if (event == undefined) {
                     id = this.blured.id;
                     key = this.blured.locale;
                     postValue[key] = this.blured.value;
-                } else if((event instanceof KeyboardEvent) && event.key=="Enter") {
+                } else if ((event instanceof KeyboardEvent) && event.key == "Enter") {
                     id = event.target.dataset.id;
                     key = event.target.dataset.key;
                     postValue[key] = event.target.value;
                     this.focused.value = event.target.value;
                 }
-                if(postValue[key] != undefined && postValue[key] != ''){
+                if (postValue[key] != undefined && postValue[key] != '') {
                     this.$parent.$emit('updateCategory', {postValue: postValue, key: key, id: id});
                 } else {
                     this.$parent.$emit('getCategories', false);
                     this.$parent.$emit('patchError');
                 }
+            },
+            shiftDown: function (event) {
+                this.$parent.$emit('shiftDown', event);
+            },
+            shiftUp: function (event) {
+                this.$parent.$emit('shiftUp', event);
             }
         }
     }

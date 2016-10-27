@@ -44,6 +44,7 @@ return [
     'form_pointing_minimun_chars' => ' caractères minimum',
     'form_input_search_label' => 'Cherchez ...',
     'form_dropdown_all_item' => 'Tous',
+    'form_dropdown_move_item' => 'Déplacer vers...',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
@@ -75,6 +76,7 @@ return [
     'view_category_add_parent_not_exist' => 'La catégorie parente n\'existe pas',
     'view_category_patch_exist' => 'Cette catégorie existe déjà',
     'view_category_patch_not_exist' => 'Cette catégorie n\'existe pas',
+    'view_category_patch_shift_impossible' => 'La catégorie n\'à pas pu être déplacée',
     'view_category_del_not_exist' => 'Cette catégorie n\'existe pas',
     'view_category_index_header' => 'Gestion des catégories',
     'view_category_index_modal_del_header' => 'Supprimer la Categorie',

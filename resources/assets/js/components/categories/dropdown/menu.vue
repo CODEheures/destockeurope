@@ -1,24 +1,23 @@
 <template>
-    <div id="category-dropdown-menu">
+    <div>
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <div class="ui floating dropdown button">
+        <div class="ui floating dropdown" :class="isButton ? 'button' : ''">
             <div class="text">{{ firstMenuName }}</div>
             <i class="dropdown icon"></i>
             <div class="menu">
-                <div class="item" v-if="withAll">
-                    {{ allItem }}
+                <div class="item" data-value="0" :data-text="allItem" v-if="withAll">
+                    <span class="text">{{ allItem }}</span>
                 </div>
-                <div v-for="metaCategory in metaCategories" class="item" >
-                    <i class="dropdown icon" v-if="metaCategory.categories.length>0"></i>
-                    <span class="text">{{ metaCategory['description'][actualLocale] }}</span>
+                <div v-for="category in categories" class="item" >
+                    <i class="dropdown icon" v-if="category.children.length>0"></i>
+                    <span class="text">{{ category['description'][actualLocale] }}</span>
                     <recursive-categories-dropdown-menu
-                            :parent-description="metaCategory['description'][actualLocale]"
-                            :parent-categories="metaCategory.categories"
-                            parent-type="metaCategory"
+                            :parent-description="category['description'][actualLocale]"
+                            :categories="category.children"
                             :actual-locale="actualLocale"
-                            :parent-id="metaCategory.id"
+                            :parent-id="category.id"
                             :with-all="withAll"
                             :all-item="allItem"
                             :left="false">
@@ -33,93 +32,72 @@
 <script>
     export default {
         props: {
-            routeMetaCategory: String,
+            routeCategory: String,
             firstMenuName: String,
             actualLocale: String,
-            oldChoice: String,
-            withAll: Boolean,
-            allItem: String
+            oldChoice: {
+                type: Number,
+                required: false,
+                default: 0
+            },
+            withAll: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            allItem: String,
+            allowCategorySelection: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            isButton: {
+                type: Boolean,
+                required: false,
+                default: true
+            }
         },
         data: () => {
             return {
-                metaCategories: [],
+                categories: [],
                 isLoaded: false,
-                parentId: 0
             } ;
         },
         mounted () {
-            this.getMetaCategories();
+            this.getCategories();
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });
-            this.$on('metaCategoryChoice', function (event) {
-                this.$parent.$emit('metaCategoryChoice', {id: event.id});
-            });
         },
         methods: {
-            getMetaCategories: function (withLoadIndicator) {
+            getCategories: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeMetaCategory)
+                this.$http.get(this.routeCategory)
                         .then(
-                                (response) => {
-                                    this.metaCategories = response.data;
-                                    this.setChildsCategories();
+                                function (response) {
+                                    this.categories = response.data;
                                     this.isLoaded = true;
                                 },
-                                (response) => {
+                                function (response) {
                                     this.$parent.$emit('loadError');
                                 }
                         );
-            },
-            setChildsCategories: function () {
-                for(var index in this.metaCategories){
-                    let metaCategory =  this.metaCategories[index];
-                    for(var index2 in metaCategory.categories) {
-                        let category = metaCategory.categories[index2];
-                        category.children=[];
-                        for(var index3 in metaCategory.categories){
-                            if(metaCategory.categories[index3].parent_id==category.id){
-                                category.children.push(metaCategory.categories[index3]);
-                            }
-                        }
-                    }
-                }
             }
         },
         updated () {
             var that = this;
-            if(that.oldChoice != ''){
-                $('#category-dropdown-menu .ui.dropdown')
-                        .dropdown('set selected',  that.oldChoice)
-                        .dropdown({
-                            onChange: function(value, text, $selectedItem) {
-                                var type = value.split('_')[0];
-                                var val = value.split('_')[1];
-                                if(type == 'category') {
-                                    that.$parent.$emit('categoryChoice', {id: val});
-                                } else if(type=='metaCategory'){
-                                    that.$parent.$emit('metaCategoryChoice', {id: val});
-                                }
+            let dropdown = $('.ui.dropdown');
+            dropdown.dropdown('set selected',  that.oldChoice.toString())
+                 .dropdown({
+                        allowCategorySelection: that.allowCategorySelection,
+                        onChange: function(value, text, $selectedItem) {
+                            if(value != undefined && value != '' && value != that.oldChoice){
+                                that.$parent.$emit('categoryChoice', {id: value});
                             }
-                        })
-                ;
-            } else {
-                $('#category-dropdown-menu .ui.dropdown')
-                        .dropdown({
-                            onChange: function(value, text, $selectedItem) {
-                                var type = value.split('_')[0];
-                                var val = value.split('_')[1];
-                                if(type == 'category') {
-                                    that.$parent.$emit('categoryChoice', {id: val});
-                                } else if(type=='metaCategory'){
-                                    that.$parent.$emit('metaCategoryChoice', {id: val});
-                                }
-                            }
-                        })
-                ;
-            }
-
+                        }
+                    })
+            ;
         }
     }
 </script>

@@ -34,6 +34,14 @@ form {
   margin-bottom: 0.75rem;
 }
 
+#category-accordion {
+  box-shadow: none;
+
+  & > .title {
+    display: none;
+  }
+}
+
 #category-accordion .ui.labeled.input {
   margin-right: 0.5rem;
 }
@@ -63,6 +71,39 @@ form {
   content: "\f0da";
 }
 
+.change-category {
+  float: right;
+}
+
+.drag-category {
+  float: right;
+
+  & .toggle.icon {
+    cursor: pointer;
+  }
+
+}
+
+.accordion {
+  transition: scale, opacity;
+  transition-duration: 0.2s;
+  transform: scale(1.00);
+  position: relative;
+}
+
+.main-action {
+  transform: scale(1.01);
+  box-shadow: 0.1em 0.1em 1em rgba(0,0,0,0.2);
+  border: 1px solid hsla(201, 73%, 47%, 0.38);
+  z-index: 1000;
+  position: relative;
+}
+
+.sub-action {
+  transform: scale(0.99);
+  opacity: 0.8;
+  position: relative;
+}
 //transitions vuejs
 .p-fade-enter-active, .p-fade-leave-active {
   transition: opacity 0.8s !important;

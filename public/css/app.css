@@ -28725,6 +28725,11 @@ form.login, form.register {
 .row.social a.button {
   margin-bottom: 0.75rem; }
 
+#category-accordion {
+  box-shadow: none; }
+  #category-accordion > .title {
+    display: none; }
+
 #category-accordion .ui.labeled.input {
   margin-right: 0.5rem; }
 
@@ -28747,6 +28752,37 @@ form.login, form.register {
 
 .ui.dropdown .menu .item .right.dropdown.icon:before {
   content: "\f0da"; }
+
+.change-category {
+  float: right; }
+
+.drag-category {
+  float: right; }
+  .drag-category .toggle.icon {
+    cursor: pointer; }
+
+.accordion {
+  -webkit-transition: scale, opacity;
+  transition: scale, opacity;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  position: relative; }
+
+.main-action {
+  -webkit-transform: scale(1.01);
+  transform: scale(1.01);
+  box-shadow: 0.1em 0.1em 1em rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(32, 146, 207, 0.38);
+  z-index: 1000;
+  position: relative; }
+
+.sub-action {
+  -webkit-transform: scale(0.99);
+  transform: scale(0.99);
+  opacity: 0.8;
+  position: relative; }
 
 .p-fade-enter-active, .p-fade-leave-active {
   -webkit-transition: opacity 0.8s !important;

@@ -28,7 +28,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $tree = Category::get()->toTree();
+        $tree = Category::defaultOrder()->get()->toTree();
         return response()->json($tree);
     }
 
@@ -183,5 +183,64 @@ class CategoryController extends Controller
         } else {
             return response('error', 500);
         }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function shiftUp(Request $request)
+    {
+        $id = $request->id;
+        if($id && $id > 0 ) {
+            $existCategory = Category::find($id);
+            if(!$existCategory) {
+                return response(trans('strings.view_category_patch_not_exist'), 409);
+            } else {
+                $result = $existCategory->up();
+                if($result){
+                    return response('ok',200);
+                } else {
+                    return response(trans('strings.view_category_patch_not_exist'), 409);
+                }
+            }
+        } else {
+            return response('error', 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function shiftDown(Request $request)
+    {
+        $id = $request->id;
+        if($id && $id > 0 ) {
+            $existCategory = Category::find($id);
+            if(!$existCategory) {
+                return response(trans('strings.view_category_patch_not_exist'), 409);
+            } else {
+                $result = $existCategory->down();
+                if($result){
+                    return response('ok',200);
+                } else {
+                    //return response(trans('strings.view_category_patch_not_exist'), 409);
+                    return response(trans('crotte'), 409);
+                }
+            }
+        } else {
+            return response('error', 500);
+        }
+    }
+
+    public function fixTree()
+    {
+        Category::fixTree();
+        return back();
     }
 }

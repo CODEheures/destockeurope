@@ -12,6 +12,7 @@
                         :actual-locale="actualLocale"
                         :parent-id="category.id"
                         :all-item="allItem"
+                        :old-choice="oldChoice"
                 ></recursive-categories-lateral-menu>
             </div>
         </div>
@@ -24,7 +25,8 @@
         props: [
             'routeCategory',
             'actualLocale',
-            'allItem'
+            'allItem',
+            'oldChoice'
         ],
         data: () => {
             return {

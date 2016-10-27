@@ -44,6 +44,7 @@ return [
     'form_pointing_minimun_chars' => ' characters minimum',
     'form_input_search_label' => 'Search issues...',
     'form_dropdown_all_item' => 'All',
+    'form_dropdown_move_item' => 'Move to...',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
@@ -75,6 +76,7 @@ return [
     'view_category_add_parent_not_exist' => 'The parent category is not exist',
     'view_category_patch_exist' => 'This category is already exist',
     'view_category_patch_not_exist' => 'This category is not exist',
+    'view_category_patch_shift_impossible' => 'It does not reach the category could be moved',
     'view_category_del_not_exist' => 'This category is not exist',
     'view_category_index_header' => 'Categories settings',
     'view_category_index_modal_del_header' => 'Delete Category',
