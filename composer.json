@@ -9,7 +9,7 @@
         "laravel/framework": "5.3.*",
         "laravel/socialite": "^2.0",
         "caouecs/laravel-lang": "~3.0",
-        "mathiasverraes/money": "dev-master",
+        "moneyphp/money": "dev-master",
         "kalnoy/nestedset": "^4.1"
     },
     "require-dev": {

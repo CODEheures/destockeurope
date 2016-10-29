@@ -14,12 +14,12 @@
                 modal-del-header = "{{ trans('strings.view_category_index_modal_del_header') }}"
                 modal-del-description = "{{ trans('strings.view_category_index_modal_del_description') }}"
                 route-category="{{ route('category.index') }}"
-                route-get-available-move-to-category="{{ route('category.index') }}"
+                route-get-available-move-to-category="{{ route('category.availableMoveTo') }}"
                 route-shift-up-category="{{ route('category.shiftUp') }}"
                 route-shift-down-category="{{ route('category.shiftDown') }}"
+                route-append-to-category="{{ route('category.appendTo') }}"
                 availables-locales-list="{{ json_encode(config('app.locales')) }}"
                 categories-dropdown-menu-first-menu-name="{{ trans('strings.form_dropdown_move_item') }}"
-                categories-all-item="{{ trans('strings.form_dropdown_all_item') }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}">
         </manage-categories>
 

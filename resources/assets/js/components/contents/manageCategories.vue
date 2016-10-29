@@ -40,51 +40,58 @@
                 </div>
                 <div class="active content">
                     <div v-for="(category,index) in categories" class="accordion">
-                        <div class="title">
-                            <i class="dropdown icon"></i>
-                            <i class="big teal minus square icon" v-on:click="delCategory"
-                               :data-id="category.id"></i>
-                            <span v-for="locale in availablesDatasLocalesList">
-                                <div class="ui labeled input">
-                                    <div class="ui label">{{ locale }}</div>
-                                    <input type="text"
-                                           :name="category.id + '_' + locale"
-                                           :data-id="category.id"
-                                           :data-key="locale"
-                                           v-model="category['description'][locale]"
-                                           v-on:keyup.enter="updateCategory"
-                                           v-on:focus="focused={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
-                                           v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"/>
-                                </div>
-                            </span>
-                            <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
-                                <template v-if="index==0">
-                                    <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
-                                </template>
-                                <template v-if="index==categories.length-1">
-                                    <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
-                                </template>
-                                <template v-if="index!=0 && index!=categories.length-1">
-                                    <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
-                                    <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
-                                </template>
-                            </span>
-                            <span class="change-category">
-                                <categories-dropdown-menu
-                                        :route-category="routeCategory"
-                                        :first-menu-name="categoriesDropdownMenuFirstMenuName"
-                                        :all-item="categoriesAllItem"
-                                        :actual-locale="actualLocale"
-                                        :allow-category-selection="true"
-                                        :is-button="false">
-                                </categories-dropdown-menu>
-                            </span>
+                        <div class="title flex">
+                            <div>
+                                <i class="dropdown icon"></i>
+                                <i class="big teal minus square icon" v-on:click="delCategory"
+                                   :data-id="category.id"></i>
+                                <span v-for="locale in availablesDatasLocalesList">
+                                    <div class="ui labeled input">
+                                        <div class="ui label">{{ locale }}</div>
+                                        <input type="text"
+                                               :name="category.id + '_' + locale"
+                                               :data-id="category.id"
+                                               :data-key="locale"
+                                               v-model="category['description'][locale]"
+                                               v-on:keyup.enter="updateCategory"
+                                               v-on:focus="focused={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
+                                               v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"/>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="change-category">
+                                <span>
+                                    <categories-list-move-to
+                                            :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
+                                            :route-param="category.id"
+                                            :first-menu-name="categoriesDropdownMenuFirstMenuName"
+                                            :actual-locale="actualLocale"
+                                            :flag-refresh="flagRefresh">
+                                    </categories-list-move-to>
+                                </span>
+                                <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
+                                    <template v-if="index==0">
+                                        <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                                    </template>
+                                    <template v-if="index==categories.length-1">
+                                        <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                                    </template>
+                                    <template v-if="index!=0 && index!=categories.length-1">
+                                        <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                                        <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                                    </template>
+                                </span>
+                            </div>
                         </div>
                         <div class="content">
                             <categories-updatable
                                     :categories="category.children"
                                     :availables-locales-list="availablesLocalesList"
-                                    :parent-id="category.id">
+                                    :parent-id="category.id"
+                                    :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
+                                    :actual-locale="actualLocale"
+                                    :categories-dropdown-menu-first-menu-name="categoriesDropdownMenuFirstMenuName"
+                                    :flag-refresh="flagRefresh">
                             </categories-updatable>
                         </div>
                     </div>
@@ -127,11 +134,12 @@
             modalDelHeader: String,
             modalDelDescription: String,
             routeCategory: String,
+            routeGetAvailableMoveToCategory: String,
             routeShiftUpCategory: String,
             routeShiftDownCategory: String,
+            routeAppendToCategory: String,
             availablesLocalesList: String,
             categoriesDropdownMenuFirstMenuName: String,
-            categoriesAllItem: String,
             actualLocale: String
         },
         data: () => {
@@ -144,7 +152,8 @@
                 focused: {},
                 blured: {},
                 categories: {},
-                categoryName: []
+                categoryName: [],
+                flagRefresh: false
             };
         },
         mounted () {
@@ -153,9 +162,12 @@
             $('.accordion').each(function () {
                 $(this).accordion({
                     selector: {
-                        trigger: '.title > .dropdown.icon'
+                        trigger: '.title > div > .dropdown.icon'
                     }
                 });
+            });
+            this.$on('categoryChoice', function (event) {
+                this.appendToCategory(event.id, event.parentId);
             });
             this.$on('getCategories', function (withLoadIndicator) {
                 this.getCategories(withLoadIndicator);
@@ -196,6 +208,7 @@
                         .then(
                                 function (response) {
                                     this.categories = response.data;
+                                    this.flagRefresh=!this.flagRefresh;
                                     this.isLoaded = true;
                                 }
                                 ,
@@ -392,6 +405,23 @@
                         }
                 );
 
+            },
+            appendToCategory(childId, parentId){
+                var that = this;
+                that.$http.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
+                        .then(
+                                function (response) {
+                                    that.getCategories(false);
+                                    that.sendToast(that.patchSuccessMessage, 'success');
+                                },
+                                function (response) {
+                                    if (response.status == 409) {
+                                        that.sendToast(response.body, 'error');
+                                    } else {
+                                        that.sendToast(this.patchErrorMessage, 'error');
+                                    }
+                                }
+                        );
             }
         }
     }

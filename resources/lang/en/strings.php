@@ -45,6 +45,8 @@ return [
     'form_input_search_label' => 'Search issues...',
     'form_dropdown_all_item' => 'All',
     'form_dropdown_move_item' => 'Move to...',
+    'form_dropdown_move_as_root' => 'Root catégory',
+    'form_dropdown_move_already_child_of' => 'Category already child of choice',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',

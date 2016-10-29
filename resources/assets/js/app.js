@@ -25,8 +25,10 @@ Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb
 //Catégories
 Vue.component('categories-lateral-menu', require('./components/categories/lateral/menu.vue'));
 Vue.component('recursive-categories-lateral-menu', require('./components/categories/lateral/recursive.vue'));
-Vue.component('categories-dropdown-menu', require('./components/categories/dropdown/menu.vue'));
-Vue.component('recursive-categories-dropdown-menu', require('./components/categories/dropdown/recursive.vue'));
+Vue.component('categories-dropdown-menu', require('./components/categories/dropdown/all/menu.vue'));
+Vue.component('recursive-categories-dropdown-menu', require('./components/categories/dropdown/all/recursive.vue'));
+Vue.component('categories-list-move-to', require('./components/categories/dropdown/listMoveTo/menu.vue'));
+Vue.component('recursive-categories-list-move-to', require('./components/categories/dropdown/listMoveTo/recursive.vue'));
 Vue.component('categories-updatable', require('./components/categories/categoriesUpdatable.vue'));
 
 //adverts

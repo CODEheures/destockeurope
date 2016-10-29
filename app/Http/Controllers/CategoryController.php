@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\MetaCategory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -51,7 +47,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $descriptions = $request->descriptions;
-        $parent_id = $request->parentId;
+        $parent_id = (int) $request->parentId;
 
         //1 test langages in lang
         foreach ($descriptions as $lang=>$description){
@@ -148,7 +144,7 @@ class CategoryController extends Controller
             }
         }
 
-        //2 test exist MetaCategories
+        //2 test exist Categories
         $existCategory = Category::find($id);
         if(!$existCategory){
             return response(trans('strings.view_category_patch_not_exist'), 409);
@@ -193,7 +189,7 @@ class CategoryController extends Controller
      */
     public function shiftUp(Request $request)
     {
-        $id = $request->id;
+        $id = (int) $request->id;
         if($id && $id > 0 ) {
             $existCategory = Category::find($id);
             if(!$existCategory) {
@@ -219,7 +215,7 @@ class CategoryController extends Controller
      */
     public function shiftDown(Request $request)
     {
-        $id = $request->id;
+        $id = (int) $request->id;
         if($id && $id > 0 ) {
             $existCategory = Category::find($id);
             if(!$existCategory) {
@@ -229,8 +225,7 @@ class CategoryController extends Controller
                 if($result){
                     return response('ok',200);
                 } else {
-                    //return response(trans('strings.view_category_patch_not_exist'), 409);
-                    return response(trans('crotte'), 409);
+                    return response(trans('strings.view_category_patch_not_exist'), 409);
                 }
             }
         } else {
@@ -238,9 +233,88 @@ class CategoryController extends Controller
         }
     }
 
-    public function fixTree()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function availableMoveTo($id)
     {
-        Category::fixTree();
-        return back();
+        if($id && $id > 0 ) {
+            $category = Category::find($id);
+            if($category){
+                $tree = Category::whereNotDescendantOf($category)->defaultOrder()->get();
+                foreach ($tree as $key => $item){
+                    if($item->id == $category->id){
+                        $tree->pull($key);
+                    }
+                }
+
+                if(!$category->isRoot()){
+                    $descriptions = [];
+                    foreach (config('app.locales') as $lang){
+                        $descriptions[$lang] = trans('strings.form_dropdown_move_as_root',[],'',$lang);
+                    }
+                    $cat = new Category();
+                    $cat->description = $descriptions;
+                    $cat->id=-1;
+                    $tree->prepend($cat);
+                }
+
+                return response()->json($tree->toTree());
+            } else {
+                return response(trans('strings.view_category_patch_not_exist'), 409);
+            }
+        } else {
+            return response('error', 500);
+        }
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function appendTo(Request $request)
+    {
+        $childId = (int) $request->childId;
+        $parentId = (int) $request->parentId;
+        if($childId && $parentId && $childId > 0 && ($parentId > 0 || $parentId==-1)) {
+            $existChildCategory = Category::find($childId);
+
+            if($parentId > 0){
+                $existParentCategory = Category::find($parentId);
+                if(!$existChildCategory || !$existParentCategory) {
+                    return response(trans('strings.view_category_patch_not_exist'), 409);
+                } elseif ($existChildCategory && $existChildCategory->isChildOf($existParentCategory)) {
+                    return response(trans('strings.form_dropdown_move_already_child_of'), 409);
+                } else {
+                    $existChildCategory->appendToNode($existParentCategory);
+                    $result = $existChildCategory->save();
+                    if($result){
+                        return response('ok',200);
+                    } else {
+                        return response(trans('strings.view_category_patch_not_exist'), 409);
+                    }
+                }
+            } else {
+                if(!$existChildCategory) {
+                    return response(trans('strings.view_category_patch_not_exist'), 409);
+                } elseif ($existChildCategory && $existChildCategory->isRoot()){
+                    return response('error', 500);
+                } else {
+                    $result = $existChildCategory->saveAsRoot();
+                    if($result){
+                        return response('ok',200);
+                    } else {
+                        return response(trans('strings.view_category_patch_not_exist'), 409);
+                    }
+                }
+            }
+        } else {
+            return response('error', 500);
+        }
     }
 }

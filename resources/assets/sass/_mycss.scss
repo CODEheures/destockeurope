@@ -37,6 +37,18 @@ form {
 #category-accordion {
   box-shadow: none;
 
+  & .title.flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    & div.change-category {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   & > .title {
     display: none;
   }
@@ -71,24 +83,12 @@ form {
   content: "\f0da";
 }
 
-.change-category {
-  float: right;
-}
-
-.drag-category {
-  float: right;
-
-  & .toggle.icon {
-    cursor: pointer;
-  }
-
-}
-
 .accordion {
   transition: scale, opacity;
   transition-duration: 0.2s;
   transform: scale(1.00);
   position: relative;
+  z-index: 1;
 }
 
 .main-action {

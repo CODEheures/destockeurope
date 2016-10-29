@@ -45,6 +45,8 @@ return [
     'form_input_search_label' => 'Cherchez ...',
     'form_dropdown_all_item' => 'Tous',
     'form_dropdown_move_item' => 'Déplacer vers...',
+    'form_dropdown_move_as_root' => 'Catégorie principale',
+    'form_dropdown_move_already_child_of' => 'Cette catégory est déjà bien placée',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',

@@ -28727,6 +28727,21 @@ form.login, form.register {
 
 #category-accordion {
   box-shadow: none; }
+  #category-accordion .title.flex {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between; }
+    #category-accordion .title.flex div.change-category {
+      display: -webkit-box;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center; }
   #category-accordion > .title {
     display: none; }
 
@@ -28753,14 +28768,6 @@ form.login, form.register {
 .ui.dropdown .menu .item .right.dropdown.icon:before {
   content: "\f0da"; }
 
-.change-category {
-  float: right; }
-
-.drag-category {
-  float: right; }
-  .drag-category .toggle.icon {
-    cursor: pointer; }
-
 .accordion {
   -webkit-transition: scale, opacity;
   transition: scale, opacity;
@@ -28768,7 +28775,8 @@ form.login, form.register {
   transition-duration: 0.2s;
   -webkit-transform: scale(1);
   transform: scale(1);
-  position: relative; }
+  position: relative;
+  z-index: 1; }
 
 .main-action {
   -webkit-transform: scale(1.01);

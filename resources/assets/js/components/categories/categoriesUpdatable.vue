@@ -1,10 +1,11 @@
 <template>
     <div>
         <div v-for="(category,index) in categories" class="accordion">
-            <div class="title">
-                <i class="dropdown icon"></i>
-                <i class="large blue minus square icon" v-on:click="delCategory" :data-id="category.id"></i>
-                <span v-for="locale in availablesDatasLocalesList">
+            <div class="title flex">
+                <div>
+                    <i class="dropdown icon"></i>
+                    <i class="large blue minus square icon" v-on:click="delCategory" :data-id="category.id"></i>
+                    <span v-for="locale in availablesDatasLocalesList">
                     <div class="ui mini labeled input">
                         <div class="ui label">{{ locale }}</div>
                         <input type="text"
@@ -18,24 +19,41 @@
                         />
                     </div>
                 </span>
-                <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
-                    <template v-if="index==0">
-                        <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
-                    </template>
-                    <template v-if="index==categories.length-1">
-                        <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
-                    </template>
-                    <template v-if="index!=0 && index!=categories.length-1">
-                        <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
-                        <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
-                    </template>
-                </span>
+                </div>
+                <div class="change-category">
+                    <span>
+                        <categories-list-move-to
+                                :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
+                                :route-param="category.id"
+                                :first-menu-name="categoriesDropdownMenuFirstMenuName"
+                                :actual-locale="actualLocale"
+                                :flag-refresh="flagRefresh">
+                        </categories-list-move-to>
+                    </span>
+                    <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
+                        <template v-if="index==0">
+                            <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                        </template>
+                        <template v-if="index==categories.length-1">
+                            <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                        </template>
+                        <template v-if="index!=0 && index!=categories.length-1">
+                            <i class="large toggle down icon" :data-value="category.id" v-on:click="shiftDown"></i>
+                            <i class="large toggle up icon" :data-value="category.id" v-on:click="shiftUp"></i>
+                        </template>
+                    </span>
+                </div>
+
             </div>
             <div class="content">
                 <categories-updatable
                         :categories="category.children"
                         :availables-locales-list="availablesLocalesList"
-                        :parent-id="category.id">
+                        :parent-id="category.id"
+                        :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
+                        :actual-locale="actualLocale"
+                        :categories-dropdown-menu-first-menu-name="categoriesDropdownMenuFirstMenuName"
+                        :flag-refresh="flagRefresh">
                 </categories-updatable>
             </div>
         </div>
@@ -70,6 +88,10 @@
             categories: Array,
             availablesLocalesList: String,
             parentId: Number,
+            routeGetAvailableMoveToCategory: String,
+            actualLocale: String,
+            categoriesDropdownMenuFirstMenuName: String,
+            flagRefresh: Boolean
         },
         data: () => {
             return {
@@ -83,6 +105,9 @@
         mounted () {
             this.availablesDatasLocalesList = JSON.parse(this.availablesLocalesList);
             this.isLoaded = true;
+            this.$on('categoryChoice', function (event) {
+                this.$parent.$emit('categoryChoice', event);
+            });
             this.$on('getCategories', function (withLoadIndicator) {
                 this.$parent.$emit('getCategories', withLoadIndicator);
             });
@@ -109,7 +134,6 @@
                     this.updateCategory();
                 }
             });
-
         },
         methods: {
             addCategory: function (event) {
