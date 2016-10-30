@@ -56,9 +56,13 @@ Route::group(['prefix' => 'utils'] , function () {
 });
 
 //Categories
-Route::get('category/get-parent-info/{id?}',  ['as' => 'category.parentInfo', 'uses' =>'CategoryController@getParentInfo']);
+Route::get('categories/manage',  ['as' => 'category.manage', 'uses' =>'CategoryController@manage']);
+Route::patch('category/shiftUp',  ['as' => 'category.shiftUp', 'uses' =>'CategoryController@shiftUp']);
+Route::patch('category/shiftDown',  ['as' => 'category.shiftDown', 'uses' =>'CategoryController@shiftDown']);
+Route::get('category/available-move-to/{id?}',  ['as' => 'category.availableMoveTo', 'uses' =>'CategoryController@availableMoveTo']);
+Route::patch('category/append-to',  ['as' => 'category.appendTo', 'uses' =>'CategoryController@appendTo']);
 Route::resource('category', 'CategoryController');
-Route::resource('metaCategory', 'MetaCategoryController');
+
 
 Route::get('advert/get-list-type', ['as' => 'advert.getListType', 'uses' => 'AdvertController@getListType']);
 Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);

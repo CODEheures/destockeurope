@@ -7,7 +7,7 @@
                         <div class="section active" :data-value="item.value">{{ item.name }}</div>
                     </template>
                     <template v-else>
-                        <a class="section" :data-value="item.value" v-on:click="emitCategorieChoice(item.value, index)">{{ item.name }}</a>
+                        <a class="section" :data-value="item.value" v-on:click="emitCategorieChoice(item.value)">{{ item.name }}</a>
                         <i class="right angle icon divider"></i>
                     </template>
                 </template>
@@ -30,12 +30,8 @@
 
         },
         methods: {
-            emitCategorieChoice: function (categoryId, index) {
-                if(index == 0){
-                    this.$parent.$emit('metaCategoryChoice', {id: categoryId});
-                } else {
-                    this.$parent.$emit('categoryChoice', {id: categoryId});
-                }
+            emitCategorieChoice: function (categoryId) {
+                this.$parent.$emit('categoryChoice', {id: categoryId});
             }
         },
     }

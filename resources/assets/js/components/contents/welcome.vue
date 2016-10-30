@@ -4,11 +4,12 @@
         <div class="mobile only tablet only row">
             <div class="ui one column grid">
                 <categories-dropdown-menu
-                        :route-meta-category="routeMetaCategory"
+                        :route-category="routeCategory"
                         :first-menu-name="categoriesDropdownMenuFirstMenuName"
                         :all-item="categoriesAllItem"
                         :actual-locale="actualLocale"
-                        :with-all="true">
+                        :with-all="true"
+                        :old-choice="filter.id">
                 </categories-dropdown-menu>
             </div>
         </div>
@@ -19,11 +20,12 @@
                 </breadcrumb>
             </div>
             <div class="computer only four wide column">
-                <categories-lateral-menu
-                        :route-meta-category="routeMetaCategory"
+                <categories-lateral-accordion-menu
+                        :route-category="routeCategory"
                         :all-item="categoriesAllItem"
-                        :actual-locale="actualLocale">
-                </categories-lateral-menu>
+                        :actual-locale="actualLocale"
+                        :old-choice="filter.id">
+                </categories-lateral-accordion-menu>
                 <div id="welcome-skycrapper" class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
             </div>
             <div class="sixteen wide tablet twelve wide computer column">
@@ -51,8 +53,7 @@
     export default {
         props: [
             'loadErrorMessage',
-            'routeMetaCategory',
-            'routeCategoryInfo',
+            'routeCategory',
             'categoriesDropdownMenuFirstMenuName',
             'filterRibbon',
             'filterPriceTitle',
@@ -71,7 +72,7 @@
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
-                filter: {}
+                filter: {'id' : 0},
             }
         },
         mounted () {
@@ -80,22 +81,13 @@
             });
             this.$on('categoryChoice', function (event) {
                 if(event.id != undefined && event.id > 0) {
-                    this.setBreadCrumbItems(event.id, false);
-                    this.filter['type'] = 'category';
-                    this.filter['id'] = event.id;
+                    if(parseInt(event.id) != this.filter['id']) {
+                        this.setBreadCrumbItems(event.id);
+                        this.filter['id'] = parseInt(event.id);
+                    }
                 } else {
                     this.breadcrumbItems= [];
-                    this.filter={};
-                }
-            });
-            this.$on('metaCategoryChoice', function (event) {
-                if(event.id != undefined && event.id > 0) {
-                    this.setBreadCrumbItems(event.id, true);
-                    this.filter['type']='metaCategory';
-                    this.filter['id']=event.id;
-                } else {
-                    this.breadcrumbItems= [];
-                    this.filter={};
+                    this.filter['id'] = 0;
                 }
             });
         },
@@ -105,50 +97,28 @@
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
             },
-            setBreadCrumbItems: function (categoryId, isMetaCategorie) {
-                if(isMetaCategorie){
-                    this.$http.get(this.routeMetaCategory +'/'+ categoryId)
-                            .then(
-                                    function (response) {
-                                        var metaCategory = response.data;
-                                        this.breadcrumbItems = [];
+            setBreadCrumbItems: function (categoryId) {
+                this.$http.get(this.routeCategory+'/'+categoryId)
+                        .then(
+                                function (response) {
+                                    var chainedCategories = response.data;
+                                    this.breadcrumbItems = [];
+                                    for(var index in chainedCategories){
                                         this.breadcrumbItems.push({
-                                            name: metaCategory['description'][this.actualLocale],
-                                            value: metaCategory.id
+                                            name: chainedCategories[index]['description'][this.actualLocale],
+                                            value: chainedCategories[index].id
                                         });
-                                    },
-                                    function (response) {
-                                        this.breadcrumbItems = [];
-                                        this.breadcrumbItems.push({
-                                            name: this.loadErrorMessage,
-                                            value:''
-                                        });
-                                        //this.$parent.$emit('loadError');
                                     }
-                            );
-                } else {
-                    this.$http.get(this.routeCategoryInfo+'/'+categoryId)
-                            .then(
-                                    function (response) {
-                                        var chainedCategories = response.data;
-                                        this.breadcrumbItems = [];
-                                        for(var index in chainedCategories){
-                                            this.breadcrumbItems.push({
-                                                name: chainedCategories[index]['description'][this.actualLocale],
-                                                value: chainedCategories[index].id
-                                            });
-                                        }
-                                    },
-                                    function (response) {
-                                        this.breadcrumbItems = [];
-                                        this.breadcrumbItems.push({
-                                            name: this.loadErrorMessage,
-                                            value:''
-                                        });
-                                        //this.$parent.$emit('loadError');
-                                    }
-                            );
-                }
+                                },
+                                function (response) {
+                                    this.breadcrumbItems = [];
+                                    this.breadcrumbItems.push({
+                                        name: this.loadErrorMessage,
+                                        value:''
+                                    });
+                                    //this.$parent.$emit('loadError');
+                                }
+                        );
 
             }
         }

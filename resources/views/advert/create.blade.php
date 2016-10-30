@@ -8,7 +8,7 @@
             advert-form-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-form-price-label="{{ trans('strings.view_advert_form_price_label') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
-            category-route-meta-category="{{ route('metaCategory.index') }}"
+            route-category="{{ route('category.index') }}"
             category-first-menu-name="{{ trans('strings.menu_category') }}"
             route-get-list-type="{{ route('advert.getListType') }}"
             list-type-first-menu-name="{{ trans('strings.view_advert_list_type_dropdown_label') }}"

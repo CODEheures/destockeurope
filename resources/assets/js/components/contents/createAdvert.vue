@@ -17,7 +17,7 @@
                 </type-advert-radio-button>
                 <div class="field">
                     <categories-dropdown-menu
-                            :route-meta-category="categoryRouteMetaCategory"
+                            :route-category="routeCategory"
                             :first-menu-name="categoryFirstMenuName"
                             :actual-locale="actualLocale"
                             :old-choice="oldCategoryId"
@@ -66,7 +66,7 @@
             'advertFormDescriptionLabel',
             'advertFormPriceLabel',
             'loadErrorMessage',
-            'categoryRouteMetaCategory',
+            'routeCategory',
             'categoryFirstMenuName',
             'routeGetListType',
             'routeAdvertFormPost',
@@ -91,7 +91,7 @@
                 description: '',
                 price: '',
                 xCsrfToken: '',
-                oldCategoryId: '',
+                oldCategoryId: 0,
                 oldType: '',
                 oldCurrency: '',
                 sendMessage: false,
@@ -113,7 +113,7 @@
             this.xCsrfToken = Laravel.csrfToken;
             if (this.old != undefined) {
                 this.categoryId = JSON.parse(this.old).category;
-                this.oldCategoryId = JSON.parse(this.old).category;
+                this.oldCategoryId = parseInt(JSON.parse(this.old).category);
                 this.title = JSON.parse(this.old).title;
                 this.description = JSON.parse(this.old).description;
                 this.price = JSON.parse(this.old).price;
@@ -125,7 +125,7 @@
         },
         methods: {
             categoryChoice: function (id) {
-                this.categoryId = id;
+                this.categoryId = parseInt(id);
             },
             currencyChoice: function (currency) {
                 this.currency = currency;

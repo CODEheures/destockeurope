@@ -9,14 +9,16 @@
         "laravel/framework": "5.3.*",
         "laravel/socialite": "^2.0",
         "caouecs/laravel-lang": "~3.0",
-        "mathiasverraes/money": "dev-master"
+        "moneyphp/money": "dev-master",
+        "kalnoy/nestedset": "^4.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~5.0",
         "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*"
+        "symfony/dom-crawler": "3.1.*",
+        "barryvdh/laravel-debugbar": "^2.3"
     },
     "autoload": {
         "classmap": [
