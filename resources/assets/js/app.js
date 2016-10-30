@@ -23,8 +23,10 @@ Vue.component('toast', require('./components/generics/messages/toast.vue'));
 Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb.vue'));
 
 //Catégories
-Vue.component('categories-lateral-menu', require('./components/categories/lateral/menu.vue'));
-Vue.component('recursive-categories-lateral-menu', require('./components/categories/lateral/recursive.vue'));
+Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));
+Vue.component('recursive-categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/recursive.vue'));
+Vue.component('categories-lateral-accordion-menu', require('./components/categories/lateral/accordion/menu.vue'));
+Vue.component('recursive-categories-lateral-accordion-menu', require('./components/categories/lateral/accordion/recursive.vue'));
 Vue.component('categories-dropdown-menu', require('./components/categories/dropdown/all/menu.vue'));
 Vue.component('recursive-categories-dropdown-menu', require('./components/categories/dropdown/all/recursive.vue'));
 Vue.component('categories-list-move-to', require('./components/categories/dropdown/listMoveTo/menu.vue'));

@@ -20,12 +20,12 @@
                 </breadcrumb>
             </div>
             <div class="computer only four wide column">
-                <categories-lateral-menu
+                <categories-lateral-accordion-menu
                         :route-category="routeCategory"
                         :all-item="categoriesAllItem"
                         :actual-locale="actualLocale"
                         :old-choice="filter.id">
-                </categories-lateral-menu>
+                </categories-lateral-accordion-menu>
                 <div id="welcome-skycrapper" class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
             </div>
             <div class="sixteen wide tablet twelve wide computer column">
