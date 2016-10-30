@@ -3,7 +3,7 @@
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <div class="ui floating dropdown" :class="'cat'+routeParam" v-show="categories.length>0">
+        <div :id="_uid" class="ui floating dropdown" v-show="categories.length>0">
             <div class="text">{{ firstMenuName }}</div>
             <i class="dropdown icon"></i>
             <div class="menu">
@@ -63,7 +63,7 @@
         },
         updated () {
             var that = this;
-            let dropdown = $('.ui.dropdown.cat'+that.routeParam);
+            let dropdown = $('#'+that._uid);
             dropdown.on('click', function () {
                $(this).closest('.accordion').css({'z-index':'2'});
             });

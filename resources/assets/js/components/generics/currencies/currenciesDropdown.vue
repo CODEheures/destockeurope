@@ -1,5 +1,5 @@
 <template>
-        <div id="currencies-dropdown-menu" class="ui floating labeled icon dropdown button">
+        <div :id="_uid" class="ui floating labeled icon dropdown button">
             <i class="dollar icon"></i>
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
@@ -66,7 +66,7 @@
             }
 
             var that = this;
-            $('#currencies-dropdown-menu')
+            $('#'+this._uid)
                     .dropdown('set selected', that.currencies.userPrefCurrency)
                     .dropdown({
                         fullTextSearch: true,

@@ -1,7 +1,7 @@
 <template>
     <div class="ui one column grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
-        <div class="ui basic modal">
+        <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
                 {{ modalDelHeader }}
@@ -39,7 +39,7 @@
                     <i class="dropdown icon"></i>
                 </div>
                 <div class="active content">
-                    <div v-for="(category,index) in categories" class="accordion">
+                    <div v-for="(category,index) in categories" :id="'accordion-'+_uid+'-'+index" class="accordion">
                         <div class="title flex">
                             <div>
                                 <i class="dropdown icon"></i>
@@ -159,13 +159,6 @@
         mounted () {
             this.getCategories();
             this.availablesDatasLocalesList = JSON.parse(this.availablesLocalesList);
-            $('.accordion').each(function () {
-                $(this).accordion({
-                    selector: {
-                        trigger: '.title > div > .dropdown.icon'
-                    }
-                });
-            });
             this.$on('categoryChoice', function (event) {
                 this.appendToCategory(event.id, event.parentId);
             });
@@ -199,6 +192,15 @@
                     this.updateCategory();
                 }
             });
+        },
+        updated () {
+            for(var index in this.categories){
+                $('#accordion-'+this._uid+'-'+index).accordion({
+                    selector: {
+                        trigger: '.title > div > .dropdown.icon'
+                    }
+                });
+            }
         },
         methods: {
             getCategories: function (withLoadIndicator) {
@@ -265,7 +267,7 @@
 
                 if (categoryId != undefined && categoryId > 0) {
                     var that = this;
-                    $('.ui.basic.modal').modal({
+                    $('#modal-'+this._uid).modal({
                         closable: false,
                         onApprove: function () {
                             that.isLoaded = false;

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use Illuminate\Support\Facades\App;
 use Money\Currencies\ISOCurrencies;
 use NumberFormatter;
-use Symfony\Component\HttpFoundation\Request;
 
 class UtilsController extends Controller
 {

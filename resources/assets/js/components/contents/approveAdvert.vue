@@ -1,7 +1,7 @@
 <template>
     <div class="ui one column grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
-        <div class="ui basic modal">
+        <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
                 {{ modalValidHeader }}
@@ -36,7 +36,7 @@
                     <div class="ui large text loader">Loading</div>
                 </div>
                 <form>
-                    <div v-for="advert in advertsList" class="ui segment">
+                    <div v-for="(advert,index) in advertsList" class="ui segment">
                         <table class="ui definition table">
                             <tbody>
                             <tr>
@@ -58,13 +58,13 @@
                                 <div class="ui form">
                                     <div class="grouped fields">
                                         <div class="field">
-                                            <div class="ui slider checkbox">
+                                            <div :id="'slider1-'+_uid+'-'+index" class="ui slider checkbox">
                                                 <input type="radio" :name="advert.id" value="1">
                                                 <label>{{ toggleApproveLabel }}</label>
                                             </div>
                                         </div>
                                         <div class="field">
-                                            <div class="ui slider checkbox">
+                                            <div :id="'slider2-'+_uid+'-'+index" class="ui slider checkbox">
                                                 <input type="radio" :name="advert.id" value="0">
                                                 <label>{{ toggleDisapproveLabel }}</label>
                                             </div>
@@ -119,14 +119,20 @@
         },
         updated () {
             var that = this;
-            $('.ui.slider').each(function () {
-                $(this).checkbox({
+            for(var index in this.advertList){
+                $('#slider1-'+this._uid+'-'+index).checkbox({
                     onChange: function () {
                         that.action = true;
                         that.approveList[this.name] = this.value;
                     }
-                })
-            });
+                });
+                $('#slider2-'+this._uid+'-'+index).checkbox({
+                    onChange: function () {
+                        that.action = true;
+                        that.approveList[this.name] = this.value;
+                    }
+                });
+            }
         },
         methods: {
             getAdvertsList: function (withLoadIndicator) {
@@ -146,7 +152,7 @@
             approveAll: function (event) {
                 event.preventDefault();
                 var that = this;
-                $('.ui.basic.modal').modal({
+                $('#modal-'+this._uid).modal({
                     closable: false,
                     onApprove: function () {
                         that.isLoaded = false;

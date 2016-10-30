@@ -1,5 +1,5 @@
 <template>
-        <div id="currencies-dropdown-menu" class="ui search selection dropdown label">
+        <div :id="_uid" class="ui search selection dropdown label">
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
@@ -19,7 +19,6 @@
         props: {
             routeListCurrencies: String,
             firstMenuName: String,
-            update: Boolean,
             oldCurrency: {
                 type: String,
                 required: false
@@ -29,11 +28,11 @@
             return {
                 currencies: [],
                 isLoaded: false,
+                id: ''
             };
         },
         mounted () {
             this.getListCurrencies();
-            this.$watch('update', function() {this.getListCurrencies();});
         },
         methods: {
             getListCurrencies: function (withLoadIndicator) {
@@ -58,7 +57,7 @@
             }
 
             var that = this;
-            $('#currencies-dropdown-menu')
+            $('#'+this._uid)
                     .dropdown('set selected', that.currencies.userPrefCurrency)
                     .dropdown({
                         fullTextSearch: true,

@@ -3,7 +3,7 @@
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <div class="ui vertical accordion menu">
+        <div :id="_uid" class="ui vertical accordion menu">
             <div class="item">
                 <a class="title" v-on:click="emitCategoryChoice(0)">{{ allItem }}</a>
             </div>
@@ -44,7 +44,7 @@
         },
         mounted () {
             this.getCategories();
-            $('#category-vertical-menu').find('.ui.vertical.accordion.menu').accordion();
+            $('#'+this._uid).accordion();
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });

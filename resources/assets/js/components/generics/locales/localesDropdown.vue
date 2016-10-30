@@ -1,5 +1,5 @@
 <template>
-        <div id="locales-dropdown-menu" class="ui floating dropdown labeled icon button">
+        <div :id="_uid" class="ui floating dropdown labeled icon button">
             <i class="world icon"></i>
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
@@ -64,7 +64,7 @@
             }
 
             var that = this;
-            $('#locales-dropdown-menu')
+            $('#'+this._uid)
                     .dropdown('set selected', that.locales.userPrefLocale)
                     .dropdown({
                         fullTextSearch: true,

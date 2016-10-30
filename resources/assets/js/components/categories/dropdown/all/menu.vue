@@ -3,7 +3,7 @@
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <div class="ui floating dropdown" :class="isButton ? 'button' : ''">
+        <div :id="_uid" class="ui floating dropdown" :class="isButton ? 'button' : ''">
             <div class="text">{{ firstMenuName }}</div>
             <i class="dropdown icon"></i>
             <div class="menu">
@@ -87,7 +87,7 @@
         },
         updated () {
             var that = this;
-            let dropdown = $('.ui.dropdown');
+            let dropdown = $('#'+this._uid);
             dropdown.dropdown('set selected',  that.oldChoice.toString())
                  .dropdown({
                         allowCategorySelection: that.allowCategorySelection,
