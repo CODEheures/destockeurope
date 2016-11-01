@@ -41,7 +41,8 @@
                             :advert-title-label="advertTitleLabel"
                             :advert-description-label="advertDescriptionLabel"
                             :advert-price-label="advertPriceLabel"
-                            :see-advert-link-label="seeAdvertLinkLabel">
+                            :see-advert-link-label="seeAdvertLinkLabel"
+                            :actual-locale="actualLocale">
                     </adverts-by-list>
                 </div>
             </div>

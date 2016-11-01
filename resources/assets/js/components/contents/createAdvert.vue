@@ -9,6 +9,9 @@
                 <input type="hidden" name="_token" :value="xCsrfToken"/>
                 <input type="hidden" name="category" :value="categoryId"/>
                 <input type="hidden" name="currency" :value="currency" />
+                <input type="hidden" name="lat" :value="lat" />
+                <input type="hidden" name="lng" :value="lng" />
+                <input type="hidden" name="geoloc" :value="geoloc" />
                 <div class="ui error message"></div>
                 <type-advert-radio-button
                         :route-get-list-type="routeGetListType"
@@ -39,20 +42,41 @@
                     </transition>
                 </div>
 
-                <div class="required field">
-                    <label>{{ advertFormPriceLabel }}</label>
-                    <div class="ui right labeled input">
-                        <input name="price" type="number" min="0.01" step="0.01" :value="price">
-                        <currencies-input-right-label
-                                :route-list-currencies="routeListCurrencies"
-                                :first-menu-name="currenciesFirstMenuName"
-                                :old-currency="oldCurrency">
-                        </currencies-input-right-label>
+                <div class="field">
+                    <div class="ui grid">
+                        <div class="doubling four column row">
+                            <div class="column">
+                                <div class="required field">
+                                    <label>{{ advertFormPriceLabel }}</label>
+                                    <div class="ui right labeled input">
+                                        <input name="price" type="number" min="0.01" step="0.01" :value="price">
+                                        <currencies-input-right-label
+                                                :route-list-currencies="routeListCurrencies"
+                                                :first-menu-name="currenciesFirstMenuName"
+                                                :old-currency="oldCurrency">
+                                        </currencies-input-right-label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div class="required field">
+                    <label>Localisation</label>
+                    <div id="geoloc" class="ui icon message" data-lng="" data-lat="" data-geoloc="" v-on:geochange="latLngChange">
+                        <i class="marker icon"></i>
+                        <div class="content">
+                            <div class="header"></div>
+                            <p>{{ geolocHelpMsg }}</p>
+                        </div>
+                    </div>
+                    <div id="map" style="height: 50vh;width: 100%;max-width: 600px;"></div>
+                </div>
 
-                <button type="submit" class="ui primary button">{{ formValidationButtonLabel }}</button>
+                <div class="field">
+                    <button type="submit" class="ui primary button">{{ formValidationButtonLabel }}</button>
+                </div>
             </form>
         </div>
     </div>
@@ -80,7 +104,8 @@
             'old',
             'routeListCurrencies',
             'currenciesFirstMenuName',
-            'actualLocale'
+            'actualLocale',
+            'geolocHelpMsg'
         ],
         data: () => {
             return {
@@ -97,7 +122,10 @@
                 sendMessage: false,
                 typeMessage: '',
                 message:'',
-                currency:''
+                currency:'',
+                lat: '',
+                lng: '',
+                geoloc: ''
             };
         },
         mounted () {
@@ -134,6 +162,11 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
+            },
+            latLngChange: function (event) {
+                this.lat= event.target.dataset.lat;
+                this.lng= event.target.dataset.lng;
+                this.geoloc= event.target.dataset.geoloc;
             }
         }
     }

@@ -75,6 +75,14 @@ form {
   margin-right: 0.5em;
 }
 
+.ui.list > .item.advert {
+  position: relative;
+  & > p.date {
+    position: absolute;
+    right: 1em;
+    bottom: 0.2em;
+  }
+}
 .ui.dropdown .menu .item .right.dropdown.icon {
   float: right;
 }

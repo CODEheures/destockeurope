@@ -29,6 +29,12 @@ class AdvertController extends Controller
     public function index()
     {
         $adverts = Advert::where('isValid', true)->get();
+        $adverts->load('category');
+        foreach ($adverts as $advert){
+            $ancestors = $advert->category->getAncestors();
+            $ancestors->add($advert->category);
+            $advert->setBreadCrumb($ancestors);
+        }
         //dd($adverts[0]->price);
         return response()->json($adverts);
     }
@@ -38,9 +44,12 @@ class AdvertController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('advert.create');
+        //TODO changer ip
+        //$ip = $request->ip();
+        $ip='82.246.117.210';
+        return view('advert.create', compact('ip'));
     }
 
     /**
@@ -59,6 +68,9 @@ class AdvertController extends Controller
             $advert->type = $request->type;
             $advert->title = $request->title;
             $advert->description = $request->description;
+            $advert->latitude = $request->lat;
+            $advert->longitude = $request->lng;
+            $advert->geoloc = $request->geoloc;
             $advert->currency=$request->currency;
 
             $currencies = new ISOCurrencies();
@@ -80,7 +92,8 @@ class AdvertController extends Controller
      */
     public function show($id)
     {
-        //
+        $advert = Advert::find($id);
+        dd($advert->formattedAdress);
     }
 
     /**

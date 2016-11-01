@@ -4,17 +4,32 @@
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
-            <a v-for="advert in advertsList" class="item advert">
+            <a :href="routeGetAdvertsList+'/'+advert.id" v-for="advert in advertsList" class="item advert">
+                <p class="date">
+                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.created_at) }}</span>
+                </p>
                 <div class="ui image">
                     <div class="ui right blue corner label"><i class="icon">3</i></div>
                     <img  class="ui top aligned small bordered rounded image" src="/images/jenny.jpg">
                 </div>
-
                 <div class="content">
-
-                    <div class="header">{{ advert.title }}</div>
-                    <p class="ui teal tag label">{{ advert.price }} {{ advert.currency }}</p>
-                    <a class="ui primary button">{{ seeAdvertLinkLabel }}</a>
+                    <div class="header"><h3>{{ advert.title }}</h3></div>
+                    <div class="description">
+                        <p>
+                            <span class="ui breadcrumb">
+                                <template v-for="(item,index) in advert.breadCrumb">
+                                    <div class="active section" >{{ item.description[actualLocale] }}</div>
+                                    <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                </template>
+                            </span>
+                        </p>
+                        <p>
+                            <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
+                        </p>
+                        <p>
+                            <span class="ui large teal tag label">{{ advert.price }} {{ advert.currency }}</span>
+                        </p>
+                    </div>
                 </div>
             </a>
         </div>
@@ -28,7 +43,8 @@
             'advertTitleLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',
-            'seeAdvertLinkLabel'
+            'seeAdvertLinkLabel',
+            'actualLocale'
         ],
         data: () => {
             return {
@@ -45,14 +61,18 @@
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 this.$http.get(this.routeGetAdvertsList)
                         .then(
-                                (response) => {
+                                function (response)  {
                                     this.advertsList = response.data;
                                     this.isLoaded = true;
                                 },
-                                (response) => {
+                                function (response)  {
                                     this.$parent.$emit('loadError')
                                 }
                         );
+            },
+            getMoment: function (dateTime) {
+                moment.locale(this.actualLocale);
+                return moment(dateTime).fromNow();
             }
         }
     }

@@ -51,6 +51,10 @@
                                 <td class="two wide column">{{ advertPriceLabel }}</td>
                                 <td>{{ advert.price }} {{ advert.currency}}</td>
                             </tr>
+                            <tr>
+                                <td class="two wide column">{{ advertAddressLabel }}</td>
+                                <td>{{ advert.geoloc }}</td>
+                            </tr>
                             </tbody>
                         </table>
                         <div class="ui grid">
@@ -101,6 +105,7 @@
             'advertTitleLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',
+            'advertAddressLabel',
             'advertApproveSuccess'
         ],
         data: () => {
@@ -119,7 +124,7 @@
         },
         updated () {
             var that = this;
-            for(var index in this.advertList){
+            for(var index in this.advertsList){
                 $('#slider1-'+this._uid+'-'+index).checkbox({
                     onChange: function () {
                         that.action = true;
@@ -140,11 +145,11 @@
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 this.$http.get(this.routeGetAdvertsList)
                         .then(
-                                (response) => {
+                                function (response) {
                                     this.advertsList = response.data;
                                     this.isLoaded = true;
                                 },
-                                (response) => {
+                                function (response)  {
                                     this.sendToast(this.loadErrorMessage, 'error');
                                 }
                         );

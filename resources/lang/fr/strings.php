@@ -47,6 +47,9 @@ return [
     'form_dropdown_move_item' => 'Déplacer vers...',
     'form_dropdown_move_as_root' => 'Catégorie principale',
     'form_dropdown_move_already_child_of' => 'Cette catégory est déjà bien placée',
+    'form_googlemap_marker' => 'La vente se situe ici',
+    'form_googlemap_geoloc_fail' => 'Adresse indéterminée',
+    'form_googlemap_help' => 'Placez le marqueur de la carte à l\'endroit désiré. Si besoin, vous pouvez utiliser le zoom et faire glisser la carte',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
@@ -88,6 +91,7 @@ return [
     'view_advert_form_title_label' => 'Titre de l\'annonce',
     'view_advert_form_description_label' => 'Description de l\'annonce',
     'view_advert_form_price_label' => 'Prix de vente',
+    'view_advert_form_address_label' => 'Lieu de vente',
     'view_advert_list_type_dropdown_label' => 'Type d\'annonce',
     'view_advert_list_type_bid' => 'offre',
     'view_advert_list_type_request' => 'demande',

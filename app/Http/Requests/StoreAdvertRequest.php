@@ -63,7 +63,10 @@ class StoreAdvertRequest extends FormRequest
             'title' => 'required|min:'. config('db_limits.adverts.minTitle') . '|max:'. config('db_limits.adverts.maxTitle') ,
             'description' => 'required|min:' . config('db_limits.adverts.minDescription') . '|max:' . config('db_limits.adverts.maxDescription'),
             'price' => 'required|numeric|min:0.01',
-            'currency' => 'required|in:'.$line2
+            'currency' => 'required|in:'.$line2,
+            'lat' => 'required|numeric|min:-90|max:90',
+            'lng' => 'required|numeric|min:-180|max:180',
+            'geoloc' => 'required|min:2'
         ];
     }
 }

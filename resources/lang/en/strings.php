@@ -47,6 +47,9 @@ return [
     'form_dropdown_move_item' => 'Move to...',
     'form_dropdown_move_as_root' => 'Root catégory',
     'form_dropdown_move_already_child_of' => 'Category already child of choice',
+    'form_googlemap_marker' => 'The selling is here',
+    'form_googlemap_geoloc_fail' => 'Adresse undefined',
+    'form_googlemap_help' => 'Place the marker of the map to the desired location. If necessary, you can use the zoom and drag the map',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
@@ -88,6 +91,7 @@ return [
     'view_advert_form_title_label' => 'Advert Title',
     'view_advert_form_description_label' => 'Advert description',
     'view_advert_form_price_label' => 'Sell Price',
+    'view_advert_form_address_label' => 'Location selling',
     'view_advert_list_type_dropdown_label' => 'Advert type',
     'view_advert_list_type_bid' => 'bid',
     'view_advert_list_type_request' => 'request',

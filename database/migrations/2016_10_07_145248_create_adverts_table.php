@@ -25,6 +25,9 @@ class CreateAdvertsTable extends Migration
             $table->text('description');
             $table->integer('price');
             $table->string('currency', 3);
+            $table->float('latitude',6,4);
+            $table->float('longitude',19,16);
+            $table->string('geoloc')->nullable()->default(null);
             $table->boolean('isValid')->nullable()->default(null);
         });
     }

@@ -10,6 +10,7 @@ window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window.noUiSlider = require('./nouislider');
+window.destock = require('./destockeurope');
 /*require('bootstrap-sass');*/
 
 /**
