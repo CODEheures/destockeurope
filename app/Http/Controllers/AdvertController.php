@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Category;
 use App\Common\DBUtils;
+use App\Http\Requests\PictureAdvertRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 use League\Flysystem\Exception;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
@@ -17,7 +19,7 @@ class AdvertController extends Controller
 {
 
     public function __construct() {
-        $this->middleware('auth', ['only' => ['create', 'getListType', 'getListCurrencies']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'getListType']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
     }
 
@@ -93,7 +95,11 @@ class AdvertController extends Controller
     public function show($id)
     {
         $advert = Advert::find($id);
-        dd($advert->formattedAdress);
+        if($advert->isValid){
+            dd($advert->formattedAdress);
+        } else {
+            return back();
+        }
     }
 
     /**
@@ -169,5 +175,39 @@ class AdvertController extends Controller
         }
 
         return response('ok',200);
+    }
+
+    public function tempoPictures(PictureAdvertRequest $request) {
+        $ext = $request->file('addpicture')->extension();
+        $sub_path = 'tempo/'.auth()->user()->id ;
+        $file = $request->file('addpicture')->store($sub_path);
+        $fileName = str_replace($sub_path.'/','',$file);
+        $fileNameWoExt = str_replace('.'.$ext,'',$fileName);
+        $path =  config('filesystems.disks.local.root') . '/tempo/' . auth()->user()->id;
+
+        $img = Image::make($path.'/'.$fileName);
+
+        $size=300;
+        $thumbFileName = $path.'/'.$fileNameWoExt.'-thumb.'.$ext;
+        $img->resize($size,$size, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+
+        $img->save($thumbFileName);
+
+        $listFiles = scandir($path);
+
+        $newListFiles = [];
+        foreach ($listFiles as $item){
+            if(strpos($item,'thumb')){
+                $newListFiles[] = str_replace('.'.$ext,'',$item);
+            }
+        }
+
+        return response()->json($newListFiles);
+    }
+
+    public function getTempoThumb($file) {
+
     }
 }

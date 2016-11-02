@@ -53,6 +53,7 @@ Route::group(['prefix' => 'users'], function() {
 Route::group(['prefix' => 'utils'] , function () {
     Route::get('/get-list-currencies', ['as' => 'utils.getListCurrencies', 'uses' => 'UtilsController@getListCurrencies']);
     Route::get('/get-list-locales', ['as' => 'utils.getListLocales', 'uses' => 'UtilsController@getListLocales']);
+    Route::get('/tempo', 'UtilsController@tempo');
 });
 
 //Categories
@@ -68,4 +69,5 @@ Route::get('advert/get-list-type', ['as' => 'advert.getListType', 'uses' => 'Adv
 Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
 Route::get('advert/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
 Route::post('advert/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
+Route::post('advert/tempo-pictures', ['as' => 'advert.tempoPictures', 'uses' => 'AdvertController@tempoPictures']);
 Route::resource('advert', 'AdvertController');

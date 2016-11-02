@@ -62,9 +62,13 @@
                     </div>
                 </div>
 
-                <div class="required field">
-                    <label>Localisation</label>
-                    <div id="geoloc" class="ui icon message" data-lng="" data-lat="" data-geoloc="" v-on:geochange="latLngChange">
+                <h4 class="ui horizontal divider header">
+                    <i class="map signs icon"></i>
+                    {{ advertFormGooglemapLabel }}
+                </h4>
+
+                <div class="field">
+                    <div id="geoloc" class="ui icon info message" data-lng="" data-lat="" data-geoloc="" v-on:geochange="latLngChange">
                         <i class="marker icon"></i>
                         <div class="content">
                             <div class="header"></div>
@@ -73,6 +77,35 @@
                     </div>
                     <div id="map" style="height: 50vh;width: 100%;max-width: 600px;"></div>
                 </div>
+
+                <h4 class="ui horizontal divider header">
+                    <i class="camera retro icon"></i>
+                    {{ advertFormPhotoSeparator }}
+                </h4>
+
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="ui icon info message">
+                            <i class="icon">{{ nbPicturesIndicator }}</i>
+                            <div class="content">
+                                <div class="header">{{ helpHeaderIndicator }}</div>
+                                <p>{{ helpUploadP }}<a :href="helpUploadAHref">{{ helpUploadA }}</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doubling four column row">
+                        <div class="column" v-for="thumb in thumbs">
+                            <img id="holder" style="margin-top:15px;max-height:100px;">
+                        </div>
+                        <div class="column" v-if="thumbs.length<maxFiles">
+                            <div class="field">
+                                <label>{{ advertFormPhotoLabel }}</label>
+                                <input type="file" :name="formFileInputName" v-on:change="upload">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="field">
                     <button type="submit" class="ui primary button">{{ formValidationButtonLabel }}</button>
@@ -89,11 +122,23 @@
             'advertFormTitleLabel',
             'advertFormDescriptionLabel',
             'advertFormPriceLabel',
+            'advertFormGooglemapLabel',
+            'advertFormPhotoSeparator',
+            'advertFormPhotoLabel',
+            'advertFormFreePhotoHelpHeaderSingular',
+            'advertFormFreePhotoHelpHeaderPlural',
+            'advertFormPayPhotoHelpHeaderSingular',
+            'advertFormPayPhotoHelpHeaderPlural',
+            'advertFormPhotoHelpContent',
+            'advertFormPhotoNbFreePicture',
             'loadErrorMessage',
+            'filesizeErrorMessage',
+            'maxFiles',
             'routeCategory',
             'categoryFirstMenuName',
             'routeGetListType',
             'routeAdvertFormPost',
+            'routeAdvertPicturesPost',
             'listTypeFirstMenuName',
             'formValidationButtonLabel',
             'formTitleMinValid',
@@ -125,7 +170,15 @@
                 currency:'',
                 lat: '',
                 lng: '',
-                geoloc: ''
+                geoloc: '',
+                helpUploadP: '',
+                helpUploadA: '',
+                helpUploadAHref: '',
+                fileToPost: new FormData(),
+                formFileInputName: 'addpicture',
+                thumbs: [],
+                nbPicturesIndicator: '',
+                helpHeaderIndicator: ''
             };
         },
         mounted () {
@@ -150,6 +203,11 @@
                 this.currency=JSON.parse(this.old).currency;
                 this.oldCurrency= JSON.parse(this.old).currency;
             }
+            this.setPicturesIndicators();
+            this.helpUpload();
+            this.$watch('thumbs', function () {
+                this.setPicturesIndicators();
+            });
         },
         methods: {
             categoryChoice: function (id) {
@@ -167,6 +225,53 @@
                 this.lat= event.target.dataset.lat;
                 this.lng= event.target.dataset.lng;
                 this.geoloc= event.target.dataset.geoloc;
+            },
+            helpUpload: function () {
+                var htmlObject = $('<p>'+this.advertFormPhotoHelpContent+'</p>');
+                this.helpUploadP = htmlObject[0].firstChild.data;
+                this.helpUploadA = htmlObject[0].firstElementChild.innerHTML;
+                this.helpUploadAHref = htmlObject[0].firstElementChild.href;
+            },
+            upload: function (event) {
+                this.fileToPost.append(this.formFileInputName, event.target.files[0]);
+                var that = this;
+                this.$http.post(this.routeAdvertPicturesPost, this.fileToPost)
+                        .then(
+                                function (response) {
+                                    that.fileToPost.delete(that.formFileInputName);
+                                    that.thumbs = response.body;
+                                    console.log(response);
+                                },
+                                function (response) {
+                                    that.fileToPost.delete(that.formFileInputName);
+                                    if (response.status == 422) {
+                                        let msg = response.body.addpicture[0];
+                                        that.sendToast(msg, 'error');
+                                    } else if(response.status == 413) {
+                                        that.sendToast(that.filesizeErrorMessage, 'error');
+                                    } else {
+                                        that.sendToast(that.delErrorMessage, 'error');
+                                    }
+                                }
+                        );
+            },
+            setPicturesIndicators () {
+                var resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
+                if(resultIndicator>=0){
+                    this.nbPicturesIndicator = resultIndicator;
+                    if(resultIndicator>1){
+                        this.helpHeaderIndicator = this.advertFormFreePhotoHelpHeaderPlural;
+                    } else {
+                        this.helpHeaderIndicator = this.advertFormFreePhotoHelpHeaderSingular;
+                    }
+                } else {
+                    this.nbPicturesIndicator = -resultIndicator;
+                    if(this.nbPicturesIndicator>1){
+                        this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderPlural;
+                    } else {
+                        this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderSingular;
+                    }
+                }
             }
         }
     }

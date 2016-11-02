@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Support\Facades\Storage;
 use Money\Currencies\ISOCurrencies;
 use NumberFormatter;
 
@@ -50,5 +51,11 @@ class UtilsController extends Controller
         ];
 
         return response()->json($response);
+    }
+
+    public function tempo(){
+        $path =  config('filesystems.disks.local.root') . '/tempo/' . auth()->user()->id;
+        $nbFiles = count(scandir($path))-2;
+        return $nbFiles;
     }
 }

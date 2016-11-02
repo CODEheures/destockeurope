@@ -10,7 +10,8 @@
         "laravel/socialite": "^2.0",
         "caouecs/laravel-lang": "~3.0",
         "moneyphp/money": "dev-master",
-        "kalnoy/nestedset": "^4.1"
+        "kalnoy/nestedset": "^4.1",
+        "intervention/image": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
