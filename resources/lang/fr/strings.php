@@ -105,6 +105,12 @@ return [
     'view_advert_list_type_dropdown_label' => 'Type d\'annonce',
     'view_advert_list_type_bid' => 'offre',
     'view_advert_list_type_request' => 'demande',
+    'view_advert_steps_1_title' => 'Création de l\'annonce',
+    'view_advert_steps_1_description' => 'décrire votre annonce',
+    'view_advert_steps_2_title' => 'Vos informations',
+    'view_advert_steps_2_description' => 'vérifier les informations de votre compte',
+    'view_advert_steps_3_title' => 'Paiement',
+    'view_advert_steps_3_description' => 'payer les photos supplémentaires',
     'advert_create_success' => 'Votre annonce est créée. Elle sera validée très prochainement par nos équipes',
 
     'view_advert_approve_header' => 'Approuver les annonces',

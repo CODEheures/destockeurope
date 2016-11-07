@@ -21,6 +21,7 @@ Vue.component('currencies-input-right-label', require('./components/generics/cur
 Vue.component('locales-dropdown', require('./components/generics/locales/localesDropdown.vue'));
 Vue.component('toast', require('./components/generics/messages/toast.vue'));
 Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb.vue'));
+Vue.component('steps', require('./components/generics/steps/step.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));

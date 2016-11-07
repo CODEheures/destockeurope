@@ -39,6 +39,12 @@
             currencies-first-menu-name="{{ trans('strings.view_user_account_currency_dropdown_label') }}"
             actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
             geoloc-help-msg="{{ trans('strings.form_googlemap_help') }}"
+            step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
+            step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"
+            step-three-title="{{ trans('strings.view_advert_steps_3_title') }}"
+            step-one-description="{{ trans('strings.view_advert_steps_1_description') }}"
+            step-two-description="{{ trans('strings.view_advert_steps_2_description') }}"
+            step-three-description="{{ trans('strings.view_advert_steps_3_description') }}"
             @if(count(old())>0)
                 old="{{ json_encode(old()) }}"
             @endif>

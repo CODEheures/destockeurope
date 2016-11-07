@@ -105,6 +105,12 @@ return [
     'view_advert_list_type_dropdown_label' => 'Advert type',
     'view_advert_list_type_bid' => 'bid',
     'view_advert_list_type_request' => 'request',
+    'view_advert_steps_1_title' => 'Create Advert',
+    'view_advert_steps_1_description' => 'describe your advert',
+    'view_advert_steps_2_title' => 'Account info',
+    'view_advert_steps_2_description' => 'check the information in your account',
+    'view_advert_steps_3_title' => 'Payment',
+    'view_advert_steps_3_description' => 'pay extra photos',
     'advert_create_success' => 'Your advert is being created. It will be validated by our teams soon',
 
     'view_advert_approve_header' => 'Approve this adverts',

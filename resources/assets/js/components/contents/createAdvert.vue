@@ -4,6 +4,11 @@
         <div class="column">
             <h2 class="ui header">{{ contentHeader }}</h2>
         </div>
+        <div class="tablet only computer only column">
+            <steps
+                :steps="steps">
+            </steps>
+        </div>
         <div class="column">
             <form class="ui form" :action="routeAdvertFormPost" method="post">
                 <input type="hidden" name="_token" :value="xCsrfToken"/>
@@ -50,7 +55,7 @@
                                 <div class="required field">
                                     <label>{{ advertFormPriceLabel }}</label>
                                     <div class="ui right labeled input">
-                                        <input name="price" type="number" min="0.01" step="0.01" :value="price">
+                                        <input name="price" type="number" min="0.01" step="0.01" v-model="price" />
                                         <currencies-input-right-label
                                                 :route-list-currencies="routeListCurrencies"
                                                 :first-menu-name="currenciesFirstMenuName"
@@ -181,7 +186,13 @@
             'routeListCurrencies',
             'currenciesFirstMenuName',
             'actualLocale',
-            'geolocHelpMsg'
+            'geolocHelpMsg',
+            'stepOneTitle',
+            'stepTwoTitle',
+            'stepThreeTitle',
+            'stepOneDescription',
+            'stepTwoDescription',
+            'stepThreeDescription',
         ],
         data: () => {
             return {
@@ -210,10 +221,34 @@
                 thumbs: [],
                 nbPicturesIndicator: '',
                 helpHeaderIndicator: '',
-                mainPicture: ''
+                mainPicture: '',
+                steps: [],
             };
         },
         mounted () {
+            this.steps = [
+                {
+                    isActive : true,
+                    isDisabled : false,
+                    title: this.stepOneTitle,
+                    description: this.stepOneDescription,
+                    icon: 'write'
+                },
+                {
+                    isActive : false,
+                    isDisabled : false,
+                    title: this.stepTwoTitle,
+                    description: this.stepTwoDescription,
+                    icon: 'user'
+                },
+                {
+                    isActive : false,
+                    isDisabled : true,
+                    title: this.stepThreeTitle,
+                    description: this.stepThreeDescription,
+                    icon: 'payment'
+                }
+            ];
             this.$on('categoryChoice', function (event) {
                 this.categoryChoice(event.id);
             });
@@ -225,10 +260,12 @@
             });
             this.xCsrfToken = Laravel.csrfToken;
             this.setPicturesIndicators();
+            this.setSteps();
             this.helpUpload();
             this.getListThumbs();
             this.$watch('thumbs', function () {
                 this.setPicturesIndicators();
+                this.setSteps();
                 this.setMainPicture();
             });
             if (this.old != undefined) {
@@ -339,6 +376,15 @@
                     } else {
                         this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderSingular;
                     }
+                }
+            },
+            setSteps () {
+                var resultIndicator =  this.thumbs.length - this.advertFormPhotoNbFreePicture;
+                console.log(this.steps);
+                if(resultIndicator>=1) {
+                    (this.steps[2]).isDisabled = false;
+                } else {
+                    (this.steps[2]).isDisabled = true;
                 }
             },
             setMainPicture() {
