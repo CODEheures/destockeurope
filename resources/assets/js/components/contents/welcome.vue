@@ -38,6 +38,7 @@
                 <div class="row">
                     <adverts-by-list
                             :route-get-adverts-list="routeGetAdvertsList"
+                            :route-get-thumb="routeGetThumb"
                             :advert-title-label="advertTitleLabel"
                             :advert-description-label="advertDescriptionLabel"
                             :advert-price-label="advertPriceLabel"
@@ -55,6 +56,7 @@
         props: [
             'loadErrorMessage',
             'routeCategory',
+            'routeGetThumb',
             'categoriesDropdownMenuFirstMenuName',
             'filterRibbon',
             'filterPriceTitle',

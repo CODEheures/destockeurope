@@ -64,10 +64,16 @@ Route::get('category/available-move-to/{id?}',  ['as' => 'category.availableMove
 Route::patch('category/append-to',  ['as' => 'category.appendTo', 'uses' =>'CategoryController@appendTo']);
 Route::resource('category', 'CategoryController');
 
-
+//Adverts
 Route::get('advert/get-list-type', ['as' => 'advert.getListType', 'uses' => 'AdvertController@getListType']);
 Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
 Route::get('advert/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
 Route::post('advert/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
-Route::post('advert/tempo-pictures', ['as' => 'advert.tempoPictures', 'uses' => 'AdvertController@tempoPictures']);
 Route::resource('advert', 'AdvertController');
+
+//Pictures
+Route::post('picture', ['as' => 'picture.post', 'uses' => 'PictureController@post']);
+Route::delete('picture/{type}/{hashName?}', ['as' => 'picture.destroy', 'uses' => 'PictureController@destroy']);
+Route::get('picture/list-thumbs/{type}', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
+Route::get('picture/thumb/{type}/{hashName?}/{advertId?}', ['as' => 'picture.thumb', 'uses' => 'PictureController@getThumb']);
+Route::get('picture/tempo', 'PictureController@tempo');

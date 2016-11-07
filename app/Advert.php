@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Money\Currencies\ISOCurrencies;
@@ -9,11 +10,22 @@ use Money\Currency;
 use Money\Formatter\IntlMoneyFormatter;
 use Money\Money;
 
-class Advert extends Model
-{
+class Advert extends Model {
     use SoftDeletes;
 
-    protected $fillable = [ 'user_id', 'category_id', 'type', 'title', 'description', 'price', 'currency', 'latitude', 'longitude', 'geoloc'];
+    protected $fillable = [
+        'user_id',
+        'category_id',
+        'type',
+        'title',
+        'description',
+        'price',
+        'currency',
+        'latitude',
+        'longitude',
+        'geoloc',
+        'mainPicture'
+    ];
     protected $dates = ['deleted_at'];
     protected $appends = array('breadCrumb');
     private $breadcrumb;
@@ -24,6 +36,10 @@ class Advert extends Model
 
     public function category() {
         return $this->belongsTo('App\Category');
+    }
+
+    public function pictures() {
+        return $this->hasMany('App\Picture');
     }
 
     public function getPriceAttribute($value) {
@@ -43,6 +59,10 @@ class Advert extends Model
 
     public function getBreadCrumbAttribute() {
         return $this->breadcrumb;
+    }
+
+    public function getUpdatedAtAttribute($time) {
+        return Carbon::parse($time)->toAtomString();
     }
 
 //    public function getGeolocAttribute($value) {

@@ -28,6 +28,7 @@ class CreateAdvertsTable extends Migration
             $table->float('latitude',6,4);
             $table->float('longitude',19,16);
             $table->string('geoloc')->nullable()->default(null);
+            $table->string('mainPicture',32);
             $table->boolean('isValid')->nullable()->default(null);
         });
     }

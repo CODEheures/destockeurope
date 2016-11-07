@@ -11,7 +11,8 @@
         "caouecs/laravel-lang": "~3.0",
         "moneyphp/money": "dev-master",
         "kalnoy/nestedset": "^4.1",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "league/flysystem-dropbox": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

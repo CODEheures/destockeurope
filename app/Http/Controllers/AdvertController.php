@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Category;
 use App\Common\DBUtils;
-use App\Http\Requests\PictureAdvertRequest;
+use App\Common\PicturesManager;
 use App\Http\Requests\StoreAdvertRequest;
+use App\Picture;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
-use League\Flysystem\Exception;
+use Illuminate\Support\Facades\DB;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -17,10 +17,12 @@ use Money\Parser\DecimalMoneyParser;
 
 class AdvertController extends Controller
 {
+    private $pictureManager;
 
-    public function __construct() {
+    public function __construct(PicturesManager $picturesManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
+        $this->pictureManager  = $picturesManager;
     }
 
     /**
@@ -31,13 +33,13 @@ class AdvertController extends Controller
     public function index()
     {
         $adverts = Advert::where('isValid', true)->get();
+        $adverts->load('pictures');
         $adverts->load('category');
         foreach ($adverts as $advert){
             $ancestors = $advert->category->getAncestors();
             $ancestors->add($advert->category);
             $advert->setBreadCrumb($ancestors);
         }
-        //dd($adverts[0]->price);
         return response()->json($adverts);
     }
 
@@ -58,32 +60,52 @@ class AdvertController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *
      */
     public function store(StoreAdvertRequest $request)
     {
         $category = Category::find($request->category);
         if($category) {
-            $advert = new Advert();
-            $advert->user_id = auth()->user()->id;
-            $advert->category_id = $request->category;
-            $advert->type = $request->type;
-            $advert->title = $request->title;
-            $advert->description = $request->description;
-            $advert->latitude = $request->lat;
-            $advert->longitude = $request->lng;
-            $advert->geoloc = $request->geoloc;
-            $advert->currency=$request->currency;
+            try {
+                $advert = new Advert();
+                $advert->user_id = auth()->user()->id;
+                $advert->category_id = $request->category;
+                $advert->type = $request->type;
+                $advert->title = $request->title;
+                $advert->description = $request->description;
+                $advert->latitude = $request->lat;
+                $advert->longitude = $request->lng;
+                $advert->geoloc = $request->geoloc;
+                $advert->mainPicture = $request->main_picture;
+                $advert->currency=$request->currency;
 
-            $currencies = new ISOCurrencies();
-            $moneyParser = new DecimalMoneyParser($currencies);
+                $currencies = new ISOCurrencies();
+                $moneyParser = new DecimalMoneyParser($currencies);
+                $advert->price = $moneyParser->parse($request->price,$request->currency)->getAmount();
 
-            $advert->price = $moneyParser->parse($request->price,$request->currency)->getAmount();
+                $results = $this->pictureManager->storeLocalFinal();
 
-            $advert->save();
-            return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
+                DB::beginTransaction();
+                $advert->save();
+                foreach ($results as $result){
+                    $picture = new Picture();
+                    $picture->hashName = $result['hashName'];
+                    $picture->path = $result['path'];
+                    $picture->disk = $result['disk'];
+                    $picture->isThumb = $result['isThumb'];
+                    $advert->pictures()->save($picture);
+                    $picture->save();
+                }
+                DB::commit();
+                $this->pictureManager->purgeLocalTempo();
+                return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
+            } catch (\Exception $e) {
+                DB::rollback();
+                return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));
+            }
+        } else {
+            return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));
         }
-
     }
 
     /**
@@ -152,6 +174,7 @@ class AdvertController extends Controller
     public function listApprove() {
         $adverts = Advert::where('isValid', null)->get();
         $adverts->load('user');
+        $adverts->load('pictures');
         $adverts->load('category');
         return response()->json($adverts);
     }
@@ -170,44 +193,12 @@ class AdvertController extends Controller
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response(trans('strings.view_advert_error'), 500);
         }
 
         return response('ok',200);
     }
 
-    public function tempoPictures(PictureAdvertRequest $request) {
-        $ext = $request->file('addpicture')->extension();
-        $sub_path = 'tempo/'.auth()->user()->id ;
-        $file = $request->file('addpicture')->store($sub_path);
-        $fileName = str_replace($sub_path.'/','',$file);
-        $fileNameWoExt = str_replace('.'.$ext,'',$fileName);
-        $path =  config('filesystems.disks.local.root') . '/tempo/' . auth()->user()->id;
 
-        $img = Image::make($path.'/'.$fileName);
-
-        $size=300;
-        $thumbFileName = $path.'/'.$fileNameWoExt.'-thumb.'.$ext;
-        $img->resize($size,$size, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-
-        $img->save($thumbFileName);
-
-        $listFiles = scandir($path);
-
-        $newListFiles = [];
-        foreach ($listFiles as $item){
-            if(strpos($item,'thumb')){
-                $newListFiles[] = str_replace('.'.$ext,'',$item);
-            }
-        }
-
-        return response()->json($newListFiles);
-    }
-
-    public function getTempoThumb($file) {
-
-    }
 }

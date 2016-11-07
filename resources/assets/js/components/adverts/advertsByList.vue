@@ -6,11 +6,11 @@
             </div>
             <a :href="routeGetAdvertsList+'/'+advert.id" v-for="advert in advertsList" class="item advert">
                 <p class="date">
-                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.created_at) }}</span>
+                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
                 </p>
                 <div class="ui image">
-                    <div class="ui right blue corner label"><i class="icon">3</i></div>
-                    <img  class="ui top aligned small bordered rounded image" src="/images/jenny.jpg">
+                    <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
+                    <img  class="ui top aligned small bordered rounded image" :src="routeGetThumb+'/'+advert.mainPicture+'/'+advert.id">
                 </div>
                 <div class="content">
                     <div class="header"><h3>{{ advert.title }}</h3></div>
@@ -40,6 +40,7 @@
     export default {
         props: [
             'routeGetAdvertsList',
+            'routeGetThumb',
             'advertTitleLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',
@@ -72,7 +73,7 @@
             },
             getMoment: function (dateTime) {
                 moment.locale(this.actualLocale);
-                return moment(dateTime).fromNow();
+                return moment(dateTime).fromNow()
             }
         }
     }

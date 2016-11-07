@@ -54,8 +54,7 @@ class UtilsController extends Controller
     }
 
     public function tempo(){
-        $path =  config('filesystems.disks.local.root') . '/tempo/' . auth()->user()->id;
-        $nbFiles = count(scandir($path))-2;
-        return $nbFiles;
+        $disk = Storage::disk('local');
+        return $disk;
     }
 }

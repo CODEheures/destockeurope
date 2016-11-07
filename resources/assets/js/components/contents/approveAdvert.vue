@@ -57,6 +57,20 @@
                             </tr>
                             </tbody>
                         </table>
+
+                        <div class="ui doubling three column grid">
+                            <div class="column" v-for="(picture,index) in advert.pictures" v-if="picture.isThumb">
+                                    <div :class="index>=(advertNbFreePicture*2) ? 'ui pink segment' : 'ui segment'">
+                                        <a class="ui pink right ribbon label" v-if="index>=(advertNbFreePicture*2)">{{ advertPayPhotoSingular }}</a>
+                                        <div class="ui stackable grid">
+                                            <div class="sixteen wide column">
+                                                <img :src="routeGetThumb+'/'+picture.hashName+'/'+advert.id" class="ui rounded medium centered image" />
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+
                         <div class="ui grid">
                             <div class="right floated sixteen wide mobile eight wide tablet five wide computer column">
                                 <div class="ui form">
@@ -94,6 +108,7 @@
             'contentHeader',
             'routeGetAdvertsList',
             'routeAdvertApprove',
+            'routeGetThumb',
             'loadErrorMessage',
             'toggleApproveLabel',
             'toggleDisapproveLabel',
@@ -102,6 +117,8 @@
             'modalValidDescription',
             'modalNo',
             'modalYes',
+            'advertNbFreePicture',
+            'advertPayPhotoSingular',
             'advertTitleLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',

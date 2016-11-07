@@ -12,6 +12,7 @@
                 <input type="hidden" name="lat" :value="lat" />
                 <input type="hidden" name="lng" :value="lng" />
                 <input type="hidden" name="geoloc" :value="geoloc" />
+                <input type="hidden" name="main_picture" :value="mainPicture" />
                 <div class="ui error message"></div>
                 <type-advert-radio-button
                         :route-get-list-type="routeGetListType"
@@ -82,30 +83,56 @@
                     <i class="camera retro icon"></i>
                     {{ advertFormPhotoSeparator }}
                 </h4>
-
-                <div class="ui grid">
-                    <div class="row">
-                        <div class="ui icon info message">
-                            <i class="icon">{{ nbPicturesIndicator }}</i>
-                            <div class="content">
-                                <div class="header">{{ helpHeaderIndicator }}</div>
-                                <p>{{ helpUploadP }}<a :href="helpUploadAHref">{{ helpUploadA }}</a></p>
-                            </div>
+                <div class="field" >
+                    <div class="ui icon info message">
+                        <i class="icon">{{ nbPicturesIndicator }}</i>
+                        <div class="content">
+                            <div class="header">{{ helpHeaderIndicator }}</div>
+                            <p>{{ helpUploadP }}<a :href="helpUploadAHref">{{ helpUploadA }}</a></p>
                         </div>
                     </div>
-                    <div class="doubling four column row">
-                        <div class="column" v-for="thumb in thumbs">
-                            <img id="holder" style="margin-top:15px;max-height:100px;">
-                        </div>
-                        <div class="column" v-if="thumbs.length<maxFiles">
-                            <div class="field">
-                                <label>{{ advertFormPhotoLabel }}</label>
-                                <input type="file" :name="formFileInputName" v-on:change="upload">
+                </div>
+
+                <div class="field">
+                    <div class="ui doubling three column grid">
+                        <div class="column" v-for="(thumb,index) in thumbs">
+                            <div :class="index>=advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
+                                <a class="ui pink right ribbon label" v-if="index>=advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
+                                <div class="ui stackable grid">
+                                    <div class="four wide centered column">
+                                        <a href="#"><i class="large grey remove circle outline icon" :data-file="thumb" v-on:click="delPhoto"></i></a>
+                                    </div>
+                                    <div class="twelve wide right aligned column">
+                                        <div :id="'slider1-'+_uid+'-'+index" class="ui slider checkbox">
+                                            <input type="radio" name="mainThumb" :value="thumb">
+                                            <label>{{ advertFormMainPhotoLabel }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="sixteen wide column">
+                                        <img :src="routeGetTempoThumb+'/'+thumb" class="ui rounded medium centered image" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="field">
+                    <template v-if="thumbs.length<maxFiles">
+                        <div class="ui grid">
+                            <div class="doubling four column row">
+                                <div class="column">
+                                    <div class="field">
+                                        <input type="file" :name="formFileInputName" v-on:change="upload">
+                                        <div class="ui top teal pointing basic label">
+                                            {{ advertFormPhotoLabel }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
 
                 <div class="field">
                     <button type="submit" class="ui primary button">{{ formValidationButtonLabel }}</button>
@@ -131,6 +158,7 @@
             'advertFormPayPhotoHelpHeaderPlural',
             'advertFormPhotoHelpContent',
             'advertFormPhotoNbFreePicture',
+            'advertFormMainPhotoLabel',
             'loadErrorMessage',
             'filesizeErrorMessage',
             'maxFiles',
@@ -138,7 +166,10 @@
             'categoryFirstMenuName',
             'routeGetListType',
             'routeAdvertFormPost',
-            'routeAdvertPicturesPost',
+            'routePostTempoPicture',
+            'routeGetListTempoThumbs',
+            'routeGetTempoThumb',
+            'routeDelTempoPicture',
             'listTypeFirstMenuName',
             'formValidationButtonLabel',
             'formTitleMinValid',
@@ -178,7 +209,8 @@
                 formFileInputName: 'addpicture',
                 thumbs: [],
                 nbPicturesIndicator: '',
-                helpHeaderIndicator: ''
+                helpHeaderIndicator: '',
+                mainPicture: ''
             };
         },
         mounted () {
@@ -192,6 +224,13 @@
                 this.sendToast(this.loadErrorMessage, 'error');
             });
             this.xCsrfToken = Laravel.csrfToken;
+            this.setPicturesIndicators();
+            this.helpUpload();
+            this.getListThumbs();
+            this.$watch('thumbs', function () {
+                this.setPicturesIndicators();
+                this.setMainPicture();
+            });
             if (this.old != undefined) {
                 this.categoryId = JSON.parse(this.old).category;
                 this.oldCategoryId = parseInt(JSON.parse(this.old).category);
@@ -203,11 +242,16 @@
                 this.currency=JSON.parse(this.old).currency;
                 this.oldCurrency= JSON.parse(this.old).currency;
             }
-            this.setPicturesIndicators();
-            this.helpUpload();
-            this.$watch('thumbs', function () {
-                this.setPicturesIndicators();
-            });
+        },
+        updated () {
+            var that = this;
+            for(var index in this.thumbs){
+                $('#slider1-'+this._uid+'-'+index).checkbox({
+                    onChange: function () {
+                        that.mainPicture = this.value;
+                    }
+                });
+            }
         },
         methods: {
             categoryChoice: function (id) {
@@ -235,12 +279,11 @@
             upload: function (event) {
                 this.fileToPost.append(this.formFileInputName, event.target.files[0]);
                 var that = this;
-                this.$http.post(this.routeAdvertPicturesPost, this.fileToPost)
+                this.$http.post(this.routePostTempoPicture, this.fileToPost)
                         .then(
                                 function (response) {
                                     that.fileToPost.delete(that.formFileInputName);
                                     that.thumbs = response.body;
-                                    console.log(response);
                                 },
                                 function (response) {
                                     that.fileToPost.delete(that.formFileInputName);
@@ -250,8 +293,33 @@
                                     } else if(response.status == 413) {
                                         that.sendToast(that.filesizeErrorMessage, 'error');
                                     } else {
-                                        that.sendToast(that.delErrorMessage, 'error');
+                                        that.sendToast(that.loadErrorMessage, 'error');
                                     }
+                                }
+                        );
+            },
+            getListThumbs: function (event) {
+                var that = this;
+                this.$http.get(this.routeGetListTempoThumbs)
+                        .then(
+                                function (response) {
+                                    that.thumbs = response.body;
+                                },
+                                function (response) {
+                                    that.sendToast(that.loadErrorMessage, 'error');
+                                }
+                        );
+            },
+            delPhoto: function (event) {
+                event.preventDefault();
+                var that=this;
+                this.$http.delete(this.routeDelTempoPicture+'/'+event.target.dataset.file)
+                        .then(
+                                function (response) {
+                                    that.thumbs = response.body;
+                                },
+                                function (response) {
+                                    that.sendToast(that.loadErrorMessage, 'error');
                                 }
                         );
             },
@@ -271,6 +339,13 @@
                     } else {
                         this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderSingular;
                     }
+                }
+            },
+            setMainPicture() {
+                if(this.thumbs.length == 0){
+                    this.mainPicture ='';
+                } else if(this.thumbs.length == 1 || this.thumbs.indexOf(this.mainPicture)==-1){
+                    $('#slider1-'+this._uid+'-0').checkbox('check');
                 }
             }
         }

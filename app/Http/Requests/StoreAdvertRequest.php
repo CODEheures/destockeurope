@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Common\DBUtils;
+use App\Common\PicturesManager;
 use App\Http\Controllers\UtilsController;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
@@ -57,6 +58,18 @@ class StoreAdvertRequest extends FormRequest
 
         }
 
+        $picturesManager = new PicturesManager();
+        $pictures = $picturesManager->listThumbs(PicturesManager::TYPE_TEMPO_LOCAL);
+        $line3='';
+        foreach ($pictures as $picture) {
+            if ($line3 == '') {
+                $line3 = $picture;
+            } else {
+                $line3 = $line3 . ',' . $picture;
+            }
+
+        }
+
         return [
             'type' => 'required|in:'.$line,
             'category' => 'required|numeric|exists:categories,id',
@@ -66,7 +79,8 @@ class StoreAdvertRequest extends FormRequest
             'currency' => 'required|in:'.$line2,
             'lat' => 'required|numeric|min:-90|max:90',
             'lng' => 'required|numeric|min:-180|max:180',
-            'geoloc' => 'required|min:2'
+            'geoloc' => 'required|min:2',
+            'main_picture' => 'required|size:32|in:'.$line3,
         ];
     }
 }

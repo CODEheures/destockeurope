@@ -4,6 +4,7 @@
     <welcome
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             route-category="{{ route('category.index') }}"
+            route-get-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_FINAL_LOCAL])}}"
             categories-dropdown-menu-first-menu-name="{{ trans('strings.menu_category') }}"
             categories-all-item="{{ trans('strings.form_dropdown_all_item') }}"
             filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
