@@ -1,12 +1,12 @@
-exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCodeMsg) {
+exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMapInput, ip, markerMsg, errorGeoCodeMsg) {
     this.geocoder = new google.maps.Geocoder;
     this.elemMap = document.getElementById(idMap);
     this.geoloc = document.getElementById(idGeoLoc);
+    this.input = document.getElementById(idMapInput);
     var that = this;
 
     this.constructMap= function () {
         if(this.elemMap != undefined && this.geoloc != undefined && ip != undefined){
-            console.log(geoloc);
             this.getInitLocation();
         }
     };
@@ -14,7 +14,7 @@ exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCo
         if(this.position != undefined){
             this.myLatlng = new google.maps.LatLng(this.position.coords.latitude, this.position.coords.longitude);
             this.mapOptions = {
-                zoom: 11,
+                zoom: parseInt(zoomMap),
                 center: this.myLatlng,
                 mapTypeControl: false,
                 streetViewControl: false,
@@ -28,6 +28,7 @@ exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCo
                 draggable: true,
                 position: this.myLatlng
             });
+
             that.setGeoCode();
             this.marker.addListener('mousedown', function() {
                 that.toggleBounce();
@@ -36,16 +37,25 @@ exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCo
                 that.toggleBounce();
                 that.setGeoCode();
             });
+
+            var autocomplete = new google.maps.places.Autocomplete(this.input);
+            autocomplete.bindTo('bounds', this.map);
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+                if(place.geometry != undefined) {
+                    that.map.setCenter(place.geometry.location);
+                    that.marker.setPosition(place.geometry.location);
+                }
+                that.setGeoCode();
+            });
         }
     };
     this.getInitLocation= function () {
-
-        console.log(geoloc.dataset.lat);
-        if(geoloc.dataset.lat!='' && geoloc.dataset.lng!=''){
+        if(sessionStorage.getItem('lat')!=undefined && sessionStorage.getItem('lng')!=undefined && sessionStorage.getItem('lat')!='' && sessionStorage.getItem('lng')!=''){
             var position =  {
                 coords: {
-                    latitude: geoloc.dataset.lat,
-                    longitude: geoloc.dataset.lng
+                    latitude: sessionStorage.getItem('lat'),
+                    longitude: sessionStorage.getItem('lng')
                 }
             };
             that.setMyLatLng(position);
@@ -70,7 +80,6 @@ exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCo
         this.position = position;
         this.setMap();
     };
-
     this.toggleBounce= function () {
         if (this.marker.getAnimation() !== null) {
             this.marker.setAnimation(null);
@@ -84,12 +93,12 @@ exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCo
         $(icon).attr('class', 'notched circle loading icon');
         this.geocoder.geocode({'location': this.marker.getPosition().toJSON()}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
-                if (results[1]) {
+                if (results[parseInt(geolocType)]) {
                     var header = $(that.geoloc).find('.header');
-                    header.html(results[1].formatted_address);
+                    header.html(results[parseInt(geolocType)].formatted_address);
                     that.geoloc.dataset.lat = that.marker.getPosition().lat();
                     that.geoloc.dataset.lng = that.marker.getPosition().lng();
-                    that.geoloc.dataset.geoloc = results[1].formatted_address;
+                    that.geoloc.dataset.geoloc = results[parseInt(geolocType)].formatted_address;
                     $(icon).attr('class', classIcon);
                     if ("createEvent" in document) {
                         var evt = document.createEvent("HTMLEvents");

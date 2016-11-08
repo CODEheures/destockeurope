@@ -1,5 +1,6 @@
 .main.container {
   margin-top: 4rem;
+  margin-bottom: 4rem;
 }
 
 .hidden.menu {
@@ -16,6 +17,10 @@
 
 .row.breadcrumb {
   margin-bottom: 1rem;
+}
+
+.ui .segment .footer {
+  padding: 4em 0 4em 0;
 }
 
 form {

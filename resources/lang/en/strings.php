@@ -56,7 +56,8 @@ return [
     'form_googlemap_label' => 'Location',
     'form_googlemap_marker' => 'The selling is here',
     'form_googlemap_geoloc_fail' => 'Adresse undefined',
-    'form_googlemap_help' => 'Place the marker of the map to the desired location. If necessary, you can use the zoom and drag the map',
+    'form_googlemap_help' => 'Enter a location or place the marker of the map to the desired location. If necessary, you can use the zoom and drag the map',
+    'form_googlemap_help2' => 'Enter a location',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',

@@ -36,11 +36,16 @@ class UserController extends Controller
     public function index()
     {
         $user = $this->auth->user();
-        return view('user.account', compact('user'));
+        //TODO changer ip
+        //$ip = $request->ip();
+        $ip='82.246.117.210';
+        $geolocType = 0;
+        $zoomMap = 16;
+        return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap'));
     }
 
-    public function completeAccount(Advert $advert){
-        dd($advert);
+    public function completeAccount($id){
+        dd($id);
         $this->pictureManager->purgeLocalTempo();
         return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
     }

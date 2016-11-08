@@ -74,14 +74,13 @@
                 </h4>
 
                 <div class="field">
-                    <div id="geoloc" class="ui icon info message" :data-lng="geoLocLng" :data-lat="geoLocLat" data-geoloc="" v-on:geochange="latLngChange">
-                        <i class="marker icon"></i>
-                        <div class="content">
-                            <div class="header"></div>
-                            <p>{{ geolocHelpMsg }}</p>
-                        </div>
-                    </div>
-                    <div id="map" style="height: 50vh;width: 100%;max-width: 600px;"></div>
+                    <googleMap
+                        :lng="lng"
+                        :lat="lat"
+                        :geoloc="geoloc"
+                        :geoloc-help-msg="geolocHelpMsg"
+                        :geoloc-help-msg-two="geolocHelpMsgTwo">
+                    </googleMap>
                 </div>
 
                 <h4 class="ui horizontal divider header">
@@ -187,6 +186,7 @@
             'currenciesFirstMenuName',
             'actualLocale',
             'geolocHelpMsg',
+            'geolocHelpMsgTwo',
             'stepOneTitle',
             'stepTwoTitle',
             'stepThreeTitle',
@@ -223,8 +223,6 @@
                 helpHeaderIndicator: '',
                 mainPicture: '',
                 steps: [],
-                geoLocLng: '',
-                geoLocLat:'',
                 successFormSubmit: false
             };
         },
@@ -261,6 +259,9 @@
             this.$on('currencyChoice', function (event) {
                 this.currencyChoice(event.cur);
             });
+            this.$on('locationChange', function (event) {
+                this.latLngChange(event);
+            });
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
             });
@@ -288,7 +289,6 @@
         },
         methods: {
             typeChoice: function (type) {
-                console.log(type);
                 this.type = type;
             },
             categoryChoice: function (id) {
@@ -303,9 +303,9 @@
                 this.sendMessage = !this.sendMessage;
             },
             latLngChange: function (event) {
-                this.lat= event.target.dataset.lat;
-                this.lng= event.target.dataset.lng;
-                this.geoloc= event.target.dataset.geoloc;
+                this.lat= event.lat;
+                this.lng= event.lng;
+                this.geoloc= event.geoloc;
             },
             helpUpload: function () {
                 var htmlObject = $('<p>'+this.advertFormPhotoHelpContent+'</p>');
@@ -419,8 +419,8 @@
                 sessionStorage.getItem('type') != undefined ? this.oldType = sessionStorage.getItem('type') : null;
                 sessionStorage.getItem('currency') != undefined ? this.currency= sessionStorage.getItem('currency') : null;
                 sessionStorage.getItem('currency') != undefined ? this.oldCurrency= sessionStorage.getItem('currency') : null;
-                sessionStorage.getItem('lat') != undefined ? this.geoLocLat =  sessionStorage.getItem('lat') : null;
-                sessionStorage.getItem('lng') != undefined ? this.geoLocLng =  sessionStorage.getItem('lng') : null;
+                sessionStorage.getItem('lat') != undefined ? this.lat =  sessionStorage.getItem('lat') : null;
+                sessionStorage.getItem('lng') != undefined ? this.lng =  sessionStorage.getItem('lng') : null;
             }
         }
     }

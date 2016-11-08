@@ -53,7 +53,9 @@ class AdvertController extends Controller
         //TODO changer ip
         //$ip = $request->ip();
         $ip='82.246.117.210';
-        return view('advert.create', compact('ip'));
+        $geolocType = 1;
+        $zoomMap = 11;
+        return view('advert.create', compact('ip', 'geolocType', 'zoomMap'));
     }
 
     /**
@@ -97,7 +99,7 @@ class AdvertController extends Controller
                     $picture->save();
                 }
                 DB::commit();
-                return redirect()->action('UserController@completeAccount', compact($advert));
+                return redirect(route('user.completeAccount', ['id' =>$advert->id]));
                 //return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
             } catch (\Exception $e) {
                 DB::rollback();

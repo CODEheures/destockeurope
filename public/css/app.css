@@ -28702,7 +28702,8 @@ html.ios body {
   cursor: not-allowed; }
 
 .main.container {
-  margin-top: 4rem; }
+  margin-top: 4rem;
+  margin-bottom: 4rem; }
 
 .hidden.menu {
   display: none; }
@@ -28715,6 +28716,9 @@ html.ios body {
 
 .row.breadcrumb {
   margin-bottom: 1rem; }
+
+.ui .segment .footer {
+  padding: 4em 0 4em 0; }
 
 form.login, form.register {
   padding-top: 2rem; }

@@ -27,6 +27,23 @@
                 </div>
             </div>
         </div>
+        <div class="column">
+            <div class="ui form">
+                <h4 class="ui horizontal divider header">
+                    <i class="map signs icon"></i>
+                    {{ accountGooglemapLabel }}
+                </h4>
+                <div class="field">
+                    <googleMap
+                            :lng="lng"
+                            :lat="lat"
+                            :geoloc="geoloc"
+                            :geoloc-help-msg="geolocHelpMsg"
+                            :geoloc-help-msg-two="geolocHelpMsgTwo">
+                    </googleMap>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -44,7 +61,10 @@
             'routeAvatar',
             'accountPreferencesLabel',
             'userName',
-            'inputSearchLabel'
+            'inputSearchLabel',
+            'accountGooglemapLabel',
+            'geolocHelpMsg',
+            'geolocHelpMsgTwo'
         ],
         data: () => {
             return {
@@ -52,7 +72,10 @@
                 sendMessage: false,
                 typeMessage: '',
                 message:'',
-                currenciesDropDownUpdate: false
+                currenciesDropDownUpdate: false,
+                lat: '',
+                lng: '',
+                geoloc: ''
             };
         },
         mounted () {
@@ -65,6 +88,9 @@
                 if(event.initial == undefined || event.initial!=true){
                     this.localeChoice(event.locale);
                 }
+            });
+            this.$on('locationChange', function (event) {
+                this.latLngChange(event);
             });
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
@@ -101,6 +127,11 @@
                                     }
                                 }
                 );
+            },
+            latLngChange: function (event) {
+                this.lat= event.lat;
+                this.lng= event.lng;
+                this.geoloc= event.geoloc;
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;

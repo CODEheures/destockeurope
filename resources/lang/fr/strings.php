@@ -56,7 +56,8 @@ return [
     'form_googlemap_label' => 'Localisation',
     'form_googlemap_marker' => 'La vente se situe ici',
     'form_googlemap_geoloc_fail' => 'Adresse indéterminée',
-    'form_googlemap_help' => 'Placez le marqueur de la carte à l\'endroit désiré. Si besoin, vous pouvez utiliser le zoom et faire glisser la carte',
+    'form_googlemap_help' => 'Renseignez une adresse ou placez le marqueur de la carte à l\'endroit désiré. Si besoin, vous pouvez utiliser le zoom et faire glisser la carte',
+    'form_googlemap_help2' => 'Renseignez une adresse',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',

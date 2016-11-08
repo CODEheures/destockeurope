@@ -14,7 +14,14 @@
                     account-preferences-label="{{ trans('strings.view_user_account_preferences_label') }}"
                     route-avatar="{{ asset('/images/matt.jpg') }}"
                     input-search-label="{{ trans('strings.form_input_search_label') }}"
-                    user-name="{{ $user->name }}">
+                    user-name="{{ $user->name }}"
+                    geoloc-help-msg="{{ trans('strings.form_googlemap_help') }}"
+                    geoloc-help-msg-two="{{ trans('strings.form_googlemap_help2') }}"
+                    account-googlemap-label="{{ trans('strings.form_googlemap_label') }}">
             </user-account>
 
+@endsection
+
+@section('scripts')
+    @include('plugins.googleMap.script')
 @endsection
