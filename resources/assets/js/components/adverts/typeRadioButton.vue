@@ -6,7 +6,7 @@
             </div>
             <label class="text">{{ firstMenuName }}</label>
             <div v-for="(type,index) in listType" class="field" :data-value="index">
-                <div class="ui radio checkbox">
+                <div :id="_uid" class="ui radio checkbox">
                     <input type="radio" name="type" :value="index" :checked="oldChoice == index ? true : false">
                     <label>{{ type }}</label>
                 </div>
@@ -32,15 +32,23 @@
         mounted () {
             this.getListType();
         },
+        updated () {
+            var that = this;
+            $('#'+that._uid).checkbox({
+                onChange: function () {
+                    that.$parent.$emit('typeChoice', {'type': this.value})
+                }
+            })
+        },
         methods: {
             getListType: function () {
                 this.$http.get(this.routeGetListType)
                         .then(
-                                (response) => {
+                                function (response) {
                                     this.listType = response.data;
                                     this.isLoaded = true;
                                 },
-                                (response) => {
+                                function (response) {
                                     this.$parent.$emit('loadError');
                                 }
                         );

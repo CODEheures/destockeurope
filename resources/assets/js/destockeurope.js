@@ -6,6 +6,7 @@ exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCo
 
     this.constructMap= function () {
         if(this.elemMap != undefined && this.geoloc != undefined && ip != undefined){
+            console.log(geoloc);
             this.getInitLocation();
         }
     };
@@ -38,7 +39,17 @@ exports.destockMap= function (google, idMap, idGeoLoc, ip, markerMsg, errorGeoCo
         }
     };
     this.getInitLocation= function () {
-        if (navigator.geolocation) {
+
+        console.log(geoloc.dataset.lat);
+        if(geoloc.dataset.lat!='' && geoloc.dataset.lng!=''){
+            var position =  {
+                coords: {
+                    latitude: geoloc.dataset.lat,
+                    longitude: geoloc.dataset.lng
+                }
+            };
+            that.setMyLatLng(position);
+        } else if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setMyLatLng, this.setMyLatLngByIp, {enableHighAccuracy:true, timeout:60*1000});
         } else {
             this.setMyLatLngByIp();

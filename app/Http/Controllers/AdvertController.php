@@ -97,8 +97,8 @@ class AdvertController extends Controller
                     $picture->save();
                 }
                 DB::commit();
-                $this->pictureManager->purgeLocalTempo();
-                return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
+                return redirect()->action('UserController@completeAccount', compact($advert));
+                //return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
             } catch (\Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));

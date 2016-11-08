@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 
 
+use App\Advert;
+use App\Common\PicturesManager;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Money\Currencies\ISOCurrencies;
@@ -13,15 +15,17 @@ class UserController extends Controller
 {
 
     private $auth;
+    private $pictureManager;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Guard $auth)
+    public function __construct(Guard $auth, PicturesManager $picturesManager)
     {
         $this->middleware('auth');
         $this->auth = $auth;
+        $this->pictureManager = $picturesManager;
     }
 
     /**
@@ -33,6 +37,12 @@ class UserController extends Controller
     {
         $user = $this->auth->user();
         return view('user.account', compact('user'));
+    }
+
+    public function completeAccount(Advert $advert){
+        dd($advert);
+        $this->pictureManager->purgeLocalTempo();
+        return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
     }
 
     public function setCurrency(Request $request) {

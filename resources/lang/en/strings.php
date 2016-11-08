@@ -110,7 +110,7 @@ return [
     'view_advert_steps_2_title' => 'Account info',
     'view_advert_steps_2_description' => 'check the information in your account',
     'view_advert_steps_3_title' => 'Payment',
-    'view_advert_steps_3_description' => 'pay extra photos',
+    'view_advert_steps_3_description' => 'if extra photos',
     'advert_create_success' => 'Your advert is being created. It will be validated by our teams soon',
 
     'view_advert_approve_header' => 'Approve this adverts',

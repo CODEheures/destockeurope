@@ -110,7 +110,7 @@ return [
     'view_advert_steps_2_title' => 'Vos informations',
     'view_advert_steps_2_description' => 'vérifier les informations de votre compte',
     'view_advert_steps_3_title' => 'Paiement',
-    'view_advert_steps_3_description' => 'payer les photos supplémentaires',
+    'view_advert_steps_3_description' => 'si photos supplémentaires',
     'advert_create_success' => 'Votre annonce est créée. Elle sera validée très prochainement par nos équipes',
 
     'view_advert_approve_header' => 'Approuver les annonces',

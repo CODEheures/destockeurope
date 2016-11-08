@@ -74,7 +74,7 @@
                 </h4>
 
                 <div class="field">
-                    <div id="geoloc" class="ui icon info message" data-lng="" data-lat="" data-geoloc="" v-on:geochange="latLngChange">
+                    <div id="geoloc" class="ui icon info message" :data-lng="geoLocLng" :data-lat="geoLocLat" data-geoloc="" v-on:geochange="latLngChange">
                         <i class="marker icon"></i>
                         <div class="content">
                             <div class="header"></div>
@@ -140,7 +140,7 @@
                 </div>
 
                 <div class="field">
-                    <button type="submit" class="ui primary button">{{ formValidationButtonLabel }}</button>
+                    <button type="submit" class="ui primary button" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
                 </div>
             </form>
         </div>
@@ -223,6 +223,9 @@
                 helpHeaderIndicator: '',
                 mainPicture: '',
                 steps: [],
+                geoLocLng: '',
+                geoLocLat:'',
+                successFormSubmit: false
             };
         },
         mounted () {
@@ -249,6 +252,9 @@
                     icon: 'payment'
                 }
             ];
+            this.$on('typeChoice', function (event) {
+                this.typeChoice(event.type);
+            });
             this.$on('categoryChoice', function (event) {
                 this.categoryChoice(event.id);
             });
@@ -268,17 +274,7 @@
                 this.setSteps();
                 this.setMainPicture();
             });
-            if (this.old != undefined) {
-                this.categoryId = JSON.parse(this.old).category;
-                this.oldCategoryId = parseInt(JSON.parse(this.old).category);
-                this.title = JSON.parse(this.old).title;
-                this.description = JSON.parse(this.old).description;
-                this.price = JSON.parse(this.old).price;
-                this.type = JSON.parse(this.old).type;
-                this.oldType = JSON.parse(this.old).type;
-                this.currency=JSON.parse(this.old).currency;
-                this.oldCurrency= JSON.parse(this.old).currency;
-            }
+            this.getStorage();
         },
         updated () {
             var that = this;
@@ -291,6 +287,10 @@
             }
         },
         methods: {
+            typeChoice: function (type) {
+                console.log(type);
+                this.type = type;
+            },
             categoryChoice: function (id) {
                 this.categoryId = parseInt(id);
             },
@@ -380,7 +380,6 @@
             },
             setSteps () {
                 var resultIndicator =  this.thumbs.length - this.advertFormPhotoNbFreePicture;
-                console.log(this.steps);
                 if(resultIndicator>=1) {
                     (this.steps[2]).isDisabled = false;
                 } else {
@@ -393,6 +392,35 @@
                 } else if(this.thumbs.length == 1 || this.thumbs.indexOf(this.mainPicture)==-1){
                     $('#slider1-'+this._uid+'-0').checkbox('check');
                 }
+            },
+            submitForm (event) {
+                event.preventDefault();
+                this.setStorage();
+                event.target.parentNode.parentNode.submit();
+            },
+            setStorage() {
+                sessionStorage.setItem('category', this.categoryId);
+                sessionStorage.setItem('title', this.title);
+                sessionStorage.setItem('description', this.description);
+                sessionStorage.setItem('price', this.price);
+                sessionStorage.setItem('type', this.type);
+                sessionStorage.setItem('currency', this.currency);
+                sessionStorage.setItem('lat', this.lat);
+                sessionStorage.setItem('lng', this.lng);
+            },
+            getStorage() {
+                sessionStorage.getItem('successFormSubmit') != undefined ? this.successFormSubmit = sessionStorage.getItem('successFormSubmit') : null;
+                sessionStorage.getItem('category') != undefined ? this.categoryId = sessionStorage.getItem('category') : null;
+                sessionStorage.getItem('category') != undefined? this.oldCategoryId = parseInt(sessionStorage.getItem('category')): null;
+                sessionStorage.getItem('title') != undefined ? this.title = sessionStorage.getItem('title') : null;
+                sessionStorage.getItem('description') != undefined ? this.description = sessionStorage.getItem('description') : null;
+                sessionStorage.getItem('price') != undefined ? this.price = sessionStorage.getItem('price') : null;
+                sessionStorage.getItem('type') != undefined ? this.type = sessionStorage.getItem('type') : null;
+                sessionStorage.getItem('type') != undefined ? this.oldType = sessionStorage.getItem('type') : null;
+                sessionStorage.getItem('currency') != undefined ? this.currency= sessionStorage.getItem('currency') : null;
+                sessionStorage.getItem('currency') != undefined ? this.oldCurrency= sessionStorage.getItem('currency') : null;
+                sessionStorage.getItem('lat') != undefined ? this.geoLocLat =  sessionStorage.getItem('lat') : null;
+                sessionStorage.getItem('lng') != undefined ? this.geoLocLng =  sessionStorage.getItem('lng') : null;
             }
         }
     }
