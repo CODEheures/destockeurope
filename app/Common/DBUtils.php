@@ -17,8 +17,17 @@ trait DBUtils
         return $enum;
     }
 
-    public static function getCountItems($table, $where1, $where2) {
-        $count = DB::table($table)->where($where1, $where2)->count();
+    public static function getCountItems($table, $wheres = []) {
+
+        $query = DB::table($table);
+
+        if(count($wheres)>0){
+            foreach ($wheres as $key => $where){
+                $query = $query->where($key, $where);
+            }
+        }
+
+        $count = $query->count();
         return $count;
     }
 }

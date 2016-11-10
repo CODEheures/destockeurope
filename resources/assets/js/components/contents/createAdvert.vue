@@ -231,6 +231,7 @@
                 {
                     isActive : true,
                     isDisabled : false,
+                    isCompleted: false,
                     title: this.stepOneTitle,
                     description: this.stepOneDescription,
                     icon: 'write'
@@ -238,6 +239,7 @@
                 {
                     isActive : false,
                     isDisabled : false,
+                    isCompleted: false,
                     title: this.stepTwoTitle,
                     description: this.stepTwoDescription,
                     icon: 'user'
@@ -245,6 +247,7 @@
                 {
                     isActive : false,
                     isDisabled : true,
+                    isCompleted: false,
                     title: this.stepThreeTitle,
                     description: this.stepThreeDescription,
                     icon: 'payment'

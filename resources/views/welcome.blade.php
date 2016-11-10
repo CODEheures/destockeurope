@@ -15,6 +15,7 @@
             advert-price-label="{{ trans('strings.view_advert_form_price_label') }}"
             see-advert-link-label="{{ trans('strings.view_advert_by_link_label') }}"
             actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
-            menu-home="{{ trans('strings.menu_home') }}">
+            menu-home="{{ trans('strings.menu_home') }}"
+            clear-storage="{{ session()->has('clear') ? true : false }}">
     </welcome>
 @endsection

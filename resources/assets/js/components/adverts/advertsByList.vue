@@ -9,7 +9,7 @@
                     <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
                 </p>
                 <div class="ui image">
-                    <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
+                    <div class="ui right teal corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
                     <img  class="ui top aligned small bordered rounded image" :src="routeGetThumb+'/'+advert.mainPicture+'/'+advert.id">
                 </div>
                 <div class="content">

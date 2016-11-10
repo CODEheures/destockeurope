@@ -9,18 +9,12 @@ return [
        'maxDescription' => 2000,
     ],
 
-    'meta_categories' => [
-        'minTitle' => 3,
-        'maxTitle' => 25,
-        'minDescription' => 0,
-        'maxDescription' => 100,
-    ],
-
-    'categories' => [
-        'minTitle' => 3,
-        'maxTitle' => 50,
-        'minDescription' => 0,
-        'maxDescription' => 100,
+    'users' => [
+        'minName' => 3,
+        'minCompagnyName' => 3,
+        'maxCompagnyName' => 100,
+        'minRegistrationNumber' => 3,
+        'maxRegistrationNumber' => 30
     ]
 
 ];

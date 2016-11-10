@@ -6,6 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Common\PicturesManager;
+use App\Http\Requests\UpdateCompagnyNameRequest;
+use App\Http\Requests\UpdateRegistrationRequest;
+use App\Http\Requests\UpdateUserLocationRequest;
+use App\Http\Requests\UpdateUserNameRequest;
+use Dropbox\Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Money\Currencies\ISOCurrencies;
@@ -45,9 +50,19 @@ class UserController extends Controller
     }
 
     public function completeAccount($id){
-        dd($id);
-        $this->pictureManager->purgeLocalTempo();
-        return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
+        $user = $this->auth->user();
+        //TODO changer ip
+        //$ip = $request->ip();
+        $ip='82.246.117.210';
+        $geolocType = 0;
+        $zoomMap = 16;
+        $advertAccountVerifiedStep = true;
+        $advert = Advert::find($id);
+        if($advert){
+            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert'));
+        } else {
+            return redirect()->back()->withInput()->withErrors('errors', trans('strings.view_all_error_saving_message'));
+        }
     }
 
     public function setCurrency(Request $request) {
@@ -74,5 +89,55 @@ class UserController extends Controller
         } else {
             return response(trans('strings.view_user_account_locale_patch_error'), 409);
         }
+    }
+
+    public function setLocation(UpdateUserLocationRequest $request) {
+        try {
+            $user = $this->auth->user();
+            $user->latitude = $request->lat;
+            $user->longitude = $request->lng;
+            $user->geoloc = $request->geoloc;
+            $user->save();
+            return response('ok', 200);
+        } catch (\Exception $e) {
+            return response(trans('strings.view_user_account_locale_patch_error'), 409);
+        }
+
+    }
+
+    public function setName(UpdateUserNameRequest $request) {
+        try {
+            $user = $this->auth->user();
+            $user->name = $request->value;
+            $user->save();
+            return response('ok', 200);
+        } catch (\Exception $e) {
+            return response(trans('strings.view_user_account_locale_patch_error'), 409);
+        }
+
+    }
+
+    public function setCompagnyName(UpdateCompagnyNameRequest $request) {
+        try {
+            $user = $this->auth->user();
+            $user->compagny_name = $request->value;
+            $user->save();
+            return response('ok', 200);
+        } catch (\Exception $e) {
+            return response(trans('strings.view_user_account_locale_patch_error'), 409);
+        }
+
+    }
+
+    public function setRegistrationNumber(UpdateRegistrationRequest $request) {
+        try {
+            $user = $this->auth->user();
+            $user->registration_number = $request->value;
+            $user->save();
+            return response('ok', 200);
+        } catch (\Exception $e) {
+            return response(trans('strings.view_user_account_locale_patch_error'), 409);
+        }
+
     }
 }

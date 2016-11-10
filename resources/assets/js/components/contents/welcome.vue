@@ -67,7 +67,8 @@
             'seeAdvertLinkLabel',
             'actualLocale',
             'categoriesAllItem',
-            'menuHome'
+            'menuHome',
+            'clearStorage'
         ],
         data: () => {
             return {
@@ -93,6 +94,9 @@
                     this.filter['id'] = 0;
                 }
             });
+            if(this.clearStorage){
+                sessionStorage.clear();
+            }
         },
         methods: {
             sendToast: function(message,type) {

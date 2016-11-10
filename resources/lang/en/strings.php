@@ -79,6 +79,7 @@ return [
     'divider_register' => 'or use',
 
     'middleware_admin' => 'You do not have the correct security credentials to access this page...',
+    'middleware_complete_account' => 'Thank you to fill in all fields before validation of your account',
 
     'view_all_error_load_message' => 'Ho no! Load error :-( , try to refresh the page',
     'view_all_error_add_message' => 'Ho no! Adding Fails error :-(',
@@ -128,9 +129,14 @@ return [
     'view_user_account_patch_success' => 'Update OK',
     'view_user_account_currency_dropdown_label' => 'Currency',
     'view_user_account_currency_patch_error' => 'The select currency is not available',
-    'view_user_account_locale_dropdown_label' => 'Localization',
+    'view_user_account_locale_dropdown_label' => 'Language',
     'view_user_account_locale_patch_error' => 'The select localization is not available',
-
+    'view_user_account_location_patch_error' => 'The select location is not available',
+    'view_user_account_name_patch_error' => 'The name is not available',
+    'view_user_account_registration_patch_error' => 'The registration number is not available',
+    'view_user_account_compagny_divider_label' => 'Your Compagny',
+    'view_user_account_compagny_name_label' => 'Name',
+    'view_user_account_compagny_number_label' => 'Compagny registration number',
     'view_filter_ribbon' => 'Filters',
     'view_filter_price_title' => 'Range Price',
 ];

@@ -21,6 +21,7 @@ class AdvertController extends Controller
 
     public function __construct(PicturesManager $picturesManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType']]);
+        $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
         $this->pictureManager  = $picturesManager;
     }
@@ -87,6 +88,8 @@ class AdvertController extends Controller
 
                 $results = $this->pictureManager->storeLocalFinal();
 
+                $advert->cost = $this->setCost(count($results));
+
                 DB::beginTransaction();
                 $advert->save();
                 foreach ($results as $result){
@@ -100,13 +103,20 @@ class AdvertController extends Controller
                 }
                 DB::commit();
                 return redirect(route('user.completeAccount', ['id' =>$advert->id]));
-                //return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
             } catch (\Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));
             }
         } else {
             return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));
+        }
+    }
+
+    private function setCost($nbPictures){
+        if($nbPictures > env('NB_FREE_PICTURES')){
+            return ($nbPictures - env('NB_FREE_PICTURES'))*10;
+        } else {
+            return 0;
         }
     }
 
@@ -174,7 +184,7 @@ class AdvertController extends Controller
     }
 
     public function listApprove() {
-        $adverts = Advert::where('isValid', null)->get();
+        $adverts = Advert::where('isPublish', true)->where('isValid', null)->get();
         $adverts->load('user');
         $adverts->load('pictures');
         $adverts->load('category');
@@ -202,5 +212,21 @@ class AdvertController extends Controller
         return response('ok',200);
     }
 
-
+    public function publish(Request $request, $id){
+        $advert = Advert::find($id);
+        $advert->load('user');
+        if($advert && $advert->user->id == auth()->user()->id && $advert->cost == 0){
+            $advert->isPublish = true;
+            $advert->save();
+            $this->pictureManager->purgeLocalTempo();
+            $request->session()->flash('clear', true);
+            return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
+        } elseif($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0) {
+            $advert->load('payment');
+            //TODO fin du test et redirection
+            return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
+        } else {
+            return response(trans('strings.view_advert_error'), 500);
+        }
+    }
 }

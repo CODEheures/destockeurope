@@ -79,6 +79,7 @@ return [
     'divider_register' => 'ou utiliser',
 
     'middleware_admin' => 'Vous n\'avez pas les droits nécéssaires pour acceder à cette page...',
+    'middleware_complete_account' => 'Merci de remplir tous les champs de votre compte avant validation',
 
     'view_all_error_load_message' => 'Ho non! Erreur de chargement :-( , essayez de rafraichir la page',
     'view_all_error_add_message' => 'Ho non! L\'ajout a échoué',
@@ -128,9 +129,14 @@ return [
     'view_user_account_patch_success' => 'Mise à jour OK',
     'view_user_account_currency_dropdown_label' => 'Monnaie',
     'view_user_account_currency_patch_error' => 'La monnaie choisie n\'est pas valide',
-    'view_user_account_locale_dropdown_label' => 'Localisation',
+    'view_user_account_locale_dropdown_label' => 'Langage',
     'view_user_account_locale_patch_error' => 'La localisation choisie n\'est pas valide',
-
+    'view_user_account_location_patch_error' => 'L\'adresse choisie n\'est pas valide',
+    'view_user_account_name_patch_error' => 'Le nom choisie n\'est pas valide',
+    'view_user_account_registration_patch_error' => 'Le numéro d\'enregistrement n\'est pas valide',
+    'view_user_account_compagny_divider_label' => 'Votre société',
+    'view_user_account_compagny_name_label' => 'Nom',
+    'view_user_account_compagny_number_label' => 'Numero d\'enregistrement',
     'view_filter_ribbon' => 'Filtres',
     'view_filter_price_title' => 'Tranche de Prix',
 ];

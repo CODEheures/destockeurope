@@ -25,11 +25,14 @@ class CreateAdvertsTable extends Migration
             $table->text('description');
             $table->integer('price');
             $table->string('currency', 3);
-            $table->float('latitude',6,4);
-            $table->float('longitude',19,16);
+            $table->decimal('latitude',6,4);
+            $table->decimal('longitude',19,16);
             $table->string('geoloc')->nullable()->default(null);
             $table->string('mainPicture',32);
+            $table->boolean('isPublish')->default(false);
             $table->boolean('isValid')->nullable()->default(null);
+            $table->decimal('cost',8,2)->default(0);
+            $table->integer('payment_id')->unsigned()->index()->nullable()->default(null);
         });
     }
 

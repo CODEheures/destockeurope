@@ -47,6 +47,10 @@ Route::group(['prefix' => 'users'], function() {
     //User Preferences settings
     Route::patch('currency', ['as' => 'user.currency', 'uses' => 'UserController@setCurrency']);
     Route::patch('locale', ['as' => 'user.locale', 'uses' => 'UserController@setLocale']);
+    Route::patch('location', ['as' => 'user.location', 'uses' => 'UserController@setLocation']);
+    Route::patch('name', ['as' => 'user.name', 'uses' => 'UserController@setName']);
+    Route::patch('compagny-name', ['as' => 'user.compagnyName', 'uses' => 'UserController@setCompagnyName']);
+    Route::patch('registration-number', ['as' => 'user.registrationNumber', 'uses' => 'UserController@setRegistrationNumber']);
 });
 
 //Utils
@@ -66,6 +70,7 @@ Route::patch('category/append-to',  ['as' => 'category.appendTo', 'uses' =>'Cate
 Route::resource('category', 'CategoryController');
 
 //Adverts
+Route::get('advert/publish/{id?}', ['as' => 'advert.publish', 'uses' => 'AdvertController@publish']);
 Route::get('advert/get-list-type', ['as' => 'advert.getListType', 'uses' => 'AdvertController@getListType']);
 Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
 Route::get('advert/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);

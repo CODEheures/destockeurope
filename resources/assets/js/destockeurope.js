@@ -93,6 +93,7 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
         $(icon).attr('class', 'notched circle loading icon');
         this.geocoder.geocode({'location': this.marker.getPosition().toJSON()}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
+                sessionStorage.setItem('geoloc', JSON.stringify(results));
                 if (results[parseInt(geolocType)]) {
                     var header = $(that.geoloc).find('.header');
                     header.html(results[parseInt(geolocType)].formatted_address);

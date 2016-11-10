@@ -2,13 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
-
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -27,7 +28,12 @@ class User extends Authenticatable
         'linkedin_id',
         'avatar',
         'currency',
-        'locale'
+        'locale',
+        'compagny_name',
+        'registration_number',
+        'latitude',
+        'longitude',
+        'geoloc'
     ];
 
     /**
@@ -53,4 +59,12 @@ class User extends Authenticatable
     public function adverts() {
         return $this->hasMany('App\Advert');
     }
+
+    public function payments() {
+        return $this->hasMany('App\Payment');
+    }
+
+//    public function getLongitudeAttribute($value){
+//        dd('value' . $value);
+//    }
 }
