@@ -1,6 +1,11 @@
 .main.container {
   margin-top: 4rem;
   margin-bottom: 4rem;
+
+  & a.item.advert > .ui.image > .corner i {
+    color: white;
+    font-weight: 600;
+  }
 }
 
 .hidden.menu {

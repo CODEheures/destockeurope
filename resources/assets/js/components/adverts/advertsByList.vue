@@ -6,10 +6,11 @@
             </div>
             <a :href="routeGetAdvertsList+'/'+advert.id" v-for="advert in advertsList" class="item advert">
                 <p class="date">
+                    <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                     <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
                 </p>
                 <div class="ui image">
-                    <div class="ui right teal corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
+                    <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
                     <img  class="ui top aligned small bordered rounded image" :src="routeGetThumb+'/'+advert.mainPicture+'/'+advert.id">
                 </div>
                 <div class="content">
@@ -24,10 +25,7 @@
                             </span>
                         </p>
                         <p>
-                            <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                        </p>
-                        <p>
-                            <span class="ui large teal tag label">{{ advert.price }} {{ advert.currency }}</span>
+                            <span class="ui large blue tag label">{{ advert.price }} {{ advert.currency }}</span>
                         </p>
                     </div>
                 </div>

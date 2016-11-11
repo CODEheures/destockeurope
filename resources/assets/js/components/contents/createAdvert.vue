@@ -141,7 +141,7 @@
                                 <div class="column">
                                     <div class="field">
                                         <input type="file" :name="formFileInputName" v-on:change="upload">
-                                        <div class="ui top teal pointing basic label">
+                                        <div class="ui top blue pointing basic label">
                                             {{ advertFormPhotoLabel }}
                                         </div>
                                     </div>

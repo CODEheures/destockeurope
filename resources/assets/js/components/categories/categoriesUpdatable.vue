@@ -4,7 +4,7 @@
             <div class="title flex">
                 <div>
                     <i class="dropdown icon"></i>
-                    <i class="large blue minus square icon" v-on:click="delCategory" :data-id="category.id"></i>
+                    <i :class="'large ' + colors[colorNumber%colors.length] + ' minus square icon'" v-on:click="delCategory" :data-id="category.id"></i>
                     <span v-for="locale in availablesDatasLocalesList">
                     <div class="ui mini labeled input">
                         <div class="ui label">{{ locale }}</div>
@@ -53,12 +53,13 @@
                         :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
                         :actual-locale="actualLocale"
                         :categories-dropdown-menu-first-menu-name="categoriesDropdownMenuFirstMenuName"
-                        :flag-refresh="flagRefresh">
+                        :flag-refresh="flagRefresh"
+                        :color-number="colorNumber+1">
                 </categories-updatable>
             </div>
         </div>
-        <div class="ui blue segment">
-            <i class="large blue add square icon"
+        <div :class="'ui ' + colors[colorNumber%colors.length] + ' segment'">
+            <i :class="'large ' + colors[colorNumber%colors.length] + ' add square icon'"
                :data-value="categoryName"
                :data-parent-id="parentId"
                v-on:click="addCategory">
@@ -91,7 +92,12 @@
             routeGetAvailableMoveToCategory: String,
             actualLocale: String,
             categoriesDropdownMenuFirstMenuName: String,
-            flagRefresh: Boolean
+            flagRefresh: Boolean,
+            colorNumber: {
+                type: Number,
+                required: false,
+                default: 0
+            }
         },
         data: () => {
             return {
@@ -100,6 +106,21 @@
                 availablesDatasLocalesList: {},
                 focused: {},
                 blured: {},
+                colors: [
+                        'violet',
+                        'purple',
+                        'pink',
+                        'brown',
+                        'grey',
+                        'black',
+                        'red',
+                        'orange',
+                        'yellow',
+                        'olive',
+                        'green',
+                        'teal',
+                        'blue',
+                ]
             };
         },
         mounted () {

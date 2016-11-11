@@ -43,7 +43,7 @@
                         <div class="title flex">
                             <div>
                                 <i class="dropdown icon"></i>
-                                <i class="big teal minus square icon" v-on:click="delCategory"
+                                <i class="big blue minus square icon" v-on:click="delCategory"
                                    :data-id="category.id"></i>
                                 <span v-for="locale in availablesDatasLocalesList">
                                     <div class="ui labeled input">
@@ -95,8 +95,8 @@
                             </categories-updatable>
                         </div>
                     </div>
-                    <div class="ui teal segment">
-                        <i class="big teal add square icon" v-on:click="addCategory"
+                    <div class="ui blue segment">
+                        <i class="big blue add square icon" v-on:click="addCategory"
                            :data-value="categoryName"></i>
                         <span v-for="locale in availablesDatasLocalesList">
                             <div class="ui labeled input">

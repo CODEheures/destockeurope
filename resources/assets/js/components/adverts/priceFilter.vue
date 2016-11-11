@@ -1,6 +1,6 @@
 <template>
-    <div class="ui teal colored segment">
-        <span class="ui teal ribbon label">{{ filterRibbon }}</span>
+    <div class="ui blue colored segment">
+        <span class="ui blue ribbon label">{{ filterRibbon }}</span>
         <p>{{ filterPriceTitle }}</p>
         <range-filter
             :mini="0"
