@@ -25,7 +25,12 @@ class Advert extends Model {
         'latitude',
         'longitude',
         'geoloc',
-        'mainPicture'
+        'mainPicture',
+        'isPublish',
+        'isValid',
+        'cost',
+        'totalQuantity',
+        'lotMiniQuantity'
     ];
     protected $dates = ['deleted_at'];
     protected $appends = array('breadCrumb');
@@ -69,18 +74,4 @@ class Advert extends Model {
     public function getUpdatedAtAttribute($time) {
         return Carbon::parse($time)->toAtomString();
     }
-
-//    public function getGeolocAttribute($value) {
-//        $key = env('GOOGLE_MAP_API_KEY');
-//        $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.$this->latitude.','.$this->longitude.'&key='.$key;
-//
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, $url);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//
-//        $exec = json_decode(curl_exec($ch), true);
-//        $result = $exec['results'][1]['formatted_address'];
-//
-//        return $result;
-//    }
 }

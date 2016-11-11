@@ -15,14 +15,14 @@ class CreatePicturesTable extends Migration
     {
         Schema::create('pictures', function (Blueprint $table) {
             $table->increments('id');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->integer('advert_id')->unsigned()->index();
+            $table->foreign('advert_id')->references('id')->on('adverts')->onDelete('cascade');
             $table->string('hashName',32);
             $table->string('path');
             $table->string('disk');
             $table->boolean('isThumb');
-            $table->integer('advert_id')->unsigned()->index();
-            $table->foreign('advert_id')->references('id')->on('adverts')->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 

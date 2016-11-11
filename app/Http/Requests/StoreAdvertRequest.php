@@ -81,6 +81,15 @@ class StoreAdvertRequest extends FormRequest
             'lng' => 'required|numeric|min:-180|max:180',
             'geoloc' => 'required|min:2',
             'main_picture' => 'required|size:32|in:'.$line3,
+            'total_quantity' => 'required|numeric|min:1',
+            'lot_mini_quantity' => 'required|numeric|min:1'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'main_picture.required' => trans('strings.request_main_picture_require')
         ];
     }
 }

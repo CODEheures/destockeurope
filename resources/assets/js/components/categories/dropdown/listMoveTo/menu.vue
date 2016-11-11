@@ -12,8 +12,7 @@
                     <span class="text">{{ category['description'][actualLocale] }}</span>
                     <recursive-categories-list-move-to
                             :categories="category.children"
-                            :actual-locale="actualLocale"
-                            :parent-id="category.id">
+                            :actual-locale="actualLocale">
                     </recursive-categories-list-move-to>
                 </div>
             </div>

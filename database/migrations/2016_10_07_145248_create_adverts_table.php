@@ -20,6 +20,7 @@ class CreateAdvertsTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->integer('category_id')->unsigned()->index();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->integer('payment_id')->unsigned()->index()->nullable()->default(null);
             $table->enum('type', ['bid', 'request']);
             $table->string('title',config('db_limits.adverts.maxTitle'));
             $table->text('description');
@@ -32,7 +33,8 @@ class CreateAdvertsTable extends Migration
             $table->boolean('isPublish')->default(false);
             $table->boolean('isValid')->nullable()->default(null);
             $table->decimal('cost',8,2)->default(0);
-            $table->integer('payment_id')->unsigned()->index()->nullable()->default(null);
+            $table->integer('totalQuantity');
+            $table->integer('lotMiniQuantity')->nullable()->default(null);
         });
     }
 

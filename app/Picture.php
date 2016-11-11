@@ -10,11 +10,11 @@ class Picture extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'advert_id',
         'hashName',
         'path',
         'disk',
-        'isThumb',
-        'advert_id'
+        'isThumb'
     ];
     protected $dates = ['deleted_at'];
 

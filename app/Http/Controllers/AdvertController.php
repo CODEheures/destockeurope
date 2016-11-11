@@ -81,6 +81,8 @@ class AdvertController extends Controller
                 $advert->geoloc = $request->geoloc;
                 $advert->mainPicture = $request->main_picture;
                 $advert->currency=$request->currency;
+                $advert->totalQuantity=$request->total_quantity;
+                $advert->lotMiniQuantity=$request->lot_mini_quantity;
 
                 $currencies = new ISOCurrencies();
                 $moneyParser = new DecimalMoneyParser($currencies);

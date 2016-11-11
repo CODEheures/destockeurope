@@ -45,7 +45,11 @@
                 required: false,
                 default: false
             },
-            allItem: String,
+            allItem: {
+                type: String,
+                required: false,
+                default: ''
+            },
             allowCategorySelection: {
                 type: Boolean,
                 required: false,

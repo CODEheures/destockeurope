@@ -18,7 +18,6 @@
                             :actual-locale="actualLocale"
                             :parent-id="category.id"
                             :all-item="allItem"
-                            :old-choice="oldChoice"
                     ></recursive-categories-lateral-accordion-menu>
                 </div>
             </div>
@@ -33,13 +32,11 @@
             'routeCategory',
             'actualLocale',
             'allItem',
-            'oldChoice'
         ],
         data: () => {
             return {
                 categories: [],
-                isLoaded: false,
-                parentId: 0
+                isLoaded: false
             } ;
         },
         mounted () {
@@ -55,11 +52,11 @@
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 this.$http.get(this.routeCategory)
                         .then(
-                                (response) => {
+                                function(response)  {
                                     this.categories = response.data;
                                     this.isLoaded = true;
                                 },
-                                (response) => {
+                                function (response) {
                                     this.$parent.$emit('loadError');
                                 }
                         );

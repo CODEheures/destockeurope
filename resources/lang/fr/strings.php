@@ -58,12 +58,16 @@ return [
     'form_googlemap_geoloc_fail' => 'Adresse indéterminée',
     'form_googlemap_help' => 'Renseignez une adresse ou placez le marqueur de la carte à l\'endroit désiré. Si besoin, vous pouvez utiliser le zoom et faire glisser la carte',
     'form_googlemap_help2' => 'Renseignez une adresse',
+    'form_quantity_label' => 'Quantité à vendre',
+    'form_lot_mini_label' => 'Lot minimal de vente',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
 
     'link_forgot_password' => 'Mot de passe oublié',
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',
+
+    'request_main_picture_require' => 'Il faut au moins une image à votre annonce',
 
     'auth_register_success' => 'Votre compte est créé. Merci de le valider en cliquant le lien reçu à votre adresse email.',
     'auth_register_resend_token' => 'Le lien de confirmation de votre email vous a été renvoyé.',

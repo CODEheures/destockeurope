@@ -50,8 +50,8 @@
                                 <currencies-dropdown
                                         :route-list-currencies="routeListCurrencies"
                                         :first-menu-name="currenciesFirstMenuName"
-                                        :update="currenciesDropDownUpdate"
-                                        :input-search-label="inputSearchLabel">
+                                        :input-search-label="inputSearchLabel"
+                                        :update="currenciesDropDownUpdate">
                                 </currencies-dropdown>
                             </div>
                         </div>
@@ -110,53 +110,59 @@
     export default {
         directives: {focus: focus},
         props: [
-            'loadErrorMessage',
-            'routeListCurrencies',
-            'routeListLocales',
-            'localesFirstMenuName',
-            'currenciesFirstMenuName',
+            //vue routes
             'routeUserSetPrefCurrency',
             'routeUserSetPrefLocale',
             'routeUserSetPrefLocation',
             'routeUserSetName',
             'routeUserSetCompagnyName',
             'routeUserSetRegistrationNumber',
-            'accountPatchSuccess',
             'routeAvatar',
-            'accountPreferencesLabel',
-            'userName',
+            'routeNextUrlWithPayment',
+            'routeNextUrlWithoutPayment',
+            //vue vars
             'userEmail',
-            'nameLabel',
-            'emailLabel',
-            'inputSearchLabel',
-            'googlemapDivider',
-            'compagnyDivider',
-            'compagnyNameLabel',
-            'compagnyNumberLabel',
-            'geolocHelpMsg',
-            'geolocHelpMsgTwo',
+            'userName',
             'latitude',
             'longitude',
             'compagnyName',
             'registrationNumber',
-            'contentHeader',
-            'stepOneTitle',
-            'stepTwoTitle',
-            'stepThreeTitle',
-            'stepOneDescription',
-            'stepTwoDescription',
-            'stepThreeDescription',
             'advertAccountVerifiedStep',
-            'formValidationButtonLabel',
             'advertCost',
             'advertId',
             'formCompagnyNameMinValid',
             'formCompagnyNameMaxValid',
             'formRegistrationNumberMinValid',
             'formRegistrationNumberMaxValid',
+            //vue strings
+            'loadErrorMessage',
+            'accountPatchSuccess',
+            'accountPreferencesLabel',
+            'nameLabel',
+            'emailLabel',
+            'compagnyDivider',
+            'compagnyNameLabel',
+            'compagnyNumberLabel',
+            'contentHeader',
+            'geolocHelpMsg',
+            'geolocHelpMsgTwo',
+            'googlemapDivider',
+            'formValidationButtonLabel',
             'formPointingMinimumChars',
-            'nextUrlWithPayment',
-            'nextUrlWithoutPayment'
+            //steps component
+            'stepOneTitle',
+            'stepTwoTitle',
+            'stepThreeTitle',
+            'stepOneDescription',
+            'stepTwoDescription',
+            'stepThreeDescription',
+            //locale dropdown component
+            'routeListLocales',
+            'localesFirstMenuName',
+            'inputSearchLabel',
+            //currencie dropdown component
+            'routeListCurrencies',
+            'currenciesFirstMenuName'
         ],
         data: () => {
             return {
@@ -328,9 +334,9 @@
             submitForm (event) {
                 event.preventDefault();
                 if(parseFloat(this.advertCost)>0) {
-                    window.location.href=this.nextUrlWithPayment+'/'+this.advertId;
+                    window.location.href=this.routeNextUrlWithPayment+'/'+this.advertId;
                 } else {
-                    window.location.href=this.nextUrlWithoutPayment+'/'+this.advertId;
+                    window.location.href=this.routeNextUrlWithoutPayment+'/'+this.advertId;
                 }
             },
             sendToast: function(message,type) {

@@ -21,11 +21,11 @@ class HaveCompleteAccount
             $user = auth()->user();
             if(
                 $user->name != null
-                && $user->compagny_name != null
-                && $user->registration_number != null
+                && $user->compagnyName != null
+                && $user->registrationNumber != null
                 && strlen($user->name) >= config('db_limits.users.minName')
-                && strlen($user->compagny_name) >= config('db_limits.users.minCompagnyName')
-                && strlen($user->registration_number) >= config('db_limits.users.minRegistrationNumber')
+                && strlen($user->compagnyName) >= config('db_limits.users.minCompagnyName')
+                && strlen($user->registrationNumber) >= config('db_limits.users.minRegistrationNumber')
             ) {
                 return $next($request);
             }

@@ -42,7 +42,7 @@
                 </div>
                 <div class="required field">
                     <label>{{ advertFormDescriptionLabel }}</label>
-                    <textarea name="description" v-model="description"></textarea>
+                    <textarea name="description" v-model="description" :maxlength="formDescriptionMaxValid"></textarea>
                     <transition name="p-fade">
                         <span class="ui red pointing basic label notransition" v-show="description.length<formDescriptionMinValid">{{ formDescriptionMinValid }}{{formPointingMinimumChars }}</span>
                     </transition>
@@ -64,6 +64,19 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="two fields">
+                        <div class="required field">
+                            <label>{{ advertFormTotalQuantityLabel }}</label>
+                            <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
+                        </div>
+                        <div class="required field">
+                            <label>{{ advertFormLotMiniQuantityLabel }}</label>
+                            <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
                         </div>
                     </div>
                 </div>
@@ -149,6 +162,21 @@
 <script>
     export default {
         props: [
+            //vue routes
+            'routeAdvertFormPost',
+            'routePostTempoPicture',
+            'routeGetListTempoThumbs',
+            'routeGetTempoThumb',
+            'routeDelTempoPicture',
+            //vue vars
+            'old',
+            'advertFormPhotoNbFreePicture',
+            'maxFiles',
+            'formTitleMinValid',
+            'formTitleMaxValid',
+            'formDescriptionMinValid',
+            'formDescriptionMaxValid',
+            //vue strings
             'contentHeader',
             'advertFormTitleLabel',
             'advertFormDescriptionLabel',
@@ -161,38 +189,33 @@
             'advertFormPayPhotoHelpHeaderSingular',
             'advertFormPayPhotoHelpHeaderPlural',
             'advertFormPhotoHelpContent',
-            'advertFormPhotoNbFreePicture',
             'advertFormMainPhotoLabel',
             'loadErrorMessage',
             'filesizeErrorMessage',
-            'maxFiles',
-            'routeCategory',
-            'categoryFirstMenuName',
-            'routeGetListType',
-            'routeAdvertFormPost',
-            'routePostTempoPicture',
-            'routeGetListTempoThumbs',
-            'routeGetTempoThumb',
-            'routeDelTempoPicture',
-            'listTypeFirstMenuName',
             'formValidationButtonLabel',
-            'formTitleMinValid',
-            'formTitleMaxValid',
-            'formDescriptionMinValid',
-            'formDescriptionMaxValid',
             'formPointingMinimumChars',
-            'old',
-            'routeListCurrencies',
-            'currenciesFirstMenuName',
-            'actualLocale',
-            'geolocHelpMsg',
-            'geolocHelpMsgTwo',
+            'advertFormTotalQuantityLabel',
+            'advertFormLotMiniQuantityLabel',
+            //steps component
             'stepOneTitle',
             'stepTwoTitle',
             'stepThreeTitle',
             'stepOneDescription',
             'stepTwoDescription',
             'stepThreeDescription',
+            //type-advert component
+            'routeGetListType',
+            'listTypeFirstMenuName',
+            //category component
+            'routeCategory',
+            'categoryFirstMenuName',
+            'actualLocale',
+            //currencies-dropdown component
+            'routeListCurrencies',
+            'currenciesFirstMenuName',
+            //geomap component
+            'geolocHelpMsg',
+            'geolocHelpMsgTwo',
         ],
         data: () => {
             return {
@@ -202,6 +225,8 @@
                 title: '',
                 description: '',
                 price: '',
+                totalQuantity: 1,
+                lotMiniQuantity: 1,
                 xCsrfToken: '',
                 oldCategoryId: 0,
                 oldType: '',
@@ -406,6 +431,8 @@
                 sessionStorage.setItem('title', this.title);
                 sessionStorage.setItem('description', this.description);
                 sessionStorage.setItem('price', this.price);
+                sessionStorage.setItem('totalQuantity', this.totalQuantity);
+                sessionStorage.setItem('lotMiniQuantity', this.lotMiniQuantity);
                 sessionStorage.setItem('type', this.type);
                 sessionStorage.setItem('currency', this.currency);
                 sessionStorage.setItem('lat', this.lat);
@@ -418,6 +445,8 @@
                 sessionStorage.getItem('title') != undefined ? this.title = sessionStorage.getItem('title') : null;
                 sessionStorage.getItem('description') != undefined ? this.description = sessionStorage.getItem('description') : null;
                 sessionStorage.getItem('price') != undefined ? this.price = sessionStorage.getItem('price') : null;
+                sessionStorage.getItem('totalQuantity') != undefined ? this.totalQuantity = sessionStorage.getItem('totalQuantity') : null;
+                sessionStorage.getItem('lotMiniQuantity') != undefined ? this.lotMiniQuantity = sessionStorage.getItem('lotMiniQuantity') : null;
                 sessionStorage.getItem('type') != undefined ? this.type = sessionStorage.getItem('type') : null;
                 sessionStorage.getItem('type') != undefined ? this.oldType = sessionStorage.getItem('type') : null;
                 sessionStorage.getItem('currency') != undefined ? this.currency= sessionStorage.getItem('currency') : null;

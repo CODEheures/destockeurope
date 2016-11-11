@@ -6,10 +6,10 @@
                 <categories-dropdown-menu
                         :route-category="routeCategory"
                         :first-menu-name="categoriesDropdownMenuFirstMenuName"
-                        :all-item="categoriesAllItem"
                         :actual-locale="actualLocale"
+                        :old-choice="filter.id"
                         :with-all="true"
-                        :old-choice="filter.id">
+                        :all-item="categoriesAllItem">
                 </categories-dropdown-menu>
             </div>
         </div>
@@ -22,9 +22,8 @@
             <div class="computer only four wide column">
                 <categories-lateral-accordion-menu
                         :route-category="routeCategory"
-                        :all-item="categoriesAllItem"
                         :actual-locale="actualLocale"
-                        :old-choice="filter.id">
+                        :all-item="categoriesAllItem">
                 </categories-lateral-accordion-menu>
                 <div id="welcome-skycrapper" class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
             </div>
@@ -39,10 +38,6 @@
                     <adverts-by-list
                             :route-get-adverts-list="routeGetAdvertsList"
                             :route-get-thumb="routeGetThumb"
-                            :advert-title-label="advertTitleLabel"
-                            :advert-description-label="advertDescriptionLabel"
-                            :advert-price-label="advertPriceLabel"
-                            :see-advert-link-label="seeAdvertLinkLabel"
                             :actual-locale="actualLocale">
                     </adverts-by-list>
                 </div>
@@ -54,21 +49,26 @@
 <script>
     export default {
         props: [
+            //vue routes
+            //vue vars
+            'clearStorage',
+            //vue strings
             'loadErrorMessage',
+            //category dropdown menu component
             'routeCategory',
-            'routeGetThumb',
             'categoriesDropdownMenuFirstMenuName',
+            'categoriesAllItem',
+            'actualLocale',
+            //price advert component
             'filterRibbon',
             'filterPriceTitle',
+            //advertByList component
             'routeGetAdvertsList',
+            'routeGetThumb',
             'advertTitleLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',
             'seeAdvertLinkLabel',
-            'actualLocale',
-            'categoriesAllItem',
-            'menuHome',
-            'clearStorage'
         ],
         data: () => {
             return {

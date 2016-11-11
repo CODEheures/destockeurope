@@ -33,8 +33,8 @@
         props: {
             categories: Array,
             actualLocale: String,
-            allItem: String,
-            parentId: Number
+            parentId: Number,
+            allItem: String
         },
         data: () => {
             return {

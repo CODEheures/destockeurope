@@ -41,10 +41,6 @@
         props: [
             'routeGetAdvertsList',
             'routeGetThumb',
-            'advertTitleLabel',
-            'advertDescriptionLabel',
-            'advertPriceLabel',
-            'seeAdvertLinkLabel',
             'actualLocale'
         ],
         data: () => {

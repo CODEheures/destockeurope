@@ -28,7 +28,6 @@
             return {
                 currencies: [],
                 isLoaded: false,
-                id: ''
             };
         },
         mounted () {

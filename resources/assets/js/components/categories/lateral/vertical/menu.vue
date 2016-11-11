@@ -31,8 +31,7 @@
         data: () => {
             return {
                 categories: [],
-                isLoaded: false,
-                parentId: 0
+                isLoaded: false
             } ;
         },
         mounted () {

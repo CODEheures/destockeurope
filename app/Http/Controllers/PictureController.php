@@ -79,9 +79,4 @@ class PictureController extends Controller
     public function getListThumbs($type) {
         return response()->json($this->pictureManager->listThumbs($type));
     }
-
-    public function tempo(){
-        $results = $this->pictureManager->getThumb(PicturesManager::TYPE_TEMPO_LOCAL,'70aa326692d594e8aade9e695ce296b8');
-        dd($results);
-    }
 }

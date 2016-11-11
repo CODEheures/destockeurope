@@ -123,6 +123,13 @@
     export default {
         directives: {focus: focus},
         props: {
+            //vue routes
+            routeCategory: String,
+            routeShiftUpCategory: String,
+            routeShiftDownCategory: String,
+            routeAppendToCategory: String,
+            //vue vars
+            //vue strings
             contentHeader: String,
             loadErrorMessage: String,
             addErrorMessage: String,
@@ -133,14 +140,12 @@
             modalNo: String,
             modalDelHeader: String,
             modalDelDescription: String,
-            routeCategory: String,
+            //categories list move to component
             routeGetAvailableMoveToCategory: String,
-            routeShiftUpCategory: String,
-            routeShiftDownCategory: String,
-            routeAppendToCategory: String,
-            availablesLocalesList: String,
             categoriesDropdownMenuFirstMenuName: String,
-            actualLocale: String
+            actualLocale: String,
+            //category updatable component
+            availablesLocalesList: String
         },
         data: () => {
             return {

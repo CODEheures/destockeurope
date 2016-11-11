@@ -16,21 +16,21 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'confirmation_token',
-        'confirmed',
         'facebook_id',
         'google_id',
         'twitter_id',
         'github_id',
         'linkedin_id',
+        'name',
+        'email',
+        'password',
+        'confirmed',
+        'confirmationToken',
         'avatar',
         'currency',
         'locale',
-        'compagny_name',
-        'registration_number',
+        'compagnyName',
+        'registrationNumber',
         'latitude',
         'longitude',
         'geoloc'
@@ -42,7 +42,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'role'
     ];
 
     public function oAuthProvider($providers) {
@@ -63,8 +63,4 @@ class User extends Authenticatable
     public function payments() {
         return $this->hasMany('App\Payment');
     }
-
-//    public function getLongitudeAttribute($value){
-//        dd('value' . $value);
-//    }
 }

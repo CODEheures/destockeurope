@@ -26,12 +26,15 @@
         props: {
             parentDescription: String,
             categories: Array,
-            parentId: Number,
             actualLocale: String,
+            parentId: Number,
             withAll: Boolean,
+            allItem: {
+                type: String,
+                required: false,
+                default: ''
+            },
             left: Boolean,
-            allItem: String,
-            parentType: String
         },
         data: () => {
             return {

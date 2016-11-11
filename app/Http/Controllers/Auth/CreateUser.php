@@ -20,7 +20,7 @@ trait CreateUser {
         $token = str_random(60);
 
         $user->confirmed = false;
-        $user->confirmation_token = $token;
+        $user->confirmationToken = $token;
         $user->save();
 
         self::sendToken($user);
@@ -44,9 +44,9 @@ trait CreateUser {
             $user = User::findOrFail($id);
             if ($user->confirmed == true) {
                 return redirect('/')->with('info',trans('strings.auth_register_account_already_confirm'));
-            } elseif ($token == $user->confirmation_token) {
+            } elseif ($token == $user->confirmationToken) {
                 $user->confirmed = true;
-                $user->confirmation_token = '';
+                $user->confirmationToken = '';
                 $user->save();
                 auth()->login($user);
                 return redirect('/')->with('success', trans('strings.auth_register_account_confirm'));

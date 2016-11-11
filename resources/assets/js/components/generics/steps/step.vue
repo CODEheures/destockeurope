@@ -25,7 +25,7 @@
         mounted () {
             $('.ui.steps').visibility({
                 type   : 'fixed',
-                offset : 112 // give some space from top of screen
+                offset : 112
             });
         },
         methods: {

@@ -105,10 +105,14 @@
 <script>
     export default {
         props: [
-            'contentHeader',
+            //vue routes
             'routeGetAdvertsList',
             'routeAdvertApprove',
             'routeGetThumb',
+            //vue vars
+            'advertNbFreePicture',
+            //vue strings
+            'contentHeader',
             'loadErrorMessage',
             'toggleApproveLabel',
             'toggleDisapproveLabel',
@@ -117,7 +121,6 @@
             'modalValidDescription',
             'modalNo',
             'modalYes',
-            'advertNbFreePicture',
             'advertPayPhotoSingular',
             'advertTitleLabel',
             'advertDescriptionLabel',

@@ -82,4 +82,3 @@ Route::post('picture', ['as' => 'picture.post', 'uses' => 'PictureController@pos
 Route::delete('picture/{type}/{hashName?}', ['as' => 'picture.destroy', 'uses' => 'PictureController@destroy']);
 Route::get('picture/list-thumbs/{type}', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
 Route::get('picture/thumb/{type}/{hashName?}/{advertId?}', ['as' => 'picture.thumb', 'uses' => 'PictureController@getThumb']);
-Route::get('picture/tempo', 'PictureController@tempo');

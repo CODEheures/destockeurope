@@ -45,7 +45,7 @@ class SendToken extends Notification
                     ->subject(trans('strings.mail_firstSendToken_subject'))
                     ->greeting(trans('strings.mail_firstSendToken_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_firstSendToken_line',['mail' => $notifiable->email]))
-                    ->action(trans('strings.mail_firstSendToken_action'), route('account.confirm', ['id' => $notifiable->id, 'token' => $notifiable->confirmation_token]))
+                    ->action(trans('strings.mail_firstSendToken_action'), route('account.confirm', ['id' => $notifiable->id, 'token' => $notifiable->confirmationToken]))
                     ->line(trans('strings.mail_firstSendToken_line2'));
     }
 

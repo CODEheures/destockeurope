@@ -120,7 +120,7 @@ class UserController extends Controller
     public function setCompagnyName(UpdateCompagnyNameRequest $request) {
         try {
             $user = $this->auth->user();
-            $user->compagny_name = $request->value;
+            $user->compagnyName = $request->value;
             $user->save();
             return response('ok', 200);
         } catch (\Exception $e) {
@@ -132,7 +132,7 @@ class UserController extends Controller
     public function setRegistrationNumber(UpdateRegistrationRequest $request) {
         try {
             $user = $this->auth->user();
-            $user->registration_number = $request->value;
+            $user->registrationNumber = $request->value;
             $user->save();
             return response('ok', 200);
         } catch (\Exception $e) {

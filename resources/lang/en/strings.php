@@ -58,12 +58,16 @@ return [
     'form_googlemap_geoloc_fail' => 'Adresse undefined',
     'form_googlemap_help' => 'Enter a location or place the marker of the map to the desired location. If necessary, you can use the zoom and drag the map',
     'form_googlemap_help2' => 'Enter a location',
+    'form_quantity_label' => 'Quantity for sale',
+    'form_lot_mini_label' => 'Minimal lot for sale',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
 
     'link_forgot_password' => 'Forgot your password',
     'link_send_reset_link' => 'Send reset link',
+
+    'request_main_picture_require' => 'At least one picture is required',
 
     'auth_register_success' => 'Your account is create. Thank you validate it by clicking the link received in your email address',
     'auth_register_resend_token' => 'Confirmation link send to your e-mail.',
