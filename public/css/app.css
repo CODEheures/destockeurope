@@ -28704,7 +28704,7 @@ html.ios body {
 .main.container {
   margin-top: 4rem;
   margin-bottom: 4rem; }
-  .main.container a.item.advert > .ui.image > .corner i {
+  .main.container a.item.advert .ui.image > .corner i {
     color: white;
     font-weight: 600; }
 
@@ -28788,7 +28788,11 @@ form.login, form.register {
 
 .ui.list > .item.advert {
   position: relative; }
-  .ui.list > .item.advert > p.date {
+  .ui.list > .item.advert > p.price {
+    position: absolute;
+    right: 1em;
+    top: 1.2em; }
+  .ui.list > .item.advert > p.geodate {
     position: absolute;
     right: 1em;
     bottom: 0.2em; }

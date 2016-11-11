@@ -2,9 +2,11 @@
   margin-top: 4rem;
   margin-bottom: 4rem;
 
-  & a.item.advert > .ui.image > .corner i {
-    color: white;
-    font-weight: 600;
+  & a.item.advert {
+    & .ui.image > .corner i {
+      color: white;
+      font-weight: 600;
+    }
   }
 }
 
@@ -107,7 +109,12 @@ form {
 
 .ui.list > .item.advert {
   position: relative;
-  & > p.date {
+  & > p.price {
+    position: absolute;
+    right: 1em;
+    top: 1.2em;
+  }
+  & > p.geodate {
     position: absolute;
     right: 1em;
     bottom: 0.2em;
