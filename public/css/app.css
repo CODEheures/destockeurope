@@ -28710,6 +28710,23 @@ html.ios body {
 
 .masthead.segment {
   padding: 1em 0em; }
+  .masthead.segment .ui.container .links {
+    display: none; }
+
+.ui.top.fixed.menu .links {
+  display: none; }
+
+.ui.steps {
+  background-color: #FFFFFF;
+  padding: 0em;
+  box-shadow: 0px 0px 0px transparent;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease; }
+
+/* change style */
+.ui.steps.fixed {
+  position: fixed;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2); }
 
 .ui.secondary.menu .right.item {
   display: none; }
@@ -28898,6 +28915,14 @@ form.login, form.register {
 
 .row.filters {
   margin-bottom: 2rem; }
+
+@media only screen and (min-width: 756px) {
+  .masthead.segment .ui.container .links {
+    display: -webkit-box;
+    display: flex; }
+  .ui.top.fixed.menu .links {
+    display: -webkit-box;
+    display: flex; } }
 
 @media only screen and (min-width: 470px) {
   .ui.secondary.menu .right.item {

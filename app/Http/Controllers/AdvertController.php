@@ -222,8 +222,12 @@ class AdvertController extends Controller
             $request->session()->flash('clear', true);
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } elseif($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0) {
-            $advert->load('payment');
+            $payment = $advert->payment();
             //TODO fin du test et redirection
+            $advert->isPublish = true;
+            $advert->save();
+            $this->pictureManager->purgeLocalTempo();
+            $request->session()->flash('clear', true);
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } else {
             return response(trans('strings.view_advert_error'), 500);

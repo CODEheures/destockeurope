@@ -13,7 +13,7 @@ class PictureController extends Controller
     private $pictureManager;
 
     public function __construct(PicturesManager $picturesManager) {
-        $this->middleware('auth', ['except' => []]);
+        $this->middleware('auth', ['except' => ['getThumb']]);
         $this->pictureManager = $picturesManager;
     }
 

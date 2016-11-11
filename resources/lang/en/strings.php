@@ -7,7 +7,7 @@ return [
     'menu_home' => 'Home',
     'menu_sells' => 'Sales',
     'menu_research' => 'Research',
-    'menu_offer' => 'Offer',
+    'menu_offer' => 'Offer an advert',
     'menu_login' => 'Login',
     'menu_logout' => 'Logout',
     'menu_register' => 'Register',

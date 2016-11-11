@@ -48,7 +48,7 @@
                     form-registration-number-max-valid="{{ config('db_limits.users.maxRegistrationNumber') }}"
                     form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimun_chars') }}"
                     form-validation-button-label="{{ trans('strings.form_button_validation') }}"
-                    next-url-with-payment=""
+                    next-url-with-payment="{{ route('advert.publish') }}"
                     next-url-without-payment="{{ route('advert.publish') }}">
             </user-account>
 
