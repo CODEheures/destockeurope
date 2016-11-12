@@ -83,7 +83,7 @@
 
                 <div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="urgent">
+                        <input type="checkbox" name="is_urgent" v-model="isUrgent">
                         <label> <span class="ui red horizontal label">{{ advertExampleUrgentLabel }}</span>{{ advertFormUrgentLabel }}</label>
                     </div>
                 </div>
@@ -175,6 +175,7 @@
             'routeGetListTempoThumbs',
             'routeGetTempoThumb',
             'routeDelTempoPicture',
+            'routeGetCost',
             //vue vars
             'old',
             'advertFormPhotoNbFreePicture',
@@ -257,7 +258,9 @@
                 helpHeaderIndicator: '',
                 mainPicture: '',
                 steps: [],
-                successFormSubmit: false
+                successFormSubmit: false,
+                isUrgent: false,
+                cost: 0
             };
         },
         mounted () {
@@ -311,6 +314,9 @@
                 this.setPicturesIndicators();
                 this.setSteps();
                 this.setMainPicture();
+            });
+            this.$watch('isUrgent', function () {
+                this.setSteps();
             });
             this.getStorage();
         },
@@ -417,9 +423,23 @@
             },
             setSteps () {
                 var resultIndicator =  this.thumbs.length - this.advertFormPhotoNbFreePicture;
-                if(resultIndicator>=1) {
+                if(resultIndicator>=1 || this.isUrgent) {
                     (this.steps[2]).isDisabled = false;
+                    var that = this;
+                    this.$http.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ (this.isUrgent ? '1':'0'))
+                            .then(
+                                    function (response) {
+                                        that.cost = response.body;
+                                        (that.steps[2]).title = that.stepThreeTitle + '(' + that.cost + '€)';
+                                    },
+                                    function (response) {
+                                        that.cost = 0;
+                                        that.sendToast(that.loadErrorMessage, 'error');
+                                    }
+                            );
                 } else {
+                    this.cost = 0;
+                    (this.steps[2]).title = this.stepThreeTitle;
                     (this.steps[2]).isDisabled = true;
                 }
             },

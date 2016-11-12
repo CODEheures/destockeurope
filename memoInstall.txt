@@ -1,6 +1,4 @@
 //TODO bucket 64 nginx + file body size nginx
-//TODO quantités mini-total sur advert
-//TODO urgent sur advert
 //TODO post video
 //TODO change adwords
 //TODO page des annonces

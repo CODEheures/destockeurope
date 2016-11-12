@@ -31,7 +31,7 @@ class Advert extends Model {
         'cost',
         'totalQuantity',
         'lotMiniQuantity',
-        'urgent'
+        'isUrgent'
     ];
     protected $dates = ['deleted_at'];
     protected $appends = array('breadCrumb');

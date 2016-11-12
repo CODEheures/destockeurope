@@ -83,7 +83,7 @@ class AdvertController extends Controller
                 $advert->currency=$request->currency;
                 $advert->totalQuantity=$request->total_quantity;
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
-                $advert->urgent=$request->urgent;
+                $advert->isUrgent=$request->is_urgent;
 
                 $currencies = new ISOCurrencies();
                 $moneyParser = new DecimalMoneyParser($currencies);
@@ -91,7 +91,7 @@ class AdvertController extends Controller
 
                 $results = $this->pictureManager->storeLocalFinal();
 
-                $advert->cost = $this->setCost(count($results));
+                $advert->cost = $this->getCost(count($results), $advert->isUrgent);
 
                 DB::beginTransaction();
                 $advert->save();
@@ -115,11 +115,24 @@ class AdvertController extends Controller
         }
     }
 
-    private function setCost($nbPictures){
+    private function getCost($nbPictures, $isUrgent=false){
+        $cost = 0;
         if($nbPictures > env('NB_FREE_PICTURES')){
-            return ($nbPictures - env('NB_FREE_PICTURES'))*10;
+            $cost += ($nbPictures - env('NB_FREE_PICTURES'))*10;
+        }
+
+        if($isUrgent){
+            $cost += env('URGENT_COST');
+        }
+
+        return $cost;
+    }
+
+    public function cost($nbPictures, $isUrgent) {
+        if(isset($nbPictures) && isset($isUrgent) && (int)$nbPictures>0 && is_bool((bool)$isUrgent)){
+            return response()->json($this->getCost((int)$nbPictures,(bool)$isUrgent));
         } else {
-            return 0;
+            return response('error', 500);
         }
     }
 

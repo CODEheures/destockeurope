@@ -83,7 +83,7 @@ class StoreAdvertRequest extends FormRequest
             'main_picture' => 'required|size:32|in:'.$line3,
             'total_quantity' => 'required|numeric|min:1',
             'lot_mini_quantity' => 'required|numeric|min:1',
-            'urgent' => 'required|boolean'
+            'is_urgent' => 'required|boolean'
         ];
     }
 

@@ -163,7 +163,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         $advert->currency="EUR";
         $advert->totalQuantity='700';
         $advert->lotMiniQuantity='50';
-        $advert->urgent=true;
+        $advert->isUrgent=true;
 
         $currencies = new ISOCurrencies();
         $moneyParser = new DecimalMoneyParser($currencies);
@@ -207,7 +207,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         $advert->currency="EUR";
         $advert->totalQuantity='28';
         $advert->lotMiniQuantity='28';
-        $advert->urgent=true;
+        $advert->isUrgent=false;
 
         $currencies = new ISOCurrencies();
         $moneyParser = new DecimalMoneyParser($currencies);
