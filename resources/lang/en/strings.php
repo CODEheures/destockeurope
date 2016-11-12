@@ -60,6 +60,7 @@ return [
     'form_googlemap_help2' => 'Enter a location',
     'form_quantity_label' => 'Quantity for sale',
     'form_lot_mini_label' => 'Minimal lot for sale',
+    'form_urgent' => 'Mark this advert as urgent for only :price€',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
@@ -93,6 +94,7 @@ return [
     'view_all_success_patch_message' => 'Modification save',
     'view_all_error_download_file' => 'Ho no! A requested file could not be downloaded',
     'view_all_error_filesize_message' => 'File to Big!',
+    'view_all_urgent' => 'urgent',
     'view_category_add_exist' => 'This category is already exist',
     'view_category_add_parent_not_exist' => 'The parent category is not exist',
     'view_category_patch_exist' => 'This category is already exist',

@@ -83,6 +83,7 @@ class AdvertController extends Controller
                 $advert->currency=$request->currency;
                 $advert->totalQuantity=$request->total_quantity;
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
+                $advert->urgent=$request->urgent;
 
                 $currencies = new ISOCurrencies();
                 $moneyParser = new DecimalMoneyParser($currencies);

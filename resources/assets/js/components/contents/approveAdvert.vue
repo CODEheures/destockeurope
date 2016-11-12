@@ -40,19 +40,23 @@
                         <table class="ui definition table">
                             <tbody>
                             <tr>
-                                <td class="two wide column">{{ advertTitleLabel }}</td>
+                                <td class="three wide column">{{ advertTitleLabel }}</td>
                                 <td>{{ advert.title }}</td>
                             </tr>
                             <tr>
-                                <td class="two wide column">{{ advertDescriptionLabel }}</td>
+                                <td class="three wide column">{{ advertDescriptionLabel }}</td>
                                 <td><p style="white-space: pre-wrap;">{{ advert.description }}</p></td>
                             </tr>
                             <tr>
-                                <td class="two wide column">{{ advertPriceLabel }}</td>
+                                <td class="three wide column">{{ advertPriceLabel }}</td>
                                 <td>{{ advert.price }} {{ advert.currency}}</td>
                             </tr>
                             <tr>
-                                <td class="two wide column">{{ advertAddressLabel }}</td>
+                                <td class="three wide column">{{ totalQuantityLabel }} / {{ lotMiniQuantityLabel }}</td>
+                                <td>{{ advert.totalQuantity }} / {{ advert.lotMiniQuantity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="three wide column">{{ advertAddressLabel }}</td>
                                 <td>{{ advert.geoloc }}</td>
                             </tr>
                             </tbody>
@@ -126,7 +130,9 @@
             'advertDescriptionLabel',
             'advertPriceLabel',
             'advertAddressLabel',
-            'advertApproveSuccess'
+            'advertApproveSuccess',
+            'totalQuantityLabel',
+            'lotMiniQuantityLabel'
         ],
         data: () => {
             return {

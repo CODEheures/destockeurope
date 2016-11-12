@@ -23,7 +23,9 @@
             advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-price-label="{{ trans('strings.view_advert_form_price_label') }}"
             advert-address-label="{{ trans('strings.view_advert_form_address_label') }}"
-            advert-approve-success="{{ trans('strings.view_advert_approve_success') }}">
+            advert-approve-success="{{ trans('strings.view_advert_approve_success') }}"
+            total-quantity-label="{{ trans('strings.form_quantity_label') }}"
+            lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}">
     </approve-advert-form>
 
 @endsection

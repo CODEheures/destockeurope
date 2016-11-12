@@ -28707,6 +28707,8 @@ html.ios body {
   .main.container a.item.advert .ui.image > .corner i {
     color: white;
     font-weight: 600; }
+  .main.container a.item.advert span.ui.red.horizontal.label {
+    margin-top: 0.2rem; }
 
 .hidden.menu {
   display: none; }

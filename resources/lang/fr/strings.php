@@ -60,6 +60,7 @@ return [
     'form_googlemap_help2' => 'Renseignez une adresse',
     'form_quantity_label' => 'Quantité à vendre',
     'form_lot_mini_label' => 'Lot minimal de vente',
+    'form_urgent' => 'Marquez cette annonce urgente pour seulement :price€',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
@@ -93,6 +94,7 @@ return [
     'view_all_error_download_file' => 'Ho non! Un fichier demandé n\'a pas pu être téléchargé',
     'view_all_success_patch_message' => 'Modification enregistrée',
     'view_all_error_filesize_message' => 'Fichier trop gros!',
+    'view_all_urgent' => 'urgent',
     'view_category_add_exist' => 'Cette catégorie existe déjà',
     'view_category_add_parent_not_exist' => 'La catégorie parente n\'existe pas',
     'view_category_patch_exist' => 'Cette catégorie existe déjà',

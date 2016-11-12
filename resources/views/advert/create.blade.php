@@ -36,6 +36,8 @@
             form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimun_chars') }}"
             advert-form-total-quantity-label="{{ trans('strings.form_quantity_label') }}"
             advert-form-lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
+            advert-form-urgent-label="{{ trans('strings.form_urgent', ['price' => env('URGENT_COST')]) }}"
+            advert-example-urgent-label="{{ trans('strings.view_all_urgent') }}"
 
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"

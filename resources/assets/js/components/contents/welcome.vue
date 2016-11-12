@@ -40,7 +40,8 @@
                             :route-get-thumb="routeGetThumb"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
-                            :lot-mini-quantity-label="lotMiniQuantityLabel">
+                            :lot-mini-quantity-label="lotMiniQuantityLabel"
+                            :urgent-label="urgentLabel">
                     </adverts-by-list>
                 </div>
             </div>
@@ -72,7 +73,8 @@
             'advertPriceLabel',
             'seeAdvertLinkLabel',
             'totalQuantityLabel',
-            'lotMiniQuantityLabel'
+            'lotMiniQuantityLabel',
+            'urgentLabel'
         ],
         data: () => {
             return {

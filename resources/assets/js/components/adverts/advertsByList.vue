@@ -30,6 +30,7 @@
                                     <span class="ui large blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
                                     <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                     <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span v-if="advert.urgent" class="ui red horizontal label">{{ urgentLabel }}</span>
                                 </p>
                             </div>
                             <div class="sixteen wide column">
@@ -59,6 +60,7 @@
                             <span class="ui large blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
                             <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                             <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                            <span v-if="advert.urgent" class="ui red horizontal label">{{ urgentLabel }}</span>
                         </p>
                     </div>
                     <div class="sixteen wide mobile only column">
@@ -85,7 +87,8 @@
             'routeGetThumb',
             'actualLocale',
             'totalQuantityLabel',
-            'lotMiniQuantityLabel'
+            'lotMiniQuantityLabel',
+            'urgentLabel',
         ],
         data: () => {
             return {

@@ -81,6 +81,13 @@
                     </div>
                 </div>
 
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="urgent">
+                        <label> <span class="ui red horizontal label">{{ advertExampleUrgentLabel }}</span>{{ advertFormUrgentLabel }}</label>
+                    </div>
+                </div>
+
                 <h4 class="ui horizontal divider header">
                     <i class="map signs icon"></i>
                     {{ advertFormGooglemapLabel }}
@@ -196,6 +203,8 @@
             'formPointingMinimumChars',
             'advertFormTotalQuantityLabel',
             'advertFormLotMiniQuantityLabel',
+            'advertFormUrgentLabel',
+            'advertExampleUrgentLabel',
             //steps component
             'stepOneTitle',
             'stepTwoTitle',

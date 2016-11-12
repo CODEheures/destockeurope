@@ -58,6 +58,7 @@ Route::group(['prefix' => 'users'], function() {
 Route::group(['prefix' => 'utils'] , function () {
     Route::get('/get-list-currencies', ['as' => 'utils.getListCurrencies', 'uses' => 'UtilsController@getListCurrencies']);
     Route::get('/get-list-locales', ['as' => 'utils.getListLocales', 'uses' => 'UtilsController@getListLocales']);
+    Route::get('/testGame', 'UtilsController@testGame');
     Route::get('/tempo', 'UtilsController@tempo');
 });
 
