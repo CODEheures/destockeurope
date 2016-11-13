@@ -18,6 +18,7 @@
                 <input type="hidden" name="lng" :value="lng" />
                 <input type="hidden" name="geoloc" :value="geoloc" />
                 <input type="hidden" name="main_picture" :value="mainPicture" />
+                <input type="hidden" name="is_urgent" :value="isUrgent ? 1 : 0" />
                 <div class="ui error message"></div>
                 <type-advert-radio-button
                         :route-get-list-type="routeGetListType"
@@ -82,8 +83,8 @@
                 </div>
 
                 <div class="field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="is_urgent" v-model="isUrgent">
+                    <div :id="'isUrgent'+_uid" class="ui checkbox">
+                        <input type="checkbox" name="isUrgent">
                         <label> <span class="ui red horizontal label">{{ advertExampleUrgentLabel }}</span>{{ advertFormUrgentLabel }}</label>
                     </div>
                 </div>
@@ -317,6 +318,12 @@
             });
             this.$watch('isUrgent', function () {
                 this.setSteps();
+                if(this.isUrgent){
+                    $('#isUrgent'+this._uid).checkbox('check');
+                } else {
+
+                    $('#isUrgent'+this._uid).checkbox('uncheck');
+                }
             });
             this.getStorage();
         },
@@ -329,6 +336,10 @@
                     }
                 });
             }
+            $('#isUrgent'+this._uid).checkbox({
+                onChecked: function() {that.isUrgent = true;},
+                onUnchecked: function() {that.isUrgent = false;}
+            });
         },
         methods: {
             typeChoice: function (type) {
@@ -426,7 +437,7 @@
                 if(resultIndicator>=1 || this.isUrgent) {
                     (this.steps[2]).isDisabled = false;
                     var that = this;
-                    this.$http.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ (this.isUrgent ? '1':'0'))
+                    this.$http.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent)
                             .then(
                                     function (response) {
                                         that.cost = response.body;
@@ -466,6 +477,7 @@
                 sessionStorage.setItem('currency', this.currency);
                 sessionStorage.setItem('lat', this.lat);
                 sessionStorage.setItem('lng', this.lng);
+                sessionStorage.setItem('isUrgent', this.isUrgent);
             },
             getStorage() {
                 sessionStorage.getItem('successFormSubmit') != undefined ? this.successFormSubmit = sessionStorage.getItem('successFormSubmit') : null;
@@ -482,6 +494,7 @@
                 sessionStorage.getItem('currency') != undefined ? this.oldCurrency= sessionStorage.getItem('currency') : null;
                 sessionStorage.getItem('lat') != undefined ? this.lat =  sessionStorage.getItem('lat') : null;
                 sessionStorage.getItem('lng') != undefined ? this.lng =  sessionStorage.getItem('lng') : null;
+                sessionStorage.getItem('isUrgent') != undefined ? this.isUrgent =  sessionStorage.getItem('isUrgent') == 'true' : null;
             }
         }
     }

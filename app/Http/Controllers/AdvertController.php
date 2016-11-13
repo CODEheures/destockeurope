@@ -33,7 +33,7 @@ class AdvertController extends Controller
      */
     public function index()
     {
-        $adverts = Advert::where('isValid', true)->get();
+        $adverts = Advert::where('isValid', true)->orderBy('updated_at', 'desc')->get();
         $adverts->load('pictures');
         $adverts->load('category');
         foreach ($adverts as $advert){
@@ -83,7 +83,7 @@ class AdvertController extends Controller
                 $advert->currency=$request->currency;
                 $advert->totalQuantity=$request->total_quantity;
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
-                $advert->isUrgent=$request->is_urgent;
+                $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
 
                 $currencies = new ISOCurrencies();
                 $moneyParser = new DecimalMoneyParser($currencies);
@@ -129,8 +129,8 @@ class AdvertController extends Controller
     }
 
     public function cost($nbPictures, $isUrgent) {
-        if(isset($nbPictures) && isset($isUrgent) && (int)$nbPictures>0 && is_bool((bool)$isUrgent)){
-            return response()->json($this->getCost((int)$nbPictures,(bool)$isUrgent));
+        if(isset($nbPictures) && isset($isUrgent) && is_numeric($nbPictures)){
+            return response()->json($this->getCost((int)$nbPictures,filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN)));
         } else {
             return response('error', 500);
         }
