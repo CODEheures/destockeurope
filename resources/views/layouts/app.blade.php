@@ -33,14 +33,17 @@
         @include('menus.top.master')
 
         <!-- main content -->
-        <div class="ui main container">
+        <masterads
+            is-active="{{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && $masterAdsControllerFlag }}">
+        </masterads>
+        <div class="ui main container {{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && $masterAdsControllerFlag ? null : 'without-master-ads' }}">
             <!-- Erreurs -->
             <div class="one column row">
                 <div class="column">
                     @include('messages.flash')
                 </div>
             </div>
-            <div class="row">
+            <div class="content row">
                 @yield('content')
             </div>
         </div>

@@ -56,6 +56,8 @@ require('./collections/internal')(gulp);
 // export task
 module.exports = function(callback) {
 
+  gulp.start('build');
+
   if( !install.isSetup() ) {
     console.error('Cannot watch files. Run "gulp install" to set-up Semantic');
     return;
@@ -168,17 +170,17 @@ module.exports = function(callback) {
           })
         ;
 
-        compressedStream = stream
-          .pipe(plumber())
-          .pipe(replace(assets.source, assets.compressed))
-          .pipe(minifyCSS(settings.minify))
-          .pipe(rename(settings.rename.minCSS))
-          .pipe(gulp.dest(output.compressed))
-          .pipe(print(log.created))
-          .on('end', function() {
-            gulp.start('package compressed css');
-          })
-        ;
+        // compressedStream = stream
+        //   .pipe(plumber())
+        //   .pipe(replace(assets.source, assets.compressed))
+        //   .pipe(minifyCSS(settings.minify))
+        //   .pipe(rename(settings.rename.minCSS))
+        //   .pipe(gulp.dest(output.compressed))
+        //   .pipe(print(log.created))
+        //   .on('end', function() {
+        //     gulp.start('package compressed css');
+        //   })
+        // ;
       }
       else {
         console.log('Cannot find UI definition at path', lessPath);
@@ -241,7 +243,23 @@ module.exports = function(callback) {
               basename: "_semantic",
               extname: '.scss'
             }))
-            .pipe(gulp.dest(output.packaged));
+            .pipe(gulp.dest('./../sass/'))
+            .on('end', function() {
+              console.log('scss updated');
+            });
+      })
+  ;
+
+  //copy css et js dans le dossier watché par webpack
+  gulp
+      .watch([
+        output.packaged   + '/semantic.js'
+      ], function(file) {
+        gulp.src(file.path)
+            .pipe(gulp.dest('./../js/'))
+            .on('end', function() {
+              console.log('js updated');
+            });
       })
   ;
 };

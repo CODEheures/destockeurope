@@ -79,7 +79,7 @@
                         </div>
                     </a>
                     <div class="item advert">
-                        <div class="ui centered  leaderboard test ad" data-text="Leaderboard">
+                        <div class="ui centered  banner test ad" data-text="banner">
                             <!-- Leaderboard
                             <ins class="adsbygoogle"
                                  style="display:inline-block;width:728px;height:90px"

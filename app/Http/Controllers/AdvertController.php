@@ -56,7 +56,8 @@ class AdvertController extends Controller
         $ip='82.246.117.210';
         $geolocType = 1;
         $zoomMap = 11;
-        return view('advert.create', compact('ip', 'geolocType', 'zoomMap'));
+        $masterAdsControllerFlag = false;
+        return view('advert.create', compact('ip', 'geolocType', 'zoomMap', 'masterAdsControllerFlag'));
     }
 
     /**

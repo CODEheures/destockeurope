@@ -6,7 +6,7 @@
  */
 
 require('./bootstrap');
-require('../semantic/dist/semantic');
+require('./semantic');
 require('./myjs');
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -24,6 +24,7 @@ Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb
 Vue.component('steps', require('./components/generics/steps/step.vue'));
 Vue.component('googleMap', require('./components/generics/location/map.vue'));
 Vue.component('pagination', require('./components/generics/paginations/pagination.vue'));
+Vue.component('masterads', require('./components/generics/ads/master.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));

@@ -1,8 +1,10 @@
+$width-masterads : 1400px;
+$height-masterads : 600px;
+
 .main.container {
-  margin-top: 225px;
+  margin-top: 1rem;
   margin-bottom: 4rem;
   background-color: white;
-
 
   & a.item.advert {
     & .ui.image > .corner i {
@@ -24,6 +26,16 @@
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
+}
+
+#app .masterads {
+  position: fixed;
+  left: calc(50% - #{$width-masterads/2});
+  width: $width-masterads;
+  height: $height-masterads;
+
+  z-index: -1;
+  display: none;
 }
 
 .hidden.menu {
@@ -208,6 +220,23 @@ form {
 
 .row.filters {
   margin-bottom: 2rem;
+}
+
+//gestion masterads
+@media only screen and (min-width: $width-masterads){
+  .main.container {
+    &:not(.without-master-ads){
+      margin-top: 150px;
+    }
+    & .content.row {
+      border-top: 1rem solid #2185d0;
+      box-shadow: 0.2rem 0.1rem 2rem 0.1rem rgba(0,0,0,0.5);
+      padding: 2rem;
+    }
+  }
+  #app .masterads {
+    display: block;
+  }
 }
 
 @media only screen and (min-width: 756px){

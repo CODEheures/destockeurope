@@ -33,7 +33,23 @@ require('laravel-elixir-vue-2');
 //                 basename: "_semantic",
 //                 extname: '.scss'
 //             }))
-//             .pipe(gulp.dest(output.packaged));
+//             .pipe(gulp.dest('./../sass/'))
+//             .on('end', function() {
+//                 console.log('scss updated');
+//             });
+//     })
+// ;
+//
+// //copy css et js dans le dossier watché par webpack
+// gulp
+//     .watch([
+//         output.packaged   + '/semantic.js'
+//     ], function(file) {
+//         gulp.src(file.path)
+//             .pipe(gulp.dest('./../js/'))
+//             .on('end', function() {
+//                 console.log('js updated');
+//             });
 //     })
 // ;
 

@@ -124,8 +124,14 @@
             this.$on('paginate', function (result) {
                 this.paginate=result;
             });
+            var that = this;
             this.$on('changePage', function (url) {
-                this.dataRouteGetAdvertList = url;
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 600, function () {
+                    that.dataRouteGetAdvertList = url;
+                });
+
             });
             if(this.clearStorage){
                 sessionStorage.clear();

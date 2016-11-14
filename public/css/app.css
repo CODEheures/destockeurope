@@ -3840,15 +3840,15 @@ input::selection {
 /* Large Monitor */
 @media only screen and (min-width: 1200px) {
   .ui.container {
-    width: 1127px;
+    width: 1007px;
     margin-left: auto !important;
     margin-right: auto !important; }
   .ui.grid.container {
-    width: calc( 1127px  +  2rem) !important; }
+    width: calc( 1007px  +  2rem) !important; }
   .ui.relaxed.grid.container {
-    width: calc( 1127px  +  3rem) !important; }
+    width: calc( 1007px  +  3rem) !important; }
   .ui.very.relaxed.grid.container {
-    width: calc( 1127px  +  5rem) !important; } }
+    width: calc( 1007px  +  5rem) !important; } }
 
 /*******************************
              Types
@@ -28678,7 +28678,7 @@ html.ios body {
   cursor: not-allowed; }
 
 .main.container {
-  margin-top: 225px;
+  margin-top: 1rem;
   margin-bottom: 4rem;
   background-color: white; }
   .main.container a.item.advert .ui.image > .corner i {
@@ -28694,6 +28694,14 @@ html.ios body {
   .main.container div.item.advert {
     padding-top: 2rem;
     padding-bottom: 2rem; }
+
+#app .masterads {
+  position: fixed;
+  left: calc(50% - 700px);
+  width: 1400px;
+  height: 600px;
+  z-index: -1;
+  display: none; }
 
 .hidden.menu {
   display: none; }
@@ -28898,6 +28906,16 @@ form.login, form.register {
 
 .row.filters {
   margin-bottom: 2rem; }
+
+@media only screen and (min-width: 1400px) {
+  .main.container:not(.without-master-ads) {
+    margin-top: 150px; }
+  .main.container .content.row {
+    border-top: 1rem solid #2185d0;
+    box-shadow: 0.2rem 0.1rem 2rem 0.1rem rgba(0, 0, 0, 0.5);
+    padding: 2rem; }
+  #app .masterads {
+    display: block; } }
 
 @media only screen and (min-width: 756px) {
   .masthead.segment .ui.container .links {

@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $masterAdsControllerFlag = true;
+    return view('welcome', compact('masterAdsControllerFlag'));
 })->name('home');
 
 //Auth::routes();
