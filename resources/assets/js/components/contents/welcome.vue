@@ -40,6 +40,7 @@
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
                             :route-get-thumb="routeGetThumb"
+                            :ads-frequency="parseInt(adsFrenquency)"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
@@ -80,6 +81,7 @@
             //advertByList component
             'routeGetAdvertsList',
             'routeGetThumb',
+            'adsFrenquency',
             'advertTitleLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',

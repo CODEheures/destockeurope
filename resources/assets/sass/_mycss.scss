@@ -2,7 +2,7 @@
   margin-top: 4rem;
   margin-bottom: 4rem;
 
-  & div.item.advert {
+  & a.item.advert {
     & .ui.image > .corner i {
       color: white;
       font-weight: 600;
@@ -17,10 +17,10 @@
     & span.ui.red.horizontal.label {
       margin-top: 0.2rem;
     }
-    & .ui.leaderboard {
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-    }
+  }
+  & div.item.advert {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
   }
 }
 

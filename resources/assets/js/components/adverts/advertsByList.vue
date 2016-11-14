@@ -5,7 +5,7 @@
                 <div class="ui large text loader">Loading</div>
             </div>
             <template v-for="(advert, index) in advertsList">
-                <template v-if="index%3==1">
+                <template v-if="(index+1)%adsFrequency==0">
                     <a :href="routeGetAdvertsList+'/'+advert.id"  class="item advert">
                         <div class="ui grid">
                             <div class="sixteen wide center aligned mobile four wide tablet four wide computer column">
@@ -173,14 +173,15 @@
 
 <script>
     export default {
-        props: [
-            'routeGetAdvertsList',
-            'routeGetThumb',
-            'actualLocale',
-            'totalQuantityLabel',
-            'lotMiniQuantityLabel',
-            'urgentLabel',
-        ],
+        props: {
+            routeGetAdvertsList: String,
+            routeGetThumb: String,
+            adsFrequency: Number,
+            actualLocale: String,
+            totalQuantityLabel: String,
+            lotMiniQuantityLabel: String,
+            urgentLabel: String
+        },
         data: () => {
             return {
                 advertsList: [],

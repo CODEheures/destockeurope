@@ -28704,19 +28704,19 @@ html.ios body {
 .main.container {
   margin-top: 4rem;
   margin-bottom: 4rem; }
-  .main.container div.item.advert .ui.image > .corner i {
+  .main.container a.item.advert .ui.image > .corner i {
     color: white;
     font-weight: 600; }
-  .main.container div.item.advert div.geodate-computer {
+  .main.container a.item.advert div.geodate-computer {
     position: absolute;
     bottom: 0; }
-  .main.container div.item.advert p.price span:not(.tag), .main.container div.item.advert div[class*="geodate-"] {
+  .main.container a.item.advert p.price span:not(.tag), .main.container a.item.advert div[class*="geodate-"] {
     color: rgba(0, 0, 0, 0.6); }
-  .main.container div.item.advert span.ui.red.horizontal.label {
+  .main.container a.item.advert span.ui.red.horizontal.label {
     margin-top: 0.2rem; }
-  .main.container div.item.advert .ui.leaderboard {
-    margin-top: 2rem;
-    margin-bottom: 2rem; }
+  .main.container div.item.advert {
+    padding-top: 2rem;
+    padding-bottom: 2rem; }
 
 .hidden.menu {
   display: none; }

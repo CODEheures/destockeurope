@@ -33,7 +33,7 @@ class AdvertController extends Controller
      */
     public function index()
     {
-        $adverts = Advert::where('isValid', true)->orderBy('updated_at', 'desc')->paginate(3);
+        $adverts = Advert::where('isValid', true)->orderBy('updated_at', 'desc')->paginate(env('ADVERT_PER_PAGE'));
         $adverts->load('pictures');
         $adverts->load('category');
         foreach ($adverts as $advert){

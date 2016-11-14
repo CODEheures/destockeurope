@@ -16,6 +16,7 @@
 
             route-get-adverts-list="{{ route('advert.index') }}"
             route-get-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_FINAL_LOCAL])}}"
+            ads-frenquency="{{ env('ADS_FREQUENCY') }}"
             advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
             advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-price-label="{{ trans('strings.view_advert_form_price_label') }}"

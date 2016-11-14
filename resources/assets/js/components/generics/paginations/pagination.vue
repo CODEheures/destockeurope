@@ -53,7 +53,6 @@
             },
             constructPages() {
                 this.datapages = [];
-                console.log(this.pages);
                 if(this.pages.last_page > 1) {
                     //previous if current page > 1
                     if(this.pages.current_page > 1){
@@ -90,7 +89,6 @@
             },
             changePage (event) {
                 event.preventDefault();
-                console.log(event.target);
                 this.$parent.$emit('changePage', event.target.href);
             }
         }
