@@ -131,6 +131,10 @@ return [
 
     'view_advert_by_link_label' => 'Voir l\'annonce',
 
+    'view_pagination_page_label' => 'page',
+    'view_pagination_prev_label' => 'précédente',
+    'view_pagination_next_label' => 'suivante',
+
     'view_user_account_preferences_label' => 'Préférences',
     'view_user_account_patch_success' => 'Mise à jour OK',
     'view_user_account_currency_dropdown_label' => 'Monnaie',

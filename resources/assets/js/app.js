@@ -23,6 +23,7 @@ Vue.component('toast', require('./components/generics/messages/toast.vue'));
 Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb.vue'));
 Vue.component('steps', require('./components/generics/steps/step.vue'));
 Vue.component('googleMap', require('./components/generics/location/map.vue'));
+Vue.component('pagination', require('./components/generics/paginations/pagination.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));

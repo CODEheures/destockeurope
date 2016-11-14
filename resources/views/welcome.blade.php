@@ -22,6 +22,10 @@
             see-advert-link-label="{{ trans('strings.view_advert_by_link_label') }}"
             total-quantity-label="{{ trans('strings.form_quantity_label') }}"
             lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
-            urgent-label="{{ trans('strings.view_all_urgent') }}">
+            urgent-label="{{ trans('strings.view_all_urgent') }}"
+
+            page-label="{{ trans('strings.view_pagination_page_label') }}"
+            page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
+            page-next-label="{{ trans('strings.view_pagination_next_label') }}">
     </welcome>
 @endsection

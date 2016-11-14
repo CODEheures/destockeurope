@@ -28704,11 +28704,19 @@ html.ios body {
 .main.container {
   margin-top: 4rem;
   margin-bottom: 4rem; }
-  .main.container a.item.advert .ui.image > .corner i {
+  .main.container div.item.advert .ui.image > .corner i {
     color: white;
     font-weight: 600; }
-  .main.container a.item.advert span.ui.red.horizontal.label {
+  .main.container div.item.advert div.geodate-computer {
+    position: absolute;
+    bottom: 0; }
+  .main.container div.item.advert p.price span:not(.tag), .main.container div.item.advert div[class*="geodate-"] {
+    color: rgba(0, 0, 0, 0.6); }
+  .main.container div.item.advert span.ui.red.horizontal.label {
     margin-top: 0.2rem; }
+  .main.container div.item.advert .ui.leaderboard {
+    margin-top: 2rem;
+    margin-bottom: 2rem; }
 
 .hidden.menu {
   display: none; }
@@ -28781,23 +28789,12 @@ form.login, form.register {
   width: 20em;
   z-index: 2000; }
 
-#welcome-skycrapper {
-  margin-top: 2rem; }
+.ui.ad.welcome-ads {
+  margin-top: 4rem; }
 
 .ui.list > .item.advert > .image:not(:only-child):not(img) {
   padding-right: 0em;
   margin-right: 0.5em; }
-
-.ui.list > .item.advert {
-  position: relative; }
-  .ui.list > .item.advert > p.price {
-    position: absolute;
-    right: 1em;
-    top: 1.2em; }
-  .ui.list > .item.advert > p.geodate {
-    position: absolute;
-    right: 1em;
-    bottom: 0.2em; }
 
 .ui.dropdown .menu .item .right.dropdown.icon {
   float: right; }

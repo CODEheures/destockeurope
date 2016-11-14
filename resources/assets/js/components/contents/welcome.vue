@@ -25,7 +25,9 @@
                         :actual-locale="actualLocale"
                         :all-item="categoriesAllItem">
                 </categories-lateral-accordion-menu>
-                <div id="welcome-skycrapper" class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
+                <div class="ui small rectangle test ad welcome-ads" data-text="Wide Skyscraper"></div>
+                <div class="ui small rectangle test ad welcome-ads" data-text="Wide Skyscraper"></div>
+                <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
             </div>
             <div class="sixteen wide tablet twelve wide computer column">
                 <div class="row filters">
@@ -36,13 +38,23 @@
                 </div>
                 <div class="row">
                     <adverts-by-list
-                            :route-get-adverts-list="routeGetAdvertsList"
+                            :route-get-adverts-list="dataRouteGetAdvertList"
                             :route-get-thumb="routeGetThumb"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel">
                     </adverts-by-list>
+                </div>
+                <div class="ui right aligned grid">
+                    <div class="sixteen wide column">
+                        <pagination
+                            :pages="paginate"
+                            :page-label="pageLabel"
+                            :page-previous-label="pagePreviousLabel"
+                            :page-next-label="pageNextLabel">
+                        </pagination>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,7 +86,11 @@
             'seeAdvertLinkLabel',
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
-            'urgentLabel'
+            'urgentLabel',
+            //paginate component
+            'pageLabel',
+            'pagePreviousLabel',
+            'pageNextLabel'
         ],
         data: () => {
             return {
@@ -83,9 +99,12 @@
                 sendMessage: false,
                 breadcrumbItems: [],
                 filter: {'id' : 0},
+                paginate: {},
+                dataRouteGetAdvertList: ''
             }
         },
         mounted () {
+            this.dataRouteGetAdvertList = this.routeGetAdvertsList;
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
             });
@@ -99,6 +118,12 @@
                     this.breadcrumbItems= [];
                     this.filter['id'] = 0;
                 }
+            });
+            this.$on('paginate', function (result) {
+                this.paginate=result;
+            });
+            this.$on('changePage', function (url) {
+                this.dataRouteGetAdvertList = url;
             });
             if(this.clearStorage){
                 sessionStorage.clear();

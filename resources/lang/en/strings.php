@@ -131,6 +131,10 @@ return [
 
     'view_advert_by_link_label' => 'See Advert',
 
+    'view_pagination_page_label' => 'page',
+    'view_pagination_prev_label' => 'previous',
+    'view_pagination_next_label' => 'next',
+
     'view_user_account_preferences_label' => 'Preferences',
     'view_user_account_patch_success' => 'Update OK',
     'view_user_account_currency_dropdown_label' => 'Currency',

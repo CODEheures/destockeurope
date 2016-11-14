@@ -97,7 +97,7 @@ class UtilsController extends Controller
         $subCategory12->description = ['fr' => 'à dos', 'en'=>'Back'];
 
         $subCategory13 = new Category();
-        $subCategory13->description = ['fr' => 'de ranonnées', 'en'=>'Hiking'];
+        $subCategory13->description = ['fr' => 'de randonnées', 'en'=>'Hiking'];
 
         $parent1 = Category::find($rootCategory1->id);
         $parent1->appendNode($subCategory11);

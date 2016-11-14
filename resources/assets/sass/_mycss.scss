@@ -2,13 +2,24 @@
   margin-top: 4rem;
   margin-bottom: 4rem;
 
-  & a.item.advert {
+  & div.item.advert {
     & .ui.image > .corner i {
       color: white;
       font-weight: 600;
     }
+    & div.geodate-computer {
+      position: absolute;
+      bottom: 0;
+    }
+    & p.price span:not(.tag), & div[class*="geodate-"] {
+      color: rgba(0,0,0,0.6);
+    }
     & span.ui.red.horizontal.label {
       margin-top: 0.2rem;
+    }
+    & .ui.leaderboard {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
     }
   }
 }
@@ -101,8 +112,8 @@ form {
   z-index: 2000;
 }
 
-#welcome-skycrapper {
-  margin-top: 2rem;
+.ui.ad.welcome-ads {
+  margin-top: 4rem;
 }
 
 .ui.list > .item.advert > .image:not(:only-child):not(img) {
@@ -110,19 +121,6 @@ form {
   margin-right: 0.5em;
 }
 
-.ui.list > .item.advert {
-  position: relative;
-  & > p.price {
-    position: absolute;
-    right: 1em;
-    top: 1.2em;
-  }
-  & > p.geodate {
-    position: absolute;
-    right: 1em;
-    bottom: 0.2em;
-  }
-}
 .ui.dropdown .menu .item .right.dropdown.icon {
   float: right;
 }
