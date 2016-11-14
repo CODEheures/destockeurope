@@ -1,5 +1,6 @@
 <div class="ui vertical masthead center aligned segment">
     <div class="ui container">
+        {{--<div class="ui panorama centered test ad" data-text="panorama"></div>--}}
         <div class="ui secondary  menu">
             @include('menus.items.logos.top')
             @include('menus.items.toc')

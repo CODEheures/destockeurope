@@ -25,8 +25,8 @@
                         :actual-locale="actualLocale"
                         :all-item="categoriesAllItem">
                 </categories-lateral-accordion-menu>
-                <div class="ui small rectangle test ad welcome-ads" data-text="Wide Skyscraper"></div>
-                <div class="ui small rectangle test ad welcome-ads" data-text="Wide Skyscraper"></div>
+                <div class="ui small rectangle test ad welcome-ads" data-text="Small Rectangle"></div>
+                <div class="ui small rectangle test ad welcome-ads" data-text="Small Rectangle"></div>
                 <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
             </div>
             <div class="sixteen wide tablet twelve wide computer column">

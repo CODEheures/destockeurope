@@ -34,7 +34,6 @@
 
         <!-- main content -->
         <div class="ui main container">
-
             <!-- Erreurs -->
             <div class="one column row">
                 <div class="column">
