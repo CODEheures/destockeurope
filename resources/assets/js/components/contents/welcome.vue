@@ -19,7 +19,7 @@
                     :items="breadcrumbItems">
                 </breadcrumb>
             </div>
-            <div class="computer only four wide column">
+            <div :id="'column1_'+_uid" class="computer only four wide column">
                 <categories-lateral-accordion-menu
                         :route-category="routeCategory"
                         :actual-locale="actualLocale"
@@ -106,6 +106,10 @@
             }
         },
         mounted () {
+            $('#column1_'+this._uid).visibility({
+                type   : 'fixed',
+                offset : 112
+            });
             this.dataRouteGetAdvertList = this.routeGetAdvertsList;
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');

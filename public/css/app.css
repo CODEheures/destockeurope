@@ -28694,6 +28694,8 @@ html.ios body {
   .main.container div.item.advert {
     padding-top: 2rem;
     padding-bottom: 2rem; }
+  .main.container div.column.item-description {
+    padding-top: 0; }
 
 #app .masterads {
   position: fixed;
@@ -28912,7 +28914,7 @@ form.login, form.register {
     margin-top: 150px; }
   .main.container .content.row {
     border-top: 1rem solid #2185d0;
-    box-shadow: 0.2rem 0.1rem 2rem 0.1rem rgba(0, 0, 0, 0.5);
+    box-shadow: 0.1rem 0.05rem 2rem 0.1rem rgba(0, 0, 0, 0.3);
     padding: 2rem; }
   #app .masterads {
     display: block; } }

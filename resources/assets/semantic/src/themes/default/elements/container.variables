@@ -24,7 +24,7 @@
 @computerGutter: auto;
 
 @largeMonitorMinimumGutter: (@emSize  * 2);
-@largeMonitorWidth: @largeMonitorBreakpoint*0.9 - (@largeMonitorMinimumGutter * 2) - @scrollbarWidth;
+@largeMonitorWidth: @largeMonitorBreakpoint - (@largeMonitorMinimumGutter * 2) - @scrollbarWidth;
 @largeMonitorGutter: auto;
 
 /* Coupling (Add Negative Margin to container size) */

@@ -15,7 +15,6 @@
             }
         },
         mounted () {
-            console.log(this.isActive);
             this.dataIsActive = this.isActive == '1';
         },
         methods: {

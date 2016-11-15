@@ -34,9 +34,9 @@
 
         <!-- main content -->
         <masterads
-            is-active="{{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && $masterAdsControllerFlag }}">
+            is-active="{{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}">
         </masterads>
-        <div class="ui main container {{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && $masterAdsControllerFlag ? null : 'without-master-ads' }}">
+        <div class="ui main container {{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && (isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false) ? null : 'without-master-ads' }}">
             <!-- Erreurs -->
             <div class="one column row">
                 <div class="column">
