@@ -11,8 +11,8 @@
             route-get-cost="{{ route('advert.cost')}}"
 
             @if(count(old())>0)old="{{ json_encode(old()) }}" @endif
-            advert-form-photo-nb-free-picture="{{ env('NB_FREE_PICTURES') }}"
-            max-files="{{ env('NB_MAX_PICTURES') }}"
+            advert-form-photo-nb-free-picture="{{ config('runtime.nbFreePictures') }}"
+            max-files="{{ config('runtime.nbMaxPictures') }}"
             form-title-min-valid="{{ config('db_limits.adverts.minTitle') }}"
             form-title-max-valid="{{ config('db_limits.adverts.maxTitle') }}"
             form-description-min-valid="{{ config('db_limits.adverts.minDescription') }}"
@@ -29,7 +29,7 @@
             advert-form-free-photo-help-header-plural="{{ trans_choice('strings.form_file_add_free_photo_help_header',2) }}"
             advert-form-pay-photo-help-header-singular="{{ trans_choice('strings.form_file_add_pay_photo_help_header',1) }}"
             advert-form-pay-photo-help-header-plural="{{ trans_choice('strings.form_file_add_pay_photo_help_header',2) }}"
-            advert-form-photo-help-content="{{ trans('strings.form_file_add_photo_help_content',['nb' => env('NB_FREE_PICTURES'), 'link' => route('home')]) }}"
+            advert-form-photo-help-content="{{ trans('strings.form_file_add_photo_help_content',['nb' => config('runtime.nbFreePictures'), 'link' => route('home')]) }}"
             advert-form-main-photo-label="{{ trans('strings.form_radio_main_photo_label') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             filesize-error-message="{{ trans('strings.view_all_error_filesize_message') }}"
@@ -37,7 +37,7 @@
             form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimun_chars') }}"
             advert-form-total-quantity-label="{{ trans('strings.form_quantity_label') }}"
             advert-form-lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
-            advert-form-urgent-label="{{ trans('strings.form_urgent', ['price' => env('URGENT_COST')]) }}"
+            advert-form-urgent-label="{{ trans('strings.form_urgent', ['price' => config('runtime.urgentCost')]) }}"
             advert-example-urgent-label="{{ trans('strings.view_all_urgent') }}"
 
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"

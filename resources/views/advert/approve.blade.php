@@ -7,7 +7,7 @@
             route-advert-approve="{{ route('advert.approve') }}"
             route-get-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_FINAL_LOCAL])}}"
 
-            advert-nb-free-picture="{{ env('NB_FREE_PICTURES') }}"
+            advert-nb-free-picture="{{ config('runtime.nbFreePictures') }}"
 
             content-header="{{ trans('strings.view_advert_approve_header') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"

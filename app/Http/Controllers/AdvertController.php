@@ -33,7 +33,7 @@ class AdvertController extends Controller
      */
     public function index()
     {
-        $adverts = Advert::where('isValid', true)->orderBy('updated_at', 'desc')->paginate(env('ADVERT_PER_PAGE'));
+        $adverts = Advert::where('isValid', true)->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
         $adverts->load('pictures');
         $adverts->load('category');
         foreach ($adverts as $advert){
@@ -117,12 +117,12 @@ class AdvertController extends Controller
 
     private function getCost($nbPictures, $isUrgent=false){
         $cost = 0;
-        if($nbPictures > env('NB_FREE_PICTURES')){
-            $cost += ($nbPictures - env('NB_FREE_PICTURES'))*10;
+        if($nbPictures > config('runtime.nbFreePictures')){
+            $cost += ($nbPictures - config('runtime.nbFreePictures'))*10;
         }
 
         if($isUrgent){
-            $cost += env('URGENT_COST');
+            $cost += config('runtime.urgentCost');
         }
 
         return $cost;

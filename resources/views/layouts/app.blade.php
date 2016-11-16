@@ -34,9 +34,11 @@
 
         <!-- main content -->
         <masterads
-            is-active="{{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}">
+            is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
+            url="{{config('runtime.urlMasterAds')}}"
+            width="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? config('runtime.widthUrlMasterAds') : 0 }}">
         </masterads>
-        <div class="ui main container {{ filter_var(env('MASTER_ADS_ACTIVE'), FILTER_VALIDATE_BOOLEAN) && (isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false) ? null : 'without-master-ads' }}">
+        <div class="ui main container" style="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && (isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false) ? 'margin-top:' . config('runtime.offsetYMasterAds').'px;' : null}}">
             <!-- Erreurs -->
             <div class="one column row">
                 <div class="column">

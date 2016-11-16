@@ -10,6 +10,7 @@
                     <div class="ui circular red label">{{ $count }}</div>
                 @endif
             </a>
+            <a href="{{ route('application.manage') }}" class="{{ $routeName == 'application.manage' ? 'active' : '' }} item">{{ trans('strings.menu_parameters') }}</a>
         </div>
     </div>
 @endif

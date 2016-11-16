@@ -11,10 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    $masterAdsControllerFlag = true;
-    return view('welcome', compact('masterAdsControllerFlag'));
-})->name('home');
+//Common
+Route::get('/', 'CommonController@home')->name('home');
+Route::get('/manage', 'CommonController@manage')->name('application.manage');
+Route::get('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@appParameters')->name('appParameters');
+Route::patch('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@patchParameters');
+
 
 //Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

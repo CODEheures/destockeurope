@@ -32,10 +32,10 @@ $height-masterads : 600px;
 }
 
 #app .masterads {
-  position: fixed;
-  left: calc(50% - #{$width-masterads/2});
-  width: $width-masterads;
-  height: $height-masterads;
+  position: absolute;
+  //left: calc(50% - #{$width-masterads/2});
+  //width: $width-masterads;
+  height: auto;
 
   z-index: -1;
   display: none;
@@ -228,9 +228,6 @@ form {
 //gestion masterads
 @media only screen and (min-width: $width-masterads){
   .main.container {
-    &:not(.without-master-ads){
-      margin-top: 150px;
-    }
     & .content.row {
       border-top: 1rem solid #2185d0;
       box-shadow: 0.1rem 0.05rem 2rem 0.1rem rgba(0,0,0,0.3);

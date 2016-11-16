@@ -28698,10 +28698,8 @@ html.ios body {
     padding-top: 0; }
 
 #app .masterads {
-  position: fixed;
-  left: calc(50% - 700px);
-  width: 1400px;
-  height: 600px;
+  position: absolute;
+  height: auto;
   z-index: -1;
   display: none; }
 
@@ -28910,8 +28908,6 @@ form.login, form.register {
   margin-bottom: 2rem; }
 
 @media only screen and (min-width: 1400px) {
-  .main.container:not(.without-master-ads) {
-    margin-top: 150px; }
   .main.container .content.row {
     border-top: 1rem solid #2185d0;
     box-shadow: 0.1rem 0.05rem 2rem 0.1rem rgba(0, 0, 0, 0.3);

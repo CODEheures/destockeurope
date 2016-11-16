@@ -241,7 +241,6 @@
             this.latLngChange(geoCodes);
             this.$watch('blured', function () {
                 if (this.blured.input == this.focused.input && this.blured.value != this.focused.value) {
-                    console.log(this.blured.input);
                     this.updateAccount(this.blured.input, this.blured.value);
                 }
             });

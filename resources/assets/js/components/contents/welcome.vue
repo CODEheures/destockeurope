@@ -44,7 +44,8 @@
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
-                            :urgent-label="urgentLabel">
+                            :urgent-label="urgentLabel"
+                            :price-info-label="priceInfoLabel">
                     </adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -89,6 +90,7 @@
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
+            'priceInfoLabel',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',

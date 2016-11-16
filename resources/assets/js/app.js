@@ -48,6 +48,8 @@ Vue.component('welcome', require('./components/contents/welcome.vue'));
 Vue.component('user-account', require('./components/contents/userAccount.vue'));
 //Categories page
 Vue.component('manage-categories', require('./components/contents/manageCategories.vue'));
+//Application page
+Vue.component('manage-application', require('./components/contents/manageApplication.vue'));
 //createAdvert page
 Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
 //approve advert page

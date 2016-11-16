@@ -1,6 +1,11 @@
 <template>
     <div>
         <div class="ui celled list">
+            <div class="ui grid">
+                <div class="sixteen wide right aligned column">
+                    <span class="ui mini label"><i class="info circle icon"></i>Tous les prix sont unitaires</span>
+                </div>
+            </div>
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
@@ -30,8 +35,8 @@
                                     <div class="six wide right aligned vertical middle aligned column">
                                         <p class="price">
                                             <span class="ui large blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
-                                            <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                            <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                            <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
+                                            <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
                                         </p>
                                     </div>
@@ -136,8 +141,8 @@
                                     <div class="six wide right aligned vertical middle aligned column">
                                         <p class="price">
                                             <span class="ui large blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
-                                            <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                            <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                            <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
+                                            <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
                                         </p>
                                     </div>
@@ -201,7 +206,8 @@
             actualLocale: String,
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
-            urgentLabel: String
+            urgentLabel: String,
+            priceInfoLabel: String
         },
         data: () => {
             return {
