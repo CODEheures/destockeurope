@@ -1,0 +1,91 @@
+<template>
+    <div>
+        <div class="ui active inverted dimmer" v-if="!isLoaded">
+            <div class="ui large text loader">Loading</div>
+        </div>
+        <div class="ui menu">
+            <a class="browse item" v-on:click="emitCategoryChoice(0)">
+            {{ allItem }}
+            </a>
+            <template v-for="(category,index) in categories">
+                    <template>
+                        <a :id="'browse-'+index+'-'+_uid" class="browse item">
+                            {{ category['description'][actualLocale] }}
+                            <i class="dropdown icon"></i>
+                        </a>
+                        <recursive-categories-horizontal-menu
+                                :categories="category.children"
+                                :actual-locale="actualLocale"
+                                :parent-id="category.id"
+                                :all-item="allItem"
+                                :old-choice="oldChoice"
+                                :level="1"
+                        ></recursive-categories-horizontal-menu>
+                    </template>
+            </template>
+        </div>
+    </div>
+</template>
+
+
+<script>
+    export default {
+        props: [
+            'routeCategory',
+            'actualLocale',
+            'allItem',
+            'oldChoice'
+        ],
+        data: () => {
+            return {
+                categories: [],
+                isLoaded: false
+            } ;
+        },
+        mounted () {
+            this.getCategories();
+            this.$on('categoryChoice', function (event) {
+                this.$parent.$emit('categoryChoice', {id: event.id});
+            });
+        },
+        updated() {
+            this.setPopup();
+        },
+        methods: {
+            getCategories: function (withLoadIndicator) {
+                withLoadIndicator == undefined ? withLoadIndicator = true : null;
+                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
+                this.$http.get(this.routeCategory)
+                        .then(
+                                (response) => {
+                                    this.categories = response.data;
+                                    this.isLoaded = true;
+                                },
+                                (response) => {
+                                    this.$parent.$emit('loadError');
+                                }
+                        );
+            },
+            emitCategoryChoice: function(value){
+                this.$parent.$emit('categoryChoice', {id: value});
+            },
+            setPopup () {
+                for(var index in this.categories){
+                    let $elem = $('#browse-'+index+'-'+this._uid);
+                    $elem.popup({
+                                inline: false,
+                                hoverable: true,
+                                exclusive: true,
+                                transition: 'scale',
+                                position: 'bottom left',
+                                delay: {
+                                    show: 300,
+                                    hide: 800
+                                }
+                            })
+                    ;
+                }
+            }
+        }
+    }
+</script>

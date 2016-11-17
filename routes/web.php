@@ -16,6 +16,7 @@ Route::get('/', 'CommonController@home')->name('home');
 Route::get('/manage', 'CommonController@manage')->name('application.manage');
 Route::get('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@appParameters')->name('appParameters');
 Route::patch('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@patchParameters');
+Route::get('/u15t6rs1hqe6h1qreh16er561he5r/get-welcome-list-type', 'CommonController@getWelcomeType')->name('advert.getWelcomeListType');
 
 
 //Auth::routes();

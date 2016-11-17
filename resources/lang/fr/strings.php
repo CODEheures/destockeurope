@@ -95,6 +95,7 @@ return [
     'view_all_error_download_file' => 'Ho non! Un fichier demandé n\'a pas pu être téléchargé',
     'view_all_success_patch_message' => 'Modification enregistrée',
     'view_all_error_filesize_message' => 'Fichier trop gros!',
+    'view_all_error_invalid_image_message' => 'Image invalide',
     'view_all_urgent' => 'urgent',
     'view_category_add_exist' => 'Cette catégorie existe déjà',
     'view_category_add_parent_not_exist' => 'La catégorie parente n\'existe pas',
@@ -117,6 +118,8 @@ return [
     'view_manage_master_ads_activation_label' => 'Activer la publicité de page d\'accueil',
     'view_manage_master_ads_url_label' => 'URL de l\'image de la publicité',
     'view_manage_master_offset_y_label' => 'Décalage vertical de l\'annonce',
+    'view_manage_appearance_label' => 'Apparence',
+    'view_manage_welcome_type_label' => 'Page d\'accueil type n°',
 
     'view_advert_create_header' => 'Créer une annonce',
     'view_advert_form_title_label' => 'Titre de l\'annonce',

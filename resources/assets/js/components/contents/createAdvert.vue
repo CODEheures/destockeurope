@@ -20,11 +20,11 @@
                 <input type="hidden" name="main_picture" :value="mainPicture" />
                 <input type="hidden" name="is_urgent" :value="isUrgent ? 1 : 0" />
                 <div class="ui error message"></div>
-                <type-advert-radio-button
+                <type-radio-button
                         :route-get-list-type="routeGetListType"
                         :first-menu-name="listTypeFirstMenuName"
                         :old-choice="oldType">
-                </type-advert-radio-button>
+                </type-radio-button>
                 <div class="field">
                     <categories-dropdown-menu
                             :route-category="routeCategory"

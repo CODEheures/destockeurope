@@ -95,6 +95,7 @@ return [
     'view_all_success_patch_message' => 'Modification save',
     'view_all_error_download_file' => 'Ho no! A requested file could not be downloaded',
     'view_all_error_filesize_message' => 'File to Big!',
+    'view_all_error_invalid_image_message' => 'Unvaillable Image',
     'view_all_urgent' => 'urgent',
     'view_category_add_exist' => 'This category is already exist',
     'view_category_add_parent_not_exist' => 'The parent category is not exist',
@@ -117,6 +118,8 @@ return [
     'view_manage_master_ads_activation_label' => 'Activate home page advert',
     'view_manage_master_ads_url_label' => 'Master advertisement URL',
     'view_manage_master_offset_y_label' => 'Vertical offset of the advert',
+    'view_manage_appearance_label' => 'Appearance',
+    'view_manage_welcome_type_label' => 'Home Page type n°',
 
     'view_advert_create_header' => 'Create new advert',
     'view_advert_form_title_label' => 'Advert Title',

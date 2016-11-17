@@ -29,6 +29,9 @@ $height-masterads : 600px;
   & div.column.item-description {
     padding-top: 0;
   }
+  & .pagination {
+    margin-top: 1.3rem;
+  }
 }
 
 #app .masterads {
@@ -129,8 +132,16 @@ form {
   z-index: 2000;
 }
 
-.ui.ad.welcome-ads {
-  margin-top: 4rem;
+#welcome-ads {
+  display: flex;
+  justify-content: center;
+  & div.small.rectangle:not(:first-of-type) {
+    margin-top: 4rem;
+  }
+}
+
+.content.row .ui.small.rectangle.welcome-ads{
+  margin-top: 3.2rem;
 }
 
 .ui.list > .item.advert > .image:not(:only-child):not(img) {

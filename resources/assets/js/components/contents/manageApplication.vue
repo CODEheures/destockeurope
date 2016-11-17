@@ -87,10 +87,7 @@
                     <div :id="'slider1-'+_uid" class="ui slider checkbox">
                         <input type="checkbox"
                                name="masterAds"
-                               v-model="parameters.masterAds"
-                               v-on:keyup.enter="updateParameter"
-                               v-on:focus="focused={'name': 'masterAds', 'value': parameters.masterAds}"
-                               v-on:blur="blured={'name': 'masterAds', 'value': parameters.masterAds}">
+                               v-model="parameters.masterAds">
                         <label>{{ masterAdsActivationLabel }}</label>
                     </div>
                 </div>
@@ -124,7 +121,14 @@
                         </div>
                     </div>
                 </div>
-
+                <h4 class="ui horizontal divider header"><i class="paint brush icon"></i> {{ appearanceLabel }} </h4>
+                <div class="field">
+                    <type-radio-button
+                            :route-get-list-type="routeGetListType"
+                            :first-menu-name="listTypeFirstMenuName"
+                            :old-choice="oldType">
+                    </type-radio-button>
+                </div>
             </div>
         </div>
     </div>
@@ -143,6 +147,7 @@
             loadErrorMessage: String,
             patchErrorMessage: String,
             patchSuccessMessage: String,
+            invalidImageMessage: String,
             advertPreferencesLabel: String,
             advertNbFreePicturesLabel: String,
             advertNbMaxPicturesLabel: String,
@@ -152,7 +157,12 @@
             adsFrequencyLabel: String,
             masterAdsActivationLabel: String,
             masterAdsUrlLabel: String,
-            masterAdsOffsetYLabel: String
+            masterAdsOffsetYLabel: String,
+            appearanceLabel: String,
+            welcomeAppearanceLabel: String,
+            //type radio btn component
+            routeGetListType: String,
+            listTypeFirstMenuName: String
         },
         data: () => {
             return {
@@ -163,10 +173,21 @@
                 focused: {},
                 blured: {},
                 parameters: [],
+                oldType: '',
+                isValidImage: false
             };
         },
         mounted () {
             this.getParameters();
+            this.$on('typeChoice', function (event) {
+                this.typeChoice(event.type);
+            });
+            var that = this;
+            $('#slider1-'+this._uid).checkbox({
+               onChange: function () {
+                   that.activeMasterAds(that.parameters.masterAds);
+               }
+            });
             this.$watch('blured', function () {
                 if (this.blured.name == this.focused.name && this.blured.value != this.focused.value) {
                     this.updateParameter();
@@ -182,6 +203,7 @@
                         .then(
                                 function (response) {
                                     that.parameters = response.data;
+                                    that.oldType=that.parameters.welcomeType;
                                     that.isLoaded = true;
                                 }
                                 ,
@@ -190,6 +212,16 @@
                                 }
                         )
                 ;
+            },
+            typeChoice: function (type) {
+                this.blured.name = 'welcomeType';
+                this.blured.value = type;
+                this.updateParameter();
+            },
+            activeMasterAds(flag){
+                this.blured.name = 'masterAds';
+                this.blured.value = flag;
+                this.updateParameter();
             },
             updateParameter: function (event) {
                 let patchValue = {};
@@ -202,29 +234,62 @@
                     patchValue[name] = event.target.value;
                     this.focused.value = event.target.value;
                 }
-                if (patchValue[name] != undefined && (patchValue[name] != '' || name=='urlMasterAds')) {
-                    let that = this;
-                    this.$http.patch(this.routeParameters, patchValue)
-                            .then(
-                                    function (response) {
-                                        that.getParameters(false);
-                                        that.sendToast(that.patchSuccessMessage, 'success');
-                                    }
-                                    ,
-                                    function (response) {
-                                        that.getParameters(false);
-                                        if (response.status == 409) {
-                                            that.sendToast(response.body, 'error');
-                                        } else {
-                                            that.sendToast(that.patchErrorMessage, 'error');
-                                        }
-                                    }
-                            )
-                    ;
+                if (name != undefined && patchValue[name] != undefined) {
+                    if(name=='urlMasterAds' && patchValue[name] != ''){
+                        var that = this;
+                        this.testValidImgUrl(patchValue[name], function () {
+                            that.updateRequest(patchValue);
+                        });
+                    } else {
+                        this.updateRequest(patchValue);
+                    }
                 } else {
                     this.getParameters(false);
                     this.sendToast(this.patchErrorMessage, 'error');
                 }
+            },
+            updateRequest(patchValue) {
+                let that = this;
+                this.$http.patch(this.routeParameters, patchValue)
+                        .then(
+                                function (response) {
+                                    that.getParameters(false);
+                                    that.sendToast(that.patchSuccessMessage, 'success');
+                                }
+                                ,
+                                function (response) {
+                                    that.getParameters(false);
+                                    if (response.status == 409) {
+                                        that.sendToast(response.body, 'error');
+                                    } else {
+                                        that.sendToast(that.patchErrorMessage, 'error');
+                                    }
+                                }
+                        )
+                ;
+            },
+            testValidImgUrl(url, callback){
+                var that = this;
+                this.$http.get(url)
+                        .then(
+                                function (response) {
+                                    if(response.body && response.body.type){
+                                        if(response.body.type.indexOf('image')==0){
+                                            that.isValidImage = true;
+                                            callback();
+                                        }
+                                    } else {
+                                        that.isValidImage = false;
+                                        that.sendToast(this.invalidImageMessage, 'error');
+                                    }
+                                }
+                                ,
+                                function (response) {
+                                    that.isValidImage = false;
+                                    that.sendToast(this.invalidImageMessage, 'error');
+                                }
+                        )
+                ;
             },
             sendToast: function (message, type) {
                 this.typeMessage = type;

@@ -16,6 +16,7 @@ require('./myjs');
 
 //Generics
 Vue.component('range-filter', require('./components/generics/filters/rangeFilter.vue'));
+Vue.component('type-radio-button', require('./components/generics/filters/typeRadioButton.vue'));
 Vue.component('currencies-dropdown', require('./components/generics/currencies/currenciesDropdown.vue'));
 Vue.component('currencies-input-right-label', require('./components/generics/currencies/currenciesInputRightLabel.vue'));
 Vue.component('locales-dropdown', require('./components/generics/locales/localesDropdown.vue'));
@@ -29,6 +30,8 @@ Vue.component('masterads', require('./components/generics/ads/master.vue'));
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));
 Vue.component('recursive-categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/recursive.vue'));
+Vue.component('categories-horizontal-menu', require('./components/categories/horizontal/menu.vue'));
+Vue.component('recursive-categories-horizontal-menu', require('./components/categories/horizontal/recursive.vue'));
 Vue.component('categories-lateral-accordion-menu', require('./components/categories/lateral/accordion/menu.vue'));
 Vue.component('recursive-categories-lateral-accordion-menu', require('./components/categories/lateral/accordion/recursive.vue'));
 Vue.component('categories-dropdown-menu', require('./components/categories/dropdown/all/menu.vue'));
@@ -39,11 +42,11 @@ Vue.component('categories-updatable', require('./components/categories/categorie
 
 //adverts
 Vue.component('price-advert-filter', require('./components/adverts/priceFilter.vue'));
-Vue.component('type-advert-radio-button', require('./components/adverts/typeRadioButton.vue'));
 Vue.component('adverts-by-list', require('./components/adverts/advertsByList.vue'));
 
 //Welcome page vue
-Vue.component('welcome', require('./components/contents/welcome.vue'));
+Vue.component('welcome1', require('./components/contents/welcome1.vue'));
+Vue.component('welcome2', require('./components/contents/welcome2.vue'));
 //User page
 Vue.component('user-account', require('./components/contents/userAccount.vue'));
 //Categories page

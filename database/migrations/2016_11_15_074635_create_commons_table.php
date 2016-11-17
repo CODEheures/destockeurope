@@ -25,6 +25,7 @@ class CreateCommonsTable extends Migration
             $table->smallInteger('urgentCost')->default(49);
             $table->tinyInteger('nbFreePictures')->default(3);
             $table->tinyInteger('nbMaxPictures')->default(6);
+            $table->enum('welcomeType', ['1', '2'])->default(1);
         });
     }
 

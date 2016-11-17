@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Common;
 use Closure;
+use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
 
 class GetConfig
@@ -28,13 +29,18 @@ class GetConfig
             config(['runtime.urgentCost' => $config->urgentCost]);
             config(['runtime.nbFreePictures' => $config->nbFreePictures]);
             config(['runtime.nbMaxPictures' => $config->nbMaxPictures]);
-        }
+            config(['runtime.welcomeType' => $config->welcomeType]);
 
-        if($config->masterAds && $config->urlMasterAds && $config->urlMasterAds != ''){
-            $width = Image::make($config->urlMasterAds)->width();
-            config(['runtime.widthUrlMasterAds' => $width]);
-        } else {
-            config(['runtime.widthUrlMasterAds' => 0]);
+            if($config->masterAds && $config->urlMasterAds && $config->urlMasterAds != ''){
+                try {
+                    $width = Image::make($config->urlMasterAds)->width();
+                    config(['runtime.widthUrlMasterAds' => $width]);
+                } catch (NotReadableException $e) {
+                    config(['runtime.widthUrlMasterAds' => 0]);
+                }
+            } else {
+                config(['runtime.widthUrlMasterAds' => 0]);
+            }
         }
 
 

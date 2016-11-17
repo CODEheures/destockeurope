@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Common;
+use App\Common\DBUtils;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -46,5 +47,14 @@ class CommonController extends Controller
         } else {
             return response('error', 500);
         }
+    }
+
+    public function getWelcomeType() {
+        $list = DBUtils::getEnumValues('commons', 'welcomeType');
+        $transList = [];
+        foreach ($list as $key => $item) {
+            $transList[$key] =  $item;
+        }
+        return response()->json($transList);
     }
 }

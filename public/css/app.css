@@ -28696,6 +28696,8 @@ html.ios body {
     padding-bottom: 2rem; }
   .main.container div.column.item-description {
     padding-top: 0; }
+  .main.container .pagination {
+    margin-top: 1.3rem; }
 
 #app .masterads {
   position: absolute;
@@ -28774,8 +28776,16 @@ form.login, form.register {
   width: 20em;
   z-index: 2000; }
 
-.ui.ad.welcome-ads {
-  margin-top: 4rem; }
+#welcome-ads {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center; }
+  #welcome-ads div.small.rectangle:not(:first-of-type) {
+    margin-top: 4rem; }
+
+.content.row .ui.small.rectangle.welcome-ads {
+  margin-top: 3.2rem; }
 
 .ui.list > .item.advert > .image:not(:only-child):not(img) {
   padding-right: 0em;
