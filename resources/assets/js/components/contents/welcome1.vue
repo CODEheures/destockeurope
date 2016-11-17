@@ -1,7 +1,7 @@
 <template>
     <div  class="ui grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
-        <div class="mobile only tablet only row">
+        <div class="mobile only row">
             <div class="ui one column grid">
                 <categories-dropdown-menu
                         :route-category="routeCategory"
@@ -13,7 +13,7 @@
                 </categories-dropdown-menu>
             </div>
         </div>
-        <div class="computer only sixteen wide column">
+        <div class="tablet only computer only sixteen wide column">
             <div class="row">
                 <breadcrumb
                         :items="breadcrumbItems">

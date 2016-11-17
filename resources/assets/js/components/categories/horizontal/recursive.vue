@@ -1,5 +1,5 @@
 <template>
-    <div :class="level==1 ? 'ui fluid popup' : 'ui link list'">
+    <div :class="level==1 ? 'ui flowing basic admission popup' : 'ui link list'">
         <template v-if="level==1">
             <div :class="'ui ' + numberToWord(categories.length) +' column relaxed equal height divided grid'">
                 <template v-for="(category,index) in categories">
@@ -53,7 +53,7 @@
                 this.$parent.$emit('categoryChoice', {id: value});
             },
             numberToWord: function (num) {
-                var a = ['one','two','three','four', 'five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen'];
+                var a = ['', 'one','two','three','four', 'five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen'];
                 return a[num];
             }
         }

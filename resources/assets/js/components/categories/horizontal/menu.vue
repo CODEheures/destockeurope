@@ -76,8 +76,8 @@
                                 inline: false,
                                 hoverable: true,
                                 exclusive: true,
-                                transition: 'scale',
                                 position: 'bottom left',
+                                lastResort: true,
                                 delay: {
                                     show: 300,
                                     hide: 800

@@ -262,7 +262,9 @@ class PicturesManager
         });
         $thumb->insert($this->getWaterMark(),'bottom-left',5,5);
 
-        $rawThumb = $thumb->encode(static::EXT);
+        $rawThumb = Image::canvas($thumb->width(), $thumb->height(), '#ffffff');
+        $rawThumb->insert($thumb);
+        $rawThumb->encode(static::EXT);
         Storage::disk($this->disk)->put($this->personnalPath().$this->fileName.static::THUMB_EXT.'.'.static::EXT, $rawThumb);
     }
 
@@ -270,12 +272,14 @@ class PicturesManager
         $file = Storage::disk($this->disk)->get($this->personnalPath().$this->fileName.'.'.$this->ext);
 
         $picture = Image::make($file);
-        $picture->fit(static::PICTURE_SIZE_MAX_WIDTH,static::PICTURE_SIZE_MAX_HEIGHT, function ($constraint) {
+        $picture->fit(static::PICTURE_SIZE_MAX_WIDTH,null, function ($constraint) {
             $constraint->upsize();
         });
         $picture->insert($this->getWaterMark(),'bottom-left',10,10);
 
-        $rawPicture = $picture->encode(static::EXT);
+        $rawPicture = Image::canvas($picture->width(), $picture->height(), '#ffffff');
+        $rawPicture->insert($picture);
+        $rawPicture->encode(static::EXT);
         Storage::disk($this->disk)->put($this->personnalPath().$this->fileName.'.'.static::EXT, $rawPicture);
     }
 
