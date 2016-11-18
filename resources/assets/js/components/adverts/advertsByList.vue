@@ -252,13 +252,21 @@
         data: () => {
             return {
                 advertsList: [],
-                isLoaded: false
+                isLoaded: false,
+                minPrice: 0,
+                maxPrice: 0
             };
         },
         mounted () {
             this.$watch('routeGetAdvertsList', function () {
                 this.getAdvertsList();
             });
+            this.$watch('minPrice', function () {
+                this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
+            });
+            this.$watch('maxPrice', function () {
+                this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
+            })
         },
         filters: {
             format (description) {
@@ -275,9 +283,11 @@
                 this.$http.get(this.routeGetAdvertsList)
                         .then(
                                 function (response)  {
-                                    that.advertsList = (response.data).data;
+                                    that.advertsList = (response.data).adverts.data;
+                                    that.minPrice = parseFloat((response.data).minPrice);
+                                    that.maxPrice = parseFloat((response.data).maxPrice);
                                     that.isLoaded = true;
-                                    let paginate = response.data;
+                                    let paginate = response.data.adverts;
                                     delete paginate.data;
                                     that.$parent.$emit('paginate', paginate);
                                 },

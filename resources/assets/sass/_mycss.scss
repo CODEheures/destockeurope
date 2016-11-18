@@ -50,7 +50,9 @@ $height-masterads : 600px;
 
 .masthead.segment {
   padding: 1em 0em;
-
+  & .ui.secondary.menu {
+    position: relative;
+  }
   & .ui.container .links {
     display: none;
   }
@@ -59,6 +61,19 @@ $height-masterads : 600px;
 .ui.top.fixed.menu{
   & .links {
     display: none;
+  }
+}
+
+.masthead.segment , .ui.top.fixed.menu{
+  & .sub.header{
+    position: absolute;
+    bottom: 21px;
+    left: 98px;
+    font-size: 10px;
+    line-height: 10px;
+    text-align: left;
+    color: rgba(0,103,161,1);
+    z-index: -1;
   }
 }
 
@@ -234,6 +249,11 @@ form {
 
 .row.filters {
   margin-bottom: 2rem;
+
+  & div.column.price {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 //gestion masterads
@@ -250,7 +270,7 @@ form {
   }
 }
 
-@media only screen and (min-width: 756px){
+@media only screen and (min-width: 990px){
   .masthead.segment {
     & .ui.container .links {
       display: flex;

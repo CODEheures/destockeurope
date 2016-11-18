@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Category;
 use App\Common\DBUtils;
+use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Picture;
@@ -12,8 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
-use Money\Money;
-use Money\Parser\DecimalMoneyParser;
 
 class AdvertController extends Controller
 {
@@ -33,7 +32,26 @@ class AdvertController extends Controller
      */
     public function index(Request $request)
     {
+        //only valid advert
         $adverts = Advert::where('isValid', true);
+
+        //where currency
+        if($request->has('currency')){
+            $currencies = new ISOCurrencies();
+            if($currencies->contains(new Currency($request->currency))) {
+                $currency = $request->currency;
+            } else {
+                $currency = env('DEFAULT_CURRENCY');
+            }
+        } else {
+            $currency = env('DEFAULT_CURRENCY');
+        }
+        $adverts = $adverts->where('currency', $currency);
+
+        //if urgent
+        if($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true ){
+            $adverts = $adverts->where('isUrgent', true);
+        }
 
         if($request->has('categoryId') && $request->categoryId != 0){
             $categories = Category::with('descendants')->where('id', $request->categoryId)->get()->toFlatTree();
@@ -48,6 +66,29 @@ class AdvertController extends Controller
             }
         }
 
+        $minAllPrice = $adverts->min('price');
+        $maxAllPrice = $adverts->max('price');
+
+        if($minAllPrice){
+            $minAllPrice = MoneyUtils::getPriceWithDecimal($adverts->min('price'), $currency, false);
+        } else {
+            $minAllPrice = 0;
+        }
+
+        if($maxAllPrice){
+            $maxAllPrice = MoneyUtils::getPriceWithDecimal($adverts->max('price'), $currency, false);
+        } else {
+            $maxAllPrice = 0;
+        }
+
+
+        //if range price
+        if($request->has('minPrice') && $request->has('maxPrice') ){
+            $minPrice = MoneyUtils::setPriceWithoutDecimal($request->minPrice, $currency);
+            $maxPrice = MoneyUtils::setPriceWithoutDecimal($request->maxPrice, $currency);
+            $adverts = $adverts->where('price', '>=', $minPrice)->where('price', '<=', $maxPrice);
+        }
+
         $adverts = $adverts->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
 
 
@@ -58,7 +99,7 @@ class AdvertController extends Controller
             $ancestors->add($advert->category);
             $advert->setBreadCrumb($ancestors);
         }
-        return response()->json($adverts);
+        return response()->json(['adverts'=> $adverts, 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
     }
 
     /**
@@ -102,9 +143,7 @@ class AdvertController extends Controller
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
 
-                $currencies = new ISOCurrencies();
-                $moneyParser = new DecimalMoneyParser($currencies);
-                $advert->price = $moneyParser->parse($request->price,$request->currency)->getAmount();
+                $advert->price = MoneyUtils::setPriceWithoutDecimal($request->price,$request->currency);
 
                 $results = $this->pictureManager->storeLocalFinal();
 

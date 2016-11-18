@@ -2,13 +2,10 @@
 
 namespace App;
 
+use App\Common\MoneyUtils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
-use Money\Formatter\IntlMoneyFormatter;
-use Money\Money;
 
 class Advert extends Model {
     use SoftDeletes;
@@ -54,14 +51,7 @@ class Advert extends Model {
     }
 
     public function getPriceAttribute($value) {
-
-        $money = new Money($value, new Currency($this->currency));
-        $currencies = new ISOCurrencies();
-
-        $numberFormatter = new \NumberFormatter('fr_FR', \NumberFormatter::CURRENCY);
-        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
-
-        return $moneyFormatter->format($money);
+        return MoneyUtils::getPriceWithDecimal($value, $this->currency);
     }
 
     public function setBreadCrumb($ancestors) {

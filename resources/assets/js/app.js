@@ -41,7 +41,7 @@ Vue.component('recursive-categories-list-move-to', require('./components/categor
 Vue.component('categories-updatable', require('./components/categories/categoriesUpdatable.vue'));
 
 //adverts
-Vue.component('price-advert-filter', require('./components/adverts/priceFilter.vue'));
+Vue.component('advert-filter', require('./components/adverts/advertsFilter.vue'));
 Vue.component('adverts-by-list', require('./components/adverts/advertsByList.vue'));
 
 //Welcome page vue

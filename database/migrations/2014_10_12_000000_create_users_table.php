@@ -29,8 +29,8 @@ class CreateUsersTable extends Migration
             $table->string('confirmationToken',60)->nullable()->default(null);
             $table->string('role')->default('user'); //user, admin
             $table->string('avatar')->nullable()->default(null);
-            $table->string('currency', 3)->default("EUR");
-            $table->string('locale',50)->default("fr_FR");
+            $table->string('currency', 3)->default(env('DEFAULT_CURRENCY'));
+            $table->string('locale',50)->default(env('DEFAULT_LOCALE'));
             $table->string('compagnyName',config('db_limits.users.maxCompagnyName'))->nullable()->default(null);
             $table->string('registrationNumber', config('db_limits.users.maxRegistrationNumber'))->nullable()->default(null);
             $table->decimal('latitude',6,4)->nullable()->default(null);

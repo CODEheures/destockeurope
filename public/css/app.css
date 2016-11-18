@@ -28710,11 +28710,23 @@ html.ios body {
 
 .masthead.segment {
   padding: 1em 0em; }
+  .masthead.segment .ui.secondary.menu {
+    position: relative; }
   .masthead.segment .ui.container .links {
     display: none; }
 
 .ui.top.fixed.menu .links {
   display: none; }
+
+.masthead.segment .sub.header, .ui.top.fixed.menu .sub.header {
+  position: absolute;
+  bottom: 21px;
+  left: 98px;
+  font-size: 10px;
+  line-height: 10px;
+  text-align: left;
+  color: #0067a1;
+  z-index: -1; }
 
 .ui.steps {
   background-color: #FFFFFF;
@@ -28916,6 +28928,9 @@ form.login, form.register {
 
 .row.filters {
   margin-bottom: 2rem; }
+  .row.filters div.column.price {
+    padding-left: 2rem;
+    padding-right: 2rem; }
 
 @media only screen and (min-width: 1400px) {
   .main.container .content.row {
@@ -28925,7 +28940,7 @@ form.login, form.register {
   #app .masterads {
     display: block; } }
 
-@media only screen and (min-width: 756px) {
+@media only screen and (min-width: 990px) {
   .masthead.segment .ui.container .links {
     display: -webkit-box;
     display: flex; }

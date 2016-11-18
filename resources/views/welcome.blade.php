@@ -14,6 +14,7 @@
 
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
+                filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-get-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_FINAL_LOCAL])}}"
@@ -46,6 +47,7 @@
 
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
+                filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-get-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_FINAL_LOCAL])}}"

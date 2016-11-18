@@ -30,10 +30,13 @@
         <div class="row">
             <div class="sixteen wide column">
                 <div class="row filters">
-                    <price-advert-filter
+                    <advert-filter
                             :filter-ribbon="filterRibbon"
+                            :urgent-label="filterUrgentLabel"
+                            :min-price="minPrice"
+                            :max-price="maxPrice"
                             :filter-price-title ="filterPriceTitle">
-                    </price-advert-filter>
+                    </advert-filter>
                 </div>
             </div>
             <div class="sixteen wide tablet twelve wide computer column">
@@ -55,6 +58,7 @@
                     <div class="sixteen wide column pagination">
                         <pagination
                             :pages="paginate"
+                            :route-get-advert-list="dataRouteGetAdvertList"
                             :page-label="pageLabel"
                             :page-previous-label="pagePreviousLabel"
                             :page-next-label="pageNextLabel">
@@ -88,9 +92,10 @@
             'categoriesDropdownMenuFirstMenuName',
             'categoriesAllItem',
             'actualLocale',
-            //price advert component
+            //filter advert component
             'filterRibbon',
             'filterPriceTitle',
+            'filterUrgentLabel',
             //advertByList component
             'routeGetAdvertsList',
             'routeGetThumb',
@@ -118,7 +123,9 @@
                 breadcrumbItems: [],
                 filter: {'categoryId' : 0},
                 paginate: {},
-                dataRouteGetAdvertList: ''
+                dataRouteGetAdvertList: '',
+                minPrice: 0,
+                maxPrice: 0
             }
         },
         mounted () {
@@ -141,10 +148,16 @@
                     this.breadcrumbItems= [];
                     this.filter.categoryId = 0;
                 }
-                this.dataRouteGetAdvertList = this.urlForFilter();
+                this.urlForFilter();
             });
             this.$on('paginate', function (result) {
                 this.paginate=result;
+            });
+            this.$on('updateFilter', function (result) {
+                for(let elem in result){
+                    this.filter[elem] = result[elem];
+                    this.urlForFilter();
+                }
             });
             var that = this;
             this.$on('changePage', function (url) {
@@ -153,6 +166,10 @@
                 }, 600, function () {
                     that.dataRouteGetAdvertList = url;
                 });
+            });
+            this.$on('setRangePrice', function (prices) {
+                this.minPrice = prices.mini;
+                this.maxPrice = prices.maxi;
             });
             if(this.clearStorage){
                 sessionStorage.clear();
@@ -196,7 +213,7 @@
                 for(var elem in this.filter){
                     parsed.query[elem]=(this.filter[elem]).toString();
                 }
-                return Parser.format(parsed);
+                this.dataRouteGetAdvertList = Parser.format(parsed);
             }
         }
     }
