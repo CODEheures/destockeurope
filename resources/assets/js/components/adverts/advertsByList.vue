@@ -280,6 +280,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 var that = this;
+                this.advertsList = [];
                 this.$http.get(this.routeGetAdvertsList)
                         .then(
                                 function (response)  {
