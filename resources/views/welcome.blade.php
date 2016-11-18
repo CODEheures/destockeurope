@@ -26,6 +26,8 @@
                 lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
                 urgent-label="{{ trans('strings.view_all_urgent') }}"
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
+                no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
+                no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
@@ -56,6 +58,8 @@
                 lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
                 urgent-label="{{ trans('strings.view_all_urgent') }}"
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
+                no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
+                no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"

@@ -130,6 +130,8 @@ return [
     'view_advert_list_type_bid' => 'offre',
     'view_advert_list_type_request' => 'demande',
     'view_advert_list_price_info' => 'Tous les prix sont unitaires',
+    'view_advert_list_no_result_header' => 'Aucun résultat',
+    'view_advert_list_no_result_message' => 'Aucune annonce ne correspond aux critères de recherche. Soyez le 1er à publier la votre!!',
     'view_advert_steps_1_title' => 'Création de l\'annonce',
     'view_advert_steps_1_description' => 'décrire votre annonce',
     'view_advert_steps_2_title' => 'Vos informations',

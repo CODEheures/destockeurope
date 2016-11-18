@@ -9,7 +9,8 @@
             </a>
             <template v-for="(category,index) in categories">
                     <template>
-                        <a :id="'browse-'+index+'-'+_uid" class="browse item">
+                        <a :id="'browse-'+index+'-'+_uid" class="browse item"
+                           v-on:click="emitCategoryChoice(category.id)">
                             {{ category['description'][actualLocale] }}
                             <i class="dropdown icon"></i>
                         </a>

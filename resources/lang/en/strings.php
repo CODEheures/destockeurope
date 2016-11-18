@@ -130,6 +130,8 @@ return [
     'view_advert_list_type_bid' => 'bid',
     'view_advert_list_type_request' => 'request',
     'view_advert_list_price_info' => 'All prices are unitaries',
+    'view_advert_list_no_result_header' => 'No result',
+    'view_advert_list_no_result_message' => 'No ads found matching the search criteria. Be the 1st to post your own!!',
     'view_advert_steps_1_title' => 'Create Advert',
     'view_advert_steps_1_description' => 'describe your advert',
     'view_advert_steps_2_title' => 'Account info',

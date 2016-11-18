@@ -7,7 +7,7 @@
                         :route-category="routeCategory"
                         :first-menu-name="categoriesDropdownMenuFirstMenuName"
                         :actual-locale="actualLocale"
-                        :old-choice="filter.id"
+                        :old-choice="filter.categoryId"
                         :with-all="true"
                         :all-item="categoriesAllItem">
                 </categories-dropdown-menu>
@@ -45,7 +45,9 @@
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
-                            :price-info-label="priceInfoLabel">
+                            :price-info-label="priceInfoLabel"
+                            :no-result-found-header="noResultFoundHeader"
+                            :no-result-found-message="noResultFoundMessage">
                     </adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -91,6 +93,8 @@
             'lotMiniQuantityLabel',
             'urgentLabel',
             'priceInfoLabel',
+            'noResultFoundHeader',
+            'noResultFoundMessage',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',
@@ -102,7 +106,7 @@
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
-                filter: {'id' : 0},
+                filter: {'categoryId' : 0},
                 paginate: {},
                 dataRouteGetAdvertList: ''
             }
@@ -118,14 +122,15 @@
             });
             this.$on('categoryChoice', function (event) {
                 if(event.id != undefined && event.id > 0) {
-                    if(parseInt(event.id) != this.filter['id']) {
+                    if(parseInt(event.id) != this.filter.categoryId) {
                         this.setBreadCrumbItems(event.id);
-                        this.filter['id'] = parseInt(event.id);
+                        this.filter.categoryId = parseInt(event.id);
                     }
                 } else {
                     this.breadcrumbItems= [];
-                    this.filter['id'] = 0;
+                    this.filter.categoryId = 0;
                 }
+                this.dataRouteGetAdvertList = this.urlForFilter();
             });
             this.$on('paginate', function (result) {
                 this.paginate=result;
@@ -172,6 +177,16 @@
                                 }
                         );
 
+            },
+            urlForFilter() {
+                let urlBase = this.dataRouteGetAdvertList;
+                let parsed = Parser.parse(urlBase, true);
+                parsed.search=undefined;
+                parsed.query={};
+                for(var elem in this.filter){
+                    parsed.query[elem]=(this.filter[elem]).toString();
+                }
+                return Parser.format(parsed);
             }
         }
     }

@@ -31,9 +31,26 @@ class AdvertController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $adverts = Advert::where('isValid', true)->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+        $adverts = Advert::where('isValid', true);
+
+        if($request->has('categoryId') && $request->categoryId != 0){
+            $categories = Category::with('descendants')->where('id', $request->categoryId)->get()->toFlatTree();
+            if(count($categories)==1){
+                $category = $categories[0];
+                $ids = [];
+                $ids[] = $category->id;
+                foreach ($category->descendants as $descendant){
+                    $ids[] = $descendant->id;
+                }
+                $adverts = $adverts->whereIn('category_id', $ids);
+            }
+        }
+
+        $adverts = $adverts->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+
+
         $adverts->load('pictures');
         $adverts->load('category');
         foreach ($adverts as $advert){

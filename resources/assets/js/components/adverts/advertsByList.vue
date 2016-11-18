@@ -9,6 +9,44 @@
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
+            <template v-if="advertsList.length==0">
+                <div class="item advert">
+                    <div class="ui info message">
+                        <div class="header">{{ noResultFoundHeader }}</div>
+                        <p>{{ noResultFoundMessage }}</p>
+                    </div>
+                </div>
+                <div class="item advert">
+                    <div class="ui grid">
+                        <div class="tablet only computer only row">
+                            <div class=" ui centered banner test ad" data-text="banner">
+                                <!-- Leaderboard
+                                <ins class="adsbygoogle"
+                                     style="display:inline-block;width:728px;height:90px"
+                                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                                     data-ad-slot="XXXXXXXXXXXXXXXX"></ins>
+                                <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                                !-->
+                            </div>
+                        </div>
+                        <div class="mobile only row">
+                            <div class="ui centered half banner test ad" data-text="half banner">
+                                <!-- Leaderboard
+                                <ins class="adsbygoogle"
+                                     style="display:inline-block;width:728px;height:90px"
+                                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                                     data-ad-slot="XXXXXXXXXXXXXXXX"></ins>
+                                <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                                !-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
             <template v-for="(advert, index) in advertsList">
                 <template v-if="(index+1)%adsFrequency==0">
                     <a :href="routeGetAdvertsList+'/'+advert.id"  class="item advert">
@@ -207,7 +245,9 @@
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
             urgentLabel: String,
-            priceInfoLabel: String
+            priceInfoLabel: String,
+            noResultFoundHeader: String,
+            noResultFoundMessage: String
         },
         data: () => {
             return {
