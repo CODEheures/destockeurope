@@ -10,6 +10,7 @@ use App\Common\PicturesManager;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Picture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
@@ -48,10 +49,6 @@ class AdvertController extends Controller
         }
         $adverts = $adverts->where('currency', $currency);
 
-        //if urgent
-        if($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true ){
-            $adverts = $adverts->where('isUrgent', true);
-        }
 
         if($request->has('categoryId') && $request->categoryId != 0){
             $categories = Category::with('descendants')->where('id', $request->categoryId)->get()->toFlatTree();
@@ -70,17 +67,26 @@ class AdvertController extends Controller
         $maxAllPrice = $adverts->max('price');
 
         if($minAllPrice){
-            $minAllPrice = MoneyUtils::getPriceWithDecimal($adverts->min('price'), $currency, false);
+            $minAllPrice = MoneyUtils::getPriceWithDecimal($minAllPrice, $currency, false);
         } else {
             $minAllPrice = 0;
         }
 
         if($maxAllPrice){
-            $maxAllPrice = MoneyUtils::getPriceWithDecimal($adverts->max('price'), $currency, false);
+            $maxAllPrice = MoneyUtils::getPriceWithDecimal($maxAllPrice, $currency, false);
         } else {
             $maxAllPrice = 0;
         }
 
+        //STOP REQUEST HERE IF only RANGE PRICES
+        if($request->has('priceOnly') && filter_var($request->priceOnly, FILTER_VALIDATE_BOOLEAN) == true){
+            return response()->json(['minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
+        }
+
+        //if urgent
+        if($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true ){
+            $adverts = $adverts->where('isUrgent', true);
+        }
 
         //if range price
         if($request->has('minPrice') && $request->has('maxPrice') ){
@@ -89,17 +95,40 @@ class AdvertController extends Controller
             $adverts = $adverts->where('price', '>=', $minPrice)->where('price', '<=', $maxPrice);
         }
 
-        $adverts = $adverts->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
-
+        if($request->has('search') && strlen($request->search) >= 3){
+            $search = $request->search;
+            $adverts = $adverts->where(function ($query) use ($search) {
+                $query->where('title', 'LIKE', '%' .$search .'%')
+                    ->orWhere('description', 'LIKE', '%' .$search .'%');
+            });
+            $adverts = $adverts->orderBy('updated_at', 'desc')->get();
+        } else {
+            $adverts = $adverts->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+        }
 
         $adverts->load('pictures');
         $adverts->load('category');
+        $tempoStore =[];
+        $resultsByCat = [];
         foreach ($adverts as $advert){
-            $ancestors = $advert->category->getAncestors();
-            $ancestors->add($advert->category);
+            if(!array_key_exists($advert->category->id,$tempoStore)){
+                $ancestors = $advert->category->getAncestors();
+                $ancestors->add($advert->category);
+                $tempoStore[$advert->category->id] = $ancestors;
+                $resultsByCat[$advert->category->id]['results'] = [];
+            } else {
+                $ancestors = $tempoStore[$advert->category->id];
+            }
             $advert->setBreadCrumb($ancestors);
+            $resultsByCat[$advert->category->id]['results'][] = $advert;
+            $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
         }
-        return response()->json(['adverts'=> $adverts, 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
+
+        if($request->has('search') && strlen($request->search) >= 3){
+            return response()->json(['results'=> $resultsByCat]);
+        } else {
+            return response()->json(['adverts'=> $adverts, 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
+        }
     }
 
     /**

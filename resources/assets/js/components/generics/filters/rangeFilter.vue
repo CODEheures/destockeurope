@@ -20,7 +20,8 @@
         },
         data: () => {
             return {
-                start: [0,1]
+                start: [-1,-1],
+                init: [false, false]
             }
         },
         mounted () {
@@ -47,17 +48,17 @@
                 that.emitRangeChange(values);
             });
             this.$watch('mini', function () {
-                this.updateRange();
+                this.updateRange(0);
             });
             this.$watch('maxi', function () {
-                this.updateRange();
+                this.updateRange(1);
             })
         },
         methods: {
             updateStart: function (values, handle) {
                 this.$set(this.start, handle, values[handle]);
             },
-            updateRange: function () {
+            updateRange: function (handle) {
                 var that = this;
                 var rangeSlider = document.getElementById('range-'+this._uid);
                 rangeSlider.noUiSlider.updateOptions({
@@ -69,10 +70,18 @@
                 this.start[0] = (this.mini);
                 this.start[1] = (this.maxi);
                 rangeSlider.noUiSlider.set([this.mini, this.maxi]);
+                if(this.mini == this.maxi){
+                    rangeSlider.setAttribute('disabled', true);
+                } else {
+                    rangeSlider.removeAttribute('disabled');
+                }
                 this.emitRangeChange(this.start);
+                this.init[handle] = true;
             },
             emitRangeChange: function (values) {
-                this.$parent.$emit('rangeUpdate', {name: this.name, values: values});
+                if(this.init[0] && this.init[1]) {
+                    this.$parent.$emit('rangeUpdate', {name: this.name, values: values});
+                }
             }
         }
     }

@@ -162,13 +162,14 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
-        //Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        //Barryvdh\Debugbar\ServiceProvider::class,
+        //Laravel\Scout\ScoutServiceProvider::class,
 
         //
 

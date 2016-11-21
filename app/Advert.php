@@ -6,6 +6,7 @@ use App\Common\MoneyUtils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\App;
 
 class Advert extends Model {
     use SoftDeletes;
@@ -60,6 +61,19 @@ class Advert extends Model {
 
     public function getBreadCrumbAttribute() {
         return $this->breadcrumb;
+    }
+
+    public function getConstructBreadCrumb() {
+        $locale = App::getLocale();
+        $bread = '';
+        foreach ($this->breadcrumb as $item){
+            if($bread == '') {
+                $bread = $item->description[$locale];
+            } else {
+                $bread = $bread . ' > ' . $item->description[$locale];
+            }
+        }
+        return $bread;
     }
 
     public function getUpdatedAtAttribute($time) {

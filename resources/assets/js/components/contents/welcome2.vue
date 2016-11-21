@@ -36,7 +36,8 @@
                         :urgent-label="filterUrgentLabel"
                         :min-price="minPrice"
                         :max-price="maxPrice"
-                        :filter-price-title ="filterPriceTitle">
+                        :filter-price-title ="filterPriceTitle"
+                        :route-search="dataRouteGetAdvertList">
                     </advert-filter>
                 </div>
                 <div class="row">
@@ -111,7 +112,7 @@
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
-                filter: {'categoryId' : 0},
+                filter: {},
                 paginate: {},
                 dataRouteGetAdvertList: '',
                 minPrice: 0,
@@ -132,12 +133,17 @@
                     if(parseInt(event.id) != this.filter.categoryId) {
                         this.setBreadCrumbItems(event.id);
                         this.filter.categoryId = parseInt(event.id);
+                        let urlGetRangePrices = this.urlForFilter(true);
+                        this.updateRangePrices(urlGetRangePrices);
                     }
                 } else {
-                    this.breadcrumbItems= [];
-                    this.filter.categoryId = 0;
+                    if(this.filter.categoryId != 0){
+                        this.breadcrumbItems= [];
+                        this.filter.categoryId = 0;
+                        let urlGetRangePrices = this.urlForFilter(true);
+                        this.updateRangePrices(urlGetRangePrices);
+                    }
                 }
-                this.urlForFilter();
             });
             this.$on('paginate', function (result) {
                 this.paginate=result;
@@ -145,8 +151,8 @@
             this.$on('updateFilter', function (result) {
                 for(let elem in result){
                     this.filter[elem] = result[elem];
-                    this.urlForFilter();
                 }
+                this.dataRouteGetAdvertList = this.urlForFilter();
             });
             var that = this;
             this.$on('changePage', function (url) {
@@ -158,8 +164,7 @@
 
             });
             this.$on('setRangePrice', function (prices) {
-               this.minPrice = prices.mini;
-               this.maxPrice = prices.maxi;
+               this.setRangePrice(prices);
             });
             if(this.clearStorage){
                 sessionStorage.clear();
@@ -195,7 +200,7 @@
                         );
 
             },
-            urlForFilter() {
+            urlForFilter(priceOnly=false) {
                 let urlBase = this.dataRouteGetAdvertList;
                 let parsed = Parser.parse(urlBase, true);
                 parsed.search=undefined;
@@ -203,7 +208,32 @@
                 for(var elem in this.filter){
                     parsed.query[elem]=(this.filter[elem]).toString();
                 }
-                this.dataRouteGetAdvertList = Parser.format(parsed);
+                if(priceOnly){
+                    parsed.query.priceOnly=true.toString();
+                } else {
+                    if("priceOnly" in parsed.query){
+                        delete parsed.query.priceOnly;
+                    }
+                }
+                return Parser.format(parsed);
+            },
+            setRangePrice(prices) {
+                this.minPrice = prices.mini;
+                this.maxPrice = prices.maxi;
+            },
+            updateRangePrices(url) {
+                this.isLoaded = false;
+                var that = this;
+                this.$http.get(url)
+                        .then(
+                                function (response)  {
+                                    that.isLoaded = true;
+                                    that.setRangePrice({'mini': parseFloat((response.data).minPrice), 'maxi': parseFloat((response.data).maxPrice)});
+                                },
+                                function (response)  {
+                                    that.$parent.$emit('loadError')
+                                }
+                        );
             }
         }
     }

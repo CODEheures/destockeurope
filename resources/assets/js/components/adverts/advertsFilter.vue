@@ -8,13 +8,20 @@
                     <label> <span class="ui red horizontal label">{{ urgentLabel }}</span></label>
                 </div>
             </div>
-            <div class="sixteen wide mobile twelve wide tablet twelve wide computer column price" v-show="maxPrice != 0">
+            <div class="sixteen wide mobile twelve wide tablet twelve wide computer column price">
                 <label class="price-label">{{ filterPriceTitle }}</label>
                 <range-filter
                         :mini="minPrice"
                         :maxi="maxPrice"
                         name="price">
                 </range-filter>
+            </div>
+        </div>
+        <div class="ui grid">
+            <div class="sixteen wide column">
+                <search-filter
+                    :route-search="routeSearch">
+                </search-filter>
             </div>
         </div>
     </div>
@@ -33,6 +40,8 @@
             'minPrice',
             'maxPrice',
             'filterPriceTitle',
+            //search component
+            'routeSearch'
         ],
         data: () => {
             return {

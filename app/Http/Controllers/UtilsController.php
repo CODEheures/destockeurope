@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Category;
+use App\Common;
 use App\Common\PicturesManager;
 use App\Picture;
 use App\User;
@@ -64,6 +65,9 @@ class UtilsController extends Controller
 
     public function testGame(){
         Artisan::call('migrate:refresh');
+
+        $parameters = new Common();
+        $parameters->save();
 
         $user1 = new User();
         $user1->name = 'client';
@@ -203,6 +207,8 @@ class UtilsController extends Controller
             200,
             50
         );
+
+        return redirect(route('home'));
     }
 
     private function advertCreate($userId, $catId, $title, Array $pictures, $maxQuantity, $lotMini, $description=null, $isValid=null){
