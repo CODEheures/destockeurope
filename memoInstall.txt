@@ -1,5 +1,7 @@
 //TODO bucket 64 nginx + file body size nginx
+//      INTL EXTENSION apt-get install php5-intl
 //TODO post video
-//TODO change adwords
 //TODO page des annonces
-//TODO filtres
+//TODO bug link advertsList en page > 1
+//TODO filtres: quand choix categorie, reinit search
+//TODO 3 nouveau params config à ajouter au dashboard admin advertResumeLenght minLengthSearch maxNumberOfSearchResults
