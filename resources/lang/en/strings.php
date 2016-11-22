@@ -44,6 +44,7 @@ return [
     'form_button_validation' => 'Send',
     'form_pointing_minimun_chars' => ' characters minimum',
     'form_input_search_label' => 'Search issues...',
+    'form_input_search_view_all' => 'See the only :nb result|See :nb results',
     'form_dropdown_all_item' => 'All',
     'form_dropdown_move_item' => 'Move to...',
     'form_dropdown_move_as_root' => 'Root catégory',

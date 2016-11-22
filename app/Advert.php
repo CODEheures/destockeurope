@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Common\MoneyUtils;
+use App\Common\PicturesManager;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,8 +33,9 @@ class Advert extends Model {
         'isUrgent'
     ];
     protected $dates = ['deleted_at'];
-    protected $appends = array('breadCrumb');
+    protected $appends = array('breadCrumb', 'url', 'resume', 'thumb');
     private $breadcrumb;
+    private $resumeLength;
 
     public function user() {
         return $this->belongsTo('App\User');
@@ -74,6 +76,29 @@ class Advert extends Model {
             }
         }
         return $bread;
+    }
+
+    public function getUrlAttribute() {
+        return route('advert.show', ['id' => $this->id]);
+    }
+
+    public function getThumbAttribute() {
+        return route('picture.thumb', ['type' => PicturesManager::TYPE_FINAL_LOCAL, 'hashName' => $this->mainPicture, 'advertId' => $this->id]);
+    }
+
+    public function setResumeLength($length) {
+        if(!$length || !is_numeric($length) || $length == 0){
+            $this->resumeLength = config('runtime.advertResumeLenght');
+        } else {
+            $this->resumeLength = $length;
+        }
+    }
+
+    public function getResumeAttribute() {
+        if(!$this->resumeLength || !is_numeric($this->resumeLength) || $this->resumeLength == 0){
+            $this->resumeLength = config('runtime.advertResumeLenght');
+        }
+        return ucfirst(substr($this->description, 0,$this->resumeLength)).'...';
     }
 
     public function getUpdatedAtAttribute($time) {

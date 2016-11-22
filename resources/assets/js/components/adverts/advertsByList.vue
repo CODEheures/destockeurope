@@ -54,7 +54,7 @@
                             <div class="six wide aligned mobile four wide tablet four wide computer column">
                                 <div class="ui image">
                                     <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
-                                    <img  class="ui top aligned medium bordered rounded image" :src="routeGetThumb+'/'+advert.mainPicture+'/'+advert.id">
+                                    <img  class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                                 </div>
                             </div>
                             <div class="twelve wide tablet only twelve wide computer only column">
@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="sixteen wide column item-description">
                                         <div class="description">
-                                            <p>{{ advert.description | format }}</p>
+                                            <p>{{ advert.resume }}</p>
                                         </div>
                                     </div>
                                     <div class="sixteen wide right aligned column geodate-computer">
@@ -112,7 +112,7 @@
                             </div>
                             <div class="sixteen wide mobile only column">
                                 <div class="description">
-                                    <p>{{ advert.description | format }}</p>
+                                    <p>{{ advert.resume }}</p>
                                 </div>
                             </div>
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
@@ -160,7 +160,7 @@
                             <div class="six wide aligned mobile four wide tablet four wide computer column">
                                 <div class="ui image">
                                     <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
-                                    <img  class="ui top aligned medium bordered rounded image" :src="routeGetThumb+'/'+advert.mainPicture+'/'+advert.id">
+                                    <img  class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                                 </div>
                             </div>
                             <div class="twelve wide tablet only twelve wide computer only column">
@@ -186,7 +186,7 @@
                                     </div>
                                     <div class="sixteen wide column item-description">
                                         <div class="description">
-                                            <p>{{ advert.description | format }}</p>
+                                            <p>{{ advert.resume }}</p>
                                         </div>
                                     </div>
                                     <div class="sixteen wide right aligned column geodate-computer">
@@ -218,7 +218,7 @@
                             </div>
                             <div class="sixteen wide mobile only column">
                                 <div class="description">
-                                    <p>{{ advert.description | format }}</p>
+                                    <p>{{ advert.resume }}</p>
                                 </div>
                             </div>
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
@@ -239,7 +239,6 @@
     export default {
         props: {
             routeGetAdvertsList: String,
-            routeGetThumb: String,
             adsFrequency: Number,
             actualLocale: String,
             totalQuantityLabel: String,
@@ -267,13 +266,6 @@
             this.$watch('maxPrice', function () {
                 this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
             })
-        },
-        filters: {
-            format (description) {
-                let first = description.charAt(0);
-                let resume = description.substr(1,200);
-                return first.toUpperCase()+resume+'...';
-            }
         },
         methods: {
             getAdvertsList: function (withLoadIndicator) {

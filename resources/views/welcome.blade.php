@@ -12,12 +12,13 @@
                 categories-all-item="{{ trans('strings.form_dropdown_all_item') }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
 
+                filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
+                filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
-                route-get-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_FINAL_LOCAL])}}"
                 ads-frenquency="{{ config('runtime.adsFrequency') }}"
                 advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
                 advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
@@ -45,12 +46,13 @@
                 categories-all-item="{{ trans('strings.form_dropdown_all_item') }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
 
+                filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
+                filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
-                route-get-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_FINAL_LOCAL])}}"
                 ads-frenquency="{{ config('runtime.adsFrequency') }}"
                 advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
                 advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"

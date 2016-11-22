@@ -36,7 +36,9 @@
                             :min-price="minPrice"
                             :max-price="maxPrice"
                             :filter-price-title ="filterPriceTitle"
-                            :route-search="dataRouteGetAdvertList">
+                            :route-search="dataRouteGetAdvertList"
+                            :min-length-search="parseInt(filterMinLengthSearch)"
+                            :search-place-holder="filterSearchPlaceHolder">
                     </advert-filter>
                 </div>
             </div>
@@ -44,7 +46,6 @@
                 <div class="row">
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
-                            :route-get-thumb="routeGetThumb"
                             :ads-frequency="parseInt(adsFrenquency)"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
@@ -94,12 +95,13 @@
             'categoriesAllItem',
             'actualLocale',
             //filter advert component
+            'filterMinLengthSearch',
             'filterRibbon',
             'filterPriceTitle',
             'filterUrgentLabel',
+            'filterSearchPlaceHolder',
             //advertByList component
             'routeGetAdvertsList',
-            'routeGetThumb',
             'adsFrenquency',
             'advertTitleLabel',
             'advertDescriptionLabel',
@@ -175,6 +177,18 @@
             });
             this.$on('setRangePrice', function (prices) {
                 this.setRangePrice(prices);
+            });
+            this.$on('refreshResults', function (query) {
+                if(query != undefined && query.length >= this.filterMinLengthSearch){
+                    this.filter.resultsFor = query;
+                    this.dataRouteGetAdvertList = this.urlForFilter();
+                }
+            });
+            this.$on('clearSearchResults', function () {
+                if('resultsFor' in this.filter){
+                    delete this.filter.resultsFor;
+                    this.dataRouteGetAdvertList = this.urlForFilter();
+                }
             });
             if(this.clearStorage){
                 sessionStorage.clear();

@@ -254,6 +254,11 @@ form {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+
+  & div.ui.search input.prompt.disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
 }
 
 //gestion masterads

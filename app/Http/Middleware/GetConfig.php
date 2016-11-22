@@ -30,6 +30,9 @@ class GetConfig
             config(['runtime.nbFreePictures' => $config->nbFreePictures]);
             config(['runtime.nbMaxPictures' => $config->nbMaxPictures]);
             config(['runtime.welcomeType' => $config->welcomeType]);
+            config(['runtime.advertResumeLenght' => $config->advertResumeLenght]);
+            config(['runtime.minLengthSearch' => $config->minLengthSearch]);
+            config(['runtime.maxNumberOfSearchResults' => $config->maxNumberOfSearchResults]);
 
             if($config->masterAds && $config->urlMasterAds && $config->urlMasterAds != ''){
                 try {

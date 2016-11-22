@@ -20,7 +20,9 @@
         <div class="ui grid">
             <div class="sixteen wide column">
                 <search-filter
-                    :route-search="routeSearch">
+                    :route-search="routeSearch"
+                    :min-length-search="minLengthSearch"
+                    :place-holder="searchPlaceHolder">
                 </search-filter>
             </div>
         </div>
@@ -41,7 +43,9 @@
             'maxPrice',
             'filterPriceTitle',
             //search component
-            'routeSearch'
+            'routeSearch',
+            'minLengthSearch',
+            'searchPlaceHolder'
         ],
         data: () => {
             return {
@@ -56,6 +60,12 @@
             });
             this.$watch('isUrgent', function () {
                 this.$parent.$emit('updateFilter', {'isUrgent' : this.isUrgent})
+            });
+            this.$on('refreshResults', function (query) {
+                this.$parent.$emit('refreshResults', query);
+            });
+            this.$on('clearSearchResults', function () {
+                this.$parent.$emit('clearSearchResults');
             });
             var that = this;
             $('#isUrgent'+this._uid).checkbox({

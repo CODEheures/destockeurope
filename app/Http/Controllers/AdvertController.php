@@ -33,6 +33,12 @@ class AdvertController extends Controller
      */
     public function index(Request $request)
     {
+        //Init vars
+        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
+        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
+        $isRangePricesOnly = ($request->has('priceOnly') && filter_var($request->priceOnly, FILTER_VALIDATE_BOOLEAN) == true);
+        $isUrgentOnly = ($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true );
+
         //only valid advert
         $adverts = Advert::where('isValid', true);
 
@@ -63,28 +69,40 @@ class AdvertController extends Controller
             }
         }
 
-        $minAllPrice = $adverts->min('price');
-        $maxAllPrice = $adverts->max('price');
-
-        if($minAllPrice){
-            $minAllPrice = MoneyUtils::getPriceWithDecimal($minAllPrice, $currency, false);
-        } else {
-            $minAllPrice = 0;
+        //search results before range price
+        if($isSearchResults){
+            $search = $request->resultsFor;
+            $adverts = $adverts->where(function ($query) use ($search) {
+                $query->where('title', 'LIKE', '%' .$search .'%')
+                    ->orWhere('description', 'LIKE', '%' .$search .'%');
+            });
         }
 
-        if($maxAllPrice){
-            $maxAllPrice = MoneyUtils::getPriceWithDecimal($maxAllPrice, $currency, false);
-        } else {
-            $maxAllPrice = 0;
+        //Set min & max prices only if not $isSearchRequest
+        if(!$isSearchRequest) {
+            $minAllPrice = $adverts->min('price');
+            $maxAllPrice = $adverts->max('price');
+
+            if ($minAllPrice) {
+                $minAllPrice = MoneyUtils::getPriceWithDecimal($minAllPrice, $currency, false);
+            } else {
+                $minAllPrice = 0;
+            }
+
+            if ($maxAllPrice) {
+                $maxAllPrice = MoneyUtils::getPriceWithDecimal($maxAllPrice, $currency, false);
+            } else {
+                $maxAllPrice = 0;
+            }
         }
 
         //STOP REQUEST HERE IF only RANGE PRICES
-        if($request->has('priceOnly') && filter_var($request->priceOnly, FILTER_VALIDATE_BOOLEAN) == true){
+        if($isRangePricesOnly){
             return response()->json(['minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
         }
 
         //if urgent
-        if($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true ){
+        if($isUrgentOnly){
             $adverts = $adverts->where('isUrgent', true);
         }
 
@@ -95,13 +113,17 @@ class AdvertController extends Controller
             $adverts = $adverts->where('price', '>=', $minPrice)->where('price', '<=', $maxPrice);
         }
 
-        if($request->has('search') && strlen($request->search) >= 3){
+        if($isSearchRequest){
             $search = $request->search;
             $adverts = $adverts->where(function ($query) use ($search) {
                 $query->where('title', 'LIKE', '%' .$search .'%')
                     ->orWhere('description', 'LIKE', '%' .$search .'%');
             });
-            $adverts = $adverts->orderBy('updated_at', 'desc')->get();
+        }
+
+        if($isSearchRequest) {
+            $countSearch = $adverts->count();
+            $adverts = $adverts->orderBy('updated_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
         } else {
             $adverts = $adverts->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
         }
@@ -124,8 +146,12 @@ class AdvertController extends Controller
             $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
         }
 
-        if($request->has('search') && strlen($request->search) >= 3){
-            return response()->json(['results'=> $resultsByCat]);
+        if($isSearchRequest){
+            $action = [
+                'url' => '#',
+                'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
+            ];
+            return response()->json(['results'=> $resultsByCat, 'action' => $action]);
         } else {
             return response()->json(['adverts'=> $adverts, 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
         }

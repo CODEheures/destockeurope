@@ -26,6 +26,9 @@ class CreateCommonsTable extends Migration
             $table->tinyInteger('nbFreePictures')->default(3);
             $table->tinyInteger('nbMaxPictures')->default(6);
             $table->enum('welcomeType', ['1', '2'])->default(1);
+            $table->smallInteger('advertResumeLenght')->default(200);
+            $table->tinyInteger('maxNumberOfSearchResults')->default(5);
+            $table->tinyInteger('minLengthSearch')->default(3);
         });
     }
 

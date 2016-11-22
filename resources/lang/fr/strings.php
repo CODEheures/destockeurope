@@ -44,6 +44,7 @@ return [
     'form_button_validation' => 'Soumettre',
     'form_pointing_minimun_chars' => ' caractères minimum',
     'form_input_search_label' => 'Cherchez ...',
+    'form_input_search_view_all' => 'Afficher :nb résultat | Afficher les :nb résultats',
     'form_dropdown_all_item' => 'Tous',
     'form_dropdown_move_item' => 'Déplacer vers...',
     'form_dropdown_move_as_root' => 'Catégorie principale',

@@ -22,6 +22,8 @@ class Common extends Model
         'urgentCost',
         'nbFreePictures',
         'nbMaxPictures',
-        'welcomeType'
+        'welcomeType',
+        'advertResumeLenght',
+        'maxNumberOfSearchResults'
     ];
 }

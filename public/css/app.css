@@ -28931,6 +28931,9 @@ form.login, form.register {
   .row.filters div.column.price {
     padding-left: 2rem;
     padding-right: 2rem; }
+  .row.filters div.ui.search input.prompt.disabled {
+    opacity: 0.45;
+    pointer-events: none; }
 
 @media only screen and (min-width: 1400px) {
   .main.container .content.row {
