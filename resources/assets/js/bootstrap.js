@@ -31,7 +31,11 @@ require('vue-focus');
  */
 
 Vue.http.interceptors.push((request, next) => {
-    request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+    let myHost = window.location.hostname;
+    let requestHost = Parser.parse(request.url).hostname;
+    if(myHost == requestHost){
+        request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+    }
     next();
 });
 Vue.config.devtools = true;

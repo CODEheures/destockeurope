@@ -4,6 +4,7 @@
 
     <manage-application
             route-parameters="{{ route('appParameters') }}"
+            route-test-is-picture="{{ route('utils.isPicture') }}"
 
             content-header="{{ trans('strings.view_manage_index_header') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
@@ -15,6 +16,10 @@
             advert-nb-max-pictures-label="{{ trans('strings.view_manage_adverts_nb_max_pictures_label') }}"
             advert-urgent-cost-label="{{ trans('strings.view_manage_adverts_urgent_cost_label') }}"
             advert-per-page-label="{{ trans('strings.view_manage_adverts_per_page_label') }}"
+            advert-resume-lenght-label="{{ trans('strings.view_manage_resume_length_label') }}"
+            search-label="{{ trans('strings.view_manage_search_label') }}"
+            min-length-search-label="{{ trans('strings.view_manage_min_length_search_label') }}"
+            max-number-of-search-results-label="{{ trans('strings.view_manage_max_result_search_label') }}"
             ads-preferences-label="{{ trans('strings.view_manage_ads_label') }}"
             ads-frequency-label="{{ trans('strings.view_manage_ads_frequency_label') }}"
             master-ads-activation-label="{{ trans('strings.view_manage_master_ads_activation_label') }}"

@@ -49,7 +49,7 @@
             </template>
             <template v-for="(advert, index) in advertsList">
                 <template v-if="(index+1)%adsFrequency==0">
-                    <a :href="routeGetAdvertsList+'/'+advert.id"  class="item advert">
+                    <a :href="advert.url"  class="item advert">
                         <div class="ui grid">
                             <div class="six wide aligned mobile four wide tablet four wide computer column">
                                 <div class="ui image">
@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="six wide right aligned vertical middle aligned column">
                                         <p class="price">
-                                            <span class="ui large blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
                                             <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                             <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -102,7 +102,7 @@
                                 <div class="ui grid">
                                     <div class="sixteen wide mobile only right aligned column">
                                         <p class="price">
-                                            <span class="ui blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
                                             <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                             <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -155,7 +155,7 @@
                     </div>
                 </template>
                 <template v-else>
-                    <a :href="routeGetAdvertsList+'/'+advert.id"  class="item advert">
+                    <a :href="advert.url"  class="item advert">
                         <div class="ui grid">
                             <div class="six wide aligned mobile four wide tablet four wide computer column">
                                 <div class="ui image">
@@ -178,7 +178,7 @@
                                     </div>
                                     <div class="six wide right aligned vertical middle aligned column">
                                         <p class="price">
-                                            <span class="ui large blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
                                             <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                             <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -208,7 +208,7 @@
                                 <div class="ui grid">
                                     <div class="sixteen wide mobile only right aligned column">
                                         <p class="price">
-                                            <span class="ui blue tag label">{{ advert.price }} {{ advert.currency }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
                                             <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                             <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>

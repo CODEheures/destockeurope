@@ -2,6 +2,6 @@
 //      INTL EXTENSION apt-get install php5-intl
 //TODO post video
 //TODO page des annonces
-//TODO bug link advertsList en page > 1
+
 //TODO filtres: quand choix categorie, reinit search
 //TODO 3 nouveau params config à ajouter au dashboard admin advertResumeLenght minLengthSearch maxNumberOfSearchResults

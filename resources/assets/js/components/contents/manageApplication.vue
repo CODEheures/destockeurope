@@ -9,6 +9,14 @@
                 <div class="ui large text loader">Loading</div>
             </div>
             <div class="ui form">
+                <h4 class="ui horizontal divider header"><i class="paint brush icon"></i> {{ appearanceLabel }} </h4>
+                <div class="field">
+                    <type-radio-button
+                            :route-get-list-type="routeGetListType"
+                            :first-menu-name="listTypeFirstMenuName"
+                            :old-choice="oldType">
+                    </type-radio-button>
+                </div>
                 <h4 class="ui horizontal divider header"><i class="browser icon"></i> {{ advertPreferencesLabel }} </h4>
                 <div class="field">
                     <div class="three fields">
@@ -46,20 +54,51 @@
                     </div>
                 </div>
                 <div class="field">
-                    <div class="ui grid">
-                        <div class="doubling four column row">
-                            <div class="column">
-                                <div class="field">
-                                    <label>{{ advertPerPageLabel }}</label>
-                                    <input type="number"
-                                           name="advertsPerPage"
-                                           min="4"
-                                           v-model="parameters.advertsPerPage"
-                                           v-on:keyup.enter="updateParameter"
-                                           v-on:focus="focused={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}"
-                                           v-on:blur="blured={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}">
-                                </div>
-                            </div>
+                    <div class="three fields">
+                        <div class="field">
+                            <label>{{ advertPerPageLabel }}</label>
+                            <input type="number"
+                                   name="advertsPerPage"
+                                   min="4"
+                                   v-model="parameters.advertsPerPage"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}"
+                                   v-on:blur="blured={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}">
+                        </div>
+                        <div class="field">
+                            <label>{{ advertResumeLenghtLabel }}</label>
+                            <input type="number"
+                                   name="advertResumeLenght"
+                                   min="20"
+                                   v-model="parameters.advertResumeLenght"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}"
+                                   v-on:blur="blured={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}">
+                        </div>
+                    </div>
+                </div>
+                <h4 class="ui horizontal divider header"><i class="search icon"></i> {{ searchLabel }} </h4>
+                <div class="field">
+                    <div class="three fields">
+                        <div class="field">
+                            <label>{{ minLengthSearchLabel }}</label>
+                            <input type="number"
+                                   name="minLengthSearch"
+                                   min="1"
+                                   v-model="parameters.minLengthSearch"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'minLengthSearch', 'value': parameters.minLengthSearch}"
+                                   v-on:blur="blured={'name': 'minLengthSearch', 'value': parameters.minLengthSearch}">
+                        </div>
+                        <div class="field">
+                            <label>{{ maxNumberOfSearchResultsLabel }}</label>
+                            <input type="number"
+                                   name="maxNumberOfSearchResults"
+                                   min="1"
+                                   v-model="parameters.maxNumberOfSearchResults"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'maxNumberOfSearchResults', 'value': parameters.maxNumberOfSearchResults}"
+                                   v-on:blur="blured={'name': 'maxNumberOfSearchResults', 'value': parameters.maxNumberOfSearchResults}">
                         </div>
                     </div>
                 </div>
@@ -121,14 +160,6 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="ui horizontal divider header"><i class="paint brush icon"></i> {{ appearanceLabel }} </h4>
-                <div class="field">
-                    <type-radio-button
-                            :route-get-list-type="routeGetListType"
-                            :first-menu-name="listTypeFirstMenuName"
-                            :old-choice="oldType">
-                    </type-radio-button>
-                </div>
             </div>
         </div>
     </div>
@@ -141,6 +172,7 @@
         props: {
             //vue routes
             routeParameters: String,
+            routeTestIsPicture: String,
             //vue vars
             //vue strings
             contentHeader: String,
@@ -153,6 +185,10 @@
             advertNbMaxPicturesLabel: String,
             advertUrgentCostLabel: String,
             advertPerPageLabel: String,
+            advertResumeLenghtLabel: String,
+            searchLabel: String,
+            minLengthSearchLabel: String,
+            maxNumberOfSearchResultsLabel: String,
             adsPreferencesLabel: String,
             adsFrequencyLabel: String,
             masterAdsActivationLabel: String,
@@ -270,14 +306,14 @@
             },
             testValidImgUrl(url, callback){
                 var that = this;
-                this.$http.get(url)
+                this.isLoaded = false;
+                this.$http.post(this.routeTestIsPicture, {url: url})
                         .then(
                                 function (response) {
-                                    if(response.body && response.body.type){
-                                        if(response.body.type.indexOf('image')==0){
-                                            that.isValidImage = true;
-                                            callback();
-                                        }
+                                    that.isLoaded = true;
+                                    if(response.body && response.body == true){
+                                        that.isValidImage = true;
+                                        callback();
                                     } else {
                                         that.isValidImage = false;
                                         that.sendToast(this.invalidImageMessage, 'error');
@@ -285,6 +321,7 @@
                                 }
                                 ,
                                 function (response) {
+                                    that.isLoaded = true;
                                     that.isValidImage = false;
                                     that.sendToast(this.invalidImageMessage, 'error');
                                 }

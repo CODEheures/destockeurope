@@ -24,6 +24,7 @@ class Common extends Model
         'nbMaxPictures',
         'welcomeType',
         'advertResumeLenght',
-        'maxNumberOfSearchResults'
+        'maxNumberOfSearchResults',
+        'minLengthSearch'
     ];
 }

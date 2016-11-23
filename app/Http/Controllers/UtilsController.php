@@ -16,9 +16,16 @@ use Illuminate\Support\Str;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
 use NumberFormatter;
+use Symfony\Component\HttpFoundation\Request;
 
 class UtilsController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('isAdminUser', ['only' => ['testGame', 'isPicture']]);
+    }
+
+
     public function getListCurrencies()  {
         $currencies = new ISOCurrencies();
 
@@ -274,8 +281,17 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         DB::commit();
     }
 
+    public function isPicture(Request $request){
+        $url = $request->url;
+        if(array_key_exists('Content-Type', get_headers($url,1))){
+            if(strpos(get_headers($url,1)['Content-Type'],'image') !== false){
+                return response()->json(true);
+            }
+        }
+        return response()->json(false);
+    }
+
     public function tempo(){
-        $disk = Storage::disk('local');
-        return $disk;
+        return response()->json(false);
     }
 }
