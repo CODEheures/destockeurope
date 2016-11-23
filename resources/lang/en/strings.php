@@ -122,6 +122,7 @@ return [
     'view_manage_ads_frequency_label' => 'Advert Frequency',
     'view_manage_master_ads_activation_label' => 'Activate home page advert',
     'view_manage_master_ads_url_label' => 'Master advertisement URL',
+    'view_manage_master_ads_url_link_label' => 'Advertissement Redirection URL',
     'view_manage_master_offset_y_label' => 'Vertical offset of the advert',
     'view_manage_appearance_label' => 'Appearance',
     'view_manage_welcome_type_label' => 'Home Page type n°',

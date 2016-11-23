@@ -1,6 +1,8 @@
 <template>
     <div v-if="dataIsActive">
-        <img class="ui fluid image masterads" :src="datasrc" :style="'width:'+datawidth+'px; left:calc(50% - '+datawidth/2+'px);'">
+        <a :href="urlRedirect">
+            <img class="ui fluid image masterads" :src="datasrc" :style="'width:'+datawidth+'px; left:calc(50% - '+datawidth/2+'px);'">
+        </a>
     </div>
 </template>
 
@@ -9,7 +11,8 @@
         props: [
             //vue vars
             'isActive',
-            'url',
+            'urlImg',
+            'urlRedirect',
             'width'
         ],
         data: () => {
@@ -27,11 +30,11 @@
         methods: {
             setDatasrc() {
                 if(this.url != ''){
-                    this.datasrc = this.url;
+                    this.datasrc = this.urlImg;
                 }
             },
             setDataWidth() {
-                if(this.url != '' && this.width != undefined){
+                if(this.urlImg != '' && this.width != undefined){
                     this.datawidth = this.width;
                 }
             }

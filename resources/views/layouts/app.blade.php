@@ -35,7 +35,8 @@
         <!-- main content -->
         <masterads
             is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
-            url="{{config('runtime.urlMasterAds')}}"
+            url-img="{{config('runtime.urlMasterAds')}}"
+            url-redirect="{{ config('runtime.urlLinkMasterAds') }}"
             width="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? config('runtime.widthUrlMasterAds') : 0 }}">
         </masterads>
         <div class="ui main container" style="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && (isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false) ? 'margin-top:' . config('runtime.offsetYMasterAds').'px;' : null}}">

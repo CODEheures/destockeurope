@@ -24,6 +24,7 @@
             ads-frequency-label="{{ trans('strings.view_manage_ads_frequency_label') }}"
             master-ads-activation-label="{{ trans('strings.view_manage_master_ads_activation_label') }}"
             master-ads-url-label="{{ trans('strings.view_manage_master_ads_url_label') }}"
+            master-ads-url-link-label="{{ trans('strings.view_manage_master_ads_url_link_label') }}"
             master-ads-offset-y-label="{{ trans('strings.view_manage_master_offset_y_label') }}"
             appearance-label="{{ trans('strings.view_manage_appearance_label') }}"
             welcome-appearance-label="{{ trans('strings.view_manage_welcome_type_label') }}"

@@ -19,6 +19,7 @@ class CreateCommonsTable extends Migration
             $table->softDeletes();
             $table->boolean('masterAds')->default(false);
             $table->string('urlMasterAds')->nullable()->default(null);
+            $table->string('urlLinkMasterAds')->nullable()->default(null);
             $table->smallInteger('offsetYMasterAds')->default(0);
             $table->tinyInteger('adsFrequency')->default(0);
             $table->tinyInteger('advertsPerPage')->default(6);

@@ -122,6 +122,7 @@ return [
     'view_manage_ads_frequency_label' => 'Fréquence des publicités',
     'view_manage_master_ads_activation_label' => 'Activer la publicité de page d\'accueil',
     'view_manage_master_ads_url_label' => 'URL de l\'image de la publicité',
+    'view_manage_master_ads_url_link_label' => 'URL de redirection de la publicité',
     'view_manage_master_offset_y_label' => 'Décalage vertical de l\'annonce',
     'view_manage_appearance_label' => 'Apparence',
     'view_manage_welcome_type_label' => 'Page d\'accueil type n°',

@@ -16,6 +16,7 @@ class Common extends Model
     protected $fillable = [
         'masterAds',
         'urlMasterAds',
+        'urlLinkMasterAds',
         'offsetYMasterAds',
         'adsFrequency',
         'advertsPerPage',

@@ -131,7 +131,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <div class="two fields">
+                    <div class="three fields">
                         <div class="field">
                             <transition name="p-fade">
                                 <div class="field" v-show="parameters.masterAds">
@@ -142,6 +142,19 @@
                                            v-on:keyup.enter="updateParameter"
                                            v-on:focus="focused={'name': 'urlMasterAds', 'value': parameters.urlMasterAds}"
                                            v-on:blur="blured={'name': 'urlMasterAds', 'value': parameters.urlMasterAds}">
+                                </div>
+                            </transition>
+                        </div>
+                        <div class="field">
+                            <transition name="p-fade">
+                                <div class="field" v-show="parameters.masterAds">
+                                    <label>{{ masterAdsUrlLinkLabel }}</label>
+                                    <input type="url" placeholder="http://ads.google.com/1d5f1d..."
+                                           name="urlLinkMasterAds"
+                                           v-model="parameters.urlLinkMasterAds"
+                                           v-on:keyup.enter="updateParameter"
+                                           v-on:focus="focused={'name': 'urlLinkMasterAds', 'value': parameters.urlLinkMasterAds}"
+                                           v-on:blur="blured={'name': 'urlLinkMasterAds', 'value': parameters.urlLinkMasterAds}">
                                 </div>
                             </transition>
                         </div>
@@ -193,6 +206,7 @@
             adsFrequencyLabel: String,
             masterAdsActivationLabel: String,
             masterAdsUrlLabel: String,
+            masterAdsUrlLinkLabel: String,
             masterAdsOffsetYLabel: String,
             appearanceLabel: String,
             welcomeAppearanceLabel: String,

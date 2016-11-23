@@ -23,6 +23,7 @@ class GetConfig
         if($config){
             config(['runtime.masterAds' => $config->masterAds]);
             config(['runtime.urlMasterAds' => $config->urlMasterAds]);
+            config(['runtime.urlLinkMasterAds' => $config->urlLinkMasterAds]);
             config(['runtime.offsetYMasterAds' => $config->offsetYMasterAds]);
             config(['runtime.adsFrequency' => $config->adsFrequency]);
             config(['runtime.advertsPerPage' => $config->advertsPerPage]);
