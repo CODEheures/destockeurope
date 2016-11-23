@@ -20,14 +20,16 @@
                 </breadcrumb>
             </div>
             <div :id="'column1_'+_uid" class="computer only four wide column">
-                <categories-lateral-accordion-menu
-                        :route-category="routeCategory"
-                        :actual-locale="actualLocale"
-                        :all-item="categoriesAllItem">
-                </categories-lateral-accordion-menu>
-                <div class="ui small rectangle test ad welcome-ads" data-text="Small Rectangle"></div>
-                <div class="ui small rectangle test ad welcome-ads" data-text="Small Rectangle"></div>
-                <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
+                <div>
+                    <categories-lateral-accordion-menu
+                            :route-category="routeCategory"
+                            :actual-locale="actualLocale"
+                            :all-item="categoriesAllItem">
+                    </categories-lateral-accordion-menu>
+                    <div class="ui small rectangle test ad welcome-ads" data-text="Small Rectangle"></div>
+                    <div class="ui small rectangle test ad welcome-ads" data-text="Small Rectangle"></div>
+                    <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
+                </div>
             </div>
             <div class="sixteen wide tablet twelve wide computer column">
                 <div class="row filters">
@@ -122,7 +124,8 @@
             }
         },
         mounted () {
-            $('#column1_'+this._uid).visibility({
+            var elem = $('#column1_'+this._uid).children('div');
+            elem.visibility({
                 type   : 'fixed',
                 offset : 112
             });

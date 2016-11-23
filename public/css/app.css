@@ -28686,7 +28686,8 @@ html.ios body {
     font-weight: 600; }
   .main.container a.item.advert div.geodate-computer {
     position: absolute;
-    bottom: 0; }
+    bottom: 0;
+    right: 0; }
   .main.container a.item.advert p.price span:not(.tag), .main.container a.item.advert div[class*="geodate-"] {
     color: rgba(0, 0, 0, 0.6); }
   .main.container a.item.advert span.ui.red.horizontal.label {

@@ -4,4 +4,3 @@
 //TODO page des annonces
 
 //TODO filtres: quand choix categorie, reinit search
-//TODO 3 nouveau params config à ajouter au dashboard admin advertResumeLenght minLengthSearch maxNumberOfSearchResults
