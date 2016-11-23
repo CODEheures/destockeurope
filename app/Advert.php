@@ -5,12 +5,14 @@ namespace App;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
 use Carbon\Carbon;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 
 class Advert extends Model {
     use SoftDeletes;
+    use CascadeSoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -33,6 +35,7 @@ class Advert extends Model {
         'isUrgent'
     ];
     protected $dates = ['deleted_at'];
+    protected $cascadeDeletes = ['pictures'];
     protected $appends = array('breadCrumb', 'url', 'resume', 'thumb');
     private $breadcrumb;
     private $resumeLength;

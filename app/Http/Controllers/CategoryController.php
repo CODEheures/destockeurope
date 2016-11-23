@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Advert;
 use App\Category;
+use App\Common\CategoryUtils;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
+
+    use CategoryUtils;
 
     public function __construct() {
         $this->middleware('isAdminUser', ['except' => ['index', 'show']]);
@@ -173,7 +178,16 @@ class CategoryController extends Controller
             if(!$existCategory) {
                 return response(trans('strings.view_category_del_not_exist'), 409);
             } else {
+                DB::beginTransaction();
+                $ids = CategoryUtils::getListSubTree($existCategory->id);
+                if($ids){
+                    $adverts = Advert::whereIn('category_id', $ids)->get();
+                    foreach ($adverts as $advert){
+                        $advert->delete();
+                    }
+                }
                 $existCategory->delete();
+                DB::commit();
                 return response('ok',200);
             }
         } else {

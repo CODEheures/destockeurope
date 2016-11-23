@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Category;
+use App\Common\CategoryUtils;
 use App\Common\DBUtils;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
@@ -17,6 +18,9 @@ use Money\Currency;
 
 class AdvertController extends Controller
 {
+
+    use CategoryUtils;
+
     private $pictureManager;
 
     public function __construct(PicturesManager $picturesManager) {
@@ -57,14 +61,8 @@ class AdvertController extends Controller
 
 
         if($request->has('categoryId') && $request->categoryId != 0){
-            $categories = Category::with('descendants')->where('id', $request->categoryId)->get()->toFlatTree();
-            if(count($categories)==1){
-                $category = $categories[0];
-                $ids = [];
-                $ids[] = $category->id;
-                foreach ($category->descendants as $descendant){
-                    $ids[] = $descendant->id;
-                }
+            $ids = CategoryUtils::getListSubTree($request->categoryId);
+            if($ids){
                 $adverts = $adverts->whereIn('category_id', $ids);
             }
         }
