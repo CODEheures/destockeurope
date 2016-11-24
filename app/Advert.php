@@ -32,7 +32,8 @@ class Advert extends Model {
         'cost',
         'totalQuantity',
         'lotMiniQuantity',
-        'isUrgent'
+        'isUrgent',
+        'views'
     ];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['pictures'];

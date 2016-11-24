@@ -33,9 +33,10 @@ class CreateAdvertsTable extends Migration
             $table->boolean('isPublish')->default(false);
             $table->boolean('isValid')->nullable()->default(null);
             $table->decimal('cost',8,2)->default(0);
-            $table->integer('totalQuantity');
-            $table->integer('lotMiniQuantity')->nullable()->default(null);
+            $table->mediumInteger('totalQuantity')->unsigned();
+            $table->mediumInteger('lotMiniQuantity')->unsigned()->nullable()->default(null);
             $table->boolean('isUrgent')->default(false);
+            $table->mediumInteger('views')->unsigned()->default(0);
         });
     }
 
