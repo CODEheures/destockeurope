@@ -37,8 +37,6 @@ $height-masterads : 600px;
 
 #app .masterads {
   position: absolute;
-  //left: calc(50% - #{$width-masterads/2});
-  //width: $width-masterads;
   height: auto;
 
   z-index: -1;

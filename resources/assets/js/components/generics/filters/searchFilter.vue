@@ -5,7 +5,7 @@
             <button class="ui icon button">
                 <i class="search icon" v-if="wantSearch"></i>
                 <i class="remove red icon" v-else
-                    v-on:click="emitResetSearch">
+                    v-on:click="resetSearch(true)">
                 </i>
             </button>
         </div>
@@ -20,6 +20,10 @@
             routeSearch: String,
             //vue vars
             minLengthSearch: Number,
+            flagReset: {
+                type: Boolean,
+                default: false
+            },
             //vue strings
             placeHolder: String
         },
@@ -58,6 +62,9 @@
                     ;
                 });
             });
+            this.$watch('flagReset', function () {
+                this.resetSearch(false);
+            })
         },
         methods: {
             urlForSearch(callback) {
@@ -68,12 +75,12 @@
                 this.dataRouteSearch = Parser.format(parsed);
                 callback(this.dataRouteSearch);
             },
-            emitResetSearch() {
+            resetSearch(withEmit) {
                 let elemSearch = $('#'+this._uid);
                 elemSearch.search('set value','');
                 elemSearch.search('clear cache');
                 this.wantSearch = true;
-                this.$parent.$emit('clearSearchResults');
+                withEmit ? this.$parent.$emit('clearSearchResults') : null;
             }
         }
     }

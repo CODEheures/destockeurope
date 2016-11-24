@@ -38,6 +38,7 @@
                             :filter-price-title ="filterPriceTitle"
                             :route-search="dataRouteGetAdvertList"
                             :min-length-search="parseInt(filterMinLengthSearch)"
+                            :flag-reset-search="dataFlagResetSearch"
                             :search-place-holder="filterSearchPlaceHolder">
                     </advert-filter>
                 </div>
@@ -124,37 +125,44 @@
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
-                filter: {},
+                filter: {categoryId: 0},
                 paginate: {},
                 dataRouteGetAdvertList: '',
                 minPrice: 0,
-                maxPrice: 0
+                maxPrice: 0,
+                dataFlagResetSearch: false
             }
         },
         mounted () {
+            //Visibility for ADS
             var $elem = $('#welcome-ads').children('div');
             $elem.visibility({
                 type   : 'fixed',
                 offset : 112
             });
-            this.dataRouteGetAdvertList = this.routeGetAdvertsList;
+
+            //Init dataRoute
+            this.dataRouteGetAdvertList = this.urlForFilter(false, true);
+
+            //On load Error
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
             });
+
+            var that = this;
             this.$on('categoryChoice', function (event) {
                 if(event.id != undefined && event.id > 0) {
                     if(parseInt(event.id) != this.filter.categoryId) {
-                        this.setBreadCrumbItems(event.id);
-                        this.filter.categoryId = parseInt(event.id);
-                        let urlGetRangePrices = this.urlForFilter(true);
-                        this.updateRangePrices(urlGetRangePrices);
+                        this.choiceCategory(event.id)
                     }
                 } else {
                     if(this.filter.categoryId != 0){
-                        this.breadcrumbItems= [];
-                        this.filter.categoryId = 0;
-                        let urlGetRangePrices = this.urlForFilter(true);
-                        this.updateRangePrices(urlGetRangePrices);
+                        this.choiceCategory(0)
+                    } else {
+                        let haveClearAction = this.clearInputSearch();
+                        if(haveClearAction){
+                            this.updateResults(true);
+                        }
                     }
                 }
             });
@@ -162,12 +170,8 @@
                 this.paginate=result;
             });
             this.$on('updateFilter', function (result) {
-                for(let elem in result){
-                    this.filter[elem] = result[elem];
-                }
-                this.dataRouteGetAdvertList = this.urlForFilter();
+                this.updateFilter(result);
             });
-            var that = this;
             this.$on('changePage', function (url) {
                 $('html, body').animate({
                     scrollTop: 0
@@ -181,13 +185,13 @@
             this.$on('refreshResults', function (query) {
                 if(query != undefined && query.length >= this.filterMinLengthSearch){
                     this.filter.resultsFor = query;
-                    this.dataRouteGetAdvertList = this.urlForFilter();
+                    this.updateResults(true);
                 }
             });
             this.$on('clearSearchResults', function () {
-                if('resultsFor' in this.filter){
-                    delete this.filter.resultsFor;
-                    this.dataRouteGetAdvertList = this.urlForFilter();
+                let haveClearAction = this.clearInputSearch();
+                if(haveClearAction){
+                    this.updateResults(true);
                 }
             });
             if(this.clearStorage){
@@ -201,31 +205,31 @@
                 this.sendMessage = !this.sendMessage;
             },
             setBreadCrumbItems: function (categoryId) {
-                this.$http.get(this.routeCategory+'/'+categoryId)
-                        .then(
-                                function (response) {
-                                    var chainedCategories = response.data;
-                                    this.breadcrumbItems = [];
-                                    for(var index in chainedCategories){
-                                        this.breadcrumbItems.push({
-                                            name: chainedCategories[index]['description'][this.actualLocale],
-                                            value: chainedCategories[index].id
+                this.breadcrumbItems = [];
+                var that = this;
+                if(categoryId != undefined && categoryId>0 ) {
+                    this.$http.get(this.routeCategory+'/'+categoryId)
+                            .then(
+                                    function (response) {
+                                        var chainedCategories = response.data;
+                                        for(var index in chainedCategories){
+                                            that.breadcrumbItems.push({
+                                                name: chainedCategories[index]['description'][that.actualLocale],
+                                                value: chainedCategories[index].id
+                                            });
+                                        }
+                                    },
+                                    function (response) {
+                                        that.breadcrumbItems.push({
+                                            name: this.loadErrorMessage,
+                                            value:''
                                         });
                                     }
-                                },
-                                function (response) {
-                                    this.breadcrumbItems = [];
-                                    this.breadcrumbItems.push({
-                                        name: this.loadErrorMessage,
-                                        value:''
-                                    });
-                                    //this.$parent.$emit('loadError');
-                                }
-                        );
-
+                            );
+                }
             },
-            urlForFilter(priceOnly=false) {
-                let urlBase = this.dataRouteGetAdvertList;
+            urlForFilter(priceOnly=false, init=false) {
+                let urlBase = init ? this.routeGetAdvertsList : this.dataRouteGetAdvertList;
                 let parsed = Parser.parse(urlBase, true);
                 parsed.search=undefined;
                 parsed.query={};
@@ -258,6 +262,35 @@
                                     that.$parent.$emit('loadError')
                                 }
                         );
+            },
+            clearInputSearch() {
+                if('resultsFor' in this.filter) {
+                    delete this.filter.resultsFor;
+                    this.dataFlagResetSearch = !this.dataFlagResetSearch;
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            choiceCategory(categoryId) {
+                this.setBreadCrumbItems(categoryId);
+                this.filter.categoryId = parseInt(categoryId);
+                this.clearInputSearch();
+                this.updateResults(true);
+            },
+            updateResults(withUpdatePriceFilter=false){
+                if(withUpdatePriceFilter) {
+                    let urlGetRangePrices = this.urlForFilter(true);
+                    this.updateRangePrices(urlGetRangePrices);
+                } else {
+                    this.dataRouteGetAdvertList = this.urlForFilter();
+                }
+            },
+            updateFilter(result){
+                for(let elem in result){
+                    this.filter[elem] = result[elem];
+                }
+                this.updateResults(false); //Attention jamais true param sinon boucle infinie
             }
         }
     }

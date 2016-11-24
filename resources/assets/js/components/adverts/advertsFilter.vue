@@ -22,7 +22,8 @@
                 <search-filter
                     :route-search="routeSearch"
                     :min-length-search="minLengthSearch"
-                    :place-holder="searchPlaceHolder">
+                    :place-holder="searchPlaceHolder"
+                    :flag-reset="flagResetSearch">
                 </search-filter>
             </div>
         </div>
@@ -45,6 +46,7 @@
             //search component
             'routeSearch',
             'minLengthSearch',
+            'flagResetSearch',
             'searchPlaceHolder'
         ],
         data: () => {

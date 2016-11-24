@@ -2,5 +2,5 @@
 //      INTL EXTENSION apt-get install php5-intl
 //TODO post video
 //TODO page des annonces
-
+//TODO paiement paypal
 //TODO filtres: quand choix categorie, reinit search
