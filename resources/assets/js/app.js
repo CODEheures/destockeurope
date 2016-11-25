@@ -44,6 +44,7 @@ Vue.component('categories-updatable', require('./components/categories/categorie
 //adverts
 Vue.component('advert-filter', require('./components/adverts/advertsFilter.vue'));
 Vue.component('adverts-by-list', require('./components/adverts/advertsByList.vue'));
+Vue.component('advert-by-id', require('./components/adverts/advertById.vue'));
 
 //Welcome page vue
 Vue.component('welcome1', require('./components/contents/welcome1.vue'));
@@ -58,6 +59,8 @@ Vue.component('manage-application', require('./components/contents/manageApplica
 Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
 //approve advert page
 Vue.component('approve-advert-form', require('./components/contents/approveAdvert.vue'));
+//show advert page
+Vue.component('show-advert1', require('./components/contents/showAdvert1.vue'));
 
 const app = new Vue({
     el: '#app'

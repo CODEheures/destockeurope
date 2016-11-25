@@ -3,7 +3,7 @@
         <div class="ui celled list">
             <div class="ui grid">
                 <div class="sixteen wide right aligned column">
-                    <span class="ui mini label"><i class="info circle icon"></i>Tous les prix sont unitaires</span>
+                    <span class="ui mini label"><i class="info circle icon"></i>{{ priceInfoLabel }}</span>
                 </div>
             </div>
             <div class="ui active inverted dimmer" v-if="!isLoaded">

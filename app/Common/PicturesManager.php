@@ -256,14 +256,16 @@ class PicturesManager
     private function createThumb(){
         $file = Storage::disk($this->disk)->get($this->personnalPath().$this->fileName.'.'.$this->ext);
 
+        $rawThumb = Image::canvas(static::THUMB_SIZE, static::THUMB_SIZE, '#ffffff');
+
         $thumb = Image::make($file);
-        $thumb->fit(static::THUMB_SIZE,static::THUMB_SIZE, function ($constraint) {
+        $thumb->resize(static::THUMB_SIZE,static::THUMB_SIZE, function ($constraint) {
             $constraint->aspectRatio();
         });
         $thumb->insert($this->getWaterMark(),'bottom-left',5,5);
 
-        $rawThumb = Image::canvas($thumb->width(), $thumb->height(), '#ffffff');
-        $rawThumb->insert($thumb);
+
+        $rawThumb->insert($thumb, 'center');
         $rawThumb->encode(static::EXT);
         Storage::disk($this->disk)->put($this->personnalPath().$this->fileName.static::THUMB_EXT.'.'.static::EXT, $rawThumb);
     }
@@ -272,13 +274,21 @@ class PicturesManager
         $file = Storage::disk($this->disk)->get($this->personnalPath().$this->fileName.'.'.$this->ext);
 
         $picture = Image::make($file);
-        $picture->fit(static::PICTURE_SIZE_MAX_WIDTH,null, function ($constraint) {
+        $picture->resize(static::PICTURE_SIZE_MAX_WIDTH,static::PICTURE_SIZE_MAX_HEIGHT, function ($constraint) {
             $constraint->upsize();
+            $constraint->aspectRatio();
         });
         $picture->insert($this->getWaterMark(),'bottom-left',10,10);
 
-        $rawPicture = Image::canvas($picture->width(), $picture->height(), '#ffffff');
-        $rawPicture->insert($picture);
+        if($picture->width() < 16*$picture->height()/9){
+            $rawPicture = Image::canvas(16*$picture->height()/9, $picture->height(), '#ffffff');
+        } elseif ($picture->width() > 16*$picture->height()/9) {
+            $rawPicture = Image::canvas($picture->width(), 9*$picture->width()/16, '#ffffff');
+        } else {
+            $rawPicture = Image::canvas($picture->width(), $picture->height(), '#ffffff');
+        }
+
+        $rawPicture->insert($picture, 'center');
         $rawPicture->encode(static::EXT);
         Storage::disk($this->disk)->put($this->personnalPath().$this->fileName.'.'.static::EXT, $rawPicture);
     }
@@ -312,6 +322,18 @@ class PicturesManager
 
         if(Storage::disk($this->disk)->exists($path.$this->fileName.static::THUMB_EXT.'.'.static::EXT)){
             $file =  Storage::disk($this->disk)->get($path.$this->fileName.static::THUMB_EXT.'.'.static::EXT);
+            return $file;
+        }
+        return null;
+    }
+
+    public function getNormal($type, $hashName, $path){
+        $this->setType($type);
+        $this->setFileName($hashName);
+
+
+        if(Storage::disk($this->disk)->exists($path.$this->fileName.'.'.static::EXT)){
+            $file =  Storage::disk($this->disk)->get($path.$this->fileName.'.'.static::EXT);
             return $file;
         }
         return null;

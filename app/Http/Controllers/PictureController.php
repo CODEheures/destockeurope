@@ -13,7 +13,7 @@ class PictureController extends Controller
     private $pictureManager;
 
     public function __construct(PicturesManager $picturesManager) {
-        $this->middleware('auth', ['except' => ['getThumb']]);
+        $this->middleware('auth', ['except' => ['getThumb', 'getNormal']]);
         $this->pictureManager = $picturesManager;
     }
 
@@ -69,6 +69,29 @@ class PictureController extends Controller
             } else {
                 return response(trans('strings.view_all_error_download_file'), 404);
             }
+        }
+    }
+
+    /**
+     * Get a specific Thumb
+     * @param $type
+     * @param $fileName
+     * @return \Illuminate\Http\Response
+     */
+    public function getNormal($hashName, $advertId) {
+        $picture = Picture::where('hashName', '=', $hashName)
+            ->where('advert_id','=',$advertId)
+            ->where('isThumb', '=', true)->first();
+        if($picture){
+            $realType =  $picture->disk == 'local' ? PicturesManager::TYPE_FINAL_LOCAL : PicturesManager::TYPE_FINAL_DISTANT;
+            $file = $this->pictureManager->getNormal($realType, $picture->hashName, $picture->path);
+            if($file){
+                return response($file,200)->header("Content-Type", PicturesManager::MIME);
+            } else {
+                return response(trans('strings.view_all_error_download_file'), 404);
+            }
+        } else {
+            return response(trans('strings.view_all_error_download_file'), 404);
         }
     }
 

@@ -104,10 +104,6 @@
             //advertByList component
             'routeGetAdvertsList',
             'adsFrenquency',
-            'advertTitleLabel',
-            'advertDescriptionLabel',
-            'advertPriceLabel',
-            'seeAdvertLinkLabel',
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
@@ -142,7 +138,14 @@
             });
 
             //Init dataRoute
-            this.dataRouteGetAdvertList = this.urlForFilter(false, true);
+            if(sessionStorage.getItem('goToCategory') != undefined){
+                this.choiceCategory(sessionStorage.getItem('goToCategory'),true);
+                this.dataRouteGetAdvertList = this.urlForFilter(true, true);
+                this.dataRouteGetAdvertList = this.urlForFilter();
+                sessionStorage.removeItem('goToCategory');
+            } else {
+                this.dataRouteGetAdvertList = this.urlForFilter(false, true);
+            }
 
             //On load Error
             this.$on('loadError', function () {
@@ -272,11 +275,13 @@
                     return false;
                 }
             },
-            choiceCategory(categoryId) {
+            choiceCategory(categoryId, choiceOnMounted=false) {
                 this.setBreadCrumbItems(categoryId);
                 this.filter.categoryId = parseInt(categoryId);
                 this.clearInputSearch();
-                this.updateResults(true);
+                if(!choiceOnMounted){
+                    this.updateResults(true);
+                }
             },
             updateResults(withUpdatePriceFilter=false){
                 if(withUpdatePriceFilter) {

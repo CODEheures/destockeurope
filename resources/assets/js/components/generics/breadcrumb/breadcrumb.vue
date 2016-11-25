@@ -19,7 +19,12 @@
 <script>
     export default {
         props: {
-            'items': Array
+            'items': Array,
+            'withAction' : {
+                type: Boolean,
+                required: false,
+                default: false
+            }
         },
         data: () => {
             return {

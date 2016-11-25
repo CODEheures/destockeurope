@@ -251,11 +251,22 @@ class AdvertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         $advert = Advert::find($id);
         if($advert->isValid){
-            dd($advert->formattedAdress);
+            if($request->isXmlHttpRequest()){
+                $advert->load('pictures');
+                $advert->load('category');
+                $ancestors = $advert->category->getAncestors();
+                $ancestors->add($advert->category);
+                $advert->setBreadCrumb($ancestors);
+                return response()->json(['advert' => $advert]);
+            } else {
+                $advert->views = $advert->views +1;
+                $advert->save();
+                return view('advert.show', compact('advert'));
+            }
         } else {
             return back();
         }
