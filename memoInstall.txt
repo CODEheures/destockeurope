@@ -1,5 +1,5 @@
 //TODO bucket 64 nginx + file body size nginx
 //      INTL EXTENSION apt-get install php5-intl
 //TODO post video
-//TODO page des annonces
+//TODO finir page des annonces ->mobile, version2 et revoir l'indication de updated_at dans la liste
 //TODO paiement paypal

@@ -7,6 +7,7 @@
 
 require('./bootstrap');
 require('./semantic');
+require('swiper');
 require('./myjs');
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -27,6 +28,9 @@ Vue.component('steps', require('./components/generics/steps/step.vue'));
 Vue.component('googleMap', require('./components/generics/location/map.vue'));
 Vue.component('pagination', require('./components/generics/paginations/pagination.vue'));
 Vue.component('masterads', require('./components/generics/ads/master.vue'));
+Vue.component('swiper', require('./components/generics/swipers/swiper.vue'));
+Vue.component('swiper-slide', require('./components/generics/swipers/slide.vue'));
+Vue.component('swiper-gallerie', require('./components/generics/swipers/gallerie.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));

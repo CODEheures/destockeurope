@@ -8,6 +8,7 @@
             route-get-advert="{{ route('advert.show', ['id' => $advert->id]) }}"
             route-home="{{ route('home') }}"
             actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
+            image-ratio="{{ env('IMAGE_RATIO') }}"
             total-quantity-label="{{ trans('strings.form_quantity_label') }}"
             lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
             urgent-label="{{ trans('strings.view_all_urgent') }}"

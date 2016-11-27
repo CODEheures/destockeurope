@@ -15,6 +15,7 @@
                     <advert-by-id
                         :route-get-advert="routeGetAdvert"
                         :actual-locale="actualLocale"
+                        :image-ratio="parseFloat(imageRatio)"
                         :total-quantity-label="totalQuantityLabel"
                         :lot-mini-quantity-label="lotMiniQuantityLabel"
                         :urgent-label="urgentLabel"
@@ -47,6 +48,7 @@
             'routeGetAdvert',
             'routeHome',
             'actualLocale',
+            'imageRatio',
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',

@@ -263,6 +263,7 @@ class AdvertController extends Controller
                 $advert->setBreadCrumb($ancestors);
                 return response()->json(['advert' => $advert]);
             } else {
+                $advert->timestamps = false;
                 $advert->views = $advert->views +1;
                 $advert->save();
                 return view('advert.show', compact('advert'));

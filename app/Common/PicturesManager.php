@@ -31,15 +31,19 @@ class PicturesManager
     Const WATER_MARK = 'watermark.png';
 
     Const PICTURE_SIZE_MAX_WIDTH = 1200;
-    Const PICTURE_SIZE_MAX_HEIGHT = 675;
     Const THUMB_SIZE = 600;
+    Const PICTURE_BACK_COLOR = '#fafafa';
+    Const THUMB_BACK_COLOR = '#ffffff';
 
     private $type;
     private $disk;
     private $fileName;
     private $ext;
+    private $picture_size_max_height;
 
-    public function __construct() {}
+    public function __construct() {
+        $this->picture_size_max_height = round(static::PICTURE_SIZE_MAX_WIDTH*env('IMAGE_RATIO'));
+    }
 
     /**
      * Set private type from request
@@ -256,16 +260,16 @@ class PicturesManager
     private function createThumb(){
         $file = Storage::disk($this->disk)->get($this->personnalPath().$this->fileName.'.'.$this->ext);
 
-        $rawThumb = Image::canvas(static::THUMB_SIZE, static::THUMB_SIZE, '#ffffff');
+        $rawThumb = Image::canvas(static::THUMB_SIZE, static::THUMB_SIZE, static::THUMB_BACK_COLOR);
 
         $thumb = Image::make($file);
         $thumb->resize(static::THUMB_SIZE,static::THUMB_SIZE, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $thumb->insert($this->getWaterMark(),'bottom-left',5,5);
 
 
         $rawThumb->insert($thumb, 'center');
+        $rawThumb->insert($this->getWaterMark(),'bottom-left',5,5);
         $rawThumb->encode(static::EXT);
         Storage::disk($this->disk)->put($this->personnalPath().$this->fileName.static::THUMB_EXT.'.'.static::EXT, $rawThumb);
     }
@@ -274,21 +278,21 @@ class PicturesManager
         $file = Storage::disk($this->disk)->get($this->personnalPath().$this->fileName.'.'.$this->ext);
 
         $picture = Image::make($file);
-        $picture->resize(static::PICTURE_SIZE_MAX_WIDTH,static::PICTURE_SIZE_MAX_HEIGHT, function ($constraint) {
+        $picture->resize(static::PICTURE_SIZE_MAX_WIDTH,$this->picture_size_max_height, function ($constraint) {
             $constraint->upsize();
             $constraint->aspectRatio();
         });
-        $picture->insert($this->getWaterMark(),'bottom-left',10,10);
 
         if($picture->width() < 16*$picture->height()/9){
-            $rawPicture = Image::canvas(16*$picture->height()/9, $picture->height(), '#ffffff');
+            $rawPicture = Image::canvas(16*$picture->height()/9, $picture->height(), static::PICTURE_BACK_COLOR);
         } elseif ($picture->width() > 16*$picture->height()/9) {
-            $rawPicture = Image::canvas($picture->width(), 9*$picture->width()/16, '#ffffff');
+            $rawPicture = Image::canvas($picture->width(), 9*$picture->width()/16, static::PICTURE_BACK_COLOR);
         } else {
-            $rawPicture = Image::canvas($picture->width(), $picture->height(), '#ffffff');
+            $rawPicture = Image::canvas($picture->width(), $picture->height(), static::PICTURE_BACK_COLOR);
         }
 
         $rawPicture->insert($picture, 'center');
+        $rawPicture->insert($this->getWaterMark(),'bottom-left',10,10);
         $rawPicture->encode(static::EXT);
         Storage::disk($this->disk)->put($this->personnalPath().$this->fileName.'.'.static::EXT, $rawPicture);
     }

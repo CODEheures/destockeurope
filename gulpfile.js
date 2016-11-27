@@ -54,6 +54,9 @@ require('laravel-elixir-vue-2');
 // ;
 
 elixir(mix => {
-    mix.sass('app.scss')
+    mix.copy(
+        'node_modules/swiper/dist/css/swiper.css',  'resources/assets/sass/_swiper.scss'
+        )
+        .sass('app.scss')
         .webpack('app.js');
 });

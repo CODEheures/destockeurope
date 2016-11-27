@@ -1,17 +1,21 @@
 <template>
     <div class="ui grid">
+        <div :id="'modal-'+_uid" class="ui modal">
+            <i class="close icon"></i>
+            <div class="image content">
+                <img class="image lightbox" :src="dataLightBoxUrl" :style="'height: ' + dataHeight + 'px;'">
+            </div>
+        </div>
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
         <template v-else>
             <div class="sixteen wide column">
                 <div class="header"><h3><span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>{{ advert.title }}</h3></div>
-                <div class="ui image">
-                    <template v-for="picture in advert.pictures">
-                        <img class="ui top aligned bordered rounded image" :src="picture.url"
-                             v-if="picture.isThumb==false && picture.hashName == advert.mainPicture">
-                    </template>
-                </div>
+                <swiper-gallerie
+                        :pictures="advert.pictures"
+                        :image-ratio="imageRatio"
+                ></swiper-gallerie>
             </div>
             <div class="sixteen wide column">
                 <div class="ui grid">
@@ -64,6 +68,7 @@
             routeGetAdvert: String,
             //vue vars
             actualLocale: String,
+            imageRatio: Number,
             //vue strings
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
@@ -74,11 +79,18 @@
         data: () => {
             return {
                 advert: {},
-                isLoaded: false
+                isLoaded: false,
+                dataHashName: '',
+                dataLightBoxUrl: '',
+                dataHeight: '',
             };
         },
         mounted () {
             this.getAdvert();
+            this.$on('openLightBox', function (imgUrl) {
+                this.openLightBox(imgUrl);
+            });
+            this.dataHeight = $('#modal-'+this._uid).width()/this.imageRatio;
         },
         methods: {
             getAdvert: function (withLoadIndicator) {
@@ -89,6 +101,7 @@
                         .then(
                                 function (response) {
                                     that.advert = (response.data).advert;
+                                    that.dataHashName = that.advert.mainPicture;
                                     let breadcrumb = that.advert.breadCrumb;
                                     let lastBread = {
                                         description: [],
@@ -107,6 +120,14 @@
             getMoment: function (dateTime) {
                 moment.locale(this.actualLocale);
                 return moment(dateTime).fromNow()
+            },
+            openLightBox: function (imgUrl) {
+                this.dataLightBoxUrl = imgUrl;
+                this.dataHeight = $('.lightBox').width/this.imageRatio;
+                $('#modal-'+this._uid).modal({
+                    closable: true,
+                    blurring: true
+                }).modal('show');
             }
         }
     }

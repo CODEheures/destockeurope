@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "moment": "^2.15.1",
-    "semantic-ui": "^2.2.6"
+    "semantic-ui": "^2.2.6",
+    "swiper": "^3.4.0"
   }
 }
