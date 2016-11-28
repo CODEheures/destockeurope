@@ -38,10 +38,10 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
                 that.setGeoCode();
             });
 
-            var autocomplete = new google.maps.places.Autocomplete(this.input);
+            let autocomplete = new google.maps.places.Autocomplete(this.input);
             autocomplete.bindTo('bounds', this.map);
             autocomplete.addListener('place_changed', function() {
-                var place = autocomplete.getPlace();
+                let place = autocomplete.getPlace();
                 if(place.geometry != undefined) {
                     that.map.setCenter(place.geometry.location);
                     that.marker.setPosition(place.geometry.location);
@@ -52,7 +52,7 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
     };
     this.getInitLocation= function () {
         if(sessionStorage.getItem('lat')!=undefined && sessionStorage.getItem('lng')!=undefined && sessionStorage.getItem('lat')!='' && sessionStorage.getItem('lng')!=''){
-            var position =  {
+            let position =  {
                 coords: {
                     latitude: sessionStorage.getItem('lat'),
                     longitude: sessionStorage.getItem('lng')
@@ -62,12 +62,12 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
         } else if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setMyLatLng, this.setMyLatLngByIp, {enableHighAccuracy:true, timeout:60*1000});
         } else {
-            this.setMyLatLngByIp();
+            that.setMyLatLngByIp();
         }
     };
     this.setMyLatLngByIp= function () {
         $.getJSON("http://ip-api.com/json/"+ip, function(data) {
-            var position =  {
+            let position =  {
                 coords: {
                     latitude: data.lat,
                     longitude: data.lon
@@ -77,8 +77,8 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
         });
     };
     this.setMyLatLng= function (position) {
-        this.position = position;
-        this.setMap();
+        that.position = position;
+        that.setMap();
     };
     this.toggleBounce= function () {
         if (this.marker.getAnimation() !== null) {
@@ -88,21 +88,21 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
         }
     };
     this.setGeoCode= function () {
-        var icon = $(that.geoloc).find('i');
-        var classIcon = $(icon).attr('class');
+        let icon = $(that.geoloc).find('i');
+        let classIcon = $(icon).attr('class');
         $(icon).attr('class', 'notched circle loading icon');
         this.geocoder.geocode({'location': this.marker.getPosition().toJSON()}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
                 sessionStorage.setItem('geoloc', JSON.stringify(results));
                 if (results[parseInt(geolocType)]) {
-                    var header = $(that.geoloc).find('.header');
+                    let header = $(that.geoloc).find('.header');
                     header.html(results[parseInt(geolocType)].formatted_address);
                     that.geoloc.dataset.lat = that.marker.getPosition().lat();
                     that.geoloc.dataset.lng = that.marker.getPosition().lng();
                     that.geoloc.dataset.geoloc = results[parseInt(geolocType)].formatted_address;
                     $(icon).attr('class', classIcon);
                     if ("createEvent" in document) {
-                        var evt = document.createEvent("HTMLEvents");
+                        let evt = document.createEvent("HTMLEvents");
                         evt.initEvent("geochange", false, true);
                         that.geoloc.dispatchEvent(evt);
                     } else {

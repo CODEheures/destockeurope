@@ -47,10 +47,18 @@ class AdvertController extends Controller
         $adverts = Advert::where('isValid', true);
 
         //where currency
-        if($request->has('currency')){
+        if($request->has('currency')) {
             $currencies = new ISOCurrencies();
-            if($currencies->contains(new Currency($request->currency))) {
+            if ($currencies->contains(new Currency($request->currency))) {
                 $currency = $request->currency;
+            } else {
+                $currency = env('DEFAULT_CURRENCY');
+            }
+        } elseif (auth()->check()) {
+            $userCurrency = auth()->user()->currency;
+            $currencies = new ISOCurrencies();
+            if ($currencies->contains(new Currency($userCurrency))) {
+                $currency = $userCurrency;
             } else {
                 $currency = env('DEFAULT_CURRENCY');
             }
