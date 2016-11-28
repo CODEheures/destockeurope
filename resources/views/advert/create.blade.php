@@ -34,7 +34,7 @@
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             filesize-error-message="{{ trans('strings.view_all_error_filesize_message') }}"
             form-validation-button-label="{{ trans('strings.form_button_validation') }}"
-            form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimun_chars') }}"
+            form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimum_chars') }}"
             advert-form-total-quantity-label="{{ trans('strings.form_quantity_label') }}"
             advert-form-lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
             advert-form-urgent-label="{{ trans('strings.form_urgent', ['price' => config('runtime.urgentCost')]) }}"

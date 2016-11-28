@@ -15,6 +15,11 @@ return [
         'maxCompagnyName' => 100,
         'minRegistrationNumber' => 3,
         'maxRegistrationNumber' => 30
+    ],
+
+    'messages' => [
+        'minLength' => 30,
+        'maxLength' => 2000,
     ]
 
 ];

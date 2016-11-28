@@ -82,6 +82,7 @@ Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertCon
 Route::get('advert/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
 Route::post('advert/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
 Route::get('advert/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
+Route::post('advert/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
 Route::resource('advert', 'AdvertController');
 
 //Pictures

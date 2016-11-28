@@ -11,7 +11,6 @@
         </div>
         <template v-else>
             <div class="sixteen wide column">
-                <div class="header"><h3><span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>{{ advert.title }}</h3></div>
                 <swiper-gallerie
                         :pictures="advert.pictures"
                         :image-ratio="imageRatio"
@@ -20,7 +19,7 @@
             <div class="sixteen wide column">
                 <div class="ui grid">
                     <div class="sixteen wide column">
-                        <table class="ui very basic celled table">
+                        <table id="table-advert-infos" class="ui very basic celled table advert-infos">
                             <tbody>
                             <tr>
                                 <td class="collapsing">
@@ -82,7 +81,7 @@
                 isLoaded: false,
                 dataHashName: '',
                 dataLightBoxUrl: '',
-                dataHeight: '',
+                dataHeight: ''
             };
         },
         mounted () {
@@ -96,7 +95,7 @@
             getAdvert: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                var that = this;
+                let that = this;
                 this.$http.get(this.routeGetAdvert)
                         .then(
                                 function (response) {
@@ -110,6 +109,7 @@
                                     lastBread.description[that.actualLocale] = that.advert.title;
                                     breadcrumb.push(lastBread);
                                     that.$parent.$emit('setBreadCrumb', breadcrumb);
+                                    that.$parent.$emit('setHeader', {'id': that.advert.id, 'isUrgent': that.advert.isUrgent, 'title': that.advert.title});
                                     that.isLoaded = true;
                                 },
                                 function (response) {

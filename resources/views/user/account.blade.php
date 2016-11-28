@@ -40,7 +40,7 @@
             geoloc-help-msg-two="{{ trans('strings.form_googlemap_help2') }}"
             googlemap-divider="{{ trans('strings.form_googlemap_label') }}"
             form-validation-button-label="{{ trans('strings.form_button_validation') }}"
-            form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimun_chars') }}"
+            form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimum_chars') }}"
 
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"

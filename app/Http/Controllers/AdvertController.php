@@ -370,4 +370,8 @@ class AdvertController extends Controller
             return response(trans('strings.view_advert_error'), 500);
         }
     }
+
+    public function sendMail(Request $request) {
+        dd($request->all());
+    }
 }

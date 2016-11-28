@@ -35,14 +35,17 @@ return [
     'mail_firstSendToken_action' => 'Confirmez votre email',
     'mail_firstSendToken_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
-    'form_label_name' => 'Nom',
-    'form_label_email' => 'E-mail',
+    'form_label_name' => 'Votre nom',
+    'form_label_email' => 'Votre E-mail',
+    'form_validation_email' => 'Entrez un E-mail valide',
     'form_label_password' => 'Mot de passe',
     'form_label_confimr_password' => 'Confirmation mot de passe',
     'form_label_remember_me' => 'Se souvenir de moi',
+    'form_label_message_input' => 'Votre message',
     'form_button_new_password' => 'Valider le nouveau mot de passe',
     'form_button_validation' => 'Soumettre',
-    'form_pointing_minimun_chars' => ' caractères minimum',
+    'form_pointing_minimum_chars' => ' caractères minimum',
+    'form_pointing_maximum_chars' => ' caractères maximum',
     'form_input_search_label' => 'Cherchez ...',
     'form_input_search_view_all' => 'Afficher :nb résultat | Afficher les :nb résultats',
     'form_dropdown_all_item' => 'Tous',
@@ -66,6 +69,8 @@ return [
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
+    'modal_send'=> 'Envoyer',
+    'modal_cancel'=> 'Annuler',
 
     'link_forgot_password' => 'Mot de passe oublié',
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',
@@ -144,6 +149,8 @@ return [
     'view_advert_steps_2_description' => 'vérifier les informations de votre compte',
     'view_advert_steps_3_title' => 'Paiement',
     'view_advert_steps_3_description' => 'si urgent ou photos supplémentaires',
+    'view_advert_show_contact_label' => 'Contacter le vendeur',
+    'view_advert_show_message_send' => 'Votre message est bien envoyé',
     'advert_create_success' => 'Votre annonce est créée. Elle sera validée très prochainement par nos équipes',
 
     'view_advert_approve_header' => 'Approuver les annonces',

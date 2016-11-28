@@ -35,14 +35,17 @@ return [
     'mail_firstSendToken_action' => 'Confirm your email',
     'mail_firstSendToken_line2' => 'Thank you for using our application!',
 
-    'form_label_name' => 'Name',
-    'form_label_email' => 'E-mail',
+    'form_label_name' => 'Your name',
+    'form_label_email' => 'Your E-mail',
+    'form_validation_email' => 'Please enter a valid e-mail',
     'form_label_password' => 'Password',
     'form_label_confimr_password' => 'Confirm Password',
     'form_label_remember_me' => 'Remember me',
+    'form_label_message_input' => 'Your message',
     'form_button_new_password' => 'Valide new password',
     'form_button_validation' => 'Send',
-    'form_pointing_minimun_chars' => ' characters minimum',
+    'form_pointing_minimum_chars' => ' characters minimum',
+    'form_pointing_maximum_chars' => ' characters maximum',
     'form_input_search_label' => 'Search issues...',
     'form_input_search_view_all' => 'See the only :nb result|See :nb results',
     'form_dropdown_all_item' => 'All',
@@ -66,6 +69,8 @@ return [
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
+    'modal_send'=> 'Envoyer',
+    'modal_cancel'=> 'Annuler',
 
     'link_forgot_password' => 'Forgot your password',
     'link_send_reset_link' => 'Send reset link',
@@ -144,6 +149,8 @@ return [
     'view_advert_steps_2_description' => 'check the information in your account',
     'view_advert_steps_3_title' => 'Payment',
     'view_advert_steps_3_description' => 'if urgent or extra photos',
+    'view_advert_show_contact_label' => 'Contact the seller',
+    'view_advert_show_message_send' => 'Your message is being send',
     'advert_create_success' => 'Your advert is being created. It will be validated by our teams soon',
 
     'view_advert_approve_header' => 'Approve this adverts',

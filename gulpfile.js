@@ -53,10 +53,13 @@ require('laravel-elixir-vue-2');
 //     })
 // ;
 
+elixir.config.versioning.buildFolder = '';
+//elixir.config.sourcemaps = false;
 elixir(mix => {
     mix.copy(
         'node_modules/swiper/dist/css/swiper.css',  'resources/assets/sass/_swiper.scss'
         )
         .sass('app.scss')
-        .webpack('app.js');
+        .webpack('app.js')
+        .version(['css/app.css','js/app.js']);
 });
