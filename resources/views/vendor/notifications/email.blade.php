@@ -102,6 +102,24 @@ $style = [
                                             </p>
                                         @endforeach
 
+                                        <!--Customer Message -->
+                                        @if(isset($customerMessage) && count($customerMessage)>=1)
+                                            <hr>
+                                            <p style="{{ $style['paragraph-sub'] }}">
+                                            @foreach($customerMessage as $line)
+                                                    {{ $line }}<br />
+                                            @endforeach
+                                            </p>
+
+                                            <!--Customer Contact -->
+                                            <p style="{{ $style['paragraph-sub'] }}">
+                                                @foreach($customerContact as $line)
+                                                    {{ $line }}<br />
+                                                @endforeach
+                                            </p>
+                                            <hr>
+                                        @endif
+
                                         <!-- Action Button -->
                                         @if (isset($actionText))
                                             <table style="{{ $style['body_action'] }}" align="center" width="100%" cellpadding="0" cellspacing="0">

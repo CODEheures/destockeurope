@@ -35,6 +35,13 @@ return [
     'mail_firstSendToken_action' => 'Confirmez votre email',
     'mail_firstSendToken_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
+    'mail_customerToSeller_subject' => 'Votre annonce ":title" a une réponse',
+    'mail_customerToSeller_greeting' => 'Bonjour :sellername',
+    'mail_customerToSeller_line' => ':customername a répondu à propos de votre annonce ":title"',
+    'mail_customerToSeller_line2' => 'Coordonnées de :customername:',
+    'mail_customerToSeller_line3' => 'Merci d\'utiliser notre application!',
+    'mail_customerToSeller_send_error' => 'Ho non! Nous n\'avons pas réussi à envoyé l\'email \'-(',
+
     'form_label_name' => 'Votre nom',
     'form_label_email' => 'Votre E-mail',
     'form_validation_email' => 'Entrez un E-mail valide',
@@ -150,6 +157,10 @@ return [
     'view_advert_steps_3_title' => 'Paiement',
     'view_advert_steps_3_description' => 'si urgent ou photos supplémentaires',
     'view_advert_show_contact_label' => 'Contacter le vendeur',
+    'view_advert_show_bookmark_info' => 'Favoris',
+    'view_advert_show_bookmark_label' => 'Mettre en favori',
+    'view_advert_show_unbookmark_label' => 'Supprimer des favoris',
+    'view_advert_show_delete_label' => 'Supprimer mon annonce',
     'view_advert_show_message_send' => 'Votre message est bien envoyé',
     'advert_create_success' => 'Votre annonce est créée. Elle sera validée très prochainement par nos équipes',
 

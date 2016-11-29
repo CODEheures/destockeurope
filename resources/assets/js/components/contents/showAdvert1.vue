@@ -12,9 +12,17 @@
                         <label>{{ formMessageLabel }}</label>
                         <textarea name="message" v-model="dataMessage" :maxlength="formMessageMaxValid"></textarea>
                     </div>
-                    <div class="required field">
-                        <label>{{ formMessageEmailLabel }}</label>
-                        <input name="email" type="text" v-model="dataUserMail">
+                    <div class="field">
+                        <div class="two fields">
+                            <div class="required field">
+                                <label>{{ formMessageNameLabel }}</label>
+                                <input name="name" type="text" v-model="dataUserName">
+                            </div>
+                            <div class="required field">
+                                <label>{{ formMessageEmailLabel }}</label>
+                                <input name="email" type="text" v-model="dataUserMail">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,11 +64,44 @@
             </div>
             <div id="welcome-ads" class="computer only six wide column">
                 <div>
-                    <div class="sixteen right aligned column">
-                        <button class="large teal ui button"
-                            v-on:click="openMessageBox">
-                            {{ contactLabel }}
-                        </button>
+                    <div class="ui form">
+                        <div class="field" v-if="!isUserOwner">
+                            <button class="ui basic teal icon fluid button"
+                                    v-on:click="openMessageBox">
+                                <i class="mail outline icon"></i>
+                                {{ contactLabel }}
+                            </button>
+                        </div>
+                        <div class="field" v-if="userName == ''">
+                            <div class="ui labeled button">
+                                <div class="ui red button">
+                                    <i class="heart icon"></i> {{ bookmarkInfo }}
+                                </div>
+                                <a class="ui basic red left pointing label">
+                                    {{ bookmarkCount }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="field" v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
+                            <button class="ui basic pink icon fluid button">
+                                <i class="empty heart icon"></i>
+                                {{ bookmarkLabel }}
+                            </button>
+                        </div>
+                        <div class="field" v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
+                            <button class="ui basic pink icon fluid button">
+                                <i class="heart icon"></i>
+                                {{ unbookmarkLabel }}
+                            </button>
+                        </div>
+                        <div class="field" v-if="isUserOwner">
+                            <button class="ui red icon button">
+                                <i class="trash outline icon"></i>
+                                {{ deleteLabel }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sixteen right aligned column spaced-top-2">
                         <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
                         <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
                         <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
@@ -68,10 +109,39 @@
                 </div>
             </div>
         </div>
-        <div class="mobile only tablet only sixteen wide center aligned column">
-            <button class="large teal ui button"
-                v-on:click="openMessageBox">
+        <div class="mobile only tablet only sixteen wide center aligned column" v-if="!isUserOwner">
+            <button class="ui basic teal icon fluid button"
+                    v-on:click="openMessageBox">
+                <i class="mail outline icon"></i>
                 {{ contactLabel }}
+            </button>
+        </div>
+        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName == ''">
+            <div class="ui labeled button">
+                <div class="ui red button">
+                    <i class="heart icon"></i> {{ bookmarkInfo }}
+                </div>
+                <a class="ui basic red left pointing label">
+                    {{ bookmarkCount }}
+                </a>
+            </div>
+        </div>
+        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
+            <button class="ui basic pink icon fluid button">
+                <i class="empty heart icon"></i>
+                {{ bookmarkLabel }}
+            </button>
+        </div>
+        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
+            <button class="ui basic pink icon fluid button">
+                <i class="heart icon"></i>
+                {{ unbookmarkLabel }}
+            </button>
+        </div>
+        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="isUserOwner">
+            <button class="ui red icon button">
+                <i class="trash outline icon"></i>
+                {{ deleteLabel }}
             </button>
         </div>
     </div>
@@ -84,6 +154,11 @@
             'routeSendMail',
             //vue vars
             'userMail',
+            'userName',
+            'isUserOwner',
+            'isUserBookmark',
+            'bookmarkCount',
+            'formNameMinValid',
             'formMessageMinValid',
             'formMessageMaxValid',
             //vue strings
@@ -92,6 +167,16 @@
             'formValidationEmail',
             'formPointingMinimumChars',
             'formPointingMaximumChars',
+            'contactLabel',
+            'bookmarkInfo',
+            'bookmarkLabel',
+            'unbookmarkLabel',
+            'deleteLabel',
+            'formMessageLabel',
+            'formMessageEmailLabel',
+            'formMessageNameLabel',
+            'formMessageSendLabel',
+            'formMessageCancelLabel',
             //advertById component
             'routeGetAdvert',
             'routeHome',
@@ -101,12 +186,7 @@
             'lotMiniQuantityLabel',
             'urgentLabel',
             'priceInfoLabel',
-            'priceLabel',
-            'contactLabel',
-            'formMessageLabel',
-            'formMessageEmailLabel',
-            'formMessageSendLabel',
-            'formMessageCancelLabel'
+            'priceLabel'
         ],
         data: () => {
             return {
@@ -117,13 +197,17 @@
                 isUrgent: false,
                 title: '',
                 id: 0,
+                dataUserName: '',
                 dataUserMail: '',
                 dataMessage: '',
-                dataEnabledMessage: false
+                dataEnabledMessage: false,
+                dataIsUserBookmark: false
             }
         },
         mounted () {
             this.dataUserMail = this.userMail;
+            this.dataUserName = this.userName;
+            this.dataIsUserBookmark = this.isUserBookmark;
             //Visibility for ADS
             let $elem = $('#welcome-ads').children('div');
             $elem.visibility({
@@ -161,6 +245,15 @@
                                 }
                             ]
                         },
+                        name: {
+                            identifier  : 'name',
+                            rules: [
+                                {
+                                    type : 'minLength['+that.formNameMinValid+']',
+                                    prompt: '{ruleValue} ' + that.formPointingMinimumChars
+                                }
+                            ]
+                        },
                         message: {
                             identifier  : 'message',
                             rules: [
@@ -179,6 +272,9 @@
                     on     : 'change'
                 })
             ;
+            this.$watch('dataUserName', function () {
+                this.testValidForm();
+            });
             this.$watch('dataUserMail', function () {
                 this.testValidForm();
             });
@@ -208,7 +304,7 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.post(that.routeSendMail, {'id': that.id, 'email': that.dataUserMail, 'message': that.dataMessage})
+                        that.$http.post(that.routeSendMail, {'id': that.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'message': that.dataMessage})
                             .then(
                                 (response) => {
                                     that.sendToast(that.sendSuccessMessage, 'success');

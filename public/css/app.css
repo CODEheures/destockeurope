@@ -29298,6 +29298,9 @@ form.login, form.register {
   #welcome-ads div.small.rectangle:not(:first-of-type) {
     margin-top: 4rem; }
 
+.spaced-top-2 {
+  margin-top: 2rem; }
+
 .content.row .ui.small.rectangle.welcome-ads {
   margin-top: 3.2rem; }
 

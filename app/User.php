@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,6 +11,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+    use CascadeSoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -41,6 +43,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $cascadeDeletes = ['adverts', 'bookmarks'];
     protected $hidden = [
         'password', 'remember_token', 'role'
     ];
@@ -60,7 +63,21 @@ class User extends Authenticatable
         return $this->hasMany('App\Advert');
     }
 
+    public function bookmarks() {
+        return $this->hasMany('App\Bookmark');
+    }
+
     public function payments() {
         return $this->hasMany('App\Payment');
+    }
+
+    public function haveBookmark($id) {
+        $result=false;
+        foreach ($this->bookmarks as $bookmark){
+            if($bookmark->advert_id == $id) {
+                $result = true;
+            }
+        }
+        return $result;
     }
 }

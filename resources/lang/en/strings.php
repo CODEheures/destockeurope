@@ -35,6 +35,13 @@ return [
     'mail_firstSendToken_action' => 'Confirm your email',
     'mail_firstSendToken_line2' => 'Thank you for using our application!',
 
+    'mail_customerToSeller_subject' => 'Your advert ":title" have a response',
+    'mail_customerToSeller_greeting' => 'Hello :sellername',
+    'mail_customerToSeller_line' => ':customername answers you about your advert ":title"',
+    'mail_customerToSeller_line2' => 'Contact informations:',
+    'mail_customerToSeller_line3' => 'Thank you for using our application!',
+    'mail_customerToSeller_send_error' => 'Ho no! The email could not be sent \'-(',
+
     'form_label_name' => 'Your name',
     'form_label_email' => 'Your E-mail',
     'form_validation_email' => 'Please enter a valid e-mail',
@@ -150,6 +157,10 @@ return [
     'view_advert_steps_3_title' => 'Payment',
     'view_advert_steps_3_description' => 'if urgent or extra photos',
     'view_advert_show_contact_label' => 'Contact the seller',
+    'view_advert_show_bookmark_info' => 'Bookmarks',
+    'view_advert_show_bookmark_label' => 'Bookmark',
+    'view_advert_show_unbookmark_label' => 'Remove Bookmark',
+    'view_advert_show_delete_label' => 'Delete my Advert',
     'view_advert_show_message_send' => 'Your message is being send',
     'advert_create_success' => 'Your advert is being created. It will be validated by our teams soon',
 

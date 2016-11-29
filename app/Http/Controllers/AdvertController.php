@@ -9,6 +9,7 @@ use App\Common\DBUtils;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
 use App\Http\Requests\StoreAdvertRequest;
+use App\Notifications\CustomerContactSeller;
 use App\Picture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -24,7 +25,7 @@ class AdvertController extends Controller
     private $pictureManager;
 
     public function __construct(PicturesManager $picturesManager) {
-        $this->middleware('auth', ['except' => ['index', 'show', 'getListType']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
         $this->pictureManager  = $picturesManager;
@@ -380,6 +381,17 @@ class AdvertController extends Controller
     }
 
     public function sendMail(Request $request) {
-        dd($request->all());
+        $advert = Advert::find($request->id);
+        if($advert){
+            $senderMail = $request->email;
+            $senderName = ucfirst($request->name);
+            $message = $request->message;
+            $recipient = $advert->user;
+
+            $recipient->notify(new CustomerContactSeller($advert, $senderName, $senderMail, $message));
+            return response('ok', 200);
+        } else {
+            return response(trans('strings.mail_customerToSeller_send_error'), 500);
+        }
     }
 }

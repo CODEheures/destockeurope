@@ -36,13 +36,17 @@ class Advert extends Model {
         'views'
     ];
     protected $dates = ['deleted_at'];
-    protected $cascadeDeletes = ['pictures'];
+    protected $cascadeDeletes = ['pictures', 'bookmarks'];
     protected $appends = array('breadCrumb', 'url', 'resume', 'thumb');
     private $breadcrumb;
     private $resumeLength;
 
     public function user() {
         return $this->belongsTo('App\User');
+    }
+
+    public function bookmarks() {
+        return $this->hasMany('App\Bookmark');
     }
 
     public function category() {
