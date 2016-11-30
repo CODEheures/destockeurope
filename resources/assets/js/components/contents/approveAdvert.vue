@@ -189,16 +189,17 @@
                         that.isLoaded = false;
                         that.$http.post(that.routeAdvertApprove, that.approveList)
                                 .then(
-                                        (response) => {
+                                        function (response) {
                                             that.getAdvertsList();
                                             that.sendToast(that.advertApproveSuccess, 'success');
                                         },
-                                        (response) => {
+                                        function (response) {
                                             if (response.status == 409) {
                                                 that.sendToast(response.body, 'error');
+                                            } else {
+                                                that.sendToast(that.loadErrorMessage, 'error');
                                             }
                                             that.isLoaded = false;
-                                            that.sendToast(that.loadErrorMessage, 'error');
                                         }
                                 );
                     }

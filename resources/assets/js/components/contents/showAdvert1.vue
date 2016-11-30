@@ -1,7 +1,7 @@
 <template>
-    <div  class="ui grid">
+    <div>
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
-        <div :id="'modal-'+_uid" class="ui modal">
+        <div :id="'modal1-'+_uid" class="ui modal">
             <i class="close icon"></i>
             <div class="header">
                 {{ contactLabel }}
@@ -36,113 +36,147 @@
                 </div>
             </div>
         </div>
-        <div class="sixteen wide column">
-            <div class="row">
-                <breadcrumb
-                        :items="breadcrumbItems"
-                        :withAction="true">
-                </breadcrumb>
+        <div :id="'modal2-'+_uid" class="ui basic modal">
+            <i class="close icon"></i>
+            <div class="header">
+                {{ modalValidHeader }}
             </div>
-        </div>
-        <div class="row">
-            <div class="sixteen wide column">
-                <div class="header"><h3><span v-if="isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>{{ title }}</h3></div>
-            </div>
-            <div class="sixteen wide tablet ten wide computer column">
-                <div class="row">
-                    <advert-by-id
-                        :route-get-advert="routeGetAdvert"
-                        :actual-locale="actualLocale"
-                        :image-ratio="parseFloat(imageRatio)"
-                        :total-quantity-label="totalQuantityLabel"
-                        :lot-mini-quantity-label="lotMiniQuantityLabel"
-                        :urgent-label="urgentLabel"
-                        :price-info-label="priceInfoLabel"
-                        :price-label="priceLabel"
-                    ></advert-by-id>
+            <div class="image content">
+                <div class="image">
+                    <i class="legal icon"></i>
+                </div>
+                <div class="description">
+                    <p>{{ modalValidDescription }}</p>
                 </div>
             </div>
-            <div id="welcome-ads" class="computer only six wide column">
-                <div>
-                    <div class="ui form">
-                        <div class="field" v-if="!isUserOwner">
-                            <button class="ui basic teal icon fluid button"
-                                    v-on:click="openMessageBox">
-                                <i class="mail outline icon"></i>
-                                {{ contactLabel }}
-                            </button>
-                        </div>
-                        <div class="field" v-if="userName == ''">
-                            <div class="ui labeled button">
-                                <div class="ui red button">
-                                    <i class="heart icon"></i> {{ bookmarkInfo }}
+            <div class="actions">
+                <div class="two fluid ui inverted buttons">
+                    <div class="ui cancel red basic inverted button">
+                        <i class="remove icon"></i>
+                        {{ modalNo }}
+                    </div>
+                    <div class="ui ok green basic inverted button">
+                        <i class="checkmark icon"></i>
+                        {{ modalYes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui grid">
+            <div class="eleven wide mobile only eleven wide tablet only sixteen wide computer only column">
+                <div class="row">
+                    <breadcrumb
+                            :items="breadcrumbItems"
+                            :withAction="true">
+                    </breadcrumb>
+                </div>
+            </div>
+            <div class="mobile only tablet only five wide right aligned column"  v-if="userName == '' || isUserOwner">
+                <div class="ui labeled button">
+                    <div class="ui yellow button">
+                        <i class="heart icon"></i>
+                    </div>
+                    <a class="ui basic yellow left pointing label">
+                        {{ bookmarkCount }}
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="sixteen wide column">
+                    <div class="header"><h3><span v-if="isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>{{ title }}</h3></div>
+                </div>
+                <div class="sixteen wide tablet ten wide computer column">
+                    <div class="row">
+                        <advert-by-id
+                                :route-get-advert="routeGetAdvert"
+                                :actual-locale="actualLocale"
+                                :image-ratio="parseFloat(imageRatio)"
+                                :total-quantity-label="totalQuantityLabel"
+                                :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                :urgent-label="urgentLabel"
+                                :price-info-label="priceInfoLabel"
+                                :price-label="priceLabel"
+                        ></advert-by-id>
+                    </div>
+                </div>
+                <div id="welcome-ads" class="computer only six wide column">
+                    <div>
+                        <div class="ui form">
+                            <div class="field" v-if="!isUserOwner">
+                                <button class="ui basic teal icon fluid button"
+                                        v-on:click="openMessageBox">
+                                    <i class="mail outline icon"></i>
+                                    {{ contactLabel }}
+                                </button>
+                            </div>
+                            <div class="field" v-if="userName == '' || isUserOwner">
+                                <div class="ui labeled button">
+                                    <div class="ui yellow button">
+                                        <i class="heart icon"></i> {{ bookmarkInfo }}
+                                    </div>
+                                    <a class="ui basic yellow left pointing label">
+                                        {{ bookmarkCount }}
+                                    </a>
                                 </div>
-                                <a class="ui basic red left pointing label">
-                                    {{ bookmarkCount }}
-                                </a>
+                            </div>
+                            <div class="field" v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
+                                <button class="ui basic yellow icon fluid button"
+                                    v-on:click="bookmarkMe()">
+                                    <i class="empty heart icon"></i>
+                                    {{ bookmarkLabel }}
+                                </button>
+                            </div>
+                            <div class="field" v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
+                                <button class="ui basic yellow icon fluid button"
+                                        v-on:click="unbookmarkMe()">
+                                    <i class="heart icon"></i>
+                                    {{ unbookmarkLabel }}
+                                </button>
+                            </div>
+                            <div class="field" v-if="isUserOwner">
+                                <button class="ui red icon button"
+                                        v-on:click="destroyMe()">
+                                    <i class="trash outline icon"></i>
+                                    {{ deleteLabel }}
+                                </button>
                             </div>
                         </div>
-                        <div class="field" v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
-                            <button class="ui basic pink icon fluid button">
-                                <i class="empty heart icon"></i>
-                                {{ bookmarkLabel }}
-                            </button>
+                        <div class="sixteen right aligned column spaced-top-2">
+                            <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
+                            <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
+                            <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
                         </div>
-                        <div class="field" v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
-                            <button class="ui basic pink icon fluid button">
-                                <i class="heart icon"></i>
-                                {{ unbookmarkLabel }}
-                            </button>
-                        </div>
-                        <div class="field" v-if="isUserOwner">
-                            <button class="ui red icon button">
-                                <i class="trash outline icon"></i>
-                                {{ deleteLabel }}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="sixteen right aligned column spaced-top-2">
-                        <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
-                        <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
-                        <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="mobile only tablet only sixteen wide center aligned column" v-if="!isUserOwner">
-            <button class="ui basic teal icon fluid button"
-                    v-on:click="openMessageBox">
-                <i class="mail outline icon"></i>
-                {{ contactLabel }}
-            </button>
-        </div>
-        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName == ''">
-            <div class="ui labeled button">
-                <div class="ui red button">
-                    <i class="heart icon"></i> {{ bookmarkInfo }}
-                </div>
-                <a class="ui basic red left pointing label">
-                    {{ bookmarkCount }}
-                </a>
+            <div class="mobile only tablet only sixteen wide center aligned column" v-if="!isUserOwner">
+                <button class="ui basic teal icon fluid button"
+                        v-on:click="openMessageBox">
+                    <i class="mail outline icon"></i>
+                    {{ contactLabel }}
+                </button>
             </div>
-        </div>
-        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
-            <button class="ui basic pink icon fluid button">
-                <i class="empty heart icon"></i>
-                {{ bookmarkLabel }}
-            </button>
-        </div>
-        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
-            <button class="ui basic pink icon fluid button">
-                <i class="heart icon"></i>
-                {{ unbookmarkLabel }}
-            </button>
-        </div>
-        <div class="mobile only tablet only sixteen wide center aligned column"  v-if="isUserOwner">
-            <button class="ui red icon button">
-                <i class="trash outline icon"></i>
-                {{ deleteLabel }}
-            </button>
+            <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
+                <button class="ui basic yellow icon fluid button"
+                        v-on:click="bookmarkMe()">
+                    <i class="empty heart icon"></i>
+                    {{ bookmarkLabel }}
+                </button>
+            </div>
+            <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
+                <button class="ui basic yellow icon fluid button"
+                        v-on:click="unbookmarkMe()">
+                    <i class="heart icon"></i>
+                    {{ unbookmarkLabel }}
+                </button>
+            </div>
+            <div class="mobile only tablet only sixteen wide center aligned column"  v-if="isUserOwner">
+                <button class="ui red icon button"
+                        v-on:click="destroyMe()">
+                    <i class="trash outline icon"></i>
+                    {{ deleteLabel }}
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -152,6 +186,9 @@
         props: [
             //vue routes
             'routeSendMail',
+            'routeBookmarkAdd',
+            'routeBookmarkRemove',
+            'routeDeleteAdvert',
             //vue vars
             'userMail',
             'userName',
@@ -177,6 +214,12 @@
             'formMessageNameLabel',
             'formMessageSendLabel',
             'formMessageCancelLabel',
+            'bookmarkSuccess',
+            'unbookmarkSuccess',
+            'modalValidHeader',
+            'modalValidDescription',
+            'modalNo',
+            'modalYes',
             //advertById component
             'routeGetAdvert',
             'routeHome',
@@ -298,7 +341,7 @@
                 }
             },
             openMessageBox: function () {
-                let modalForm = $('#modal-'+this._uid);
+                let modalForm = $('#modal1-'+this._uid);
                 let that = this;
                 modalForm.modal({
                     closable: true,
@@ -306,14 +349,15 @@
                     onApprove: function () {
                         that.$http.post(that.routeSendMail, {'id': that.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'message': that.dataMessage})
                             .then(
-                                (response) => {
+                                function (response) {
                                     that.sendToast(that.sendSuccessMessage, 'success');
                                 },
-                                (response) => {
+                                function (response) {
                                     if (response.status == 409) {
                                         that.sendToast(response.body, 'error');
+                                    } else {
+                                        that.sendToast(that.loadErrorMessage, 'error');
                                     }
-                                    that.sendToast(that.loadErrorMessage, 'error');
                                 }
                             );
                     }
@@ -321,6 +365,66 @@
             },
             testValidForm: function () {
                 this.dataEnabledMessage = $('#form-'+this._uid).form('is valid');
+            },
+            bookmarkMe: function () {
+                let that = this;
+                this.$http.get(this.routeBookmarkAdd)
+                    .then(
+                        function (response)  {
+                            that.dataIsUserBookmark = true;
+                            that.sendToast(that.bookmarkSuccess, 'success');
+                        },
+                        function (response)  {
+                            if (response.status == 409) {
+                                that.sendToast(response.body, 'error');
+                            } else {
+                                that.sendToast(that.loadErrorMessage, 'error');
+                            }
+                            that.isLoaded = false;
+                        }
+                    );
+            },
+            unbookmarkMe: function () {
+                let that = this;
+                this.$http.get(this.routeBookmarkRemove)
+                    .then(
+                        function (response)  {
+                            that.dataIsUserBookmark = false;
+                            that.sendToast(that.unbookmarkSuccess, 'success');
+                        },
+                        function (response)  {
+                            if (response.status == 409) {
+                                that.sendToast(response.body, 'error');
+                            } else {
+                                that.sendToast(that.loadErrorMessage, 'error');
+                            }
+                            that.isLoaded = false;
+                        }
+                    );
+            },
+            destroyMe: function () {
+                let modalForm = $('#modal2-'+this._uid);
+                let that = this;
+                modalForm.modal({
+                    closable: true,
+                    blurring: true,
+                    onApprove: function () {
+                        that.$http.delete(that.routeDeleteAdvert)
+                            .then(
+                                function (response) {
+                                    window.location.href = response.body;
+                                },
+                                function (response) {
+                                    if (response.status == 409) {
+                                        that.sendToast(response.body, 'error');
+                                    } else {
+                                        that.sendToast(that.loadErrorMessage, 'error');
+                                    }
+                                    that.isLoaded = false;
+                                }
+                            );
+                    }
+                }).modal('show');
             }
         }
     }

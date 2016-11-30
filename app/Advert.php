@@ -37,9 +37,11 @@ class Advert extends Model {
     ];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
-    protected $appends = array('breadCrumb', 'url', 'resume', 'thumb');
+    protected $appends = array('breadCrumb', 'url', 'resume', 'thumb', 'isUserOwner', 'isUserBookmark', 'bookmarkCount');
     private $breadcrumb;
     private $resumeLength;
+    private $isUserBookmark = false;
+    private $bookmarkCount = 0;
 
     public function user() {
         return $this->belongsTo('App\User');
@@ -111,5 +113,28 @@ class Advert extends Model {
 
     public function getUpdatedAtAttribute($time) {
         return Carbon::parse($time)->toAtomString();
+    }
+
+    public function getIsUserOwnerAttribute() {
+        if(auth()->check()){
+            return auth()->user()->id === $this->user_id;
+        }
+        return false;
+    }
+
+    public function setIsUserBookmark($result) {
+        $this->isUserBookmark = $result;
+    }
+
+    public function getIsUserBookmarkAttribute() {
+        return $this->isUserBookmark;
+    }
+
+    public function setBookmarkCount() {
+        $this->bookmarkCount = $this->bookmarks()->count();
+    }
+
+    public function getBookmarkCountAttribute() {
+        return $this->bookmarkCount;
     }
 }

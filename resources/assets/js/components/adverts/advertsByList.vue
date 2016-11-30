@@ -49,12 +49,13 @@
             </template>
             <template v-for="(advert, index) in advertsList">
                 <template v-if="(index+1)%adsFrequency==0">
-                    <a :href="advert.url"  class="item advert">
+                    <a :href="advert.url" class="item advert">
                         <div class="ui grid">
                             <div class="six wide aligned mobile four wide tablet four wide computer column">
                                 <div class="ui image">
-                                    <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
-                                    <img  class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                    <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2
+                                        }}</i></div>
+                                    <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                                 </div>
                             </div>
                             <div class="twelve wide tablet only twelve wide computer only column">
@@ -65,14 +66,15 @@
                                         <span class="ui breadcrumb">
                                             <template v-for="(item,index) in advert.breadCrumb">
                                                 <div class="active section">{{ item.description[actualLocale] }}</div>
-                                                <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                                <i class="right angle icon divider"
+                                                   v-if="index != advert.breadCrumb.length-1"></i>
                                             </template>
                                         </span>
                                         </p>
                                     </div>
                                     <div class="six wide right aligned vertical middle aligned column">
                                         <p class="price">
-                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br/>
                                             <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                             <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -88,6 +90,9 @@
                                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                                             <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
                                             <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
+                                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                            <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
+                                            <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                         </p>
                                     </div>
                                 </div>
@@ -96,14 +101,15 @@
                                 <span class="ui mini breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
                                         <div class="active section">{{ item.description[actualLocale] }}</div>
-                                        <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                        <i class="right angle icon divider"
+                                           v-if="index != advert.breadCrumb.length-1"></i>
                                     </template>
                                 </span>
                                 <div class="header"><h3>{{ advert.title }}</h3></div>
                                 <div class="ui grid">
                                     <div class="sixteen wide mobile only right aligned column">
                                         <p class="price">
-                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br/>
                                             <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                             <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -119,8 +125,12 @@
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
                                 <p>
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                                    <i class="calendar icon"></i><span
+                                        class="meta">{{ getMoment(advert.updated_at) }}</span>
                                     <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
+                                    <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                    <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
+                                    <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                 </p>
                             </div>
                         </div>
@@ -157,12 +167,13 @@
                     </div>
                 </template>
                 <template v-else>
-                    <a :href="advert.url"  class="item advert">
+                    <a :href="advert.url" class="item advert">
                         <div class="ui grid">
                             <div class="six wide aligned mobile four wide tablet four wide computer column">
                                 <div class="ui image">
-                                    <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2 }}</i></div>
-                                    <img  class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                    <div class="ui right blue corner label"><i class="icon">{{ advert.pictures.length/2
+                                        }}</i></div>
+                                    <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                                 </div>
                             </div>
                             <div class="twelve wide tablet only twelve wide computer only column">
@@ -173,14 +184,15 @@
                                         <span class="ui breadcrumb">
                                             <template v-for="(item,index) in advert.breadCrumb">
                                                 <div class="active section">{{ item.description[actualLocale] }}</div>
-                                                <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                                <i class="right angle icon divider"
+                                                   v-if="index != advert.breadCrumb.length-1"></i>
                                             </template>
                                         </span>
                                         </p>
                                     </div>
                                     <div class="six wide right aligned vertical middle aligned column">
                                         <p class="price">
-                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br/>
                                             <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                             <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -196,6 +208,9 @@
                                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                                             <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
                                             <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
+                                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                            <i class="empty large heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
+                                            <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                         </p>
                                     </div>
                                 </div>
@@ -204,14 +219,15 @@
                                 <span class="ui mini breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
                                         <div class="active section">{{ item.description[actualLocale] }}</div>
-                                        <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                        <i class="right angle icon divider"
+                                           v-if="index != advert.breadCrumb.length-1"></i>
                                     </template>
                                 </span>
                                 <div class="header"><h3>{{ advert.title }}</h3></div>
                                 <div class="ui grid">
                                     <div class="sixteen wide mobile only right aligned column">
                                         <p class="price">
-                                            <span class="ui small blue tag label">{{ advert.price }}</span><br />
+                                            <span class="ui small blue tag label">{{ advert.price }}</span><br/>
                                             <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                             <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                             <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -227,8 +243,12 @@
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
                                 <p>
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                                    <i class="calendar icon"></i><span
+                                        class="meta">{{ getMoment(advert.updated_at) }}</span>
                                     <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
+                                    <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                    <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
+                                    <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                 </p>
                             </div>
                         </div>
@@ -243,6 +263,8 @@
     export default {
         props: {
             routeGetAdvertsList: String,
+            routeBookmarkAdd: String,
+            routeBookmarkRemove: String,
             adsFrequency: Number,
             actualLocale: String,
             totalQuantityLabel: String,
@@ -278,24 +300,79 @@
                 var that = this;
                 this.advertsList = [];
                 this.$http.get(this.routeGetAdvertsList)
-                        .then(
-                                function (response)  {
-                                    that.advertsList = (response.data).adverts.data;
-                                    that.minPrice = parseFloat((response.data).minPrice);
-                                    that.maxPrice = parseFloat((response.data).maxPrice);
-                                    that.isLoaded = true;
-                                    let paginate = response.data.adverts;
-                                    delete paginate.data;
-                                    that.$parent.$emit('paginate', paginate);
-                                },
-                                function (response)  {
-                                    that.$parent.$emit('loadError')
-                                }
-                        );
+                    .then(
+                        function (response) {
+                            that.advertsList = (response.data).adverts.data;
+                            that.minPrice = parseFloat((response.data).minPrice);
+                            that.maxPrice = parseFloat((response.data).maxPrice);
+                            that.isLoaded = true;
+                            let paginate = response.data.adverts;
+                            delete paginate.data;
+                            that.$parent.$emit('paginate', paginate);
+                        },
+                        function (response) {
+                            that.$parent.$emit('loadError')
+                        }
+                    );
             },
             getMoment: function (dateTime) {
                 moment.locale(this.actualLocale);
-                return moment(dateTime).fromNow()
+                return moment(dateTime).fromNow();
+            },
+            bookmarkMe: function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                let id = event.target.dataset.id;
+                let that = this;
+                if(id != undefined && parseInt(id)>0){
+                    this.$http.get(this.routeBookmarkAdd+'/'+id)
+                        .then(
+                            function (response) {
+                                that.dataIsUserBookmark = true;
+                                that.$parent.$emit('bookmarkSuccess');
+                                for(let index in that.advertsList){
+                                    that.advertsList[index].id == id ? that.advertsList[index].isUserBookmark = true : null;
+                                }
+                            },
+                            function (response) {
+                                if (response.status == 409) {
+                                    that.$parent.$emit('sendToast', {'message': response.body, 'type': 'error'});
+                                } else {
+                                    that.$parent.$emit('loadError')
+                                }
+                            }
+                        );
+                } else {
+                    that.$parent.$emit('loadError')
+                }
+            },
+            unbookmarkMe: function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                let id = event.target.dataset.id;
+                let that = this;
+                if(id != undefined && parseInt(id)>0){
+                    this.$http.get(this.routeBookmarkRemove+'/'+id)
+                        .then(
+                            function (response) {
+                                that.dataIsUserBookmark = false;
+                                that.$parent.$emit('unbookmarkSuccess');
+                                for(let index in that.advertsList){
+                                    that.advertsList[index].id == id ? that.advertsList[index].isUserBookmark = false : null;
+                                }
+                            },
+                            function (response) {
+                                if (response.status == 409) {
+                                    that.$parent.$emit('sendToast', {'message': response.body, 'type': 'error'});
+                                } else {
+                                    that.$parent.$emit('loadError')
+                                }
+                            }
+                        )
+                    ;
+                } else {
+                    that.$parent.$emit('loadError')
+                }
             }
         }
     }

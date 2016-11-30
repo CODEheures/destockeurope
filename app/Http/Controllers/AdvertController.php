@@ -139,6 +139,10 @@ class AdvertController extends Controller
         $adverts->load('category');
         $tempoStore =[];
         $resultsByCat = [];
+        if(auth()->check()){
+            $user = auth()->user();
+            $user->load('bookmarks');
+        }
         foreach ($adverts as $advert){
             if(!array_key_exists($advert->category->id,$tempoStore)){
                 $ancestors = $advert->category->getAncestors();
@@ -151,6 +155,14 @@ class AdvertController extends Controller
             $advert->setBreadCrumb($ancestors);
             $resultsByCat[$advert->category->id]['results'][] = $advert;
             $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
+
+            if($advert->isUserOwner) {
+                $advert->setBookmarkCount();
+            } elseif (auth()->check()){
+                $advert->setIsUserBookmark($user->haveBookmark($advert->id));
+            } else {
+                $advert->setIsUserBookmark(false);
+            }
         }
 
         if($isSearchRequest){
@@ -272,6 +284,8 @@ class AdvertController extends Controller
                 $advert->setBreadCrumb($ancestors);
                 return response()->json(['advert' => $advert]);
             } else {
+                $advert->load('user');
+                $advert->load('bookmarks');
                 $advert->timestamps = false;
                 $advert->views = $advert->views +1;
                 $advert->save();
@@ -313,7 +327,14 @@ class AdvertController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $advert = Advert::find($id);
+        if($advert && auth()->user()->id === $advert->user->id){
+            $advert->delete();
+            session()->flash('info', trans('strings.view_advert_show_delete_success'));
+            return response(route('home'), 200);
+        } else {
+            return response('error',500);
+        }
     }
 
     public function getListType()  {

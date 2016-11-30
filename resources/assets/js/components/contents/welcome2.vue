@@ -48,6 +48,8 @@
                 <div class="row">
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
+                            :route-bookmark-add="routeBookmarkAdd"
+                            :route-bookmark-remove="routeBookmarkRemove"
                             :ads-frequency="parseInt(adsFrenquency)"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
@@ -82,6 +84,8 @@
             'clearStorage',
             //vue strings
             'loadErrorMessage',
+            'bookmarkSuccess',
+            'unbookmarkSuccess',
             //category dropdown menu component
             'routeCategory',
             'categoriesDropdownMenuFirstMenuName',
@@ -95,6 +99,8 @@
             'filterSearchPlaceHolder',
             //advertByList component
             'routeGetAdvertsList',
+            'routeBookmarkAdd',
+            'routeBookmarkRemove',
             'adsFrenquency',
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
@@ -188,6 +194,15 @@
                 if(haveClearAction){
                     this.updateResults(true);
                 }
+            });
+            this.$on('sendToast', function (event) {
+                this.sendToast(event.message, event.type);
+            });
+            this.$on('bookmarkSuccess', function () {
+                this.sendToast(this.bookmarkSuccess, 'success');
+            });
+            this.$on('unbookmarkSuccess', function () {
+                this.sendToast(this.unbookmarkSuccess, 'success');
             });
             if(this.clearStorage){
                 sessionStorage.clear();

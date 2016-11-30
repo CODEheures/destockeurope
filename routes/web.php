@@ -91,3 +91,7 @@ Route::delete('picture/{type}/{hashName?}', ['as' => 'picture.destroy', 'uses' =
 Route::get('picture/list-thumbs/{type}', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
 Route::get('picture/thumb/{type}/{hashName?}/{advertId?}', ['as' => 'picture.thumb', 'uses' => 'PictureController@getThumb']);
 Route::get('picture/normal/{hashName}/{advertId}', ['as' => 'picture.normal', 'uses' => 'PictureController@getNormal']);
+
+//Bookmarks
+Route::get('bookmark/add/{advertId?}', ['as' => 'bookmark.add', 'uses' => 'BookmarkController@add']);
+Route::get('bookmark/remove/{advertId?}', ['as' => 'bookmark.remove', 'uses' => 'BookmarkController@remove']);

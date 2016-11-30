@@ -19,6 +19,8 @@
                 filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
+                route-bookmark-add="{{ route('bookmark.add') }}"
+                route-bookmark-remove="{{ route('bookmark.remove') }}"
                 ads-frenquency="{{ config('runtime.adsFrequency') }}"
                 advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
                 advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
@@ -30,6 +32,8 @@
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
                 no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
+                bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
+                unbookmark-success="{{ trans('strings.view_advert_show_unbookmark_success') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
@@ -53,6 +57,8 @@
                 filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
+                route-bookmark-add="{{ route('bookmark.add') }}"
+                route-bookmark-remove="{{ route('bookmark.remove') }}"
                 ads-frenquency="{{ config('runtime.adsFrequency') }}"
                 advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
                 advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
@@ -64,6 +70,8 @@
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
                 no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
+                bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
+                unbookmark-success="{{ trans('strings.view_advert_show_unbookmark_success') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"

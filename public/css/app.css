@@ -29189,6 +29189,11 @@ button.swiper-pagination-bullet {
     position: absolute;
     bottom: 0;
     right: 0; }
+  .main.container a.item.advert div[class*="geodate-"] i.heart {
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    border-left: solid 1px rgba(0, 0, 0, 0.2);
+    z-index: 99; }
   .main.container a.item.advert p.price span:not(.tag), .main.container a.item.advert div[class*="geodate-"] {
     color: rgba(0, 0, 0, 0.6); }
   .main.container a.item.advert span.ui.red.horizontal.label {

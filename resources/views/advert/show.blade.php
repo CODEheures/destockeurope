@@ -4,6 +4,9 @@
 
     <show-advert1
             route-send-mail="{{ route('advert.sendMail') }}"
+            route-bookmark-add="{{ route('bookmark.add', ['advertId'=>$advert->id]) }}"
+            route-bookmark-remove="{{ route('bookmark.remove', ['advertId'=>$advert->id]) }}"
+            route-delete-advert="{{ route('advert.destroy', ['advertId'=>$advert->id] ) }}"
 
             user-mail="{{ auth()->check() ? auth()->user()->email : '' }}"
             user-name="{{ auth()->check() ? auth()->user()->name : '' }}"
@@ -29,6 +32,12 @@
             form-message-name-label="{{ trans('strings.form_label_name') }}"
             form-message-send-label="{{ trans('strings.modal_send') }}"
             form-message-cancel-label="{{ trans('strings.modal_cancel') }}"
+            bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
+            unbookmark-success="{{ trans('strings.view_advert_show_unbookmark_success') }}"
+            modal-valid-header="{{ trans('strings.view_advert_show_modal_delete_header') }}"
+            modal-valid-description="{{ trans('strings.view_advert_show_modal_delete_description') }}"
+            modal-no="{{ trans('strings.modal_no') }}"
+            modal-yes="{{ trans('strings.modal_yes') }}"
 
             route-get-advert="{{ route('advert.show', ['id' => $advert->id]) }}"
             route-home="{{ route('home') }}"

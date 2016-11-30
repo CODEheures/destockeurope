@@ -18,6 +18,13 @@
             </div>
             <div class="sixteen wide column">
                 <div class="ui grid">
+                    <div class="sixteen wide right aligned column geodate-computer">
+                        <p>
+                            <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
+                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                            <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
+                        </p>
+                    </div>
                     <div class="sixteen wide column">
                         <table id="table-advert-infos" class="ui very basic celled table advert-infos">
                             <tbody>
@@ -46,13 +53,6 @@
                         <div class="description">
                             <p>{{ advert.description }}</p>
                         </div>
-                    </div>
-                    <div class="sixteen wide right aligned column geodate-computer">
-                        <p>
-                            <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
-                            <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
-                        </p>
                     </div>
                 </div>
             </div>
