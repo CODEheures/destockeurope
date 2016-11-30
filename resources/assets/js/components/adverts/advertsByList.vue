@@ -90,7 +90,7 @@
                                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                                             <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
                                             <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
-                                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                             <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                             <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                         </p>
@@ -128,7 +128,7 @@
                                     <i class="calendar icon"></i><span
                                         class="meta">{{ getMoment(advert.updated_at) }}</span>
                                     <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
-                                    <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                    <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                     <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                     <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                 </p>
@@ -208,7 +208,7 @@
                                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                                             <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
                                             <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
-                                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                             <i class="empty large heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                             <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                         </p>
@@ -246,7 +246,7 @@
                                     <i class="calendar icon"></i><span
                                         class="meta">{{ getMoment(advert.updated_at) }}</span>
                                     <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
-                                    <i class="yellow large heart icon" v-if="advert.isUserOwner"></i>{{ advert.bookmarkCount }}
+                                    <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                     <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                     <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                 </p>
