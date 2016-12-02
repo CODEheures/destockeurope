@@ -85,13 +85,21 @@ class UtilsController extends Controller
         $user1->save();
 
         $user2 = new User();
-        $user2->name = 'admin';
-        $user2->email = 'admin@d.e';
+        $user2->name = 'vendeur';
+        $user2->email = 'vendeur@d.e';
         $user2->password = bcrypt('123456');
         $user2->setRememberToken(Str::random(60));
         $user2->confirmed = true;
-        $user2->role='admin';
         $user2->save();
+
+        $user3 = new User();
+        $user3->name = 'admin';
+        $user3->email = 'admin@d.e';
+        $user3->password = bcrypt('123456');
+        $user3->setRememberToken(Str::random(60));
+        $user3->confirmed = true;
+        $user3->role='admin';
+        $user3->save();
 
         $rootCategory1 = new Category();
         $rootCategory1->description = ['fr' => 'Matériels', 'en'=>'Hardware'];
@@ -142,7 +150,7 @@ class UtilsController extends Controller
 
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory212->id,
             '1000 doudounes en fin de série à prix cassées',
             ['11111111111111111111111111111111'],
@@ -151,7 +159,7 @@ class UtilsController extends Controller
         );
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory213->id,
             'Un lot de 28 chiens de cirque',
             ['22222222222222222222222222222222', '33333333333333333333333333333333', '44444444444444444444444444444444'],
@@ -162,7 +170,7 @@ class UtilsController extends Controller
         );
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory12->id,
             'Excellent état! 10 Cartons de casques AudioBeats',
             ['55555555555555555555555555555555'],
@@ -171,7 +179,7 @@ class UtilsController extends Controller
         );
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory12->id,
             '10000 lunettes Gears pour samsung S7...\':(',
             ['66666666666666666666666666666666'],
@@ -180,7 +188,7 @@ class UtilsController extends Controller
         );
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory11->id,
             '3 palettes de boites à dessin avec defauts',
             ['77777777777777777777777777777777'],
@@ -189,7 +197,7 @@ class UtilsController extends Controller
         );
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory22->id,
             '500 sacs à dos EastPack Gris à saisir',
             ['88888888888888888888888888888888'],
@@ -198,7 +206,7 @@ class UtilsController extends Controller
         );
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory11->id,
             '42 kilos de crayons tout venant',
             ['99999999999999999999999999999999'],
@@ -207,7 +215,7 @@ class UtilsController extends Controller
         );
 
         $this->advertCreate(
-            $user1->id,
+            $user2->id,
             $subCategory12->id,
             '200 clés USB suite à depot de bilan',
             ['00000000000000000000000000000000'],
