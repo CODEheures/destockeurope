@@ -24,6 +24,12 @@
                 type: Boolean,
                 default: false
             },
+            resultsFor: {
+                type: String
+            },
+            update: {
+                type: Boolean
+            },
             //vue strings
             placeHolder: String
         },
@@ -34,7 +40,7 @@
             }
         },
         mounted () {
-            var that = this;
+            let that = this;
             this.$watch('routeSearch', function () {
                 this.urlForSearch(function (url) {
                     let elemSearch = $('#'+that._uid);
@@ -64,7 +70,10 @@
             });
             this.$watch('flagReset', function () {
                 this.resetSearch(false);
-            })
+            });
+            this.$watch('update', function () {
+                this.updateSearch();
+            });
         },
         methods: {
             urlForSearch(callback) {
@@ -81,6 +90,13 @@
                 elemSearch.search('clear cache');
                 this.wantSearch = true;
                 withEmit ? this.$parent.$emit('clearSearchResults') : null;
+            },
+            updateSearch() {
+                let elemSearch = $('#'+this._uid);
+                if(this.resultsFor != undefined){
+                    elemSearch.search('set value',this.resultsFor);
+                    this.wantSearch = false;
+                }
             }
         }
     }
