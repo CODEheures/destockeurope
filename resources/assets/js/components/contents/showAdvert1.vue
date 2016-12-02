@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div class="mobile only tablet only five wide right aligned column"  v-if="userName == '' || isUserOwner">
-                <div class="ui labeled button">
+                <div class="ui labeled button disabled-bookmark">
                     <div class="ui yellow button">
                         <i class="heart icon"></i>
                     </div>
@@ -110,7 +110,7 @@
                                 </button>
                             </div>
                             <div class="field" v-if="userName == '' || isUserOwner">
-                                <div class="ui labeled button">
+                                <div class="ui labeled button disabled-bookmark">
                                     <div class="ui yellow button">
                                         <i class="heart icon"></i> {{ bookmarkInfo }}
                                     </div>

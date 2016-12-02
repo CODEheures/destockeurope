@@ -84,6 +84,11 @@ $height-masterads : 600px;
   }
 }
 
+.disabled-bookmark.button {
+  cursor: default;
+  pointer-events: none;
+}
+
 .ui.steps {
   background-color: #FFFFFF;
   padding: 0em;

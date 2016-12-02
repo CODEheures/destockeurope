@@ -29257,6 +29257,10 @@ button.swiper-pagination-bullet {
   color: #0067a1;
   z-index: -1; }
 
+.disabled-bookmark.button {
+  cursor: default;
+  pointer-events: none; }
+
 .ui.steps {
   background-color: #FFFFFF;
   padding: 0em;
