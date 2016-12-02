@@ -323,10 +323,13 @@
                 });
             },
             updateFilter(result){
+                let oldFilter= _.cloneDeep(this.filter);
                 for(let elem in result){
                     this.filter[elem] = result[elem];
                 }
-                this.updateResults();
+                if(!_.isEqual(oldFilter, this.filter)){
+                    this.updateResults();
+                }
             },
             initFilterBySessionStorage: function () {
                 if(sessionStorage.getItem('filter') != null){
