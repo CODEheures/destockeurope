@@ -46,15 +46,15 @@
                         <table style="float: right" class="ui very basic collapsing celled compact unstackable table">
                             <tbody>
                                 <tr>
-                                    <td class="four wide double">Total HT</td>
+                                    <td class="four wide double">{{ tableTotalExclVat }}</td>
                                     <td class="four wide double right aligned">{{ ((advert.cost - tva)/100).toFixed(2) }}€</td>
                                 </tr>
                                 <tr>
-                                    <td class="four wide double">TVA</td>
+                                    <td class="four wide double">{{ tableTotalVat }}</td>
                                     <td class="four wide double right aligned">{{ (tva/100).toFixed(2) }}€</td>
                                 </tr>
                                 <tr>
-                                    <td class="four wide double">Total TTC</td>
+                                    <td class="four wide double">{{ tableTotalInclVat }}</td>
                                     <td class="four wide double right aligned">{{ (advert.cost/100).toFixed(2) }}€</td>
                                 </tr>
                             </tbody>
@@ -159,6 +159,9 @@
             'tableHeaderOptionName',
             'tableHeaderOptionQuantity',
             'tableHeaderOptionCost',
+            'tableTotalExclVat',
+            'tableTotalVat',
+            'tableTotalInclVat',
             'toggleCgvLabel',
             'lockInfoHeader',
             'lockInfoContent',
