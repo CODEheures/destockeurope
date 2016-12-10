@@ -30,4 +30,48 @@ trait MoneyUtils
         $moneyParser = new DecimalMoneyParser($currencies);
         return $moneyParser->parse($price,$currency)->getAmount();
     }
+
+    public static function getDefaultMoneyByLocale($locale) {
+        $currencies = new ISOCurrencies();
+        $numberFormatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
+        $currency =  $numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE);
+        if ($currencies->contains(new Currency($currency)) && $currency != '') {
+            return $currency;
+        } else {
+            return env('DEFAULT_CURRENCY');
+        }
+    }
+
+    public static function listCurrencies()  {
+        $currencies = new ISOCurrencies();
+
+        $listCodeCurrencies=[];
+        foreach ($currencies as $currency) {
+
+            $region = auth()->user()->locale."@currency=$currency";
+            $formatter = new \NumberFormatter($region, \NumberFormatter::CURRENCY);
+            $symbol = $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
+
+            if($symbol != '') {
+                $listCodeCurrencies[$currency->getCode()] = [
+                    'code' => $currency->getCode(),
+                    'symbol' => $symbol];
+            }
+        }
+
+        $userPreferedCurrency = auth()->user()->currency;
+        $response = [
+            'listCurrencies' => $listCodeCurrencies,
+            'userPrefCurrency' => $userPreferedCurrency
+        ];
+        return $response;
+    }
+
+    public static function isAvailableCurrency($currency) {
+        $currencies = new ISOCurrencies();
+        if ($currencies->contains(new Currency($currency)) && $currency != '') {
+            return true;
+        }
+        return false;
+    }
 }

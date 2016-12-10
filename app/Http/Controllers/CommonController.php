@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class CommonController extends Controller
 {
     public function __construct() {
-        $this->middleware('isAdminUser', ['except' => ['home']]);
+        $this->middleware('isAdminUser', ['except' => ['home', 'cgv']]);
     }
 
     public function home() {
@@ -56,5 +56,9 @@ class CommonController extends Controller
             $transList[$key] =  $item;
         }
         return response()->json($transList);
+    }
+
+    public function cgv(){
+        return 'cgv';
     }
 }

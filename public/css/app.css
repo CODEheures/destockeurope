@@ -29279,6 +29279,12 @@ button.swiper-pagination-bullet {
 .row.breadcrumb {
   margin-bottom: 1rem; }
 
+div.breadcrumb.type-steps div.active {
+  color: #4183C4; }
+
+div.breadcrumb.type-steps div.disabled {
+  opacity: 0.6; }
+
 .ui .segment .footer {
   padding: 4em 0 4em 0; }
 

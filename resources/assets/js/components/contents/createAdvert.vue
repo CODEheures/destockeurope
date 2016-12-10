@@ -4,9 +4,14 @@
         <div class="column">
             <h2 class="ui header">{{ contentHeader }}</h2>
         </div>
-        <div class="tablet only computer only column">
+        <div class="mobile only tablet only column">
+            <steps-light
+                    :steps="steps">
+            </steps-light>
+        </div>
+        <div class="computer only column">
             <steps
-                :steps="steps">
+                    :steps="steps">
             </steps>
         </div>
         <div class="column">
@@ -441,7 +446,7 @@
                             .then(
                                     function (response) {
                                         that.cost = response.body;
-                                        (that.steps[2]).title = that.stepThreeTitle + '(' + that.cost + '€)';
+                                        (that.steps[2]).title = that.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + '€)';
                                     },
                                     function (response) {
                                         that.cost = 0;

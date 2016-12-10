@@ -5,7 +5,12 @@
             <div class="column">
                 <h2 class="ui header">{{ contentHeader }}</h2>
             </div>
-            <div class="tablet only computer only column">
+            <div class="mobile only tablet only column">
+                <steps-light
+                        :steps="steps">
+                </steps-light>
+            </div>
+            <div class="computer only column">
                 <steps
                         :steps="steps">
                 </steps>
@@ -111,6 +116,7 @@
         directives: {focus: focus},
         props: [
             //vue routes
+            'routeUserGetMe',
             'routeUserSetPrefCurrency',
             'routeUserSetPrefLocale',
             'routeUserSetPrefLocation',
@@ -125,6 +131,7 @@
             'userName',
             'latitude',
             'longitude',
+            'firstGeoloc',
             'compagnyName',
             'registrationNumber',
             'advertAccountVerifiedStep',
@@ -174,6 +181,7 @@
                 lat: '',
                 lng: '',
                 geoloc: '',
+                dataFirstGeoloc: false,
                 dataUserName: '',
                 dataCompagnyName: '',
                 dataRegistrationNumber: '',
@@ -232,13 +240,13 @@
             sessionStorage.setItem('lat', this.latitude);
             sessionStorage.setItem('lng', this.longitude);
             sessionStorage.setItem('geoloc', this.geoloc);
-            var geoCodes = {
+            let geoCodes = {
                 'typeEvent': 'mounted',
                 'lat' : this.latitude,
                 'lng' : this.longitude,
                 'geoloc': this.geoloc
             };
-            this.latLngChange(geoCodes);
+            this.firstGeoloc == '1' ? this.dataFirstGeoloc = true :  null;
             this.$watch('blured', function () {
                 if (this.blured.input == this.focused.input && this.blured.value != this.focused.value) {
                     this.updateAccount(this.blured.input, this.blured.value);
@@ -281,10 +289,11 @@
                 this.lat= event.lat;
                 this.lng= event.lng;
                 this.geoloc= event.geoloc;
-                if(parseFloat(this.lat) != parseFloat(this.latitude) || parseFloat(this.lng) != parseFloat(this.longitude)){
+                if(this.dataFirstGeoloc || parseFloat(this.lat) != parseFloat(this.latitude) || parseFloat(this.lng) != parseFloat(this.longitude)){
                     this.$http.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
                             .then(
                                     (response) => {
+                                        this.dataFirstGeoloc = false;
                                         this.sendToast(this.accountPatchSuccess, 'success');
                                     },
                                     (response) => {
@@ -308,17 +317,33 @@
                 }
                 this.$http.patch(updateRoute, {'value': value})
                         .then(
-                                (response) => {
+                                function (response) {
                                     this.sendToast(this.accountPatchSuccess, 'success');
                                 },
-                                (response) => {
+                                function (response) {
                                     if(response.status == 409) {
                                         this.sendToast(response.body, 'error');
+                                    } else if(response.status == 422) {
+                                        this.sendToast(response.body.value[0], 'error');
                                     } else {
                                         this.sendToast(this.loadErrorMessage, 'error');
                                     }
+                                    this.userGetMe();
                                 }
                         );
+            },
+            userGetMe: function () {
+                this.$http.get(this.routeUserGetMe)
+                    .then(
+                        function (response) {
+                            this.dataUserName = response.body.userName;
+                            this.dataCompagnyName = response.body.compagnyName;
+                            this.dataRegistrationNumber = response.body.registrationNumber;
+                        },
+                        function (response) {
+                            this.sendToast(this.loadErrorMessage, 'error');
+                        }
+                    );
             },
             updateByEnter: function (event) {
                 this.updateAccount(event.target.name, event.target.value);
@@ -326,6 +351,7 @@
             setSteps () {
                 if(parseFloat(this.advertCost)>0) {
                     (this.steps[2]).isDisabled = false;
+                    (this.steps[2]).title = this.stepThreeTitle + '(' + (this.advertCost/100).toFixed(2) + '€)';
                 } else {
                     (this.steps[2]).isDisabled = true;
                 }

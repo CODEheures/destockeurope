@@ -41,9 +41,7 @@ class UserController extends Controller
     public function index()
     {
         $user = $this->auth->user();
-        //TODO changer ip
-        //$ip = $request->ip();
-        $ip='82.246.117.210';
+        $ip=config('runtime.ip');
         $geolocType = 0;
         $zoomMap = 16;
         return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap'));
@@ -51,9 +49,7 @@ class UserController extends Controller
 
     public function completeAccount($id){
         $user = $this->auth->user();
-        //TODO changer ip
-        //$ip = $request->ip();
-        $ip='82.246.117.210';
+        $ip=config('runtime.ip');
         $geolocType = 0;
         $zoomMap = 16;
         $advertAccountVerifiedStep = true;
@@ -65,11 +61,20 @@ class UserController extends Controller
         }
     }
 
+    public function getMe() {
+        $user = $this->auth->user();
+        return response()->json([
+            'userName' => $user->name,
+            'compagnyName' => $user->compagnyName,
+            'registrationNumber' => $user->registrationNumber
+        ]);
+    }
+
     public function setCurrency(Request $request) {
         $currencies = new ISOCurrencies();
         $prefCurrency = $request->currency;
 
-        if($currencies->contains(new Currency($prefCurrency))) {
+        if($currencies->contains(new Currency($prefCurrency)) && $prefCurrency != '') {
             $this->auth->user()->currency = $prefCurrency;
             $this->auth->user()->save();
             return response('ok', 200);

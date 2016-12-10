@@ -9,7 +9,6 @@
                 'geoloc',
                 geolocType,
                 'mapInput',
-                '{{ $ip }}',
                 '{{ trans('strings.form_googlemap_marker') }}',
                 '{{ trans('strings.form_googlemap_geoloc_fail') }}'
         );

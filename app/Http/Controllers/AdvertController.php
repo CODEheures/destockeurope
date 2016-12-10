@@ -8,6 +8,8 @@ use App\Common\CategoryUtils;
 use App\Common\DBUtils;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
+use App\Common\UserUtils;
+use App\Http\Requests\CreditCardRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Notifications\CustomerContactSeller;
 use App\Picture;
@@ -21,7 +23,7 @@ class AdvertController extends Controller
 {
 
     use CategoryUtils;
-
+    use UserUtils;
     private $pictureManager;
 
     public function __construct(PicturesManager $picturesManager) {
@@ -48,23 +50,10 @@ class AdvertController extends Controller
         $adverts = Advert::where('isValid', true);
 
         //where currency
-        if($request->has('currency')) {
-            $currencies = new ISOCurrencies();
-            if ($currencies->contains(new Currency($request->currency))) {
-                $currency = $request->currency;
-            } else {
-                $currency = env('DEFAULT_CURRENCY');
-            }
-        } elseif (auth()->check()) {
-            $userCurrency = auth()->user()->currency;
-            $currencies = new ISOCurrencies();
-            if ($currencies->contains(new Currency($userCurrency))) {
-                $currency = $userCurrency;
-            } else {
-                $currency = env('DEFAULT_CURRENCY');
-            }
+        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)) {
+            $currency = $request->currency;
         } else {
-            $currency = env('DEFAULT_CURRENCY');
+            $currency = config('runtime.currency');
         }
         $adverts = $adverts->where('currency', $currency);
 
@@ -183,9 +172,7 @@ class AdvertController extends Controller
      */
     public function create(Request $request)
     {
-        //TODO changer ip
-        //$ip = $request->ip();
-        $ip='82.246.117.210';
+        $ip=config('runtime.ip');
         $geolocType = 1;
         $zoomMap = 11;
         return view('advert.create', compact('ip', 'geolocType', 'zoomMap'));
@@ -221,7 +208,9 @@ class AdvertController extends Controller
 
                 $results = $this->pictureManager->storeLocalFinal();
 
-                $advert->cost = $this->getCost(count($results), $advert->isUrgent);
+                $advert->options = $this->setOptions(count($results)/2, $advert->isUrgent);
+
+                $advert->cost = $this->getCost(count($results)/2, $advert->isUrgent);
 
                 DB::beginTransaction();
                 $advert->save();
@@ -245,16 +234,45 @@ class AdvertController extends Controller
         }
     }
 
+    private function setOptions($nbPictures, $isUrgent) {
+        $options = [];
+        if($nbPictures > config('runtime.nbFreePictures')){
+            $options['payedPictures'] = [
+                'name' => trans('strings.option_payedPicture_name'),
+                'quantity' => $nbPictures - config('runtime.nbFreePictures'),
+                'cost' => $this->getCostPictures($nbPictures),
+                'tva' => env('TVA')
+            ];
+        }
+        if($isUrgent){
+            $options['isUrgent'] = [
+                'name' => trans('strings.option_isUrgent_name'),
+                'quantity' => 1,
+                'cost' => $this->getCostIsUrgent($isUrgent),
+                'tva' => env('TVA')
+            ];
+        }
+        return $options;
+    }
+
+    private function getCostPictures($nbPictures){
+        if($nbPictures > config('runtime.nbFreePictures')){
+            return ($nbPictures - config('runtime.nbFreePictures'))*10*100;
+        }
+        return 0;
+    }
+
+    private function getCostIsUrgent($isUrgent){
+        if($isUrgent){
+            return config('runtime.urgentCost')*100;
+        }
+        return 0;
+    }
+
     private function getCost($nbPictures, $isUrgent=false){
         $cost = 0;
-        if($nbPictures > config('runtime.nbFreePictures')){
-            $cost += ($nbPictures - config('runtime.nbFreePictures'))*10;
-        }
-
-        if($isUrgent){
-            $cost += config('runtime.urgentCost');
-        }
-
+        $cost += $this->getCostPictures($nbPictures);
+        $cost += $this->getCostIsUrgent($isUrgent);
         return $cost;
     }
 
@@ -270,13 +288,13 @@ class AdvertController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function show($id, Request $request)
     {
         $advert = Advert::find($id);
-        if($advert->isValid){
-            if($request->isXmlHttpRequest()){
+        if($advert->isValid) {
+            if ($request->isXmlHttpRequest()) {
                 $advert->load('pictures');
                 $advert->load('category');
                 $ancestors = $advert->category->getAncestors();
@@ -287,10 +305,12 @@ class AdvertController extends Controller
                 $advert->load('user');
                 $advert->load('bookmarks');
                 $advert->timestamps = false;
-                $advert->views = $advert->views +1;
+                $advert->views = $advert->views + 1;
                 $advert->save();
                 return view('advert.show', compact('advert'));
             }
+        } elseif ($request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == 'admin')) {
+            return response()->json(['advert' => $advert]);
         } else {
             return back();
         }
@@ -401,6 +421,19 @@ class AdvertController extends Controller
         }
     }
 
+    public function reviewForPayment($id) {
+        if(!$this->haveCompleteAccount()){
+            return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
+        }
+        $advert = Advert::find($id);
+        if($advert->user->id == auth()->user()->id){
+            return view('advert.reviewForPayment', compact('advert'));
+        } else {
+            return redirect()->back()->withErrors(trans('strings.view_all_error_saving_message'));
+        }
+
+    }
+
     public function sendMail(Request $request) {
         $advert = Advert::find($request->id);
         if($advert){
@@ -415,4 +448,186 @@ class AdvertController extends Controller
             return response(trans('strings.mail_customerToSeller_send_error'), 500);
         }
     }
+
+    public function payByPaypal($id) {
+        return 'payée avec paypal';
+    }
+
+    public function payByCard($id, CreditCardRequest $request) {
+        return 'payée avec carte';
+    }
+
+//    public function advertPayment($id) {
+//        $advert = Advert::find($id);
+//        $advert->load('user');
+//        if($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0){
+//
+//        } else {
+//
+//        }
+//
+//
+//        $tva = round($product->tvaPrice()/100,2);
+//        $price = round($product->priceTTC()/100,2);
+//
+//
+//        $payerInfo = new PayerInfo();
+//
+//        $adresses = $this->auth->user()->addresses;
+//        foreach ($adresses as $adress) {
+//            if($adress->type == 'invoice') {
+//                $paypalAdress = new ShippingAddress();
+//                $paypalAdress->setLine1($adress->address);
+//                $paypalAdress->setLine2($adress->complement);
+//                $paypalAdress->setPostalCode($adress->zipCode);
+//                $paypalAdress->setCity($adress->town);
+//                $paypalAdress->setCountryCode('FR');
+//                if($this->auth->user()->enterprise != null){
+//                    $paypalAdress->setRecipientName($this->auth->user()->enterprise);
+//                } else {
+//                    $paypalAdress->setRecipientName($this->auth->user()->firstName . ' ' . $this->auth->user()->lastName);
+//                }
+//            }
+//        }
+//
+//
+//        $payer = new Payer();
+//        $payer->setPaymentMethod('paypal');
+//        $payer->setPayerInfo($payerInfo);
+//
+//
+//        $item_1 = new Item();
+//        $item_1->setName($product->description) // item name
+//        ->setCurrency('EUR')
+//            ->setQuantity(1)
+//            ->setTax($tva)
+//            ->setPrice($price); // unit price
+//
+//        // add item to list
+//        $item_list = new ItemList();
+//        $item_list->setItems(array($item_1));
+//        $item_list->setShippingAddress($paypalAdress);
+//
+//        $amount = new Amount();
+//        $amount->setCurrency('EUR')->setTotal($price);
+//
+//        $transaction = new Transaction();
+//        $transaction->setAmount($amount)
+//            ->setItemList($item_list)
+//            ->setDescription('Votre achat chez CODEheures')
+//            ->setInvoiceNumber($purchase->id);
+//
+//
+//        $redirect_urls = new RedirectUrls();
+//
+//        // Specify return URL
+//        $redirect_urls->setReturnUrl(route('customer.sale.payment.status').'?success=true')
+//            ->setCancelUrl(route('customer.sale.payment.status').'?success=false');
+//
+//        $payment = new Payment();
+//        $payment->setIntent('Sale')
+//            ->setPayer($payer)
+//            ->setRedirectUrls($redirect_urls)
+//            ->setTransactions(array($transaction));
+//
+//
+//        try {
+//            $payment->create($this->_api_context);
+//        } catch (PayPalConnectionException $ex) {
+//            if (config('app.debug')) {
+//                echo "Exception: " . $ex->getMessage() . PHP_EOL;
+//                $err_data = json_decode($ex->getData(), true);
+//                exit;
+//            } else {
+//                die('Ho mince! Une erreur inconnue est apparue \':(');
+//            }
+//        }
+//
+//        foreach($payment->getLinks() as $link) {
+//            if($link->getRel() == 'approval_url') {
+//                $redirect_url = $link->getHref();
+//                break;
+//            }
+//        }
+//
+//        // add payment ID to session
+//        session(['paypal_payment_id' => $payment->getId()]);
+//
+//        if(isset($redirect_url)) {
+//            // redirect to paypal
+//            return redirect($redirect_url);
+//        }
+//        return redirect(route('customer.monitor.index'))
+//            ->with('error', 'Ho mince! Une erreur inconnue est apparue \':(');
+//    }
+//
+//    public function salePaymentStatus(Request $request) {
+//
+//        if($request->get('success') == 'true') {
+//            // Get the payment ID before session clear
+//            $session_payment_id = session('paypal_payment_id');
+//            $payment_id = $request->get('paymentId');
+//
+//            //test sessionId = Request return paymentId
+//            if($session_payment_id != $payment_id) {
+//                session()->forget('paypal_payment_id');
+//                return redirect(route('customer.monitor.index'))
+//                    ->with('error', 'Ho non! Le paiement à échoué \':(');
+//
+//            }
+//
+//            // clear the session payment ID
+//            session()->forget('paypal_payment_id');
+//
+//            if (empty($request->input('PayerID')) || empty($request->input('token'))) {
+//                return redirect(route('customer.monitor.index'))
+//                    ->with('error', 'Ho non! Le paiement à échoué \':(');
+//            }
+//
+//            try {
+//                $payment = Payment::get($payment_id, $this->_api_context);
+//
+//                // PaymentExecution object includes information necessary
+//                // to execute a PayPal account payment.
+//                // The payer_id is added to the request query parameters
+//                // when the user is redirected from paypal back to your site
+//                $execution = new PaymentExecution();
+//                $execution->setPayerId($request->input('PayerID'));
+//                //Execute the payment
+//                $result = $payment->execute($execution, $this->_api_context);
+//            } catch (\Exception $e) {
+//                return redirect(route('customer.monitor.index'))
+//                    ->with('error', 'Ho non! Le paiement à échoué \':(');
+//            }
+//
+//
+//
+//
+//            if ($result->getState() == 'approved') { // payment made
+//                $purchase = Purchase::findOrFail($result->getTransactions()[0]->getInvoiceNumber());
+//                $purchase->paypal_result = json_encode(['id' => $result->getId()]);
+//                $purchase->payed = true;
+//                $purchase->save();
+//
+//                //envoi du mail de la facture
+//                try {
+//                    $this->invoiceTools->create('isSold', 'purchase', $purchase->id, true);
+//                    $this->invoiceTools->sendMail();
+//                    return redirect(route('customer.monitor.index'))
+//                        ->with('success', 'Merci pour votre paiement. Votre compte est crédité. Votre facture est disponible dans votre espace client sur le détail de votre commande sur le lien suivant: ')
+//                        ->with('info_url', route('invoice.get', ['type' => 'isSold', 'origin' => 'purchase', 'id' => $purchase->id]))
+//                        ->with('info_url_txt', 'voir ma facture');
+//                } catch (\Exception $e) {
+//                    return redirect(route('customer.monitor.index'))
+//                        ->with('success', 'Merci pour votre paiement. Votre compte est crédité.');
+//                }
+//            }
+//
+//            return redirect(route('customer.monitor.index'))
+//                ->with('error', 'Ho non! Le paiement à échoué \':(');
+//        } else {
+//            return redirect(route('customer.monitor.index'))
+//                ->with('error', 'Ho non! Le paiement à échoué \':(');
+//        }
+//    }
 }

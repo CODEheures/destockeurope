@@ -6,68 +6,35 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Category;
 use App\Common;
-use App\Common\PicturesManager;
 use App\Picture;
 use App\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
-use NumberFormatter;
 use Symfony\Component\HttpFoundation\Request;
+use App\Common\LocaleUtils;
+use App\Common\MoneyUtils;
 
 class UtilsController extends Controller
 {
 
+    use LocaleUtils;
+    use MoneyUtils;
+
     public function __construct() {
+        $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales']]);
         $this->middleware('isAdminUser', ['only' => ['testGame', 'isPicture']]);
     }
 
 
     public function getListCurrencies()  {
-        $currencies = new ISOCurrencies();
-
-        $listCodeCurrencies=[];
-        foreach ($currencies as $currency) {
-
-            $region = auth()->user()->locale."@currency=$currency";
-            $formatter = new NumberFormatter($region, NumberFormatter::CURRENCY);
-            $symbol = $formatter->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
-
-            $listCodeCurrencies[$currency->getCode()] = [
-                'code' => $currency->getCode(),
-                'symbol' => $symbol];
-        }
-
-        $userPreferedCurrency = auth()->user()->currency;
-        $response = [
-            'listCurrencies' => $listCodeCurrencies,
-            'userPrefCurrency' => $userPreferedCurrency
-        ];
-        return response()->json($response);
+        return response()->json($this->listCurrencies());
     }
 
     public function getListLocales() {
-        $locales = \ResourceBundle::getLocales('');
-
-        $listLocales = [];
-        foreach ($locales as $locale) {
-            $listLocales[$locale] = [
-                'code' => $locale,
-                'name' => \Locale::getDisplayName($locale),
-                'region' => strtolower(\Locale::getDisplayRegion($locale))
-            ];
-        }
-
-        $userPreferedLocale = auth()->user()->locale;
-        $response = [
-            'listLocales' => $listLocales,
-            'userPrefLocale' => $userPreferedLocale
-        ];
-
-        return response()->json($response);
+        return response()->json($this->listLocales());
     }
 
     public function testGame(){
@@ -76,10 +43,18 @@ class UtilsController extends Controller
         $parameters = new Common();
         $parameters->save();
 
+        $lat = 47.3526;
+        $lng = 0.6702587142943912;
+
+
         $user1 = new User();
         $user1->name = 'client';
         $user1->email = 'client@d.e';
         $user1->password = bcrypt('123456');
+        $user1->locale = env('DEFAULT_LOCALE');
+        $user1->currency = config('runtime.currency');
+        $user1->latitude = $lat;
+        $user1->longitude = $lng;
         $user1->setRememberToken(Str::random(60));
         $user1->confirmed = true;
         $user1->save();
@@ -88,6 +63,10 @@ class UtilsController extends Controller
         $user2->name = 'vendeur';
         $user2->email = 'vendeur@d.e';
         $user2->password = bcrypt('123456');
+        $user2->locale = env('DEFAULT_LOCALE');
+        $user2->currency = config('runtime.currency');
+        $user2->latitude = $lat;
+        $user2->longitude = $lng;
         $user2->setRememberToken(Str::random(60));
         $user2->confirmed = true;
         $user2->save();
@@ -96,6 +75,10 @@ class UtilsController extends Controller
         $user3->name = 'admin';
         $user3->email = 'admin@d.e';
         $user3->password = bcrypt('123456');
+        $user3->locale = env('DEFAULT_LOCALE');
+        $user3->currency = config('runtime.currency');
+        $user3->latitude = $lat;
+        $user3->longitude = $lng;
         $user3->setRememberToken(Str::random(60));
         $user3->confirmed = true;
         $user3->role='admin';
@@ -300,6 +283,6 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-        return response()->json(false);
+        return null;
     }
 }

@@ -9,8 +9,10 @@
 namespace App\Http\Controllers\Auth;
 
 
+use App\Common\LocaleUtils;
 use App\Notifications\SendToken;
 use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait CreateUser {
 
@@ -60,11 +62,21 @@ trait CreateUser {
 
     protected function create(array $data)
     {
+        $lat = 0;
+        $lng = 0;
+        $geoloc = LocaleUtils::getGeoLocByIp(config('runtime.ip'));
+        if($geoloc){
+            $lat = $geoloc[0];
+            $lng = $geoloc[1];
+        }
         $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'locale' => \Locale::acceptFromHttp($this->request->server('HTTP_ACCEPT_LANGUAGE'))
+            'locale' => \Locale::acceptFromHttp($this->request->server('HTTP_ACCEPT_LANGUAGE')),
+            'currency' => config('runtime.currency'),
+            'latitude' => $lat,
+            'longitude' => $lng
         ]);
 
         self::setNewToken($user);
@@ -94,13 +106,24 @@ trait CreateUser {
             }
 
             try {
+                $lat = 0;
+                $lng = 0;
+                $geoloc = LocaleUtils::getGeoLocByIp(config('runtime.ip'));
+                if($geoloc){
+                    $lat = $geoloc[0];
+                    $lng = $geoloc[1];
+                }
+
                 $newUser =  User::create([
                     'name' => $user->name,
                     'email' => $user->email,
                     $keyId => $user->id,
                     'avatar' => $user->avatar,
                     'confirmed' => true,
-                    'locale' => \Locale::acceptFromHttp($this->request->server('HTTP_ACCEPT_LANGUAGE'))
+                    'locale' => \Locale::acceptFromHttp($this->request->server('HTTP_ACCEPT_LANGUAGE')),
+                    'currency' => config('runtime.currency'),
+                    'latitude' => $lat,
+                    'longitude' => $lng
                 ]);
                 $this->isNewOauthUser = true;
                 return $newUser;

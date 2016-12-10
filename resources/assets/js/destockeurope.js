@@ -1,4 +1,4 @@
-exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMapInput, ip, markerMsg, errorGeoCodeMsg) {
+exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMapInput, markerMsg, errorGeoCodeMsg) {
     this.geocoder = new google.maps.Geocoder;
     this.elemMap = document.getElementById(idMap);
     this.geoloc = document.getElementById(idGeoLoc);
@@ -6,7 +6,7 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
     var that = this;
 
     this.constructMap= function () {
-        if(this.elemMap != undefined && this.geoloc != undefined && ip != undefined){
+        if(this.elemMap != undefined && this.geoloc != undefined){
             this.getInitLocation();
         }
     };
@@ -66,11 +66,20 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
         }
     };
     this.setMyLatLngByIp= function () {
-        $.getJSON("http://ip-api.com/json/"+ip, function(data) {
+        $.getJSON("https://ipinfo.io/geo" , function(response) {
+            let loc = response.loc.split(',');
             let position =  {
                 coords: {
-                    latitude: data.lat,
-                    longitude: data.lon
+                    latitude: loc[0],
+                    longitude: loc[1]
+                }
+            };
+            that.setMyLatLng(position);
+        }).fail(function() {
+            let position =  {
+                coords: {
+                    latitude: 0,
+                    longitude: 0
                 }
             };
             that.setMyLatLng(position);

@@ -29,6 +29,7 @@ class Advert extends Model {
         'mainPicture',
         'isPublish',
         'isValid',
+        'options',
         'cost',
         'totalQuantity',
         'lotMiniQuantity',
@@ -37,6 +38,9 @@ class Advert extends Model {
     ];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
+    protected $casts = [
+        'options' => 'array'
+    ];
     protected $appends = array('breadCrumb', 'url', 'resume', 'thumb', 'isUserOwner', 'isUserBookmark', 'bookmarkCount');
     private $breadcrumb;
     private $resumeLength;

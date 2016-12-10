@@ -83,6 +83,9 @@ return [
     'link_send_reset_link' => 'Send reset link',
 
     'request_main_picture_require' => 'At least one picture is required',
+    'request_input_require' => 'This input is required',
+    'request_input_min_chars' => 'This input required at least :min characters',
+    'request_input_max_chars' => 'This input required :max characters maximum',
 
     'auth_register_success' => 'Your account is create. Thank you validate it by clicking the link received in your email address',
     'auth_register_resend_token' => 'Confirmation link send to your e-mail.',
@@ -96,9 +99,13 @@ return [
     'auth_register_oauth_success' => 'Welcome on :appname :username. Thank you for your trust. You can henceforth enjoy your customer area',
 
     'divider_register' => 'or use',
+    'divider_payment' => 'or use card',
 
     'middleware_admin' => 'You do not have the correct security credentials to access this page...',
     'middleware_complete_account' => 'Thank you to fill in all fields before validation of your account',
+
+    'option_payedPicture_name' => 'Extra Photos',
+    'option_isUrgent_name' => 'Urgent advert',
 
     'view_all_error_load_message' => 'Ho no! Load error :-( , try to refresh the page',
     'view_all_error_add_message' => 'Ho no! Adding Fails error :-(',
@@ -198,4 +205,35 @@ return [
     'view_user_account_compagny_number_label' => 'Compagny registration number',
     'view_filter_ribbon' => 'Filters',
     'view_filter_price_title' => 'Range Price',
+
+    'view_reviewForPayment_header' => 'Summary of your order',
+    'view_reviewForPayment_table_option_name' => 'Options',
+    'view_reviewForPayment_table_option_quantity' => 'Quantity',
+    'view_reviewForPayment_table_option_cost' => 'Cost',
+    'view_reviewForPayment_cgv' => 'I agree with <a href=":link">Terms of service</a>',
+    'view_reviewForPayment_lock_info_header' => 'This page is fully secure',
+    'view_reviewForPayment_lock_info_content' => 'This page uses the https: // protocol and guarantees a total security of the exchanges',
+    'view_reviewForPayment_paypal_title' => 'PayPal, the reflex security to pay online',
+
+    'payment_card_name_label' => 'Card owner name',
+    'payment_card_number_label' => 'Card number',
+    'payment_card_number_placeholder' => 'Card #',
+    'payment_card_cvc_label' => 'CVC',
+    'payment_card_expiration_label' => 'Expiration',
+    'payment_card_expiration_month_placeholder' => 'Month',
+    'payment_card_expiration_year_placeholder' => 'Year YYYY',
+
+    'january' => 'january',
+    'february' => 'february',
+    'march' => 'march',
+    'april' => 'april',
+    'may' => 'may',
+    'june' => 'june',
+    'july'=> 'july',
+    'august' => 'august',
+    'september' => 'september',
+    'october' => 'october',
+    'november' => 'november',
+    'december' => 'december'
+
 ];

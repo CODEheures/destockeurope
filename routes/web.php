@@ -17,7 +17,7 @@ Route::get('/manage', 'CommonController@manage')->name('application.manage');
 Route::get('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@appParameters')->name('appParameters');
 Route::patch('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@patchParameters');
 Route::get('/u15t6rs1hqe6h1qreh16er561he5r/get-welcome-list-type', 'CommonController@getWelcomeType')->name('advert.getWelcomeListType');
-
+Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
 
 //Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -46,6 +46,7 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function() {
 });
 
 Route::group(['prefix' => 'users'], function() {
+    Route::get('getMe', ['as' => 'user.getMe', 'uses' => 'UserController@getMe']);
     Route::get('account', ['as' => 'user.account', 'uses' => 'UserController@index']);
     Route::get('completeAccount/{id}', ['as' => 'user.completeAccount', 'uses' => 'UserController@completeAccount']);
     //User Preferences settings
@@ -77,12 +78,15 @@ Route::resource('category', 'CategoryController');
 
 //Adverts
 Route::get('advert/publish/{id?}', ['as' => 'advert.publish', 'uses' => 'AdvertController@publish']);
+Route::get('advert/reviewForPayment/{id?}', ['as' => 'advert.reviewForPayment', 'uses' => 'AdvertController@reviewForPayment']);
 Route::get('advert/get-list-type', ['as' => 'advert.getListType', 'uses' => 'AdvertController@getListType']);
 Route::get('advert/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
 Route::get('advert/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
 Route::post('advert/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
 Route::get('advert/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
 Route::post('advert/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
+Route::get('advert/pay/paypal/{id}', ['as' => 'advert.payByPaypal', 'uses' => 'AdvertController@payByPaypal']);
+Route::post('advert/pay/card/{id}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
 Route::resource('advert', 'AdvertController');
 
 //Pictures

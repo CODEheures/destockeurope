@@ -1,5 +1,6 @@
 $width-masterads : 1400px;
 $height-masterads : 600px;
+$color-blue: #4183C4;
 
 .main.container {
   margin-top: 1rem;
@@ -107,6 +108,16 @@ $height-masterads : 600px;
 
 .row.breadcrumb {
   margin-bottom: 1rem;
+}
+
+div.breadcrumb.type-steps {
+  & div.active {
+    color: $color-blue;
+  }
+
+  & div.disabled {
+    opacity: 0.6;
+  }
 }
 
 .ui .segment .footer {

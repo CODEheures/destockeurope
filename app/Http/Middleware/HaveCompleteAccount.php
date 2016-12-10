@@ -2,10 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Common\UserUtils;
 use Closure;
 
 class HaveCompleteAccount
 {
+
+    use UserUtils;
     /**
      * Handle an incoming request.
      *
@@ -16,22 +19,10 @@ class HaveCompleteAccount
     public function handle($request, Closure $next)
     {
 
-        if(auth()->check()) {
-
-            $user = auth()->user();
-            if(
-                $user->name != null
-                && $user->compagnyName != null
-                && $user->registrationNumber != null
-                && strlen($user->name) >= config('db_limits.users.minName')
-                && strlen($user->compagnyName) >= config('db_limits.users.minCompagnyName')
-                && strlen($user->registrationNumber) >= config('db_limits.users.minRegistrationNumber')
-            ) {
-                return $next($request);
-            }
+        if($this->haveCompleteAccount()){
+            return $next($request);
+        } else {
+            return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
         }
-
-        return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
-
     }
 }

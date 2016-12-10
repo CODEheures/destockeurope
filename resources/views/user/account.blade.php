@@ -3,6 +3,7 @@
 @section('content')
 
     <user-account
+            route-user-get-me="{{ route('user.getMe') }}"
             route-user-set-pref-currency="{{ route('user.currency') }}"
             route-user-set-pref-locale="{{ route('user.locale') }}"
             route-user-set-pref-location="{{ route('user.location') }}"
@@ -10,13 +11,14 @@
             route-user-set-compagny-name="{{ route('user.compagnyName') }}"
             route-user-set-registration-number="{{ route('user.registrationNumber') }}"
             route-avatar="{{ asset('/images/matt.jpg') }}"
-            route-next-url-with-payment="{{ route('advert.publish') }}"
+            route-next-url-with-payment="{{ route('advert.reviewForPayment') }}"
             route-next-url-without-payment="{{ route('advert.publish') }}"
 
             user-email="{{ $user->email }}"
             user-name="{{ $user->name }}"
             latitude="{{ $user->latitude }}"
             longitude="{{ $user->longitude }}"
+            first-geoloc="{{ $user->geoloc == null ? true : false }}"
             compagny-name="{{ $user->compagnyName }}"
             registration-number="{{ $user->registrationNumber }}"
             advert-account-verified-step="{{ isset($advertAccountVerifiedStep) ? $advertAccountVerifiedStep : false }}"

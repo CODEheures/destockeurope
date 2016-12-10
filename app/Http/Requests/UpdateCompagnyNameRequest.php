@@ -34,4 +34,13 @@ class UpdateCompagnyNameRequest extends FormRequest
             'value' => 'required|min:'.config('db_limits.users.minCompagnyName').'|max:'.config('db_limits.users.maxCompagnyName'),
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'value.required' => trans('strings.request_input_require'),
+            'value.min' => trans('strings.request_input_min_chars', ['min' => config('db_limits.users.minCompagnyName')]),
+            'value.max' => trans('strings.request_input_max_chars', ['min' => config('db_limits.users.maxCompagnyName')])
+        ];
+    }
 }

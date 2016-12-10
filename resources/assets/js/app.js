@@ -25,6 +25,7 @@ Vue.component('locales-dropdown', require('./components/generics/locales/locales
 Vue.component('toast', require('./components/generics/messages/toast.vue'));
 Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb.vue'));
 Vue.component('steps', require('./components/generics/steps/step.vue'));
+Vue.component('steps-light', require('./components/generics/steps/stepLight.vue'));
 Vue.component('googleMap', require('./components/generics/location/map.vue'));
 Vue.component('pagination', require('./components/generics/paginations/pagination.vue'));
 Vue.component('masterads', require('./components/generics/ads/master.vue'));
@@ -65,6 +66,8 @@ Vue.component('create-advert-form', require('./components/contents/createAdvert.
 Vue.component('approve-advert-form', require('./components/contents/approveAdvert.vue'));
 //show advert page
 Vue.component('show-advert1', require('./components/contents/showAdvert1.vue'));
+//review payment page
+Vue.component('review-for-payment', require('./components/contents/reviewForPayment.vue'));
 
 const app = new Vue({
     el: '#app'

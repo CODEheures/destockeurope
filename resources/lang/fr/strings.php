@@ -83,6 +83,9 @@ return [
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',
 
     'request_main_picture_require' => 'Il faut au moins une image à votre annonce',
+    'request_input_require' => 'Ce champ est obligatoire',
+    'request_input_min_chars' => 'Ce champ requiert au moins :min caractères',
+    'request_input_max_chars' => 'Ce champ requiert :max caractères maximum',
 
     'auth_register_success' => 'Votre compte est créé. Merci de le valider en cliquant le lien reçu à votre adresse email.',
     'auth_register_resend_token' => 'Le lien de confirmation de votre email vous a été renvoyé.',
@@ -96,9 +99,13 @@ return [
     'auth_register_oauth_success' => 'Bienvenu sur :appname :username. Merci de votre confiance. Vous pouvez desormais profiter de votre espace client',
 
     'divider_register' => 'ou utiliser',
+    'divider_payment' => 'ou payer par carte',
 
     'middleware_admin' => 'Vous n\'avez pas les droits nécéssaires pour acceder à cette page...',
     'middleware_complete_account' => 'Merci de remplir tous les champs de votre compte avant validation',
+
+    'option_payedPicture_name' => 'Photos supplémentaires',
+    'option_isUrgent_name' => 'Annonce urgente',
 
     'view_all_error_load_message' => 'Ho non! Erreur de chargement :-( , essayez de rafraichir la page',
     'view_all_error_add_message' => 'Ho non! L\'ajout a échoué',
@@ -198,4 +205,35 @@ return [
     'view_user_account_compagny_number_label' => 'Numero d\'enregistrement',
     'view_filter_ribbon' => 'Filtres',
     'view_filter_price_title' => 'Tranche de Prix',
+
+    'view_reviewForPayment_header' => 'Recapitulatif de votre commande',
+    'view_reviewForPayment_table_option_name' => 'Options',
+    'view_reviewForPayment_table_option_quantity' => 'Quantité',
+    'view_reviewForPayment_table_option_cost' => 'Prix',
+    'view_reviewForPayment_cgv' => 'J\'accepte les <a href=":link">conditions générales de vente</a>',
+    'view_reviewForPayment_lock_info_header' => 'Cette page est entierement sécurisée',
+    'view_reviewForPayment_lock_info_content' => 'Cette page utilise le protocol https:// et vous garantie une totale sécurité des échanges',
+    'view_reviewForPayment_paypal_title' => 'PayPal, le réflexe sécurité pour payer en ligne',
+
+    'payment_card_name_label' => 'Nom sur la carte',
+    'payment_card_number_label' => 'Numero de carte',
+    'payment_card_number_placeholder' => 'Carte n°...',
+    'payment_card_cvc_label' => 'CVC',
+    'payment_card_expiration_label' => 'Expiration',
+    'payment_card_expiration_month_placeholder' => 'Mois',
+    'payment_card_expiration_year_placeholder' => 'Année AAAA',
+
+    'january' => 'janvier',
+    'february' => 'fevrier',
+    'march' => 'mars',
+    'april' => 'avril',
+    'may' => 'mai',
+    'june' => 'juin',
+    'july'=> 'juillet',
+    'august' => 'août',
+    'september' => 'septembre',
+    'october' => 'octobre',
+    'november' => 'novembre',
+    'december' => 'decembre'
+    
 ];
