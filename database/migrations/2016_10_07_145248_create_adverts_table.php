@@ -21,7 +21,7 @@ class CreateAdvertsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('category_id')->unsigned()->index();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->integer('payment_id')->unsigned()->index()->nullable()->default(null);
+            $table->integer('invoice_id')->unsigned()->index()->nullable()->default(null);
             $table->enum('type', ['bid', 'request']);
             $table->string('title',config('db_limits.adverts.maxTitle'));
             $table->text('description');

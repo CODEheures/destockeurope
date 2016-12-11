@@ -67,8 +67,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Bookmark');
     }
 
-    public function payments() {
-        return $this->hasMany('App\Payment');
+    public function invoices() {
+        return $this->hasMany('App\Invoice');
     }
 
     public function haveBookmark($id) {

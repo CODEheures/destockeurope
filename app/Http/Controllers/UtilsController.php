@@ -283,6 +283,6 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-        return null;
+        return redirect()->route('advert.payByPaypal', ['id' => 9]);
     }
 }

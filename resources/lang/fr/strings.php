@@ -42,6 +42,18 @@ return [
     'mail_customerToSeller_line3' => 'Merci d\'utiliser notre application!',
     'mail_customerToSeller_send_error' => 'Ho non! Nous n\'avons pas réussi à envoyé l\'email \'-(',
 
+    'mail_advertApprove_subject' => 'Votre annonce est en ligne!',
+    'mail_advertApprove_greeting' => 'Félicitation :username !',
+    'mail_advertApprove_line' => 'Votre annonce ":title" est approuvée et en ligne',
+    'mail_advertApprove_action' => 'Voir mon annonce',
+    'mail_advertApprove_line2' => 'Merci d\'utiliser notre application! A tout de suite',
+
+    'mail_advertNotApprove_subject' => 'Votre annonce n\'a pas pu être approuvée',
+    'mail_advertNotApprove_greeting' => 'Désolé chère utilisateur :username !',
+    'mail_advertNotApprove_line' => 'Votre annonce ":title" ne respecte pas les règles et par conséquent n\'a pas été approuvée par notre équipe \':(.',
+    'mail_advertNotApprove_line_voidPayment' => 'Le paiement de celle-ci a été annulé.',
+    'mail_advertNotApprove_line2' => 'Nous espérons vous revoir très vite pour poster une annonce valide. Merci d\'utiliser notre application! A tout de suite!',
+
     'form_label_name' => 'Votre nom',
     'form_label_email' => 'Votre E-mail',
     'form_validation_email' => 'Entrez un E-mail valide',
@@ -225,6 +237,10 @@ return [
     'payment_card_expiration_label' => 'Expiration',
     'payment_card_expiration_month_placeholder' => 'Mois',
     'payment_card_expiration_year_placeholder' => 'Année AAAA',
+    'payment_paypal_generic_product_name' => 'Une annonce avec :nb option:|Une annonce avec :nb options:',
+    'payment_paypal_invoice_description' => 'Votre achat sur :name',
+    'payment_all_error' => 'Ho non! Le paiement a échoué :-(',
+    'payment_paypal_success' => 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.',
 
     'january' => 'janvier',
     'february' => 'fevrier',

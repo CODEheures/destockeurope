@@ -13,7 +13,8 @@
         "kalnoy/nestedset": "^4.1",
         "intervention/image": "^2.3",
         "league/flysystem-dropbox": "^1.0",
-        "iatstuti/laravel-cascade-soft-deletes": "1.0.*"
+        "iatstuti/laravel-cascade-soft-deletes": "1.0.*",
+        "paypal/rest-api-sdk-php": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

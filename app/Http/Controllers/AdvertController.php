@@ -11,13 +11,28 @@ use App\Common\PicturesManager;
 use App\Common\UserUtils;
 use App\Http\Requests\CreditCardRequest;
 use App\Http\Requests\StoreAdvertRequest;
+use App\Invoice;
+use App\Notifications\AdvertApprove;
+use App\Notifications\AdvertNotApprove;
 use App\Notifications\CustomerContactSeller;
 use App\Picture;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
+use PayPal\Api\Amount;
+use PayPal\Api\Authorization;
+use PayPal\Api\Capture;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\PayerInfo;
+use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\ShippingAddress;
+use PayPal\Api\Transaction;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Exception\PayPalConnectionException;
+use PayPal\Rest\ApiContext;
 
 class AdvertController extends Controller
 {
@@ -25,12 +40,22 @@ class AdvertController extends Controller
     use CategoryUtils;
     use UserUtils;
     private $pictureManager;
+    private $_api_context;
 
     public function __construct(PicturesManager $picturesManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
         $this->pictureManager  = $picturesManager;
+
+        // setup PayPal api context
+        if(auth()->check() && !(env('PAYPAL_SANDBOX')=='true')){
+            $paypal_conf = config('paypal');
+        } else {
+            $paypal_conf = config('paypal_sandbox');
+        }
+        $this->_api_context = new ApiContext(new OAuthTokenCredential($paypal_conf['client_id'], $paypal_conf['secret']));
+        $this->_api_context->setConfig($paypal_conf['settings']);
     }
 
     /**
@@ -386,16 +411,63 @@ class AdvertController extends Controller
                 if($value != null) {
                     $advert = Advert::find($key);
                     if($advert) {
-                        $advert->isValid=(boolean)$value;
-                        $advert->save();
-                        /*TODO envoyer mail au client */
+                        //IF EXIST AUTHORIZATION PAYMENT
+                        if($advert->invoice
+                            && $advert->invoice->authorization
+                            && $advert->invoice->authorization != '')
+                        {
+                            try {
+                                $invoice = $advert->invoice;
+                                $authorizationId = $advert->invoice->authorization;
+                                $authorization = Authorization::get($authorizationId, $this->_api_context);
+                                if((boolean)$value==true){
+                                    //CAPTURE PAYMENT
+                                    $amt = new Amount();
+                                    $amt->setCurrency($authorization->getAmount()->getCurrency());
+                                    $amt->setTotal($authorization->getAmount()->getTotal());
+                                    $capture = new Capture();
+                                    $capture->setAmount($amt);
+                                    $getCapture = $authorization->capture($capture, $this->_api_context);
+                                    $invoice->captureId = $getCapture->getId();
+                                    $advert->isValid=(boolean)$value;
+
+                                    DB::beginTransaction();
+                                    $invoice->save();
+                                    $advert->save();
+                                    DB::commit();
+                                } else {
+                                    //VOID PAYMENT
+                                    $getVoid = $authorization->void($this->_api_context);
+                                    $invoice->voidId = $getVoid->getId();
+                                    $advert->isValid=(boolean)$value;
+
+                                    DB::beginTransaction();
+                                    $invoice->save();
+                                    $advert->save();
+                                    DB::commit();
+                                }
+                            } catch (\Exception $e) {
+                                return response($e, 500);
+                            }
+                        } else {
+                            $advert->isValid=(boolean)$value;
+                            $advert->save();
+                        }
+
+                        $recipient = $advert->user;
+                        $senderMail = env('SERVICE_MAIL_FROM');
+                        $senderName = ucfirst(config('app.name'));
+                        if($advert->isValid){
+                            $recipient->notify(new AdvertApprove($advert, $senderName, $senderMail));
+                        } else {
+                            $recipient->notify(new AdvertNotApprove($advert, $senderName, $senderMail));
+                        }
                     }
                 }
             }
         } catch (\Exception $e) {
-            return response(trans('strings.view_advert_error'), 500);
+            return response(trans('strings.view_advert_approve_error'), 500);
         }
-
         return response('ok',200);
     }
 
@@ -403,22 +475,26 @@ class AdvertController extends Controller
         $advert = Advert::find($id);
         $advert->load('user');
         if($advert && $advert->user->id == auth()->user()->id && $advert->cost == 0){
-            $advert->isPublish = true;
-            $advert->save();
-            $this->pictureManager->purgeLocalTempo();
-            $request->session()->flash('clear', true);
-            return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
-        } elseif($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0) {
-            $payment = $advert->payment();
-            //TODO fin du test et redirection
-            $advert->isPublish = true;
-            $advert->save();
-            $this->pictureManager->purgeLocalTempo();
-            $request->session()->flash('clear', true);
+            $this->advertPublish($advert, $request, null);
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } else {
             return response(trans('strings.view_advert_error'), 500);
         }
+    }
+
+    private function advertPublish(Advert $advert, Request $request, $authorizationId=null){
+        DB::beginTransaction();
+        $advert->isPublish = true;
+        if($authorizationId){
+            $invoice = $advert->invoice;
+            $invoice->authorization = $authorizationId;
+            $invoice->save();
+        }
+        $advert->save();
+        DB::commit();
+
+        $this->pictureManager->purgeLocalTempo();
+        $request->session()->flash('clear', true);
     }
 
     public function reviewForPayment($id) {
@@ -450,184 +526,231 @@ class AdvertController extends Controller
     }
 
     public function payByPaypal($id) {
-        return 'payée avec paypal';
+        return $this->advertPayment($id);
     }
 
     public function payByCard($id, CreditCardRequest $request) {
         return 'payée avec carte';
     }
 
-//    public function advertPayment($id) {
-//        $advert = Advert::find($id);
-//        $advert->load('user');
-//        if($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0){
-//
-//        } else {
-//
-//        }
-//
-//
-//        $tva = round($product->tvaPrice()/100,2);
-//        $price = round($product->priceTTC()/100,2);
-//
-//
-//        $payerInfo = new PayerInfo();
-//
-//        $adresses = $this->auth->user()->addresses;
-//        foreach ($adresses as $adress) {
-//            if($adress->type == 'invoice') {
-//                $paypalAdress = new ShippingAddress();
-//                $paypalAdress->setLine1($adress->address);
-//                $paypalAdress->setLine2($adress->complement);
-//                $paypalAdress->setPostalCode($adress->zipCode);
-//                $paypalAdress->setCity($adress->town);
-//                $paypalAdress->setCountryCode('FR');
-//                if($this->auth->user()->enterprise != null){
-//                    $paypalAdress->setRecipientName($this->auth->user()->enterprise);
-//                } else {
-//                    $paypalAdress->setRecipientName($this->auth->user()->firstName . ' ' . $this->auth->user()->lastName);
-//                }
-//            }
-//        }
-//
-//
-//        $payer = new Payer();
-//        $payer->setPaymentMethod('paypal');
-//        $payer->setPayerInfo($payerInfo);
-//
-//
-//        $item_1 = new Item();
-//        $item_1->setName($product->description) // item name
-//        ->setCurrency('EUR')
-//            ->setQuantity(1)
-//            ->setTax($tva)
-//            ->setPrice($price); // unit price
-//
-//        // add item to list
-//        $item_list = new ItemList();
-//        $item_list->setItems(array($item_1));
-//        $item_list->setShippingAddress($paypalAdress);
-//
-//        $amount = new Amount();
-//        $amount->setCurrency('EUR')->setTotal($price);
-//
-//        $transaction = new Transaction();
-//        $transaction->setAmount($amount)
-//            ->setItemList($item_list)
-//            ->setDescription('Votre achat chez CODEheures')
-//            ->setInvoiceNumber($purchase->id);
-//
-//
-//        $redirect_urls = new RedirectUrls();
-//
-//        // Specify return URL
-//        $redirect_urls->setReturnUrl(route('customer.sale.payment.status').'?success=true')
-//            ->setCancelUrl(route('customer.sale.payment.status').'?success=false');
-//
-//        $payment = new Payment();
-//        $payment->setIntent('Sale')
-//            ->setPayer($payer)
-//            ->setRedirectUrls($redirect_urls)
-//            ->setTransactions(array($transaction));
-//
-//
-//        try {
-//            $payment->create($this->_api_context);
-//        } catch (PayPalConnectionException $ex) {
-//            if (config('app.debug')) {
-//                echo "Exception: " . $ex->getMessage() . PHP_EOL;
-//                $err_data = json_decode($ex->getData(), true);
-//                exit;
-//            } else {
-//                die('Ho mince! Une erreur inconnue est apparue \':(');
-//            }
-//        }
-//
-//        foreach($payment->getLinks() as $link) {
-//            if($link->getRel() == 'approval_url') {
-//                $redirect_url = $link->getHref();
-//                break;
-//            }
-//        }
-//
-//        // add payment ID to session
-//        session(['paypal_payment_id' => $payment->getId()]);
-//
-//        if(isset($redirect_url)) {
-//            // redirect to paypal
-//            return redirect($redirect_url);
-//        }
-//        return redirect(route('customer.monitor.index'))
-//            ->with('error', 'Ho mince! Une erreur inconnue est apparue \':(');
-//    }
-//
-//    public function salePaymentStatus(Request $request) {
-//
-//        if($request->get('success') == 'true') {
-//            // Get the payment ID before session clear
-//            $session_payment_id = session('paypal_payment_id');
-//            $payment_id = $request->get('paymentId');
-//
-//            //test sessionId = Request return paymentId
-//            if($session_payment_id != $payment_id) {
-//                session()->forget('paypal_payment_id');
-//                return redirect(route('customer.monitor.index'))
-//                    ->with('error', 'Ho non! Le paiement à échoué \':(');
-//
-//            }
-//
-//            // clear the session payment ID
-//            session()->forget('paypal_payment_id');
-//
-//            if (empty($request->input('PayerID')) || empty($request->input('token'))) {
-//                return redirect(route('customer.monitor.index'))
-//                    ->with('error', 'Ho non! Le paiement à échoué \':(');
-//            }
-//
-//            try {
-//                $payment = Payment::get($payment_id, $this->_api_context);
-//
-//                // PaymentExecution object includes information necessary
-//                // to execute a PayPal account payment.
-//                // The payer_id is added to the request query parameters
-//                // when the user is redirected from paypal back to your site
-//                $execution = new PaymentExecution();
-//                $execution->setPayerId($request->input('PayerID'));
-//                //Execute the payment
-//                $result = $payment->execute($execution, $this->_api_context);
-//            } catch (\Exception $e) {
-//                return redirect(route('customer.monitor.index'))
-//                    ->with('error', 'Ho non! Le paiement à échoué \':(');
-//            }
-//
-//
-//
-//
-//            if ($result->getState() == 'approved') { // payment made
-//                $purchase = Purchase::findOrFail($result->getTransactions()[0]->getInvoiceNumber());
-//                $purchase->paypal_result = json_encode(['id' => $result->getId()]);
-//                $purchase->payed = true;
-//                $purchase->save();
-//
-//                //envoi du mail de la facture
-//                try {
-//                    $this->invoiceTools->create('isSold', 'purchase', $purchase->id, true);
-//                    $this->invoiceTools->sendMail();
-//                    return redirect(route('customer.monitor.index'))
-//                        ->with('success', 'Merci pour votre paiement. Votre compte est crédité. Votre facture est disponible dans votre espace client sur le détail de votre commande sur le lien suivant: ')
-//                        ->with('info_url', route('invoice.get', ['type' => 'isSold', 'origin' => 'purchase', 'id' => $purchase->id]))
-//                        ->with('info_url_txt', 'voir ma facture');
-//                } catch (\Exception $e) {
-//                    return redirect(route('customer.monitor.index'))
-//                        ->with('success', 'Merci pour votre paiement. Votre compte est crédité.');
-//                }
-//            }
-//
-//            return redirect(route('customer.monitor.index'))
-//                ->with('error', 'Ho non! Le paiement à échoué \':(');
-//        } else {
-//            return redirect(route('customer.monitor.index'))
-//                ->with('error', 'Ho non! Le paiement à échoué \':(');
-//        }
-//    }
+    private function advertPayment($id) {
+        $advert = Advert::find($id);
+        if($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0){
+            $advert->load('user');
+
+            //create or get invoice
+            if(!$advert->invoice){
+                DB::beginTransaction();
+                $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
+                if($previousInvoice){
+                    $next_invoice_number = $previousInvoice->invoice_number + 1;
+                } else {
+                    $next_invoice_number = 1;
+                }
+
+                $invoice = Invoice::create([
+                    'user_id' => $advert->user->id,
+                    'invoice_number' => $next_invoice_number,
+                    'method' => Invoice::PAYPAL
+                ]);
+
+                $advert->invoice()->associate($invoice);
+                $advert->save();
+
+                DB::commit();
+            } else {
+                $invoice = $advert->invoice;
+                $invoice->method = Invoice::PAYPAL;
+                $invoice->save();
+            }
+
+
+            //set $tva, $price, $productName
+            $tva = 0;
+            $productName = trans_choice('strings.payment_paypal_generic_product_name', count($advert->options), ['nb' => count($advert->options)]);
+            $i = 0;
+            foreach ($advert->options as $option){
+                $tva = $tva + ($option['cost'] - $option['cost']/(1+($option['tva']/100)));
+                $productName .= ($i > 0 ? ' + #' : ' #') . $option['quantity'] . ' ' . $option['name'];
+                $i++;
+            }
+            $tva = round($tva/100,2);
+            $price = round($advert->cost/100,2);
+
+            //Paypal ShippingAddress
+            $geoCodes = json_decode($advert->user->geoloc);
+            $street_components = null;
+            $components = [];
+            if(is_array($geoCodes) && count($geoCodes)>0){
+                foreach ($geoCodes as $geoCode){
+                    if($geoCode->types[0]=='street_address'){
+                        $street_components = $geoCode->address_components;
+                        foreach ($street_components as $component){
+                            if($component->types[0] != 'country'){
+                                $components[$component->types[0]] = $component->long_name;
+                            } else {
+                                $components[$component->types[0]] = $component->short_name;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $line1 = '';
+            $line1 .= key_exists('street_number', $components) ?  $components['street_number'] : null;
+            $line1 .= key_exists('route', $components) ?  ' ' . $components['route'] : null;
+
+            $paypalAdress = new ShippingAddress();
+            $paypalAdress->setLine1($line1);
+            $paypalAdress->setLine2('');
+            $paypalAdress->setPostalCode(key_exists('postal_code', $components) ?  $components['postal_code'] : '');
+            $paypalAdress->setCity(key_exists('locality', $components) ?  $components['locality'] : '');
+            $paypalAdress->setCountryCode(key_exists('country', $components) ?  $components['country'] : '');
+            $paypalAdress->setRecipientName($advert->user->compagnyName);
+
+
+            //Payer Infos
+            $payer = new Payer();
+            $payer->setPaymentMethod('paypal');
+            $payer->setPayerInfo(new PayerInfo());
+
+            //ItemList
+            $item_1 = new Item();
+            $item_1->setName($productName) // item name
+            ->setCurrency('EUR')
+                ->setQuantity(1)
+                ->setTax($tva)
+                ->setPrice($price); // unit price
+
+            // add item to list
+            $item_list = new ItemList();
+            $item_list->setItems(array($item_1));
+            $item_list->setShippingAddress($paypalAdress);
+
+            //Paypal Amount
+            $amount = new Amount();
+            $amount->setCurrency('EUR')->setTotal($price);
+
+            //Paypal Transaction
+            $transaction = new Transaction();
+            $transaction->setAmount($amount)
+                ->setItemList($item_list)
+                ->setDescription(trans('strings.payment_paypal_invoice_description', ['name' => config('app.name')]))
+                ->setInvoiceNumber($invoice->invoice_number);
+
+            //Paypal Redirect URL
+            $redirect_urls = new RedirectUrls();
+            $redirect_urls->setReturnUrl(route('advert.paypalStatus', ['id' => $advert->id, 'success'=>'true']))
+                ->setCancelUrl(route('advert.paypalStatus', ['id' => $advert->id, 'success'=>'false']));
+
+            //Paypal Payment
+            $payment = new Payment();
+            $payment->setIntent('authorize')
+                ->setPayer($payer)
+                ->setRedirectUrls($redirect_urls)
+                ->setTransactions(array($transaction));
+//            $payment->setIntent('Sale')
+//                ->setPayer($payer)
+//                ->setRedirectUrls($redirect_urls)
+//                ->setTransactions(array($transaction));
+
+            try {
+                $payment->create($this->_api_context);
+            } catch (PayPalConnectionException $ex) {
+                dd($ex);
+                if (config('app.debug')) {
+                    echo "Exception: " . $ex->getMessage() . PHP_EOL;
+                    $err_data = json_decode($ex->getData(), true);
+                    exit;
+                } else {
+                    die(trans('strings.payment_all_error'));
+                }
+            }
+
+
+            foreach($payment->getLinks() as $link) {
+                if($link->getRel() == 'approval_url') {
+                    $redirect_url = $link->getHref();
+                    break;
+                }
+            }
+
+            // add payment ID to session
+            session(['paypal_payment_id' => $payment->getId()]);
+
+            if(isset($redirect_url)) {
+                // redirect to paypal
+                return redirect($redirect_url);
+            }
+            return redirect(route('home'))
+                ->withErrors(trans('strings.payment_all_error'));
+
+        } else {
+            return redirect(route('home'))
+                ->withErrors(trans('strings.payment_all_error'));
+        }
+    }
+
+    public function paypalStatus($id, $success, Request $request) {
+        if($success == 'true') {
+            // Get the payment ID before session clear
+            $session_payment_id = session('paypal_payment_id');
+            $payment_id = $request->get('paymentId');
+
+            //test sessionId = Request return paymentId
+            if($session_payment_id != $payment_id) {
+                session()->forget('paypal_payment_id');
+                return redirect(route('home'))
+                    ->withErrors('err1: ' . trans('strings.payment_all_error'));
+            }
+
+            // clear the session payment ID
+            session()->forget('paypal_payment_id');
+
+            if (empty($request->input('PayerID')) || empty($request->input('token'))) {
+                return redirect(route('home'))
+                    ->withErrors('err2: ' . trans('strings.payment_all_error'));
+            }
+
+            $advert = Advert::find($id);
+            if(!$advert || !$advert->invoice){
+                return redirect(route('home'))
+                    ->withErrors('err3: ' . trans('strings.payment_all_error'));
+            }
+
+            try {
+                $payment = Payment::get($payment_id, $this->_api_context);
+
+                // PaymentExecution object includes information necessary
+                // to execute a PayPal account payment.
+                // The payer_id is added to the request query parameters
+                // when the user is redirected from paypal back to your site
+                $execution = new PaymentExecution();
+                $execution->setPayerId($request->input('PayerID'));
+                //Execute the payment
+                $result = $payment->execute($execution, $this->_api_context);
+            } catch (\Exception $e) {
+                return redirect(route('home'))
+                    ->withErrors('err4: ' . trans('strings.payment_all_error'));
+            }
+
+            if ($result->getState() == 'approved') { // payment made
+                $transactions = $payment->getTransactions();
+                $relatedResources = $transactions[0]->getRelatedResources();
+                $authorization = $relatedResources[0]->getAuthorization();
+                $authorizationId = $authorization->getId();
+
+                $this->advertPublish($advert, $request, $authorizationId);
+
+                return redirect(route('home'))
+                    ->with('success', 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.');
+            }
+
+            return redirect(route('home'))
+                ->withErrors('err5: ' . trans('strings.payment_all_error'));
+        } else {
+            return redirect(route('home'))
+                ->withErrors('err6: ' . trans('strings.payment_all_error'));
+        }
+    }
 }

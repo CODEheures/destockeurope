@@ -17,7 +17,7 @@ class Advert extends Model {
     protected $fillable = [
         'user_id',
         'category_id',
-        'payment_id',
+        'invoice_id',
         'type',
         'title',
         'description',
@@ -63,8 +63,8 @@ class Advert extends Model {
         return $this->hasMany('App\Picture');
     }
 
-    public function payment() {
-        return $this->hasOne('App\Payment');
+    public function invoice() {
+        return $this->belongsTo('App\Invoice');
     }
 
     public function getPriceAttribute($value) {

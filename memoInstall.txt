@@ -1,5 +1,5 @@
 //TODO bucket 64 nginx + file body size nginx
 //      INTL EXTENSION apt-get install php5-intl
 //TODO post video
-//TODO finir page des anonces --> version2, actions users et owner
 //TODO paiement paypal
+//TODO PAGINATION > 6

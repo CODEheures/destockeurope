@@ -86,6 +86,9 @@ Route::post('advert/approve', ['as' => 'advert.approve', 'uses' => 'AdvertContro
 Route::get('advert/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
 Route::post('advert/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
 Route::get('advert/pay/paypal/{id}', ['as' => 'advert.payByPaypal', 'uses' => 'AdvertController@payByPaypal']);
+Route::get('advert/pay/paypal/status/{id}/{success}', ['as' => 'advert.paypalStatus', 'uses' => 'AdvertController@paypalStatus'])
+    ->where(['id' => '[0-9]+'])
+    ->where(['success' => '\b(true|false)\b']);
 Route::post('advert/pay/card/{id}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
 Route::resource('advert', 'AdvertController');
 

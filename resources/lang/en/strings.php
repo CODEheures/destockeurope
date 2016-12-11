@@ -42,6 +42,18 @@ return [
     'mail_customerToSeller_line3' => 'Thank you for using our application!',
     'mail_customerToSeller_send_error' => 'Ho no! The email could not be sent \'-(',
 
+    'mail_advertApprove_subject' => 'Your advert is online!',
+    'mail_advertApprove_greeting' => 'Congratulations :username !',
+    'mail_advertApprove_line' => 'Your advert ":title" is approved and is now online',
+    'mail_advertApprove_action' => 'See my advert',
+    'mail_advertApprove_line2' => 'Thank you for using our application!',
+
+    'mail_advertNotApprove_subject' => 'Your advert is not approve',
+    'mail_advertNotApprove_greeting' => 'Sorry dear user :username !',
+    'mail_advertNotApprove_line' => 'Your advert ":title" does not respect the rules and is not approved by our team \':(.',
+    'mail_advertNotApprove_line_voidPayment' => 'Your Payment for this Advert is Canceled.',
+    'mail_advertNotApprove_line2' => 'We hope to see you quickly for post a new valid advert. Thank you for using our application!',
+
     'form_label_name' => 'Your name',
     'form_label_email' => 'Your E-mail',
     'form_validation_email' => 'Please enter a valid e-mail',
@@ -225,6 +237,10 @@ return [
     'payment_card_expiration_label' => 'Expiration',
     'payment_card_expiration_month_placeholder' => 'Month',
     'payment_card_expiration_year_placeholder' => 'Year YYYY',
+    'payment_paypal_generic_product_name' => 'One Advert with :nb option:|One Advert with :nb options:',
+    'payment_paypal_invoice_description' => 'Votre achat sur :name',
+    'payment_all_error' => 'Ho no! Payment fails :-(',
+    'payment_paypal_success' => 'Thank you for your payment. This will be final when your advert is approved by our service.',
 
     'january' => 'january',
     'february' => 'february',
