@@ -4,6 +4,7 @@
 
     <review-for-payment
             route-get-advert="{{ route('advert.show', ['id' => $advert->id]) }}"
+            route-get-cards-type="{{ route('utils.getListCardsType') }}"
             route-paypal-choice="{{ route('advert.payByPaypal', ['id' => $advert->id]) }}"
             route-card-choice="{{ route('advert.payByCard', ['id' => $advert->id]) }}"
 
@@ -24,13 +25,18 @@
             lock-info-content="{{ trans('strings.view_reviewForPayment_lock_info_content') }}"
             paypal-btn-title="{{ trans('strings.view_reviewForPayment_paypal_title') }}"
             divider-choice-label="{{ trans('strings.divider_payment') }}"
+            payment-card-type-label="{{ trans('strings.payment_card_type_label') }}"
             payment-card-name-label="{{ trans('strings.payment_card_name_label') }}"
+            payment-card-name-error="{{ trans('strings.request_input_regex_name', ['name' => trans('strings.payment_card_name_label')]) }}"
             payment-card-number-label="{{ trans('strings.payment_card_number_label') }}"
+            payment-card-number-error="{{ trans('strings.payment_card_number_error') }}"
             payment-card-number-placeholder="{{ trans('strings.payment_card_number_placeholder') }}"
             payment-card-cvc-label="{{ trans('strings.payment_card_cvc_label') }}"
+            payment-card-cvc-error="{{ trans('strings.request_input_generic_error', ['name' => trans('strings.payment_card_cvc_label')]) }}"
             payment-card-expiration-label="{{ trans('strings.payment_card_expiration_label') }}"
             payment-card-expiration-month-placeholder="{{ trans('strings.payment_card_expiration_month_placeholder') }}"
             payment-card-expiration-year-placeholder="{{ trans('strings.payment_card_expiration_year_placeholder') }}"
+            payment-card-year-error="{{ trans('strings.request_input_generic_error', ['name' => trans('strings.payment_card_expiration_year_placeholder')]) }}"
             january="{{ trans('strings.january') }}"
             february="{{ trans('strings.february') }}"
             march="{{ trans('strings.march') }}"

@@ -38,9 +38,9 @@ class UpdateCompagnyNameRequest extends FormRequest
     public function messages()
     {
         return [
-            'value.required' => trans('strings.request_input_require'),
-            'value.min' => trans('strings.request_input_min_chars', ['min' => config('db_limits.users.minCompagnyName')]),
-            'value.max' => trans('strings.request_input_max_chars', ['min' => config('db_limits.users.maxCompagnyName')])
+            'value.required' => trans('strings.request_input_require', ['name' => trans('strings.view_user_account_compagny_name_label')]),
+            'value.min' => trans('strings.request_input_min_chars', ['name' => trans('strings.view_user_account_compagny_name_label'), 'min' => config('db_limits.users.minCompagnyName')]),
+            'value.max' => trans('strings.request_input_max_chars', ['name' => trans('strings.view_user_account_compagny_name_label'), 'max' => config('db_limits.users.maxCompagnyName')])
         ];
     }
 }

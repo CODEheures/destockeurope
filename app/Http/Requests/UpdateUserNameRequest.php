@@ -37,8 +37,8 @@ class UpdateUserNameRequest extends FormRequest
     public function messages()
     {
         return [
-            'value.required' => trans('strings.request_input_require'),
-            'value.min' => trans('strings.request_input_min_chars', ['min' => config('db_limits.users.minName')])
+            'value.required' => trans('strings.request_input_require', ['name' => trans('strings.form_label_name')]),
+            'value.min' => trans('strings.request_input_min_chars', ['name' => trans('strings.form_label_name'), 'min' => config('db_limits.users.minName')])
         ];
     }
 }

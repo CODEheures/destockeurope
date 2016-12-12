@@ -21,11 +21,14 @@ use Illuminate\Support\Facades\DB;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 use PayPal\Api\Capture;
+use PayPal\Api\Details;
+use PayPal\Api\FundingInstrument;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
 use PayPal\Api\PayerInfo;
 use PayPal\Api\Payment;
+use PayPal\Api\PaymentCard;
 use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\ShippingAddress;
@@ -41,6 +44,8 @@ class AdvertController extends Controller
     use UserUtils;
     private $pictureManager;
     private $_api_context;
+    Const PAYPAL = 0;
+    Const CARD = 1;
 
     public function __construct(PicturesManager $picturesManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail']]);
@@ -526,14 +531,27 @@ class AdvertController extends Controller
     }
 
     public function payByPaypal($id) {
-        return $this->advertPayment($id);
+        return $this->advertPayment($id, self::PAYPAL);
     }
 
     public function payByCard($id, CreditCardRequest $request) {
-        return 'payée avec carte';
+        return $this->advertPayment($id, self::CARD, $request);
     }
 
-    private function advertPayment($id) {
+    private function splitName($name) {
+        $result = (explode(' ', $name));
+        $firstname = '';
+        $lastname = '';
+        for($i=0; $i<count($result); $i++) {
+            $i < count($result)/2 ? $firstname .= ' ' . $result[$i]: $lastname .= ' ' . $result[$i];
+        }
+        return [
+            'firstName' => substr($firstname,1),
+            'lastName' => substr($lastname,1),
+        ];
+    }
+
+    private function advertPayment($id, $type, $request=null) {
         $advert = Advert::find($id);
         if($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0){
             $advert->load('user');
@@ -611,7 +629,30 @@ class AdvertController extends Controller
 
             //Payer Infos
             $payer = new Payer();
-            $payer->setPaymentMethod('paypal');
+            if($type==self::PAYPAL){
+                $payer->setPaymentMethod('paypal');
+            } else {
+                $card = new PaymentCard();
+                $splitName = $this->splitName($request->name);
+                foreach ($splitName as $item){
+                    if(!$item || $item=''){
+                        return redirect(route('home'))
+                            ->withErrors(trans('strings.payment_all_error'));
+                    }
+                }
+                $card->setType(config('paypal_cards.list')[$request->card_type])
+                    ->setNumber($request->card_no)
+                    ->setExpireMonth($request->expiration_month)
+                    ->setExpireYear($request->expiration_year)
+                    ->setCvv2($request->cvc)
+                    ->setFirstName($splitName['firstName'])
+                    ->setBillingCountry($paypalAdress->getCountryCode())
+                    ->setLastName($splitName['lastName']);
+                $fi = new FundingInstrument();
+                $fi->setPaymentCard($card);
+                $payer->setPaymentMethod("credit_card")
+                    ->setFundingInstruments(array($fi));
+            }
             $payer->setPayerInfo(new PayerInfo());
 
             //ItemList
@@ -620,16 +661,22 @@ class AdvertController extends Controller
             ->setCurrency('EUR')
                 ->setQuantity(1)
                 ->setTax($tva)
-                ->setPrice($price); // unit price
+                ->setPrice($price-$tva); // unit price
 
             // add item to list
             $item_list = new ItemList();
             $item_list->setItems(array($item_1));
             $item_list->setShippingAddress($paypalAdress);
 
+            //set details
+            $details = new Details();
+            $details->setShipping(0)
+                ->setTax($tva)
+                ->setSubtotal($price-$tva);
+
             //Paypal Amount
             $amount = new Amount();
-            $amount->setCurrency('EUR')->setTotal($price);
+            $amount->setCurrency('EUR')->setTotal($price)->setDetails($details);
 
             //Paypal Transaction
             $transaction = new Transaction();
@@ -638,57 +685,59 @@ class AdvertController extends Controller
                 ->setDescription(trans('strings.payment_paypal_invoice_description', ['name' => config('app.name')]))
                 ->setInvoiceNumber($invoice->invoice_number);
 
-            //Paypal Redirect URL
-            $redirect_urls = new RedirectUrls();
-            $redirect_urls->setReturnUrl(route('advert.paypalStatus', ['id' => $advert->id, 'success'=>'true']))
-                ->setCancelUrl(route('advert.paypalStatus', ['id' => $advert->id, 'success'=>'false']));
 
             //Paypal Payment
             $payment = new Payment();
             $payment->setIntent('authorize')
                 ->setPayer($payer)
-                ->setRedirectUrls($redirect_urls)
                 ->setTransactions(array($transaction));
-//            $payment->setIntent('Sale')
-//                ->setPayer($payer)
-//                ->setRedirectUrls($redirect_urls)
-//                ->setTransactions(array($transaction));
+            if($type==self::PAYPAL){
+                //Paypal Redirect URL
+                $redirect_urls = new RedirectUrls();
+                $redirect_urls->setReturnUrl(route('advert.paypalStatus', ['id' => $advert->id, 'success'=>'true']))
+                    ->setCancelUrl(route('advert.paypalStatus', ['id' => $advert->id, 'success'=>'false']));
+                $payment->setRedirectUrls($redirect_urls);
+            }
+
 
             try {
                 $payment->create($this->_api_context);
             } catch (PayPalConnectionException $ex) {
-                dd($ex);
                 if (config('app.debug')) {
-                    echo "Exception: " . $ex->getMessage() . PHP_EOL;
-                    $err_data = json_decode($ex->getData(), true);
-                    exit;
+//                    echo "Exception: " . $ex->getMessage() . PHP_EOL;
+//                    $err_data = json_decode($ex->getData(), true);
+                    echo $ex->getCode(); // Prints the Error Code
+                    echo $ex->getData(); // Prints the detailed error message
+                    die($ex);
+//                    exit;
                 } else {
-                    die(trans('strings.payment_all_error'));
+                    return redirect(route('home'))
+                        ->withErrors(trans('strings.payment_all_error'));
                 }
             }
 
 
-            foreach($payment->getLinks() as $link) {
-                if($link->getRel() == 'approval_url') {
-                    $redirect_url = $link->getHref();
-                    break;
+            if($type==self::PAYPAL){
+                foreach($payment->getLinks() as $link) {
+                    if($link->getRel() == 'approval_url') {
+                        $redirect_url = $link->getHref();
+                        break;
+                    }
+                }
+                // add payment ID to session
+                session(['paypal_payment_id' => $payment->getId()]);
+                if(isset($redirect_url)) {
+                    // redirect to paypal
+                    return redirect($redirect_url);
+                }
+            } elseif ($type == self::CARD) {
+                if ($payment->getState() == 'approved') { // payment made
+                    return $this->saveApprovedAuthorization($payment, $advert, $request);
                 }
             }
-
-            // add payment ID to session
-            session(['paypal_payment_id' => $payment->getId()]);
-
-            if(isset($redirect_url)) {
-                // redirect to paypal
-                return redirect($redirect_url);
-            }
-            return redirect(route('home'))
-                ->withErrors(trans('strings.payment_all_error'));
-
-        } else {
-            return redirect(route('home'))
-                ->withErrors(trans('strings.payment_all_error'));
         }
+        return redirect(route('home'))
+            ->withErrors(trans('strings.payment_all_error'));
     }
 
     public function paypalStatus($id, $success, Request $request) {
@@ -735,15 +784,7 @@ class AdvertController extends Controller
             }
 
             if ($result->getState() == 'approved') { // payment made
-                $transactions = $payment->getTransactions();
-                $relatedResources = $transactions[0]->getRelatedResources();
-                $authorization = $relatedResources[0]->getAuthorization();
-                $authorizationId = $authorization->getId();
-
-                $this->advertPublish($advert, $request, $authorizationId);
-
-                return redirect(route('home'))
-                    ->with('success', 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.');
+                return $this->saveApprovedAuthorization($payment, $advert, $request);
             }
 
             return redirect(route('home'))
@@ -752,5 +793,15 @@ class AdvertController extends Controller
             return redirect(route('home'))
                 ->withErrors('err6: ' . trans('strings.payment_all_error'));
         }
+    }
+
+    private function saveApprovedAuthorization(Payment $payment, Advert $advert, Request $request) {
+        $transactions = $payment->getTransactions();
+        $relatedResources = $transactions[0]->getRelatedResources();
+        $authorization = $relatedResources[0]->getAuthorization();
+        $authorizationId = $authorization->getId();
+        $this->advertPublish($advert, $request, $authorizationId);
+        return redirect(route('home'))
+            ->with('success', 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.');
     }
 }

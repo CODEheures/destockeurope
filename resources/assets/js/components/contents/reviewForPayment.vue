@@ -90,16 +90,22 @@
                             <a href="https://stripe.com"><img class="ui tiny centered image" :src="urlImgDividerStripe"/></a>
                         </div>
                         <div class="sixteen wide mobile eight wide tablet six wide computer centered column">
-                            <form accept-charset="UTF-8" :action="routeCardChoice"  id="payment-form" method="post" class="ui form">
+                            <form accept-charset="UTF-8" autocomplete="off" :action="routeCardChoice"  id="payment-form" method="post" class="ui form" >
                                 <input type="hidden" name="_token" :value="xCsrfToken"/>
                                 <div class="field">
+                                    <select class="ui fluid search dropdown" name="card_type">
+                                        <option value="">{{ paymentCardTypeLabel }}</option>
+                                        <option :value="index" v-for="(card, index) in cardsType">{{ card }}</option>
+                                    </select>
+                                </div>
+                                <div class="field">
                                     <label>{{ paymentCardNameLabel }}</label>
-                                    <input size='4' type='text' name="name">
+                                    <input type='text' name="name">
                                 </div>
                                 <div class="two fields">
                                     <div class="twelve wide field">
                                         <label>{{ paymentCardNumberLabel }}</label>
-                                        <input type="text" name="card_no" maxlength="16" :placeholder="paymentCardNumberPlaceholder">
+                                        <input type="text" name="card_no" maxlength="25" :placeholder="paymentCardNumberPlaceholder">
                                     </div>
                                     <div class="four wide field">
                                         <label>{{ paymentCardCvcLabel }}</label>
@@ -147,6 +153,7 @@
         props: [
             //vue routes
             'routeGetAdvert',
+            'routeGetCardsType',
             'routePaypalChoice',
             'routeCardChoice',
             //vue vars
@@ -167,13 +174,18 @@
             'lockInfoContent',
             'paypalBtnTitle',
             'dividerChoiceLabel',
+            'paymentCardTypeLabel',
             'paymentCardNameLabel',
+            'paymentCardNameError',
             'paymentCardNumberLabel',
+            'paymentCardNumberError',
             'paymentCardNumberPlaceholder',
             'paymentCardCvcLabel',
+            'paymentCardCvcError',
             'paymentCardExpirationLabel',
             'paymentCardExpirationMonthPlaceholder',
             'paymentCardExpirationYearPlaceholder',
+            'paymentCardYearError',
             'january',
             'february',
             'march',
@@ -210,6 +222,7 @@
                 dataRoutePaypalChoice: '',
                 dataUrlImgPaypal: null,
                 xCsrfToken: '',
+                cardsType: {},
             };
         },
         mounted () {
@@ -244,6 +257,7 @@
             ];
             this.getAdvert();
             this.setDataCgv();
+            this.getCardsType();
         },
         updated () {
             let that = this;
@@ -259,6 +273,50 @@
                     that.dataRoutePaypalChoice = null;
                 }
             });
+            $('#payment-form')
+                .form({
+                    on: 'blur',
+                    inline: true,
+                    fields: {
+                        card_no: {
+                            identifier  : 'card_no',
+                            rules: [
+                                {
+                                    type   : 'creditCard',
+                                    prompt : that.paymentCardNumberError
+                                }
+                            ]
+                        },
+                        name: {
+                            identifier  : 'name',
+                            rules: [
+                                {
+                                    type   : 'regExp[/^[A-Za-z\\s]{1,255}$/]',
+                                    prompt : that.paymentCardNameError
+                                }
+                            ]
+                        },
+                        cvc: {
+                            identifier  : 'cvc',
+                            rules: [
+                                {
+                                    type   : 'integer[0..999]',
+                                    prompt : that.paymentCardCvcError
+                                }
+                            ]
+                        },
+                        expiration_year: {
+                            identifier  : 'expiration_year',
+                            rules: [
+                                {
+                                    type   : 'integer[' + new Date().getFullYear() + '..' + ((new Date().getFullYear())+50) +']',
+                                    prompt : that.paymentCardYearError
+                                }
+                            ]
+                        }
+                    }
+                })
+            ;
         },
         methods: {
             sendToast: function(message,type) {
@@ -276,6 +334,21 @@
                             that.advert = (response.data).advert;
                             that.setSteps();
                             that.calcTVA();
+                            that.isLoaded = true;
+                        },
+                        function (response) {
+                            that.$parent.$emit('loadError')
+                        }
+                    );
+            },
+            getCardsType: function (withLoadIndicator) {
+                withLoadIndicator == undefined ? withLoadIndicator = true : null;
+                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
+                let that = this;
+                this.$http.get(this.routeGetCardsType)
+                    .then(
+                        function (response) {
+                            that.cardsType = response.data;
                             that.isLoaded = true;
                         },
                         function (response) {

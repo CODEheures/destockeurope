@@ -24,7 +24,7 @@ class UtilsController extends Controller
     use MoneyUtils;
 
     public function __construct() {
-        $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales']]);
+        $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales', 'getListCardsType']]);
         $this->middleware('isAdminUser', ['only' => ['testGame', 'isPicture']]);
     }
 
@@ -35,6 +35,11 @@ class UtilsController extends Controller
 
     public function getListLocales() {
         return response()->json($this->listLocales());
+    }
+
+    public function getListCardsType(){
+        $list = config('paypal_cards.list');
+        return response()->json($list);
     }
 
     public function testGame(){

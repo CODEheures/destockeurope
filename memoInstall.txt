@@ -1,5 +1,3 @@
 //TODO bucket 64 nginx + file body size nginx
 //      INTL EXTENSION apt-get install php5-intl
 //TODO post video
-//TODO paiement paypal
-//TODO PAGINATION > 6

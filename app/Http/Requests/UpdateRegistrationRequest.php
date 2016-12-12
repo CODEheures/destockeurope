@@ -38,9 +38,9 @@ class UpdateRegistrationRequest extends FormRequest
     public function messages()
     {
         return [
-            'value.required' => trans('strings.request_input_require'),
-            'value.min' => trans('strings.request_input_min_chars', ['min' => config('db_limits.users.minRegistrationNumber')]),
-            'value.max' => trans('strings.request_input_max_chars', ['min' => config('db_limits.users.maxRegistrationNumber')])
+            'value.required' => trans('strings.request_input_require', ['name' => trans('strings.view_user_account_compagny_number_label')]),
+            'value.min' => trans('strings.request_input_min_chars', ['name' => trans('strings.view_user_account_compagny_number_label'), 'min' => config('db_limits.users.minRegistrationNumber')]),
+            'value.max' => trans('strings.request_input_max_chars', ['name' => trans('strings.view_user_account_compagny_number_label'), 'max' => config('db_limits.users.maxRegistrationNumber')])
         ];
     }
 }
