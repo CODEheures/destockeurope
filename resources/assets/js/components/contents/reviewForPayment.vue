@@ -87,7 +87,6 @@
                                     {{ dividerChoiceLabel }}
                                 </div>
                             </div>
-                            <a href="https://stripe.com"><img class="ui tiny centered image" :src="urlImgDividerStripe"/></a>
                         </div>
                         <div class="sixteen wide mobile eight wide tablet six wide computer centered column">
                             <form accept-charset="UTF-8" autocomplete="off" :action="routeCardChoice"  id="payment-form" method="post" class="ui form" >
@@ -159,7 +158,6 @@
             //vue vars
             'urlImgPaypalDisabled',
             'urlImgPaypalEnabled',
-            'urlImgDividerStripe',
             //vue strings
             'contentHeader',
             'loadErrorMessage',

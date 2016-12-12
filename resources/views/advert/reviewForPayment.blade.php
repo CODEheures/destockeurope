@@ -10,7 +10,6 @@
 
             url-img-paypal-disabled="{{ asset('/images/frenchPayButton2_disable.png') }}"
             url-img-paypal-enabled="{{ asset('/images/frenchPayButton2.png') }}"
-            url-img-divider-stripe="{{ asset('/images/stripe.png')  }}"
 
             content-header="{{ trans('strings.view_reviewForPayment_header') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"

@@ -507,11 +507,13 @@ class AdvertController extends Controller
             return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
         }
         $advert = Advert::find($id);
-        if($advert->user->id == auth()->user()->id){
-            return view('advert.reviewForPayment', compact('advert'));
-        } else {
-            return redirect()->back()->withErrors(trans('strings.view_all_error_saving_message'));
+        if($advert
+            && $advert->user->id == auth()->user()->id
+            && (!$advert->invoice || ($advert->invoice && !$advert->invoice->authorization))
+        ){
+                return view('advert.reviewForPayment', compact('advert'));
         }
+        return redirect(route('home'));
 
     }
 
@@ -553,7 +555,11 @@ class AdvertController extends Controller
 
     private function advertPayment($id, $type, $request=null) {
         $advert = Advert::find($id);
-        if($advert && $advert->user->id == auth()->user()->id && $advert->cost > 0){
+        if($advert
+            && $advert->user->id == auth()->user()->id
+            && $advert->cost > 0
+            && (!$advert->invoice || ($advert->invoice && !$advert->invoice->authorization))
+        ){
             $advert->load('user');
 
             //create or get invoice
@@ -636,8 +642,8 @@ class AdvertController extends Controller
                 $splitName = $this->splitName($request->name);
                 foreach ($splitName as $item){
                     if(!$item || $item=''){
-                        return redirect(route('home'))
-                            ->withErrors(trans('strings.payment_all_error'));
+                        return redirect(route('advert.reviewForPayment', ['id' => $id]))
+                            ->withErrors(trans('strings.request_input_generic_error', ['name' => trans('strings.payment_card_name_label')]));
                     }
                 }
                 $card->setType(config('paypal_cards.list')[$request->card_type])
@@ -711,8 +717,8 @@ class AdvertController extends Controller
                     die($ex);
 //                    exit;
                 } else {
-                    return redirect(route('home'))
-                        ->withErrors(trans('strings.payment_all_error'));
+                    return redirect(route('advert.reviewForPayment', ['id' => $id]))
+                        ->withErrors('err6: ' . trans('strings.payment_all_error'));
                 }
             }
 
@@ -741,6 +747,11 @@ class AdvertController extends Controller
     }
 
     public function paypalStatus($id, $success, Request $request) {
+        $advert = Advert::find($id);
+        if(!$advert || !$advert->invoice){
+            return redirect(route('home'))
+                ->withErrors('err3: ' . trans('strings.payment_all_error'));
+        }
         if($success == 'true') {
             // Get the payment ID before session clear
             $session_payment_id = session('paypal_payment_id');
@@ -749,7 +760,7 @@ class AdvertController extends Controller
             //test sessionId = Request return paymentId
             if($session_payment_id != $payment_id) {
                 session()->forget('paypal_payment_id');
-                return redirect(route('home'))
+                return redirect(route('advert.reviewForPayment', ['id' => $id]))
                     ->withErrors('err1: ' . trans('strings.payment_all_error'));
             }
 
@@ -757,14 +768,8 @@ class AdvertController extends Controller
             session()->forget('paypal_payment_id');
 
             if (empty($request->input('PayerID')) || empty($request->input('token'))) {
-                return redirect(route('home'))
+                return redirect(route('advert.reviewForPayment', ['id' => $id]))
                     ->withErrors('err2: ' . trans('strings.payment_all_error'));
-            }
-
-            $advert = Advert::find($id);
-            if(!$advert || !$advert->invoice){
-                return redirect(route('home'))
-                    ->withErrors('err3: ' . trans('strings.payment_all_error'));
             }
 
             try {
@@ -779,7 +784,7 @@ class AdvertController extends Controller
                 //Execute the payment
                 $result = $payment->execute($execution, $this->_api_context);
             } catch (\Exception $e) {
-                return redirect(route('home'))
+                return redirect(route('advert.reviewForPayment', ['id' => $id]))
                     ->withErrors('err4: ' . trans('strings.payment_all_error'));
             }
 
@@ -787,10 +792,10 @@ class AdvertController extends Controller
                 return $this->saveApprovedAuthorization($payment, $advert, $request);
             }
 
-            return redirect(route('home'))
-                ->withErrors('err5: ' . trans('strings.payment_all_error'));
+            return redirect(route('advert.reviewForPayment', ['id' => $id]))
+                ->withErrors('err2: ' . trans('strings.payment_all_error'));
         } else {
-            return redirect(route('home'))
+            return redirect(route('advert.reviewForPayment', ['id' => $id]))
                 ->withErrors('err6: ' . trans('strings.payment_all_error'));
         }
     }
