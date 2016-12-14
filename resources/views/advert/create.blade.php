@@ -7,7 +7,7 @@
             route-post-tempo-picture="{{ route('picture.post',['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
             route-get-list-tempo-thumbs="{{ route('picture.listThumbs', ['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
             route-get-tempo-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_TEMPO_LOCAL])}}"
-            route-del-tempo-picture="{{ route('picture.destroy', ['type' => \App\Common\PicturesManager::TYPE_TEMPO_LOCAL])}}"
+            route-del-tempo-picture="{{ route('picture.destroyTempo')}}"
             route-get-cost="{{ route('advert.cost')}}"
 
             @if(count(old())>0)old="{{ json_encode(old()) }}" @endif

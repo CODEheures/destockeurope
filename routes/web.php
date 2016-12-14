@@ -18,6 +18,8 @@ Route::get('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@appParameters')->
 Route::patch('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@patchParameters');
 Route::get('/u15t6rs1hqe6h1qreh16er561he5r/get-welcome-list-type', 'CommonController@getWelcomeType')->name('advert.getWelcomeListType');
 Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
+Route::get('/cleanApp', 'CommonController@cleanApp')->name('application.cleanApp');
+Route::get('/lightenLocalDisk', 'CommonController@lightenLocalDisk')->name('application.lightenLocalDisk');
 
 //Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -59,14 +61,11 @@ Route::group(['prefix' => 'users'], function() {
 });
 
 //Utils
-
 Route::group(['prefix' => 'utils'] , function () {
     Route::get('/get-list-currencies', ['as' => 'utils.getListCurrencies', 'uses' => 'UtilsController@getListCurrencies']);
     Route::get('/get-list-locales', ['as' => 'utils.getListLocales', 'uses' => 'UtilsController@getListLocales']);
     Route::get('/get-list-cards-type', ['as' => 'utils.getListCardsType', 'uses' => 'UtilsController@getListCardsType']);
-    Route::get('/testGame', 'UtilsController@testGame');
     Route::post('/isPicture', 'UtilsController@isPicture')->name('utils.isPicture');
-    Route::get('/tempo', 'UtilsController@tempo');
 });
 
 //Categories
@@ -95,7 +94,7 @@ Route::resource('advert', 'AdvertController');
 
 //Pictures
 Route::post('picture', ['as' => 'picture.post', 'uses' => 'PictureController@post']);
-Route::delete('picture/{type}/{hashName?}', ['as' => 'picture.destroy', 'uses' => 'PictureController@destroy']);
+Route::delete('picture/{hashName?}', ['as' => 'picture.destroyTempo', 'uses' => 'PictureController@destroyTempo']);
 Route::get('picture/list-thumbs/{type}', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
 Route::get('picture/thumb/{type}/{hashName?}/{advertId?}', ['as' => 'picture.thumb', 'uses' => 'PictureController@getThumb']);
 Route::get('picture/normal/{hashName}/{advertId}', ['as' => 'picture.normal', 'uses' => 'PictureController@getNormal']);
@@ -103,3 +102,10 @@ Route::get('picture/normal/{hashName}/{advertId}', ['as' => 'picture.normal', 'u
 //Bookmarks
 Route::get('bookmark/add/{advertId?}', ['as' => 'bookmark.add', 'uses' => 'BookmarkController@add']);
 Route::get('bookmark/remove/{advertId?}', ['as' => 'bookmark.remove', 'uses' => 'BookmarkController@remove']);
+
+
+//DANGEROUS
+Route::group(['prefix' => 'dangerous'] , function () {
+    Route::get('/testGame', 'UtilsController@testGame');
+    Route::get('/tempo', 'UtilsController@tempo');
+});

@@ -14,6 +14,8 @@ return [
     'menu_account' => 'My account',
     'menu_category' => 'Categories',
     'menu_parameters' => 'Parameters',
+    'menu_cleanApp' => 'Clean Application',
+    'menu_lightenLocalDisk' => 'Lighten Local Disk',
     'menu_advert_to_approve' => 'Advert to Validate',
 
     'title_reset_password' => 'Reset Password',
@@ -260,6 +262,10 @@ return [
     'september' => 'september',
     'october' => 'october',
     'november' => 'november',
-    'december' => 'december'
+    'december' => 'december',
+
+    'admin_purge_response' => ':nbadvert adverts deleted and :nbimg pictures deleted',
+    'admin_purge_error' => 'purge error',
+    'admin_transfert_image_response' => ':nb pictures move to disk :disk'
 
 ];

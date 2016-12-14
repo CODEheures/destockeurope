@@ -323,7 +323,7 @@ class AdvertController extends Controller
     public function show($id, Request $request)
     {
         $advert = Advert::find($id);
-        if($advert->isValid) {
+        if($advert && $advert->isValid) {
             if ($request->isXmlHttpRequest()) {
                 $advert->load('pictures');
                 $advert->load('category');
@@ -342,7 +342,7 @@ class AdvertController extends Controller
         } elseif ($request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == 'admin')) {
             return response()->json(['advert' => $advert]);
         } else {
-            return back();
+            return redirect(route('home'));
         }
     }
 

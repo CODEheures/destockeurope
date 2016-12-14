@@ -25,7 +25,7 @@ class UtilsController extends Controller
 
     public function __construct() {
         $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales', 'getListCardsType']]);
-        $this->middleware('isAdminUser', ['only' => ['testGame', 'isPicture']]);
+        $this->middleware('isAdminUser', ['only' => ['testGame', 'isPicture', 'tempo']]);
     }
 
 
@@ -277,6 +277,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         DB::commit();
     }
 
+    //test if a resource is a picture. Only use for advertissement on welcome page
     public function isPicture(Request $request){
         $url = $request->url;
         if(array_key_exists('Content-Type', get_headers($url,1))){
@@ -288,6 +289,6 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-        return redirect()->route('advert.payByPaypal', ['id' => 9]);
+        return null;
     }
 }

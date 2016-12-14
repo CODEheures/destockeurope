@@ -63,6 +63,10 @@ class Advert extends Model {
         return $this->hasMany('App\Picture');
     }
 
+    public function picturesWithTrashed() {
+        return $this->hasMany('App\Picture')->withTrashed();
+    }
+
     public function invoice() {
         return $this->belongsTo('App\Invoice');
     }

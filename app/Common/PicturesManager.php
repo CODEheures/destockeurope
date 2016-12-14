@@ -207,42 +207,22 @@ class PicturesManager
         Storage::deleteDirectory($this->personnalPath(static::TYPE_TEMPO_LOCAL));
     }
 
-    public function storeDistantFinal(){
+    public function moveToDistantFinal(Picture $picture){
 
-        $listPictureToMove= Picture::where('disk', '=', 'local')->take(4)->get();
-
-        //$listTempoFiles = Storage::disk(static::DISK_LOCAL)->files($this->personnalPath(static::TYPE_TEMPO_LOCAL));
-        $results=[];
-        foreach ($listPictureToMove as $file){
-            $urlTempoFile = config(self::CONFIG_LOCAL_ROOT_PATH).'/'.$file;
-
-            $originPath = $this->personnalPath(static::TYPE_TEMPO_LOCAL);
-            $fileName = substr($file,strlen($originPath)-1);
-
-            $destPath = $this->personnalPath(static::TYPE_FINAL_DISTANT);
-            //$result = Storage::disk(static::DISK_DISTANT)->put($destPath.$fileName, file_get_contents($urlTempoFile));
-            $result = Storage::disk(static::DISK_DISTANT)->putFileAs($destPath, new File($urlTempoFile), $fileName);
-
-            if($result) {
-                //Storage::disk(static::DISK_LOCAL)->delete($file);
-                $results[] = [
-                    'new' => [
-                        'disk' => static::DISK_DISTANT,
-                        'path' => $destPath,
-                        'fileName' => $fileName
-                    ],
-                    'old' => [
-                        'disk' => static::DISK_LOCAL,
-                        'path' => $this->personnalPath(static::TYPE_TEMPO_LOCAL),
-                        'fileName' => $fileName
-                    ]
-                ];
-            } else {
-                throw new \Exception('copy fails');
-            }
+        $fileName = $picture->isThumb ? $picture->hashName.static::THUMB_EXT.'.'.static::EXT : $picture->hashName.'.'.static::EXT;$picture->hashName;
+        $originPath = config(self::CONFIG_LOCAL_ROOT_PATH).$picture->path;
+        $destPathBDD = $this->personnalPath(static::TYPE_FINAL_DISTANT);
+        substr($destPathBDD,-1)=='/' ?  $destPath=substr($destPathBDD,0,strlen($destPathBDD)-1) : $destPath=$destPathBDD;
+        $result = Storage::disk(static::DISK_DISTANT)->putFileAs($destPath, new File($originPath.$fileName), $fileName);
+        if($result) {
+            $countParentAdvert = $this->countParent($picture);
+            $countParentAdvert == 1 ? $this->destroy($picture) : null;
+            $picture->path = $destPathBDD;
+            $picture->disk = self::DISK_DISTANT;
+            $picture->save();
+        } else {
+            throw new \Exception('copy fails');
         }
-        //Storage::disk(static::DISK_LOCAL)->deleteDirectory($this->personnalPath(static::TYPE_TEMPO_LOCAL));
-        return $results;
     }
 
     public function save($request) {
@@ -303,8 +283,8 @@ class PicturesManager
         }
     }
 
-    public function destroy($type, $hashName){
-        $this->setType($type);
+    public function destroyTempo($hashName){
+        $this->setType(self::TYPE_TEMPO_LOCAL);
         $this->setFileName($hashName);
 
         if(Storage::disk($this->disk)->exists($this->personnalPath().$this->fileName.static::THUMB_EXT.'.'.static::EXT)){
@@ -316,13 +296,30 @@ class PicturesManager
         }
     }
 
-    public function getThumb($type, $hashName, $path=null){
-        $this->setType($type);
-        $this->setFileName($hashName);
-
-        if(!$path) {
-            $path = $this->personnalPath();
+    public function destroy(Picture $picture){
+        if($picture->isThumb){
+            if(Storage::disk($picture->disk)->exists($picture->path.$picture->hashName.static::THUMB_EXT.'.'.static::EXT)){
+                Storage::disk($picture->disk)->delete($picture->path.$picture->hashName.static::THUMB_EXT.'.'.static::EXT);
+            }
+        } else {
+            if(Storage::disk($picture->disk)->exists($picture->path.$picture->hashName.'.'.static::EXT)){
+                Storage::disk($picture->disk)->delete($picture->path.$picture->hashName.'.'.static::EXT);
+            }
         }
+    }
+
+    public function getThumbFinal(Picture $picture){
+        if(Storage::disk($picture->disk)->exists($picture->path.$picture->hashName.static::THUMB_EXT.'.'.static::EXT)){
+            $file =  Storage::disk($picture->disk)->get($picture->path.$picture->hashName.static::THUMB_EXT.'.'.static::EXT);
+            return $file;
+        }
+        return null;
+    }
+
+    public function getThumbTempo($hashName){
+        $this->setType(self::TYPE_TEMPO_LOCAL);
+        $this->setFileName($hashName);
+        $path = $this->personnalPath();
 
         if(Storage::disk($this->disk)->exists($path.$this->fileName.static::THUMB_EXT.'.'.static::EXT)){
             $file =  Storage::disk($this->disk)->get($path.$this->fileName.static::THUMB_EXT.'.'.static::EXT);
@@ -331,15 +328,20 @@ class PicturesManager
         return null;
     }
 
-    public function getNormal($type, $hashName, $path){
-        $this->setType($type);
-        $this->setFileName($hashName);
-
-
-        if(Storage::disk($this->disk)->exists($path.$this->fileName.'.'.static::EXT)){
-            $file =  Storage::disk($this->disk)->get($path.$this->fileName.'.'.static::EXT);
+    public function getNormal(Picture $picture){
+        if(Storage::disk($picture->disk)->exists($picture->path.$picture->hashName.'.'.static::EXT)){
+            $file =  Storage::disk($picture->disk)->get($picture->path.$picture->hashName.'.'.static::EXT);
             return $file;
         }
         return null;
+    }
+
+    public function countParent(Picture $picture) {
+        return Picture::where('hashName' , '=', $picture->hashName)
+            ->where('path', '=', $picture->path)
+            ->where('disk', '=', $picture->disk)
+            ->where('isThumb', '=', $picture->isThumb)
+            ->withTrashed()
+            ->count();
     }
 }

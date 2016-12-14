@@ -11,6 +11,8 @@
                 @endif
             </a>
             <a href="{{ route('application.manage') }}" class="{{ $routeName == 'application.manage' ? 'active' : '' }} item">{{ trans('strings.menu_parameters') }}</a>
+            <a href="{{ route('application.cleanApp') }}" class="{{ $routeName == 'application.cleanApp' ? 'active' : '' }} item">{{ trans('strings.menu_cleanApp') }}</a>
+            <a href="{{ route('application.lightenLocalDisk') }}" class="{{ $routeName == 'application.lightenLocalDisk' ? 'active' : '' }} item">{{ trans('strings.menu_lightenLocalDisk') }}</a>
         </div>
     </div>
 @endif

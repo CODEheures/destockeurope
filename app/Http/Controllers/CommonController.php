@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Common;
 use App\Common\DBUtils;
+use App\Picture;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -47,6 +48,29 @@ class CommonController extends Controller
         } else {
             return response('error', 500);
         }
+    }
+
+    public function cleanApp() {
+        try {
+            $pictureManager = new Common\PicturesManager();
+            $advertManager = new Common\AdvertsManager($pictureManager);
+            $info = $advertManager->purge();
+            return back()->with('info', $info);
+        } catch (\Exception $e) {
+            return back()->withErrors($e);
+        }
+
+    }
+
+    public function lightenLocalDisk() {
+        $lot = 1;
+        //move pictures to distant disk
+        $pictureManager = new Common\PicturesManager();
+        $pictures = Picture::where('disk', '=', 'local')->take($lot)->get();
+        foreach ($pictures as $picture){
+            $pictureManager->moveToDistantFinal($picture);
+        }
+        return back()->with('info', trans('strings.admin_transfert_image_response', ['nb' => $lot, 'disk' => $pictureManager::DISK_DISTANT]));
     }
 
     public function getWelcomeType() {

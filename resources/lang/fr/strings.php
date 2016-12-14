@@ -14,6 +14,8 @@ return [
     'menu_account' => 'Mon compte',
     'menu_category' => 'Catégories',
     'menu_parameters' => 'Paramètres',
+    'menu_cleanApp' => 'Nettoyage Application',
+    'menu_lightenLocalDisk' => 'Alleger disque local',
     'menu_advert_to_approve' => 'Annonce à valider',
 
     'title_reset_password' => 'Renouvellement du mot de passe',
@@ -260,6 +262,10 @@ return [
     'september' => 'septembre',
     'october' => 'octobre',
     'november' => 'novembre',
-    'december' => 'decembre'
+    'december' => 'decembre',
+
+    'admin_purge_response' => ':nbadvert annonces supprimées et :nbimg images éffacées',
+    'admin_purge_error' => 'erreur pendant la purge',
+    'admin_transfert_image_response' => ':nb images transférées vers le disque :disk'
     
 ];
