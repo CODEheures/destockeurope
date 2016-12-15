@@ -2,6 +2,7 @@
 
 namespace App\Common;
 
+use Illuminate\Notifications\Action;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class CustomerToSellerMailMessage extends MailMessage

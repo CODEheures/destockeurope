@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Common\StatsManager;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\TransfertMedias::class
     ];
 
     /**
@@ -26,6 +27,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->call(function(){
+            $statManager = new StatsManager();
+            $statManager->getStats();
+        })->everyThirtyMinutes();//->dailyAt('02:00');
     }
 
     /**

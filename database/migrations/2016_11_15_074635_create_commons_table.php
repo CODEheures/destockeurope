@@ -30,6 +30,9 @@ class CreateCommonsTable extends Migration
             $table->smallInteger('advertResumeLenght')->default(120);
             $table->tinyInteger('maxNumberOfSearchResults')->default(3);
             $table->tinyInteger('minLengthSearch')->default(3);
+            $table->boolean('isOnTransfert')->default(false);
+            $table->tinyInteger('transfertPartial')->default(0);
+            $table->tinyInteger('transfertTotal')->default(0);
         });
     }
 

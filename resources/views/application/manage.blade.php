@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
+@section('css')
+    @include('plugins.amcharts.css')
+@endsection
+
 @section('content')
 
     <manage-application
-            route-parameters="{{ route('appParameters') }}"
+            route-parameters="{{ route('application.parameters') }}"
             route-test-is-picture="{{ route('utils.isPicture') }}"
+            route-clean-app = "{{ route('application.cleanApp') }}"
+            route-lighten-local-disk="{{ route('application.lightenLocalDisk') }}"
+            route-get-stats="{{ route('application.getStats') }}"
 
             content-header="{{ trans('strings.view_manage_index_header') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
@@ -28,9 +35,21 @@
             master-ads-offset-y-label="{{ trans('strings.view_manage_master_offset_y_label') }}"
             appearance-label="{{ trans('strings.view_manage_appearance_label') }}"
             welcome-appearance-label="{{ trans('strings.view_manage_welcome_type_label') }}"
+            dashboard-label="{{ trans('strings.view_manage_dashboard_label') }}"
+            menu-clean-app-label="{{ trans('strings.menu_cleanApp') }}"
+            menu-lighten-local-disk-label="{{ trans('strings.menu_lightenLocalDisk') }}"
+            dashboard-size-local-file-label="{{ trans('strings.dashboard_size_local_files_label') }}"
+            dashboard-size-distant-file-label="{{ trans('strings.dashboard_size_distant_files_label') }}"
+            dashboard-count-files-title="{{ trans('strings.dashboard_count_files_title') }}"
+            dashboard-count-local-files-label="{{ trans('strings.dashboard_count_local_files_label') }}"
+            dashboard-count-distant-files-label="{{ trans('strings.dashboard_count_distant_files_label') }}"
 
             route-get-list-type="{{ route('advert.getWelcomeListType') }}"
             list-type-first-menu-name="{{ trans('strings.view_manage_welcome_type_label') }}">
     </manage-application>
 
+@endsection
+
+@section('scripts')
+    @include('plugins.amcharts.scripts')
 @endsection

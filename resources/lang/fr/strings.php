@@ -13,7 +13,7 @@ return [
     'menu_register' => 'S\'enregistrer',
     'menu_account' => 'Mon compte',
     'menu_category' => 'Catégories',
-    'menu_parameters' => 'Paramètres',
+    'menu_parameters' => 'Manage Application',
     'menu_cleanApp' => 'Nettoyage Application',
     'menu_lightenLocalDisk' => 'Alleger disque local',
     'menu_advert_to_approve' => 'Annonce à valider',
@@ -164,6 +164,7 @@ return [
     'view_manage_master_offset_y_label' => 'Décalage vertical de l\'annonce',
     'view_manage_appearance_label' => 'Apparence',
     'view_manage_welcome_type_label' => 'Page d\'accueil type n°',
+    'view_manage_dashboard_label' => 'Etat de l\'application',
 
     'view_advert_create_header' => 'Créer une annonce',
     'view_advert_form_title_label' => 'Titre de l\'annonce',
@@ -266,6 +267,11 @@ return [
 
     'admin_purge_response' => ':nbadvert annonces supprimées et :nbimg images éffacées',
     'admin_purge_error' => 'erreur pendant la purge',
-    'admin_transfert_image_response' => ':nb images transférées vers le disque :disk'
-    
+    'admin_transfert_image_response' => ':nb images en cours de transfert vers le disque :disk',
+
+    'dashboard_size_local_files_label' => 'Charge disque local',
+    'dashboard_size_distant_files_label' => 'Charge disque ' . \App\Common\PicturesManager::DISK_DISTANT,
+    'dashboard_count_files_title' => 'Nombre de fichiers',
+    'dashboard_count_local_files_label' => 'Local',
+    'dashboard_count_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT,
 ];

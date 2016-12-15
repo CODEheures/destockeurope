@@ -16,6 +16,7 @@ use App\Notifications\AdvertApprove;
 use App\Notifications\AdvertNotApprove;
 use App\Notifications\CustomerContactSeller;
 use App\Picture;
+use App\Stats;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PayPal\Api\Amount;
@@ -337,6 +338,9 @@ class AdvertController extends Controller
                 $advert->timestamps = false;
                 $advert->views = $advert->views + 1;
                 $advert->save();
+                $stats = Stats::latest()->first();
+                $stats->totalNewView = $stats->totalNewView + 1;
+                $stats->save();
                 return view('advert.show', compact('advert'));
             }
         } elseif ($request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == 'admin')) {

@@ -10,6 +10,7 @@ use App\Picture;
 use App\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
@@ -25,7 +26,7 @@ class UtilsController extends Controller
 
     public function __construct() {
         $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales', 'getListCardsType']]);
-        $this->middleware('isAdminUser', ['only' => ['testGame', 'isPicture', 'tempo']]);
+        $this->middleware('isAdminUser', ['only' => ['isPicture', 'tempo']]);
     }
 
 
@@ -44,6 +45,13 @@ class UtilsController extends Controller
 
     public function testGame(){
         Artisan::call('migrate:refresh');
+
+        $testFiles = Storage::disk('local')->files('/testGame');
+        foreach ($testFiles as $file){
+            if(!Storage::disk('local')->exists(Common\PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
+                Storage::disk('local')->copy($file, Common\PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
+            }
+        }
 
         $parameters = new Common();
         $parameters->save();
@@ -211,6 +219,8 @@ class UtilsController extends Controller
             50
         );
 
+        $statsManager = new Common\StatsManager();
+        $statsManager->getStats();
         return redirect(route('home'));
     }
 

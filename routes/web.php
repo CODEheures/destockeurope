@@ -13,13 +13,18 @@
 
 //Common
 Route::get('/', 'CommonController@home')->name('home');
-Route::get('/manage', 'CommonController@manage')->name('application.manage');
-Route::get('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@appParameters')->name('appParameters');
-Route::patch('/u15t6rs1hqe6h1qreh16er561he5r', 'CommonController@patchParameters');
-Route::get('/u15t6rs1hqe6h1qreh16er561he5r/get-welcome-list-type', 'CommonController@getWelcomeType')->name('advert.getWelcomeListType');
 Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
-Route::get('/cleanApp', 'CommonController@cleanApp')->name('application.cleanApp');
-Route::get('/lightenLocalDisk', 'CommonController@lightenLocalDisk')->name('application.lightenLocalDisk');
+
+// Admin Routes...
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('/manage', 'AdminController@manage')->name('application.manage');
+    Route::get('/parameters', 'AdminController@appParameters')->name('application.parameters');
+    Route::patch('/parameters', 'AdminController@patchParameters');
+    Route::get('/get-welcome-list-type', 'AdminController@getWelcomeType')->name('advert.getWelcomeListType');
+    Route::get('/cleanApp', 'AdminController@cleanApp')->name('application.cleanApp');
+    Route::get('/lightenLocalDisk', 'AdminController@lightenLocalDisk')->name('application.lightenLocalDisk');
+    Route::get('/stats', 'AdminController@getStats')->name('application.getStats');
+});
 
 //Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

@@ -27,6 +27,7 @@ class PicturesManager
     Const EXT = 'jpg';
     CONST MIME = 'image/jpeg';
     Const THUMB_EXT = '-thumb';
+    Const FINAL_LOCAL_PATH = '/final/';
 
     Const WATER_MARK = 'watermark.png';
 
@@ -130,8 +131,8 @@ class PicturesManager
             return '/tempo/' . auth()->user()->id . '/';
         } elseif($this->type == self::TYPE_FINAL_LOCAL){
             for($i=1; $i<static::MAX_DIR; $i++){
-                if(count(Storage::disk($this->disk)->files('/final/' . $i . '/'))<static::MAX_FILE_PER_DIR){
-                    return '/final/' . $i . '/';
+                if(count(Storage::disk($this->disk)->files(self::FINAL_LOCAL_PATH . $i . '/'))<static::MAX_FILE_PER_DIR){
+                    return self::FINAL_LOCAL_PATH . $i . '/';
                 }
             }
             throw new \Exception('max file in storage');
@@ -208,13 +209,13 @@ class PicturesManager
     }
 
     public function moveToDistantFinal(Picture $picture){
-
         $fileName = $picture->isThumb ? $picture->hashName.static::THUMB_EXT.'.'.static::EXT : $picture->hashName.'.'.static::EXT;$picture->hashName;
         $originPath = config(self::CONFIG_LOCAL_ROOT_PATH).$picture->path;
         $destPathBDD = $this->personnalPath(static::TYPE_FINAL_DISTANT);
         substr($destPathBDD,-1)=='/' ?  $destPath=substr($destPathBDD,0,strlen($destPathBDD)-1) : $destPath=$destPathBDD;
         $result = Storage::disk(static::DISK_DISTANT)->putFileAs($destPath, new File($originPath.$fileName), $fileName);
         if($result) {
+            //Attention d'abord destruction puis sauv BDD sinon le fichier detruit est le fichier final!
             $countParentAdvert = $this->countParent($picture);
             $countParentAdvert == 1 ? $this->destroy($picture) : null;
             $picture->path = $destPathBDD;
@@ -343,5 +344,35 @@ class PicturesManager
             ->where('isThumb', '=', $picture->isThumb)
             ->withTrashed()
             ->count();
+    }
+
+    public function infoLocalFiles() {
+        $files = [];
+        $size = 0;
+        try {
+            $files = Storage::disk(self::DISK_LOCAL)->allFiles(self::FINAL_LOCAL_PATH);
+            foreach ($files as $file){
+                $size += Storage::disk(self::DISK_LOCAL)->size($file);
+            }
+
+            return [count($files), $size];
+        } catch (\Exception $e) {
+            return [count($files), $size];
+        }
+    }
+
+    public function infoDistantFiles() {
+        $distantFiles = [];
+        $distantSize = 0;
+
+        try {
+            $distantFiles = Storage::disk(self::DISK_DISTANT)->allFiles('/');
+            foreach ($distantFiles as $distantFile){
+                $distantSize += Storage::disk(self::DISK_DISTANT)->size($distantFile);
+            }
+            return [count($distantFiles), $distantSize];
+        } catch (\Exception $e) {
+            return [count($distantFiles), $distantSize];
+        }
     }
 }

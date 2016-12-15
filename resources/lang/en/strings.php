@@ -13,7 +13,7 @@ return [
     'menu_register' => 'Register',
     'menu_account' => 'My account',
     'menu_category' => 'Categories',
-    'menu_parameters' => 'Parameters',
+    'menu_parameters' => 'Manage Application',
     'menu_cleanApp' => 'Clean Application',
     'menu_lightenLocalDisk' => 'Lighten Local Disk',
     'menu_advert_to_approve' => 'Advert to Validate',
@@ -164,6 +164,7 @@ return [
     'view_manage_master_offset_y_label' => 'Vertical offset of the advert',
     'view_manage_appearance_label' => 'Appearance',
     'view_manage_welcome_type_label' => 'Home Page type n°',
+    'view_manage_dashboard_label' => 'Application states',
 
     'view_advert_create_header' => 'Create new advert',
     'view_advert_form_title_label' => 'Advert Title',
@@ -266,6 +267,11 @@ return [
 
     'admin_purge_response' => ':nbadvert adverts deleted and :nbimg pictures deleted',
     'admin_purge_error' => 'purge error',
-    'admin_transfert_image_response' => ':nb pictures move to disk :disk'
+    'admin_transfert_image_response' => ':nb pictures moving to disk :disk',
 
+    'dashboard_size_local_files_label' => 'local disk charge',
+    'dashboard_size_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT . 'disk charge',
+    'dashboard_count_files_title' => 'File count',
+    'dashboard_count_local_files_label' => 'Local',
+    'dashboard_count_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT,
 ];
