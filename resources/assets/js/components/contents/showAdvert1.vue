@@ -24,6 +24,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="field">
+                        <div class="two fields">
+                            <div class="field">
+                                <label>{{ formMessagePhoneLabel }}</label>
+                                <input name="phone" type="text" v-model="dataUserPhone">
+                            </div>
+                            <div class="field">
+                                <label>{{ formMessageCompagnyLabel }}</label>
+                                <input name="compagnyName" type="text" v-model="dataUserCompagnyName">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="actions">
@@ -192,12 +204,16 @@
             //vue vars
             'userMail',
             'userName',
+            'userPhone',
+            'userCompagnyName',
             'isUserOwner',
             'isUserBookmark',
             'bookmarkCount',
             'formNameMinValid',
             'formMessageMinValid',
             'formMessageMaxValid',
+            'formPhoneMaxValid',
+            'formCompagnyNameMaxValid',
             //vue strings
             'loadErrorMessage',
             'sendSuccessMessage',
@@ -212,6 +228,8 @@
             'formMessageLabel',
             'formMessageEmailLabel',
             'formMessageNameLabel',
+            'formMessagePhoneLabel',
+            'formMessageCompagnyLabel',
             'formMessageSendLabel',
             'formMessageCancelLabel',
             'bookmarkSuccess',
@@ -242,6 +260,8 @@
                 id: 0,
                 dataUserName: '',
                 dataUserMail: '',
+                dataUserPhone: '',
+                dataUserCompagnyName: '',
                 dataMessage: '',
                 dataEnabledMessage: false,
                 dataIsUserBookmark: false
@@ -250,6 +270,8 @@
         mounted () {
             this.dataUserMail = this.userMail;
             this.dataUserName = this.userName;
+            this.dataUserPhone = this.userPhone;
+            this.dataUserCompagnyName = this.userCompagnyName;
             this.dataIsUserBookmark = this.isUserBookmark;
             //Visibility for ADS
             let $elem = $('#welcome-ads').children('div');
@@ -309,6 +331,24 @@
                                     prompt: '{ruleValue} ' + that.formPointingMaximumChars
                                 }
                             ]
+                        },
+                        phone: {
+                            identifier  : 'phone',
+                            rules: [
+                                {
+                                    type : 'maxLength['+that.formPhoneMaxValid+']',
+                                    prompt: '{ruleValue} ' + that.formPointingMaximumChars
+                                }
+                            ]
+                        },
+                        compagnyName: {
+                            identifier  : 'compagnyName',
+                            rules: [
+                                {
+                                    type : 'maxLength['+that.formCompagnyNameMaxValid+']',
+                                    prompt: '{ruleValue} ' + that.formPointingMaximumChars
+                                }
+                            ]
                         }
                     },
                     inline : true,
@@ -347,7 +387,7 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.post(that.routeSendMail, {'id': that.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'message': that.dataMessage})
+                        that.$http.post(that.routeSendMail, {'id': that.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
                             .then(
                                 function (response) {
                                     that.sendToast(that.sendSuccessMessage, 'success');

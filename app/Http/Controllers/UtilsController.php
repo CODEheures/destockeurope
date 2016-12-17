@@ -8,6 +8,9 @@ use App\Category;
 use App\Common;
 use App\Picture;
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Database\Console\Migrations\RefreshCommand;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -56,6 +59,8 @@ class UtilsController extends Controller
         $parameters = new Common();
         $parameters->save();
 
+        $statsManager = new Common\StatsManager();
+
         $lat = 47.3526;
         $lng = 0.6702587142943912;
 
@@ -63,6 +68,7 @@ class UtilsController extends Controller
         $user1 = new User();
         $user1->name = 'client';
         $user1->email = 'client@d.e';
+        $user1->phone = '06.87.34.06.83';
         $user1->password = bcrypt('123456');
         $user1->locale = env('DEFAULT_LOCALE');
         $user1->currency = config('runtime.currency');
@@ -145,9 +151,12 @@ class UtilsController extends Controller
 
 
 
+        // J-5
         $this->advertCreate(
             $user2->id,
             $subCategory212->id,
+            Carbon::now()->subDays(5),
+            0,
             '1000 doudounes en fin de série à prix cassées',
             ['11111111111111111111111111111111'],
             1000,
@@ -157,6 +166,8 @@ class UtilsController extends Controller
         $this->advertCreate(
             $user2->id,
             $subCategory213->id,
+            Carbon::now()->subDays(5),
+            0,
             'Un lot de 28 chiens de cirque',
             ['22222222222222222222222222222222', '33333333333333333333333333333333', '44444444444444444444444444444444'],
             28,
@@ -165,9 +176,21 @@ class UtilsController extends Controller
             true
         );
 
+        $stat1 = $statsManager->getStats();
+        $stat1->created_at = Carbon::now()->subDays(5);
+        $stat1->totalNewViews = 328;
+        $stat1->totalNewFreeAdverts = 56;
+        $stat1->totalNewCostAdverts = 14;
+        $stat1->totalCosts = 428;
+        $stat1->save();
+
+
+        // J-4
         $this->advertCreate(
             $user2->id,
             $subCategory12->id,
+            Carbon::now()->subDays(4),
+            69,
             'Excellent état! 10 Cartons de casques AudioBeats',
             ['55555555555555555555555555555555'],
             10,
@@ -177,6 +200,8 @@ class UtilsController extends Controller
         $this->advertCreate(
             $user2->id,
             $subCategory12->id,
+            Carbon::now()->subDays(4),
+            20,
             '10000 lunettes Gears pour samsung S7...\':(',
             ['66666666666666666666666666666666'],
             10000,
@@ -186,24 +211,51 @@ class UtilsController extends Controller
         $this->advertCreate(
             $user2->id,
             $subCategory11->id,
+            Carbon::now()->subDays(4),
+            0,
             '3 palettes de boites à dessin avec defauts',
             ['77777777777777777777777777777777'],
             3,
             1
         );
 
+        $stat2 = $statsManager->getStats();
+        $stat2->created_at = Carbon::now()->subDays(4);
+        $stat2->totalNewViews = 211;
+        $stat2->totalNewFreeAdverts = 21;
+        $stat2->totalNewCostAdverts = 0;
+        $stat2->totalCosts = 0;
+        $stat2->save();
+
+
+        // J-2
         $this->advertCreate(
             $user2->id,
             $subCategory22->id,
+            Carbon::now()->subDays(2),
+            10,
             '500 sacs à dos EastPack Gris à saisir',
             ['88888888888888888888888888888888'],
             500,
             30
         );
 
+        $stat3 = $statsManager->getStats();
+        $stat3->created_at = Carbon::now()->subDays(2);
+        $stat3->totalNewViews = 404;
+        $stat3->totalNewFreeAdverts = 56;
+        $stat3->totalNewCostAdverts = 14;
+        $stat3->totalCosts = 428;
+        $stat3->save();
+
+
+
+        //J - 1
         $this->advertCreate(
             $user2->id,
             $subCategory11->id,
+            Carbon::now()->subDays(1),
+            49,
             '42 kilos de crayons tout venant',
             ['99999999999999999999999999999999'],
             42,
@@ -213,21 +265,31 @@ class UtilsController extends Controller
         $this->advertCreate(
             $user2->id,
             $subCategory12->id,
+            Carbon::now()->subDays(1),
+            0,
             '200 clés USB suite à depot de bilan',
             ['00000000000000000000000000000000'],
             200,
             50
         );
 
-        $statsManager = new Common\StatsManager();
-        $statsManager->getStats();
+
+        $stat4 = $statsManager->getStats();
+        $stat4->created_at = Carbon::now()->subDays(1);
+        $stat4->totalNewViews = 528;
+        $stat4->totalNewFreeAdverts = 87;
+        $stat4->totalNewCostAdverts = 25;
+        $stat4->totalCosts = 621;
+        $stat4->save();
         return redirect(route('home'));
     }
 
-    private function advertCreate($userId, $catId, $title, Array $pictures, $maxQuantity, $lotMini, $description=null, $isValid=null){
+    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $description=null, $isValid=null){
         $advert = new Advert();
         $advert->user_id = $userId;
         $advert->category_id = $catId;
+        $advert->created_at = $created_at;
+        $advert->cost = $cost;
         $advert->type = 'bid';
         $advert->title = $title;
         if($description){
@@ -253,7 +315,6 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
 
         $advert->price = $moneyParser->parse(strval($unitPrice),"EUR")->getAmount();
 
-        $advert->cost = 0;
         $advert->isPublish = true;
 
         if($isValid==null) {

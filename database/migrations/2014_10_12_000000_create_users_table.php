@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('locale',50)->default(env('DEFAULT_LOCALE'));
             $table->string('compagnyName',config('db_limits.users.maxCompagnyName'))->nullable()->default(null);
             $table->string('registrationNumber', config('db_limits.users.maxRegistrationNumber'))->nullable()->default(null);
+            $table->string('phone',config('db_limits.users.maxPhone'))->nullable()->default(null);
             $table->decimal('latitude',6,4)->nullable()->default(null);
             $table->decimal('longitude',19,16)->nullable()->default(null);
             $table->text('geoloc')->nullable()->default(null);

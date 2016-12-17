@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 
 use App\Common;
 use App\Common\DBUtils;
+use App\Common\PicturesManager;
+use App\Jobs\TransferMedias;
+use App\Picture;
 use App\Stats;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Process\Process;
 
 class AdminController extends Controller
 {
@@ -23,54 +25,50 @@ class AdminController extends Controller
         return view('application.manage');
     }
 
+    public function dashboard(){
+        return view('application.dashboard');
+    }
+
     public function getStats(){
         $date = Carbon::now()->subMonths(6);
-        $viewsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('SUM(totalNewView) as views')))
+        $viewsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('SUM(totalNewViews) as views')))
             ->where('created_at', '>', $date)
             ->groupBy('date')
             ->orderBy('date', 'ASC')
-            ->pluck('views','date');
+            ->get();
 
-        $validAdvertsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('AVG(totalAdverts) as adverts')))
+        $advertsByDay = Stats::select(array(
+                DB::raw('DATE(`created_at`) as `date`'),
+                DB::raw('AVG(totalAdverts) as valid_adverts'),
+                DB::raw('AVG(totalInvalidAdverts) as invalid_adverts'),
+                DB::raw('AVG(totalWaitingAdverts) as waiting_adverts'),
+                DB::raw('SUM(totalNewFreeAdverts) as new_free_adverts'),
+                DB::raw('SUM(totalNewCostAdverts) as new_cost_adverts'),
+            ))
             ->where('created_at', '>', $date)
             ->groupBy('date')
             ->orderBy('date', 'ASC')
-            ->pluck('adverts','date');
+            ->get();
 
-        $invalidAdvertsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('AVG(totalInvalidAdverts) as adverts')))
-            ->where('created_at', '>', $date)
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->pluck('adverts','date');
 
-        $waitingAdvertsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('AVG(totalWaitingAdverts) as adverts')))
+        $costsByDay = Stats::select(array(
+                DB::raw('DATE(`created_at`) as `date`'),
+                DB::raw('SUM(totalCosts) as sum_costs'),
+                DB::raw('(SUM(totalCosts)/SUM(totalNewCostAdverts)) as avg_costs')
+        ))
             ->where('created_at', '>', $date)
             ->groupBy('date')
             ->orderBy('date', 'ASC')
-            ->pluck('adverts','date');
+            ->get();
 
-        $avgCostAdvertsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('AVG(totalCostAdverts) as avg_costs')))
-            ->where('created_at', '>', $date)
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->pluck('costs','date');
-
-        $sumCostAdvertsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('SUM(totalCostAdverts) as avg_costs')))
-            ->where('created_at', '>', $date)
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->pluck('costs','date');
 
         $filesInfo = Stats::latest()->first();
 
 
         return response()->json([
-            'viewsByDay' => $viewsByDay,
-            'validAdvertsByDay' => $validAdvertsByDay,
-            'invalidAdvertsByDay' => $invalidAdvertsByDay,
-            'waitingAdvertsByDay' => $waitingAdvertsByDay,
-            'avgCostAdvertsByDay' => $avgCostAdvertsByDay,
-            'sumCostAdvertsByDay' => $sumCostAdvertsByDay,
+            'viewsByDay' => $viewsByDay->toArray(),
+            'advertsByDay' => $advertsByDay->toArray(),
+            'costsByDay' => $costsByDay->toArray(),
             'filesInfo' => $filesInfo
         ]);
     }
@@ -118,11 +116,27 @@ class AdminController extends Controller
 
     }
 
-    public function lightenLocalDisk() {
-        $quantity = 5;
-        $process = new Process('php ../artisan medias:transfert ' . $quantity . ' --quiet');
-        $process->start();
-        return response(trans('strings.admin_transfert_image_response', ['nb' => $quantity, 'disk' => Common\PicturesManager::DISK_DISTANT]),202);
+    public function transfertMedias($sizeInMb) {
+        if($sizeInMb <= 0) {
+            return response(trans('strings.admin_transfert_size_null'), 500);
+        }
+        $commons = Common::latest()->first();
+        if($commons && !$commons->isOnTransfert) {
+            $commons = Common::latest()->first();
+            $commons->transfertTotal = 0;
+            $commons->transfertPartial = 0;
+            $commons->save();
+            $job = (new TransferMedias($sizeInMb))->delay(Carbon::now()->addSeconds(5))->onConnection('database');
+            $this->dispatch($job);
+            return response(trans('strings.admin_transfert_image_response', ['nb' => $sizeInMb, 'disk' => Common\PicturesManager::DISK_DISTANT]), 202);
+        } else {
+            return response(trans('strings.admin_transfert_image_exist'), 500);
+        }
+    }
+
+    public function progressTransfertMedias() {
+        $common = Common::latest()->first();
+        return response()->json([$common->isOnTransfert, $common->transfertPartial, $common->transfertTotal]);
     }
 
     public function getWelcomeType() {

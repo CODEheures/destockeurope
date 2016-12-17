@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Common\PicturesManager;
 use App\Http\Requests\UpdateCompagnyNameRequest;
+use App\Http\Requests\UpdatePhoneRequest;
 use App\Http\Requests\UpdateRegistrationRequest;
 use App\Http\Requests\UpdateUserLocationRequest;
 use App\Http\Requests\UpdateUserNameRequest;
@@ -114,6 +115,18 @@ class UserController extends Controller
         try {
             $user = $this->auth->user();
             $user->name = $request->value;
+            $user->save();
+            return response('ok', 200);
+        } catch (\Exception $e) {
+            return response(trans('strings.view_user_account_locale_patch_error'), 409);
+        }
+
+    }
+
+    public function setPhone(UpdatePhoneRequest $request) {
+        try {
+            $user = $this->auth->user();
+            $user->phone = $request->value;
             $user->save();
             return response('ok', 200);
         } catch (\Exception $e) {

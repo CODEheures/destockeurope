@@ -24,13 +24,20 @@
         <div class="column">
             <div class="ui form">
                 <div class="field">
-                    <div class="two fields">
-                        <div class="field">
+                    <div class="three fields">
+                        <div class="required field">
                             <label>{{ nameLabel }}</label>
                             <input type="text" name="name" :placeholder="nameLabel" v-model:value="dataUserName"
                                    v-on:keyup.enter="updateByEnter"
                                    v-on:focus="focused={'input': 'name', 'value': dataUserName}"
                                    v-on:blur="blured={'input': 'name', 'value': dataUserName}">
+                        </div>
+                        <div class="required field">
+                            <label>{{ phoneLabel }}</label>
+                            <input type="text" name="phone" :placeholder="phoneLabel" v-model:value="dataUserPhone" :maxlength="formPhoneMaxValid"
+                                   v-on:keyup.enter="updateByEnter"
+                                   v-on:focus="focused={'input': 'phone', 'value': dataUserPhone}"
+                                   v-on:blur="blured={'input': 'phone', 'value': dataUserPhone}">
                         </div>
                         <div class="disabled field">
                             <label>{{ emailLabel }}</label>
@@ -121,6 +128,7 @@
             'routeUserSetPrefLocale',
             'routeUserSetPrefLocation',
             'routeUserSetName',
+            'routeUserSetPhone',
             'routeUserSetCompagnyName',
             'routeUserSetRegistrationNumber',
             'routeAvatar',
@@ -129,6 +137,7 @@
             //vue vars
             'userEmail',
             'userName',
+            'userPhone',
             'latitude',
             'longitude',
             'firstGeoloc',
@@ -137,6 +146,7 @@
             'advertAccountVerifiedStep',
             'advertCost',
             'advertId',
+            'formPhoneMaxValid',
             'formCompagnyNameMinValid',
             'formCompagnyNameMaxValid',
             'formRegistrationNumberMinValid',
@@ -147,6 +157,7 @@
             'accountPreferencesLabel',
             'nameLabel',
             'emailLabel',
+            'phoneLabel',
             'compagnyDivider',
             'compagnyNameLabel',
             'compagnyNumberLabel',
@@ -183,6 +194,7 @@
                 geoloc: '',
                 dataFirstGeoloc: false,
                 dataUserName: '',
+                dataUserPhone: '',
                 dataCompagnyName: '',
                 dataRegistrationNumber: '',
                 focused: {},
@@ -235,6 +247,7 @@
             });
             this.setSteps();
             this.dataUserName = this.userName;
+            this.dataUserPhone = this.userPhone;
             this.dataCompagnyName = this.compagnyName;
             this.dataRegistrationNumber = this.registrationNumber;
             sessionStorage.setItem('lat', this.latitude);
@@ -314,6 +327,8 @@
                     updateRoute = this.routeUserSetCompagnyName;
                 } else if(inputName == 'registration-number') {
                     updateRoute = this.routeUserSetRegistrationNumber;
+                } else if(inputName == 'phone') {
+                    updateRoute = this.routeUserSetPhone;
                 }
                 this.$http.patch(updateRoute, {'value': value})
                         .then(

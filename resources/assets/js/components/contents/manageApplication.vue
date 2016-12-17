@@ -9,25 +9,6 @@
                 <div class="ui large text loader">Loading</div>
             </div>
             <div class="ui form">
-                <h4 class="ui horizontal divider header"><i class="dashboard icon"></i> {{ dashboardLabel }} </h4>
-                <div class="ui equal width grid">
-                    <div class="column">
-                        <div id="graphSizeLocal" style="width: 100%; height: 280px; background-color: #FFFFFF;"></div>
-                    </div>
-                    <div class="column">
-                        <div id="chartFilesBalance" style="width: 100%; height: 280px; background-color: #FFFFFF;"></div>
-                    </div>
-                    <div class="column">
-                        <div id="graphSizeDistant" style="width: 100%; height: 280px; background-color: #FFFFFF;"></div>
-                    </div>
-                </div>
-                <!--<div class="field">-->
-                    <!---->
-                <!--</div>-->
-                <button :class="dataCleanLoading ? 'ui primary loading button' : 'ui primary button' "
-                    v-on:click="cleanApp">{{ menuCleanAppLabel }}</button>
-                <button :class="datalightenLocalDiskLoading ? 'ui primary loading button' : 'ui primary button' "
-                    v-on:click="lightenLocalDisk">{{ menuLightenLocalDiskLabel }}</button>
                 <h4 class="ui horizontal divider header"><i class="paint brush icon"></i> {{ appearanceLabel }} </h4>
                 <div class="field">
                     <type-radio-button
@@ -205,9 +186,6 @@
             //vue routes
             routeParameters: String,
             routeTestIsPicture: String,
-            routeCleanApp: String,
-            routeLightenLocalDisk: String,
-            routeGetStats: String,
             //vue vars
             //vue strings
             contentHeader: String,
@@ -232,14 +210,6 @@
             masterAdsOffsetYLabel: String,
             appearanceLabel: String,
             welcomeAppearanceLabel: String,
-            dashboardLabel: String,
-            menuCleanAppLabel: String,
-            menuLightenLocalDiskLabel: String,
-            dashboardSizeLocalFileLabel: String,
-            dashboardSizeDistantFileLabel: String,
-            dashboardCountFilesTitle: String,
-            dashboardCountLocalFilesLabel: String,
-            dashboardCountDistantFilesLabel: String,
 
             //type radio btn component
             routeGetListType: String,
@@ -256,11 +226,6 @@
                 parameters: [],
                 oldType: '',
                 isValidImage: false,
-                dataCleanLoading: false,
-                datalightenLocalDiskLoading: false,
-                dataStatsLoading : false,
-                dataStats: [],
-                chartFilesBalanceObjet: {},
             };
         },
         mounted () {
@@ -279,7 +244,6 @@
                     this.updateParameter();
                 }
             });
-            this.getStats();
         },
         methods: {
             getParameters: function (withLoadIndicator) {
@@ -377,241 +341,6 @@
                                     that.sendToast(this.invalidImageMessage, 'error');
                                 }
                         )
-                ;
-            },
-            getStats() {
-                let that = this;
-                this.dataStatsLoading = true;
-                this.$http.get(this.routeGetStats)
-                    .then(
-                        function (response) {
-                            that.dataStatsLoading = false;
-                            that.dataStats = response.body;
-                            that.chartLocalFileSize();
-                            that.chartDistantFileSize();
-                            that.chartFilesBalance();
-                        },
-                        function (response) {
-                            that.dataCleanLoading = false;
-                            that.sendToast(that.loadErrorMessage, 'error');
-                        }
-                    )
-                ;
-            },
-            chartLocalFileSize () {
-                let that = this;
-                let filesInfo = this.dataStats.filesInfo;
-                AmCharts.makeChart("graphSizeLocal",
-                    {
-                        "type": "gauge",
-                        "marginBottom": 10,
-                        "marginTop": 20,
-                        "startDuration": 1.2,
-                        "fontSize": 8,
-                        "theme": "default",
-                        "arrows": [
-                            {
-                                "id": "GaugeArrow-1",
-                                //"value": 120
-                                "value": filesInfo.sizeLocalFiles
-                            }
-                        ],
-                        "axes": [
-                            {
-                                "bottomText": filesInfo.sizeLocalFiles + " Mb",
-                                "bottomTextYOffset": -20,
-                                "endValue": 220,
-                                "id": "GaugeAxis-1",
-                                "topText": that.dashboardSizeLocalFileLabel,
-                                "valueInterval": 10,
-                                "bands": [
-                                    {
-                                        "alpha": 0.7,
-                                        "color": "#00CC00",
-                                        "endValue": 90,
-                                        "id": "GaugeBand-1",
-                                        "startValue": 0
-                                    },
-                                    {
-                                        "alpha": 0.7,
-                                        "color": "#ffac29",
-                                        "endValue": 130,
-                                        "id": "GaugeBand-2",
-                                        "startValue": 90
-                                    },
-                                    {
-                                        "alpha": 0.7,
-                                        "color": "#ea3838",
-                                        "endValue": 220,
-                                        "id": "GaugeBand-3",
-                                        "innerRadius": "95%",
-                                        "startValue": 130
-                                    }
-                                ]
-                            }
-                        ],
-                        "allLabels": [],
-                        "balloon": {},
-                        "titles": []
-                    }
-                );
-            },
-            chartDistantFileSize () {
-                let that = this;
-                let filesInfo = this.dataStats.filesInfo;
-                AmCharts.makeChart("graphSizeDistant",
-                    {
-                        "type": "gauge",
-                        "marginBottom": 10,
-                        "marginTop": 20,
-                        "startDuration": 1.2,
-                        "fontSize": 8,
-                        "theme": "default",
-                        "arrows": [
-                            {
-                                "id": "GaugeArrow-1",
-                                //"value": 120
-                                "value": filesInfo.sizeDistantFiles
-                            }
-                        ],
-                        "axes": [
-                            {
-                                "bottomText": filesInfo.sizeDistantFiles + " Mb",
-                                "bottomTextYOffset": -20,
-                                "endValue": 220,
-                                "id": "GaugeAxis-1",
-                                "topText": that.dashboardSizeDistantFileLabel,
-                                "valueInterval": 10,
-                                "bands": [
-                                    {
-                                        "alpha": 0.7,
-                                        "color": "#00CC00",
-                                        "endValue": 90,
-                                        "id": "GaugeBand-1",
-                                        "startValue": 0
-                                    },
-                                    {
-                                        "alpha": 0.7,
-                                        "color": "#ffac29",
-                                        "endValue": 130,
-                                        "id": "GaugeBand-2",
-                                        "startValue": 90
-                                    },
-                                    {
-                                        "alpha": 0.7,
-                                        "color": "#ea3838",
-                                        "endValue": 220,
-                                        "id": "GaugeBand-3",
-                                        "innerRadius": "95%",
-                                        "startValue": 130
-                                    }
-                                ]
-                            }
-                        ],
-                        "allLabels": [],
-                        "balloon": {},
-                        "titles": []
-                    }
-                );
-            },
-            chartFilesBalance() {
-                let that = this;
-                let filesInfo = this.dataStats.filesInfo;
-                this.chartFilesBalanceObjet = AmCharts.makeChart("chartFilesBalance",
-                    {
-                        "type": "serial",
-                        "theme": "light",
-                        "dataProvider": [{
-                            "name": that.dashboardCountLocalFilesLabel,
-                            "points": filesInfo.countLocalFiles,
-                            "color": "#7F8DA9",
-                            "bullet": "https://www.amcharts.com/lib/images/faces/A04.png"
-                        }, {
-                            "name": that.dashboardCountDistantFilesLabel,
-                            "points": filesInfo.countDistantFiles,
-                            "color": "#FEC514",
-                            "bullet": "https://www.amcharts.com/lib/images/faces/C02.png"
-                        }],
-                        "valueAxes": [{
-                            "maximum": Math.max([filesInfo.countLocalFiles, filesInfo.countDistantFiles])*1.2,
-                            "minimum": 0,
-                            "axisAlpha": 0,
-                            "dashLength": 4,
-                            "position": "left"
-                        }],
-                        "startDuration": 1,
-                        "graphs": [{
-                            "balloonText": "<span style='font-size:13px;'>[[category]]: <b>[[value]]</b></span>",
-                            "bulletOffset": 10,
-                            "bulletSize": 52,
-                            "colorField": "color",
-                            "cornerRadiusTop": 8,
-                            "customBulletField": "bullet",
-                            "fillAlphas": 0.8,
-                            "lineAlpha": 0,
-                            "type": "column",
-                            "valueField": "points"
-                        }],
-                        "marginTop": 10,
-                        "marginRight": 0,
-                        "marginLeft": 0,
-                        "marginBottom": 40,
-                        "autoMargins": false,
-                        "categoryField": "name",
-                        "categoryAxis": {
-                            "axisAlpha": 0,
-                            "gridAlpha": 0,
-                            "inside": true,
-                            "tickLength": 0
-                        },
-                        "titles": [
-                            {
-                                "id": "Title-1",
-                                "size": 15,
-                                "text": that.dashboardCountFilesTitle
-                            }
-                        ],
-                        "export": {
-                            "enabled": false
-                        }
-                    });
-            },
-            updateChartFilesBalance() {
-                this.chartFilesBalanceObjet.validateData();
-            },
-            cleanApp() {
-                let that = this;
-                this.dataCleanLoading = true;
-                this.$http.get(this.routeCleanApp)
-                    .then(
-                        function (response) {
-                            that.dataCleanLoading = false;
-                            that.sendToast(response.body, 'success');
-                        }
-                        ,
-                        function (response) {
-                            that.dataCleanLoading = false;
-                            that.sendToast(response.body, 'error');
-                        }
-                    )
-                ;
-            },
-            lightenLocalDisk() {
-                let that = this;
-                this.datalightenLocalDiskLoading = true;
-                this.$http.get(this.routeLightenLocalDisk)
-                    .then(
-                        function (response) {
-                            that.datalightenLocalDiskLoading = false;
-                            that.sendToast(response.body, 'success');
-                            that.getStats();
-                        }
-                        ,
-                        function (response) {
-                            that.dataCleanLoading = false;
-                            that.sendToast(response.body, 'error');
-                        }
-                    )
                 ;
             },
             sendToast: function (message, type) {

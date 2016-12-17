@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Advert;
+use App\Anonymous;
 use App\Category;
 use App\Common\CategoryUtils;
 use App\Common\DBUtils;
@@ -17,8 +18,10 @@ use App\Notifications\AdvertNotApprove;
 use App\Notifications\CustomerContactSeller;
 use App\Picture;
 use App\Stats;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 use PayPal\Api\Capture;
@@ -243,8 +246,18 @@ class AdvertController extends Controller
 
                 $advert->cost = $this->getCost(count($results)/2, $advert->isUrgent);
 
+                $stats = Stats::latest()->first();
+                if($advert->cost > 0){
+                    $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
+                    $stats->totalCosts = $stats->totalCosts + $advert->cost;
+                } else {
+                    $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+                }
+
+
                 DB::beginTransaction();
                 $advert->save();
+                $stats->save();
                 foreach ($results as $result){
                     $picture = new Picture();
                     $picture->hashName = $result['hashName'];
@@ -339,7 +352,7 @@ class AdvertController extends Controller
                 $advert->views = $advert->views + 1;
                 $advert->save();
                 $stats = Stats::latest()->first();
-                $stats->totalNewView = $stats->totalNewView + 1;
+                $stats->totalNewViews = $stats->totalNewViews + 1;
                 $stats->save();
                 return view('advert.show', compact('advert'));
             }
@@ -522,14 +535,62 @@ class AdvertController extends Controller
     }
 
     public function sendMail(Request $request) {
+        //valid Request here because not possible back in pop-up message
+        $validator = Validator::make($request->all(), [
+            'message' => 'required|min:' . config('db_limits.messages.minLength') . '|max:' . config('db_limits.messages.maxLength'),
+            'email' => 'required|email',
+            'name' => 'required|min:' . config('db_limits.users.minName'),
+            'phone' => 'max:'.config('db_limits.users.maxPhone'),
+            'compagnyName' => 'max:'.config('db_limits.users.maxCompagnyName') //min test in store because not min in pop-up
+        ]);
+
+        if ($validator->fails()) {
+            return response(trans('strings.mail_customerToSeller_send_error'), 500);
+        }
+
+
+
+        if(auth()->check()){
+           $sender = auth()->user();
+        } else {
+            //test if User exist
+           $sender = User::where('email', '=', $request->email)->first();
+           if(!$sender){
+               //test if anonymous exist
+               $sender = Anonymous::where('email', '=', $request->email)->first();
+           }
+        }
+        if($sender){
+            //complete infos
+            $sender->name = $request->name;
+            if($request->has('phone') && $request->phone != ''){
+                $sender->phone = $request->phone;
+            }
+            if($request->has('compagnyName') && $request->compagnyName != '' && strlen($request->compagnyName) >= config('db_limits.users.minCompagnyName')){
+                $sender->compagnyName = $request->compagnyName;
+            }
+            $sender->save();
+        } else {
+            //create anonymous user
+            $anonymous = Anonymous::create([
+                'email' => $request->email,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'compagnyName' => $request->compagnyName
+            ]);
+            $anonymous->save();
+        }
+        //Test compagnyName mini car pas de test dans message car pas required
         $advert = Advert::find($request->id);
         if($advert){
             $senderMail = $request->email;
             $senderName = ucfirst($request->name);
+            $senderPhone = $request->phone;
+            $senderCompagnyName = $request->compagnyName;
             $message = $request->message;
             $recipient = $advert->user;
 
-            $recipient->notify(new CustomerContactSeller($advert, $senderName, $senderMail, $message));
+            $recipient->notify(new CustomerContactSeller($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
             return response('ok', 200);
         } else {
             return response(trans('strings.mail_customerToSeller_send_error'), 500);

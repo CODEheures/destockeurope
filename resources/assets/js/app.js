@@ -60,6 +60,8 @@ Vue.component('user-account', require('./components/contents/userAccount.vue'));
 Vue.component('manage-categories', require('./components/contents/manageCategories.vue'));
 //Application page
 Vue.component('manage-application', require('./components/contents/manageApplication.vue'));
+//Dashboard page
+Vue.component('dashboard-admin', require('./components/contents/dashboardAdmin.vue'));
 //createAdvert page
 Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
 //approve advert page

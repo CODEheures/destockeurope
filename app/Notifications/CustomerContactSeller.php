@@ -16,18 +16,22 @@ class CustomerContactSeller extends Notification
     private $advert;
     private $customerName;
     private $customerMail;
+    private $customerPhone;
+    private $customerCompagnyName;
     private $message;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Advert $advert, $customerName, $customerMail, $message)
+    public function __construct(Advert $advert, $customerName, $customerMail, $message, $customerPhone, $customerCompagnyName)
     {
         $this->advert = $advert;
         $this->customerName = $customerName;
         $this->customerMail = $customerMail;
         $this->message = $message;
+        $this->customerPhone = $customerPhone;
+        $this->customerCompagnyName = $customerCompagnyName;
     }
 
     /**
@@ -57,7 +61,9 @@ class CustomerContactSeller extends Notification
             ->line(trans('strings.mail_customerToSeller_line',['customername' => ucfirst($this->customerName), 'title' => ucfirst($this->advert->title)]))
             ->customerLines($this->message)
             ->customerContact(trans('strings.mail_customerToSeller_line2', ['customername' => ucfirst($this->customerName)]))
-            ->customerContact($this->customerMail)
+            ->customerContact(trans('strings.mail_customerToSeller_comapgnyName', ['compagnyName' => $this->customerCompagnyName]))
+            ->customerContact(trans('strings.mail_customerToSeller_mail', ['mail' => $this->customerMail]))
+            ->customerContact(trans('strings.mail_customerToSeller_phone', ['phone' => $this->customerPhone]))
             ->line(trans('strings.mail_customerToSeller_line3'));
 
         return $mailMessage;

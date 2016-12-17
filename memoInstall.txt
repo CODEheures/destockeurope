@@ -1,4 +1,6 @@
 //TODO bucket 64 nginx + file body size nginx
 //      INTL EXTENSION apt-get install php5-intl
-//      php artisan run:schedule (premiere fois pour creer une ligne de stats
+//      php artisan run:schedule (premiere fois pour creer une ligne de stats)
+//      crontab -e creer le cron du schedule
+//      php artisan queue:work database --timeout=600 --tries=1 (1ere fois) | php artisan queue:restart
 //TODO post video

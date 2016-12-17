@@ -12,9 +12,6 @@ class StatsManager
         $totalAdverts = Advert::where('isValid', '=', true)->count();
         $totalInvalidAdverts = Advert::where('isValid', '=', false)->count();
         $totalWaitingAdverts = Advert::where('isValid', '=', null)->count();
-        $totalCostAdverts = Advert::where('cost', '>', 0)->count();
-        $totalAverageCost = Advert::where('cost', '>', 0)->avg('cost') || 0;
-        $totalNewView = 0;
         //Nombre de fichiers et taille total
         $pictureManager = new PicturesManager();
         $infoLocalFiles=[0,0];
@@ -31,13 +28,14 @@ class StatsManager
         }
 
 
-        Stats::create([
+        $stat = Stats::create([
             'totalAdverts' => $totalAdverts,
             'totalInvalidAdverts' => $totalInvalidAdverts,
             'totalWaitingAdverts' => $totalWaitingAdverts,
-            'totalCostAdverts' => $totalCostAdverts,
-            'totalAverageCost' => $totalAverageCost,
-            'totalNewView' => $totalNewView,
+            'totalNewViews' => 0,
+            'totalNewFreeAdverts' => 0,
+            'totalNewCostAdverts' => 0,
+            'totalCosts' => 0,
             'countLocalFiles' => $infoLocalFiles[0],
             'sizeLocalFiles'  => round($infoLocalFiles[1]/(1024*1024),0),
             'countDistantFiles'  => $infoDistantFiles[0],
@@ -45,7 +43,7 @@ class StatsManager
         ]);
 
 
-        return null;
+        return $stat;
     }
 
 }

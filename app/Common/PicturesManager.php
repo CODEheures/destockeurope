@@ -226,6 +226,15 @@ class PicturesManager
         }
     }
 
+    public function getSize(Picture $picture){
+        $fileName = $picture->isThumb ? $picture->hashName.static::THUMB_EXT.'.'.static::EXT : $picture->hashName.'.'.static::EXT;$picture->hashName;
+        if(Storage::disk('local')->exists($picture->path.$fileName)){
+            return Storage::disk('local')->size($picture->path.$fileName);
+        } else {
+            return 0;
+        }
+    }
+
     public function save($request) {
         $this->setType(static::TYPE_TEMPO_LOCAL);
 

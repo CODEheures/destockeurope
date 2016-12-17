@@ -31,8 +31,8 @@ class CreateCommonsTable extends Migration
             $table->tinyInteger('maxNumberOfSearchResults')->default(3);
             $table->tinyInteger('minLengthSearch')->default(3);
             $table->boolean('isOnTransfert')->default(false);
-            $table->tinyInteger('transfertPartial')->default(0);
-            $table->tinyInteger('transfertTotal')->default(0);
+            $table->integer('transfertPartial')->unsigned()->default(0);
+            $table->integer('transfertTotal')->unsigned()->default(0);
         });
     }
 

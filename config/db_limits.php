@@ -11,6 +11,7 @@ return [
 
     'users' => [
         'minName' => 3,
+        'maxPhone' => 30,
         'minCompagnyName' => 3,
         'maxCompagnyName' => 100,
         'minRegistrationNumber' => 3,

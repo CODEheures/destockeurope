@@ -18,11 +18,13 @@ Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv'
 // Admin Routes...
 Route::group(['prefix' => 'admin'], function() {
     Route::get('/manage', 'AdminController@manage')->name('application.manage');
+    Route::get('/dashboard', 'AdminController@dashboard')->name('application.dashboard');
     Route::get('/parameters', 'AdminController@appParameters')->name('application.parameters');
     Route::patch('/parameters', 'AdminController@patchParameters');
     Route::get('/get-welcome-list-type', 'AdminController@getWelcomeType')->name('advert.getWelcomeListType');
     Route::get('/cleanApp', 'AdminController@cleanApp')->name('application.cleanApp');
-    Route::get('/lightenLocalDisk', 'AdminController@lightenLocalDisk')->name('application.lightenLocalDisk');
+    Route::get('/transfertMedias/{sizeInMb?}', 'AdminController@transfertMedias')->name('application.transfertMedias');
+    Route::get('/progressTransfertMedias', 'AdminController@progressTransfertMedias')->name('application.progressTransfertMedias');
     Route::get('/stats', 'AdminController@getStats')->name('application.getStats');
 });
 
@@ -61,6 +63,7 @@ Route::group(['prefix' => 'users'], function() {
     Route::patch('locale', ['as' => 'user.locale', 'uses' => 'UserController@setLocale']);
     Route::patch('location', ['as' => 'user.location', 'uses' => 'UserController@setLocation']);
     Route::patch('name', ['as' => 'user.name', 'uses' => 'UserController@setName']);
+    Route::patch('phone', ['as' => 'user.phone', 'uses' => 'UserController@setPhone']);
     Route::patch('compagny-name', ['as' => 'user.compagnyName', 'uses' => 'UserController@setCompagnyName']);
     Route::patch('registration-number', ['as' => 'user.registrationNumber', 'uses' => 'UserController@setRegistrationNumber']);
 });

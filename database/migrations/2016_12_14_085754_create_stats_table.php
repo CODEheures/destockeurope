@@ -19,9 +19,10 @@ class CreateStatsTable extends Migration
             $table->mediumInteger('totalAdverts')->unsigned()->default(0);
             $table->smallInteger('totalInvalidAdverts')->unsigned()->default(0);
             $table->smallInteger('totalWaitingAdverts')->unsigned()->default(0);
-            $table->mediumInteger('totalCostAdverts')->unsigned()->default(0);
-            $table->smallInteger('totalAverageCost')->unsigned()->default(0);
-            $table->mediumInteger('totalNewView')->unsigned()->default(0);
+            $table->mediumInteger('totalNewViews')->unsigned()->default(0);
+            $table->mediumInteger('totalNewFreeAdverts')->unsigned()->default(0);
+            $table->mediumInteger('totalNewCostAdverts')->unsigned()->default(0);
+            $table->integer('totalCosts')->unsigned()->default(0);
             $table->mediumInteger('countLocalFiles')->unsigned()->default(0);
             $table->integer('sizeLocalFiles')->unsigned()->default(0);
             $table->mediumInteger('countDistantFiles')->unsigned()->default(0);
