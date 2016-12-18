@@ -74,6 +74,33 @@
                 </div>
             </div>
         </div>
+        <div :id="'modal3-'+_uid" class="ui modal">
+            <i class="close icon"></i>
+            <div class="header">
+                {{ reportLabel }}
+            </div>
+            <div class="content">
+                <div :id="'reportform-'+_uid" class="ui form">
+                    <div class="required field">
+                        <label>{{ formMessageLabel }}</label>
+                        <textarea name="reportmessage" v-model="dataReportMessage" :maxlength="formMessageMaxValid"></textarea>
+                    </div>
+                    <div class="required field">
+                        <label>{{ formMessageEmailLabel }}</label>
+                        <input name="reportemail" type="text" v-model="dataUserMail">
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui black deny button">
+                    {{ formMessageCancelLabel }}
+                </div>
+                <div :class="dataEnabledReportMessage == true ? 'ui positive right labeled icon button' : 'ui positive right labeled icon disabled button'">
+                    {{ formMessageSendLabel }}
+                    <i class="send outline icon"></i>
+                </div>
+            </div>
+        </div>
         <div class="ui grid">
             <div class="eleven wide mobile only eleven wide tablet only sixteen wide computer only column">
                 <div class="row">
@@ -189,6 +216,10 @@
                     {{ deleteLabel }}
                 </button>
             </div>
+            <div class="sixteen wide right aligned column" v-if="!isUserOwner">
+                <div class="ui divider"></div>
+                <a href="#" v-on:click.prevent="report()"><i class="ban icon"></i>{{ reportLabel }}</a>
+            </div>
         </div>
     </div>
 </template>
@@ -201,6 +232,7 @@
             'routeBookmarkAdd',
             'routeBookmarkRemove',
             'routeDeleteAdvert',
+            'routeReportAdvert',
             //vue vars
             'advert',
             'userMail',
@@ -217,10 +249,12 @@
             //vue strings
             'loadErrorMessage',
             'sendSuccessMessage',
+            'sendSuccessReportMessage',
             'formValidationEmail',
             'formPointingMinimumChars',
             'formPointingMaximumChars',
             'contactLabel',
+            'reportLabel',
             'bookmarkInfo',
             'bookmarkLabel',
             'unbookmarkLabel',
@@ -260,7 +294,9 @@
                 dataUserPhone: '',
                 dataUserCompagnyName: '',
                 dataMessage: '',
+                dataReportMessage: '',
                 dataEnabledMessage: false,
+                dataEnabledReportMessage: false,
                 dataIsUserBookmark: false
             }
         },
@@ -346,14 +382,48 @@
                     on     : 'change'
                 })
             ;
+            let messageReportForm = $('#reportform-'+this._uid);
+            messageReportForm.form({
+                fields : {
+                    reportemail: {
+                        identifier  : 'reportemail',
+                        rules: [
+                            {
+                                type   : 'email',
+                                prompt : that.formValidationEmail
+                            }
+                        ]
+                    },
+                    reportmessage: {
+                        identifier  : 'reportmessage',
+                        rules: [
+                            {
+                                type : 'minLength['+that.formMessageMinValid+']',
+                                prompt: '{ruleValue} ' + that.formPointingMinimumChars
+                            },
+                            {
+                                type : 'maxLength['+that.formMessageMaxValid+']',
+                                prompt: '{ruleValue} ' + that.formPointingMaximumChars
+                            }
+                        ]
+                    }
+                },
+                inline : true,
+                on     : 'change'
+            })
+            ;
             this.$watch('dataUserName', function () {
                 this.testValidForm();
             });
             this.$watch('dataUserMail', function () {
                 this.testValidForm();
+                this.testValidReportForm();
             });
             this.$watch('dataMessage', function () {
                 this.testValidForm();
+            });
+            this.$watch('dataReportMessage', function () {
+                this.testValidReportForm();
             })
         },
         methods: {
@@ -402,8 +472,34 @@
                     }
                 }).modal('show');
             },
+            report: function () {
+                let modalForm = $('#modal3-'+this._uid);
+                let that = this;
+                modalForm.modal({
+                    closable: true,
+                    blurring: true,
+                    onApprove: function () {
+                        that.$http.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
+                            .then(
+                                function (response) {
+                                    that.sendToast(that.sendSuccessReportMessage, 'success');
+                                },
+                                function (response) {
+                                    if (response.status == 409) {
+                                        that.sendToast(response.body, 'error');
+                                    } else {
+                                        that.sendToast(that.loadErrorMessage, 'error');
+                                    }
+                                }
+                            );
+                    }
+                }).modal('show');
+            },
             testValidForm: function () {
                 this.dataEnabledMessage = $('#form-'+this._uid).form('is valid');
+            },
+            testValidReportForm: function () {
+                this.dataEnabledReportMessage = $('#reportform-'+this._uid).form('is valid');
             },
             bookmarkMe: function () {
                 let that = this;

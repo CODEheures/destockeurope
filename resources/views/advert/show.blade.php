@@ -7,6 +7,7 @@
             route-bookmark-add="{{ route('bookmark.add', ['advertId'=>$advert->id]) }}"
             route-bookmark-remove="{{ route('bookmark.remove', ['advertId'=>$advert->id]) }}"
             route-delete-advert="{{ route('advert.destroy', ['advertId'=>$advert->id] ) }}"
+            route-report-advert="{{ route('advert.report') }}"
 
             advert="{{ json_encode($advert) }}"
             user-mail="{{ auth()->check() ? auth()->user()->email : '' }}"
@@ -23,10 +24,12 @@
 
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             send-success-message="{{ trans('strings.view_advert_show_message_send') }}"
+            send-success-report-message="{{ trans('strings.view_advert_show_report_send') }}"
             form-validation-email="{{ trans('strings.form_validation_email') }}"
             form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimum_chars') }}"
             form-pointing-maximum-chars="{{ trans('strings.form_pointing_maximum_chars') }}"
             contact-label="{{ trans('strings.view_advert_show_contact_label') }}"
+            report-label="{{ trans('strings.view_advert_report_label') }}"
             bookmark-info="{{ trans('strings.view_advert_show_bookmark_info') }}"
             bookmark-label="{{ trans('strings.view_advert_show_bookmark_label') }}"
             unbookmark-label="{{ trans('strings.view_advert_show_unbookmark_label') }}"

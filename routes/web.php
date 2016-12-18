@@ -92,6 +92,7 @@ Route::get('advert/listApprove', ['as' => 'advert.listApprove', 'uses' => 'Adver
 Route::post('advert/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
 Route::get('advert/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
 Route::post('advert/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
+Route::post('advert/report', ['as' => 'advert.report', 'uses' => 'AdvertController@report']);
 Route::get('advert/pay/paypal/{id}', ['as' => 'advert.payByPaypal', 'uses' => 'AdvertController@payByPaypal']);
 Route::get('advert/pay/paypal/status/{id}/{success}', ['as' => 'advert.paypalStatus', 'uses' => 'AdvertController@paypalStatus'])
     ->where(['id' => '[0-9]+'])

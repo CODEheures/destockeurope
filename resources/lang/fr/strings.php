@@ -48,6 +48,12 @@ return [
     'mail_customerToSeller_line3' => 'Merci d\'utiliser notre application!',
     'mail_customerToSeller_send_error' => 'Ho non! Nous n\'avons pas réussi à envoyé l\'email \'-(',
 
+    'mail_report_send_error' => 'Ho non! Nous n\'avons pas réussi à envoyer le signalement \'-(',
+    'mail_report_subject' => 'Une annonce vient d\'être signalée par un utilisateur',
+    'mail_report_greeting' => 'Bonjour chèr(e) administrateur/administratice',
+    'mail_report_line' => ':customermail a signalé une annonce en laissant le message suivant:',
+    'mail_report_action' => 'Vérifier l\'annonce',
+
     'mail_advertApprove_subject' => 'Votre annonce est en ligne!',
     'mail_advertApprove_greeting' => 'Félicitation :username !',
     'mail_advertApprove_line' => 'Votre annonce ":title" est approuvée et en ligne',
@@ -199,6 +205,8 @@ return [
     'view_advert_show_delete_label' => 'Supprimer mon annonce',
     'view_advert_show_delete_success' => 'Votre annonce est bien supprimée. Merci de votre confiance',
     'view_advert_show_message_send' => 'Votre message est bien envoyé',
+    'view_advert_report_label' => 'Signaler cette annonce',
+    'view_advert_show_report_send' => 'Votre signalement est bien envoyé. Nous vérifions cette annonce dans les plus brefs délais',
     'view_advert_show_modal_delete_header' => 'Vous allez supprimer votre annonce',
     'view_advert_show_modal_delete_description' => 'En cliquant sur "oui", vous allez définitivement supprimer votre annonce. Cliquez sur "non" ou fermez cette fenetre si vous ne souhaitez pas supprimer votre annonce',
     'advert_create_success' => 'Votre annonce est créée. Elle sera validée très prochainement par nos équipes',

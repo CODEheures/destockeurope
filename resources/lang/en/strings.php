@@ -48,6 +48,12 @@ return [
     'mail_customerToSeller_line3' => 'Thank you for using our application!',
     'mail_customerToSeller_send_error' => 'Ho no! The email could not be sent \'-(',
 
+    'mail_report_send_error' => 'Ho non! The report could not be sent \'-(',
+    'mail_report_subject' => 'An advert has just been report by a user',
+    'mail_report_greeting' => 'Hello dear admin',
+    'mail_report_line' => ':customermail posted a report on an advert leaving the following message:',
+    'mail_report_action' => 'Check Advert',
+
     'mail_advertApprove_subject' => 'Your advert is online!',
     'mail_advertApprove_greeting' => 'Congratulations :username !',
     'mail_advertApprove_line' => 'Your advert ":title" is approved and is now online',
@@ -199,6 +205,8 @@ return [
     'view_advert_show_delete_label' => 'Delete my Advert',
     'view_advert_show_delete_success' => 'Your ad is deleted. Thank you for your confidence',
     'view_advert_show_message_send' => 'Your message is being send',
+    'view_advert_report_label' => 'Report this advert',
+    'view_advert_show_report_send' => 'Your report is being send. We will verify this ad as soon as possible.',
     'view_advert_show_modal_delete_header' => 'You will delete your advert',
     'view_advert_show_modal_delete_description' => 'By clicking "Yes", you will definitely delete your advert. Click "no" or close this window if you do not want to delete your advert',
     'advert_create_success' => 'Your advert is being created. It will be validated by our teams soon',

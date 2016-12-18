@@ -16,6 +16,7 @@ use App\Invoice;
 use App\Notifications\AdvertApprove;
 use App\Notifications\AdvertNotApprove;
 use App\Notifications\CustomerContactSeller;
+use App\Notifications\ReportAdvert;
 use App\Picture;
 use App\Stats;
 use App\User;
@@ -559,7 +560,7 @@ class AdvertController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(trans('strings.mail_customerToSeller_send_error'), 500);
+            return response(trans('strings.mail_customerToSeller_send_error'), 409);
         }
 
 
@@ -607,7 +608,33 @@ class AdvertController extends Controller
             $recipient->notify(new CustomerContactSeller($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
             return response('ok', 200);
         } else {
-            return response(trans('strings.mail_customerToSeller_send_error'), 500);
+            return response(trans('strings.mail_customerToSeller_send_error'), 409);
+        }
+    }
+
+    public function report(Request $request) {
+        //valid Request here because not possible back in pop-up message
+        $validator = Validator::make($request->all(), [
+            'message' => 'required|min:' . config('db_limits.messages.minLength') . '|max:' . config('db_limits.messages.maxLength'),
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return response(trans('strings.mail_report_send_error'), 409);
+        }
+
+        $advert = Advert::find($request->id);
+        if($advert){
+            $senderMail = $request->email;
+            $message = $request->message;
+
+            $recipients = User::where('role', '=', 'admin')->get();
+            foreach ($recipients as $recipient){
+                $recipient->notify(new ReportAdvert($advert, $senderMail, $message));
+            }
+            return response('ok', 200);
+        } else {
+            return response(trans('strings.mail_report_send_error'), 409);
         }
     }
 
