@@ -11,7 +11,6 @@ use App\Http\Requests\UpdatePhoneRequest;
 use App\Http\Requests\UpdateRegistrationRequest;
 use App\Http\Requests\UpdateUserLocationRequest;
 use App\Http\Requests\UpdateUserNameRequest;
-use Dropbox\Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Money\Currencies\ISOCurrencies;
@@ -22,10 +21,12 @@ class UserController extends Controller
 
     private $auth;
     private $pictureManager;
+
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param Guard $auth
+     * @param PicturesManager $picturesManager
      */
     public function __construct(Guard $auth, PicturesManager $picturesManager)
     {
@@ -35,9 +36,9 @@ class UserController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Return the User Account page
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -48,6 +49,12 @@ class UserController extends Controller
         return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap'));
     }
 
+    /**
+     * Return the User Account page for complete it when Publish advert
+     *
+     * @param $id
+     * @return UserController|\Illuminate\Http\RedirectResponse
+     */
     public function completeAccount($id){
         $user = $this->auth->user();
         $ip=config('runtime.ip');
@@ -62,6 +69,11 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Get somes Actual User Elements
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getMe() {
         $user = $this->auth->user();
         return response()->json([
@@ -71,6 +83,12 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Set The Currency User Attribute
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setCurrency(Request $request) {
         $currencies = new ISOCurrencies();
         $prefCurrency = $request->currency;
@@ -84,6 +102,12 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Set the User locale Attribute
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setLocale(Request $request) {
 
         $existLocales = \ResourceBundle::getLocales('');
@@ -97,6 +121,12 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Set the User Location attribute
+     *
+     * @param UpdateUserLocationRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setLocation(UpdateUserLocationRequest $request) {
         try {
             $user = $this->auth->user();
@@ -111,6 +141,12 @@ class UserController extends Controller
 
     }
 
+    /**
+     * Set the Name User Attribute
+     *
+     * @param UpdateUserNameRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setName(UpdateUserNameRequest $request) {
         try {
             $user = $this->auth->user();
@@ -123,6 +159,12 @@ class UserController extends Controller
 
     }
 
+    /**
+     * Set the phone User Attribute
+     *
+     * @param UpdatePhoneRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setPhone(UpdatePhoneRequest $request) {
         try {
             $user = $this->auth->user();
@@ -135,6 +177,12 @@ class UserController extends Controller
 
     }
 
+    /**
+     * Set compagnyName User Attribute
+     *
+     * @param UpdateCompagnyNameRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setCompagnyName(UpdateCompagnyNameRequest $request) {
         try {
             $user = $this->auth->user();
@@ -147,6 +195,12 @@ class UserController extends Controller
 
     }
 
+    /**
+     * Set registration user attribute
+     *
+     * @param UpdateRegistrationRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function setRegistrationNumber(UpdateRegistrationRequest $request) {
         try {
             $user = $this->auth->user();

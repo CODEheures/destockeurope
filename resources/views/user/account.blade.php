@@ -46,6 +46,7 @@
             geoloc-help-msg-two="{{ trans('strings.form_googlemap_help2') }}"
             googlemap-divider="{{ trans('strings.form_googlemap_label') }}"
             form-validation-button-label="{{ trans('strings.form_button_validation') }}"
+            form-validation-fails-button-label="{{ trans('strings.view_all_error_reload_message') }}"
             form-pointing-minimum-chars="{{ trans('strings.form_pointing_minimum_chars') }}"
 
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"

@@ -51,6 +51,10 @@ class AdvertController extends Controller
     Const PAYPAL = 0;
     Const CARD = 1;
 
+    /**
+     * AdvertController constructor.
+     * @param PicturesManager $picturesManager
+     */
     public function __construct(PicturesManager $picturesManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
@@ -68,9 +72,10 @@ class AdvertController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Get List advert or range Price
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -338,25 +343,33 @@ class AdvertController extends Controller
     {
         $advert = Advert::find($id);
         if($advert && $advert->isValid) {
-            if ($request->isXmlHttpRequest()) {
+//            if ($request->isXmlHttpRequest()) {
+//                $advert->load('pictures');
+//                $advert->load('category');
+//                $ancestors = $advert->category->getAncestors();
+//                $ancestors->add($advert->category);
+//                $advert->setBreadCrumb($ancestors);
+//                return response()->json(['advert' => $advert]);
+//            } else {
+                //+1 Views to advert
+                $advert->timestamps = false;
+                $advert->views = $advert->views + 1;
+                $advert->save();
+                //+1 view to stats
+                $stats = Stats::latest()->first();
+                $stats->totalNewViews = $stats->totalNewViews + 1;
+                $stats->save();
+
+                //Eager Loading but not for user to not pass user to VueJS Props
+                $advert->load('bookmarks');
                 $advert->load('pictures');
                 $advert->load('category');
                 $ancestors = $advert->category->getAncestors();
                 $ancestors->add($advert->category);
                 $advert->setBreadCrumb($ancestors);
-                return response()->json(['advert' => $advert]);
-            } else {
-                $advert->load('user');
-                $advert->load('bookmarks');
-                $advert->timestamps = false;
-                $advert->views = $advert->views + 1;
-                $advert->save();
-                $stats = Stats::latest()->first();
-                $stats->totalNewViews = $stats->totalNewViews + 1;
-                $stats->save();
                 return view('advert.show', compact('advert'));
-            }
-        } elseif ($request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == 'admin')) {
+//            }
+        } elseif ($advert && $request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == 'admin')) {
             return response()->json(['advert' => $advert]);
         } else {
             return redirect(route('home'));
@@ -528,7 +541,8 @@ class AdvertController extends Controller
             && $advert->user->id == auth()->user()->id
             && (!$advert->invoice || ($advert->invoice && !$advert->invoice->authorization))
         ){
-                return view('advert.reviewForPayment', compact('advert'));
+                $listCardTypes = config('paypal_cards.list');
+                return view('advert.reviewForPayment', compact('advert', 'listCardTypes'));
         }
         return redirect(route('home'));
 

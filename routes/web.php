@@ -72,7 +72,6 @@ Route::group(['prefix' => 'users'], function() {
 Route::group(['prefix' => 'utils'] , function () {
     Route::get('/get-list-currencies', ['as' => 'utils.getListCurrencies', 'uses' => 'UtilsController@getListCurrencies']);
     Route::get('/get-list-locales', ['as' => 'utils.getListLocales', 'uses' => 'UtilsController@getListLocales']);
-    Route::get('/get-list-cards-type', ['as' => 'utils.getListCardsType', 'uses' => 'UtilsController@getListCardsType']);
     Route::post('/isPicture', 'UtilsController@isPicture')->name('utils.isPicture');
 });
 

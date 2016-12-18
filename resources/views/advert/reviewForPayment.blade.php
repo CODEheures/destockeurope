@@ -3,11 +3,11 @@
 @section('content')
 
     <review-for-payment
-            route-get-advert="{{ route('advert.show', ['id' => $advert->id]) }}"
-            route-get-cards-type="{{ route('utils.getListCardsType') }}"
             route-paypal-choice="{{ route('advert.payByPaypal', ['id' => $advert->id]) }}"
             route-card-choice="{{ route('advert.payByCard', ['id' => $advert->id]) }}"
 
+            advert="{{ json_encode($advert) }}"
+            cards-types="{{ json_encode($listCardTypes) }}"
             url-img-paypal-disabled="{{ asset('/images/frenchPayButton2_disable.png') }}"
             url-img-paypal-enabled="{{ asset('/images/frenchPayButton2.png') }}"
 

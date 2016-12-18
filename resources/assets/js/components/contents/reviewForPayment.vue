@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="option in advert.options">
+                        <tr v-for="option in dataAdvert.options">
                             <td>
                                 <h5 class="ui center aligned header">{{ option.name }}</h5>
                             </td>
@@ -47,7 +47,7 @@
                             <tbody>
                                 <tr>
                                     <td class="four wide double">{{ tableTotalExclVat }}</td>
-                                    <td class="four wide double right aligned">{{ ((advert.cost - tva)/100).toFixed(2) }}€</td>
+                                    <td class="four wide double right aligned">{{ ((dataAdvert.cost - tva)/100).toFixed(2) }}€</td>
                                 </tr>
                                 <tr>
                                     <td class="four wide double">{{ tableTotalVat }}</td>
@@ -55,7 +55,7 @@
                                 </tr>
                                 <tr>
                                     <td class="four wide double">{{ tableTotalInclVat }}</td>
-                                    <td class="four wide double right aligned">{{ (advert.cost/100).toFixed(2) }}€</td>
+                                    <td class="four wide double right aligned">{{ (dataAdvert.cost/100).toFixed(2) }}€</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -94,7 +94,7 @@
                                 <div class="field">
                                     <select class="ui fluid search dropdown" name="card_type">
                                         <option value="">{{ paymentCardTypeLabel }}</option>
-                                        <option :value="index" v-for="(card, index) in cardsType">{{ card }}</option>
+                                        <option :value="index" v-for="(card, index) in dataCardsTypes">{{ card }}</option>
                                     </select>
                                 </div>
                                 <div class="field">
@@ -151,11 +151,11 @@
     export default {
         props: [
             //vue routes
-            'routeGetAdvert',
-            'routeGetCardsType',
             'routePaypalChoice',
             'routeCardChoice',
             //vue vars
+            'advert',
+            'cardsTypes',
             'urlImgPaypalDisabled',
             'urlImgPaypalEnabled',
             //vue strings
@@ -206,12 +206,11 @@
         ],
         data: () => {
             return {
-                isLoaded: false,
+                isLoaded: true,
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
                 steps: [],
-                advert: {},
                 tva: 0,
                 dataCgvText: '',
                 dataCgvA: '',
@@ -220,10 +219,13 @@
                 dataRoutePaypalChoice: '',
                 dataUrlImgPaypal: null,
                 xCsrfToken: '',
-                cardsType: {},
+                dataAdvert: {},
+                dataCardsTypes: []
             };
         },
         mounted () {
+            this.dataAdvert = JSON.parse(this.advert);
+            this.dataCardsTypes = JSON.parse(this.cardsTypes);
             this.xCsrfToken = Laravel.csrfToken;
             this.dataUrlImgPaypal = this.urlImgPaypalDisabled;
             this.dataRoutePaypalChoice = null;
@@ -253,9 +255,9 @@
                     icon: 'payment'
                 }
             ];
-            this.getAdvert();
+            this.setSteps();
+            this.calcTVA();
             this.setDataCgv();
-            this.getCardsType();
         },
         updated () {
             let that = this;
@@ -322,40 +324,8 @@
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
             },
-            getAdvert: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                this.$http.get(this.routeGetAdvert)
-                    .then(
-                        function (response) {
-                            that.advert = (response.data).advert;
-                            that.setSteps();
-                            that.calcTVA();
-                            that.isLoaded = true;
-                        },
-                        function (response) {
-                            that.$parent.$emit('loadError')
-                        }
-                    );
-            },
-            getCardsType: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                this.$http.get(this.routeGetCardsType)
-                    .then(
-                        function (response) {
-                            that.cardsType = response.data;
-                            that.isLoaded = true;
-                        },
-                        function (response) {
-                            that.$parent.$emit('loadError')
-                        }
-                    );
-            },
             setSteps () {
-                (this.steps[2]).title = this.stepThreeTitle + '(' + (this.advert.cost/100).toFixed(2) + '€)';
+                (this.steps[2]).title = this.stepThreeTitle + '(' + (this.dataAdvert.cost/100).toFixed(2) + '€)';
             },
             setDataCgv () {
                 var htmlObject = $('<p>'+this.toggleCgvLabel+'</p>');
@@ -365,8 +335,8 @@
             },
             calcTVA () {
                 this.tva = 0;
-                for(let index in this.advert.options){
-                    this.tva = this.tva + (this.advert.options[index].cost - this.advert.options[index].cost/(1+(this.advert.options[index].tva/100)));
+                for(let index in this.dataAdvert.options){
+                    this.tva = this.tva + (this.dataAdvert.options[index].cost - this.dataAdvert.options[index].cost/(1+(this.dataAdvert.options[index].tva/100)));
                 }
             }
         }

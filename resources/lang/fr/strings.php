@@ -132,6 +132,7 @@ return [
     'option_isUrgent_name' => 'Annonce urgente',
 
     'view_all_error_load_message' => 'Ho non! Erreur de chargement :-( , essayez de rafraichir la page',
+    'view_all_error_reload_message' => 'rafraichir la page SVP',
     'view_all_error_add_message' => 'Ho non! L\'ajout a échoué',
     'view_all_error_saving_message' => 'Ho non! L\'enregistrement a échoué :-(',
     'view_all_error_del_message' => 'Ho non! La suppression a échoué',

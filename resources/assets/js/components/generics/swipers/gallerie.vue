@@ -46,6 +46,7 @@
                     preloadImages: false,
                     // Enable lazy loading
                     lazyLoading: true,
+                    observer: true,
                 },
                 swiperOptionThumbs: {
                     name: 'swiperThumbs',

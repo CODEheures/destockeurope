@@ -41,11 +41,6 @@ class UtilsController extends Controller
         return response()->json($this->listLocales());
     }
 
-    public function getListCardsType(){
-        $list = config('paypal_cards.list');
-        return response()->json($list);
-    }
-
     public function testGame(){
         Artisan::call('migrate:refresh');
 

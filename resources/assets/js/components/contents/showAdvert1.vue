@@ -89,18 +89,18 @@
                         <i class="heart icon"></i>
                     </div>
                     <a class="ui basic yellow left pointing label">
-                        {{ bookmarkCount }}
+                        {{ dataAdvert.bookmarkCount }}
                     </a>
                 </div>
             </div>
             <div class="row">
                 <div class="sixteen wide column">
-                    <div class="header"><h3><span v-if="isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>{{ title }}</h3></div>
+                    <div class="header"><h3><span v-if="dataAdvert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>{{ dataAdvert.title }}</h3></div>
                 </div>
                 <div class="sixteen wide tablet ten wide computer column">
                     <div class="row">
                         <advert-by-id
-                                :route-get-advert="routeGetAdvert"
+                                :advert="dataAdvert"
                                 :actual-locale="actualLocale"
                                 :image-ratio="parseFloat(imageRatio)"
                                 :total-quantity-label="totalQuantityLabel"
@@ -127,7 +127,7 @@
                                         <i class="heart icon"></i> {{ bookmarkInfo }}
                                     </div>
                                     <a class="ui basic yellow left pointing label">
-                                        {{ bookmarkCount }}
+                                        {{ dataAdvert.bookmarkCount }}
                                     </a>
                                 </div>
                             </div>
@@ -202,13 +202,13 @@
             'routeBookmarkRemove',
             'routeDeleteAdvert',
             //vue vars
+            'advert',
             'userMail',
             'userName',
             'userPhone',
             'userCompagnyName',
             'isUserOwner',
             'isUserBookmark',
-            'bookmarkCount',
             'formNameMinValid',
             'formMessageMinValid',
             'formMessageMaxValid',
@@ -239,7 +239,6 @@
             'modalNo',
             'modalYes',
             //advertById component
-            'routeGetAdvert',
             'routeHome',
             'actualLocale',
             'imageRatio',
@@ -255,9 +254,7 @@
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
-                isUrgent: false,
-                title: '',
-                id: 0,
+                dataAdvert: {},
                 dataUserName: '',
                 dataUserMail: '',
                 dataUserPhone: '',
@@ -268,11 +265,14 @@
             }
         },
         mounted () {
+            this.dataAdvert= JSON.parse(this.advert);
             this.dataUserMail = this.userMail;
             this.dataUserName = this.userName;
             this.dataUserPhone = this.userPhone;
             this.dataUserCompagnyName = this.userCompagnyName;
             this.dataIsUserBookmark = this.isUserBookmark;
+            //BreadCrumbs
+            this.setBreadCrumbItems();
             //Visibility for ADS
             let $elem = $('#welcome-ads').children('div');
             $elem.visibility({
@@ -284,22 +284,13 @@
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
             });
-            this.$on('setBreadCrumb', function (chainedCategories) {
-                this.setBreadCrumbItems(chainedCategories)
-            });
-            this.$on('setHeader', function (advert) {
-                this.isUrgent = advert.isUrgent;
-                this.title=  advert.title;
-                this.id = advert.id;
-            });
             this.$on('categoryChoice', function (category) {
                 sessionStorage.setItem('goToCategory', category.id);
                 window.location.href = this.routeHome;
             });
             let that = this;
             let messageForm = $('#form-'+this._uid);
-            messageForm
-                .form({
+            messageForm.form({
                     fields : {
                         email: {
                             identifier  : 'email',
@@ -371,12 +362,20 @@
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
             },
-            setBreadCrumbItems: function (chainedCategories) {
+            setBreadCrumbItems: function () {
+                let breadcrumb = this.dataAdvert.breadCrumb;
+                let lastBread = {
+                    description: [],
+                    id: 0
+                };
+                lastBread.description[this.actualLocale] = this.dataAdvert.title;
+                breadcrumb.push(lastBread);
+
                 this.breadcrumbItems = [];
-                for(let index in chainedCategories){
+                for(let index in breadcrumb){
                     this.breadcrumbItems.push({
-                        name: chainedCategories[index]['description'][this.actualLocale],
-                        value: chainedCategories[index].id
+                        name: breadcrumb[index]['description'][this.actualLocale],
+                        value: breadcrumb[index].id
                     });
                 }
             },
@@ -387,7 +386,7 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.post(that.routeSendMail, {'id': that.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
+                        that.$http.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
                             .then(
                                 function (response) {
                                     that.sendToast(that.sendSuccessMessage, 'success');

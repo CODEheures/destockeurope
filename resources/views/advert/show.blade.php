@@ -8,13 +8,13 @@
             route-bookmark-remove="{{ route('bookmark.remove', ['advertId'=>$advert->id]) }}"
             route-delete-advert="{{ route('advert.destroy', ['advertId'=>$advert->id] ) }}"
 
+            advert="{{ json_encode($advert) }}"
             user-mail="{{ auth()->check() ? auth()->user()->email : '' }}"
             user-name="{{ auth()->check() ? auth()->user()->name : '' }}"
             user-phone="{{ auth()->check() ? auth()->user()->phone : '' }}"
             user-compagny-name="{{ auth()->check() ? auth()->user()->compagnyName : '' }}"
             is-user-owner="{{ auth()->check() ? $advert->user->id == auth()->user()->id : false }}"
             is-user-bookmark="{{ auth()->check() ? auth()->user()->haveBookmark($advert->id) : false }}"
-            bookmark-count="{{ $advert->bookmarks->count() }}"
             form-name-min-valid="{{ config('db_limits.users.minName') }}"
             form-message-min-valid="{{ config('db_limits.messages.minLength') }}"
             form-message-max-valid="{{ config('db_limits.messages.maxLength') }}"
@@ -45,7 +45,6 @@
             modal-no="{{ trans('strings.modal_no') }}"
             modal-yes="{{ trans('strings.modal_yes') }}"
 
-            route-get-advert="{{ route('advert.show', ['id' => $advert->id]) }}"
             route-home="{{ route('home') }}"
             actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
             image-ratio="{{ env('IMAGE_RATIO') }}"

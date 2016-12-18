@@ -32,7 +32,7 @@
                                    v-on:focus="focused={'input': 'name', 'value': dataUserName}"
                                    v-on:blur="blured={'input': 'name', 'value': dataUserName}">
                         </div>
-                        <div class="required field">
+                        <div class="field">
                             <label>{{ phoneLabel }}</label>
                             <input type="text" name="phone" :placeholder="phoneLabel" v-model:value="dataUserPhone" :maxlength="formPhoneMaxValid"
                                    v-on:keyup.enter="updateByEnter"
@@ -111,7 +111,7 @@
                     </googleMap>
                 </div>
                 <div class="field" v-if="advertAccountVerifiedStep">
-                    <button type="submit" class="ui primary button" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
+                    <button type="submit" :class="updateFails ? 'ui disabled button' : 'ui primary button'" v-on:click="submitForm">{{ updateFails ? formValidationFailsButtonLabel : formValidationButtonLabel }}</button>
                 </div>
             </div>
         </div>
@@ -166,6 +166,7 @@
             'geolocHelpMsgTwo',
             'googlemapDivider',
             'formValidationButtonLabel',
+            'formValidationFailsButtonLabel',
             'formPointingMinimumChars',
             //steps component
             'stepOneTitle',
@@ -199,7 +200,9 @@
                 dataRegistrationNumber: '',
                 focused: {},
                 blured: {},
-                steps: []
+                steps: [],
+                updateInProgress: 0,
+                updateFails: false
             };
         },
         mounted () {
@@ -253,15 +256,10 @@
             sessionStorage.setItem('lat', this.latitude);
             sessionStorage.setItem('lng', this.longitude);
             sessionStorage.setItem('geoloc', this.geoloc);
-            let geoCodes = {
-                'typeEvent': 'mounted',
-                'lat' : this.latitude,
-                'lng' : this.longitude,
-                'geoloc': this.geoloc
-            };
             this.firstGeoloc == '1' ? this.dataFirstGeoloc = true :  null;
             this.$watch('blured', function () {
                 if (this.blured.input == this.focused.input && this.blured.value != this.focused.value) {
+                    this.updateInProgress++;
                     this.updateAccount(this.blured.input, this.blured.value);
                 }
             });
@@ -320,7 +318,7 @@
                 }
             },
             updateAccount: function (inputName, value){
-                var updateRoute = '';
+                let updateRoute = '';
                 if(inputName == 'name'){
                     updateRoute = this.routeUserSetName;
                 } else if(inputName == 'compagny-name') {
@@ -334,8 +332,10 @@
                         .then(
                                 function (response) {
                                     this.sendToast(this.accountPatchSuccess, 'success');
+                                    this.updateInProgress--;
                                 },
                                 function (response) {
+                                    this.updateFails = true;
                                     if(response.status == 409) {
                                         this.sendToast(response.body, 'error');
                                     } else if(response.status == 422) {
@@ -373,10 +373,37 @@
             },
             submitForm (event) {
                 event.preventDefault();
-                if(parseFloat(this.advertCost)>0) {
-                    window.location.href=this.routeNextUrlWithPayment+'/'+this.advertId;
+                this.isLoaded = false;
+                let counter = 0;
+                console.log('if');
+                if(this.updateInProgress == 0){
+                    console.log('go1');
+                    if(parseFloat(this.advertCost)>0) {
+                        window.location.href=this.routeNextUrlWithPayment+'/'+this.advertId;
+                    } else {
+                        window.location.href=this.routeNextUrlWithoutPayment+'/'+this.advertId;
+                    }
                 } else {
-                    window.location.href=this.routeNextUrlWithoutPayment+'/'+this.advertId;
+                    console.log('else');
+                    let that = this;
+                    let interval = setInterval(function () {
+                        if(that.updateInProgress == 0){
+                            console.log('go2');
+                            if(parseFloat(that.advertCost)>0) {
+                                window.location.href=that.routeNextUrlWithPayment+'/'+that.advertId;
+                            } else {
+                                window.location.href=that.routeNextUrlWithoutPayment+'/'+that.advertId;
+                            }
+                        } else {
+                            console.log(counter);
+                            counter++;
+                            if (counter == 20) {
+                                clearInterval(interval);
+                                that.isLoaded = true;
+                                that.updateFails = true;
+                            }
+                        }
+                    }, 250);
                 }
             },
             sendToast: function(message,type) {
