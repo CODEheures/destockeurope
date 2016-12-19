@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
             } catch (\Exception $e) {
                 $message = $message . ';schedule fails: ' . $e->getMessage();
             }
-            Storage::append('/logs/schedule.log', $message);
+            Storage::disk('logs')->append('schedule.log' , $message);
 
         })->everyThirtyMinutes();//->dailyAt('02:00');
     }
