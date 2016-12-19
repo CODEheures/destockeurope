@@ -8,6 +8,7 @@ return [
     'menu_sells' => 'Sales',
     'menu_research' => 'Research',
     'menu_offer' => 'Offer an advert',
+    'menu_mines' => 'My Adverts',
     'menu_login' => 'Login',
     'menu_logout' => 'Logout',
     'menu_register' => 'Register',

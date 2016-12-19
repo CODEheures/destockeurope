@@ -56,6 +56,7 @@ Vue.component('welcome1', require('./components/contents/welcome1.vue'));
 Vue.component('welcome2', require('./components/contents/welcome2.vue'));
 //User page
 Vue.component('user-account', require('./components/contents/userAccount.vue'));
+Vue.component('personnal-list', require('./components/contents/personnalList.vue'));
 //Categories page
 Vue.component('manage-categories', require('./components/contents/manageCategories.vue'));
 //Application page

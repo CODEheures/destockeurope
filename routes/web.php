@@ -13,6 +13,7 @@
 
 //Common
 Route::get('/', 'CommonController@home')->name('home');
+Route::get('/mines', ['as' => 'mines', 'uses' => 'CommonController@mines']);
 Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
 
 // Admin Routes...
@@ -98,6 +99,7 @@ Route::get('advert/pay/paypal/status/{id}/{success}', ['as' => 'advert.paypalSta
     ->where(['id' => '[0-9]+'])
     ->where(['success' => '\b(true|false)\b']);
 Route::post('advert/pay/card/{id}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
+Route::get('advert/mines', ['as' => 'advert.mines', 'uses' => 'AdvertController@mines']);
 Route::resource('advert', 'AdvertController');
 
 //Pictures

@@ -205,6 +205,37 @@ class AdvertController extends Controller
         }
     }
 
+    public function mines(Request $request)
+    {
+        $adverts = Advert::where('user_id', '=', auth()->id())->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+
+        $adverts->load('pictures');
+        $adverts->load('category');
+        $tempoStore =[];
+        $resultsByCat = [];
+        if(auth()->check()){
+            $user = auth()->user();
+            $user->load('bookmarks');
+        }
+        foreach ($adverts as $advert){
+            if(!array_key_exists($advert->category->id,$tempoStore)){
+                $ancestors = $advert->category->getAncestors();
+                $ancestors->add($advert->category);
+                $tempoStore[$advert->category->id] = $ancestors;
+                $resultsByCat[$advert->category->id]['results'] = [];
+            } else {
+                $ancestors = $tempoStore[$advert->category->id];
+            }
+            $advert->setBreadCrumb($ancestors);
+            $resultsByCat[$advert->category->id]['results'][] = $advert;
+            $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
+            $advert->setBookmarkCount();
+        }
+
+        return response()->json(['adverts'=> $adverts]);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
