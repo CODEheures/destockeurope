@@ -11,7 +11,7 @@ class StatsManager
         //Nombre d'annonces en ligne
         $totalAdverts = Advert::where('isValid', '=', true)->count();
         $totalInvalidAdverts = Advert::where('isValid', '=', false)->count();
-        $totalWaitingAdverts = Advert::where('isValid', '=', null)->count();
+        $totalWaitingAdverts = Advert::where('isPublish', '=', true)->where('isValid', '=', null)->count();
         //Nombre de fichiers et taille total
         $pictureManager = new PicturesManager();
         $infoLocalFiles=[0,0];

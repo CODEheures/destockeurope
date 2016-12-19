@@ -53,8 +53,8 @@ class AdminController extends Controller
 
         $costsByDay = Stats::select(array(
                 DB::raw('DATE(`created_at`) as `date`'),
-                DB::raw('SUM(totalCosts) as sum_costs'),
-                DB::raw('(SUM(totalCosts)/SUM(totalNewCostAdverts)) as avg_costs')
+                DB::raw('(SUM(totalCosts)/100) as sum_costs'),
+                DB::raw('((SUM(totalCosts)/SUM(totalNewCostAdverts))/100) as avg_costs')
         ))
             ->where('created_at', '>', $date)
             ->groupBy('date')
