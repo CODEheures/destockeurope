@@ -2,9 +2,13 @@
 
 namespace App\Console;
 
+use App\Common\AdvertsManager;
+use App\Common\PicturesManager;
 use App\Common\StatsManager;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Storage;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,8 +32,22 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->call(function(){
-            $statManager = new StatsManager();
-            $statManager->getStats();
+            $message = Carbon::now()->toDateTimeString();
+            try {
+                $statManager = new StatsManager();
+                $statManager->getStats();
+
+                $pictureManager = new PicturesManager();
+                $advertManager = new AdvertsManager($pictureManager);
+                $result1 = $advertManager->stopAdverts();
+                $result2 = $advertManager->purgeObsoletesAdverts();
+
+                $message = $message . ';stop adverts;' . $result1 . ';purge adverts;' . $result2[0] . ';delete pictures;' . $result2[1];
+            } catch (\Exception $e) {
+                $message = $message . ';schedule fails: ' . $e->getMessage();
+            }
+            Storage::append('/logs/schedule.log', $message);
+
         })->everyThirtyMinutes();//->dailyAt('02:00');
     }
 

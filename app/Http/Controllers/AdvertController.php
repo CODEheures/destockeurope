@@ -207,7 +207,7 @@ class AdvertController extends Controller
 
     public function mines(Request $request)
     {
-        $adverts = Advert::where('user_id', '=', auth()->id())->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+        $adverts = Advert::withTrashed()->where('user_id', '=', auth()->id())->where('isValid', true)->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
 
         $adverts->load('pictures');
         $adverts->load('category');

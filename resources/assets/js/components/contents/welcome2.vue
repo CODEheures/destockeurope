@@ -55,6 +55,10 @@
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
+                            :manage-advert-label="manageAdvertLabel"
+                            :renew-advert-label="renewAdvertLabel"
+                            :bookmark-info="bookmarkInfo"
+                            :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
                             :no-result-found-header="noResultFoundHeader"
                             :no-result-found-message="noResultFoundMessage">
@@ -105,6 +109,10 @@
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
+            'manageAdvertLabel',
+            'renewAdvertLabel',
+            'bookmarkInfo',
+            'viewsInfo',
             'priceInfoLabel',
             'noResultFoundHeader',
             'noResultFoundMessage',

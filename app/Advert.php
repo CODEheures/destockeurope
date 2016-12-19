@@ -41,7 +41,7 @@ class Advert extends Model {
     protected $casts = [
         'options' => 'array'
     ];
-    protected $appends = array('breadCrumb', 'url', 'resume', 'thumb', 'isUserOwner', 'isUserBookmark', 'bookmarkCount');
+    protected $appends = array('breadCrumb', 'url', 'resume', 'thumb', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -144,5 +144,9 @@ class Advert extends Model {
 
     public function getBookmarkCountAttribute() {
         return $this->bookmarkCount;
+    }
+
+    public function getPicturesWithTrashedCountAttribute() {
+        return $this->hasMany('App\Picture')->withTrashed()->count();
     }
 }

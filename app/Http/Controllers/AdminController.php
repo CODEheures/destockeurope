@@ -111,7 +111,7 @@ class AdminController extends Controller
             $statsManager->getStats();
             return response($info,200);
         } catch (\Exception $e) {
-            return response($e,500);
+            return response($e->getMessage(),500);
         }
 
     }

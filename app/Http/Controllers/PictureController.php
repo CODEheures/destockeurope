@@ -47,7 +47,7 @@ class PictureController extends Controller
      */
     public function getThumb($type, $hashName, $advertId=null) {
         if($type != PicturesManager::TYPE_TEMPO_LOCAL){
-            $picture = Picture::where('hashName', '=', $hashName)
+            $picture = Picture::withTrashed()->where('hashName', '=', $hashName)
                 ->where('advert_id','=',$advertId)
                 ->where('isThumb', '=', true)->first();
             if($picture){
@@ -77,7 +77,7 @@ class PictureController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getNormal($hashName, $advertId) {
-        $picture = Picture::where('hashName', '=', $hashName)
+        $picture = Picture::withTrashed()->where('hashName', '=', $hashName)
             ->where('advert_id','=',$advertId)
             ->where('isThumb', '=', false)->first();
         if($picture){

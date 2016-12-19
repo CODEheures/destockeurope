@@ -48,8 +48,9 @@ Vue.component('categories-updatable', require('./components/categories/categorie
 
 //adverts
 Vue.component('advert-filter', require('./components/adverts/advertsFilter.vue'));
-Vue.component('adverts-by-list', require('./components/adverts/advertsByList.vue'));
-Vue.component('advert-by-id', require('./components/adverts/advertById.vue'));
+Vue.component('adverts-by-list', require('./components/adverts/byList/advertsByList.vue'));
+Vue.component('adverts-by-list-item', require('./components/adverts/byList/item.vue'));
+Vue.component('advert-by-id', require('./components/adverts/byId/advertById.vue'));
 
 //Welcome page vue
 Vue.component('welcome1', require('./components/contents/welcome1.vue'));

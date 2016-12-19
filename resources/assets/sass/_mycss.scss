@@ -7,7 +7,7 @@ $color-blue: #4183C4;
   margin-bottom: 4rem;
   background-color: white;
 
-  & a.item.advert {
+  & div.item.advert {
     & .ui.image > .corner i {
       color: white;
       font-weight: 600;
@@ -32,7 +32,7 @@ $color-blue: #4183C4;
       margin-top: 0.2rem;
     }
   }
-  & div.item.advert {
+  & div.item.ads {
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
