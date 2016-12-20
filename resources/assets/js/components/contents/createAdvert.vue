@@ -22,6 +22,8 @@
                 <input type="hidden" name="lat" :value="lat" />
                 <input type="hidden" name="lng" :value="lng" />
                 <input type="hidden" name="geoloc" :value="geoloc" />
+                <input type="hidden" name="completegeoloc" :value="dataCompleteGeoloc" />
+                <input type="hidden" name="searchPlace" :value="searchPlace" />
                 <input type="hidden" name="main_picture" :value="mainPicture" />
                 <input type="hidden" name="is_urgent" :value="isUrgent ? 1 : 0" />
                 <div class="ui error message"></div>
@@ -254,6 +256,8 @@
                 lat: '',
                 lng: '',
                 geoloc: '',
+                dataCompleteGeoloc: '',
+                searchPlace: '',
                 helpUploadP: '',
                 helpUploadA: '',
                 helpUploadAHref: '',
@@ -365,6 +369,8 @@
                 this.lat= event.lat;
                 this.lng= event.lng;
                 this.geoloc= event.geoloc;
+                this.dataCompleteGeoloc = sessionStorage.getItem('geoloc');
+                this.searchPlace = sessionStorage.getItem('searchPlace');
             },
             helpUpload: function () {
                 var htmlObject = $('<p>'+this.advertFormPhotoHelpContent+'</p>');

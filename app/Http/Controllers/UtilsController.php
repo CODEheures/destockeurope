@@ -295,6 +295,11 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         }
         $advert->latitude = 47.3526;
         $advert->longitude = 0.6704089179992252;
+        $advert->locality = 'Joué-lès-Tours';
+        $advert->postal_code = '37300';
+        $advert->administrative_area_level_2 = 'Indre-et-Loire';
+        $advert->administrative_area_level_1 = 'Centre-Val de Loire';
+        $advert->country = 'FR';
         $advert->geoloc = 'Joué-lès-Tours, France';
         $advert->mainPicture = $pictures[0];
         $advert->currency="EUR";

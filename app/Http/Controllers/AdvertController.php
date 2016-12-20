@@ -7,6 +7,7 @@ use App\Anonymous;
 use App\Category;
 use App\Common\CategoryUtils;
 use App\Common\DBUtils;
+use App\Common\GeoManager;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
 use App\Common\UserUtils;
@@ -258,6 +259,7 @@ class AdvertController extends Controller
     public function store(StoreAdvertRequest $request)
     {
         $category = Category::find($request->category);
+        $parsedAdressComponent = GeoManager::parseAddressComponent(json_decode($request->completegeoloc));
         if($category) {
             try {
                 $advert = new Advert();
@@ -268,6 +270,9 @@ class AdvertController extends Controller
                 $advert->description = $request->description;
                 $advert->latitude = $request->lat;
                 $advert->longitude = $request->lng;
+                foreach (GeoManager::$accurate as $key){
+                    key_exists($key, $parsedAdressComponent) ? $advert->$key = $parsedAdressComponent[$key] : $advert->$key = null;
+                }
                 $advert->geoloc = $request->geoloc;
                 $advert->mainPicture = $request->main_picture;
                 $advert->currency=$request->currency;

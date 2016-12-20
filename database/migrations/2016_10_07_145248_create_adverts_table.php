@@ -29,6 +29,9 @@ class CreateAdvertsTable extends Migration
             $table->string('currency', 3);
             $table->decimal('latitude',6,4);
             $table->decimal('longitude',19,16);
+            foreach (\App\Common\GeoManager::$accurate as $key){
+                $table->string($key)->nullable()->default(null);
+            }
             $table->string('geoloc')->nullable()->default(null);
             $table->string('mainPicture',32);
             $table->boolean('isPublish')->default(false);

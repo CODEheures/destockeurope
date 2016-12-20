@@ -44,6 +44,7 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
                 let place = autocomplete.getPlace();
                 if(place.geometry != undefined) {
                     that.map.setCenter(place.geometry.location);
+                    sessionStorage.setItem('searchPlace', JSON.stringify(place.address_components));
                     that.marker.setPosition(place.geometry.location);
                 }
                 that.setGeoCode();
