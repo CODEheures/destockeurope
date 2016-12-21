@@ -81,6 +81,7 @@ return [
     'form_pointing_maximum_chars' => ' characters maximum',
     'form_input_search_label' => 'Search issues...',
     'form_input_search_view_all' => 'See the only :nb result|See :nb results',
+    'form_input_location_label' => 'Country, region, department, city ...',
     'form_dropdown_all_item' => 'All',
     'form_dropdown_move_item' => 'Move to...',
     'form_dropdown_move_as_root' => 'Root catégory',

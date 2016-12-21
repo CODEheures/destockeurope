@@ -150,6 +150,13 @@ class AdvertController extends Controller
             $adverts = $adverts->where('price', '>=', $minPrice)->where('price', '<=', $maxPrice);
         }
 
+        //if location
+        foreach (GeoManager::$accurate as $item){
+            if($request->has($item) && $request->$item != null){
+                $adverts = $adverts->where($item, '=', $request->$item);
+            }
+        }
+
         if($isSearchRequest){
             $search = $request->search;
             $adverts = $adverts->where(function ($query) use ($search) {
@@ -259,7 +266,8 @@ class AdvertController extends Controller
     public function store(StoreAdvertRequest $request)
     {
         $category = Category::find($request->category);
-        $parsedAdressComponent = GeoManager::parseAddressComponent(json_decode($request->completegeoloc));
+        $completeGeoLoc = json_decode($request->completegeoloc);
+        $parsedAddressComponent = GeoManager::parseAddressComponent($completeGeoLoc[0]->address_components);
         if($category) {
             try {
                 $advert = new Advert();
@@ -271,7 +279,7 @@ class AdvertController extends Controller
                 $advert->latitude = $request->lat;
                 $advert->longitude = $request->lng;
                 foreach (GeoManager::$accurate as $key){
-                    key_exists($key, $parsedAdressComponent) ? $advert->$key = $parsedAdressComponent[$key] : $advert->$key = null;
+                    key_exists($key, $parsedAddressComponent) ? $advert->$key = $parsedAddressComponent[$key] : $advert->$key = null;
                 }
                 $advert->geoloc = $request->geoloc;
                 $advert->mainPicture = $request->main_picture;

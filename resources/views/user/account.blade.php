@@ -67,5 +67,5 @@
 @endsection
 
 @section('scripts')
-    @include('plugins.googleMap.script')
+    @include('plugins.googleMap.map.script')
 @endsection

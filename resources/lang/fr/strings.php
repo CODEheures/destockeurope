@@ -81,6 +81,7 @@ return [
     'form_pointing_maximum_chars' => ' caractères maximum',
     'form_input_search_label' => 'Cherchez ...',
     'form_input_search_view_all' => 'Afficher :nb résultat | Afficher les :nb résultats',
+    'form_input_location_label' => 'Pays, région, département, ville ...',
     'form_dropdown_all_item' => 'Tous',
     'form_dropdown_move_item' => 'Déplacer vers...',
     'form_dropdown_move_as_root' => 'Catégorie principale',

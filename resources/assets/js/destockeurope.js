@@ -3,7 +3,7 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
     this.elemMap = document.getElementById(idMap);
     this.geoloc = document.getElementById(idGeoLoc);
     this.input = document.getElementById(idMapInput);
-    var that = this;
+    let that = this;
 
     this.constructMap= function () {
         if(this.elemMap != undefined && this.geoloc != undefined){
@@ -126,4 +126,28 @@ exports.destockMap= function (google, idMap, zoomMap, idGeoLoc, geolocType, idMa
             }
         });
     };
+};
+
+exports.destockAutocomplete= function (google, idMapInput) {
+    this.input = document.getElementById(idMapInput);
+    let options = {
+        types: ['(regions)']
+    };
+    let that = this;
+    this.initAutocomplete = function () {
+        let autocomplete = new google.maps.places.Autocomplete(this.input, options);
+        autocomplete.addListener('place_changed', function() {
+            let place = autocomplete.getPlace();
+            if(place.geometry != undefined) {
+                sessionStorage.setItem('autoCompleteResult', JSON.stringify(place.address_components));
+                if ("createEvent" in document) {
+                    let evt = document.createEvent("HTMLEvents");
+                    evt.initEvent("autocompletechange", false, true);
+                    that.input.dispatchEvent(evt);
+                } else {
+                    that.input.fireEvent("autocompletechange");
+                }
+            }
+        });
+    }
 };

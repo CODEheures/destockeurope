@@ -13,10 +13,12 @@
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
 
                 filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
+                filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
                 filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
+                filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-bookmark-add="{{ route('bookmark.add') }}"
@@ -55,10 +57,12 @@
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
 
                 filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
+                filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
                 filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
+                filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-bookmark-add="{{ route('bookmark.add') }}"
@@ -86,4 +90,8 @@
                 page-next-label="{{ trans('strings.view_pagination_next_label') }}">
         </welcome2>
     @endif
+@endsection
+
+@section('scripts')
+    @include('plugins.googleMap.autocomplete.script')
 @endsection

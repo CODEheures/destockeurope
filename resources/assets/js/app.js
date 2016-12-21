@@ -17,6 +17,7 @@ require('./myjs');
 
 //Generics
 Vue.component('range-filter', require('./components/generics/filters/rangeFilter.vue'));
+Vue.component('location-filter', require('./components/generics/filters/locationFilter.vue'));
 Vue.component('search-filter', require('./components/generics/filters/searchFilter.vue'));
 Vue.component('type-radio-button', require('./components/generics/filters/typeRadioButton.vue'));
 Vue.component('currencies-dropdown', require('./components/generics/currencies/currenciesDropdown.vue'));

@@ -155,7 +155,8 @@ class UtilsController extends Controller
             '1000 doudounes en fin de série à prix cassées',
             ['11111111111111111111111111111111'],
             1000,
-            50
+            50,
+            0
         );
 
         $this->advertCreate(
@@ -167,6 +168,7 @@ class UtilsController extends Controller
             ['22222222222222222222222222222222', '33333333333333333333333333333333', '44444444444444444444444444444444'],
             28,
             8,
+            1,
             'Ceci est une annonce à valider, ... ou pas!!??. Je vends un lot de 28 chiens de cirque. Il savent faire du trapeze, de la moto et font aussi la vaisselle.',
             true
         );
@@ -189,6 +191,7 @@ class UtilsController extends Controller
             'Excellent état! 10 Cartons de casques AudioBeats',
             ['55555555555555555555555555555555'],
             10,
+            2,
             2
         );
 
@@ -200,7 +203,8 @@ class UtilsController extends Controller
             '10000 lunettes Gears pour samsung S7...\':(',
             ['66666666666666666666666666666666'],
             10000,
-            500
+            500,
+            3
         );
 
         $this->advertCreate(
@@ -211,7 +215,8 @@ class UtilsController extends Controller
             '3 palettes de boites à dessin avec defauts',
             ['77777777777777777777777777777777'],
             3,
-            1
+            1,
+            0
         );
 
         $stat2 = $statsManager->getStats();
@@ -232,7 +237,8 @@ class UtilsController extends Controller
             '500 sacs à dos EastPack Gris à saisir',
             ['88888888888888888888888888888888'],
             500,
-            30
+            30,
+            0
         );
 
         $stat3 = $statsManager->getStats();
@@ -254,7 +260,8 @@ class UtilsController extends Controller
             '42 kilos de crayons tout venant',
             ['99999999999999999999999999999999'],
             42,
-            5
+            5,
+            1
         );
 
         $this->advertCreate(
@@ -265,7 +272,8 @@ class UtilsController extends Controller
             '200 clés USB suite à depot de bilan',
             ['00000000000000000000000000000000'],
             200,
-            50
+            50,
+            4
         );
 
 
@@ -279,7 +287,7 @@ class UtilsController extends Controller
         return redirect(route('home'));
     }
 
-    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $description=null, $isValid=null){
+    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $isValid=null){
         $advert = new Advert();
         $advert->user_id = $userId;
         $advert->category_id = $catId;
@@ -295,12 +303,44 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         }
         $advert->latitude = 47.3526;
         $advert->longitude = 0.6704089179992252;
-        $advert->locality = 'Joué-lès-Tours';
-        $advert->postal_code = '37300';
-        $advert->administrative_area_level_2 = 'Indre-et-Loire';
-        $advert->administrative_area_level_1 = 'Centre-Val de Loire';
-        $advert->country = 'FR';
-        $advert->geoloc = 'Joué-lès-Tours, France';
+
+        if($location == 0){
+            $advert->locality = 'Joué-lès-Tours';
+            $advert->postal_code = '37300';
+            $advert->administrative_area_level_2 = 'Indre-et-Loire';
+            $advert->administrative_area_level_1 = 'Centre-Val de Loire';
+            $advert->country = 'FR';
+            $advert->geoloc = 'Joué-lès-Tours, France';
+        } elseif ($location == 1) {
+            $advert->locality = 'Chambray-lès-Tours';
+            $advert->postal_code = '37170';
+            $advert->administrative_area_level_2 = 'Indre-et-Loire';
+            $advert->administrative_area_level_1 = 'Centre-Val de Loire';
+            $advert->country = 'FR';
+            $advert->geoloc = 'Chambray-lès-Tours, France';
+        } elseif ($location == 2) {
+            $advert->locality = 'Montfort-sur-Meu';
+            $advert->postal_code = '35160';
+            $advert->administrative_area_level_2 = 'Ille-et-Vilaine';
+            $advert->administrative_area_level_1 = 'Bretagne';
+            $advert->country = 'FR';
+            $advert->geoloc = 'Montfort-sur-Meu, France';
+        } elseif ($location == 3) {
+            $advert->locality = 'San José';
+            $advert->postal_code = null;
+            $advert->administrative_area_level_2 = 'Comté de Santa Clara';
+            $advert->administrative_area_level_1 = 'CA';
+            $advert->country = 'US';
+            $advert->geoloc = 'San José, Californie, États-Unis';
+        } elseif ($location == 4) {
+            $advert->locality = 'San José';
+            $advert->postal_code = null;
+            $advert->administrative_area_level_2 = null;
+            $advert->administrative_area_level_1 = 'San José';
+            $advert->country = 'CR';
+            $advert->geoloc = 'San José, Costa Rica';
+        }
+
         $advert->mainPicture = $pictures[0];
         $advert->currency="EUR";
 

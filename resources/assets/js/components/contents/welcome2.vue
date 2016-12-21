@@ -41,9 +41,11 @@
                         :filter-price-title ="filterPriceTitle"
                         :route-search="dataRouteGetAdvertList"
                         :min-length-search="parseInt(filterMinLengthSearch)"
+                        :location-accurate-list="dataFilterLocationAccurateList"
                         :flag-reset-search="dataFlagResetSearch"
-                        :search-place-holder="filterSearchPlaceHolder">
-                    </advert-filter>
+                        :search-place-holder="filterSearchPlaceHolder"
+                        :location-place-holder="filterLocationPlaceHolder"
+                    ></advert-filter>
                 </div>
                 <div class="row">
                     <adverts-by-list
@@ -97,10 +99,12 @@
             'actualLocale',
             //filter advert component
             'filterMinLengthSearch',
+            'filterLocationAccurateList',
             'filterRibbon',
             'filterPriceTitle',
             'filterUrgentLabel',
             'filterSearchPlaceHolder',
+            'filterLocationPlaceHolder',
             //advertByList component
             'routeGetAdvertsList',
             'routeBookmarkAdd',
@@ -127,6 +131,7 @@
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
+                dataFilterLocationAccurateList: [],
                 filter: {categoryId: 0},
                 paginate: {},
                 dataRouteGetAdvertList: '',
@@ -136,6 +141,7 @@
             }
         },
         mounted () {
+            this.dataFilterLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
             //Visibility for ADS
             $('#column1_'+this._uid).children('div').visibility({
                 type   : 'fixed',
@@ -202,6 +208,10 @@
                     this.filter.maxPrice=0;
                     this.updateResults(true);
                 }
+            });
+            this.$on('clearLocationResults', function () {
+                this.clearInputLocation();
+                this.updateResults();
             });
             this.$on('sendToast', function (event) {
                 this.sendToast(event.message, event.type);
@@ -299,6 +309,15 @@
                     return false;
                 }
             },
+            clearInputLocation() {
+                for(let index in this.dataFilterLocationAccurateList){
+                    let key  = this.dataFilterLocationAccurateList[index];
+                    console.log(key);
+                    if(key in this.filter){
+                        delete this.filter[key];
+                    }
+                }
+            },
             choiceCategory(categoryId) {
                 this.setBreadCrumbItems(categoryId);
                 this.filter.categoryId = parseInt(categoryId);
@@ -326,7 +345,13 @@
             updateFilter(result){
                 let oldFilter= _.cloneDeep(this.filter);
                 for(let elem in result){
-                    this.filter[elem] = result[elem];
+                    if(result[elem] == null){
+                        if(elem in this.filter){
+                            delete this.filter[elem];
+                        }
+                    } else {
+                        this.filter[elem] = result[elem];
+                    }
                 }
                 if(!_.isEqual(oldFilter, this.filter)){
                     this.updateResults();

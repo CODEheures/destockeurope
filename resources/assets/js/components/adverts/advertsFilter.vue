@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="ui grid">
-            <div class="sixteen wide column">
+            <div class="doubling eight wide column">
                 <search-filter
                     :route-search="routeSearch"
                     :min-length-search="minLengthSearch"
@@ -30,6 +30,13 @@
                     :update="dataUpdate"
                     :flag-reset="flagResetSearch">
                 </search-filter>
+            </div>
+            <div class="doubling eight wide column">
+                <location-filter
+                        :accurate-list="locationAccurateList"
+                        :update="dataUpdate"
+                        :place-holder="locationPlaceHolder"
+                ></location-filter>
             </div>
         </div>
     </div>
@@ -70,6 +77,13 @@
             },
             searchPlaceHolder: {
                 type: String
+            },
+            //location component
+            locationAccurateList: {
+                type: Array
+            },
+            locationPlaceHolder: {
+                type: String
             }
         },
         data: () => {
@@ -98,11 +112,17 @@
             this.$watch('isUrgent', function () {
                 this.$parent.$emit('updateFilter', {'isUrgent' : this.isUrgent})
             });
+            this.$on('locationUpdate', function (event) {
+                this.$parent.$emit('updateFilter', event)
+            });
             this.$on('refreshResults', function (query) {
                 this.$parent.$emit('refreshResults', query);
             });
             this.$on('clearSearchResults', function () {
                 this.$parent.$emit('clearSearchResults');
+            });
+            this.$on('clearLocationResults', function () {
+                this.$parent.$emit('clearLocationResults');
             });
             let that = this;
             let isUrgent = $('#isUrgent'+this._uid);
