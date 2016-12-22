@@ -49,7 +49,7 @@
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ advertPriceLabel }}</td>
-                                <td>{{ advert.price }} {{ advert.currency}}</td>
+                                <td>{{ advert.price }}</td>
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ totalQuantityLabel }} / {{ lotMiniQuantityLabel }}</td>

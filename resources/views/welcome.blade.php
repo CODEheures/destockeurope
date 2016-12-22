@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @if(config('runtime.welcomeType')=='1')
+    @if(config('runtime.welcomeType')=='2')
         <welcome1
                 clear-storage="{{ session()->has('clear') ? true : false }}"
 
@@ -15,9 +15,8 @@
                 filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
                 filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
-                filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
-                filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
+                filter-search-place-holder="{{ trans('strings.form_input_search_label2') }}"
                 filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
@@ -45,7 +44,7 @@
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
                 page-next-label="{{ trans('strings.view_pagination_next_label') }}">
         </welcome1>
-    @elseif(config('runtime.welcomeType')=='2')
+    @elseif(config('runtime.welcomeType')=='1')
         <welcome2
                 clear-storage="{{ session()->has('clear') ? true : false }}"
 
@@ -59,9 +58,8 @@
                 filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
                 filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
                 filter-ribbon="{{ trans('strings.view_filter_ribbon') }}"
-                filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
-                filter-search-place-holder="{{ trans('strings.form_input_search_label') }}"
+                filter-search-place-holder="{{ trans('strings.form_input_search_label2') }}"
                 filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"

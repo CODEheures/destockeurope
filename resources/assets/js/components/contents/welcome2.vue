@@ -38,7 +38,7 @@
                         :urgent-label="filterUrgentLabel"
                         :update="update"
                         :filter="filter"
-                        :filter-price-title ="filterPriceTitle"
+                        :filter-price-prefix="dataFilterPricePrefix"
                         :route-search="dataRouteGetAdvertList"
                         :min-length-search="parseInt(filterMinLengthSearch)"
                         :location-accurate-list="dataFilterLocationAccurateList"
@@ -101,7 +101,6 @@
             'filterMinLengthSearch',
             'filterLocationAccurateList',
             'filterRibbon',
-            'filterPriceTitle',
             'filterUrgentLabel',
             'filterSearchPlaceHolder',
             'filterLocationPlaceHolder',
@@ -132,6 +131,9 @@
                 sendMessage: false,
                 breadcrumbItems: [],
                 dataFilterLocationAccurateList: [],
+                dataFilterPricePrefix: '',
+                oldMinRangePrice: -1,
+                oldMaxRangePrice: -1,
                 filter: {categoryId: 0},
                 paginate: {},
                 dataRouteGetAdvertList: '',
@@ -266,7 +268,7 @@
                 sessionStorage.removeItem('filter');
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
 
-                for(var elem in this.filter){
+                for(let elem in this.filter){
                     if(elem != 'minRangePrice' && elem != 'maxRangePrice'){
                         parsed.query[elem]=(this.filter[elem]).toString();
                     }
@@ -293,6 +295,7 @@
                         function (response) {
                             that.filter.minRangePrice = parseFloat((response.data).minPrice);
                             that.filter.maxRangePrice = parseFloat((response.data).maxPrice);
+                            that.dataFilterPricePrefix = (response.data).currencySymbol;
                             callBack();
                         },
                         function (response) {
@@ -312,7 +315,6 @@
             clearInputLocation() {
                 for(let index in this.dataFilterLocationAccurateList){
                     let key  = this.dataFilterLocationAccurateList[index];
-                    console.log(key);
                     if(key in this.filter){
                         delete this.filter[key];
                     }
@@ -332,11 +334,17 @@
                 let that = this;
                 this.getMinMaxPrices(url, function () {
                     //on test si le filtre min-max est toujours valable
-                    if(that.filter.minPrice == undefined || that.filter.minPrice < that.filter.minRangePrice || that.filter.minPrice > that.filter.maxRangePrice) {
+                    if(that.filter.minRangePrice != that.oldMinRangePrice || that.filter.maxRangePrice != that.oldMaxRangePrice || that.filter.minPrice == undefined || that.filter.minPrice < that.filter.minRangePrice || that.filter.minPrice > that.filter.maxRangePrice) {
                         that.filter.minPrice = that.filter.minRangePrice;
-                    }
-                    if(that.filter.maxPrice == undefined || that.filter.maxPrice > that.filter.maxRangePrice || that.filter.maxPrice <= that.filter.minPrice) {
                         that.filter.maxPrice = that.filter.maxRangePrice;
+                        that.oldMinRangePrice = that.filter.minRangePrice;
+                        that.oldMaxRangePrice = that.filter.maxRangePrice;
+                    }
+                    if(that.filter.minRangePrice != that.oldMinRangePrice || that.filter.maxRangePrice != that.oldMaxRangePrice || that.filter.maxPrice == undefined || that.filter.maxPrice > that.filter.maxRangePrice || that.filter.maxPrice <= that.filter.minPrice) {
+                        that.filter.minPrice = that.filter.minRangePrice;
+                        that.filter.maxPrice = that.filter.maxRangePrice;
+                        that.oldMinRangePrice = that.filter.minRangePrice;
+                        that.oldMaxRangePrice = that.filter.maxRangePrice;
                     }
                     that.update = !that.update;
                     that.dataRouteGetAdvertList = that.urlForFilter(false,true);

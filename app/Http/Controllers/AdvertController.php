@@ -8,6 +8,7 @@ use App\Category;
 use App\Common\CategoryUtils;
 use App\Common\DBUtils;
 use App\Common\GeoManager;
+use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
 use App\Common\UserUtils;
@@ -91,13 +92,25 @@ class AdvertController extends Controller
         $adverts = Advert::where('isValid', true);
 
         //where currency
-        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)) {
+        $currencySymbol = '';
+        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)){
             $currency = $request->currency;
+            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+        } elseif($request->has('country')){
+            $pseudoLocale = LocaleUtils::getFirstLocaleByCountryCode($request->country);
+            if($pseudoLocale){
+                $currency = MoneyUtils::getDefaultMoneyByLocale($pseudoLocale);
+                $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+            }
         } else {
             $currency = config('runtime.currency');
+            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+        }
+        if(!MoneyUtils::isAvailableCurrency($currency)){
+            $currency = config('runtime.currency');
+            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
         }
         $adverts = $adverts->where('currency', $currency);
-
 
         if($request->has('categoryId') && $request->categoryId != 0){
             $ids = CategoryUtils::getListSubTree($request->categoryId);
@@ -135,7 +148,7 @@ class AdvertController extends Controller
 
         //STOP REQUEST HERE IF only RANGE PRICES
         if($isRangePricesOnly){
-            return response()->json(['minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
+            return response()->json(['minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice, 'currencySymbol' => $currencySymbol]);
         }
 
         //if urgent

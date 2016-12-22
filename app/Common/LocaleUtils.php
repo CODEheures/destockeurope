@@ -17,13 +17,47 @@ trait LocaleUtils
             ];
         }
 
-        $userPreferedLocale = auth()->user()->locale;
+        return $listLocales;
+    }
+
+    public static function existLocale($locale) {
+        $listLocales = self::listLocales();
+        foreach ($listLocales as $item) {
+            if($item['code'] == $locale){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function listUserLocales() {
         $response = [
-            'listLocales' => $listLocales,
-            'userPrefLocale' => $userPreferedLocale
+            'listLocales' => self::listLocales(),
+            'userPrefLocale' => config('runtime.locale')
         ];
 
         return $response;
+    }
+
+    public static function getFirstLocaleByCountryCode($countryCode){
+        foreach (self::listLocales() as $locale){
+            if(strpos($locale['code'], '_'.$countryCode)){
+                return $locale['code'];
+            }
+        }
+        return null;
+    }
+
+    public static function composeLocale($language, $country){
+        $locale = \Locale::composeLocale( [
+            'language' => $language,
+            'region' => $country
+        ] );
+        if(self::existLocale($locale)){
+            return $locale;
+        } else {
+            return null;
+        }
     }
 
     public static function getCountryByIp($ip) {

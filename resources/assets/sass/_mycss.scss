@@ -72,6 +72,16 @@ $color-blue: #4183C4;
   }
 }
 
+.ui.search.filter .prompt {
+  border-radius: 0.28571429rem;
+}
+
+.ui.checkbox.filter {
+  & label:before, & label:after {
+    top: 3px;
+  }
+}
+
 .masthead.segment , .ui.top.fixed.menu{
   & .sub.header{
     position: absolute;

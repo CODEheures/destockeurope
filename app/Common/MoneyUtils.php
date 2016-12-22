@@ -15,14 +15,15 @@ trait MoneyUtils
         $money = new Money($value, new Currency($currency));
         $currencies = new ISOCurrencies();
 
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+        $result = $moneyFormatter->format($money);
+
         if($withCurrency){
-            $numberFormatter = new \NumberFormatter('fr_FR', \NumberFormatter::CURRENCY);
-            $moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
-        } else {
-            $moneyFormatter = new DecimalMoneyFormatter($currencies);
+            $symbol = self::getSymbolByCurrencyCode($currency);
+            $result .= $symbol;
         }
 
-        return $moneyFormatter->format($money);
+        return $result;
     }
 
     public static function setPriceWithoutDecimal($price, $currency){
@@ -35,11 +36,21 @@ trait MoneyUtils
         $currencies = new ISOCurrencies();
         $numberFormatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
         $currency =  $numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE);
-        if ($currencies->contains(new Currency($currency)) && $currency != '') {
+        if ($currency != '' && $currencies->contains(new Currency($currency))) {
             return $currency;
         } else {
-            return env('DEFAULT_CURRENCY');
+            return config('runtime.currency');
         }
+    }
+
+    public static function getSymbolByCurrencyCode($currencyCode) {
+        $listCurrencies = self::listCurrencies();
+        foreach ($listCurrencies as $currency){
+            if($currency['code'] == $currencyCode){
+                return $currency['symbol'];
+            }
+        }
+        return null;
     }
 
     public static function listCurrencies()  {
@@ -48,7 +59,7 @@ trait MoneyUtils
         $listCodeCurrencies=[];
         foreach ($currencies as $currency) {
 
-            $region = auth()->user()->locale."@currency=$currency";
+            $region = config('runtime.locale')."@currency=$currency";
             $formatter = new \NumberFormatter($region, \NumberFormatter::CURRENCY);
             $symbol = $formatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
 
@@ -58,11 +69,13 @@ trait MoneyUtils
                     'symbol' => $symbol];
             }
         }
+        return $listCodeCurrencies;
+    }
 
-        $userPreferedCurrency = auth()->user()->currency;
+    public static function listUserCurrencies()  {
         $response = [
-            'listCurrencies' => $listCodeCurrencies,
-            'userPrefCurrency' => $userPreferedCurrency
+            'listCurrencies' => self::listCurrencies(),
+            'userPrefCurrency' => config('runtime.currency')
         ];
         return $response;
     }

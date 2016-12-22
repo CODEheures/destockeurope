@@ -1,10 +1,10 @@
 <template>
-    <div :id="_uid" class="ui fluid search">
-        <div class="ui fluid action input">
+    <div :id="_uid" class="ui fluid search filter">
+        <div :class="!wantSearch ? 'ui fluid action left icon input' : 'ui fluid left icon input'">
+            <i class="filter icon"></i>
             <input :class="wantSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="placeHolder">
-            <button class="ui icon button">
-                <i class="search icon" v-if="wantSearch"></i>
-                <i class="remove red icon" v-else
+            <button class="ui red icon button" v-if="!wantSearch">
+                <i class="remove icon"
                     v-on:click="resetSearch(true)">
                 </i>
             </button>

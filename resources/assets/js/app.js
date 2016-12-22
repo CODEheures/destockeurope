@@ -16,6 +16,7 @@ require('./myjs');
  */
 
 //Generics
+// Vue.component('range-filter-old', require('./components/generics/filters/rangeFilterOld.vue'));
 Vue.component('range-filter', require('./components/generics/filters/rangeFilter.vue'));
 Vue.component('location-filter', require('./components/generics/filters/locationFilter.vue'));
 Vue.component('search-filter', require('./components/generics/filters/searchFilter.vue'));

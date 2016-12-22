@@ -80,6 +80,7 @@ return [
     'form_pointing_minimum_chars' => ' characters minimum',
     'form_pointing_maximum_chars' => ' characters maximum',
     'form_input_search_label' => 'Search issues...',
+    'form_input_search_label2' => 'Find in the title or in the description...',
     'form_input_search_view_all' => 'See the only :nb result|See :nb results',
     'form_input_location_label' => 'Country, region, department, city ...',
     'form_dropdown_all_item' => 'All',

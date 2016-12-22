@@ -34,11 +34,11 @@ class UtilsController extends Controller
 
 
     public function getListCurrencies()  {
-        return response()->json($this->listCurrencies());
+        return response()->json($this->listUserCurrencies());
     }
 
     public function getListLocales() {
-        return response()->json($this->listLocales());
+        return response()->json($this->listUserLocales());
     }
 
     public function testGame(){
@@ -268,7 +268,7 @@ class UtilsController extends Controller
             $user2->id,
             $subCategory12->id,
             Carbon::now()->subDays(1),
-            0,
+            1234,
             '200 clés USB suite à depot de bilan',
             ['00000000000000000000000000000000'],
             200,
@@ -311,6 +311,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
             $advert->administrative_area_level_1 = 'Centre-Val de Loire';
             $advert->country = 'FR';
             $advert->geoloc = 'Joué-lès-Tours, France';
+            $advert->currency = 'EUR';
         } elseif ($location == 1) {
             $advert->locality = 'Chambray-lès-Tours';
             $advert->postal_code = '37170';
@@ -318,6 +319,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
             $advert->administrative_area_level_1 = 'Centre-Val de Loire';
             $advert->country = 'FR';
             $advert->geoloc = 'Chambray-lès-Tours, France';
+            $advert->currency = 'EUR';
         } elseif ($location == 2) {
             $advert->locality = 'Montfort-sur-Meu';
             $advert->postal_code = '35160';
@@ -325,6 +327,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
             $advert->administrative_area_level_1 = 'Bretagne';
             $advert->country = 'FR';
             $advert->geoloc = 'Montfort-sur-Meu, France';
+            $advert->currency = 'EUR';
         } elseif ($location == 3) {
             $advert->locality = 'San José';
             $advert->postal_code = null;
@@ -332,6 +335,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
             $advert->administrative_area_level_1 = 'CA';
             $advert->country = 'US';
             $advert->geoloc = 'San José, Californie, États-Unis';
+            $advert->currency = 'USD';
         } elseif ($location == 4) {
             $advert->locality = 'San José';
             $advert->postal_code = null;
@@ -339,10 +343,11 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
             $advert->administrative_area_level_1 = 'San José';
             $advert->country = 'CR';
             $advert->geoloc = 'San José, Costa Rica';
+            $advert->currency = 'CRC';
         }
 
         $advert->mainPicture = $pictures[0];
-        $advert->currency="EUR";
+
 
         $advert->totalQuantity=$maxQuantity;
         $advert->lotMiniQuantity=$lotMini;
@@ -400,6 +405,6 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-        return null;
+        return MoneyUtils::getPriceWithDecimal(3914,'CRC');
     }
 }

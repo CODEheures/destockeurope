@@ -23,6 +23,9 @@ class GetConfig
      */
     public function handle($request, Closure $next)
     {
+        $httpAccept = \Locale::acceptFromHttp($request->server('HTTP_ACCEPT_LANGUAGE'));
+        $requestLocale = \Locale::getPrimaryLanguage($request->server('HTTP_ACCEPT_LANGUAGE'));
+        $requestRegion = \Locale::getRegion($httpAccept);
 
         $config = Common::first();
         if($config){
@@ -54,42 +57,49 @@ class GetConfig
         //config('runtime.ip')
         strpos($request->ip(), '198') != false ? config(['runtime.ip' => $request->ip()]) : config(['runtime.ip' => env('DEFAULT_IP')]);
 
+        //config('runtime.locale')
+        try {
+            if (auth()->check()) {
+                config(['runtime.locale' => auth()->user()->locale]);
+            } elseif (session('runtime.locale')) {
+                config(['runtime.locale' => session('runtime.locale')]);
+            } else {
+                $locale = null;
+                if ($requestLocale != '' && $requestRegion != '') {
+                    $locale = LocaleUtils::composeLocale($requestLocale, $requestRegion);
+                } elseif ($requestLocale == '') {
+                    $locale = env('DEFAULT_LOCALE');
+                } else {
+                    $country = $this->getCountryByIp(config('runtime.ip'));
+                    if (!$country || $country == '') {
+                        $locale = env('DEFAULT_LOCALE');
+                    } else {
+                        $locale = LocaleUtils::composeLocale($country, $requestLocale);
+                    }
+                }
+
+                if ($locale == null) {
+                    $locale = env('DEFAULT_LOCALE');
+                }
+                config(['runtime.locale' => $locale]);
+            }
+
+            if(!LocaleUtils::existLocale(config('runtime.locale'))){
+                config(['runtime.locale' => env('DEFAULT_LOCALE')]);
+            }
+
+        } catch(\Exception $e) {
+            config(['runtime.locale' => env('DEFAULT_LOCALE')]);
+        }
+        session(['runtime.locale' => config('runtime.locale')]);
+
         //config('runtime.currency')
         try {
             if(auth()->check()) {
                 config(['runtime.currency' => auth()->user()->currency]);
-            } elseif (session('runtime.currency')) {
-                config(['runtime.currency' => session('runtime.currency')]);
             } else {
-                $httpAccept = \Locale::acceptFromHttp($request->server('HTTP_ACCEPT_LANGUAGE'));
-                $requestLocale = \Locale::getPrimaryLanguage($request->server('HTTP_ACCEPT_LANGUAGE'));
-                $requestRegion = \Locale::getRegion($httpAccept);
-
-                if($requestLocale != '' && $requestRegion != '') {
-                    $formatter = new \NumberFormatter($httpAccept, \NumberFormatter::CURRENCY);
-                    config(['runtime.currency' => $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
-                } elseif ($requestLocale == '') {
-                    $formatter = new \NumberFormatter(env('DEFAULT_LOCALE'), \NumberFormatter::CURRENCY);
-                    config(['runtime.currency' =>  $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
-                } else {
-                    $country = $this->getCountryByIp(config('runtime.ip'));
-                    if(!$country || $country == ''){
-                        $formatter = new \NumberFormatter(env('DEFAULT_LOCALE'), \NumberFormatter::CURRENCY);
-                        config(['runtime.currency' =>  $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
-                    } else {
-                        $compose = \Locale::composeLocale( [
-                            'language' => $requestLocale,
-                            'region' => $country
-                        ] );
-                        if($compose != '') {
-                            $formatter = new \NumberFormatter($compose, \NumberFormatter::CURRENCY);
-                            config(['runtime.currency' =>  $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
-                        } else {
-                            $formatter = new \NumberFormatter(env('DEFAULT_LOCALE'), \NumberFormatter::CURRENCY);
-                            config(['runtime.currency' =>  $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
-                        }
-                    }
-                }
+                $formatter = new \NumberFormatter(config('runtime.locale'), \NumberFormatter::CURRENCY);
+                config(['runtime.currency' => $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
             }
 
             if(!MoneyUtils::isAvailableCurrency(config('runtime.currency'))) {
@@ -98,8 +108,6 @@ class GetConfig
         } catch (\Exception $e) {
             config(['runtime.currency' => env('DEFAULT_CURRENCY')]);
         }
-        session(['runtime.currency' => config('runtime.currency')]);
-
         return $next($request);
 
     }

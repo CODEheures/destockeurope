@@ -375,27 +375,22 @@
                 event.preventDefault();
                 this.isLoaded = false;
                 let counter = 0;
-                console.log('if');
                 if(this.updateInProgress == 0){
-                    console.log('go1');
                     if(parseFloat(this.advertCost)>0) {
                         window.location.href=this.routeNextUrlWithPayment+'/'+this.advertId;
                     } else {
                         window.location.href=this.routeNextUrlWithoutPayment+'/'+this.advertId;
                     }
                 } else {
-                    console.log('else');
                     let that = this;
                     let interval = setInterval(function () {
                         if(that.updateInProgress == 0){
-                            console.log('go2');
                             if(parseFloat(that.advertCost)>0) {
                                 window.location.href=that.routeNextUrlWithPayment+'/'+that.advertId;
                             } else {
                                 window.location.href=that.routeNextUrlWithoutPayment+'/'+that.advertId;
                             }
                         } else {
-                            console.log(counter);
                             counter++;
                             if (counter == 20) {
                                 clearInterval(interval);

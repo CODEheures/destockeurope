@@ -3,40 +3,42 @@
         <span class="ui blue ribbon label">{{ filterRibbon }}</span>
         <div class="ui middle aligned grid">
             <div class="sixteen wide mobile two wide tablet two wide computer centered right aligned column">
-                <div :id="'isUrgent'+_uid" class="ui checkbox">
+                <div :id="'isUrgent'+_uid" class="ui checkbox filter">
                     <input type="checkbox" name="isUrgent">
                     <label> <span class="ui red horizontal label">{{ urgentLabel }}</span></label>
                 </div>
             </div>
             <div class="sixteen wide mobile twelve wide tablet twelve wide computer center aligned column price">
-                <label class="price-label">{{ filterPriceTitle }}</label>
                 <range-filter
                         :mini="dataMinPrice"
                         :maxi="dataMaxPrice"
                         :handle-min="dataHandleMin"
                         :handle-max="dataHandleMax"
                         :update="dataUpdate"
-                        name="price">
-                </range-filter>
+                        name="price"
+                        :prefix="filterPricePrefix"
+                ></range-filter>
             </div>
         </div>
         <div class="ui grid">
-            <div class="doubling eight wide column">
-                <search-filter
-                    :route-search="routeSearch"
-                    :min-length-search="minLengthSearch"
-                    :place-holder="searchPlaceHolder"
-                    :results-for="dataResultsFor"
-                    :update="dataUpdate"
-                    :flag-reset="flagResetSearch">
-                </search-filter>
-            </div>
-            <div class="doubling eight wide column">
-                <location-filter
-                        :accurate-list="locationAccurateList"
-                        :update="dataUpdate"
-                        :place-holder="locationPlaceHolder"
-                ></location-filter>
+            <div class="doubling two column row">
+                <div class="column">
+                    <search-filter
+                            :route-search="routeSearch"
+                            :min-length-search="minLengthSearch"
+                            :place-holder="searchPlaceHolder"
+                            :results-for="dataResultsFor"
+                            :update="dataUpdate"
+                            :flag-reset="flagResetSearch">
+                    </search-filter>
+                </div>
+                <div class="column">
+                    <location-filter
+                            :accurate-list="locationAccurateList"
+                            :update="dataUpdate"
+                            :place-holder="locationPlaceHolder"
+                    ></location-filter>
+                </div>
             </div>
         </div>
     </div>
@@ -62,7 +64,7 @@
                 type: String
             },
             //range component
-            filterPriceTitle: {
+            filterPricePrefix: {
                 type: String
             },
             //search component
