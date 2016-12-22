@@ -132,6 +132,8 @@ class AdvertController extends Controller
         if(!$isSearchRequest) {
             $minAllPrice = $adverts->min('price');
             $maxAllPrice = $adverts->max('price');
+            $minAllQuantity = $adverts->min('totalQuantity');
+            $maxAllQuantity = $adverts->max('totalQuantity');
 
             if ($minAllPrice) {
                 $minAllPrice = MoneyUtils::getPriceWithDecimal($minAllPrice, $currency, false);
@@ -144,11 +146,25 @@ class AdvertController extends Controller
             } else {
                 $maxAllPrice = 0;
             }
+
+            if(!$minAllQuantity){
+                $minAllQuantity = 0;
+            }
+
+            if(!$maxAllQuantity){
+                $maxAllQuantity = 0;
+            }
         }
 
         //STOP REQUEST HERE IF only RANGE PRICES
         if($isRangePricesOnly){
-            return response()->json(['minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice, 'currencySymbol' => $currencySymbol]);
+            return response()->json([
+                'minPrice'=> $minAllPrice,
+                'maxPrice' => $maxAllPrice,
+                'currencySymbol' => $currencySymbol,
+                'minQuantity'=> $minAllQuantity,
+                'maxQuantity' => $maxAllQuantity,
+            ]);
         }
 
         //if urgent
@@ -161,6 +177,13 @@ class AdvertController extends Controller
             $minPrice = MoneyUtils::setPriceWithoutDecimal($request->minPrice, $currency);
             $maxPrice = MoneyUtils::setPriceWithoutDecimal($request->maxPrice, $currency);
             $adverts = $adverts->where('price', '>=', $minPrice)->where('price', '<=', $maxPrice);
+        }
+
+        //if range quantity
+        if($request->has('minQuantity') && $request->has('maxQuantity') ){
+            $minQuantity = ($request->minQuantity);
+            $maxQuantity = ($request->maxQuantity);
+            $adverts = $adverts->where('totalQuantity', '>=', $minQuantity)->where('totalQuantity', '<=', $maxQuantity);
         }
 
         //if location
@@ -308,14 +331,6 @@ class AdvertController extends Controller
                 $advert->options = $this->setOptions(count($results)/2, $advert->isUrgent);
 
                 $advert->cost = $this->getCost(count($results)/2, $advert->isUrgent);
-
-                $stats = Stats::latest()->first();
-                if($advert->cost > 0){
-                    $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
-                    $stats->totalCosts = $stats->totalCosts + $advert->cost;
-                } else {
-                    $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
-                }
 
 
                 DB::beginTransaction();
@@ -524,9 +539,18 @@ class AdvertController extends Controller
                                     $invoice->captureId = $getCapture->getId();
                                     $advert->isValid=(boolean)$value;
 
+                                    $stats = Stats::latest()->first();
+                                    if($advert->cost > 0){
+                                        $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
+                                        $stats->totalCosts = $stats->totalCosts + $advert->cost;
+                                    } else {
+                                        $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+                                    }
+
                                     DB::beginTransaction();
                                     $invoice->save();
                                     $advert->save();
+                                    $stats->save();
                                     DB::commit();
                                 } else {
                                     //VOID PAYMENT
@@ -544,7 +568,21 @@ class AdvertController extends Controller
                             }
                         } else {
                             $advert->isValid=(boolean)$value;
-                            $advert->save();
+                            if((boolean)$value){
+                                $stats = Stats::latest()->first();
+                                if($advert->cost > 0){
+                                    $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
+                                    $stats->totalCosts = $stats->totalCosts + $advert->cost;
+                                } else {
+                                    $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+                                }
+                                DB::beginTransaction();
+                                $advert->save();
+                                $stats->save();
+                                DB::commit();
+                            } else {
+                                $advert->save();
+                            }
                         }
 
                         $recipient = $advert->user;

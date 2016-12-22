@@ -5,10 +5,10 @@
                 <div class="ui grid">
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
                         <div class="ui image">
+                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                             <div class="ui right blue corner label">
                                 <i class="icon">{{ advert.pictures.length/2 }}</i>
                             </div>
-                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                         </div>
                     </div>
                     <div class="twelve wide tablet only twelve wide computer only column">
@@ -91,6 +91,7 @@
                 <div class="ui grid">
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
                         <div class="ui image">
+                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                             <div class="ui right blue corner label">
                                 <template v-if="!advert.deleted_at">
                                     <i class="icon">{{ advert.pictures.length/2 }}</i>
@@ -99,7 +100,6 @@
                                     <i class="icon">{{ advert.picturesWithTrashedCount/2 }}</i>
                                 </template>
                             </div>
-                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
                         </div>
                     </div>
                     <div class="twelve wide tablet only twelve wide computer only column">

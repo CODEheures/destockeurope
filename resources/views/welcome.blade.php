@@ -18,6 +18,8 @@
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
                 filter-search-place-holder="{{ trans('strings.form_input_search_label2') }}"
                 filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
+                filter-price-title="{{ trans('strings.view_filter_price_title') }}"
+                filter-quantity-title="{{ trans('strings.form_quantity_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-bookmark-add="{{ route('bookmark.add') }}"
@@ -61,6 +63,8 @@
                 filter-urgent-label="{{ trans('strings.view_all_urgent') }}"
                 filter-search-place-holder="{{ trans('strings.form_input_search_label2') }}"
                 filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
+                filter-price-title="{{ trans('strings.view_filter_price_title') }}"
+                filter-quantity-title="{{ trans('strings.form_quantity_label') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-bookmark-add="{{ route('bookmark.add') }}"

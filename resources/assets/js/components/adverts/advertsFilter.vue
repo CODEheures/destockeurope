@@ -1,43 +1,66 @@
 <template>
     <div class="ui blue colored segment">
-        <span class="ui blue ribbon label">{{ filterRibbon }}</span>
-        <div class="ui middle aligned grid">
-            <div class="sixteen wide mobile two wide tablet two wide computer centered right aligned column">
-                <div :id="'isUrgent'+_uid" class="ui checkbox filter">
-                    <input type="checkbox" name="isUrgent">
-                    <label> <span class="ui red horizontal label">{{ urgentLabel }}</span></label>
-                </div>
+        <div :id="'filter-accordion-'+_uid" class="ui fluid accordion">
+            <div class="active title">
+                <span class="ui blue ribbon label"><i class="dropdown icon"></i>{{ filterRibbon }}</span>
             </div>
-            <div class="sixteen wide mobile twelve wide tablet twelve wide computer center aligned column price">
-                <range-filter
-                        :mini="dataMinPrice"
-                        :maxi="dataMaxPrice"
-                        :handle-min="dataHandleMin"
-                        :handle-max="dataHandleMax"
-                        :update="dataUpdate"
-                        name="price"
-                        :prefix="filterPricePrefix"
-                ></range-filter>
-            </div>
-        </div>
-        <div class="ui grid">
-            <div class="doubling two column row">
-                <div class="column">
-                    <search-filter
-                            :route-search="routeSearch"
-                            :min-length-search="minLengthSearch"
-                            :place-holder="searchPlaceHolder"
-                            :results-for="dataResultsFor"
-                            :update="dataUpdate"
-                            :flag-reset="flagResetSearch">
-                    </search-filter>
+            <div class="active content">
+                <div class="ui middle aligned grid">
+                    <div class="sixteen wide mobile height wide computer center aligned column price">
+                        <range-filter
+                                :mini="dataMinPrice"
+                                :maxi="dataMaxPrice"
+                                :handle-min="dataHandleMinPrice"
+                                :handle-max="dataHandleMaxPrice"
+                                :update="dataUpdate"
+                                name="price"
+                                :prefix="filterPricePrefix"
+                                :title="filterPriceTitle"
+                        ></range-filter>
+                    </div>
+                    <div class="sixteen wide mobile height wide computer center aligned column price">
+                        <range-filter
+                                :mini="dataMinQuantity"
+                                :maxi="dataMaxQuantity"
+                                :handle-min="dataHandleMinQuantity"
+                                :handle-max="dataHandleMaxQuantity"
+                                :update="dataUpdate"
+                                name="quantity"
+                                prefix=""
+                                :title="filterQuantityTitle"
+                        ></range-filter>
+                    </div>
                 </div>
-                <div class="column">
-                    <location-filter
-                            :accurate-list="locationAccurateList"
-                            :update="dataUpdate"
-                            :place-holder="locationPlaceHolder"
-                    ></location-filter>
+                <div class="ui grid">
+                    <div class="doubling two column row">
+                        <div class="column">
+                            <search-filter
+                                    :route-search="routeSearch"
+                                    :min-length-search="minLengthSearch"
+                                    :place-holder="searchPlaceHolder"
+                                    :results-for="dataResultsFor"
+                                    :update="dataUpdate"
+                                    :flag-reset="flagResetSearch">
+                            </search-filter>
+                        </div>
+                        <div class="column">
+                            <div class="ui grid">
+                                <div class="ten wide column">
+                                    <location-filter
+                                            :accurate-list="locationAccurateList"
+                                            :update="dataUpdate"
+                                            :place-holder="locationPlaceHolder"
+                                    ></location-filter>
+                                </div>
+                                <div class="six wide center aligned middle aligned column">
+                                    <div :id="'isUrgent'+_uid" class="ui checkbox filter">
+                                        <input type="checkbox" name="isUrgent">
+                                        <label> <span class="ui red horizontal label">{{ urgentLabel }}</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,6 +90,12 @@
             filterPricePrefix: {
                 type: String
             },
+            filterPriceTitle: {
+                type: String
+            },
+            filterQuantityTitle: {
+                type: String
+            },
             //search component
             routeSearch: {
                 type: String
@@ -93,8 +122,12 @@
                 isUrgent: false,
                 dataMinPrice: 0,
                 dataMaxPrice: 0,
-                dataHandleMin: 0,
-                dataHandleMax: 0,
+                dataHandleMinPrice: 0,
+                dataHandleMaxPrice: 0,
+                dataMinQuantity: 0,
+                dataMaxQuantity: 0,
+                dataHandleMinQuantity: 0,
+                dataHandleMaxQuantity: 0,
                 dataResultsFor: '',
                 dataUpdate: false
             };
@@ -109,6 +142,9 @@
             this.$on('rangeUpdate', function (event) {
                 if(event.name == 'price'){
                     this.$parent.$emit('updateFilter', {'minPrice' : event.values[0], 'maxPrice': event.values[1]});
+                }
+                if(event.name == 'quantity'){
+                    this.$parent.$emit('updateFilter', {'minQuantity' : event.values[0], 'maxQuantity': event.values[1]});
                 }
             });
             this.$watch('isUrgent', function () {
@@ -132,6 +168,10 @@
                 onChecked: function() {that.isUrgent = true;},
                 onUnchecked: function() {that.isUrgent = false;}
             });
+            $('#filter-accordion-'+this._uid).accordion();
+        },
+        updated () {
+            //$('filter-accordion-'+this._uid).accordion();
         },
         methods: {
             setIsUrgent: function () {
@@ -147,8 +187,12 @@
             setRangeFilter: function () {
                 this.dataMinPrice = this.filter.minRangePrice;
                 this.dataMaxPrice = this.filter.maxRangePrice;
-                this.dataHandleMin = this.filter.minPrice;
-                this.dataHandleMax = this.filter.maxPrice;
+                this.dataHandleMinPrice = this.filter.minPrice;
+                this.dataHandleMaxPrice = this.filter.maxPrice;
+                this.dataMinQuantity = this.filter.minRangeQuantity;
+                this.dataMaxQuantity = this.filter.maxRangeQuantity;
+                this.dataHandleMinQuantity = this.filter.minQuantity;
+                this.dataHandleMaxQuantity = this.filter.maxQuantity;
             },
             setSearchFilter: function () {
                 this.dataResultsFor = this.filter.resultsFor;

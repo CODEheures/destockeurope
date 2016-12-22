@@ -39,6 +39,8 @@
                         :update="update"
                         :filter="filter"
                         :filter-price-prefix="dataFilterPricePrefix"
+                        :filter-price-title="filterPriceTitle"
+                        :filter-quantity-title="filterQuantityTitle"
                         :route-search="dataRouteGetAdvertList"
                         :min-length-search="parseInt(filterMinLengthSearch)"
                         :location-accurate-list="dataFilterLocationAccurateList"
@@ -104,6 +106,8 @@
             'filterUrgentLabel',
             'filterSearchPlaceHolder',
             'filterLocationPlaceHolder',
+            'filterPriceTitle',
+            'filterQuantityTitle',
             //advertByList component
             'routeGetAdvertsList',
             'routeBookmarkAdd',
@@ -134,6 +138,8 @@
                 dataFilterPricePrefix: '',
                 oldMinRangePrice: -1,
                 oldMaxRangePrice: -1,
+                oldMinRangeQuantity: -1,
+                oldMaxRangeQuantity: -1,
                 filter: {categoryId: 0},
                 paginate: {},
                 dataRouteGetAdvertList: '',
@@ -143,6 +149,9 @@
             }
         },
         mounted () {
+            if(this.clearStorage){
+                sessionStorage.clear();
+            }
             this.dataFilterLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
             //Visibility for ADS
             $('#column1_'+this._uid).children('div').visibility({
@@ -208,6 +217,8 @@
                 if(haveClearAction){
                     this.filter.minPrice=0;
                     this.filter.maxPrice=0;
+                    this.filter.minQuantity=0;
+                    this.filter.maxQuantity=0;
                     this.updateResults(true);
                 }
             });
@@ -224,9 +235,6 @@
             this.$on('unbookmarkSuccess', function () {
                 this.sendToast(this.unbookmarkSuccess, 'success');
             });
-            if(this.clearStorage){
-                sessionStorage.clear();
-            }
         },
         methods: {
             sendToast: function(message,type) {
@@ -269,7 +277,7 @@
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
 
                 for(let elem in this.filter){
-                    if(elem != 'minRangePrice' && elem != 'maxRangePrice'){
+                    if(elem != 'minRangePrice' && elem != 'maxRangePrice' && elem != 'maxRangeQuantity' && elem != 'maxRangeQuantity'){
                         parsed.query[elem]=(this.filter[elem]).toString();
                     }
                 }
@@ -280,6 +288,12 @@
                     }
                     if("maxPrice" in parsed.query){
                         delete parsed.query.maxPrice;
+                    }
+                    if("minQuantity" in parsed.query){
+                        delete parsed.query.minQuantity;
+                    }
+                    if("maxQuantity" in parsed.query){
+                        delete parsed.query.maxQuantity;
                     }
                 } else {
                     if("priceOnly" in parsed.query){
@@ -295,6 +309,8 @@
                         function (response) {
                             that.filter.minRangePrice = parseFloat((response.data).minPrice);
                             that.filter.maxRangePrice = parseFloat((response.data).maxPrice);
+                            that.filter.minRangeQuantity = parseInt((response.data).minQuantity);
+                            that.filter.maxRangeQuantity = parseInt((response.data).maxQuantity);
                             that.dataFilterPricePrefix = (response.data).currencySymbol;
                             callBack();
                         },
@@ -325,6 +341,8 @@
                 this.filter.categoryId = parseInt(categoryId);
                 this.filter.minPrice = 0;
                 this.filter.maxPrice = 0;
+                this.filter.minQuantity = 0;
+                this.filter.maxQuantity = 0;
                 this.clearInputSearch();
                 this.updateResults();
             },
@@ -345,6 +363,19 @@
                         that.filter.maxPrice = that.filter.maxRangePrice;
                         that.oldMinRangePrice = that.filter.minRangePrice;
                         that.oldMaxRangePrice = that.filter.maxRangePrice;
+                    }
+                    //Idem filtre quantity
+                    if(that.filter.minRangeQuantity != that.oldMinRangeQuantity || that.filter.maxRangeQuantity != that.oldMaxRangeQuantity || that.filter.minQuantity == undefined || that.filter.minQuantity < that.filter.minRangeQuantity || that.filter.minQuantity > that.filter.maxRangeQuantity) {
+                        that.filter.minQuantity = that.filter.minRangeQuantity;
+                        that.filter.maxQuantity = that.filter.maxRangeQuantity;
+                        that.oldMinRangeQuantity = that.filter.minRangeQuantity;
+                        that.oldMaxRangeQuantity = that.filter.maxRangeQuantity;
+                    }
+                    if(that.filter.minRangeQuantity != that.oldMinRangeQuantity || that.filter.maxRangeQuantity != that.oldMaxRangeQuantity || that.filter.maxQuantity == undefined || that.filter.maxQuantity > that.filter.maxRangeQuantity || that.filter.maxQuantity <= that.filter.minQuantity) {
+                        that.filter.minQuantity = that.filter.minRangeQuantity;
+                        that.filter.maxQuantity = that.filter.maxRangeQuantity;
+                        that.oldMinRangeQuantity = that.filter.minRangeQuantity;
+                        that.oldMaxRangeQuantity = that.filter.maxRangeQuantity;
                     }
                     that.update = !that.update;
                     that.dataRouteGetAdvertList = that.urlForFilter(false,true);

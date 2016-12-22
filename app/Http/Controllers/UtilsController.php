@@ -178,7 +178,7 @@ class UtilsController extends Controller
         $stat1->totalNewViews = 328;
         $stat1->totalNewFreeAdverts = 56;
         $stat1->totalNewCostAdverts = 14;
-        $stat1->totalCosts = 428;
+        $stat1->totalCosts = 42800;
         $stat1->save();
 
 
@@ -246,7 +246,7 @@ class UtilsController extends Controller
         $stat3->totalNewViews = 404;
         $stat3->totalNewFreeAdverts = 56;
         $stat3->totalNewCostAdverts = 14;
-        $stat3->totalCosts = 428;
+        $stat3->totalCosts = 42800;
         $stat3->save();
 
 
@@ -282,7 +282,7 @@ class UtilsController extends Controller
         $stat4->totalNewViews = 528;
         $stat4->totalNewFreeAdverts = 87;
         $stat4->totalNewCostAdverts = 25;
-        $stat4->totalCosts = 621;
+        $stat4->totalCosts = 62100;
         $stat4->save();
         return redirect(route('home'));
     }

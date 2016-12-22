@@ -201,6 +201,15 @@ form {
   margin-right: 0.5em;
 }
 
+.ui.list .item.advert .ui.image {
+  & img {
+    z-index: 0;
+  }
+  & .ui.corner.label {
+    z-index: 0;
+  }
+}
+
 .ui.dropdown .menu .item .right.dropdown.icon {
   float: right;
 }
@@ -295,6 +304,20 @@ form {
   & div.ui.search input.prompt.disabled {
     opacity: 0.45;
     pointer-events: none;
+  }
+
+  & div.range {
+    position: relative;
+    & span.range-title {
+      display: block;
+      position: absolute;
+      width: 100%;
+      top: 21px;
+      z-index: 1;
+      color: white;
+      font-size: 0.73rem;
+    }
+
   }
 }
 

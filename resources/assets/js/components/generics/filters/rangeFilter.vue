@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="range">
+        <span class="range-title">{{ title }}</span>
         <input type="text" :id="_uid" name="example_name" value="" />
     </div>
 </template>
@@ -16,7 +17,8 @@
             update: Boolean,
             //Vue Strings
             name: String,
-            prefix: String
+            prefix: String,
+            title: String
         },
         data: () => {
             return {
