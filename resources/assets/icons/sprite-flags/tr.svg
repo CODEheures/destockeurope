@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="89.89px" height="59.973px" viewBox="0 0 89.89 59.973" style="enable-background:new 0 0 89.89 59.973;"
+	 xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#1A171B;}
+	.st2{fill:#E2001A;}
+	.st3{opacity:0.7;fill:url(#SVGID_1_);mix-blend-mode: multiply}
+</style>
+<polygon class="st2" points="0.132,0.111 0.132,29.986 0.132,29.998 0.132,59.873 89.79,59.873 89.79,29.998 89.79,29.986 
+	89.79,0.111 "/>
+<polygon class="st0" points="45.277,23.42 48.448,27.594 53.439,25.941 50.462,30.244 53.562,34.484 48.564,32.98 45.476,37.242 
+	45.378,32.019 40.355,30.404 45.304,28.693 "/>
+<path class="st0" d="M32.835,41.297c-6.336,0-11.475-5.064-11.475-11.311s5.139-11.31,11.475-11.31c3.195,0,6.084,1.291,8.164,3.367
+	c-2.58-3.899-7.002-6.473-12.025-6.473c-7.963,0-14.418,6.453-14.418,14.416c0,7.961,6.455,14.416,14.418,14.416
+	c5.023,0,9.445-2.574,12.025-6.475C38.919,40.006,36.03,41.297,32.835,41.297z"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-3.3081" y1="52.5092" x2="93.2304" y2="7.4926">
+	<stop  offset="0" style="stop-color:#707173"/>
+	<stop  offset="0.0289" style="stop-color:#9A9B9C"/>
+	<stop  offset="0.0577" style="stop-color:#BCBDBE"/>
+	<stop  offset="0.0814" style="stop-color:#D1D2D3"/>
+	<stop  offset="0.097" style="stop-color:#D9DADB"/>
+	<stop  offset="0.1453" style="stop-color:#F1F1F2"/>
+	<stop  offset="0.1697" style="stop-color:#FFFFFF"/>
+	<stop  offset="0.1701" style="stop-color:#FFFFFF"/>
+	<stop  offset="0.239" style="stop-color:#BEBFC0"/>
+	<stop  offset="0.2892" style="stop-color:#969799"/>
+	<stop  offset="0.3152" style="stop-color:#87888A"/>
+	<stop  offset="0.3396" style="stop-color:#8B8C8E"/>
+	<stop  offset="0.3659" style="stop-color:#98989A"/>
+	<stop  offset="0.393" style="stop-color:#AEADAE"/>
+	<stop  offset="0.4206" style="stop-color:#CCC9CA"/>
+	<stop  offset="0.4303" style="stop-color:#D8D5D5"/>
+	<stop  offset="0.4727" style="stop-color:#FFFFFF"/>
+	<stop  offset="0.4857" style="stop-color:#F4F4F4"/>
+	<stop  offset="0.528" style="stop-color:#D6D5D5"/>
+	<stop  offset="0.5515" style="stop-color:#CAC9C9"/>
+	<stop  offset="0.6182" style="stop-color:#9C9E9F"/>
+	<stop  offset="0.6484" style="stop-color:#9FA1A2"/>
+	<stop  offset="0.6735" style="stop-color:#AAACAD"/>
+	<stop  offset="0.6848" style="stop-color:#B1B3B4"/>
+	<stop  offset="0.7636" style="stop-color:#FFFFFF"/>
+	<stop  offset="0.8689" style="stop-color:#AEAEAF"/>
+	<stop  offset="0.9579" style="stop-color:#707072"/>
+	<stop  offset="1" style="stop-color:#58585A"/>
+</linearGradient>
+<polygon class="st3" points="59.904,0.115 30.019,0.115 0.132,0.115 0.132,59.887 30.019,59.887 59.904,59.887 89.79,59.887 
+	89.79,0.115 "/>
+</svg>

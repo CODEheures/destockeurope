@@ -322,7 +322,7 @@
             });
             this.$on('categoryChoice', function (category) {
                 sessionStorage.setItem('goToCategory', category.id);
-                window.location.href = this.routeHome;
+                window.location.assign(this.routeHome);
             });
             let that = this;
             let messageForm = $('#form-'+this._uid);
@@ -547,7 +547,7 @@
                         that.$http.delete(that.routeDeleteAdvert)
                             .then(
                                 function (response) {
-                                    window.location.href = response.body;
+                                    window.location.assign(response.body);
                                 },
                                 function (response) {
                                     if (response.status == 409) {

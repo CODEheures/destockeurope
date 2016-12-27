@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel
             }
             Storage::disk('logs')->append('schedule.log' , $message);
 
-        })->everyThirtyMinutes();//->dailyAt('02:00');
+        })->dailyAt('11:57');
     }
 
     /**

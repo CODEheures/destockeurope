@@ -59,7 +59,7 @@ class AdvertController extends Controller
      * @param PicturesManager $picturesManager
      */
     public function __construct(PicturesManager $picturesManager) {
-        $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
         $this->pictureManager  = $picturesManager;
@@ -335,7 +335,6 @@ class AdvertController extends Controller
 
                 DB::beginTransaction();
                 $advert->save();
-                $stats->save();
                 foreach ($results as $result){
                     $picture = new Picture();
                     $picture->hashName = $result['hashName'];
@@ -682,13 +681,7 @@ class AdvertController extends Controller
             $sender->save();
         } else {
             //create anonymous user
-            $anonymous = Anonymous::create([
-                'email' => $request->email,
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'compagnyName' => $request->compagnyName
-            ]);
-            $anonymous->save();
+            $this->createAnonymous($request->email, $request->name, $request->phone, $request->compagnyName);
         }
         //Test compagnyName mini car pas de test dans message car pas required
         $advert = Advert::find($request->id);

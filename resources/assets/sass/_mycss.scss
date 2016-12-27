@@ -1,11 +1,63 @@
 $width-masterads : 1400px;
 $height-masterads : 600px;
-$color-blue: #4183C4;
+$color-blue: #32368c;
+
+body.yellowbg {
+  background: rgba(255,238,0,1);
+  background: radial-gradient(ellipse at center, rgba(255,238,0,1) 0%, rgba(245,216,0,1) 33%, rgba(220,161,0,1) 100%) !important;
+}
+
+body.yellowbg.pushable > .pusher {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+body.yellowbg.pushable {
+  height: auto !important;
+}
+
+.rubalise {
+  width: 100%;
+  //height: 19px;
+  height: 7px;
+  background-size: contain;
+  background-image: url("/images/rubalise.svg");
+}
+
+.portal {
+  //margin-top: 20px;
+  & div.ui.vertical.segment.header {
+    border-bottom: none;
+    & .rubalise {
+      //bottom: 54px;
+      bottom: 36px;
+      position: absolute;
+    }
+    & .ui.container .item {
+      & img, h1 {
+        display: inline-block;
+      }
+      & h1 {
+        line-height: 18px;
+      }
+      & h1 span {
+        //font-size: 1.5rem;
+        font-family: 'MotionControl-Bold', sans-serif;
+        font-size: 12px;
+        color: #776B6C
+      }
+    }
+  }
+}
+
+div.ui.vertical.segment.separator {
+  border-bottom: none;
+}
 
 .main.container {
   margin-top: 1rem;
   margin-bottom: 4rem;
-  background-color: white;
+  //background-color: white;
 
   & div.item.advert {
     & .ui.image > .corner i {
@@ -90,7 +142,7 @@ $color-blue: #4183C4;
     font-size: 10px;
     line-height: 10px;
     text-align: left;
-    color: rgba(0,103,161,1);
+    color: $color-blue;
     z-index: -1;
   }
 }
@@ -130,8 +182,10 @@ div.breadcrumb.type-steps {
   }
 }
 
-.ui .segment .footer {
+.ui.container.footer {
   padding: 4em 0 4em 0;
+  margin-bottom: 0;
+  background: white;
 }
 
 form {
@@ -189,7 +243,12 @@ form {
 }
 
 .spaced-top-2 {
-  margin-top: 2rem;
+  margin-top: 2rem !important;
+}
+
+.ui.header.categories-list {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .content.row .ui.small.rectangle.welcome-ads{
@@ -253,6 +312,16 @@ form {
 .appear-right-leave-active {
   animation: appear-right-out .5s !important;
 }
+
+.ui.segment.newsletter .ui.top.yellow.label {
+  font-family: 'MotionControl-Bold', sans-serif;
+  transform: translate(11px,-16px);
+  opacity: 0.8;
+  color: #32368c !important;
+  font-size: 29px;
+  padding: 0.55em;
+}
+
 @keyframes appear-right-in {
   0% {
     position: fixed;
@@ -376,8 +445,8 @@ img.lightbox {
 @media only screen and (min-width: $width-masterads){
   .main.container {
     & .content.row {
-      border-top: 1rem solid #2185d0;
-      box-shadow: 0.1rem 0.05rem 2rem 0.1rem rgba(0,0,0,0.3);
+      //border-top: 1rem solid $color-blue;
+      //box-shadow: 0.1rem 0.05rem 2rem 0.1rem rgba(0,0,0,0.3);
       padding: 2rem;
     }
   }
@@ -386,7 +455,55 @@ img.lightbox {
   }
 }
 
+@media only screen and (min-width: 768px) {
+  .portal {
+    & div.ui.vertical.segment.header {
+      & .rubalise {
+        height: 27px;
+        bottom: 46px;
+      }
+      & .ui.container .item {
+        & h1 span {
+          font-size: 19px;
+        }
+      }
+    }
+  }
+  div.ui.vertical.segment.separator {
+    & .rubalise {
+      height: 27px;
+    }
+  }
+}
+
 @media only screen and (min-width: 990px){
+  .masthead.segment {
+    & .ui.container .links {
+      display: flex;
+    }
+  }
+
+  .ui.top.fixed.menu{
+    & .links {
+      display: flex;
+    }
+  }
+  .portal {
+    margin-top: 20px;
+    & div.ui.vertical.segment.header {
+      & .rubalise {
+        bottom: 54px;
+      }
+      & .ui.container .item {
+        & h1 span {
+          font-size: 23px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 1200px){
   .masthead.segment {
     & .ui.container .links {
       display: flex;
@@ -424,5 +541,17 @@ img.lightbox {
   .secondary.pointing.menu .item,
   .secondary.pointing.menu .menu {
     display: none;
+  }
+
+  .portal {
+    //margin-top: 20px;
+    & div.ui.vertical.segment.header {
+      & .ui.container .item {
+        & .keywords {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
   }
 }

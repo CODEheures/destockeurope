@@ -20,6 +20,7 @@ class CreateAnonymousesTable extends Migration
             $table->string('email')->unique();
             $table->string('compagnyName',config('db_limits.users.maxCompagnyName'))->nullable()->default(null);
             $table->string('phone',config('db_limits.users.maxPhone'))->nullable()->default(null);
+            $table->boolean('isNewsLetterSubscriber')->default(false);
         });
     }
 

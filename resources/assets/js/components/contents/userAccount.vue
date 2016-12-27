@@ -377,18 +377,18 @@
                 let counter = 0;
                 if(this.updateInProgress == 0){
                     if(parseFloat(this.advertCost)>0) {
-                        window.location.href=this.routeNextUrlWithPayment+'/'+this.advertId;
+                        window.location.assign(this.routeNextUrlWithPayment+'/'+this.advertId);
                     } else {
-                        window.location.href=this.routeNextUrlWithoutPayment+'/'+this.advertId;
+                        window.location.assign(this.routeNextUrlWithoutPayment+'/'+this.advertId);
                     }
                 } else {
                     let that = this;
                     let interval = setInterval(function () {
                         if(that.updateInProgress == 0){
                             if(parseFloat(that.advertCost)>0) {
-                                window.location.href=that.routeNextUrlWithPayment+'/'+that.advertId;
+                                window.location.assign(that.routeNextUrlWithPayment+'/'+that.advertId);
                             } else {
-                                window.location.href=that.routeNextUrlWithoutPayment+'/'+that.advertId;
+                                window.location.assign(that.routeNextUrlWithoutPayment+'/'+that.advertId);
                             }
                         } else {
                             counter++;

@@ -54,6 +54,8 @@ Vue.component('adverts-by-list', require('./components/adverts/byList/advertsByL
 Vue.component('adverts-by-list-item', require('./components/adverts/byList/item.vue'));
 Vue.component('advert-by-id', require('./components/adverts/byId/advertById.vue'));
 
+//Portal page vue
+Vue.component('portal', require('./components/contents/portal.vue'));
 //Welcome page vue
 Vue.component('welcome1', require('./components/contents/welcome1.vue'));
 Vue.component('welcome2', require('./components/contents/welcome2.vue'));

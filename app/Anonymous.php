@@ -11,5 +11,6 @@ class Anonymous extends Model
         'email',
         'compagnyName',
         'phone',
+        'isNewsLetterSubscriber'
     ];
 }

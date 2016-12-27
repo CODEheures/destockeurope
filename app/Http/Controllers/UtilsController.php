@@ -405,6 +405,6 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-        return MoneyUtils::getPriceWithDecimal(3914,'CRC');
+        return LocaleUtils::getListCountries();
     }
 }

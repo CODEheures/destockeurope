@@ -12,7 +12,9 @@
 */
 
 //Common
-Route::get('/', 'CommonController@home')->name('home');
+Route::get('/', 'CommonController@portal')->name('portal');
+Route::get('/home', 'CommonController@home')->name('home');
+Route::post('/subscribeNewsLetter', 'CommonController@subscribeNewsLetter')->name('subscribeNewsLetter');
 Route::get('/mines', ['as' => 'mines', 'uses' => 'CommonController@mines']);
 Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
 

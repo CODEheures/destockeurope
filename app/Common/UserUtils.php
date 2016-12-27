@@ -3,6 +3,8 @@
 namespace App\Common;
 
 
+use App\Anonymous;
+
 trait UserUtils
 {
     public static function haveCompleteAccount() {
@@ -20,5 +22,16 @@ trait UserUtils
             }
         }
         return false;
+    }
+
+    public static function createAnonymous($email, $name=null, $phone=null, $compagnyName=null, $isNewsLetterSubscriber=false) {
+        $anonymous = Anonymous::create([
+            'email' => $email,
+            'name' => $name,
+            'phone' => $phone,
+            'compagnyName' => $compagnyName,
+            'isNewsLetterSubscriber' => $isNewsLetterSubscriber
+        ]);
+        $anonymous->save();
     }
 }

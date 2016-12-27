@@ -590,16 +590,16 @@ a.ui.basic.orange.label:hover {
 
 .ui.yellow.labels .label,
 .ui.yellow.label {
-  background-color: #FBBD08 !important;
-  border-color: #FBBD08 !important;
+  background-color: #EEC800 !important;
+  border-color: #EEC800 !important;
   color: #FFFFFF !important;
 }
 
 /* Link */
 .ui.yellow.labels .label:hover,
 a.ui.yellow.label:hover {
-  background-color: #eaae00 !important;
-  border-color: #eaae00 !important;
+  background-color: #d5b300 !important;
+  border-color: #d5b300 !important;
   color: #FFFFFF !important;
 }
 
@@ -611,20 +611,20 @@ a.ui.yellow.label:hover {
 
 /* Ribbon */
 .ui.yellow.ribbon.label {
-  border-color: #cd9903 !important;
+  border-color: #bb9d00 !important;
 }
 
 /* Basic */
 .ui.basic.yellow.label {
   background-color: #FFFFFF !important;
-  color: #FBBD08 !important;
-  border-color: #FBBD08 !important;
+  color: #EEC800 !important;
+  border-color: #EEC800 !important;
 }
 .ui.basic.yellow.labels a.label:hover,
 a.ui.basic.yellow.label:hover {
   background-color: #FFFFFF !important;
-  color: #eaae00 !important;
-  border-color: #eaae00 !important;
+  color: #d5b300 !important;
+  border-color: #d5b300 !important;
 }
 
 /*--- Olive ---*/
@@ -754,16 +754,16 @@ a.ui.basic.teal.label:hover {
 
 .ui.blue.labels .label,
 .ui.blue.label {
-  background-color: #2185D0 !important;
-  border-color: #2185D0 !important;
+  background-color: #32368C !important;
+  border-color: #32368C !important;
   color: #FFFFFF !important;
 }
 
 /* Link */
 .ui.blue.labels .label:hover,
 a.ui.blue.label:hover {
-  background-color: #1678c2 !important;
-  border-color: #1678c2 !important;
+  background-color: #272b7d !important;
+  border-color: #272b7d !important;
   color: #FFFFFF !important;
 }
 
@@ -775,20 +775,20 @@ a.ui.blue.label:hover {
 
 /* Ribbon */
 .ui.blue.ribbon.label {
-  border-color: #1a69a4 !important;
+  border-color: #252866 !important;
 }
 
 /* Basic */
 .ui.basic.blue.label {
   background-color: #FFFFFF !important;
-  color: #2185D0 !important;
-  border-color: #2185D0 !important;
+  color: #32368C !important;
+  border-color: #32368C !important;
 }
 .ui.basic.blue.labels a.label:hover,
 a.ui.basic.blue.label:hover {
   background-color: #FFFFFF !important;
-  color: #1678c2 !important;
-  border-color: #1678c2 !important;
+  color: #272b7d !important;
+  border-color: #272b7d !important;
 }
 
 /*--- Violet ---*/

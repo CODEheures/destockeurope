@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="ui segment">
         <div class="ui celled list">
             <div class="ui grid" v-if="routeBookmarkAdd != ''">
                 <div class="sixteen wide right aligned column">

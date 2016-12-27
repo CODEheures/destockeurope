@@ -3,6 +3,8 @@
 namespace App\Common;
 
 
+use Illuminate\Support\Facades\Lang;
+
 trait LocaleUtils
 {
     public static function listLocales() {
@@ -41,7 +43,7 @@ trait LocaleUtils
 
     public static function getFirstLocaleByCountryCode($countryCode){
         foreach (self::listLocales() as $locale){
-            if(strpos($locale['code'], '_'.$countryCode)){
+            if(strpos($locale['code'], '_'. strtoupper($countryCode))){
                 return $locale['code'];
             }
         }
@@ -72,5 +74,15 @@ trait LocaleUtils
             $loc = explode(',', json_decode($details)->loc);
         }
         return $loc;
+    }
+
+    public static function getListCountries(){
+        $countries = [];
+        foreach (Lang::get('strings') as $key => $item){
+            if (strpos($key, 'country_') !== false && strpos($key, 'country') === 0) {
+                $countries[str_replace('country_','',$key)]=$item;
+            }
+        }
+        return $countries;
     }
 }
