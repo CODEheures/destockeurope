@@ -45,18 +45,18 @@ trait CreateUser {
         try {
             $user = User::findOrFail($id);
             if ($user->confirmed == true) {
-                return redirect('/')->with('info',trans('strings.auth_register_account_already_confirm'));
+                return redirect(route('home'))->with('info',trans('strings.auth_register_account_already_confirm'));
             } elseif ($token == $user->confirmationToken) {
                 $user->confirmed = true;
                 $user->confirmationToken = '';
                 $user->save();
                 auth()->login($user);
-                return redirect('/')->with('success', trans('strings.auth_register_account_confirm'));
+                return redirect(route('home'))->with('success', trans('strings.auth_register_account_confirm'));
             } else {
                 throw new ModelNotFoundException('');
             }
         } catch(ModelNotFoundException $e) {
-            return redirect('/')->with('error', trans('strings.auth_register_invalid_link'));
+            return redirect(route('home'))->with('error', trans('strings.auth_register_invalid_link'));
         }
     }
 

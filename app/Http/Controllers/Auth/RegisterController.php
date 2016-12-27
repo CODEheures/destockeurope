@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/home';
     private $request;
     /**
      * Create a new controller instance.
@@ -63,7 +63,7 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        return redirect('/')->with('success', trans('strings.auth_register_success'));
+        return redirect(route('home'))->with('success', trans('strings.auth_register_success'));
     }
 
     /**
