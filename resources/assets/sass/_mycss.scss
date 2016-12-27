@@ -4,7 +4,7 @@ $color-blue: #32368c;
 
 body.yellowbg {
   background: rgba(255,238,0,1);
-  background: radial-gradient(ellipse at center, rgba(255,238,0,1) 0%, rgba(245,216,0,1) 33%, rgba(220,161,0,1) 100%) !important;
+  background: radial-gradient(ellipse at center, rgba(255,238,0,0.2) 0%, rgba(245,216,0,0.2) 33%, rgba(220,161,0,1) 100%) !important;
 }
 
 body.yellowbg.pushable > .pusher {
@@ -110,11 +110,16 @@ div.ui.vertical.segment.separator {
 
 .masthead.segment {
   padding: 1em 0em;
+  border-bottom: none !important;
   & .ui.secondary.menu {
     position: relative;
   }
   & .ui.container .links {
     display: none;
+  }
+  & .rubalise {
+    position: absolute;
+    bottom: -14px;
   }
 }
 
@@ -184,8 +189,9 @@ div.breadcrumb.type-steps {
 
 .ui.container.footer {
   padding: 4em 0 4em 0;
+  margin-top: 3rem;
   margin-bottom: 0;
-  background: white;
+  //background: white;
 }
 
 form {
@@ -200,6 +206,15 @@ form {
 
 .row.social a.button {
   margin-bottom: 0.75rem;
+}
+
+.grid.flags div.column {
+  line-height: 0.72em;
+  & span {
+    font-size: 0.78em;
+    text-transform: capitalize;
+    color: rgba($color-blue, 0.49)
+  }
 }
 
 #category-accordion {
@@ -381,12 +396,19 @@ form {
       display: block;
       position: absolute;
       width: 100%;
-      top: 21px;
+      top: 8px;
       z-index: 1;
-      color: white;
+      color: $color-blue;
       font-size: 0.73rem;
     }
 
+  }
+}
+
+.irs-from, .irs-to, .irs-single {
+  background: $color-blue;
+  &:after {
+    border-top-color: $color-blue;
   }
 }
 
@@ -458,10 +480,6 @@ img.lightbox {
 @media only screen and (min-width: 768px) {
   .portal {
     & div.ui.vertical.segment.header {
-      & .rubalise {
-        height: 27px;
-        bottom: 46px;
-      }
       & .ui.container .item {
         & h1 span {
           font-size: 19px;
@@ -469,7 +487,7 @@ img.lightbox {
       }
     }
   }
-  div.ui.vertical.segment.separator {
+  div.ui.vertical.segment.header, div.ui.vertical.segment.separator, div.ui.masthead.segment {
     & .rubalise {
       height: 27px;
     }

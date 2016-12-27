@@ -310,11 +310,11 @@
             //BreadCrumbs
             this.setBreadCrumbItems();
             //Visibility for ADS
-            let $elem = $('#welcome-ads').children('div');
-            $elem.visibility({
-                type   : 'fixed',
-                offset : 112
-            });
+//            let $elem = $('#welcome-ads').children('div');
+//            $elem.visibility({
+//                type   : 'fixed',
+//                offset : 112
+//            });
 
             //On load Error
             this.$on('loadError', function () {

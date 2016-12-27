@@ -50,11 +50,11 @@
                 @yield('content')
             </div>
         </div>
-
+        <!-- footer -->
+        @include('layouts.footer.common')
     </div>
 
-    <!-- footer -->
-    @include('layouts.footer.common')
+
     <!-- Scripts -->
     <script src="{{ elixir("js/app.js", '') }}"></script>
     @yield('scripts')

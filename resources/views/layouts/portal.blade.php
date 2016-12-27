@@ -32,12 +32,12 @@
                     </div>
                     <div class="ten wide mobile twelve wide tablet twelve wide computer bottom aligned column keywords">
                         <h1>
-                            <span>Fins de série</span>
-                            <span>Arrivages</span>
-                            <span>Destockage</span>
-                            <span>Faillites</span>
-                            <span>Redressements</span>
-                            <span>Fins de stocks</span>
+                            <span>{{ trans('strings.view_portal_list_header_1') }}</span>
+                            <span>{{ trans('strings.view_portal_list_header_2') }}</span>
+                            <span>{{ trans('strings.view_portal_list_header_3') }}</span>
+                            <span>{{ trans('strings.view_portal_list_header_4') }}</span>
+                            <span>{{ trans('strings.view_portal_list_header_5') }}</span>
+                            <span>{{ trans('strings.view_portal_list_header_6') }}</span>
                         </h1>
                     </div>
                 </div>

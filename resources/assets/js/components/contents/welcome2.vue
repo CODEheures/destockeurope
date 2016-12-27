@@ -154,10 +154,10 @@
             }
             this.dataFilterLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
             //Visibility for ADS
-            $('#column1_'+this._uid).children('div').visibility({
-                type   : 'fixed',
-                offset : 112
-            });
+//            $('#column1_'+this._uid).children('div').visibility({
+//                type   : 'fixed',
+//                offset : 112
+//            });
 
 
             //On load Error

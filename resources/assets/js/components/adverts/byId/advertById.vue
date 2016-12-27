@@ -21,35 +21,38 @@
                         <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                     </p>
                 </div>
-                <div class="sixteen wide column">
-                    <table id="table-advert-infos" class="ui very basic celled table advert-infos">
-                        <tbody>
-                        <tr>
-                            <td class="collapsing">
-                                <i class="cubes icon"></i> {{ totalQuantityLabel }}
-                            </td>
-                            <td>{{ advert.totalQuantity }}</td>
-                        </tr>
-                        <tr>
-                            <td class="collapsing">
-                                <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
-                            </td>
-                            <td>{{ advert.lotMiniQuantity }}</td>
-                        </tr>
-                        <tr>
-                            <td class="collapsing">
-                                <i class="money icon"></i> {{ priceLabel }}
-                            </td>
-                            <td><span class="ui small blue tag label">{{ advert.price }}</span><br/></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="sixteen wide column item-description">
-                    <div class="description">
-                        <p>{{ advert.description }}</p>
+                <div class="ui segment">
+                    <div class="sixteen wide column">
+                        <table id="table-advert-infos" class="ui very basic celled table advert-infos">
+                            <tbody>
+                            <tr>
+                                <td class="collapsing">
+                                    <i class="cubes icon"></i> {{ totalQuantityLabel }}
+                                </td>
+                                <td>{{ advert.totalQuantity }}</td>
+                            </tr>
+                            <tr>
+                                <td class="collapsing">
+                                    <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
+                                </td>
+                                <td>{{ advert.lotMiniQuantity }}</td>
+                            </tr>
+                            <tr>
+                                <td class="collapsing">
+                                    <i class="money icon"></i> {{ priceLabel }}
+                                </td>
+                                <td><span class="ui small blue tag label">{{ advert.price }}</span><br/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="sixteen wide column item-description">
+                        <div class="description">
+                            <p>{{ advert.description }}</p>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

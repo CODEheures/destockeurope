@@ -1,4 +1,5 @@
 <div class="ui vertical masthead center aligned segment">
+    <div class="rubalise"></div>
     <div class="ui container">
         {{--<div class="ui panorama centered test ad" data-text="panorama"></div>--}}
         <div class="ui secondary  menu">
