@@ -60,5 +60,5 @@ elixir(mix => {
         //.copy('node_modules/swiper/dist/css/swiper.css',  'resources/assets/sass/_swiper.scss')
         .sass('app.scss')
         .webpack('app.js')
-        //.version(['css/app.css','js/app.js']);
+        .version(['css/app.css','js/app.js']);
 });
