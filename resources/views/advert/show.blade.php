@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @section('opengraph')
-    <meta property="og:site_name" content="{{ config('app.name') }}"/>
-    <meta property="og:title" content="{{ $advert->title }}"/>
-    <meta property="og:description" content="{{ $advert->resume }}"/>
+    <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
+    <meta property="og:site_name" content="{{ config('app.name') }}">
+    <meta property="og:title" content="{{ $advert->title }}">
+    <meta property="og:description" content="{{ $advert->resume }}">
     <meta property="og:image" content="{{ $advert->thumb }}">
     <meta property="og:url" content="{{ $advert->url }}">
-    <meta property="og:type" content="product.item"/>
+    <meta property="og:type" content="product.item">
 @endsection
 
 @section('content')
