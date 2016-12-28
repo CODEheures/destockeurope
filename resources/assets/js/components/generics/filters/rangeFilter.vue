@@ -15,7 +15,12 @@
             handleMin: Number,
             handleMax: Number,
             update: Boolean,
-            //Vue Strings
+            step: {
+                type: Number,
+                required: false,
+                default: 1
+            },
+                //Vue Strings
             name: String,
             prefix: String,
             title: String
@@ -35,7 +40,7 @@
                 from: that.handleMin,
                 to: that.handleMax,
                 grid: true,
-                step: 0.01,
+                step: that.step,
                 prefix: that.prefix
             });
             let slider = elemSlider.data("ionRangeSlider");

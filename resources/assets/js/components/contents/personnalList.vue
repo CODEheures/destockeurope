@@ -9,8 +9,8 @@
                 <div class="row">
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
-                            route-bookmark-add=""
-                            route-bookmark-remove=""
+                            :route-bookmark-add="routeBookmarkAdd"
+                            :route-bookmark-remove="routeBookmarkRemove"
                             :ads-frequency="parseInt(adsFrequency)"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
@@ -22,8 +22,9 @@
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
                             :no-result-found-header="noResultFoundHeader"
-                            :no-result-found-message="noResultFoundMessage">
-                    </adverts-by-list>
+                            :no-result-found-message="noResultFoundMessage"
+                            :reload-on-unbookmark-success="reloadAdvertOnUnbookmarkSuccess==1"
+                    ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
                     <div class="sixteen wide column pagination">
@@ -60,6 +61,9 @@
             'contentHeader',
             //advertByList component
             'routeGetAdvertsList',
+            'routeBookmarkAdd',
+            'routeBookmarkRemove',
+            'reloadAdvertOnUnbookmarkSuccess',
             'actualLocale',
             'adsFrequency',
             'totalQuantityLabel',
@@ -86,7 +90,7 @@
                 dataRouteGetAdvertList: '',
                 dataFlagResetSearch: false,
                 oldChoice: {},
-                update: false
+                update: false,
             }
         },
         mounted () {
@@ -95,7 +99,6 @@
 //                type   : 'fixed',
 //                offset : 112
 //            });
-
             //On load Error
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');

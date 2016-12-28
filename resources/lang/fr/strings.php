@@ -9,6 +9,7 @@ return [
     'menu_research' => 'Demandes',
     'menu_offer' => 'Déposer une annonce',
     'menu_mines' => 'Mes annonces',
+    'menu_bookmarks' => 'Mes favoris',
     'menu_login' => 'S\'identifier',
     'menu_logout' => 'Se déconnecter',
     'menu_register' => 'S\'enregistrer',

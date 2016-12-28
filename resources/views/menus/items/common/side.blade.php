@@ -3,5 +3,6 @@
     <div class="menu">
         @include('menus.items.common.links')
         <a href="{{ route('mines') }}" class="{{ $routeName == 'mines' ? 'active' : '' }} item">{{ trans('strings.menu_mines') }}</a>
+        <a href="{{ route('bookmarks') }}" class="{{ $routeName == 'bookmarks' ? 'active' : '' }} item">{{ trans('strings.menu_bookmarks') }}</a>
     </div>
 </div>

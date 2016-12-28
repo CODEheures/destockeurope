@@ -9,6 +9,7 @@ return [
     'menu_research' => 'Research',
     'menu_offer' => 'Offer an advert',
     'menu_mines' => 'My Adverts',
+    'menu_bookmarks' => 'My Bookmarks',
     'menu_login' => 'Login',
     'menu_logout' => 'Logout',
     'menu_register' => 'Register',

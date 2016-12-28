@@ -12,6 +12,7 @@
                                 :maxi="dataMaxPrice"
                                 :handle-min="dataHandleMinPrice"
                                 :handle-max="dataHandleMaxPrice"
+                                :step="0.01"
                                 :update="dataUpdate"
                                 name="price"
                                 :prefix="filterPricePrefix"

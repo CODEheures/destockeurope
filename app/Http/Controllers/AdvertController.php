@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Anonymous;
+use App\Bookmark;
 use App\Category;
 use App\Common\CategoryUtils;
 use App\Common\DBUtils;
@@ -249,7 +250,7 @@ class AdvertController extends Controller
         }
     }
 
-    public function mines(Request $request)
+    public function mines()
     {
         $adverts = Advert::withTrashed()->where('user_id', '=', auth()->id())->where('isValid', true)->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
 
@@ -273,6 +274,38 @@ class AdvertController extends Controller
             $advert->setBreadCrumb($ancestors);
             $resultsByCat[$advert->category->id]['results'][] = $advert;
             $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
+            $advert->setBookmarkCount();
+        }
+
+        return response()->json(['adverts'=> $adverts]);
+
+    }
+
+    public function bookmarks()
+    {
+        $bookmarks = Bookmark::where('user_id', auth()->user()->id)->get()->pluck('advert_id')->toArray();
+        $adverts = Advert::whereIn('id', $bookmarks)->where('isValid', true)->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+
+        $adverts->load('pictures');
+        $adverts->load('category');
+        $tempoStore =[];
+        $resultsByCat = [];
+        $user = auth()->user();
+        $user->load('bookmarks');
+
+        foreach ($adverts as $advert){
+            if(!array_key_exists($advert->category->id,$tempoStore)){
+                $ancestors = $advert->category->getAncestors();
+                $ancestors->add($advert->category);
+                $tempoStore[$advert->category->id] = $ancestors;
+                $resultsByCat[$advert->category->id]['results'] = [];
+            } else {
+                $ancestors = $tempoStore[$advert->category->id];
+            }
+            $advert->setBreadCrumb($ancestors);
+            $resultsByCat[$advert->category->id]['results'][] = $advert;
+            $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
+            $advert->setIsUserBookmark($user->haveBookmark($advert->id));
             $advert->setBookmarkCount();
         }
 
@@ -439,6 +472,7 @@ class AdvertController extends Controller
                 $ancestors = $advert->category->getAncestors();
                 $ancestors->add($advert->category);
                 $advert->setBreadCrumb($ancestors);
+                $advert->setBookmarkCount();
                 return view('advert.show', compact('advert'));
 //            }
         } elseif ($advert && $request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == 'admin')) {

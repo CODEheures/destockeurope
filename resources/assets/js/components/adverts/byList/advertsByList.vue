@@ -121,6 +121,11 @@
             routeGetAdvertsList: String,
             routeBookmarkAdd: String,
             routeBookmarkRemove: String,
+            reloadOnUnbookmarkSuccess: {
+                type: Boolean,
+                default: false,
+                required: false
+            },
             adsFrequency: Number,
             actualLocale: String,
             totalQuantityLabel: String,
@@ -155,6 +160,12 @@
             });
             this.$on('bookmarkSuccess', function () {
                 that.$parent.$emit('bookmarkSuccess');
+            });
+            this.$on('unbookmarkSuccess', function () {
+                that.$parent.$emit('unbookmarkSuccess');
+                if(that.reloadOnUnbookmarkSuccess==true) {
+                    that.getAdvertsList(true);
+                }
             });
             this.$on('sendToast', function (message) {
                 that.$parent.$emit('sendToast', message);

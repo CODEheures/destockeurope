@@ -14,4 +14,12 @@ class Bookmark extends Model
         'advert_id',
     ];
     protected $dates = ['deleted_at'];
+
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+
+    public function advert() {
+        return $this->belongsTo('App\Advert');
+    }
 }

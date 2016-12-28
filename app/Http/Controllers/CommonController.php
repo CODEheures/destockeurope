@@ -40,6 +40,10 @@ class CommonController extends Controller
         return view('user.personnalList');
     }
 
+    public function bookmarks() {
+        return view('user.bookmarksList');
+    }
+
     public function cgv(){
         return 'cgv';
     }
