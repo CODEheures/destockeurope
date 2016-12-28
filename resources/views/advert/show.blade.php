@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('opengraph')
+    <meta property="og:site_name" content="{{ config('app.name') }}"/>
+    <meta property="og:title" content="{{ $advert->title }}"/>
+    <meta property="og:description" content="{{ $advert->resume }}"/>
+    <meta property="og:image" content="{{ $advert->thumb }}">
+    <meta property="og:url" content="{{ $advert->url }}">
+    <meta property="og:type" content="product.item"/>
+@endsection
+
 @section('content')
 
     <show-advert1
@@ -59,3 +68,23 @@
     </show-advert1>
 
 @endsection
+
+@section('scripts')
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '{{ env('FACEBOOK_CLIENT_ID') }}',
+                xfbml      : true,
+                version    : 'v2.8'
+            });
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/fr_FR/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+@endsection*

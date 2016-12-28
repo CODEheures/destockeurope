@@ -292,6 +292,25 @@ form {
   content: "\f0da";
 }
 
+.ui.grid div.swiper-container  {
+  & div.swiper-button-next, & div.swiper-button-prev {
+    background-image: none;
+    & i {
+      color: white;
+      text-shadow: -1px 2px 6px black;
+    }
+    &.swiper-button-disabled {
+      opacity: 0;
+    }
+  }
+  & div.swiper-button-next {
+    right: 25px;
+  }
+  & div.swiper-button-prev {
+    left: -12px;
+  }
+}
+
 .accordion {
   transition: scale, opacity;
   transition-duration: 0.2s;

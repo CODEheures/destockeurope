@@ -179,6 +179,11 @@
                                     {{ deleteLabel }}
                                 </button>
                             </div>
+                            <div class="fb-share-button"
+                                 :data-href="advert.url"
+                                 data-layout="button"
+                                 data-size="large"
+                            ></div>
                         </div>
                         <div class="sixteen right aligned column spaced-top-2">
                             <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>

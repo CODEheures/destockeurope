@@ -8,8 +8,8 @@
                 </swiper-slide>
             </template>
             <div class="swiper-pagination" slot="pagination"></div>
-            <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
-            <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+            <div class="swiper-button-next" slot="button-next"><i class="huge chevron right icon"></i></div>
+            <div class="swiper-button-prev" slot="button-prev"><i class="huge chevron left icon"></i></div>
         </swiper>
         <swiper :options="swiperOptionThumbs" class="gallery-thumbs" :style="'height: ' + dataHeightThumb + 'px;'">
             <template v-for="picture in pictures" v-if="picture.isThumb">
@@ -47,6 +47,7 @@
                     // Enable lazy loading
                     lazyLoading: true,
                     observer: true,
+                    zoom: true
                 },
                 swiperOptionThumbs: {
                     name: 'swiperThumbs',
