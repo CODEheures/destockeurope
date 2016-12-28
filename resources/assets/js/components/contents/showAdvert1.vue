@@ -102,22 +102,12 @@
             </div>
         </div>
         <div class="ui grid">
-            <div class="eleven wide mobile only eleven wide tablet only sixteen wide computer only column">
+            <div class="sixteen wide column">
                 <div class="row">
                     <breadcrumb
                             :items="breadcrumbItems"
                             :withAction="true">
                     </breadcrumb>
-                </div>
-            </div>
-            <div class="mobile only tablet only five wide right aligned column"  v-if="userName == '' || isUserOwner">
-                <div class="ui labeled button disabled-bookmark">
-                    <div class="ui yellow button">
-                        <i class="heart icon"></i>
-                    </div>
-                    <a class="ui basic yellow left pointing label">
-                        {{ dataAdvert.bookmarkCount }}
-                    </a>
                 </div>
             </div>
             <div class="row">
@@ -130,6 +120,8 @@
                                 :advert="dataAdvert"
                                 :actual-locale="actualLocale"
                                 :image-ratio="parseFloat(imageRatio)"
+                                :user-name="userName"
+                                :is-user-owner="isUserOwner==1"
                                 :total-quantity-label="totalQuantityLabel"
                                 :lot-mini-quantity-label="lotMiniQuantityLabel"
                                 :urgent-label="urgentLabel"

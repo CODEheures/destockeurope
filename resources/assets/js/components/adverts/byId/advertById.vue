@@ -21,38 +21,54 @@
                         <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                     </p>
                 </div>
-                <div class="ui segment">
-                    <div class="sixteen wide column">
-                        <table id="table-advert-infos" class="ui very basic celled table advert-infos">
-                            <tbody>
-                            <tr>
-                                <td class="collapsing">
-                                    <i class="cubes icon"></i> {{ totalQuantityLabel }}
-                                </td>
-                                <td>{{ advert.totalQuantity }}</td>
-                            </tr>
-                            <tr>
-                                <td class="collapsing">
-                                    <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
-                                </td>
-                                <td>{{ advert.lotMiniQuantity }}</td>
-                            </tr>
-                            <tr>
-                                <td class="collapsing">
-                                    <i class="money icon"></i> {{ priceLabel }}
-                                </td>
-                                <td><span class="ui small blue tag label">{{ advert.price }}</span><br/></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="mobile only tablet only sixteen wide right aligned column"  v-if="userName == '' || isUserOwner">
+                    <div class="fb-share-button"
+                         :data-href="advert.url"
+                         data-layout="button"
+                         data-size="large"
+                    ></div>
+                    <div class="ui labeled button disabled-bookmark">
+                        <div class="ui yellow button">
+                            <i class="heart icon"></i>
+                        </div>
+                        <a class="ui basic yellow left pointing label">
+                            {{ advert.bookmarkCount }}
+                        </a>
                     </div>
-                    <div class="sixteen wide column item-description">
-                        <div class="description">
-                            <p>{{ advert.description }}</p>
+                </div>
+                <div class="sixteen wide mobile">
+                    <div class="ui segment">
+                        <div class="sixteen wide column">
+                            <table id="table-advert-infos" class="ui very basic celled table advert-infos">
+                                <tbody>
+                                <tr>
+                                    <td class="collapsing">
+                                        <i class="cubes icon"></i> {{ totalQuantityLabel }}
+                                    </td>
+                                    <td>{{ advert.totalQuantity }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="collapsing">
+                                        <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
+                                    </td>
+                                    <td>{{ advert.lotMiniQuantity }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="collapsing">
+                                        <i class="money icon"></i> {{ priceLabel }}
+                                    </td>
+                                    <td><span class="ui small blue tag label">{{ advert.price }}</span><br/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="sixteen wide column item-description">
+                            <div class="description">
+                                <p>{{ advert.description }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -66,6 +82,16 @@
             advert: Object,
             actualLocale: String,
             imageRatio: Number,
+            userName: {
+                type: String,
+                default: undefined,
+                required: false
+            },
+            isUserOwner: {
+                type: Boolean,
+                default: false,
+                required: false
+            },
             //vue strings
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
