@@ -3,7 +3,7 @@
 namespace App\Common;
 
 use App\Advert;
-use App\Picture;
+use App\Notifications\AlertObsoleteAdvert;
 use Carbon\Carbon;
 
 class AdvertsManager
@@ -87,6 +87,45 @@ class AdvertsManager
             return $counter;
         } catch (\Exception $e) {
             throw new \Exception('stop end life time advert fails');
+        }
+    }
+
+    public function alertEndOfAdverts($days) {
+        try {
+            //alert advert with updated_at > lifeTime-$days
+            $counter = 0;
+            $alertEndOfAdverts = null;
+            if($days > 0){
+                $alertEndOfAdverts = Advert::whereDate('updated_at' , '=', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')-$days)->toDateString())
+                    ->where('isValid', true)
+                    ->where(function ($query) use ($days){
+                        $query->whereNull('lastObsoleteMail')
+                            ->orWhere('lastObsoleteMail', '>', $days);
+                    })
+                    ->get();
+            } elseif($days==0) {
+                $alertEndOfAdverts = Advert::onlyTrashed()
+                    ->where('isValid', true)
+                    ->where('lastObsoleteMail', '<>', $days)
+                    ->get();
+            }
+
+            foreach ($alertEndOfAdverts as $advert){
+                $counter++;
+
+                config(['runtime.locale' => $advert->user->locale]);
+                $runTimeLocale = \Locale::getPrimaryLanguage(config('runtime.locale'));
+                LocaleUtils::setAppLocale($runTimeLocale);
+
+                $recipient = $advert->user;
+                $recipient->notify(new AlertObsoleteAdvert($advert, $days));
+                $advert->lastObsoleteMail = $days;
+                $advert->timestamps = false;
+                $advert->save();
+            }
+            return $counter;
+        } catch (\Exception $e) {
+            throw new \Exception('alert user for J-' . $days . ' obsolete advert fails');
         }
     }
 }

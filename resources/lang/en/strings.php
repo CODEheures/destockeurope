@@ -31,7 +31,7 @@ return [
     'flash_header_error' => 'Error :(',
 
     'notification_action-text' => 'If you’re having trouble clicking the ":actiontext" button, copy and paste the URL below into your web browser:',
-    'notification_regards1' => 'Regards, the :teamname team',
+    'notification_regards1' => 'Regards,',
     'notification_regards2' => 'The :teamname team',
     'notification_rights' => 'All rights reserved',
 
@@ -68,6 +68,16 @@ return [
     'mail_advertNotApprove_line' => 'Your advert ":title" does not respect the rules and is not approved by our team \':(.',
     'mail_advertNotApprove_line_voidPayment' => 'Your Payment for this Advert is Canceled.',
     'mail_advertNotApprove_line2' => 'We hope to see you quickly for post a new valid advert. Thank you for using our application!',
+
+    'mail_alertObsoleteAdvert_subject' => 'Your advert will soon expire. Renew it',
+    'mail_alertObsoleteAdvert_subject_lastday' => 'Reminder: Your advert expires in less than 24h. Renew it there',
+    'mail_alertObsoleteAdvert_subject_afterday' => 'Information: Your advert has expired. You can renew it again',
+    'mail_alertObsoleteAdvert_greeting' => 'Hello :username !',
+    'mail_alertObsoleteAdvert_line' => 'Your advert ":title" will expire in :days day. You can click on the following link to renew it.',
+    'mail_alertObsoleteAdvert_line_lastday' => 'Your advert ":title" expires in less than 24 hours. You can click on the following link to renew it.',
+    'mail_alertObsoleteAdvert_line_afterdays' => 'Your advert ":title" has expired. You can click on the following link to renew it in a delay of '. env('DELAY_DAYS_FOR_RENEW_ADVERT') .  'days.',
+    'mail_alertObsoleteAdvert_action' => 'See my advert',
+    'mail_alertObsoleteAdvert_line2' => 'Thank you for using our application!',
 
     'form_label_name' => 'Your name',
     'form_label_email' => 'Your E-mail',

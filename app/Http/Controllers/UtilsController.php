@@ -9,8 +9,6 @@ use App\Common;
 use App\Picture;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Console\Command;
-use Illuminate\Database\Console\Migrations\RefreshCommand;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -405,6 +403,11 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-        return LocaleUtils::getListCountries();
+//        $pictureManager = new Common\PicturesManager();
+//        $advertManager = new Common\AdvertsManager($pictureManager);
+//        //$advertManager->stopAdverts();
+//        $response = $advertManager->alertEndOfAdverts(5);
+//        return $response;
+        return null;
     }
 }

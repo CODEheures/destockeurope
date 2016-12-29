@@ -42,6 +42,7 @@ class CreateAdvertsTable extends Migration
             $table->mediumInteger('lotMiniQuantity')->unsigned()->nullable()->default(null);
             $table->boolean('isUrgent')->default(false);
             $table->mediumInteger('views')->unsigned()->default(0);
+            $table->tinyInteger('lastObsoleteMail')->unsigned()->nullable()->default(null);
         });
     }
 

@@ -69,6 +69,16 @@ return [
     'mail_advertNotApprove_line_voidPayment' => 'Le paiement de celle-ci a été annulé.',
     'mail_advertNotApprove_line2' => 'Nous espérons vous revoir très vite pour poster une annonce valide. Merci d\'utiliser notre application! A tout de suite!',
 
+    'mail_alertObsoleteAdvert_subject' => 'Votre annonce arrive a expiration. Renouvellez là',
+    'mail_alertObsoleteAdvert_subject_lastday' => 'Rappel: votre annonce arrive a expiration dans moins de 24h. Renouvellez là',
+    'mail_alertObsoleteAdvert_subject_afterday' => 'Information: votre annonce est expirée. Vous pouvez encore la renouveller',
+    'mail_alertObsoleteAdvert_greeting' => 'Bonjour :username !',
+    'mail_alertObsoleteAdvert_line' => 'Votre annonce ":title" arrive a expiration dans :days jours. Vous pouvez cliquer le lien suivant pour la renouveller.',
+    'mail_alertObsoleteAdvert_line_lastday' => 'Votre annonce ":title" arrive a expiration dans moins de 24 heures. Vous pouvez cliquer le lien suivant pour la renouveller.',
+    'mail_alertObsoleteAdvert_line_afterdays' => 'Votre annonce ":title" est expirée. Vous pouvez cliquer le lien suivant pour la renouveller dans un délai de'. env('DELAY_DAYS_FOR_RENEW_ADVERT') .  'jours.',
+    'mail_alertObsoleteAdvert_action' => 'Renouveller mon annonce',
+    'mail_alertObsoleteAdvert_line2' => 'Merci d\'utiliser notre application!',
+
     'form_label_name' => 'Votre nom',
     'form_label_email' => 'Votre E-mail',
     'form_label_phone' => 'Votre n° de téléphone',

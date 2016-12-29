@@ -33,6 +33,11 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
+            $result1='';
+            $result2=['',''];
+            $result3='';
+            $result4='';
+            $result5='';
             try {
                 $statManager = new StatsManager();
                 $statManager->getStats();
@@ -41,14 +46,20 @@ class Kernel extends ConsoleKernel
                 $advertManager = new AdvertsManager($pictureManager);
                 $result1 = $advertManager->stopAdverts();
                 $result2 = $advertManager->purgeObsoletesAdverts();
+                $result3 = $advertManager->alertEndOfAdverts(5);
+                $result4 = $advertManager->alertEndOfAdverts(1);
+                $result5 = $advertManager->alertEndOfAdverts(0);
 
-                $message = $message . ';stop adverts;' . $result1 . ';purge adverts;' . $result2[0] . ';delete pictures;' . $result2[1];
+                $message = $message . ';' . $result1 . ';' . $result2[0] . ';' . $result2[1] .';' . $result3 . ';' . $result4 . ';' . $result5 .';;';
             } catch (\Exception $e) {
-                $message = $message . ';schedule fails: ' . $e->getMessage();
+                $message = $message . ';' . $result1 . ';' . $result2[0] . ';' . $result2[1] . ';' . $result3 . ';' . $result4 . ';' . $result5 . ';' .  $e->getMessage().';';
+            }
+            if(!Storage::disk('logs')->exists('schedule.log')){
+                Storage::disk('logs')->append('schedule.log' , 'DATE;STOP ADVERTS;PURGE ADVERTS;DELETE PICTURES;ALERT USER J-5;ALERT USER J-1;ALERT USER J0;FAILS;');
             }
             Storage::disk('logs')->append('schedule.log' , $message);
 
-        })->dailyAt('11:57');
+        })->dailyAt('05:57');
     }
 
     /**

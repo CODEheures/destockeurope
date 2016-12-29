@@ -3,6 +3,7 @@
 namespace App\Common;
 
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 
 trait LocaleUtils
@@ -84,5 +85,13 @@ trait LocaleUtils
             }
         }
         return $countries;
+    }
+
+    public static function setAppLocale($locale){
+        if(in_array($locale,config('app.locales'))){
+            App::setLocale($locale);
+        } else {
+            App::setLocale(config('app.fallback_locale'));
+        }
     }
 }

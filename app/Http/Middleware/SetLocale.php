@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Common\LocaleUtils;
 use Closure;
-use Illuminate\Support\Facades\App;
 
 class SetLocale
 {
@@ -17,12 +17,7 @@ class SetLocale
     public function handle($request, Closure $next)
     {
         $runTimeLocale = \Locale::getPrimaryLanguage(config('runtime.locale'));
-        if(in_array($runTimeLocale,config('app.locales'))){
-            App::setLocale($runTimeLocale);
-        } else {
-            App::setLocale(config('app.fallback_locale'));
-        }
-
+        LocaleUtils::setAppLocale($runTimeLocale);
 
         return $next($request);
     }
