@@ -48,8 +48,7 @@ class AdvertRenew extends Notification
                     ->greeting(trans('strings.mail_advertRenew_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_advertRenew_line',[
                         'title' => $this->advert->title,
-                        'date' => Carbon::parse($this->advert->online_at)->toDateTimeString(),
-                        'days' => env('ADVERT_LIFE_TIME')
+                        'date' => Carbon::parse($this->advert->online_at)->toDateTimeString()
                     ]))
                     ->line(trans('strings.mail_advertApprove_line2'));
     }

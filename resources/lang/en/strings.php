@@ -81,7 +81,7 @@ return [
 
     'mail_advertRenew_subject' => 'Your advert is renewed!',
     'mail_advertRenew_greeting' => 'Congratulations :username !',
-    'mail_advertRenew_line' => 'Your advert ":title" is renewed from :date for a period of :days days',
+    'mail_advertRenew_line' => 'Your advert ":title" is renewed from :date for a period of '. env('ADVERT_LIFE_TIME') . ' days',
     'mail_advertRenew_line2' => 'Thank you for using our application!',
 
     'form_label_name' => 'Your name',
@@ -304,7 +304,7 @@ return [
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho no! Payment fails :-(',
     'payment_paypal_success' => 'Thank you for your payment. This will be final when your advert is approved by our service.',
-    'payment_renew_success' => 'Thank you for your payment. Your advert is renew from :date for a period of :days days.',
+    'payment_renew_success' => 'Thank you for your payment. Your advert is renew from :date for a period of '. env('ADVERT_LIFE_TIME') . ' days.',
 
     'footer_list_header_1' => 'HOUSE',
     'footer_list_1_1' => 'Furnishings',

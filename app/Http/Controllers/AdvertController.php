@@ -1200,7 +1200,7 @@ class AdvertController extends Controller
             try {
                 $saveAdvert = $this->approveAdvert($advert->id, true);
                 return redirect(route('home'))
-                    ->with('success', trans('strings.payment_renew_success', ['date' => Carbon::parse($saveAdvert->online_at)->toDateTimeString(), 'days'=> env('ADVERT_LIFE_TIME')]));
+                    ->with('success', trans('strings.payment_renew_success', ['date' => Carbon::parse($saveAdvert->online_at)->toDateTimeString()]));
             } catch (\Exception $e) {
                 //TODO MAIL TO ADMIN FOR THIS CASE
                 return redirect(route('home'))
