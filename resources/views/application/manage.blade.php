@@ -19,6 +19,7 @@
             advert-nb-free-pictures-label="{{ trans('strings.view_manage_adverts_nb_free_pictures_label') }}"
             advert-nb-max-pictures-label="{{ trans('strings.view_manage_adverts_nb_max_pictures_label') }}"
             advert-urgent-cost-label="{{ trans('strings.view_manage_adverts_urgent_cost_label') }}"
+            advert-renew-cost-label="{{ trans('strings.view_manage_adverts_renew_cost_label') }}"
             advert-per-page-label="{{ trans('strings.view_manage_adverts_per_page_label') }}"
             advert-resume-lenght-label="{{ trans('strings.view_manage_resume_length_label') }}"
             search-label="{{ trans('strings.view_manage_search_label') }}"

@@ -111,6 +111,7 @@ Route::group(['prefix' => 'advert'] , function () {
     Route::post('/pay/card/{id}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
     Route::get('/mines', ['as' => 'advert.mines', 'uses' => 'AdvertController@mines']);
     Route::get('/bookmarks', ['as' => 'advert.bookmarks', 'uses' => 'AdvertController@bookmarks']);
+    Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
 });
 Route::resource('advert', 'AdvertController');
 

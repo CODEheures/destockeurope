@@ -19,6 +19,7 @@
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
                 manage-advert-label="{{ trans('strings.view_advert_show_manage_label') }}"
                 renew-advert-label="{{ trans('strings.view_advert_show_renew_label') }}"
+                is-renew-advert-label="{{ trans('strings.view_advert_show_is_renew_label') }}"
                 bookmark-info="{{ trans('strings.view_advert_show_bookmark_info') }}"
                 views-info="{{ trans('strings.view_advert_show_views_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"

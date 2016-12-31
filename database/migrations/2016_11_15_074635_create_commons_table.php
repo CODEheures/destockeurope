@@ -24,6 +24,7 @@ class CreateCommonsTable extends Migration
             $table->tinyInteger('adsFrequency')->default(0);
             $table->tinyInteger('advertsPerPage')->default(6);
             $table->smallInteger('urgentCost')->default(49);
+            $table->smallInteger('renewCost')->default(9);
             $table->tinyInteger('nbFreePictures')->default(3);
             $table->tinyInteger('nbMaxPictures')->default(6);
             $table->enum('welcomeType', ['1', '2'])->default(1);

@@ -17,7 +17,7 @@
                 <div class="sixteen wide right aligned column geodate-computer">
                     <p>
                         <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                        <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                        <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                         <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                     </p>
                 </div>

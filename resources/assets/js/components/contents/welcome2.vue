@@ -61,6 +61,7 @@
                             :urgent-label="urgentLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
@@ -118,6 +119,7 @@
             'urgentLabel',
             'manageAdvertLabel',
             'renewAdvertLabel',
+            'isRenewAdvertLabel',
             'bookmarkInfo',
             'viewsInfo',
             'priceInfoLabel',

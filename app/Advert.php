@@ -15,6 +15,7 @@ class Advert extends Model {
     use CascadeSoftDeletes;
 
     protected $fillable = [
+        'online_at',
         'user_id',
         'category_id',
         'invoice_id',
@@ -35,14 +36,16 @@ class Advert extends Model {
         'lotMiniQuantity',
         'isUrgent',
         'views',
-        'lastObsoleteMail'
+        'lastObsoleteMail',
+        'isRenew',
+        'originalAdvertId'
     ];
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'online_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
     protected $casts = [
         'options' => 'array'
     ];
-    protected $appends = array('breadCrumb', 'url', 'resume', 'thumb', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount');
+    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'resume', 'thumb', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -101,6 +104,10 @@ class Advert extends Model {
         return route('advert.show', ['id' => $this->id]);
     }
 
+    public function getRenewUrlAttribute() {
+        return route('advert.renew', ['id' => $this->id]);
+    }
+
     public function getThumbAttribute() {
         return route('picture.thumb', ['type' => PicturesManager::TYPE_FINAL_LOCAL, 'hashName' => $this->mainPicture, 'advertId' => $this->id]);
     }
@@ -121,6 +128,10 @@ class Advert extends Model {
     }
 
     public function getUpdatedAtAttribute($time) {
+        return Carbon::parse($time)->toAtomString();
+    }
+
+    public function getOnlineAtAttribute($time) {
         return Carbon::parse($time)->toAtomString();
     }
 

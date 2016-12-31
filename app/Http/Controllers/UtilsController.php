@@ -9,6 +9,7 @@ use App\Common;
 use App\Picture;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -150,7 +151,7 @@ class UtilsController extends Controller
             $subCategory212->id,
             Carbon::now()->subDays(5),
             0,
-            '1000 doudounes en fin de série à prix cassées',
+            '1000 doudounes en fin de série à prix cassé',
             ['11111111111111111111111111111111'],
             1000,
             50,
@@ -364,6 +365,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
             $loterie = rand(0,1);
             if($loterie==1){
                $advert->isValid = true;
+               $advert->online_at = $created_at;
             }
         }
 
@@ -403,11 +405,6 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-//        $pictureManager = new Common\PicturesManager();
-//        $advertManager = new Common\AdvertsManager($pictureManager);
-//        //$advertManager->stopAdverts();
-//        $response = $advertManager->alertEndOfAdverts(5);
-//        return $response;
         return null;
     }
 }

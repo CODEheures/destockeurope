@@ -48,7 +48,14 @@ class AdvertsManager
                 $counterDelPictures += $this->definitiveDestroy($advert);
             }
 
-            //3 get Adverts where deleted_at > env delay
+            //3 get abandonned duplicate Adverts
+            $abandonedDuplicateAdverts = Advert::whereNotNull('originalAdvertId')->whereNull('invoice_id')->whereNull('online_at')->where('created_at', '<', Carbon::now()->subHours(2))->get();
+            foreach ($abandonedDuplicateAdverts as $advert){
+                $counterDelAdvert++;
+                //$counterDelPictures += $this->definitiveDestroy($advert);
+            }
+
+            //4 get Adverts where deleted_at > env delay
             $obsoletesResults = $this->purgeObsoletesAdverts();
             $counterDelAdvert += $obsoletesResults[0];
             $counterDelPictures += $obsoletesResults[1];
@@ -77,9 +84,9 @@ class AdvertsManager
 
     public function stopAdverts() {
         try {
-            //stop advert with updated_at > lifeTime
+            //stop advert with online_at > lifeTime
             $counter = 0;
-            $invalidAdverts = Advert::where('updated_at', '<', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')))->get();
+            $invalidAdverts = Advert::where('online_at', '<', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')))->get();
             foreach ($invalidAdverts as $advert){
                 $counter++;
                 $advert->delete();
@@ -92,11 +99,11 @@ class AdvertsManager
 
     public function alertEndOfAdverts($days) {
         try {
-            //alert advert with updated_at > lifeTime-$days
+            //alert advert with online_at > lifeTime-$days
             $counter = 0;
             $alertEndOfAdverts = null;
             if($days > 0){
-                $alertEndOfAdverts = Advert::whereDate('updated_at' , '=', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')-$days)->toDateString())
+                $alertEndOfAdverts = Advert::whereDate('online_at' , '=', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')-$days)->toDateString())
                     ->where('isValid', true)
                     ->where(function ($query) use ($days){
                         $query->whereNull('lastObsoleteMail')

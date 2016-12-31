@@ -79,6 +79,11 @@ return [
     'mail_alertObsoleteAdvert_action' => 'See my advert',
     'mail_alertObsoleteAdvert_line2' => 'Thank you for using our application!',
 
+    'mail_advertRenew_subject' => 'Your advert is renewed!',
+    'mail_advertRenew_greeting' => 'Congratulations :username !',
+    'mail_advertRenew_line' => 'Your advert ":title" is renewed from :date for a period of :days days',
+    'mail_advertRenew_line2' => 'Thank you for using our application!',
+
     'form_label_name' => 'Your name',
     'form_label_email' => 'Your E-mail',
     'form_label_phone' => 'Your phone number',
@@ -151,6 +156,7 @@ return [
 
     'option_payedPicture_name' => 'Extra Photos',
     'option_isUrgent_name' => 'Urgent advert',
+    'option_isRenew_name' => 'Renewal of my advert',
 
     'view_all_error_load_message' => 'Ho no! Load error :-( , try to refresh the page',
     'view_all_error_reload_message' => 'refresh the page Please',
@@ -183,6 +189,7 @@ return [
     'view_manage_min_length_search_label' => 'Minimun characters for search',
     'view_manage_max_result_search_label' => 'Max results on search',
     'view_manage_adverts_urgent_cost_label' => 'Cost of URGENT option (€)',
+    'view_manage_adverts_renew_cost_label' => 'Price for renew (€)',
     'view_manage_ads_label' => 'Advertisement',
     'view_manage_ads_frequency_label' => 'Advert Frequency',
     'view_manage_master_ads_activation_label' => 'Activate home page advert',
@@ -221,7 +228,7 @@ return [
     'view_advert_steps_2_title' => 'Account info',
     'view_advert_steps_2_description' => 'check the information in your account',
     'view_advert_steps_3_title' => 'Payment',
-    'view_advert_steps_3_description' => 'if urgent or extra photos',
+    'view_advert_steps_3_description' => 'if urgent, extra photos or renew',
     'view_advert_show_contact_label' => 'Contact the seller',
     'view_advert_show_bookmark_info' => 'Bookmarks',
     'view_advert_show_bookmark_label' => 'Bookmark',
@@ -232,7 +239,8 @@ return [
     'view_advert_show_delete_label' => 'Delete my Advert',
     'view_advert_show_views_info' => 'Views',
     'view_advert_show_manage_label' => 'Manage',
-    'view_advert_show_renew_label' => 'Renew',
+    'view_advert_show_renew_label' => 'Renew it',
+    'view_advert_show_is_renew_label' => 'Is Renewed',
     'view_advert_show_delete_success' => 'Your ad is deleted. Thank you for your confidence',
     'view_advert_show_message_send' => 'Your message is being send',
     'view_advert_report_label' => 'Report this advert',
@@ -247,6 +255,7 @@ return [
     'view_advert_approve_modal_valid_header' => 'Approve all actions',
     'view_advert_approve_modal_valid_description' => 'WARNING!! The validation of all actions resulting sending mails approval or disapproval to customers.',
     'view_advert_approve_error' => 'Advert approve error',
+    'view_advert_auto_approve_error' => 'Error while automatic advert approve process. Our services are warned and deal with your problem as soon as possible',
     'view_advert_approve_success' => 'Advert approve send',
 
     'view_advert_by_link_label' => 'See Advert',
@@ -295,6 +304,7 @@ return [
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho no! Payment fails :-(',
     'payment_paypal_success' => 'Thank you for your payment. This will be final when your advert is approved by our service.',
+    'payment_renew_success' => 'Thank you for your payment. Your advert is renew from :date for a period of :days days.',
 
     'footer_list_header_1' => 'HOUSE',
     'footer_list_1_1' => 'Furnishings',

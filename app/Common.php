@@ -21,6 +21,7 @@ class Common extends Model
         'adsFrequency',
         'advertsPerPage',
         'urgentCost',
+        'renewCost',
         'nbFreePictures',
         'nbMaxPictures',
         'welcomeType',

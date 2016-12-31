@@ -19,7 +19,7 @@
                 </div>
                 <h4 class="ui horizontal divider header"><i class="browser icon"></i> {{ advertPreferencesLabel }} </h4>
                 <div class="field">
-                    <div class="three fields">
+                    <div class="two fields">
                         <div class="field">
                             <label>{{ advertNbFreePicturesLabel }}</label>
                             <input type="number"
@@ -41,6 +41,8 @@
                                    v-on:focus="focused={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}"
                                    v-on:blur="blured={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}">
                         </div>
+                    </div>
+                    <div class="two fields">
                         <div class="field">
                             <label>{{ advertUrgentCostLabel }}</label>
                             <input type="number"
@@ -50,6 +52,16 @@
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'urgentCost', 'value': parameters.urgentCost}"
                                    v-on:blur="blured={'name': 'urgentCost', 'value': parameters.urgentCost}">
+                        </div>
+                        <div class="field">
+                            <label>{{ advertRenewCostLabel }}</label>
+                            <input type="number"
+                                   name="renewCost"
+                                   min="0"
+                                   v-model="parameters.renewCost"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'renewCost', 'value': parameters.renewCost}"
+                                   v-on:blur="blured={'name': 'renewCost', 'value': parameters.renewCost}">
                         </div>
                     </div>
                 </div>
@@ -197,6 +209,7 @@
             advertNbFreePicturesLabel: String,
             advertNbMaxPicturesLabel: String,
             advertUrgentCostLabel: String,
+            advertRenewCostLabel: String,
             advertPerPageLabel: String,
             advertResumeLenghtLabel: String,
             searchLabel: String,

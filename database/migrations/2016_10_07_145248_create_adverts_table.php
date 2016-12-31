@@ -17,6 +17,7 @@ class CreateAdvertsTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->softDeletes();
+            $table->timestamp('online_at')->nullable()->default(null);
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('category_id')->unsigned()->index();
@@ -43,6 +44,8 @@ class CreateAdvertsTable extends Migration
             $table->boolean('isUrgent')->default(false);
             $table->mediumInteger('views')->unsigned()->default(0);
             $table->tinyInteger('lastObsoleteMail')->unsigned()->nullable()->default(null);
+            $table->boolean('isRenew')->default(false);
+            $table->integer('originalAdvertId')->unsigned()->nullable()->default(null);
         });
     }
 

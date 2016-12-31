@@ -18,11 +18,13 @@ use App\Http\Requests\StoreAdvertRequest;
 use App\Invoice;
 use App\Notifications\AdvertApprove;
 use App\Notifications\AdvertNotApprove;
+use App\Notifications\AdvertRenew;
 use App\Notifications\CustomerContactSeller;
 use App\Notifications\ReportAdvert;
 use App\Picture;
 use App\Stats;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -89,8 +91,8 @@ class AdvertController extends Controller
         $isRangePricesOnly = ($request->has('priceOnly') && filter_var($request->priceOnly, FILTER_VALIDATE_BOOLEAN) == true);
         $isUrgentOnly = ($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true );
 
-        //only valid advert
-        $adverts = Advert::where('isValid', true);
+        //only valid advert & online_at < now
+        $adverts = Advert::where('isValid', true)->where('online_at', '<', Carbon::now());
 
         //where currency
         $currencySymbol = '';
@@ -204,9 +206,9 @@ class AdvertController extends Controller
 
         if($isSearchRequest) {
             $countSearch = $adverts->count();
-            $adverts = $adverts->orderBy('updated_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
+            $adverts = $adverts->orderBy('online_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
         } else {
-            $adverts = $adverts->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+            $adverts = $adverts->orderBy('online_at', 'desc')->paginate(config('runtime.advertsPerPage'));
         }
 
         $adverts->load('pictures');
@@ -252,7 +254,14 @@ class AdvertController extends Controller
 
     public function mines()
     {
-        $adverts = Advert::withTrashed()->where('user_id', '=', auth()->id())->where('isValid', true)->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+        $adverts = Advert::withTrashed()
+            ->where('user_id', '=', auth()->id())->where('isValid', true)
+            ->where('online_at', '<', Carbon::now())->orderBy('online_at', 'desc')
+            ->where(function ($query){
+                $query->where('isRenew', false)
+                    ->orWhere('deleted_at', null);
+            })
+            ->paginate(config('runtime.advertsPerPage'));
 
         $adverts->load('pictures');
         $adverts->load('category');
@@ -284,7 +293,7 @@ class AdvertController extends Controller
     public function bookmarks()
     {
         $bookmarks = Bookmark::where('user_id', auth()->user()->id)->get()->pluck('advert_id')->toArray();
-        $adverts = Advert::whereIn('id', $bookmarks)->where('isValid', true)->orderBy('updated_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+        $adverts = Advert::whereIn('id', $bookmarks)->where('isValid', true)->where('online_at', '<', Carbon::now())->orderBy('online_at', 'desc')->paginate(config('runtime.advertsPerPage'));
 
         $adverts->load('pictures');
         $adverts->load('category');
@@ -361,9 +370,9 @@ class AdvertController extends Controller
 
                 $results = $this->pictureManager->storeLocalFinal();
 
-                $advert->options = $this->setOptions(count($results)/2, $advert->isUrgent);
+                $advert->options = $this->setOptions(count($results)/2, $advert->isUrgent, null);
 
-                $advert->cost = $this->getCost(count($results)/2, $advert->isUrgent);
+                $advert->cost = $this->getCost(count($results)/2, $advert->isUrgent, false);
 
 
                 DB::beginTransaction();
@@ -388,7 +397,7 @@ class AdvertController extends Controller
         }
     }
 
-    private function setOptions($nbPictures, $isUrgent) {
+    private function setOptions($nbPictures, $isUrgent, $isRenew=null) {
         $options = [];
         if($nbPictures > config('runtime.nbFreePictures')){
             $options['payedPictures'] = [
@@ -403,6 +412,14 @@ class AdvertController extends Controller
                 'name' => trans('strings.option_isUrgent_name'),
                 'quantity' => 1,
                 'cost' => $this->getCostIsUrgent($isUrgent),
+                'tva' => env('TVA')
+            ];
+        }
+        if($isRenew){
+            $options['isRenew'] = [
+                'name' => trans('strings.option_isRenew_name'),
+                'quantity' => 1,
+                'cost' => $this->getCostIsRenew($isRenew),
                 'tva' => env('TVA')
             ];
         }
@@ -423,10 +440,18 @@ class AdvertController extends Controller
         return 0;
     }
 
-    private function getCost($nbPictures, $isUrgent=false){
+    private function getCostIsRenew($isRenew){
+        if($isRenew){
+            return config('runtime.renewCost')*100;
+        }
+        return 0;
+    }
+
+    private function getCost($nbPictures, $isUrgent=false, $isRenew=false){
         $cost = 0;
         $cost += $this->getCostPictures($nbPictures);
         $cost += $this->getCostIsUrgent($isUrgent);
+        $cost += $this->getCostIsRenew($isRenew);
         return $cost;
     }
 
@@ -447,15 +472,7 @@ class AdvertController extends Controller
     public function show($id, Request $request)
     {
         $advert = Advert::find($id);
-        if($advert && $advert->isValid) {
-//            if ($request->isXmlHttpRequest()) {
-//                $advert->load('pictures');
-//                $advert->load('category');
-//                $ancestors = $advert->category->getAncestors();
-//                $ancestors->add($advert->category);
-//                $advert->setBreadCrumb($ancestors);
-//                return response()->json(['advert' => $advert]);
-//            } else {
+        if($advert && $advert->isValid && $advert->online_at != null && $advert->online_at < Carbon::now()) {
                 //+1 Views to advert
                 $advert->timestamps = false;
                 $advert->views = $advert->views + 1;
@@ -523,6 +540,12 @@ class AdvertController extends Controller
         }
     }
 
+    /**
+     *
+     * Return List of Type advert
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getListType()  {
         $list = DBUtils::getEnumValues('adverts', 'type');
         $transList = [];
@@ -532,10 +555,22 @@ class AdvertController extends Controller
         return response()->json($transList);
     }
 
+    /**
+     *
+     * Return view of list Advert to Approve
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function toApprove() {
         return view('advert.approve');
     }
 
+    /**
+     *
+     * Route to Get the list of Advert to Approve
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listApprove() {
         $adverts = Advert::where('isPublish', true)->where('isValid', null)->get();
         $adverts->load('user');
@@ -544,90 +579,18 @@ class AdvertController extends Controller
         return response()->json($adverts);
     }
 
+    /**
+     *
+     * Route to Approve Adverts after publish. Capture Payment, and set online_at attribute
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function approve(Request $request) {
-
         $approveList = $request->all();
         try {
             foreach ($approveList as $key=>$value) {
-                if($value != null) {
-                    $advert = Advert::find($key);
-                    if($advert) {
-                        //IF EXIST AUTHORIZATION PAYMENT
-                        if($advert->invoice
-                            && $advert->invoice->authorization
-                            && $advert->invoice->authorization != '')
-                        {
-                            try {
-                                $invoice = $advert->invoice;
-                                $authorizationId = $advert->invoice->authorization;
-                                $authorization = Authorization::get($authorizationId, $this->_api_context);
-                                if((boolean)$value==true){
-                                    //CAPTURE PAYMENT
-                                    $amt = new Amount();
-                                    $amt->setCurrency($authorization->getAmount()->getCurrency());
-                                    $amt->setTotal($authorization->getAmount()->getTotal());
-                                    $capture = new Capture();
-                                    $capture->setAmount($amt);
-                                    $getCapture = $authorization->capture($capture, $this->_api_context);
-                                    $invoice->captureId = $getCapture->getId();
-                                    $advert->isValid=(boolean)$value;
-
-                                    $stats = Stats::latest()->first();
-                                    if($advert->cost > 0){
-                                        $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
-                                        $stats->totalCosts = $stats->totalCosts + $advert->cost;
-                                    } else {
-                                        $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
-                                    }
-
-                                    DB::beginTransaction();
-                                    $invoice->save();
-                                    $advert->save();
-                                    $stats->save();
-                                    DB::commit();
-                                } else {
-                                    //VOID PAYMENT
-                                    $getVoid = $authorization->void($this->_api_context);
-                                    $invoice->voidId = $getVoid->getId();
-                                    $advert->isValid=(boolean)$value;
-
-                                    DB::beginTransaction();
-                                    $invoice->save();
-                                    $advert->save();
-                                    DB::commit();
-                                }
-                            } catch (\Exception $e) {
-                                return response($e, 500);
-                            }
-                        } else {
-                            $advert->isValid=(boolean)$value;
-                            if((boolean)$value){
-                                $stats = Stats::latest()->first();
-                                if($advert->cost > 0){
-                                    $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
-                                    $stats->totalCosts = $stats->totalCosts + $advert->cost;
-                                } else {
-                                    $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
-                                }
-                                DB::beginTransaction();
-                                $advert->save();
-                                $stats->save();
-                                DB::commit();
-                            } else {
-                                $advert->save();
-                            }
-                        }
-
-                        $recipient = $advert->user;
-                        $senderMail = env('SERVICE_MAIL_FROM');
-                        $senderName = ucfirst(config('app.name'));
-                        if($advert->isValid){
-                            $recipient->notify(new AdvertApprove($advert, $senderName, $senderMail));
-                        } else {
-                            $recipient->notify(new AdvertNotApprove($advert, $senderName, $senderMail));
-                        }
-                    }
-                }
+                $this->approveAdvert($key, $value);
             }
         } catch (\Exception $e) {
             return response(trans('strings.view_advert_approve_error'), 500);
@@ -635,6 +598,130 @@ class AdvertController extends Controller
         return response('ok',200);
     }
 
+    /**
+     *
+     * private function to approve One advert
+     *
+     * @param $key
+     * @param $value
+     * @return null
+     * @throws \Exception
+     */
+    private function approveAdvert($key, $value) {
+        if($value != null) {
+            $advert = Advert::find($key);
+            if($advert) {
+                //IF EXIST AUTHORIZATION PAYMENT
+                if($advert->invoice
+                    && $advert->invoice->authorization
+                    && $advert->invoice->authorization != '')
+                {
+                    try {
+                        $invoice = $advert->invoice;
+                        $authorizationId = $advert->invoice->authorization;
+                        $authorization = Authorization::get($authorizationId, $this->_api_context);
+                        if((boolean)$value==true){
+                            //First try to setting some params to advert before capture payment
+                            $originalAdvert = null;
+                            if($advert->originalAdvertId && $advert->originalAdvertId > 0) {
+                                $originalAdvert = Advert::withTrashed()->find($advert->originalAdvertId);
+                                if(!$originalAdvert){
+                                    throw new \Exception('error original advert');
+                                } else {
+                                    $originalAdvert->isRenew = true;
+                                    if(!$originalAdvert->deleted_at) {
+                                        //renew after deleted original
+                                        $advert->online_at = Carbon::parse($originalAdvert->online_at)->addDays(env('ADVERT_LIFE_TIME'));
+                                    } else {
+                                        //renew now!
+                                        $advert->online_at = Carbon::now();
+                                    }
+                                }
+                            } else {
+                                $advert->online_at = Carbon::now();
+                            }
+
+
+                            //CAPTURE PAYMENT
+                            $amt = new Amount();
+                            $amt->setCurrency($authorization->getAmount()->getCurrency());
+                            $amt->setTotal($authorization->getAmount()->getTotal());
+                            $capture = new Capture();
+                            $capture->setAmount($amt);
+                            $getCapture = $authorization->capture($capture, $this->_api_context);
+                            $invoice->captureId = $getCapture->getId();
+                            $advert->isValid=(boolean)$value;
+
+
+
+                            $stats = Stats::latest()->first();
+                            if($advert->cost > 0){
+                                $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
+                                $stats->totalCosts = $stats->totalCosts + $advert->cost;
+                            } else {
+                                $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+                            }
+
+                            DB::beginTransaction();
+                            if($originalAdvert){ $originalAdvert->save();}
+                            $invoice->save();
+                            $advert->save();
+                            $stats->save();
+                            DB::commit();
+                        } else {
+                            //VOID PAYMENT
+                            $getVoid = $authorization->void($this->_api_context);
+                            $invoice->voidId = $getVoid->getId();
+                            $advert->isValid=(boolean)$value;
+
+                            DB::beginTransaction();
+                            $invoice->save();
+                            $advert->save();
+                            DB::commit();
+                        }
+                    } catch (\Exception $e) {
+                        throw new \Exception($e);
+                    }
+                } else {
+                    $advert->isValid=(boolean)$value;
+                    if((boolean)$value){
+                        $advert->online_at = Carbon::now();
+                        $stats = Stats::latest()->first();
+                        $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+                        DB::beginTransaction();
+                        $advert->save();
+                        $stats->save();
+                        DB::commit();
+                    } else {
+                        $advert->save();
+                    }
+                }
+
+                $recipient = $advert->user;
+                $senderMail = env('SERVICE_MAIL_FROM');
+                $senderName = ucfirst(config('app.name'));
+                if($advert->isValid && !$advert->originalAdvertId) {
+                    $recipient->notify(new AdvertApprove($advert, $senderName, $senderMail));
+                    return null;
+                } elseif ($advert->isValid && $advert->originalAdvertId > 0) {
+                    $recipient->notify(new AdvertRenew($advert));
+                    return $advert;
+                } else {
+                    $recipient->notify(new AdvertNotApprove($advert, $senderName, $senderMail));
+                    return null;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * Route to publish Advert without Payment
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function publish(Request $request, $id){
         $advert = Advert::find($id);
         $advert->load('user');
@@ -646,6 +733,14 @@ class AdvertController extends Controller
         }
     }
 
+    /**
+     *
+     * Common Publish Process (with or without Payment)
+     *
+     * @param Advert $advert
+     * @param Request $request
+     * @param null $authorizationId
+     */
     private function advertPublish(Advert $advert, Request $request, $authorizationId=null){
         DB::beginTransaction();
         $advert->isPublish = true;
@@ -661,6 +756,14 @@ class AdvertController extends Controller
         $request->session()->flash('clear', true);
     }
 
+
+    /**
+     *
+     * Return View for Payment
+     *
+     * @param $id
+     * @return AdvertController|\Illuminate\Http\RedirectResponse
+     */
     public function reviewForPayment($id) {
         if(!$this->haveCompleteAccount()){
             return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
@@ -674,9 +777,15 @@ class AdvertController extends Controller
                 return view('advert.reviewForPayment', compact('advert', 'listCardTypes'));
         }
         return redirect(route('home'));
-
     }
 
+    /**
+     *
+     * Message from customer to seller
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function sendMail(Request $request) {
         //valid Request here because not possible back in pop-up message
         $validator = Validator::make($request->all(), [
@@ -734,6 +843,13 @@ class AdvertController extends Controller
         }
     }
 
+    /**
+     *
+     * Message from customer to admin
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function report(Request $request) {
         //valid Request here because not possible back in pop-up message
         $validator = Validator::make($request->all(), [
@@ -760,10 +876,26 @@ class AdvertController extends Controller
         }
     }
 
+
+    /**
+     *
+     * Route when choice Pay by paypal
+     *
+     * @param $id
+     * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function payByPaypal($id) {
         return $this->advertPayment($id, self::PAYPAL);
     }
 
+    /**
+     *
+     * Route when choice Pay by Card
+     *
+     * @param $id
+     * @param CreditCardRequest $request
+     * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function payByCard($id, CreditCardRequest $request) {
         return $this->advertPayment($id, self::CARD, $request);
     }
@@ -781,6 +913,16 @@ class AdvertController extends Controller
         ];
     }
 
+
+    /**
+     *
+     * Process Payment: Create Invoice and Get Authorization number if Card or rediret To paypal
+     *
+     * @param $id
+     * @param $type
+     * @param null $request
+     * @return AdvertController|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     private function advertPayment($id, $type, $request=null) {
         $advert = Advert::find($id);
         if($advert
@@ -974,6 +1116,16 @@ class AdvertController extends Controller
             ->withErrors(trans('strings.payment_all_error'));
     }
 
+
+    /**
+     *
+     * Get Result of Paypal Payment
+     *
+     * @param $id
+     * @param $success
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function paypalStatus($id, $success, Request $request) {
         $advert = Advert::find($id);
         if(!$advert || !$advert->invoice){
@@ -1028,13 +1180,73 @@ class AdvertController extends Controller
         }
     }
 
+
+    /**
+     *
+     * Common Save Result Of payment and Process to publish Advert before validation
+     *
+     * @param Payment $payment
+     * @param Advert $advert
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     private function saveApprovedAuthorization(Payment $payment, Advert $advert, Request $request) {
         $transactions = $payment->getTransactions();
         $relatedResources = $transactions[0]->getRelatedResources();
         $authorization = $relatedResources[0]->getAuthorization();
         $authorizationId = $authorization->getId();
         $this->advertPublish($advert, $request, $authorizationId);
+        if($advert->originalAdvertId){
+            try {
+                $saveAdvert = $this->approveAdvert($advert->id, true);
+                return redirect(route('home'))
+                    ->with('success', trans('strings.payment_renew_success', ['date' => Carbon::parse($saveAdvert->online_at)->toDateTimeString(), 'days'=> env('ADVERT_LIFE_TIME')]));
+            } catch (\Exception $e) {
+                //TODO MAIL TO ADMIN FOR THIS CASE
+                return redirect(route('home'))
+                    ->withErrors(trans('strings.view_advert_auto_approve_error'));
+            }
+        }
         return redirect(route('home'))
-            ->with('success', 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.');
+                ->with('success', trans('strings.payment_paypal_success'));
+    }
+
+
+    /**
+     *
+     * Renew an Advert
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function renew($id)
+    {
+        $advert = Advert::withTrashed()->find($id);
+        if($advert && auth()->user()->id === $advert->user->id && $advert->isValid && !$advert->isRenew && $advert->online_at){
+            $newAdvert = $advert->replicate();
+            $newAdvert->isPublish = false;
+            $newAdvert->invoice_id = null;
+            $newAdvert->deleted_at = null;
+            $newAdvert->online_at = null;
+            $newAdvert->lastObsoleteMail = null;
+            $newAdvert->options = $this->setOptions(null, null, true);
+            $newAdvert->cost = $this->getCost(null, null, true);
+            $newAdvert->originalAdvertId = $advert->id;
+
+            $newPictures = [];
+            foreach ($advert->pictures as $picture){
+                $newPictures[] = $picture->replicate();
+            }
+            DB::beginTransaction();
+            $newAdvert->save();
+            foreach ($newPictures as $picture){
+                $newAdvert->pictures()->save($picture);
+                $picture->save();
+            }
+            DB::commit();
+            return redirect(route('user.completeAccount', ['id' => $newAdvert->id]));
+        } else {
+            return redirect(route('home'));
+        }
     }
 }

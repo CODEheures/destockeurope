@@ -62,10 +62,10 @@ class UserController extends Controller
         $zoomMap = 16;
         $advertAccountVerifiedStep = true;
         $advert = Advert::find($id);
-        if($advert){
+        if($advert && $advert->user->id === $user->id && !$advert->isPublish){
             return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert'));
         } else {
-            return redirect()->back()->withInput()->withErrors('errors', trans('strings.view_all_error_saving_message'));
+            return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
         }
     }
 

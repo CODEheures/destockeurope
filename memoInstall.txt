@@ -6,3 +6,5 @@
 //      pas de php artisan config:cache , googlemap foire
 //      php artisan queue:work database --timeout=600 --tries=1 (1ere fois) | php artisan queue:restart
 //TODO post video
+//TODO post mail to admin si renew fails
+//TODO BTN renew pour advert encore en ligne??

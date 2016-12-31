@@ -40,7 +40,7 @@
                             <div class="sixteen wide right aligned column geodate-computer">
                                 <p>
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                     <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                                     <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                     <i class="empty large heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
@@ -76,7 +76,7 @@
                     <div class="sixteen wide right aligned mobile only column geodate-mobile">
                         <p>
                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                             <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                             <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                             <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
@@ -117,17 +117,25 @@
                             </div>
                             <div class="sixteen wide column item-description">
                                 <div class="description">
-                                    <template v-if="!advert.deleted_at">
-                                        <a :href="advert.url" class="ui basic primary button">
-                                            <i class="setting icon"></i>
-                                            {{ manageAdvertLabel }}
+                                    <template v-if="advert.isRenew">
+                                        <a href="#" class="ui disabled button">
+                                            <i class="history icon"></i>
+                                            {{ isRenewAdvertLabel }}
                                         </a>
                                     </template>
                                     <template v-else>
-                                        <a :href="advert.url" class="ui disabled button">
-                                            <i class="power icon"></i>
-                                            {{ renewAdvertLabel }}
-                                        </a>
+                                        <template v-if="!advert.deleted_at">
+                                            <a :href="advert.url" class="ui basic primary button">
+                                                <i class="setting icon"></i>
+                                                {{ manageAdvertLabel }}
+                                            </a>
+                                        </template>
+                                        <template v-else>
+                                            <a :href="advert.renewUrl" class="ui primary button">
+                                                <i class="power icon"></i>
+                                                {{ renewAdvertLabel }}
+                                            </a>
+                                        </template>
                                     </template>
                                     <div class="ui labeled button disabled-bookmark">
                                         <div class="ui yellow button">
@@ -150,7 +158,7 @@
                             <div class="sixteen wide right aligned column geodate-computer">
                                 <p>
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                 </p>
                             </div>
                         </div>
@@ -164,17 +172,25 @@
                         </span>
                         <div class="header"><h3>{{ advert.title }}</h3></div>
                         <div class="sixteen wide centered column">
-                            <template v-if="!advert.deleted_at">
-                                <a :href="advert.url" class="ui basic primary button">
-                                    <i class="setting icon"></i>
-                                    {{ manageAdvertLabel }}
+                            <template v-if="advert.isRenew">
+                                <a href="#" class="ui disabled button">
+                                    <i class="history icon"></i>
+                                    {{ isRenewAdvertLabel }}
                                 </a>
                             </template>
                             <template v-else>
-                                <a :href="advert.url" class="ui disabled button">
-                                    <i class="power icon"></i>
-                                    {{ renewAdvertLabel }}
-                                </a>
+                                <template v-if="!advert.deleted_at">
+                                    <a :href="advert.url" class="ui basic primary button">
+                                        <i class="setting icon"></i>
+                                        {{ manageAdvertLabel }}
+                                    </a>
+                                </template>
+                                <template v-else>
+                                    <a :href="advert.renewUrl" class="ui primary button">
+                                        <i class="power icon"></i>
+                                        {{ renewAdvertLabel }}
+                                    </a>
+                                </template>
                             </template>
                         </div>
                     </div>
@@ -201,7 +217,7 @@
                     <div class="sixteen wide right aligned mobile only column geodate-mobile">
                         <p>
                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.updated_at) }}</span>
+                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                         </p>
                     </div>
                 </div>
@@ -223,6 +239,7 @@
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,
+            isRenewAdvertLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
             noResultFoundHeader: String,

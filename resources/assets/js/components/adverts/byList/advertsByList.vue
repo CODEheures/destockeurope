@@ -59,6 +59,7 @@
                             :urgent-label="urgentLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
@@ -105,6 +106,7 @@
                             :urgent-label="urgentLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
@@ -134,6 +136,7 @@
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,
+            isRenewAdvertLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
             noResultFoundHeader: String,

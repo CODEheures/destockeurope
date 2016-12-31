@@ -79,6 +79,11 @@ return [
     'mail_alertObsoleteAdvert_action' => 'Renouveller mon annonce',
     'mail_alertObsoleteAdvert_line2' => 'Merci d\'utiliser notre application!',
 
+    'mail_advertRenew_subject' => 'Votre annonce est renouvellée!',
+    'mail_advertRenew_greeting' => 'Félicitation :username !',
+    'mail_advertRenew_line' => 'Votre annonce ":title" est renouvellée à partir du :date pour une durée de :days jours',
+    'mail_advertRenew_line2' => 'Merci d\'utiliser notre application! A tout de suite',
+
     'form_label_name' => 'Votre nom',
     'form_label_email' => 'Votre E-mail',
     'form_label_phone' => 'Votre n° de téléphone',
@@ -151,6 +156,7 @@ return [
 
     'option_payedPicture_name' => 'Photos supplémentaires',
     'option_isUrgent_name' => 'Annonce urgente',
+    'option_isRenew_name' => 'Renouvellement de mon annonce',
 
     'view_all_error_load_message' => 'Ho non! Erreur de chargement :-( , essayez de rafraichir la page',
     'view_all_error_reload_message' => 'rafraichir la page SVP',
@@ -178,6 +184,7 @@ return [
     'view_manage_adverts_nb_free_pictures_label' => 'Nombre d\'images gratuites par annonce',
     'view_manage_adverts_nb_max_pictures_label' => 'Nombre maximal d\'images par annonce',
     'view_manage_adverts_urgent_cost_label' => 'Prix de l\'option URGENT (€)',
+    'view_manage_adverts_renew_cost_label' => 'Prix de renouvellement (€)',
     'view_manage_adverts_per_page_label' => 'Nombre d\'annonces par page',
     'view_manage_resume_length_label' => 'Longeur du résumé (nb caractères)',
     'view_manage_search_label' => 'Filtre de recherche',
@@ -221,7 +228,7 @@ return [
     'view_advert_steps_2_title' => 'Vos informations',
     'view_advert_steps_2_description' => 'vérifier les informations de votre compte',
     'view_advert_steps_3_title' => 'Paiement',
-    'view_advert_steps_3_description' => 'si urgent ou photos supplémentaires',
+    'view_advert_steps_3_description' => 'si urgent, photos supplémentaires, ou renouvellement',
     'view_advert_show_contact_label' => 'Contacter le vendeur',
     'view_advert_show_bookmark_info' => 'Favoris',
     'view_advert_show_bookmark_label' => 'Mettre en favori',
@@ -229,10 +236,11 @@ return [
     'view_advert_show_unbookmark_label' => 'Supprimer des favoris',
     'view_advert_show_unbookmark_success' => 'Cette annonce est supprimée de vos favoris',
     'view_advert_show_bookmark_auth_required' => 'Identifiez-vous svp pour bénéficier du suivi des favoris',
+    'view_advert_show_delete_label' => 'Supprimer mon annonce',
     'view_advert_show_views_info' => 'Vues',
     'view_advert_show_manage_label' => 'Gerer',
     'view_advert_show_renew_label' => 'Renouveler',
-    'view_advert_show_delete_label' => 'Supprimer mon annonce',
+    'view_advert_show_is_renew_label' => 'Est renouvellée',
     'view_advert_show_delete_success' => 'Votre annonce est bien supprimée. Merci de votre confiance',
     'view_advert_show_message_send' => 'Votre message est bien envoyé',
     'view_advert_report_label' => 'Signaler cette annonce',
@@ -247,6 +255,7 @@ return [
     'view_advert_approve_modal_valid_header' => 'Valider toutes les actions',
     'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',
     'view_advert_approve_error' => 'Une erreur est survenue pendant l\'approbation d\'une annonce',
+    'view_advert_auto_approve_error' => 'Une erreur est survenue pendant l\'approbation automatique de votre annonce renouvellée. Nos service sont avertis et traitent votre problème au plus vite',
     'view_advert_approve_success' => 'Approbations des annonces envoyées',
 
     'view_advert_by_link_label' => 'Voir l\'annonce',
@@ -295,6 +304,7 @@ return [
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho non! Le paiement a échoué :-(',
     'payment_paypal_success' => 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.',
+    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de :days jours.',
 
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',
