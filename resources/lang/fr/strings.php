@@ -81,7 +81,7 @@ return [
 
     'mail_advertRenew_subject' => 'Votre annonce est renouvellée!',
     'mail_advertRenew_greeting' => 'Félicitation :username !',
-    'mail_advertRenew_line' => 'Votre annonce ":title" est renouvellée à partir du :date pour une durée de :days jours',
+    'mail_advertRenew_line' => 'Votre annonce ":title" est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours',
     'mail_advertRenew_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
     'form_label_name' => 'Votre nom',
@@ -304,7 +304,7 @@ return [
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho non! Le paiement a échoué :-(',
     'payment_paypal_success' => 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.',
-    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de :days jours.',
+    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours.',
 
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',
