@@ -20,4 +20,9 @@ class Category extends Model
     public function adverts() {
         return $this->hasMany('App\Advert');
     }
+
+    //local scopes
+    public function scopeDescendantsOf($query, $id) {
+        return $query->with('descendants')->where('id', $id);
+    }
 }

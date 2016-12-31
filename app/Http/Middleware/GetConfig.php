@@ -28,6 +28,10 @@ class GetConfig
         $requestRegion = \Locale::getRegion($httpAccept);
 
         $config = Common::first();
+        if(!$config) {
+            Common::create();
+            $config = Common::first();
+        }
         if($config){
             config(['runtime.masterAds' => $config->masterAds]);
             config(['runtime.urlMasterAds' => $config->urlMasterAds]);

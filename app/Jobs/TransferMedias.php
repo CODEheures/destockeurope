@@ -44,13 +44,13 @@ class TransferMedias implements ShouldQueue
             $commons->save();
             //move pictures to distant disk
             $pictureManager = new PicturesManager();
-            $picture = Picture::where('disk', '=', 'local')->first();
+            $picture = Picture::onLocalDisk()->first();
             while ($picture && $partial < $total){
                 $sizeBeforeMove = $pictureManager->getSize($picture);
                 if($sizeBeforeMove != 0){
                     $pictureManager->moveToDistantFinal($picture);
                     $partial += round($sizeBeforeMove/1024,0);
-                    $picture = Picture::where('disk', '=', 'local')->first();
+                    $picture = Picture::onLocalDisk()->first();
                     $commons->transfertPartial = $partial;
                     $commons->save();
                 } else {

@@ -80,4 +80,13 @@ class User extends Authenticatable
         }
         return $result;
     }
+
+    //local scopes
+    public function scopeWhereMail($query, $email) {
+        return $query->where('email', '=', $email);
+    }
+
+    public function scopeWhereRole($query, $role) {
+        return $query->where('role', '=', $role);
+    }
 }

@@ -254,14 +254,7 @@ class AdvertController extends Controller
 
     public function mines()
     {
-        $adverts = Advert::withTrashed()
-            ->where('user_id', '=', auth()->id())->where('isValid', true)
-            ->where('online_at', '<', Carbon::now())->orderBy('online_at', 'desc')
-            ->where(function ($query){
-                $query->where('isRenew', false)
-                    ->orWhere('deleted_at', null);
-            })
-            ->paginate(config('runtime.advertsPerPage'));
+        $adverts = Advert::mines()->paginate(config('runtime.advertsPerPage'));
 
         $adverts->load('pictures');
         $adverts->load('category');
@@ -292,8 +285,8 @@ class AdvertController extends Controller
 
     public function bookmarks()
     {
-        $bookmarks = Bookmark::where('user_id', auth()->user()->id)->get()->pluck('advert_id')->toArray();
-        $adverts = Advert::whereIn('id', $bookmarks)->where('isValid', true)->where('online_at', '<', Carbon::now())->orderBy('online_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+        $bookmarks = Bookmark::mines()->get()->pluck('advert_id')->toArray();
+        $adverts = Advert::inBookmarks($bookmarks)->paginate(config('runtime.advertsPerPage'));
 
         $adverts->load('pictures');
         $adverts->load('category');
@@ -472,7 +465,7 @@ class AdvertController extends Controller
     public function show($id, Request $request)
     {
         $advert = Advert::find($id);
-        if($advert && $advert->isValid && $advert->online_at != null && $advert->online_at < Carbon::now()) {
+        if($advert && $advert->isValid && $advert->online_at != null && Carbon::parse($advert->online_at)->isPast(Carbon::now())) {
                 //+1 Views to advert
                 $advert->timestamps = false;
                 $advert->views = $advert->views + 1;
@@ -572,7 +565,7 @@ class AdvertController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function listApprove() {
-        $adverts = Advert::where('isPublish', true)->where('isValid', null)->get();
+        $adverts = Advert::onlyPublish()->get();
         $adverts->load('user');
         $adverts->load('pictures');
         $adverts->load('category');
@@ -806,10 +799,10 @@ class AdvertController extends Controller
            $sender = auth()->user();
         } else {
             //test if User exist
-           $sender = User::where('email', '=', $request->email)->first();
+           $sender = User::whereMail($request->email)->first();
            if(!$sender){
                //test if anonymous exist
-               $sender = Anonymous::where('email', '=', $request->email)->first();
+               $sender = Anonymous::whereMail($request->email)->first();
            }
         }
         if($sender){
@@ -866,7 +859,7 @@ class AdvertController extends Controller
             $senderMail = $request->email;
             $message = $request->message;
 
-            $recipients = User::where('role', '=', 'admin')->get();
+            $recipients = User::whereRole('admin')->get();
             foreach ($recipients as $recipient){
                 $recipient->notify(new ReportAdvert($advert, $senderMail, $message));
             }

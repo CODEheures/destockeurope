@@ -21,7 +21,7 @@ class CommonController extends Controller
 
     public function subscribeNewsLetter(SubscribeNewsLetterRequest $request) {
         try {
-            $existUser = Anonymous::where('email', '=', $request->email)->first();
+            $existUser = Anonymous::whereMail($request->email)->first();
             if(!$existUser){
                 UserUtils::createAnonymous($request->email, $request->name, $request->phone, null, true);
             }

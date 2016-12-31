@@ -23,7 +23,7 @@ class BookmarkController extends Controller
         }
         $advert = Advert::find($advertId);
         if($advert){
-            $existBookmark = Bookmark::where('advert_id', $advert->id)->where('user_id', auth()->user()->id)->first();
+            $existBookmark = Bookmark::existForAuthUser($advert->id)->first();
             if($existBookmark){
                 return response('ok', 200);
             } else {
@@ -43,7 +43,7 @@ class BookmarkController extends Controller
         if(!auth()->check()){
             return response(trans('strings.view_advert_show_bookmark_auth_required'), 409);
         }
-        $existBookmark = Bookmark::where('advert_id', $advertId)->where('user_id', auth()->user()->id)->first();
+        $existBookmark = Bookmark::existForAuthUser($advertId)->first();
         if($existBookmark){
             $existBookmark->delete();
             return response('ok', 200);

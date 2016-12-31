@@ -13,4 +13,9 @@ class Anonymous extends Model
         'phone',
         'isNewsLetterSubscriber'
     ];
+
+    //local scopes
+    public function scopeWhereMail($query, $email) {
+        return $query->where('email', '=', $email);
+    }
 }

@@ -35,24 +35,24 @@ class AdvertsManager
             $counterDelPictures = 0;
             $counterDelAdvert = 0;
             //1 get Adverts where is Valid = false
-            $invalidAdverts = Advert::where('isValid', '=', false)->get();
+            $invalidAdverts = Advert::invalid()->get();
             foreach ($invalidAdverts as $advert){
                 $counterDelAdvert++;
                 $counterDelPictures += $this->definitiveDestroy($advert);
             }
 
             //2 get Adverts where is publish = false and created_at > 2 hours
-            $abandonedAdverts = Advert::where('isPublish', '=', false)->where('created_at', '<', Carbon::now()->subHours(2))->get();
+            $abandonedAdverts = Advert::abandonned()->get();
             foreach ($abandonedAdverts as $advert){
                 $counterDelAdvert++;
                 $counterDelPictures += $this->definitiveDestroy($advert);
             }
 
-            //3 get abandonned duplicate Adverts
-            $abandonedDuplicateAdverts = Advert::whereNotNull('originalAdvertId')->whereNull('invoice_id')->whereNull('online_at')->where('created_at', '<', Carbon::now()->subHours(2))->get();
-            foreach ($abandonedDuplicateAdverts as $advert){
+            //3 get abandonned renew Adverts
+            $abandonedRenewAdverts = Advert::abandonnedRenew()->get();
+            foreach ($abandonedRenewAdverts as $advert){
                 $counterDelAdvert++;
-                //$counterDelPictures += $this->definitiveDestroy($advert);
+                $counterDelPictures += $this->definitiveDestroy($advert);
             }
 
             //4 get Adverts where deleted_at > env delay
@@ -71,7 +71,7 @@ class AdvertsManager
         try {
             $counterDelPictures = 0;
             $counterDelAdvert = 0;
-            $obsoleteAdverts = Advert::onlyTrashed()->where('deleted_at', '<', Carbon::now()->subDay(env('DELAY_DAYS_FOR_RENEW_ADVERT')))->get();
+            $obsoleteAdverts = Advert::obsoletes()->get();
             foreach ($obsoleteAdverts as $advert){
                 $counterDelAdvert++;
                 $counterDelPictures += $this->definitiveDestroy($advert);
@@ -86,7 +86,7 @@ class AdvertsManager
         try {
             //stop advert with online_at > lifeTime
             $counter = 0;
-            $invalidAdverts = Advert::where('online_at', '<', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')))->get();
+            $invalidAdverts = Advert::finished()->get();
             foreach ($invalidAdverts as $advert){
                 $counter++;
                 $advert->delete();
@@ -102,20 +102,7 @@ class AdvertsManager
             //alert advert with online_at > lifeTime-$days
             $counter = 0;
             $alertEndOfAdverts = null;
-            if($days > 0){
-                $alertEndOfAdverts = Advert::whereDate('online_at' , '=', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')-$days)->toDateString())
-                    ->where('isValid', true)
-                    ->where(function ($query) use ($days){
-                        $query->whereNull('lastObsoleteMail')
-                            ->orWhere('lastObsoleteMail', '>', $days);
-                    })
-                    ->get();
-            } elseif($days==0) {
-                $alertEndOfAdverts = Advert::onlyTrashed()
-                    ->where('isValid', true)
-                    ->where('lastObsoleteMail', '<>', $days)
-                    ->get();
-            }
+            $alertEndOfAdverts = Advert::EligibleForMailRenew($days)->get();
 
             foreach ($alertEndOfAdverts as $advert){
                 $counter++;

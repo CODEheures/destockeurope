@@ -31,4 +31,32 @@ class Picture extends Model
             return route('picture.normal', ['hashName' => $this->hashName, 'advertId' => $this->advert_id]);
         }
     }
+
+    //local scopes
+    public function scopeParents($query) {
+        return $query->where('hashName' , '=', $this->hashName)
+            ->where('path', '=', $this->path)
+            ->where('disk', '=', $this->disk)
+            ->where('isThumb', '=', $this->isThumb)
+            ->withTrashed();
+    }
+
+    public function scopeFindByHashAndAdvertId($query, $hashName, $advertId) {
+        return $query->withTrashed()->where('hashName', '=', $hashName)
+            ->where('advert_id','=',$advertId);
+    }
+
+    public function scopeFindThumb($query, $hashName, $advertId) {
+        return $query->findByHashAndAdvertId($hashName,$advertId)
+            ->where('isThumb', '=', true);
+    }
+
+    public function scopeFindNormal($query, $hashName, $advertId) {
+        return $query->findByHashAndAdvertId($hashName,$advertId)
+            ->where('isThumb', '=', false);
+    }
+
+    public function scopeOnLocalDisk($query) {
+        return $query->where('disk', '=', 'local');
+    }
 }

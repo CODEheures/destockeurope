@@ -347,12 +347,7 @@ class PicturesManager
     }
 
     public function countParent(Picture $picture) {
-        return Picture::where('hashName' , '=', $picture->hashName)
-            ->where('path', '=', $picture->path)
-            ->where('disk', '=', $picture->disk)
-            ->where('isThumb', '=', $picture->isThumb)
-            ->withTrashed()
-            ->count();
+        return $picture->parents()->count();
     }
 
     public function infoLocalFiles() {

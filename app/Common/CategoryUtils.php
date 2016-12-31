@@ -7,7 +7,7 @@ use App\Category;
 trait CategoryUtils
 {
     public static function getListSubTree($id) {
-        $categories = Category::with('descendants')->where('id', $id)->get()->toFlatTree();
+        $categories = Category::descendantsOf($id)->get()->toFlatTree();
         if(count($categories)==1){
             $category = $categories[0];
             $ids = [];

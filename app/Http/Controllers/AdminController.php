@@ -31,39 +31,10 @@ class AdminController extends Controller
 
     public function getStats(){
         $date = Carbon::now()->subMonths(6);
-        $viewsByDay = Stats::select(array(DB::raw('DATE(`created_at`) as `date`'), DB::raw('SUM(totalNewViews) as views')))
-            ->where('created_at', '>', $date)
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->get();
-
-        $advertsByDay = Stats::select(array(
-                DB::raw('DATE(`created_at`) as `date`'),
-                DB::raw('AVG(totalAdverts) as valid_adverts'),
-                DB::raw('AVG(totalInvalidAdverts) as invalid_adverts'),
-                DB::raw('AVG(totalWaitingAdverts) as waiting_adverts'),
-                DB::raw('SUM(totalNewFreeAdverts) as new_free_adverts'),
-                DB::raw('SUM(totalNewCostAdverts) as new_cost_adverts'),
-            ))
-            ->where('created_at', '>', $date)
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->get();
-
-
-        $costsByDay = Stats::select(array(
-                DB::raw('DATE(`created_at`) as `date`'),
-                DB::raw('(SUM(totalCosts)/100) as sum_costs'),
-                DB::raw('((SUM(totalCosts)/SUM(totalNewCostAdverts))/100) as avg_costs')
-        ))
-            ->where('created_at', '>', $date)
-            ->groupBy('date')
-            ->orderBy('date', 'ASC')
-            ->get();
-
-
+        $viewsByDay = Stats::viewsByDay($date)->get();
+        $advertsByDay = Stats::advertsByDay($date)->get();
+        $costsByDay = Stats::costsByDay($date)->get();
         $filesInfo = Stats::latest()->first();
-
 
         return response()->json([
             'viewsByDay' => $viewsByDay->toArray(),
