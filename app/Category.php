@@ -22,7 +22,7 @@ class Category extends Model
     }
 
     //local scopes
-    public function scopeDescendantsOf($query, $id) {
+    public function scopeDescendantsWith($query, $id) {
         return $query->with('descendants')->where('id', $id);
     }
 }
