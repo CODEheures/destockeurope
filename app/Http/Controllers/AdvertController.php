@@ -1237,7 +1237,7 @@ class AdvertController extends Controller
                 $picture->save();
             }
             DB::commit();
-            return redirect(route('user.completeAccount', ['id' => $newAdvert->id]));
+            return redirect(route('user.completeAccount', ['id' => $newAdvert->id, 'title' => trans('strings.option_isRenew_name')]));
         } else {
             return redirect(route('home'));
         }

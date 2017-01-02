@@ -128,6 +128,11 @@
                 default: false,
                 required: false
             },
+            flagForceReload: {
+                type: Boolean,
+                default: false,
+                required: false
+            },
             adsFrequency: Number,
             actualLocale: String,
             totalQuantityLabel: String,
@@ -155,6 +160,12 @@
             this.$watch('routeGetAdvertsList', function () {
                 this.getAdvertsList();
             });
+            this.$watch('flagForceReload', function () {
+                this.getAdvertsList();
+            });
+            this.$watch('flagForceReload', function () {
+                this.getAdvertsList();
+            });
             this.$watch('minPrice', function () {
                 this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
             });
@@ -169,6 +180,9 @@
                 if(that.reloadOnUnbookmarkSuccess==true) {
                     that.getAdvertsList(true);
                 }
+            });
+            this.$on('deleteAdvert', function (event) {
+               that.$parent.$emit('deleteAdvert', event);
             });
             this.$on('sendToast', function (message) {
                 that.$parent.$emit('sendToast', message);

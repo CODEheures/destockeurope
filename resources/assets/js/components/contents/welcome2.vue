@@ -1,6 +1,32 @@
 <template>
     <div  class="ui grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
+        <div :id="'modal2-'+_uid" class="ui basic modal">
+            <i class="close icon"></i>
+            <div class="header">
+                {{ modalValidHeader }}
+            </div>
+            <div class="image content">
+                <div class="image">
+                    <i class="legal icon"></i>
+                </div>
+                <div class="description">
+                    <p>{{ modalValidDescription }}</p>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="two fluid ui inverted buttons">
+                    <div class="ui cancel red basic inverted button">
+                        <i class="remove icon"></i>
+                        {{ modalNo }}
+                    </div>
+                    <div class="ui ok green basic inverted button">
+                        <i class="checkmark icon"></i>
+                        {{ modalYes }}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="mobile only tablet only row">
             <div class="ui one column grid">
                 <categories-dropdown-menu
@@ -95,6 +121,10 @@
             'loadErrorMessage',
             'bookmarkSuccess',
             'unbookmarkSuccess',
+            'modalValidHeader',
+            'modalValidDescription',
+            'modalNo',
+            'modalYes',
             //category dropdown menu component
             'routeCategory',
             'categoriesDropdownMenuFirstMenuName',
@@ -237,6 +267,9 @@
             this.$on('unbookmarkSuccess', function () {
                 this.sendToast(this.unbookmarkSuccess, 'success');
             });
+            this.$on('deleteAdvert', function (event) {
+                this.destroyMe(event.url);
+            })
         },
         methods: {
             sendToast: function(message,type) {
@@ -402,6 +435,30 @@
                 if(sessionStorage.getItem('filter') != null){
                     this.filter = JSON.parse(sessionStorage.getItem('filter'));
                 }
+            },
+            destroyMe: function (url) {
+                let modalForm = $('#modal2-'+this._uid);
+                let that = this;
+                modalForm.modal({
+                    closable: true,
+                    blurring: true,
+                    onApprove: function () {
+                        that.$http.delete(url)
+                            .then(
+                                function (response) {
+                                    that.updateResults();
+                                },
+                                function (response) {
+                                    if (response.status == 409) {
+                                        that.sendToast(response.body, 'error');
+                                    } else {
+                                        that.sendToast(that.loadErrorMessage, 'error');
+                                    }
+                                    that.isLoaded = false;
+                                }
+                            );
+                    }
+                }).modal('show');
             }
         }
     }

@@ -55,7 +55,7 @@ class UserController extends Controller
      * @param $id
      * @return UserController|\Illuminate\Http\RedirectResponse
      */
-    public function completeAccount($id){
+    public function completeAccount($id, $title){
         $user = $this->auth->user();
         $ip=config('runtime.ip');
         $geolocType = 0;
@@ -63,7 +63,7 @@ class UserController extends Controller
         $advertAccountVerifiedStep = true;
         $advert = Advert::find($id);
         if($advert && $advert->user->id === $user->id && !$advert->isPublish){
-            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert'));
+            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title'));
         } else {
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
         }

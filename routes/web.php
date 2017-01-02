@@ -65,7 +65,7 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function() {
 Route::group(['prefix' => 'users'], function() {
     Route::get('getMe', ['as' => 'user.getMe', 'uses' => 'UserController@getMe']);
     Route::get('account', ['as' => 'user.account', 'uses' => 'UserController@index']);
-    Route::get('completeAccount/{id}', ['as' => 'user.completeAccount', 'uses' => 'UserController@completeAccount']);
+    Route::get('completeAccount/{id}/{title?}', ['as' => 'user.completeAccount', 'uses' => 'UserController@completeAccount']);
     //User Preferences settings
     Route::patch('currency', ['as' => 'user.currency', 'uses' => 'UserController@setCurrency']);
     Route::patch('locale', ['as' => 'user.locale', 'uses' => 'UserController@setLocale']);

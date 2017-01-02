@@ -6,6 +6,12 @@
                 clear-storage="{{ session()->has('clear') ? true : false }}"
 
                 load-error-message="{{ trans('strings.view_all_error_load_message') }}"
+                bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
+                unbookmark-success="{{ trans('strings.view_advert_show_unbookmark_success') }}"
+                modal-valid-header="{{ trans('strings.view_advert_show_modal_delete_header') }}"
+                modal-valid-description="{{ trans('strings.view_advert_show_modal_delete_description') }}"
+                modal-no="{{ trans('strings.modal_no') }}"
+                modal-yes="{{ trans('strings.modal_yes') }}"
 
                 route-category="{{ route('category.index') }}"
                 categories-dropdown-menu-first-menu-name="{{ trans('strings.menu_category') }}"
@@ -40,8 +46,6 @@
                 views-info="{{ trans('strings.view_advert_show_views_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
                 no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
-                bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
-                unbookmark-success="{{ trans('strings.view_advert_show_unbookmark_success') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
@@ -52,6 +56,12 @@
                 clear-storage="{{ session()->has('clear') ? true : false }}"
 
                 load-error-message="{{ trans('strings.view_all_error_load_message') }}"
+                bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
+                unbookmark-success="{{ trans('strings.view_advert_show_unbookmark_success') }}"
+                modal-valid-header="{{ trans('strings.view_advert_show_modal_delete_header') }}"
+                modal-valid-description="{{ trans('strings.view_advert_show_modal_delete_description') }}"
+                modal-no="{{ trans('strings.modal_no') }}"
+                modal-yes="{{ trans('strings.modal_yes') }}"
 
                 route-category="{{ route('category.index') }}"
                 categories-dropdown-menu-first-menu-name="{{ trans('strings.menu_category') }}"
@@ -86,8 +96,6 @@
                 views-info="{{ trans('strings.view_advert_show_views_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
                 no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
-                bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
-                unbookmark-success="{{ trans('strings.view_advert_show_unbookmark_success') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"

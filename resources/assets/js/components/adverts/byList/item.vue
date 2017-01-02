@@ -125,10 +125,14 @@
                                     </template>
                                     <template v-else>
                                         <template v-if="!advert.deleted_at">
-                                            <a :href="advert.url" class="ui basic primary button">
-                                                <i class="setting icon"></i>
-                                                {{ manageAdvertLabel }}
-                                            </a>
+                                            <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
+                                                <i class="wrench icon"></i>
+                                                <span class="text">{{ manageAdvertLabel }}</span>
+                                                <div class="menu">
+                                                    <div class="item" v-on:click="destroyMe()">Supprimer</div>
+                                                    <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">Renouveller</div>
+                                                </div>
+                                            </div>
                                         </template>
                                         <template v-else>
                                             <a :href="advert.renewUrl" class="ui primary button">
@@ -180,10 +184,14 @@
                             </template>
                             <template v-else>
                                 <template v-if="!advert.deleted_at">
-                                    <a :href="advert.url" class="ui basic primary button">
-                                        <i class="setting icon"></i>
-                                        {{ manageAdvertLabel }}
-                                    </a>
+                                    <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
+                                        <i class="wrench icon"></i>
+                                        <span class="text">{{ manageAdvertLabel }}</span>
+                                        <div class="menu">
+                                            <div class="item" v-on:click="destroyMe()">Supprimer</div>
+                                            <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">Renouveller</div>
+                                        </div>
+                                    </div>
                                 </template>
                                 <template v-else>
                                     <a :href="advert.renewUrl" class="ui primary button">
@@ -251,7 +259,8 @@
             };
         },
         mounted () {
-
+            $('#manage-btn-1-'+this._uid).dropdown();
+            $('#manage-btn-2-'+this._uid).dropdown();
         },
         methods: {
             getMoment: function (dateTime) {
@@ -298,6 +307,12 @@
                         }
                     )
                 ;
+            },
+            destroyMe: function () {
+                this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
+            },
+            renewMe: function () {
+                window.location.assign(this.advert.renewUrl);
             }
         }
     }

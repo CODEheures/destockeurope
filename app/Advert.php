@@ -45,7 +45,7 @@ class Advert extends Model {
     protected $casts = [
         'options' => 'array'
     ];
-    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'resume', 'thumb', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount');
+    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'thumb', 'isEligibleForRenew', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -75,6 +75,14 @@ class Advert extends Model {
 
     public function getRenewUrlAttribute() {
         return route('advert.renew', ['id' => $this->id]);
+    }
+
+    public function getDestroyUrlAttribute() {
+        return route('advert.destroy', ['id' => $this->id]);
+    }
+
+    public function getIsEligibleForRenewAttribute() {
+        return (!$this->isRenew && ($this->deleted_at || Carbon::parse($this->online_at)->addDay(env('ADVERT_LIFE_TIME'))->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now())));
     }
 
     public function getThumbAttribute() {

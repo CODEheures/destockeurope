@@ -216,7 +216,7 @@
                                         <span>{{ dataCountries.iceland }}</span>
                                     </div>
                                     <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="en" :data-country-name="dataCountries.england">
+                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.england">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
                                         <path fill="#FFF" d="M.132 59.923L.083.1 30.019.05H89.79l.051 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
@@ -229,7 +229,7 @@
                                         <span>{{ dataCountries.england }}</span>
                                     </div>
                                     <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="gb-sct" :data-country-name="dataCountries.scotland">
+                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.scotland">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
                                         <path fill="#FFF" d="M.133 59.923L.082.1 30.018.05h59.773l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.133V.1h89.658m.1-.1H.033V59.973h89.859V0h-.001z"/>
@@ -1245,7 +1245,7 @@
                                         <span>{{ dataCountries.estonia }}</span>
                                     </div>
                                     <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="eu" :data-country-name="dataCountries.europe">
+                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="" data-country-name="">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
                                         <path fill="#FFF" d="M.133 59.922L.082.1 30.02.049h59.771l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.133V.1h89.658m.1-.1H.033V59.973h89.859V0h-.001z"/>
@@ -1366,7 +1366,12 @@
                 if(event.currentTarget.nodeName == 'A'){
                     this.filter = {};
                     this.filter['country']=(event.currentTarget.dataset.country).toUpperCase();
-                    sessionStorage.setItem('filterLocationInputVal', event.currentTarget.dataset.countryName);
+                    if(event.currentTarget.dataset.countryName != ''){
+                        let countryChoice = event.currentTarget.dataset.countryName;
+                        sessionStorage.setItem('filterLocationInputVal', countryChoice.charAt(0).toUpperCase() + countryChoice.slice(1));
+                    } else {
+                        sessionStorage.removeItem('filterLocationInputVal');
+                    }
                 }
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
                 window.location.assign(this.routeHome);

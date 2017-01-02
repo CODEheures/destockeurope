@@ -46,8 +46,8 @@ class Kernel extends ConsoleKernel
                 $advertManager = new AdvertsManager($pictureManager);
                 $result1 = $advertManager->stopAdverts();
                 $result2 = $advertManager->purgeObsoletesAdverts();
-                $result3 = $advertManager->alertEndOfAdverts(5);
-                $result4 = $advertManager->alertEndOfAdverts(1);
+                $result3 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_1'));
+                $result4 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_2'));
                 $result5 = $advertManager->alertEndOfAdverts(0);
 
                 $message = $message . ';' . $result1 . ';' . $result2[0] . ';' . $result2[1] .';' . $result3 . ';' . $result4 . ';' . $result5 .';;';

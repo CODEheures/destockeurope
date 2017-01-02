@@ -4,6 +4,10 @@
         <personnal-list
                 load-error-message="{{ trans('strings.view_all_error_load_message') }}"
                 content-header="{{ trans('strings.menu_mines') }}"
+                modal-valid-header="{{ trans('strings.view_advert_show_modal_delete_header') }}"
+                modal-valid-description="{{ trans('strings.view_advert_show_modal_delete_description') }}"
+                modal-no="{{ trans('strings.modal_no') }}"
+                modal-yes="{{ trans('strings.modal_yes') }}"
 
                 route-get-adverts-list="{{ route('advert.mines') }}"
 

@@ -1,6 +1,32 @@
 <template>
     <div  class="ui one column grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
+        <div :id="'modal2-'+_uid" class="ui basic modal">
+            <i class="close icon"></i>
+            <div class="header">
+                {{ modalValidHeader }}
+            </div>
+            <div class="image content">
+                <div class="image">
+                    <i class="legal icon"></i>
+                </div>
+                <div class="description">
+                    <p>{{ modalValidDescription }}</p>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="two fluid ui inverted buttons">
+                    <div class="ui cancel red basic inverted button">
+                        <i class="remove icon"></i>
+                        {{ modalNo }}
+                    </div>
+                    <div class="ui ok green basic inverted button">
+                        <i class="checkmark icon"></i>
+                        {{ modalYes }}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="column">
             <h2 class="ui header">{{ contentHeader }}</h2>
         </div>
@@ -11,6 +37,7 @@
                             :route-get-adverts-list="dataRouteGetAdvertList"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
+                            :flag-force-reload="flagForceReload"
                             :ads-frequency="parseInt(adsFrequency)"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
@@ -60,6 +87,10 @@
             //vue strings
             'loadErrorMessage',
             'contentHeader',
+            'modalValidHeader',
+            'modalValidDescription',
+            'modalNo',
+            'modalYes',
             //advertByList component
             'routeGetAdvertsList',
             'routeBookmarkAdd',
@@ -93,6 +124,7 @@
                 dataFlagResetSearch: false,
                 oldChoice: {},
                 update: false,
+                flagForceReload: false
             }
         },
         mounted () {
@@ -123,12 +155,39 @@
                 this.sendToast(event.message, event.type);
             });
             this.dataRouteGetAdvertList = this.routeGetAdvertsList;
+            this.$on('deleteAdvert', function (event) {
+                this.destroyMe(event.url);
+            })
         },
         methods: {
             sendToast: function(message,type) {
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
+            },
+            destroyMe: function (url) {
+                let modalForm = $('#modal2-' + this._uid);
+                let that = this;
+                modalForm.modal({
+                    closable: true,
+                    blurring: true,
+                    onApprove: function () {
+                        that.$http.delete(url)
+                            .then(
+                                function (response) {
+                                    that.flagForceReload = !that.flagForceReload;
+                                },
+                                function (response) {
+                                    if (response.status == 409) {
+                                        that.sendToast(response.body, 'error');
+                                    } else {
+                                        that.sendToast(that.loadErrorMessage, 'error');
+                                    }
+                                    that.isLoaded = false;
+                                }
+                            );
+                    }
+                }).modal('show');
             }
         }
     }
