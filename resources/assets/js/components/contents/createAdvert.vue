@@ -30,8 +30,9 @@
                 <type-radio-button
                         :route-get-list-type="routeGetListType"
                         :first-menu-name="listTypeFirstMenuName"
-                        :old-choice="oldType">
-                </type-radio-button>
+                        :old-choice="isDelegation ? 'bid' : oldType"
+                        :is-disabled="true"
+                ></type-radio-button>
                 <div class="field">
                     <categories-dropdown-menu
                             :route-category="routeCategory"
@@ -120,7 +121,7 @@
                         <i class="icon">{{ nbPicturesIndicator }}</i>
                         <div class="content">
                             <div class="header">{{ helpHeaderIndicator }}</div>
-                            <p>{{ helpUploadP }}<a :href="helpUploadAHref">{{ helpUploadA }}</a></p>
+                            <p v-if="!isDelegation">{{ helpUploadP }}<a :href="helpUploadAHref">{{ helpUploadA }}</a></p>
                         </div>
                     </div>
                 </div>
@@ -128,8 +129,8 @@
                 <div class="field">
                     <div class="ui doubling three column grid">
                         <div class="column" v-for="(thumb,index) in thumbs">
-                            <div :class="index>=advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
-                                <a class="ui pink right ribbon label" v-if="index>=advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
+                            <div :class="!isDelegation &&  index>=advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
+                                <a class="ui pink right ribbon label" v-if="!isDelegation && index>=advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
                                 <div class="ui stackable grid">
                                     <div class="four wide centered column">
                                         <a href="#"><i class="large grey remove circle outline icon" :data-file="thumb" v-on:click="delPhoto"></i></a>
@@ -192,6 +193,7 @@
             'formTitleMaxValid',
             'formDescriptionMinValid',
             'formDescriptionMaxValid',
+            'isDelegation',
             //vue strings
             'contentHeader',
             'advertFormTitleLabel',
@@ -285,8 +287,8 @@
                 },
                 {
                     isActive : false,
-                    isDisabled : false,
-                    isCompleted: false,
+                    isDisabled : this.isDelegation == 1,
+                    isCompleted: this.isDelegation == 1,
                     title: this.stepTwoTitle,
                     description: this.stepTwoDescription,
                     icon: 'user'
@@ -294,7 +296,7 @@
                 {
                     isActive : false,
                     isDisabled : true,
-                    isCompleted: false,
+                    isCompleted: this.isDelegation == 1,
                     title: this.stepThreeTitle,
                     description: this.stepThreeDescription,
                     icon: 'payment'
@@ -337,8 +339,8 @@
             this.getStorage();
         },
         updated () {
-            var that = this;
-            for(var index in this.thumbs){
+            let that = this;
+            for(let index in this.thumbs){
                 $('#slider1-'+this._uid+'-'+index).checkbox({
                     onChange: function () {
                         that.mainPicture = this.value;
@@ -373,14 +375,14 @@
                 this.searchPlace = sessionStorage.getItem('searchPlace');
             },
             helpUpload: function () {
-                var htmlObject = $('<p>'+this.advertFormPhotoHelpContent+'</p>');
+                let htmlObject = $('<p>'+this.advertFormPhotoHelpContent+'</p>');
                 this.helpUploadP = htmlObject[0].firstChild.data;
                 this.helpUploadA = htmlObject[0].firstElementChild.innerHTML;
                 this.helpUploadAHref = htmlObject[0].firstElementChild.href;
             },
             upload: function (event) {
                 this.fileToPost.append(this.formFileInputName, event.target.files[0]);
-                var that = this;
+                let that = this;
                 this.$http.post(this.routePostTempoPicture, this.fileToPost)
                         .then(
                                 function (response) {
@@ -401,7 +403,7 @@
                         );
             },
             getListThumbs: function (event) {
-                var that = this;
+                let that = this;
                 this.$http.get(this.routeGetListTempoThumbs)
                         .then(
                                 function (response) {
@@ -414,7 +416,7 @@
             },
             delPhoto: function (event) {
                 event.preventDefault();
-                var that=this;
+                let that=this;
                 this.$http.delete(this.routeDelTempoPicture+'/'+event.target.dataset.file)
                         .then(
                                 function (response) {
@@ -426,7 +428,12 @@
                         );
             },
             setPicturesIndicators () {
-                var resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
+                let resultIndicator;
+                if(this.isDelegation==1){
+                    resultIndicator =  this.maxFiles - this.thumbs.length;
+                } else {
+                    resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
+                }
                 if(resultIndicator>=0){
                     this.nbPicturesIndicator = resultIndicator;
                     if(resultIndicator>1){
@@ -444,10 +451,17 @@
                 }
             },
             setSteps () {
-                var resultIndicator =  this.thumbs.length - this.advertFormPhotoNbFreePicture;
-                if(resultIndicator>=1 || this.isUrgent) {
-                    (this.steps[2]).isDisabled = false;
-                    var that = this;
+                let resultIndicator;
+                if(this.isDelegation==1){
+                    resultIndicator =  this.maxFiles - this.thumbs.length;
+                } else {
+                    resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
+                }
+                if(this.isDelegation!=1 && (resultIndicator>=1 || this.isUrgent)) {
+                    if(this.isDelegation != 1) {
+                        (this.steps[2]).isDisabled = false;
+                    }
+                    let that = this;
                     this.$http.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent)
                             .then(
                                     function (response) {

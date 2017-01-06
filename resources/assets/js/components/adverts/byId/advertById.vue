@@ -57,7 +57,7 @@
                                     <td class="collapsing">
                                         <i class="money icon"></i> {{ priceLabel }}
                                     </td>
-                                    <td><span class="ui small blue tag label">{{ advert.price }}</span><br/></td>
+                                    <td><span class="ui small blue tag label">{{ advert.price_margin }}</span><br/></td>
                                 </tr>
                                 </tbody>
                             </table>

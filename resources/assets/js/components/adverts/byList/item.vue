@@ -26,7 +26,7 @@
                             </div>
                             <div class="six wide right aligned vertical middle aligned column">
                                 <p class="price">
-                                    <span class="ui small blue tag label">{{ advert.price }}</span><br/>
+                                    <span class="ui small blue tag label">{{ advert.price_margin }}</span><br/>
                                     <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                     <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -60,7 +60,7 @@
                         <div class="ui grid">
                             <div class="sixteen wide mobile only right aligned column">
                                 <p class="price">
-                                    <span class="ui small blue tag label">{{ advert.price }}</span><br/>
+                                    <span class="ui small blue tag label">{{ advert.price_margin }}</span><br/>
                                     <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                     <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>

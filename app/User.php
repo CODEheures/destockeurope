@@ -47,6 +47,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token', 'role'
     ];
+    protected $appends = array('isDelegation');
 
     public function oAuthProvider($providers) {
         $refOauth = '';
@@ -79,6 +80,10 @@ class User extends Authenticatable
             }
         }
         return $result;
+    }
+
+    public function getIsDelegationAttribute() {
+        return $this->role=='delegation';
     }
 
     //local scopes

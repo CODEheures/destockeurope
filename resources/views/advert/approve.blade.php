@@ -13,6 +13,8 @@
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             toggle-approve-label="{{ trans('strings.view_advert_approve_toggle_label') }}"
             toggle-disapprove-label="{{ trans('strings.view_advert_disapprove_toggle_label') }}"
+            form-advert-price-coefficient="{{ trans('strings.view_advert_priceCoefficient_label') }}"
+            form-advert-price-coefficient-example="{{ trans('strings.view_advert_priceCoefficient_example') }}"
             form-validation-button-label="{{ trans('strings.form_button_validation') }}"
             modal-valid-header="{{ trans('strings.view_advert_approve_modal_valid_header') }}"
             modal-valid-description="{{ trans('strings.view_advert_approve_modal_valid_description') }}"

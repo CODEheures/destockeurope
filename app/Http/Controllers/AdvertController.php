@@ -46,6 +46,7 @@ use PayPal\Api\Transaction;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Exception\PayPalConnectionException;
 use PayPal\Rest\ApiContext;
+use Vinkla\Vimeo\VimeoManager;
 
 class AdvertController extends Controller
 {
@@ -53,6 +54,7 @@ class AdvertController extends Controller
     use CategoryUtils;
     use UserUtils;
     private $pictureManager;
+    private $vimeoManager;
     private $_api_context;
     Const PAYPAL = 0;
     Const CARD = 1;
@@ -61,11 +63,12 @@ class AdvertController extends Controller
      * AdvertController constructor.
      * @param PicturesManager $picturesManager
      */
-    public function __construct(PicturesManager $picturesManager) {
+    public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
         $this->pictureManager  = $picturesManager;
+        $this->vimeoManager = $vimeoManager;
 
         // setup PayPal api context
         if(auth()->check() && !(env('PAYPAL_SANDBOX')=='true')){
@@ -133,8 +136,8 @@ class AdvertController extends Controller
 
         //Set min & max prices only if not $isSearchRequest
         if(!$isSearchRequest) {
-            $minAllPrice = $adverts->min('price');
-            $maxAllPrice = $adverts->max('price');
+            $minAllPrice = $adverts->min('price_margin');
+            $maxAllPrice = $adverts->max('price_margin');
             $minAllQuantity = $adverts->min('totalQuantity');
             $maxAllQuantity = $adverts->max('totalQuantity');
 
@@ -179,7 +182,7 @@ class AdvertController extends Controller
         if($request->has('minPrice') && $request->has('maxPrice') ){
             $minPrice = MoneyUtils::setPriceWithoutDecimal($request->minPrice, $currency);
             $maxPrice = MoneyUtils::setPriceWithoutDecimal($request->maxPrice, $currency);
-            $adverts = $adverts->where('price', '>=', $minPrice)->where('price', '<=', $maxPrice);
+            $adverts = $adverts->where('price_margin', '>=', $minPrice)->where('price_margin', '<=', $maxPrice);
         }
 
         //if range quantity
@@ -320,12 +323,14 @@ class AdvertController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         $ip=config('runtime.ip');
         $geolocType = 1;
         $zoomMap = 11;
-        return view('advert.create', compact('ip', 'geolocType', 'zoomMap'));
+        $user = null;
+        auth()->check() ? $user = auth()->user() : null;
+        return view('advert.create', compact('ip', 'geolocType', 'zoomMap', 'user'));
     }
 
     /**
@@ -380,7 +385,11 @@ class AdvertController extends Controller
                     $picture->save();
                 }
                 DB::commit();
-                return redirect(route('user.completeAccount', ['id' =>$advert->id]));
+                if(auth()->user()->isDelegation){
+                    return redirect(route('advert.publish', ['id' =>$advert->id]));
+                } else {
+                    return redirect(route('user.completeAccount', ['id' =>$advert->id]));
+                }
             } catch (\Exception $e) {
                 DB::rollback();
                 return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));
@@ -442,9 +451,11 @@ class AdvertController extends Controller
 
     private function getCost($nbPictures, $isUrgent=false, $isRenew=false){
         $cost = 0;
-        $cost += $this->getCostPictures($nbPictures);
-        $cost += $this->getCostIsUrgent($isUrgent);
-        $cost += $this->getCostIsRenew($isRenew);
+        if(!auth()->user()->isDelegation) {
+            $cost += $this->getCostPictures($nbPictures);
+            $cost += $this->getCostIsUrgent($isUrgent);
+            $cost += $this->getCostIsRenew($isRenew);
+        }
         return $cost;
     }
 
@@ -569,7 +580,12 @@ class AdvertController extends Controller
         $adverts->load('user');
         $adverts->load('pictures');
         $adverts->load('category');
-        return response()->json($adverts);
+
+        $response = [];
+        foreach ($adverts as $advert){
+            $response[$advert->id] = $advert;
+        }
+        return response()->json($response);
     }
 
     /**
@@ -583,7 +599,7 @@ class AdvertController extends Controller
         $approveList = $request->all();
         try {
             foreach ($approveList as $key=>$value) {
-                $this->approveAdvert($key, $value);
+                $this->approveAdvert($key, $value['isApprove'], $value['priceCoefficient']);
             }
         } catch (\Exception $e) {
             return response(trans('strings.view_advert_approve_error'), 500);
@@ -600,10 +616,11 @@ class AdvertController extends Controller
      * @return null
      * @throws \Exception
      */
-    private function approveAdvert($key, $value) {
+    private function approveAdvert($key, $value, $priceCoefficient=null) {
         if($value != null) {
             $advert = Advert::find($key);
             if($advert) {
+                $advert->priceCoefficient = $priceCoefficient;
                 //IF EXIST AUTHORIZATION PAYMENT
                 if($advert->invoice
                     && $advert->invoice->authorization
@@ -1191,7 +1208,7 @@ class AdvertController extends Controller
         $this->advertPublish($advert, $request, $authorizationId);
         if($advert->originalAdvertId){
             try {
-                $saveAdvert = $this->approveAdvert($advert->id, true);
+                $saveAdvert = $this->approveAdvert($advert->id, true, null);
                 return redirect(route('home'))
                     ->with('success', trans('strings.payment_renew_success', ['date' => Carbon::parse($saveAdvert->online_at)->toDateTimeString()]));
             } catch (\Exception $e) {
@@ -1241,5 +1258,9 @@ class AdvertController extends Controller
         } else {
             return redirect(route('home'));
         }
+    }
+
+    public function vimeoQuota() {
+        dd($this->vimeoManager->request('/CODEheures', [], 'GET'));
     }
 }

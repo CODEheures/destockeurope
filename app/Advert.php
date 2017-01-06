@@ -7,6 +7,7 @@ use App\Common\PicturesManager;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 
@@ -23,6 +24,8 @@ class Advert extends Model {
         'title',
         'description',
         'price',
+        'priceCoefficient',
+        'price_margin',
         'currency',
         'latitude',
         'longitude',
@@ -38,14 +41,15 @@ class Advert extends Model {
         'views',
         'lastObsoleteMail',
         'isRenew',
-        'originalAdvertId'
+        'originalAdvertId',
+        'video_id'
     ];
     protected $dates = ['deleted_at', 'online_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
     protected $casts = [
         'options' => 'array'
     ];
-    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'thumb', 'isEligibleForRenew', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount');
+    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'thumb', 'isEligibleForRenew', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -59,9 +63,44 @@ class Advert extends Model {
     public function picturesWithTrashed() { return $this->hasMany('App\Picture')->withTrashed(); }
     public function invoice() { return $this->belongsTo('App\Invoice'); }
 
+    /**
+     * Boot function for using with User Events
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model)
+        {
+            if(!key_exists('priceCoefficient',$model->attributes) && key_exists('price',$model->attributes)){
+                $model->attributes['priceCoefficient'] = 0;
+                $model->attributes['price_margin'] = $model->attributes['price'];
+            } elseif (!key_exists('priceCoefficient',$model->attributes) && !key_exists('price',$model->attributes)) {
+                throw new ModelNotFoundException('error in price of advert');
+            }
+        });
+    }
 
     //Attributs Getters
+    public function getCurrencySymbolAttribute() {
+        return MoneyUtils::getSymbolByCurrencyCode($this->currency);
+    }
+
+    public function getOriginalPriceAttribute() {
+        return $this->getOriginal('price');
+    }
+
+    public function getPriceSubUnitAttribute() {
+        return MoneyUtils::getSubUnit($this->currency);
+    }
+
     public function getPriceAttribute($value) {
+        return MoneyUtils::getPriceWithDecimal($value, $this->currency);
+    }
+
+    public function getPriceMarginAttribute($value) {
         return MoneyUtils::getPriceWithDecimal($value, $this->currency);
     }
 
@@ -121,6 +160,21 @@ class Advert extends Model {
 
     public function getPicturesWithTrashedCountAttribute() {
         return $this->hasMany('App\Picture')->withTrashed()->count();
+    }
+
+
+    //Setter Attribute
+    public function setPriceCoefficientAttribute($value) {
+        //Use this mutator to ensure Margin value
+        if((int)$value > 0) {
+            $price=(int)$this->attributes['price'];
+            $coefficient=(int)$value/100;
+            $margin = (int)($price*$coefficient);
+            $this->attributes['price_margin'] =  $price+$margin;
+        } else {
+            $this->attributes['price_margin'] =  (int)$this->attributes['price'];
+        }
+        $this->attributes['priceCoefficient'] =  $value;
     }
 
     //Public functions
@@ -201,7 +255,7 @@ class Advert extends Model {
     }
 
     public function scopeOnlyPublish($query){
-        return $query->where('isPublish', true)->where('isValid', null);
+        return $query->where('isPublish', true)->where('isValid', null)->orderBy('updated_at', 'asc')->take(10);
     }
 
     public function scopeValidOnline($query){

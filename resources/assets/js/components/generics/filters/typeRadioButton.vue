@@ -5,7 +5,7 @@
                 <div class="ui large text loader">Loading</div>
             </div>
             <label class="text">{{ firstMenuName }}</label>
-            <div v-for="(type,index) in listType" class="field" :data-value="index">
+            <div v-for="(type,index) in listType" :class="isDisabled ? 'disabled field':'filed'" :data-value="index">
                 <div :id="'radio-'+index+'-'+_uid" class="ui radio checkbox">
                     <input type="radio" name="type" :value="index" :checked="oldChoice == index ? true : false">
                     <label>{{ type }}</label>
@@ -18,11 +18,20 @@
 
 <script>
     export default {
-        props: [
-            'routeGetListType',
-            'firstMenuName',
-            'oldChoice'
-            ],
+        props: {
+            routeGetListType: String,
+            firstMenuName: String,
+            oldChoice: {
+                type: String,
+                default: undefined,
+                required: false
+            },
+            isDisabled: {
+                type: Boolean,
+                default: false,
+                required: false
+            }
+        },
         data: () => {
             return {
                 listType: [],
@@ -33,7 +42,7 @@
             this.getListType();
         },
         updated () {
-            var that = this;
+            let that = this;
             for(let index in this.listType){
                 $('#radio-'+index+'-'+that._uid).checkbox({
                     onChange: function () {

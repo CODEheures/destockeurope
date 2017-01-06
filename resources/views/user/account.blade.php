@@ -41,7 +41,7 @@
             compagny-divider="{{ trans('strings.view_user_account_compagny_divider_label') }}"
             compagny-name-label="{{ trans('strings.view_user_account_compagny_name_label') }}"
             compagny-number-label="{{ trans('strings.view_user_account_compagny_number_label') }}"
-            content-header="{{ $title ?  $title : trans('strings.view_advert_create_header') }}"
+            content-header="{{ isset($title) ?  $title : trans('strings.view_advert_create_header') }}"
             geoloc-help-msg="{{ trans('strings.form_googlemap_help') }}"
             geoloc-help-msg-two="{{ trans('strings.form_googlemap_help2') }}"
             googlemap-divider="{{ trans('strings.form_googlemap_label') }}"

@@ -26,6 +26,11 @@ trait MoneyUtils
         return $result;
     }
 
+    public static function getSubUnit($currency) {
+        $currencies = new ISOCurrencies();
+        return $currencies->subunitFor(new Currency($currency));
+    }
+
     public static function setPriceWithoutDecimal($price, $currency){
         $currencies = new ISOCurrencies();
         $moneyParser = new DecimalMoneyParser($currencies);

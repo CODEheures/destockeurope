@@ -19,6 +19,7 @@ use Money\Parser\DecimalMoneyParser;
 use Symfony\Component\HttpFoundation\Request;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
+use Vinkla\Vimeo\VimeoManager;
 
 class UtilsController extends Controller
 {
@@ -26,9 +27,12 @@ class UtilsController extends Controller
     use LocaleUtils;
     use MoneyUtils;
 
-    public function __construct() {
+    private $vimeoManager;
+
+    public function __construct(VimeoManager $vimeoManager) {
         $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales', 'getListCardsType']]);
         $this->middleware('isAdminUser', ['only' => ['isPicture', 'tempo']]);
+        $this->vimeoManager = $vimeoManager;
     }
 
 
@@ -97,6 +101,22 @@ class UtilsController extends Controller
         $user3->role='admin';
         $user3->save();
 
+        $user4 = new User();
+        $user4->name = 'delegation';
+        $user4->email = 'delegation@d.e';
+        $user4->password = bcrypt('123456');
+        $user4->locale = env('DEFAULT_LOCALE');
+        $user4->currency = env('DEFAULT_CURRENCY');
+        $user4->compagnyName= env('DEFAULT_DELEGATE');
+        $user4->registrationNumber = '123456789A123';
+        $user4->latitude = 47.3478;
+        $user4->longitude = 0.6486454740523868;
+        $user4->geoloc= '[{"address_components":[{"long_name":"32","short_name":"32","types":["street_number"]},{"long_name":"Rue Gutenberg","short_name":"Rue Gutenberg","types":["route"]},{"long_name":"Joué-lès-Tours","short_name":"Joué-lès-Tours","types":["locality","political"]},{"long_name":"Indre-et-Loire","short_name":"Indre-et-Loire","types":["administrative_area_level_2","political"]},{"long_name":"Centre-Val de Loire","short_name":"Centre-Val de Loire","types":["administrative_area_level_1","political"]},{"long_name":"France","short_name":"FR","types":["country","political"]},{"long_name":"37300","short_name":"37300","types":["postal_code"]}],"formatted_address":"32 Rue Gutenberg, 37300 Joué-lès-Tours, France","geometry":{"location":{"lat":47.3477464,"lng":0.6489845999999488},"location_type":"ROOFTOP","viewport":{"south":47.3463974197085,"west":0.647635619708467,"north":47.34909538029149,"east":0.6503335802915444}},"place_id":"ChIJDXcjat4p_UcRrdgENsC3RTM","types":["street_address"]},{"address_components":[{"long_name":"Joué-lès-Tours","short_name":"Joué-lès-Tours","types":["locality","political"]},{"long_name":"Indre-et-Loire","short_name":"Indre-et-Loire","types":["administrative_area_level_2","political"]},{"long_name":"Centre-Val de Loire","short_name":"Centre-Val de Loire","types":["administrative_area_level_1","political"]},{"long_name":"France","short_name":"FR","types":["country","political"]}],"formatted_address":"Joué-lès-Tours, France","geometry":{"bounds":{"south":47.299816,"west":0.6094590000000153,"north":47.375242,"east":0.6992960000000039},"location":{"lat":47.351861,"lng":0.661309899999992},"location_type":"APPROXIMATE","viewport":{"south":47.299816,"west":0.6094590000000153,"north":47.375242,"east":0.6992960000000039}},"place_id":"ChIJcWDGIhfW_EcRyR4q_XnK6Us","types":["locality","political"]},{"address_components":[{"long_name":"37300","short_name":"37300","types":["postal_code"]},{"long_name":"Joué-lès-Tours","short_name":"Joué-lès-Tours","types":["locality","political"]},{"long_name":"Indre-et-Loire","short_name":"Indre-et-Loire","types":["administrative_area_level_2","political"]},{"long_name":"Centre-Val de Loire","short_name":"Centre-Val de Loire","types":["administrative_area_level_1","political"]},{"long_name":"France","short_name":"FR","types":["country","political"]}],"formatted_address":"37300 Joué-lès-Tours, France","geometry":{"bounds":{"south":47.2998031,"west":0.6092559999999594,"north":47.37539599999999,"east":0.6992147999999361},"location":{"lat":47.33938,"lng":0.6630261999999902},"location_type":"APPROXIMATE","viewport":{"south":47.2998031,"west":0.6092559999999594,"north":47.37539599999999,"east":0.6992147999999361}},"place_id":"ChIJx-sfRijW_EcRUAIKiNrIDRw","types":["postal_code"]},{"address_components":[{"long_name":"Indre-et-Loire","short_name":"Indre-et-Loire","types":["administrative_area_level_2","political"]},{"long_name":"Centre-Val de Loire","short_name":"Centre-Val de Loire","types":["administrative_area_level_1","political"]},{"long_name":"France","short_name":"FR","types":["country","political"]}],"formatted_address":"Indre-et-Loire, France","geometry":{"bounds":{"south":46.736714,"west":0.05273690000001352,"north":47.7098679,"east":1.3660489999999754},"location":{"lat":47.28949249999999,"lng":0.8160970000000134},"location_type":"APPROXIMATE","viewport":{"south":46.736714,"west":0.05273690000001352,"north":47.7098679,"east":1.3660489999999754}},"place_id":"ChIJE3AWTDjZ_EcR0CczBdfIDQM","types":["administrative_area_level_2","political"]},{"address_components":[{"long_name":"Centre-Val de Loire","short_name":"Centre-Val de Loire","types":["administrative_area_level_1","political"]},{"long_name":"France","short_name":"FR","types":["country","political"]}],"formatted_address":"Centre-Val de Loire, France","geometry":{"bounds":{"south":46.3469059,"west":0.05273690000001352,"north":48.941029,"east":3.1284098999999514},"location":{"lat":47.7515686,"lng":1.6750630999999885},"location_type":"APPROXIMATE","viewport":{"south":46.3469059,"west":0.05273690000001352,"north":48.941029,"east":3.1284098999999514}},"place_id":"ChIJiV0INnu55EcRMCUzBdfIDQE","types":["administrative_area_level_1","political"]},{"address_components":[{"long_name":"France","short_name":"FR","types":["country","political"]}],"formatted_address":"France","geometry":{"bounds":{"south":41.3253001,"west":-5.559099999999944,"north":51.1241999,"east":9.662499900000057},"location":{"lat":46.227638,"lng":2.213749000000007},"location_type":"APPROXIMATE","viewport":{"south":41.342778,"west":-5.142257900000004,"north":51.0891285,"east":9.55979339999999}},"place_id":"ChIJMVd4MymgVA0R99lHx5Y__Ws","types":["country","political"]}]';
+        $user4->setRememberToken(Str::random(60));
+        $user4->confirmed = true;
+        $user4->role='delegation';
+        $user4->save();
+
         $rootCategory1 = new Category();
         $rootCategory1->description = ['fr' => 'Matériels', 'en'=>'Hardware'];
         $rootCategory1->saveAsRoot();
@@ -147,7 +167,7 @@ class UtilsController extends Controller
 
         // J-5
         $this->advertCreate(
-            $user2->id,
+            $user4->id,
             $subCategory212->id,
             Carbon::now()->subDays(5),
             0,
@@ -155,7 +175,9 @@ class UtilsController extends Controller
             ['11111111111111111111111111111111'],
             1000,
             50,
-            0
+            0,
+            'Cette annonce est une annonce de test de délégation de vente',
+            true
         );
 
         $this->advertCreate(
@@ -286,7 +308,7 @@ class UtilsController extends Controller
         return redirect(route('home'));
     }
 
-    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $isValid=null){
+    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $setNullValid=null){
         $advert = new Advert();
         $advert->user_id = $userId;
         $advert->category_id = $catId;
@@ -295,7 +317,7 @@ class UtilsController extends Controller
         $advert->type = 'bid';
         $advert->title = $title;
         if($description){
-            $advert->description = 'Ceci est une annonce à valider, ... ou pas!!??. Je vends un lot de 28 chiens de cirque. Il savent faire du trapeze, de la moto et font aussi la vaisselle.';
+            $advert->description = $description;
         } else {
             $advert->description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tempus ullamcorper lectus, in semper dolor blandit id. Vestibulum quis orci convallis, elementum turpis a, scelerisque eros. Etiam dapibus sem libero, eu cursus elit aliquam facilisis. Nunc rutrum nulla purus, venenatis lobortis magna iaculis quis. Curabitur condimentum, lacus id ullamcorper pharetra, enim lectus hendrerit orci, sagittis cursus urna augue vel metus. Nunc egestas commodo felis, eu suscipit tortor. Duis at mauris ullamcorper, dapibus enim ut, imperdiet leo. Vestibulum mollis at mi quis vulputate. Donec eleifend, purus in sollicitudin sagittis, nibh dolor mattis nulla, sed condimentum lacus arcu at sapien. Donec ac turpis sit amet purus facilisis rutrum sit amet quis lacus. Pellentesque pharetra interdum turpis, sed varius ipsum scelerisque sed. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin augue magna, blandit molestie pharetra eget, sagittis quis tellus. Nullam quis molestie lorem. Cras at ornare diam, ut vulputate enim. Etiam enim mauris, auctor id pharetra nec, feugiat non purus.
 Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Suspendisse non orci vitae quam rutrum pulvinar sit amet rhoncus metus. Suspendisse et ornare dui. Nullam mattis dui et nunc faucibus, ac rhoncus nibh consequat. Nullam arcu nisl, ultrices vel venenatis vitae, vehicula at odio. Phasellus suscipit viverra turpis id bibendum. Ut vestibulum venenatis ante eget ultrices. Nam et erat at tellus molestie scelerisque. Fusce in interdum dolor. Cras porta egestas lectus quis aliquet. Etiam quis arcu nisi. Ut pharetra non dui sit amet congue. Vivamus et ligula magna. Nulla malesuada, nunc id pulvinar pellentesque, tellus nisi congue est, id condimentum tellus tortor nec nisi. Aenean pretium fermentum tortor, eget auctor arcu tempor ac. Proin nibh tellus, scelerisque nec sagittis ut, posuere vitae enim. Cras non ligula efficitur, porta odio posuere.';
@@ -361,12 +383,17 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
 
         $advert->isPublish = true;
 
-        if($isValid==null) {
+        if(is_null($setNullValid)) {
             $loterie = rand(0,1);
             if($loterie==1){
                $advert->isValid = true;
-               $advert->online_at = $created_at;
             }
+        } else {
+            $advert->isValid = null;
+        }
+
+        if($advert->isValid) {
+            $advert->online_at = $created_at;
         }
 
         DB::beginTransaction();
@@ -405,6 +432,20 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
     }
 
     public function tempo(){
-        return null;
+        //test changement bio
+        //$response = $this->vimeoManager->request('/me', ['bio'=>'essair'], 'PATCH');
+
+        //test upload serveur
+//        $content = Storage::disk('local')->url('public/1.mp4');
+//        $content = ($_SERVER["DOCUMENT_ROOT"].'/videos/1.mp4');
+//        $response = $this->vimeoManager->upload($content, false);
+//        dd($response);
+
+        //test changement param video
+        //$response = json_decode(json_encode($this->vimeoManager->request('/me/videos')));
+        //dd($response->body->data[0]->uri);
+        //$response2 = $this->vimeoManager->request($response->body->data[0]->uri , ['privacy' => ['view' => 'anybody', 'download' => false]], 'PATCH');
+        //$response2 = $this->vimeoManager->request($response->body->data[0]->uri , ['name' => 'Amazing video de ma face'], 'PATCH');
+        dd(Advert::first()->priceWithMargin);
     }
 }
