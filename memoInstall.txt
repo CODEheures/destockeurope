@@ -8,7 +8,5 @@
 //      php artisan queue:work database --timeout=600 --tries=1 (1ere fois) | php artisan queue:restart
 //TODO post video
 //TODO post mail to admin si renew fails
-//TODO supprimer access compte à delegation
-//TODO phrase en français sur popup calcul marge
-//TODO Ajout Mine à admin avec les delegation
-//TODO ajout modif de coef en delegation
+//TODO creer administration compte de delegation
+//TODO reglage stock delagation (pour faciliter la gestion de la vente en delegation)

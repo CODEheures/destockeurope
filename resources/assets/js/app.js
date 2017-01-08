@@ -34,6 +34,7 @@ Vue.component('masterads', require('./components/generics/ads/master.vue'));
 Vue.component('swiper', require('./components/generics/swipers/swiper.vue'));
 Vue.component('swiper-slide', require('./components/generics/swipers/slide.vue'));
 Vue.component('swiper-gallerie', require('./components/generics/swipers/gallerie.vue'));
+Vue.component('margin-input-field', require('./components/generics/fields/marginInput.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));

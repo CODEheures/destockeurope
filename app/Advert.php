@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
 class Advert extends Model {
     use SoftDeletes;
@@ -24,7 +25,7 @@ class Advert extends Model {
         'title',
         'description',
         'price',
-        'priceCoefficient',
+        'price_coefficient',
         'price_margin',
         'currency',
         'latitude',
@@ -41,6 +42,7 @@ class Advert extends Model {
         'views',
         'lastObsoleteMail',
         'isRenew',
+        'is_delegation',
         'originalAdvertId',
         'video_id'
     ];
@@ -74,11 +76,14 @@ class Advert extends Model {
 
         static::creating(function ($model)
         {
-            if(!key_exists('priceCoefficient',$model->attributes) && key_exists('price',$model->attributes)){
-                $model->attributes['priceCoefficient'] = 0;
+            if(!key_exists('price_coefficient',$model->attributes) && key_exists('price',$model->attributes)){
+                $model->attributes['price_coefficient'] = 0;
                 $model->attributes['price_margin'] = $model->attributes['price'];
-            } elseif (!key_exists('priceCoefficient',$model->attributes) && !key_exists('price',$model->attributes)) {
+            } elseif (!key_exists('price_coefficient',$model->attributes) && !key_exists('price',$model->attributes)) {
                 throw new ModelNotFoundException('error in price of advert');
+            }
+            if(auth()->check() && auth()->user()->role=='delegation'){
+                $model->attributes['is_delegation'] = true;
             }
         });
     }
@@ -104,6 +109,10 @@ class Advert extends Model {
         return MoneyUtils::getPriceWithDecimal($value, $this->currency);
     }
 
+    public function getPriceCoefficientAttribute($value) {
+        return $value/100;
+    }
+
     public function getBreadCrumbAttribute() {
         return $this->breadcrumb;
     }
@@ -121,7 +130,7 @@ class Advert extends Model {
     }
 
     public function getIsEligibleForRenewAttribute() {
-        return (!$this->isRenew && ($this->deleted_at || Carbon::parse($this->online_at)->addDay(env('ADVERT_LIFE_TIME'))->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now())));
+        return (!$this->is_delegation && !$this->isRenew && ($this->deleted_at || Carbon::parse($this->online_at)->addDay(env('ADVERT_LIFE_TIME'))->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now())));
     }
 
     public function getThumbAttribute() {
@@ -166,15 +175,16 @@ class Advert extends Model {
     //Setter Attribute
     public function setPriceCoefficientAttribute($value) {
         //Use this mutator to ensure Margin value
-        if((int)$value > 0) {
+        //Example Value: 5.08 => 508 in BDD
+        if((int)($value*100) > 0) {
             $price=(int)$this->attributes['price'];
-            $coefficient=(int)$value/100;
+            $coefficient=(int)($value*100)/10000;
             $margin = (int)($price*$coefficient);
             $this->attributes['price_margin'] =  $price+$margin;
         } else {
             $this->attributes['price_margin'] =  (int)$this->attributes['price'];
         }
-        $this->attributes['priceCoefficient'] =  $value;
+        $this->attributes['price_coefficient'] =  (int)($value*100);
     }
 
     //Public functions
@@ -245,13 +255,30 @@ class Advert extends Model {
 
     public function scopeMines($query) {
         return $query->withTrashed()
-            ->where('user_id', '=', auth()->id())->where('isValid', true)
-            ->where('online_at', '<', Carbon::now())
+            ->where('user_id', '=', auth()->id())
+            ->where(function ($query_in) {
+                $query_in->where('online_at', '<', Carbon::now())
+                    ->orWhere(function ($query_in2) {
+                        $query_in2->where('isValid', null)
+                            ->where('deleted_at', null);
+                    });
+            })
             ->where(function ($queryIn){
                 $queryIn->where('isRenew', false)
                     ->orWhere('deleted_at', null);
             })
             ->orderBy('online_at', 'desc');
+    }
+
+    public function scopeDelegations($query) {
+        if(auth()->check() && auth()->user()->role == 'admin'){
+            return $query->where('is_delegation', true)
+                ->where(function ($queryIn){
+                    $queryIn->where('adverts.isRenew', false)
+                        ->orWhere('adverts.deleted_at', null);
+                })
+                ->orderBy('adverts.online_at', 'desc');
+        }
     }
 
     public function scopeOnlyPublish($query){

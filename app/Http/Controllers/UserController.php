@@ -31,6 +31,7 @@ class UserController extends Controller
     public function __construct(Guard $auth, PicturesManager $picturesManager)
     {
         $this->middleware('auth');
+        $this->middleware('isNotDelegationUser');
         $this->auth = $auth;
         $this->pictureManager = $picturesManager;
     }
@@ -55,7 +56,7 @@ class UserController extends Controller
      * @param $id
      * @return UserController|\Illuminate\Http\RedirectResponse
      */
-    public function completeAccount($id, $title){
+    public function completeAccount($id, $title=null){
         $user = $this->auth->user();
         $ip=config('runtime.ip');
         $geolocType = 0;

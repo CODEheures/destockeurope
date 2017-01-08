@@ -27,7 +27,7 @@ class CreateAdvertsTable extends Migration
             $table->string('title',config('db_limits.adverts.maxTitle'));
             $table->text('description');
             $table->integer('price')->unsigned();
-            $table->smallInteger('priceCoefficient')->unsigned()->default(0);
+            $table->mediumInteger('price_coefficient')->unsigned()->default(0);
             $table->integer('price_margin')->unsigned();
             $table->string('currency', 3);
             $table->decimal('latitude',6,4);
@@ -47,6 +47,7 @@ class CreateAdvertsTable extends Migration
             $table->mediumInteger('views')->unsigned()->default(0);
             $table->tinyInteger('lastObsoleteMail')->unsigned()->nullable()->default(null);
             $table->boolean('isRenew')->default(false);
+            $table->boolean('is_delegation')->default(false);
             $table->integer('originalAdvertId')->unsigned()->nullable()->default(null);
             $table->bigInteger('video_id')->unsigned()->nullable()->default(null);
         });

@@ -29,6 +29,12 @@ class AdminController extends Controller
         return view('application.dashboard');
     }
 
+    public function delegations() {
+        $routeList = route('advert.getDelegations');
+        $title = trans('strings.menu_advert_delegations');
+        return view('user.personnalList', compact('routeList', 'title'));
+    }
+
     public function getStats(){
         $date = Carbon::now()->subMonths(6);
         $viewsByDay = Stats::viewsByDay($date)->get();

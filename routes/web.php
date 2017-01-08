@@ -22,6 +22,7 @@ Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv'
 // Admin Routes...
 Route::group(['prefix' => 'admin'], function() {
     Route::get('/manage', 'AdminController@manage')->name('application.manage');
+    Route::get('/delegations', 'AdminController@delegations')->name('advert.delegations');
     Route::get('/dashboard', 'AdminController@dashboard')->name('application.dashboard');
     Route::get('/parameters', 'AdminController@appParameters')->name('application.parameters');
     Route::patch('/parameters', 'AdminController@patchParameters');
@@ -101,6 +102,8 @@ Route::group(['prefix' => 'advert'] , function () {
     Route::get('/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
     Route::get('/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
     Route::post('/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
+    Route::get('/delegations', ['as' => 'advert.getDelegations', 'uses' => 'AdvertController@delegations']);
+    Route::patch('/updateCoefficient/{id?}/{coefficient?}', ['as' => 'advert.updateCoefficient', 'uses' => 'AdvertController@updateCoefficient']);
     Route::get('/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
     Route::post('/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
     Route::post('/report', ['as' => 'advert.report', 'uses' => 'AdvertController@report']);

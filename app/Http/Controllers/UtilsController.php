@@ -32,6 +32,7 @@ class UtilsController extends Controller
     public function __construct(VimeoManager $vimeoManager) {
         $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales', 'getListCardsType']]);
         $this->middleware('isAdminUser', ['only' => ['isPicture', 'tempo']]);
+        $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->vimeoManager = $vimeoManager;
     }
 
@@ -177,8 +178,13 @@ class UtilsController extends Controller
             50,
             0,
             'Cette annonce est une annonce de test de délégation de vente',
-            true
+            true,
+            57.35
         );
+        $advert = Advert::first();
+        $advert->is_delegation=true;
+        $advert->save();
+        $advert=null;
 
         $this->advertCreate(
             $user2->id,
@@ -308,7 +314,7 @@ class UtilsController extends Controller
         return redirect(route('home'));
     }
 
-    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $setNullValid=null){
+    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $setNullValid=null, $price=null){
         $advert = new Advert();
         $advert->user_id = $userId;
         $advert->category_id = $catId;
@@ -377,7 +383,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         $currencies = new ISOCurrencies();
         $moneyParser = new DecimalMoneyParser($currencies);
 
-        $unitPrice = rand(1,20000)/100;
+        $unitPrice = is_null($price) ? rand(1,20000)/100 : $price;
 
         $advert->price = $moneyParser->parse(strval($unitPrice),"EUR")->getAmount();
 

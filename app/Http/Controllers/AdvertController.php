@@ -66,7 +66,7 @@ class AdvertController extends Controller
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
-        $this->middleware('isAdminUser', ['only' => ['toApprove','listApprove', 'approve']]);
+        $this->middleware('isAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient']]);
         $this->pictureManager  = $picturesManager;
         $this->vimeoManager = $vimeoManager;
 
@@ -214,6 +214,36 @@ class AdvertController extends Controller
             $adverts = $adverts->orderBy('online_at', 'desc')->paginate(config('runtime.advertsPerPage'));
         }
 
+        $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
+
+        if($isSearchRequest){
+            $action = [
+                'url' => '#',
+                'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
+            ];
+            return response()->json(['results'=> $loadCompleteAdverts[1], 'action' => $action]);
+        } else {
+            return response()->json(['adverts'=> $loadCompleteAdverts[0], 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
+        }
+    }
+
+    public function mines()
+    {
+        $adverts = Advert::mines()->paginate(config('runtime.advertsPerPage'));
+        $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
+        return response()->json(['adverts'=> $loadCompleteAdverts[0]]);
+
+    }
+
+    public function delegations()
+    {
+        $adverts = Advert::delegations()->paginate(config('runtime.advertsPerPage'));
+        $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
+        return response()->json(['adverts'=> $loadCompleteAdverts[0]]);
+
+    }
+
+    private function loadCompleteAdverts($adverts) {
         $adverts->load('pictures');
         $adverts->load('category');
         $tempoStore =[];
@@ -234,7 +264,6 @@ class AdvertController extends Controller
             $advert->setBreadCrumb($ancestors);
             $resultsByCat[$advert->category->id]['results'][] = $advert;
             $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
-
             if($advert->isUserOwner) {
                 $advert->setBookmarkCount();
             } elseif (auth()->check()){
@@ -243,47 +272,7 @@ class AdvertController extends Controller
                 $advert->setIsUserBookmark(false);
             }
         }
-
-        if($isSearchRequest){
-            $action = [
-                'url' => '#',
-                'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
-            ];
-            return response()->json(['results'=> $resultsByCat, 'action' => $action]);
-        } else {
-            return response()->json(['adverts'=> $adverts, 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
-        }
-    }
-
-    public function mines()
-    {
-        $adverts = Advert::mines()->paginate(config('runtime.advertsPerPage'));
-
-        $adverts->load('pictures');
-        $adverts->load('category');
-        $tempoStore =[];
-        $resultsByCat = [];
-        if(auth()->check()){
-            $user = auth()->user();
-            $user->load('bookmarks');
-        }
-        foreach ($adverts as $advert){
-            if(!array_key_exists($advert->category->id,$tempoStore)){
-                $ancestors = $advert->category->getAncestors();
-                $ancestors->add($advert->category);
-                $tempoStore[$advert->category->id] = $ancestors;
-                $resultsByCat[$advert->category->id]['results'] = [];
-            } else {
-                $ancestors = $tempoStore[$advert->category->id];
-            }
-            $advert->setBreadCrumb($ancestors);
-            $resultsByCat[$advert->category->id]['results'][] = $advert;
-            $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
-            $advert->setBookmarkCount();
-        }
-
-        return response()->json(['adverts'=> $adverts]);
-
+        return [$adverts,$resultsByCat];
     }
 
     public function bookmarks()
@@ -620,7 +609,7 @@ class AdvertController extends Controller
         if($value != null) {
             $advert = Advert::find($key);
             if($advert) {
-                $advert->priceCoefficient = $priceCoefficient;
+                $advert->price_coefficient = $priceCoefficient;
                 //IF EXIST AUTHORIZATION PAYMENT
                 if($advert->invoice
                     && $advert->invoice->authorization
@@ -1258,6 +1247,19 @@ class AdvertController extends Controller
         } else {
             return redirect(route('home'));
         }
+    }
+
+    public function updateCoefficient(Request $request) {
+        $coefficient = $request->coefficient;
+        if((int)$coefficient >= 0){
+            $advert = Advert::find($request->id);
+            if($advert){
+                $advert->price_coefficient = $coefficient/100;
+                $advert->save();
+                return response('ok', 200);
+            }
+        }
+        return response('error', 500);
     }
 
     public function vimeoQuota() {

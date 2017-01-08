@@ -7,8 +7,10 @@
             <a class="{{ $routeName == 'register' ? 'active' : '' }} item"
                href="{{ route('register') }}">{{ trans('strings.menu_register') }}</a>
         @else
+            @if(auth()->check() && auth()->user()->role != 'delegation')
             <a class="{{ $routeName == 'user.account' ? 'active' : '' }} item"
                href="{{ route('user.account') }}"> {{ trans('strings.menu_account') }} </a>
+            @endif
             <a class="item" href="{{ url('/logout') }}"
                onclick="event.preventDefault();
            document.getElementById('logout-form2').submit();">

@@ -50,19 +50,30 @@
             <template v-for="(advert, index) in advertsList">
                 <template v-if="(index+1)%adsFrequency==0">
                     <adverts-by-list-item
+                            :route-update-price-coefficient="routeUpdatePriceCoefficient"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
                             :actual-locale="actualLocale"
+                            :is-admin-user="isAdminUser"
+                            :is-personnal-list="isPersonnalList"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :delete-advert-label="deleteAdvertLabel"
+                            :see-advert-label="seeAdvertLabel"
+                            :validation-on-progress-label="validationOnProgressLabel"
                             :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
+                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list-item>
                     <div class="item ads">
                         <div class="ui grid">
@@ -97,19 +108,30 @@
                 </template>
                 <template v-else>
                     <adverts-by-list-item
+                            :route-update-price-coefficient="routeUpdatePriceCoefficient"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
                             :actual-locale="actualLocale"
+                            :is-admin-user="isAdminUser"
+                            :is-personnal-list="isPersonnalList"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :delete-advert-label="deleteAdvertLabel"
+                            :see-advert-label="seeAdvertLabel"
+                            :validation-on-progress-label="validationOnProgressLabel"
                             :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
+                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list-item>
                 </template>
             </template>
@@ -121,6 +143,11 @@
     export default {
         props: {
             routeGetAdvertsList: String,
+            routeUpdatePriceCoefficient: {
+                type: String,
+                default: '',
+                required: false
+            },
             routeBookmarkAdd: String,
             routeBookmarkRemove: String,
             reloadOnUnbookmarkSuccess: {
@@ -134,6 +161,16 @@
                 required: false
             },
             adsFrequency: Number,
+            isAdminUser: {
+                type: Boolean,
+                default: false,
+                required: false
+            },
+            isPersonnalList: {
+                type: Boolean,
+                default: false,
+                required: false
+            },
             actualLocale: String,
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
@@ -141,11 +178,19 @@
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,
+            deleteAdvertLabel: String,
+            seeAdvertLabel: String,
+            validationOnProgressLabel: String,
             isRenewAdvertLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
             noResultFoundHeader: String,
-            noResultFoundMessage: String
+            noResultFoundMessage: String,
+            formAdvertPriceCoefficientLabel: String,
+            formAdvertPriceCoefficientNewPriceLabel: String,
+            formAdvertPriceCoefficientUnitMarginLabel: String,
+            formAdvertPriceCoefficientTotalMarginLabel: String,
+            formAdvertPriceCoefficientUpdateLabel: String
         },
         data: () => {
             return {
@@ -189,6 +234,9 @@
             });
             this.$on('loadError', function () {
                 that.$parent.$emit('loadError');
+            });
+            this.$on('updateSuccess', function () {
+                that.$parent.$emit('updateSuccess');
             });
         },
         methods: {

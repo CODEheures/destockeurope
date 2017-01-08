@@ -84,15 +84,10 @@
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
-                            :manage-advert-label="manageAdvertLabel"
-                            :renew-advert-label="renewAdvertLabel"
-                            :is-renew-advert-label="isRenewAdvertLabel"
-                            :bookmark-info="bookmarkInfo"
-                            :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
                             :no-result-found-header="noResultFoundHeader"
-                            :no-result-found-message="noResultFoundMessage">
-                    </adverts-by-list>
+                            :no-result-found-message="noResultFoundMessage"
+                    ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
                     <div class="sixteen wide column pagination">
@@ -155,11 +150,6 @@
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
-            'manageAdvertLabel',
-            'renewAdvertLabel',
-            'isRenewAdvertLabel',
-            'bookmarkInfo',
-            'viewsInfo',
             'priceInfoLabel',
             'noResultFoundHeader',
             'noResultFoundMessage',

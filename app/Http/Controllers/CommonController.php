@@ -37,7 +37,8 @@ class CommonController extends Controller
     }
 
     public function mines() {
-        return view('user.personnalList');
+        $routeList = route('advert.mines');
+        return view('user.personnalList', compact('routeList'));
     }
 
     public function bookmarks() {

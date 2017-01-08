@@ -31,7 +31,7 @@
                         :route-get-list-type="routeGetListType"
                         :first-menu-name="listTypeFirstMenuName"
                         :old-choice="isDelegation ? 'bid' : oldType"
-                        :is-disabled="true"
+                        :is-disabled="isDelegation==true"
                 ></type-radio-button>
                 <div class="field">
                     <categories-dropdown-menu

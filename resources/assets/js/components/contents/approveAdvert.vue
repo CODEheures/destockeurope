@@ -98,40 +98,13 @@
                                 <div class="ui form">
                                     <div class="field">
                                         <div class="two fields">
-                                            <div class="field">
-                                                <label>{{ formAdvertPriceCoefficient }}</label>
-                                                <input type="number" name="price_coefficient" min="0" step="1" v-model="advert.priceCoefficient">
-                                                <div class="ui pointing label">
-                                                    <table class="ui very basic collapsing celled table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    Nouveau prix affiché
-                                                                </td>
-                                                                <td>
-                                                                    {{ calcMargin(advert,3)  }}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    marge/unité
-                                                                </td>
-                                                                <td>
-                                                                    {{ calcMargin(advert,1)  }}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    marge totale
-                                                                </td>
-                                                                <td>
-                                                                    {{ calcMargin(advert,2)  }}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                            <margin-input-field
+                                                    :advert="advert"
+                                                    :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                                                    :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                                                    :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                                    :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                                            ></margin-input-field>
                                             <div class="grouped fields">
                                                 <div class="field">
                                                     <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
@@ -176,8 +149,10 @@
             'loadErrorMessage',
             'toggleApproveLabel',
             'toggleDisapproveLabel',
-            'formAdvertPriceCoefficient',
-            'formAdvertPriceCoefficientExample',
+            'formAdvertPriceCoefficientLabel',
+            'formAdvertPriceCoefficientNewPriceLabel',
+            'formAdvertPriceCoefficientUnitMarginLabel',
+            'formAdvertPriceCoefficientTotalMarginLabel',
             'formValidationButtonLabel',
             'modalValidHeader',
             'modalValidDescription',
@@ -247,7 +222,7 @@
                 event.preventDefault();
                 let that = this;
                 for(let index in this.approveList){
-                    this.approveList[index]['priceCoefficient']= this.advertsList[index]['priceCoefficient'];
+                    this.approveList[index]['priceCoefficient']= this.advertsList[index]['price_coefficient'];
                 }
                 $('#modal-'+this._uid).modal({
                     closable: false,
@@ -275,18 +250,6 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
-            },
-            calcMargin: function (advert, type) {
-                let unitMargin =  (((advert.originalPrice*advert.priceCoefficient)/(100*Math.pow(10,advert.priceSubUnit))));
-                unitMargin = (Math.floor(unitMargin*Math.pow(10,advert.priceSubUnit))/Math.pow(10,advert.priceSubUnit));
-                let totalMargin = unitMargin*advert.totalQuantity;
-                if(type == 1) {
-                    return (unitMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol
-                } else if(type == 2) {
-                    return (totalMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                } else if (type == 3) {
-                    return (((advert.originalPrice/(Math.pow(10,advert.priceSubUnit))) + unitMargin).toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                }
             }
         }
     }

@@ -35,16 +35,22 @@
                 <div class="row">
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
+                            :route-update-price-coefficient="routeUpdatePriceCoefficient"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :flag-force-reload="flagForceReload"
                             :ads-frequency="parseInt(adsFrequency)"
+                            :is-admin-user="isAdminUser==true"
+                            :is-personnal-list="isPersonnalList==true"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :delete-advert-label="deleteAdvertLabel"
+                            :see-advert-label="seeAdvertLabel"
+                            :validation-on-progress-label="validationOnProgressLabel"
                             :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
@@ -52,6 +58,11 @@
                             :no-result-found-header="noResultFoundHeader"
                             :no-result-found-message="noResultFoundMessage"
                             :reload-on-unbookmark-success="reloadAdvertOnUnbookmarkSuccess==1"
+                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -86,6 +97,7 @@
             //vue vars
             //vue strings
             'loadErrorMessage',
+            'updateSuccessMessage',
             'contentHeader',
             'modalValidHeader',
             'modalValidDescription',
@@ -93,22 +105,33 @@
             'modalYes',
             //advertByList component
             'routeGetAdvertsList',
+            'routeUpdatePriceCoefficient',
             'routeBookmarkAdd',
             'routeBookmarkRemove',
             'reloadAdvertOnUnbookmarkSuccess',
             'actualLocale',
             'adsFrequency',
+            'isAdminUser',
+            'isPersonnalList',
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
             'manageAdvertLabel',
             'renewAdvertLabel',
+            'deleteAdvertLabel',
+            'seeAdvertLabel',
+            'validationOnProgressLabel',
             'isRenewAdvertLabel',
             'bookmarkInfo',
             'viewsInfo',
             'priceInfoLabel',
             'noResultFoundHeader',
             'noResultFoundMessage',
+            'formAdvertPriceCoefficientLabel',
+            'formAdvertPriceCoefficientNewPriceLabel',
+            'formAdvertPriceCoefficientUnitMarginLabel',
+            'formAdvertPriceCoefficientTotalMarginLabel',
+            'formAdvertPriceCoefficientUpdateLabel',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',
@@ -137,7 +160,9 @@
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
             });
-
+            this.$on('updateSuccess', function () {
+                this.sendToast(this.updateSuccessMessage, 'success');
+            });
             let that = this;
 
             this.$on('paginate', function (result) {

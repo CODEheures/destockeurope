@@ -1,6 +1,6 @@
 <template>
     <div class="item advert">
-        <template  v-if="!advert.isUserOwner">
+        <template  v-if="!isPersonnalList">
             <a :href="advert.url">
                 <div class="ui grid">
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
@@ -86,7 +86,100 @@
                 </div>
             </a>
         </template>
-        <template v-else>
+        <template  v-if="isPersonnalList && isAdminUser && advert.is_delegation">
+            <div>
+                <div class="ui grid">
+                    <div class="six wide aligned mobile four wide tablet four wide computer column">
+                        <div class="ui image">
+                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                            <div class="ui right blue corner label">
+                                <i class="icon">{{ advert.pictures.length/2 }}</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="twelve wide tablet only twelve wide computer only column">
+                        <div class="ui grid">
+                            <div class="ten wide left aligned column">
+                                <div class="header"><h3>{{ advert.title }}</h3></div>
+                                <p>
+                                <span class="ui breadcrumb">
+                                    <template v-for="(item,index) in advert.breadCrumb">
+                                        <div class="active section"> {{ item.description[actualLocale] }}</div>
+                                        <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                    </template>
+                                </span>
+                                </p>
+                            </div>
+                            <div class="six wide right aligned vertical middle aligned column">
+                                <p class="price">
+                                    <span class="ui small blue tag label">{{ advert.price }}</span><br/>
+                                    <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
+                                    <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                </p>
+                            </div>
+                            <div class="sixteen wide column item-description">
+                                <div class="ui form">
+                                    <div class="two fields">
+                                        <margin-input-field
+                                                :advert="advert"
+                                                :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                                                :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                                                :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                                :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                                        ></margin-input-field>
+                                        <div class="field">
+                                            <label style="opacity: 0">1</label>
+                                            <div v-on:click="updateCoefficient()" class="ui primary button">
+                                                <i class="percent icon"></i>
+                                                {{ formAdvertPriceCoefficientUpdateLabel }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ten wide mobile only column">
+                    <span class="ui mini breadcrumb">
+                        <template v-for="(item,index) in advert.breadCrumb">
+                            <div class="active section">{{ item.description[actualLocale] }}</div>
+                            <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                        </template>
+                    </span>
+                        <div class="header"><h3>{{ advert.title }}</h3></div>
+                        <div class="ui grid">
+                            <div class="sixteen wide mobile only right aligned column">
+                                <p class="price">
+                                    <span class="ui small blue tag label">{{ advert.price }}</span><br/>
+                                    <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
+                                    <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sixteen wide mobile only column">
+                        <div class="ui form">
+                            <margin-input-field
+                                    :advert="advert"
+                                    :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                                    :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                                    :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                    :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                            ></margin-input-field>
+                            <div class="field">
+                                <div v-on:click="updateCoefficient()" class="ui primary button">
+                                    <i class="trash icon"></i>
+                                    {{ formAdvertPriceCoefficientUpdateLabel }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template v-if="isPersonnalList && advert.isUserOwner">
             <div>
                 <div class="ui grid">
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
@@ -116,7 +209,7 @@
                                 </p>
                             </div>
                             <div class="sixteen wide column item-description">
-                                <div class="description">
+                                <div class="description" v-if="advert.isValid">
                                     <template v-if="advert.isRenew">
                                         <a href="#" class="ui disabled button">
                                             <i class="history icon"></i>
@@ -129,8 +222,9 @@
                                                 <i class="wrench icon"></i>
                                                 <span class="text">{{ manageAdvertLabel }}</span>
                                                 <div class="menu">
-                                                    <div class="item" v-on:click="destroyMe()">Supprimer</div>
-                                                    <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">Renouveller</div>
+                                                    <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
+                                                    <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
+                                                    <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
                                                 </div>
                                             </div>
                                         </template>
@@ -158,9 +252,23 @@
                                         </a>
                                     </div>
                                 </div>
+                                <div v-else>
+                                    <div class="ui icon message">
+                                        <i class="notched circle loading icon"></i>
+                                        <div class="content">
+                                            <div class="header">
+                                                {{ validationOnProgressLabel }}
+                                            </div>
+                                            <div v-on:click="destroyMe()" class="ui red button">
+                                                <i class="trash icon"></i>
+                                                {{ deleteAdvertLabel }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="sixteen wide right aligned column geodate-computer">
-                                <p>
+                                <p v-if="advert.isValid">
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                                     <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                 </p>
@@ -175,7 +283,7 @@
                             </template>
                         </span>
                         <div class="header"><h3>{{ advert.title }}</h3></div>
-                        <div class="sixteen wide centered column">
+                        <div class="sixteen wide centered column" v-if="advert.isValid">
                             <template v-if="advert.isRenew">
                                 <a href="#" class="ui disabled button">
                                     <i class="history icon"></i>
@@ -188,8 +296,9 @@
                                         <i class="wrench icon"></i>
                                         <span class="text">{{ manageAdvertLabel }}</span>
                                         <div class="menu">
-                                            <div class="item" v-on:click="destroyMe()">Supprimer</div>
-                                            <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">Renouveller</div>
+                                            <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
+                                            <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
+                                            <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
                                         </div>
                                     </div>
                                 </template>
@@ -203,7 +312,7 @@
                         </div>
                     </div>
                     <div class="sixteen wide mobile only column">
-                        <div class="description">
+                        <div class="description" v-if="advert.isValid">
                             <div class="ui labeled button disabled-bookmark">
                                 <div class="ui yellow button">
                                     <i class="heart icon"></i> {{ bookmarkInfo }}
@@ -221,9 +330,23 @@
                                 </a>
                             </div>
                         </div>
+                        <div v-else>
+                            <div class="ui icon message">
+                                <i class="notched circle loading icon"></i>
+                                <div class="content">
+                                    <div class="header">
+                                        {{ validationOnProgressLabel }}
+                                    </div>
+                                    <div v-on:click="destroyMe()" class="ui red button">
+                                        <i class="trash icon"></i>
+                                        {{ deleteAdvertLabel }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="sixteen wide right aligned mobile only column geodate-mobile">
-                        <p>
+                        <p v-if="advert.isValid">
                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                             <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                         </p>
@@ -237,9 +360,24 @@
 <script>
     export default {
         props: {
+            routeUpdatePriceCoefficient: {
+                type: String,
+                default: '',
+                required: false
+            },
             routeBookmarkAdd: String,
             routeBookmarkRemove: String,
             advert: Object,
+            isAdminUser: {
+                type: Boolean,
+                default: false,
+                required: false
+            },
+            isPersonnalList: {
+                type: Boolean,
+                default: false,
+                required: false
+            },
             actualLocale: String,
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
@@ -247,11 +385,20 @@
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,
+            deleteAdvertLabel: String,
+            seeAdvertLabel: String,
+            validationOnProgressLabel: String,
             isRenewAdvertLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
             noResultFoundHeader: String,
-            noResultFoundMessage: String
+            noResultFoundMessage: String,
+            //margin input field
+            formAdvertPriceCoefficientLabel: String,
+            formAdvertPriceCoefficientNewPriceLabel: String,
+            formAdvertPriceCoefficientUnitMarginLabel: String,
+            formAdvertPriceCoefficientTotalMarginLabel: String,
+            formAdvertPriceCoefficientUpdateLabel: String
         },
         data: () => {
             return {
@@ -313,6 +460,24 @@
             },
             renewMe: function () {
                 window.location.assign(this.advert.renewUrl);
+            },
+            seeMe: function () {
+                window.location.assign(this.advert.url);
+            },
+            updateCoefficient: function () {
+                console.log(this.routeUpdatePriceCoefficient + '/' + this.advert.id + '/' + (this.advert.price_coefficient*100).toFixed(0));
+                let that = this;
+                this.$http.patch(this.routeUpdatePriceCoefficient + '/' + this.advert.id + '/' + (this.advert.price_coefficient*100).toFixed(0))
+                    .then(
+                        function (response) {
+                            that.$parent.$emit('updateSuccess')
+                        }
+                        ,
+                        function (response) {
+                            that.$parent.$emit('loadError')
+                        }
+                    )
+                ;
             }
         }
     }
