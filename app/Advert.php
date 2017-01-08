@@ -178,13 +178,13 @@ class Advert extends Model {
         //Example Value: 5.08 => 508 in BDD
         if((int)($value*100) > 0) {
             $price=(int)$this->attributes['price'];
-            $coefficient=(int)($value*100)/10000;
+            $coefficient=(int)round($value*100,0)/10000;
             $margin = (int)($price*$coefficient);
             $this->attributes['price_margin'] =  $price+$margin;
         } else {
             $this->attributes['price_margin'] =  (int)$this->attributes['price'];
         }
-        $this->attributes['price_coefficient'] =  (int)($value*100);
+        $this->attributes['price_coefficient'] =  (int)round(($value*100),0);
     }
 
     //Public functions
