@@ -9,4 +9,3 @@
 //TODO post video
 //TODO post mail to admin si renew fails
 //TODO creer administration compte de delegation
-//TODO reglage stock delagation (pour faciliter la gestion de la vente en delegation)
