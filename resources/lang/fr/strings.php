@@ -4,7 +4,7 @@ return [
     'meta_menu_common' => 'Annonces',
     'meta_menu_admin' => 'Admin',
     'meta_menu_user' => 'Utilisateur',
-    'menu_home' => 'Accueil',
+    'menu_home' => 'Annonces',
     'menu_sells' => 'Offres',
     'menu_research' => 'Demandes',
     'menu_offer' => 'Déposer une annonce',

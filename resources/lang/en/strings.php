@@ -4,7 +4,7 @@ return [
     'meta_menu_common' => 'Adverts',
     'meta_menu_admin' => 'Admin',
     'meta_menu_user' => 'User',
-    'menu_home' => 'Home',
+    'menu_home' => 'Adverts',
     'menu_sells' => 'Sales',
     'menu_research' => 'Research',
     'menu_offer' => 'Offer an advert',
