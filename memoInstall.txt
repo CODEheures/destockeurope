@@ -6,6 +6,7 @@
 //      supervisor https://laravel.com/docs/5.3/queues#supervisor-configuration
 //      pas de php artisan config:cache , googlemap foire
 //      php artisan queue:work database --timeout=600 --tries=1 (1ere fois) | php artisan queue:restart
+//      mkdir /resources/geoip
 //TODO post video
 //TODO post mail to admin si renew fails
 //TODO creer administration compte de delegation

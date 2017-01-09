@@ -101,7 +101,7 @@ return [
      *
      */
 
-    'enable_country_search' => false,
+    'enable_country_search' => true,
 
     /**
      * Should Firewall use the database?

@@ -23,7 +23,7 @@ class GeoIPUpdater
      *           Storage::disk('logs')->append('geoIpUpdate.log' , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
      *      })->monthlyOn(7,'3:57');
      *
-     *
+     * Do Mkdir /resources/geoip
      * @return bool
      */
     public static function updateGeoIpFiles() {
@@ -44,7 +44,7 @@ class GeoIPUpdater
                 $calc_md5 = md5_file($database_filePath);
                 $original_md5 = file_get_contents($md5_filePath);
                 if($calc_md5==$original_md5){
-                    $final_success = copy($database_filePath, base_path('vendor/PragmaRX/Support/src/GeoIp/'.basename($database_filePath)));
+                    $final_success = copy($database_filePath, base_path('vendor/pragmarx/support/src/GeoIp/'.basename($database_filePath)));
                     return $final_success;
                 }
                 return false;

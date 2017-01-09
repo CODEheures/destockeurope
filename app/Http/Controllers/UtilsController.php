@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Common;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use PharData;
 use Symfony\Component\HttpFoundation\Request;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
@@ -82,7 +81,7 @@ class UtilsController extends Controller
         if($success) {
             return response('ok', 200) ;
         } else {
-            return reponse('echec', 200);
+            return response('echec', 200);
         }
     }
 }
