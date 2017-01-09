@@ -9,3 +9,4 @@
 //TODO post video
 //TODO post mail to admin si renew fails
 //TODO creer administration compte de delegation
+//TODO SVG MIX-BLEND-MODE IE EDGE A SUPPRIMER
