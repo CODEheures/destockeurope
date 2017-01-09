@@ -15,7 +15,9 @@
         "league/flysystem-dropbox": "^1.0",
         "iatstuti/laravel-cascade-soft-deletes": "1.0.*",
         "paypal/rest-api-sdk-php": "*",
-        "vinkla/vimeo": "^3.4"
+        "vinkla/vimeo": "^3.4",
+        "pragmarx/firewall": "^1.0",
+        "geoip2/geoip2": "~2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

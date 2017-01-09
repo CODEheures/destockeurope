@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Common;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use PharData;
 use Symfony\Component\HttpFoundation\Request;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
@@ -71,6 +72,17 @@ class UtilsController extends Controller
         //dd($response->body->data[0]->uri);
         //$response2 = $this->vimeoManager->request($response->body->data[0]->uri , ['privacy' => ['view' => 'anybody', 'download' => false]], 'PATCH');
         //$response2 = $this->vimeoManager->request($response->body->data[0]->uri , ['name' => 'Amazing video de ma face'], 'PATCH');
-        return null;
+        //return null;
+
+
+
+
+
+        $success = Common\GeoIPUpdater::updateGeoIpFiles();
+        if($success) {
+            return response('ok', 200) ;
+        } else {
+            return reponse('echec', 200);
+        }
     }
 }

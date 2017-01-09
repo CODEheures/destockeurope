@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Common\AdvertsManager;
+use App\Common\GeoIPUpdater;
 use App\Common\PicturesManager;
 use App\Common\StatsManager;
 use Carbon\Carbon;
@@ -60,6 +61,18 @@ class Kernel extends ConsoleKernel
             Storage::disk('logs')->append('schedule.log' , $message);
 
         })->dailyAt('05:57');
+
+        $schedule->call(function(){
+            try {
+                $geoIpResult = GeoIPUpdater::updateGeoIpFiles();
+            } catch (\Exception $e) {
+                $geoIpResult = false;
+            }
+            if(!Storage::disk('logs')->exists('geoIpUpdate.log')){
+                Storage::disk('logs')->append('geoIpUpdate.log' , 'DATE;RESULT;');
+            }
+            Storage::disk('logs')->append('geoIpUpdate.log' , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
+        })->monthlyOn(7,'3:57');
     }
 
     /**
