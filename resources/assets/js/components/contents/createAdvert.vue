@@ -220,6 +220,7 @@
             'stepOneTitle',
             'stepTwoTitle',
             'stepThreeTitle',
+            'stepThreeTitlePost',
             'stepOneDescription',
             'stepTwoDescription',
             'stepThreeDescription',
@@ -466,7 +467,7 @@
                             .then(
                                     function (response) {
                                         that.cost = response.body;
-                                        (that.steps[2]).title = that.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + '€)';
+                                        (that.steps[2]).title = that.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.stepThreeTitlePost + ')';
                                     },
                                     function (response) {
                                         that.cost = 0;

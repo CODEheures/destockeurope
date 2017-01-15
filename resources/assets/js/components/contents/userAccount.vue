@@ -183,6 +183,7 @@
             'stepOneTitle',
             'stepTwoTitle',
             'stepThreeTitle',
+            'stepThreeTitlePost',
             'stepOneDescription',
             'stepTwoDescription',
             'stepThreeDescription',
@@ -399,7 +400,7 @@
             setSteps () {
                 if(parseFloat(this.advertCost)>0) {
                     (this.steps[2]).isDisabled = false;
-                    (this.steps[2]).title = this.stepThreeTitle + '(' + (this.advertCost/100).toFixed(2) + '€)';
+                    (this.steps[2]).title = this.stepThreeTitle + '(' + (this.advertCost/100).toFixed(2) + this.stepThreeTitlePost + ')';
                 } else {
                     (this.steps[2]).isDisabled = true;
                 }

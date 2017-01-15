@@ -200,6 +200,7 @@
             'stepOneTitle',
             'stepTwoTitle',
             'stepThreeTitle',
+            'stepThreeTitlePost',
             'stepOneDescription',
             'stepTwoDescription',
             'stepThreeDescription',
@@ -325,7 +326,7 @@
                 this.sendMessage = !this.sendMessage;
             },
             setSteps () {
-                (this.steps[2]).title = this.stepThreeTitle + '(' + (this.dataAdvert.cost/100).toFixed(2) + '€)';
+                (this.steps[2]).title = this.stepThreeTitle + '(' + (this.dataAdvert.cost/100).toFixed(2) + this.stepThreeTitlePost +')';
             },
             setDataCgv () {
                 var htmlObject = $('<p>'+this.toggleCgvLabel+'</p>');

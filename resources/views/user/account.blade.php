@@ -55,6 +55,7 @@
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"
             step-three-title="{{ trans('strings.view_advert_steps_3_title') }}"
+            step-three-title-post="{{ trans('strings.view_advert_steps_3_title_post') }}"
             step-one-description="{{ trans('strings.view_advert_steps_1_description') }}"
             step-two-description="{{ trans('strings.view_advert_steps_2_description') }}"
             step-three-description="{{ trans('strings.view_advert_steps_3_description') }}"
