@@ -75,29 +75,36 @@
                 </h4>
                 <div class="field">
                     <div class="two fields">
+                        <div class="field">
+                            <label>{{ compagnyNumberLabel }}</label>
+                            <div :class="vatOnCheckProgress ? 'ui icon input loading' : 'ui icon input'">
+                                <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="compagnyNumberLabel" v-model:value="dataRegistrationNumber"
+                                       v-on:keyup.enter="updateByEnter"
+                                       v-on:focus="focused={'input': 'registration-number', 'value': dataRegistrationNumber}"
+                                       v-on:blur="blured={'input': 'registration-number', 'value': dataRegistrationNumber}"
+                                       :title="!hasValidVat ? formVatWarningLabel:''">
+                                <i :class="hasValidVat ? 'green checkmark icon': 'yellow warning sign icon'"></i>
+                            </div>
+                            <span class="ui orange pointing label" v-show="!hasValidVat && !vatOnCheckProgress">{{ formVatWarningLabel }}</span>
+                            <span class="ui green pointing label" v-show="hasValidVat && !vatOnCheckProgress">{{ formVatIdentifierLabel }}{{ dataVatIdentifier }}</span>
+                            <span class="ui orange pointing label" v-show="vatOnCheckProgress">{{ formVatOnCheckProgressLabel }}</span>
+                        </div>
                         <div class="required field">
                             <label>{{ compagnyNameLabel }}</label>
-                            <input type="text" name="compagny-name" :maxlength="formCompagnyNameMaxValid" :placeholder="compagnyNameLabel" v-model:value="dataCompagnyName"
-                                   v-on:keyup.enter="updateByEnter"
-                                   v-on:focus="focused={'input': 'compagny-name', 'value': dataCompagnyName}"
-                                   v-on:blur="blured={'input': 'compagny-name', 'value': dataCompagnyName}">
+                            <div :class="vatOnCheckProgress ? 'ui disabled icon input loading' : 'ui input'">
+                                <input type="text" name="compagny-name" :maxlength="formCompagnyNameMaxValid" :placeholder="compagnyNameLabel" v-model:value="dataCompagnyName"
+                                       v-on:keyup.enter="updateByEnter"
+                                       v-on:focus="focused={'input': 'compagny-name', 'value': dataCompagnyName}"
+                                       v-on:blur="blured={'input': 'compagny-name', 'value': dataCompagnyName}">
+                                <i class="icon"></i>
+                            </div>
                             <transition name="p-fade">
                                 <span class="ui red pointing basic label notransition" v-show="dataCompagnyName.length<formCompagnyNameMinValid">{{ formCompagnyNameMinValid }}{{formPointingMinimumChars }}</span>
                             </transition>
                         </div>
-                        <div class="required field">
-                            <label>{{ compagnyNumberLabel }}</label>
-                            <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="compagnyNumberLabel" v-model:value="dataRegistrationNumber"
-                                   v-on:keyup.enter="updateByEnter"
-                                   v-on:focus="focused={'input': 'registration-number', 'value': dataRegistrationNumber}"
-                                   v-on:blur="blured={'input': 'registration-number', 'value': dataRegistrationNumber}">
-                            <transition name="p-fade">
-                                <span class="ui red pointing basic label notransition" v-show="dataRegistrationNumber.length<formRegistrationNumberMinValid">{{ formRegistrationNumberMinValid }}{{formPointingMinimumChars }}</span>
-                            </transition>
-                        </div>
                     </div>
                 </div>
-                <div class="field">
+                <div :class="vatOnCheckProgress? 'disabled field':'field'">
                     <h4 class="ui horizontal divider header">
                         <i class="map signs icon"></i>
                         {{ googlemapDivider }}
@@ -143,6 +150,7 @@
             'firstGeoloc',
             'compagnyName',
             'registrationNumber',
+            'vatIdentifier',
             'advertAccountVerifiedStep',
             'advertCost',
             'advertId',
@@ -168,6 +176,9 @@
             'formValidationButtonLabel',
             'formValidationFailsButtonLabel',
             'formPointingMinimumChars',
+            'formVatWarningLabel',
+            'formVatOnCheckProgressLabel',
+            'formVatIdentifierLabel',
             //steps component
             'stepOneTitle',
             'stepTwoTitle',
@@ -198,11 +209,14 @@
                 dataUserPhone: '',
                 dataCompagnyName: '',
                 dataRegistrationNumber: '',
+                dataVatIdentifier: '',
                 focused: {},
                 blured: {},
                 steps: [],
                 updateInProgress: 0,
-                updateFails: false
+                updateFails: false,
+                vatOnCheckProgress: false,
+                hasValidVat: false,
             };
         },
         mounted () {
@@ -253,6 +267,8 @@
             this.dataUserPhone = this.userPhone;
             this.dataCompagnyName = this.compagnyName;
             this.dataRegistrationNumber = this.registrationNumber;
+            this.dataVatIdentifier = this.vatIdentifier;
+            this.hasValidVat = this.vatIdentifier != '';
             sessionStorage.setItem('lat', this.latitude);
             sessionStorage.setItem('lng', this.longitude);
             sessionStorage.setItem('geoloc', this.geoloc);
@@ -325,6 +341,7 @@
                     updateRoute = this.routeUserSetCompagnyName;
                 } else if(inputName == 'registration-number') {
                     updateRoute = this.routeUserSetRegistrationNumber;
+                    this.vatOnCheckProgress=true;
                 } else if(inputName == 'phone') {
                     updateRoute = this.routeUserSetPhone;
                 }
@@ -333,9 +350,13 @@
                                 function (response) {
                                     this.sendToast(this.accountPatchSuccess, 'success');
                                     this.updateInProgress--;
+                                    if(inputName == 'registration-number'){
+                                        this.userGetMe();
+                                    }
                                 },
                                 function (response) {
                                     this.updateFails = true;
+                                    this.vatOnCheckProgress=false;
                                     if(response.status == 409) {
                                         this.sendToast(response.body, 'error');
                                     } else if(response.status == 422) {
@@ -354,13 +375,25 @@
                             this.dataUserName = response.body.userName;
                             this.dataCompagnyName = response.body.compagnyName;
                             this.dataRegistrationNumber = response.body.registrationNumber;
+                            this.dataVatIdentifier= response.body.vatIdentifier;
+                            this.hasValidVat = this.dataVatIdentifier != null && this.dataVatIdentifier != '';
+                            this.lng= response.body.lng;
+                            this.lat= response.body.lat;
+                            this.geoloc= response.body.geoloc;
+                            sessionStorage.setItem('lat', this.lat);
+                            sessionStorage.setItem('lng', this.lng);
+                            sessionStorage.setItem('geoloc', this.geoloc);
+                            window.map.constructMap();
+                            this.vatOnCheckProgress=false;
                         },
                         function (response) {
+                            this.vatOnCheckProgress=false;
                             this.sendToast(this.loadErrorMessage, 'error');
                         }
                     );
             },
             updateByEnter: function (event) {
+                this.focused={'input': event.target.name, 'value': event.target.value};
                 this.updateAccount(event.target.name, event.target.value);
             },
             setSteps () {

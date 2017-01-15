@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Advert;
+use App\Common\GeoManager;
 use App\Common\PicturesManager;
 use App\Http\Requests\UpdateCompagnyNameRequest;
 use App\Http\Requests\UpdatePhoneRequest;
@@ -13,6 +14,7 @@ use App\Http\Requests\UpdateUserLocationRequest;
 use App\Http\Requests\UpdateUserNameRequest;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 
@@ -80,7 +82,11 @@ class UserController extends Controller
         return response()->json([
             'userName' => $user->name,
             'compagnyName' => $user->compagnyName,
-            'registrationNumber' => $user->registrationNumber
+            'registrationNumber' => $user->registrationNumber,
+            'lng' => $user->longitude,
+            'lat' => $user->latitude,
+            'geoloc' => $user->geoloc,
+            'vatIdentifier' => $user->vatIdentifier
         ]);
     }
 
@@ -203,13 +209,32 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function setRegistrationNumber(UpdateRegistrationRequest $request) {
+
         try {
             $user = $this->auth->user();
-            $user->registrationNumber = $request->value;
+
+            if(!$request->has('value') || is_null($request->value) || $request->value==''){
+                $user->registrationNumber = null;
+                $user->vatIdentifier = null;
+            } else {
+                $user->registrationNumber = $request->value;
+                $user->vatIdentifier = $request->vat_number_identifier;
+                $user->compagnyName = $request->compagny_name;
+
+                $geoCode_json = json_decode(GeoManager::getCodeAdress($request->compagny_address));
+                $geoCode_obj = (object)$geoCode_json;
+
+                if($geoCode_obj->status=="OK"){
+                    $user->geoloc = json_encode($geoCode_obj->results);
+                    $user->latitude=$geoCode_obj->results[0]->geometry->location->lat;
+                    $user->longitude=$geoCode_obj->results[0]->geometry->location->lng;
+                }
+            }
+
             $user->save();
             return response('ok', 200);
         } catch (\Exception $e) {
-            return response(trans('strings.view_user_account_locale_patch_error'), 409);
+            return response(trans('strings.view_user_account_registration_patch_error'), 409);
         }
 
     }

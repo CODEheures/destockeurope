@@ -2,7 +2,7 @@
     var geolocType = {{ $geolocType }};
     var zoomMap = {{ $zoomMap }};
     function initMap() {
-        var map = new destock.destockMap(
+        window.map = new destock.destockMap(
                 google,
                 'map',
                 zoomMap,

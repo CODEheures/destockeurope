@@ -139,6 +139,11 @@ return [
     'request_input_max_numeric' => 'La valeur du champ ":name" est au maximum :max',
     'request_input_regex_name' => 'Le champ ":name" ne doit contenir que des lettres et des espaces',
 
+    'request_vat_invalid' => 'Ce numéro de TVA est bien formé mais n\'existe pas',
+    'request_vat_invalid_input' => 'Ce numéro de TVA est mal formé',
+    'request_vat_service_unavailable' => 'Le service de vérification europeen des TVA n\'est pas disponible, réessayer plus tard svp',
+    'request_vat_blocked' => 'Désolé, le service europeen de vérification des TVA nous indique que ce numéro de TVA est un numéro bloqué',
+
     'auth_register_success' => 'Votre compte est créé. Merci de le valider en cliquant le lien reçu à votre adresse email.',
     'auth_register_resend_token' => 'Le lien de confirmation de votre email vous a été renvoyé.',
     'auth_register_account_confirm' => 'Félicitation, votre compte est maintenant validé.',
@@ -285,10 +290,13 @@ return [
     'view_user_account_locale_patch_error' => 'La localisation choisie n\'est pas valide',
     'view_user_account_location_patch_error' => 'L\'adresse choisie n\'est pas valide',
     'view_user_account_name_patch_error' => 'Le nom choisie n\'est pas valide',
-    'view_user_account_registration_patch_error' => 'Le numéro d\'enregistrement n\'est pas valide',
+    'view_user_account_registration_patch_error' => 'Le numéro de TVA n\'a pas pu être sauvé',
     'view_user_account_compagny_divider_label' => 'Votre société',
     'view_user_account_compagny_name_label' => 'Nom de votre société',
-    'view_user_account_compagny_number_label' => 'Numero d\'enregistrement',
+    'view_user_account_compagny_number_label' => 'Numero de TVA intracommunautaire',
+    'view_user_account_compagny_number_warning_label' => 'Fournissez un bon numéro de TVA pour un calcul correct des tarifs',
+    'view_user_account_compagny_number_check_progress' => 'N° en cours de vérification...',
+    'view_user_account_compagny_number_identifier' => 'vérification n°',
     'view_filter_ribbon' => 'Filtres',
     'view_filter_price_title' => 'Tranche de Prix',
 

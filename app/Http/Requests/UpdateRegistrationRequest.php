@@ -2,13 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Common\DBUtils;
-use App\Common\PicturesManager;
-use App\Http\Controllers\UtilsController;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class UpdateRegistrationRequest extends FormRequest
 {
@@ -31,7 +28,7 @@ class UpdateRegistrationRequest extends FormRequest
     {
 
         return [
-            'value' => 'required|min:'. config('db_limits.users.minRegistrationNumber') .'|max:'.config('db_limits.users.maxRegistrationNumber'),
+            'value' => 'bail|min:'. config('db_limits.users.minRegistrationNumber') .'|max:'.config('db_limits.users.maxRegistrationNumber').'|vat_number',
         ];
     }
 
@@ -40,7 +37,15 @@ class UpdateRegistrationRequest extends FormRequest
         return [
             'value.required' => trans('strings.request_input_require', ['name' => trans('strings.view_user_account_compagny_number_label')]),
             'value.min' => trans('strings.request_input_min_chars', ['name' => trans('strings.view_user_account_compagny_number_label'), 'min' => config('db_limits.users.minRegistrationNumber')]),
-            'value.max' => trans('strings.request_input_max_chars', ['name' => trans('strings.view_user_account_compagny_number_label'), 'max' => config('db_limits.users.maxRegistrationNumber')])
+            'value.max' => trans('strings.request_input_max_chars', ['name' => trans('strings.view_user_account_compagny_number_label'), 'max' => config('db_limits.users.maxRegistrationNumber')]),
+            'value.vat_number' => ':vat_message'
         ];
     }
+
+    public function validate() {
+        parent::validate();
+        $request = App::make('request');
+        $this->replace($request->all());
+    }
+
 }

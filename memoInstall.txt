@@ -1,10 +1,11 @@
 //TODO bucket 64 nginx + file body size nginx
 //      INTL EXTENSION apt-get install php5-intl
 //      php.ini: upload_max_filesize = 5M
+//      pas de php artisan config:cache , googlemap foire
+//      php artisan route:cache
 //      php artisan run:schedule (premiere fois pour creer une ligne de stats)
 //      crontab -e creer le cron du schedule
 //      supervisor https://laravel.com/docs/5.3/queues#supervisor-configuration
-//      pas de php artisan config:cache , googlemap foire
 //      php artisan queue:work database --timeout=600 --tries=1 (1ere fois) | php artisan queue:restart
 //      mkdir /resources/geoip
 //TODO post video

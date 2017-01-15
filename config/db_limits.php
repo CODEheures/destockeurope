@@ -14,7 +14,7 @@ return [
         'maxPhone' => 30,
         'minCompagnyName' => 3,
         'maxCompagnyName' => 100,
-        'minRegistrationNumber' => 3,
+        'minRegistrationNumber' => 0,
         'maxRegistrationNumber' => 30
     ],
 

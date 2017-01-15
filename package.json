@@ -20,6 +20,7 @@
     "ion-rangeslider": "^2.1.5",
     "moment": "^2.15.1",
     "semantic-ui": "^2.2.6",
-    "swiper": "^3.4.1"
+    "swiper": "^3.4.1",
+    "validate-vat": "^0.4.0"
   }
 }

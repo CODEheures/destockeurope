@@ -36,4 +36,15 @@ class GeoManager
         return null;
     }
 
+    public static function getCodeAdress($address) {
+        $base_url = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
+        $address_url = urlencode($address);
+        $key_url = '&key=' . env('GOOGLE_MAP_SERVER_GEOCODING_KEY');
+
+        $url= $base_url . $address_url . $key_url;
+        $json_response = file_get_contents($url);
+
+        return $json_response;
+    }
+
 }

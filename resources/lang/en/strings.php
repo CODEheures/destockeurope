@@ -139,6 +139,11 @@ return [
     'request_input_max_numeric' => 'The value of ":name" field is maximum :max',
     'request_input_regex_name' => 'The ":name" field must contain only letters and spaces',
 
+    'request_vat_invalid' => 'This VAT number is well-formed but does not exist',
+    'request_vat_invalid_input' => 'This VAT number is badly formed',
+    'request_vat_service_unavailable' => 'The European VAT verification service is not available, please try again later',
+    'request_vat_blocked' => 'Sorry, the European VAT verification service tells us that this VAT number is a blocked number',
+
     'auth_register_success' => 'Your account is create. Thank you validate it by clicking the link received in your email address',
     'auth_register_resend_token' => 'Confirmation link send to your e-mail.',
     'auth_register_account_confirm' => 'Congratulations, your account has been validated.',
@@ -285,10 +290,13 @@ return [
     'view_user_account_locale_patch_error' => 'The select localization is not available',
     'view_user_account_location_patch_error' => 'The select location is not available',
     'view_user_account_name_patch_error' => 'The name is not available',
-    'view_user_account_registration_patch_error' => 'The registration number is not available',
+    'view_user_account_registration_patch_error' => 'The VAT number has save fails',
     'view_user_account_compagny_divider_label' => 'Your Compagny',
     'view_user_account_compagny_name_label' => 'Compagny Name',
-    'view_user_account_compagny_number_label' => 'Compagny registration number',
+    'view_user_account_compagny_number_label' => 'Compagny Intra-Europe VAT',
+    'view_user_account_compagny_number_warning_label' => 'Provide a good VAT number for a correct calculation of rates',
+    'view_user_account_compagny_number_check_progress' => 'Number check progress...',
+    'view_user_account_compagny_number_identifier' => 'verification n°',
     'view_filter_ribbon' => 'Filters',
     'view_filter_price_title' => 'Range Price',
 

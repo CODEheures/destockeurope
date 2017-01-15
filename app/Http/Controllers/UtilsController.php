@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Common;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use SoapClient;
 use Symfony\Component\HttpFoundation\Request;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
@@ -77,11 +78,15 @@ class UtilsController extends Controller
 
 
 
-        $success = Common\GeoIPUpdater::updateGeoIpFiles();
-        if($success) {
-            return response('ok', 200) ;
-        } else {
-            return response('echec', 200);
-        }
+//        $success = Common\GeoIPUpdater::updateGeoIpFiles();
+//        if($success) {
+//            return response('ok', 200) ;
+//        } else {
+//            return response('echec', 200);
+//        }
+
+
+
+        return null;
     }
 }
