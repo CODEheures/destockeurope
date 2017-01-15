@@ -159,7 +159,7 @@ return [
     'divider_payment' => 'or use card',
 
     'middleware_admin' => 'You do not have the correct security credentials to access this page...',
-    'middleware_complete_account' => 'Thank you to fill in all fields before validation of your account',
+    'middleware_complete_account' => 'Please fill in all required fields (marked with a red asterisk) before validation',
 
     'option_payedPicture_name' => 'Extra Photos',
     'option_isUrgent_name' => 'Urgent advert',

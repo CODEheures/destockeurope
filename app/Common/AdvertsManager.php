@@ -60,6 +60,9 @@ class AdvertsManager
             $counterDelAdvert += $obsoletesResults[0];
             $counterDelPictures += $obsoletesResults[1];
 
+            //5 deleted Tempo files with life time pass
+            $counterDelPictures += $this->pictureManager->purgeObsoleteLocalTempo(env('TEMPO_HOURS_LIFE_TIME'));
+
             return trans('strings.admin_purge_response', ['nbadvert' => $counterDelAdvert, 'nbimg' => $counterDelPictures]);
         } catch (\Exception $e) {
             throw  new \Exception(trans('strings.admin_purge_error') . ': ' . $e->getMessage());

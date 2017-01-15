@@ -13,7 +13,6 @@ trait UserUtils
             if(
                 $user->name != null
                 && $user->compagnyName != null
-                && $user->registrationNumber != null
                 && strlen($user->name) >= config('db_limits.users.minName')
                 && strlen($user->compagnyName) >= config('db_limits.users.minCompagnyName')
                 && strlen($user->registrationNumber) >= config('db_limits.users.minRegistrationNumber')

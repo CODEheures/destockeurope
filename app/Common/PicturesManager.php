@@ -23,6 +23,7 @@ class PicturesManager
     Const TYPE_TEMPO_LOCAL = 1;
     Const TYPE_FINAL_LOCAL = 2;
     Const TYPE_FINAL_DISTANT = 3;
+    Const TYPE_ALL_TEMPO_LOCAL = 4;
 
     Const EXT = 'jpg';
     CONST MIME = 'image/jpeg';
@@ -53,6 +54,9 @@ class PicturesManager
     public function setType($type){
         if($type == self::TYPE_TEMPO_LOCAL) {
             $this->type = self::TYPE_TEMPO_LOCAL;
+            $this->disk = self::DISK_LOCAL;
+        } elseif($type == self::TYPE_ALL_TEMPO_LOCAL){
+            $this->type = self::TYPE_ALL_TEMPO_LOCAL;
             $this->disk = self::DISK_LOCAL;
         } elseif($type == self::TYPE_FINAL_LOCAL){
             $this->type = self::TYPE_FINAL_LOCAL;
@@ -128,7 +132,9 @@ class PicturesManager
         $type ? $this->setType($type) : null;
         //TODO prevoir mail pour prevenir de la surcharge
         if($this->type == self::TYPE_TEMPO_LOCAL) {
-            return '/tempo/' . auth()->user()->id . '/';
+            return '/tempo/' . csrf_token() . '/';
+        } elseif ($this->type == self::TYPE_ALL_TEMPO_LOCAL) {
+            return '/tempo/' ;
         } elseif($this->type == self::TYPE_FINAL_LOCAL){
             for($i=1; $i<static::MAX_DIR; $i++){
                 if(count(Storage::disk($this->disk)->files(self::FINAL_LOCAL_PATH . $i . '/'))<static::MAX_FILE_PER_DIR){
@@ -204,8 +210,21 @@ class PicturesManager
         return $results;
     }
 
-    public function purgeLocalTempo(){
+    public function purgeSessionLocalTempo(){
         Storage::deleteDirectory($this->personnalPath(static::TYPE_TEMPO_LOCAL));
+    }
+
+    public function purgeObsoleteLocalTempo($maxHoursLifeTime){
+        $countFiles = 0;
+        $directories = Storage::directories($this->personnalPath(static::TYPE_ALL_TEMPO_LOCAL));
+        foreach ($directories as $directory) {
+            $age = time() - Storage::lastModified($directory);
+            if($age > $maxHoursLifeTime*3600){
+                $countFiles = $countFiles + count(Storage::files($directory));
+                Storage::deleteDirectory($directory);
+            }
+        }
+        return $countFiles;
     }
 
     public function moveToDistantFinal(Picture $picture){

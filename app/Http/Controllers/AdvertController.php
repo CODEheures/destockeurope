@@ -751,7 +751,7 @@ class AdvertController extends Controller
         $advert->save();
         DB::commit();
 
-        $this->pictureManager->purgeLocalTempo();
+        $this->pictureManager->purgeSessionLocalTempo();
         $request->session()->flash('clear', true);
     }
 

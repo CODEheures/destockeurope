@@ -159,7 +159,7 @@ return [
     'divider_payment' => 'ou payer par carte',
 
     'middleware_admin' => 'Vous n\'avez pas les droits nécéssaires pour acceder à cette page...',
-    'middleware_complete_account' => 'Merci de remplir tous les champs de votre compte avant validation',
+    'middleware_complete_account' => 'Merci de remplir tous les champs obligatoires (marqués d\'une astérisque rouge) avant validation',
 
     'option_payedPicture_name' => 'Photos supplémentaires',
     'option_isUrgent_name' => 'Annonce urgente',

@@ -87,6 +87,6 @@ class UtilsController extends Controller
 
 
 
-        return null;
+        return (new Common\PicturesManager())->purgeObsoleteLocalTempo(120/3600);
     }
 }
