@@ -90,6 +90,13 @@ div.ui.vertical.segment.separator {
   }
   & div.column.item-description {
     padding-top: 0;
+    & div.description p {
+      white-space: pre-wrap;
+      &.resume {
+        max-height: 4em;
+        overflow: hidden;
+      }
+    }
   }
   & .pagination {
     margin-top: 1.3rem;

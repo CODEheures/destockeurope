@@ -23,24 +23,23 @@ class AdvertsTableSeeder extends Seeder
         $user4 = \App\User::where('email', '=', 'delegation@d.e')->first();
 
         $subCategory212 = \App\Category::where('description', '=', '{"fr":"homme","en":"men"}')->first();
-        $subCategory213 = \App\Category::where('description', '=', '{"fr":"bi","en":"bi"}')->first();
         $subCategory12 = \App\Category::where('description', '=', '{"fr":"electroniques","en":"electronics"}')->first();
         $subCategory11 = \App\Category::where('description', '=', '{"fr":"crayons","en":"pens"}')->first();
         $subCategory22 = \App\Category::where('description', '=', '{"fr":"Sacs","en":"Bags"}')->first();
 
         $this->advertCreate(
             $user4->id,
-            $subCategory212->id,
+            $subCategory22->id,
             Carbon::now()->subDays(5),
             0,
-            '1000 doudounes en fin de série à prix cassé',
-            ['11111111111111111111111111111111'],
+            '1000 supers sacs à dos antivol à saisir',
+            ['2e913bc87151d291b0277b9786265ee3'],
             1000,
-            50,
+            10,
             0,
-            'Cette annonce est une annonce de test de délégation de vente',
+            'Super sac à dos antivol à prix cassé !' . PHP_EOL . 'A l’extérieur, il a beaucoup de poches cachées pour le transport urbain.' . PHP_EOL . 'A l’intérieur, des compartiments rembourrés pour ordinateur portable.',
             true,
-            57.35
+            35.00
         );
         $advert = Advert::first();
         $advert->is_delegation=true;
@@ -49,16 +48,17 @@ class AdvertsTableSeeder extends Seeder
 
         $this->advertCreate(
             $user2->id,
-            $subCategory213->id,
+            $subCategory12->id,
             Carbon::now()->subDays(5),
             0,
-            'Un lot de 28 chiens de cirque',
-            ['22222222222222222222222222222222', '33333333333333333333333333333333', '44444444444444444444444444444444'],
-            28,
-            8,
+            'Lot de 700 enceintes bluetooth',
+            ['dc4c78ee3f1417e577a3dcde1cd7edf3', '73f4e847835194b26dc991db960245fa', '40926852a25c371fb968fc8954b52665'],
+            700,
+            50,
             1,
-            'Ceci est une annonce à valider, ... ou pas!!??. Je vends un lot de 28 chiens de cirque. Il savent faire du trapeze, de la moto et font aussi la vaisselle.',
-            true
+            'Super lot de 700 enceintes bluetooth avec motif géométrique',
+            true,
+            5.00
         );
 
         $stat1 = $statsManager->getStats();
@@ -76,11 +76,14 @@ class AdvertsTableSeeder extends Seeder
             $subCategory12->id,
             Carbon::now()->subDays(4),
             6900,
-            'Excellent état! 10 Cartons de casques AudioBeats',
-            ['55555555555555555555555555555555'],
+            'MONTRES LEXON "MOON"',
+            ['862410caeed9a96ba19060c8ed7a725f'],
+            1000,
             10,
             2,
-            2
+            'Lot de 1000 montres "MOON" de la marque LEXON.' . PHP_EOL . 'Résistant à l\'eau.' . PHP_EOL . 'Mouvement SEIKO.',
+            true,
+            10.00
         );
 
         $this->advertCreate(
@@ -88,11 +91,14 @@ class AdvertsTableSeeder extends Seeder
             $subCategory12->id,
             Carbon::now()->subDays(4),
             2000,
-            '10000 lunettes Gears pour samsung S7...\':(',
-            ['66666666666666666666666666666666'],
-            10000,
-            500,
-            3
+            'Lot de Mini Radio "DOLMEN" LEXON',
+            ['c1c528fdad42239b82a57bee7410081d'],
+            8000,
+            100,
+            0,
+            'Superbe lot de 8000 mini radio "DOLMEN" de la marque LEXON' . PHP_EOL . 'Disponible en plusieurs couleurs.',
+            true,
+            8.00
         );
 
         $this->advertCreate(
@@ -100,11 +106,14 @@ class AdvertsTableSeeder extends Seeder
             $subCategory11->id,
             Carbon::now()->subDays(4),
             0,
-            '3 palettes de boites à dessin avec defauts',
-            ['77777777777777777777777777777777'],
-            3,
-            1,
-            0
+            '250 Gear VR',
+            ['66666666666666666666666666666666'],
+            250,
+            50,
+            0,
+            'Destockage de 250 GEAR VR.'. PHP_EOL .'Très haute qualité, zero defaut et garanties 1 an.',
+            false,
+            119.95
         );
 
         $stat2 = $statsManager->getStats();
@@ -126,7 +135,10 @@ class AdvertsTableSeeder extends Seeder
             ['88888888888888888888888888888888'],
             500,
             30,
-            0
+            3,
+            'A saisir rapidement, 500 sacs à dos de marque EastPack.' . PHP_EOL . 'TOP QUALITY. Envoi rapide.',
+            true,
+            57.65
         );
 
         $stat3 = $statsManager->getStats();
@@ -149,7 +161,10 @@ class AdvertsTableSeeder extends Seeder
             ['99999999999999999999999999999999'],
             42,
             5,
-            1
+            4,
+            'Ces crayons neuf sont vendus au kilo sans possibilité de choisir.' . PHP_EOL . 'Prix imbattable',
+            true,
+            27.50
         );
 
         $this->advertCreate(
@@ -157,11 +172,14 @@ class AdvertsTableSeeder extends Seeder
             $subCategory12->id,
             Carbon::now()->subDays(1),
             1234,
-            '200 clés USB suite à depot de bilan',
+            '200 clés USB3 suite à depot de bilan',
             ['00000000000000000000000000000000'],
             200,
             50,
-            4
+            0,
+            'Exceptionnel: ' . PHP_EOL .'Clés très haute capacités de 128Gb USB3.0' . PHP_EOL . 'Matériel de qualité sui vous assurera une revente dans des délai courts',
+            true,
+            18.95
         );
 
 

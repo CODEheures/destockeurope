@@ -49,12 +49,8 @@ class CategoriesTableSeeder extends Seeder
         $subCategory212 = new Category();
         $subCategory212->description = ['fr' => 'homme', 'en'=>'men'];
 
-        $subCategory213 = new Category();
-        $subCategory213->description = ['fr' => 'bi', 'en'=>'bi'];
-
         $parent21 = Category::find($subCategory21->id);
         $parent21->appendNode($subCategory211);
         $parent21->appendNode($subCategory212);
-        $parent21->appendNode($subCategory213);
     }
 }

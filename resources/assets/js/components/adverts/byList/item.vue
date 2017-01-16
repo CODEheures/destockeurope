@@ -34,7 +34,7 @@
                             </div>
                             <div class="sixteen wide column item-description">
                                 <div class="description">
-                                    <p>{{ advert.resume }}</p>
+                                    <p class="resume">{{ advert.resume }}</p>
                                 </div>
                             </div>
                             <div class="sixteen wide right aligned column geodate-computer">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="sixteen wide mobile only column">
                         <div class="description">
-                            <p>{{ advert.resume }}</p>
+                            <p class="resume">{{ advert.resume }}</p>
                         </div>
                     </div>
                     <div class="sixteen wide right aligned mobile only column geodate-mobile">

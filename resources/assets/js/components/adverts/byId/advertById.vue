@@ -36,7 +36,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="sixteen wide mobile">
+                <div class="sixteen wide column">
                     <div class="ui segment">
                         <div class="sixteen wide column">
                             <table id="table-advert-infos" class="ui very basic celled table advert-infos">
