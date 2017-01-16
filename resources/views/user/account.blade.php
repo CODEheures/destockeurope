@@ -25,7 +25,7 @@
             registration-number="{{ $user->registrationNumber }}"
             vat-identifier="{{ $user->vatIdentifier }}"
             advert-account-verified-step="{{ isset($advertAccountVerifiedStep) ? $advertAccountVerifiedStep : false }}"
-            advert-cost="{{ isset($advert) ? $advert->cost : '0' }}"
+            advert-cost="{{ isset($advert) && $advert->invoice ? $advert->invoice->cost : '0' }}"
             advert-id="{{ isset($advert) ? $advert->id : '' }}"
             form-phone-max-valid="{{ config('db_limits.users.maxPhone') }}"
             form-compagny-name-min-valid="{{ config('db_limits.users.minCompagnyName') }}"

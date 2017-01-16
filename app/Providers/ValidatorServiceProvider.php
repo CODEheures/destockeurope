@@ -24,6 +24,8 @@ class ValidatorServiceProvider extends ServiceProvider
             //$saop = new SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatTestService.wsdl");
             //FR95481749687
             //FR56749988721
+            //DE811569869
+            //BE0877241373
             $saop = new SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl");
             $request = App::make('request');
 

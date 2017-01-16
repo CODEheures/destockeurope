@@ -19,10 +19,16 @@ class CreateInvoicesTable extends Migration
             $table->softDeletes();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('invoice_number')->unsigned();
-            $table->tinyInteger('method')->unsigned();
+            $table->tinyInteger('method')->unsigned()->nullable()->default(null);
             $table->string('authorization')->nullable()->default(null);
             $table->string('captureId')->nullable()->default(null);
             $table->string('voidId')->nullable()->default(null);
+            $table->text('options')->nullable()->default(null);
+            $table->mediumInteger('cost')->unsigned()->default(0);
+            $table->string('tva_customer')->nullable()->default(null);
+            $table->string('tva_requester')->nullable()->default(null);
+            $table->string('vatIdentifier')->nullable()->default(null);
+            $table->boolean('tvaSubject')->default(true);
         });
     }
 

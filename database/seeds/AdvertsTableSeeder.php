@@ -197,7 +197,6 @@ class AdvertsTableSeeder extends Seeder
         $advert->user_id = $userId;
         $advert->category_id = $catId;
         $advert->created_at = $created_at;
-        $advert->cost = $cost;
         $advert->type = 'bid';
         $advert->title = $title;
         if($description){

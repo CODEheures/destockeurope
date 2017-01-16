@@ -349,6 +349,7 @@
                 this.$http.patch(updateRoute, {'value': value})
                         .then(
                                 function (response) {
+                                    this.updateFails = false;
                                     this.sendToast(this.accountPatchSuccess, 'success');
                                     this.updateInProgress--;
                                     if(inputName == 'registration-number'){

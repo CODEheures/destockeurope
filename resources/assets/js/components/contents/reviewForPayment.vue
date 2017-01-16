@@ -18,7 +18,7 @@
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
-            <template v-else>
+            <template>
                 <table class="ui compact unstackable table">
                     <thead>
                         <tr>
@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="option in dataAdvert.options">
+                        <tr v-for="option in dataInvoice.options">
                             <td>
                                 <h5 class="ui center aligned header">{{ option.name }}</h5>
                             </td>
@@ -47,7 +47,7 @@
                             <tbody>
                                 <tr>
                                     <td class="four wide double">{{ tableTotalExclVat }}</td>
-                                    <td class="four wide double right aligned">{{ ((dataAdvert.cost - tva)/100).toFixed(2) }}€</td>
+                                    <td class="four wide double right aligned">{{ (dataInvoice.cost/100).toFixed(2) }}€</td>
                                 </tr>
                                 <tr>
                                     <td class="four wide double">{{ tableTotalVat }}</td>
@@ -55,7 +55,7 @@
                                 </tr>
                                 <tr>
                                     <td class="four wide double">{{ tableTotalInclVat }}</td>
-                                    <td class="four wide double right aligned">{{ (dataAdvert.cost/100).toFixed(2) }}€</td>
+                                    <td class="four wide double right aligned">{{ ((dataInvoice.cost + tva)/100).toFixed(2) }}€</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -221,11 +221,13 @@
                 dataUrlImgPaypal: null,
                 xCsrfToken: '',
                 dataAdvert: {},
+                dataInvoice: {},
                 dataCardsTypes: []
             };
         },
         mounted () {
             this.dataAdvert = JSON.parse(this.advert);
+            this.dataInvoice = this.dataAdvert.invoice;
             this.dataCardsTypes = JSON.parse(this.cardsTypes);
             this.xCsrfToken = Laravel.csrfToken;
             this.dataUrlImgPaypal = this.urlImgPaypalDisabled;
@@ -326,18 +328,20 @@
                 this.sendMessage = !this.sendMessage;
             },
             setSteps () {
-                (this.steps[2]).title = this.stepThreeTitle + '(' + (this.dataAdvert.cost/100).toFixed(2) + this.stepThreeTitlePost +')';
+                (this.steps[2]).title = this.stepThreeTitle + '(' + (this.dataInvoice.cost/100).toFixed(2) + this.stepThreeTitlePost +')';
             },
             setDataCgv () {
-                var htmlObject = $('<p>'+this.toggleCgvLabel+'</p>');
+                let htmlObject = $('<p>'+this.toggleCgvLabel+'</p>');
                 this.dataCgvText = htmlObject[0].firstChild.data;
                 this.dataCgvA = htmlObject[0].firstElementChild.innerHTML;
                 this.dataCgvHref = htmlObject[0].firstElementChild.href;
             },
             calcTVA () {
                 this.tva = 0;
-                for(let index in this.dataAdvert.options){
-                    this.tva = this.tva + (this.dataAdvert.options[index].cost - this.dataAdvert.options[index].cost/(1+(this.dataAdvert.options[index].tva/100)));
+                if(this.dataInvoice.tvaSubject){
+                    for(let index in this.dataInvoice.options){
+                        this.tva = this.tva + (this.dataInvoice.options[index].cost - this.dataInvoice.options[index].cost/(1+(this.dataInvoice.options[index].tva/100)));
+                    }
                 }
             }
         }

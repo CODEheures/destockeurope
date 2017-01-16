@@ -39,8 +39,6 @@ class CreateAdvertsTable extends Migration
             $table->string('mainPicture',32);
             $table->boolean('isPublish')->default(false);
             $table->boolean('isValid')->nullable()->default(null);
-            $table->text('options')->nullable()->default(null);
-            $table->mediumInteger('cost')->unsigned()->default(0);
             $table->mediumInteger('totalQuantity')->unsigned();
             $table->mediumInteger('lotMiniQuantity')->unsigned()->nullable()->default(null);
             $table->boolean('isUrgent')->default(false);

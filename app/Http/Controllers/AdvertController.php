@@ -357,12 +357,30 @@ class AdvertController extends Controller
 
                 $results = $this->pictureManager->storeLocalFinal();
 
-                $advert->options = $this->setOptions(count($results)/2, $advert->isUrgent, null);
-
-                $advert->cost = $this->getCost(count($results)/2, $advert->isUrgent, false);
+                $cost = $this->getCost(count($results)/2, $advert->isUrgent, false);
 
 
                 DB::beginTransaction();
+                //create invoice
+                if($cost > 0 && !$advert->invoice){
+                    $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
+                    if($previousInvoice){
+                        $next_invoice_number = $previousInvoice->invoice_number + 1;
+                    } else {
+                        $next_invoice_number = 1;
+                    }
+
+                    $invoice = Invoice::create([
+                        'user_id' => $advert->user->id,
+                        'invoice_number' => $next_invoice_number,
+                        //'method' => Invoice::PAYPAL,
+                        'cost' => $cost,
+                        'options' => $this->setOptions(count($results)/2, $advert->isUrgent, null)
+                    ]);
+
+                    $advert->invoice()->associate($invoice);
+                }
+
                 $advert->save();
                 foreach ($results as $result){
                     $picture = new Picture();
@@ -654,9 +672,9 @@ class AdvertController extends Controller
 
 
                             $stats = Stats::latest()->first();
-                            if($advert->cost > 0){
+                            if($invoice->cost > 0){
                                 $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
-                                $stats->totalCosts = $stats->totalCosts + $advert->cost;
+                                $stats->totalCosts = $stats->totalCosts + $invoice->cost;
                             } else {
                                 $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
                             }
@@ -724,7 +742,7 @@ class AdvertController extends Controller
     public function publish(Request $request, $id){
         $advert = Advert::find($id);
         $advert->load('user');
-        if($advert && $advert->user->id == auth()->user()->id && $advert->cost == 0){
+        if($advert && $advert->user->id == auth()->user()->id && !$advert->invoice){
             $this->advertPublish($advert, $request, null);
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } else {
@@ -770,10 +788,22 @@ class AdvertController extends Controller
         $advert = Advert::find($id);
         if($advert
             && $advert->user->id == auth()->user()->id
-            && (!$advert->invoice || ($advert->invoice && !$advert->invoice->authorization))
+            && ($advert->invoice && !$advert->invoice->authorization)
         ){
-                $listCardTypes = config('paypal_cards.list');
-                return view('advert.reviewForPayment', compact('advert', 'listCardTypes'));
+            $advert->load('invoice');
+            $invoice = $advert->invoice;
+            $invoice->tva_customer = $invoice->user->registrationNumber;
+            $invoice->tva_requester = $invoice->user->requesterNumber;
+            $invoice->vatIdentifier = $invoice->user->vatIdentifier;
+
+            if(!$invoice->vatIdentifier || substr($invoice->tva_customer,0,2)=='FR'){
+                $invoice->tvaSubject = true;
+            } else {
+                $invoice->tvaSubject = false;
+            }
+            $invoice->save();
+            $listCardTypes = config('paypal_cards.list');
+            return view('advert.reviewForPayment', compact('advert', 'listCardTypes'));
         }
         return redirect(route('home'));
     }
@@ -915,7 +945,7 @@ class AdvertController extends Controller
 
     /**
      *
-     * Process Payment: Create Invoice and Get Authorization number if Card or rediret To paypal
+     * Process Payment: Set Invoice and Get Authorization number if Card or rediret To paypal
      *
      * @param $id
      * @param $type
@@ -924,51 +954,32 @@ class AdvertController extends Controller
      */
     private function advertPayment($id, $type, $request=null) {
         $advert = Advert::find($id);
-        if($advert
+        $invoice = $advert->invoice;
+        if($advert && $invoice
             && $advert->user->id == auth()->user()->id
-            && $advert->cost > 0
-            && (!$advert->invoice || ($advert->invoice && !$advert->invoice->authorization))
+            && $invoice->cost > 0
+            && !$invoice->authorization
         ){
             $advert->load('user');
 
-            //create or get invoice
-            if(!$advert->invoice){
-                DB::beginTransaction();
-                $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
-                if($previousInvoice){
-                    $next_invoice_number = $previousInvoice->invoice_number + 1;
-                } else {
-                    $next_invoice_number = 1;
-                }
-
-                $invoice = Invoice::create([
-                    'user_id' => $advert->user->id,
-                    'invoice_number' => $next_invoice_number,
-                    'method' => Invoice::PAYPAL
-                ]);
-
-                $advert->invoice()->associate($invoice);
-                $advert->save();
-
-                DB::commit();
-            } else {
-                $invoice = $advert->invoice;
-                $invoice->method = Invoice::PAYPAL;
-                $invoice->save();
-            }
+            //set invoice
+            $invoice->method = Invoice::PAYPAL;
+            $invoice->save();
 
 
             //set $tva, $price, $productName
             $tva = 0;
-            $productName = trans_choice('strings.payment_paypal_generic_product_name', count($advert->options), ['nb' => count($advert->options)]);
+            $productName = trans_choice('strings.payment_paypal_generic_product_name', count($invoice->options), ['nb' => count($invoice->options)]);
             $i = 0;
-            foreach ($advert->options as $option){
-                $tva = $tva + ($option['cost'] - $option['cost']/(1+($option['tva']/100)));
+            foreach ($invoice->options as $option){
+                if($invoice->tvaSubject){
+                    $tva = $tva + ($option['cost'] - $option['cost']/(1+($option['tva']/100)));
+                }
                 $productName .= ($i > 0 ? ' + #' : ' #') . $option['quantity'] . ' ' . $option['name'];
                 $i++;
             }
             $tva = round($tva/100,2);
-            $price = round($advert->cost/100,2);
+            $price = round($invoice->cost/100,2);
 
             //Paypal ShippingAddress
             $geoCodes = json_decode($advert->user->geoloc);
@@ -1036,7 +1047,7 @@ class AdvertController extends Controller
             ->setCurrency('EUR')
                 ->setQuantity(1)
                 ->setTax($tva)
-                ->setPrice($price-$tva); // unit price
+                ->setPrice($price); // unit price
 
             // add item to list
             $item_list = new ItemList();
@@ -1047,11 +1058,11 @@ class AdvertController extends Controller
             $details = new Details();
             $details->setShipping(0)
                 ->setTax($tva)
-                ->setSubtotal($price-$tva);
+                ->setSubtotal($price);
 
             //Paypal Amount
             $amount = new Amount();
-            $amount->setCurrency('EUR')->setTotal($price)->setDetails($details);
+            $amount->setCurrency('EUR')->setTotal($price+$tva)->setDetails($details);
 
             //Paypal Transaction
             $transaction = new Transaction();
@@ -1222,28 +1233,49 @@ class AdvertController extends Controller
     {
         $advert = Advert::withTrashed()->find($id);
         if($advert && auth()->user()->id === $advert->user->id && $advert->isValid && !$advert->isRenew && $advert->online_at){
-            $newAdvert = $advert->replicate();
-            $newAdvert->isPublish = false;
-            $newAdvert->invoice_id = null;
-            $newAdvert->deleted_at = null;
-            $newAdvert->online_at = null;
-            $newAdvert->lastObsoleteMail = null;
-            $newAdvert->options = $this->setOptions(null, null, true);
-            $newAdvert->cost = $this->getCost(null, null, true);
-            $newAdvert->originalAdvertId = $advert->id;
+            try {
+                $newAdvert = $advert->replicate();
+                $newAdvert->isPublish = false;
+                $newAdvert->invoice_id = null;
+                $newAdvert->deleted_at = null;
+                $newAdvert->online_at = null;
+                $newAdvert->lastObsoleteMail = null;
+                $newAdvert->originalAdvertId = $advert->id;
 
-            $newPictures = [];
-            foreach ($advert->pictures as $picture){
-                $newPictures[] = $picture->replicate();
+                //Create Invoice
+                DB::beginTransaction();
+                $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
+                if($previousInvoice){
+                    $next_invoice_number = $previousInvoice->invoice_number + 1;
+                } else {
+                    $next_invoice_number = 1;
+                }
+
+                $invoice = Invoice::create([
+                    'user_id' => $advert->user->id,
+                    'invoice_number' => $next_invoice_number,
+                    //'method' => Invoice::PAYPAL,
+                    'cost' => $this->getCost(null, null, true),
+                    'options' => $this->setOptions(null, null, true)
+                ]);
+                $newAdvert->invoice()->associate($invoice);
+
+
+                //Advert Pictures
+                $newPictures = [];
+                foreach ($advert->pictures as $picture){
+                    $newPictures[] = $picture->replicate();
+                }
+                $newAdvert->save();
+                foreach ($newPictures as $picture){
+                    $newAdvert->pictures()->save($picture);
+                    $picture->save();
+                }
+                DB::commit();
+                return redirect(route('user.completeAccount', ['id' => $newAdvert->id, 'title' => trans('strings.option_isRenew_name')]));
+            } catch (\Exception $e) {
+                return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }
-            DB::beginTransaction();
-            $newAdvert->save();
-            foreach ($newPictures as $picture){
-                $newAdvert->pictures()->save($picture);
-                $picture->save();
-            }
-            DB::commit();
-            return redirect(route('user.completeAccount', ['id' => $newAdvert->id, 'title' => trans('strings.option_isRenew_name')]));
         } else {
             return redirect(route('home'));
         }

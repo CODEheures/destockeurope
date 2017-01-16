@@ -34,8 +34,6 @@ class Advert extends Model {
         'mainPicture',
         'isPublish',
         'isValid',
-        'options',
-        'cost',
         'totalQuantity',
         'lotMiniQuantity',
         'isUrgent',
@@ -48,9 +46,6 @@ class Advert extends Model {
     ];
     protected $dates = ['deleted_at', 'online_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
-    protected $casts = [
-        'options' => 'array'
-    ];
     protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'thumb', 'isEligibleForRenew', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
     private $resumeLength;

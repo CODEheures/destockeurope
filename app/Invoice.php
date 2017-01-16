@@ -17,10 +17,17 @@ class Invoice extends Model {
         'method',
         'authorization',
         'captureId',
-        'voidId'
+        'voidId',
+        'options',
+        'cost',
+        'tva_customer',
+        'tva_provider',
+        'vatIdentifier'
     ];
 
-
+    protected $casts = [
+        'options' => 'array'
+    ];
 
     public function user() {
         return $this->belongsTo('App\User');

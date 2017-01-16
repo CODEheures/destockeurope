@@ -215,9 +215,11 @@ class UserController extends Controller
 
             if(!$request->has('value') || is_null($request->value) || $request->value==''){
                 $user->registrationNumber = null;
+                $user->requesterNumber = null;
                 $user->vatIdentifier = null;
             } else {
                 $user->registrationNumber = $request->value;
+                $user->requesterNumber = env('TVA_REQUESTER_COUNTRY_CODE').env('TVA_REQUESTER_VAT_NUMBER');
                 $user->vatIdentifier = $request->vat_number_identifier;
                 $user->compagnyName = $request->compagny_name;
 

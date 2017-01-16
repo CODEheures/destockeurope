@@ -33,6 +33,7 @@ class User extends Authenticatable
         'locale',
         'compagnyName',
         'registrationNumber',
+        'requesterNumber',
         'latitude',
         'longitude',
         'geoloc'
