@@ -35,6 +35,8 @@ Vue.component('swiper', require('./components/generics/swipers/swiper.vue'));
 Vue.component('swiper-slide', require('./components/generics/swipers/slide.vue'));
 Vue.component('swiper-gallerie', require('./components/generics/swipers/gallerie.vue'));
 Vue.component('margin-input-field', require('./components/generics/fields/marginInput.vue'));
+Vue.component('vimeo-uploader', require('./components/generics/uploaders/vimeo.vue'));
+Vue.component('photo-uploader', require('./components/generics/uploaders/photo.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));

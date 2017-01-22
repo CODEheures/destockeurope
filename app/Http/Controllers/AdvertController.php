@@ -21,6 +21,7 @@ use App\Notifications\AdvertNotApprove;
 use App\Notifications\AdvertRenew;
 use App\Notifications\CustomerContactSeller;
 use App\Notifications\ReportAdvert;
+use App\Persistent;
 use App\Picture;
 use App\Stats;
 use App\User;
@@ -352,6 +353,11 @@ class AdvertController extends Controller
                 $advert->totalQuantity=$request->total_quantity;
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
+                $persistent=null;
+                if(session()->has('videoId')){
+                    $advert->video_id = session('videoId');
+                    $persistent = Persistent::where('key', '=', 'videoId')->where('value', '=', session('videoId'))->get();
+                }
 
                 $advert->price = MoneyUtils::setPriceWithoutDecimal($request->price,$request->currency);
 
@@ -382,6 +388,9 @@ class AdvertController extends Controller
                 }
 
                 $advert->save();
+                if($persistent){
+                    $persistent::delete();
+                }
                 foreach ($results as $result){
                     $picture = new Picture();
                     $picture->hashName = $result['hashName'];
@@ -768,8 +777,8 @@ class AdvertController extends Controller
         }
         $advert->save();
         DB::commit();
-
         $this->pictureManager->purgeSessionLocalTempo();
+        session()->has('videoId') ? session()->forget('videoId'): null;
         $request->session()->flash('clear', true);
     }
 

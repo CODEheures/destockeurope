@@ -116,57 +116,46 @@
                     <i class="camera retro icon"></i>
                     {{ advertFormPhotoSeparator }}
                 </h4>
-                <div class="field" >
-                    <div class="ui icon info message">
-                        <i class="icon">{{ nbPicturesIndicator }}</i>
-                        <div class="content">
-                            <div class="header">{{ helpHeaderIndicator }}</div>
-                            <p v-if="!isDelegation">{{ helpUploadP }}<a :href="helpUploadAHref">{{ helpUploadA }}</a></p>
-                        </div>
-                    </div>
-                </div>
+                <photo-uploader
+                    :route-post-tempo-picture="routePostTempoPicture"
+                    :route-get-list-tempo-thumbs="routeGetListTempoThumbs"
+                    :route-get-tempo-thumb="routeGetTempoThumb"
+                    :route-del-tempo-picture="routeDelTempoPicture"
+                    :advert-form-photo-nb-free-picture="parseInt(advertFormPhotoNbFreePicture)"
+                    :max-files="parseInt(maxFiles)"
+                    :isDelegation="isDelegation==1"
+                    :advert-form-photo-btn-label="advertFormPhotoBtnLabel"
+                    :advert-form-photo-label="advertFormPhotoLabel"
+                    :advert-form-free-photo-help-header-singular="advertFormFreePhotoHelpHeaderSingular"
+                    :advert-form-free-photo-help-header-plural="advertFormFreePhotoHelpHeaderPlural"
+                    :advert-form-pay-photo-help-header-singular="advertFormPayPhotoHelpHeaderSingular"
+                    :advert-form-pay-photo-help-header-plural="advertFormPayPhotoHelpHeaderPlural"
+                    :advert-form-photo-help-content="advertFormPhotoHelpContent"
+                    :advert-form-main-photo-label="advertFormMainPhotoLabel"
+                ></photo-uploader>
 
-                <div class="field">
-                    <div class="ui doubling three column grid">
-                        <div class="column" v-for="(thumb,index) in thumbs">
-                            <div :class="!isDelegation &&  index>=advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
-                                <a class="ui pink right ribbon label" v-if="!isDelegation && index>=advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
-                                <div class="ui stackable grid">
-                                    <div class="four wide centered column">
-                                        <a href="#"><i class="large grey remove circle outline icon" :data-file="thumb" v-on:click="delPhoto"></i></a>
-                                    </div>
-                                    <div class="twelve wide right aligned column">
-                                        <div :id="'slider1-'+_uid+'-'+index" class="ui slider checkbox">
-                                            <input type="radio" name="mainThumb" :value="thumb">
-                                            <label>{{ advertFormMainPhotoLabel }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="sixteen wide column">
-                                        <img :src="routeGetTempoThumb+'/'+thumb" class="ui rounded medium centered image" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h4 class="ui horizontal divider header">
+                    <i class="film icon"></i>
+                    {{ advertFormVideoSeparator }}
+                </h4>
 
-                <div class="field">
-                    <template v-if="thumbs.length<maxFiles">
-                        <div class="ui grid">
-                            <div class="doubling four column row">
-                                <div class="column">
-                                    <div class="field">
-                                        <input type="file" :name="formFileInputName" v-on:change="upload">
-                                        <div class="ui top blue pointing basic label">
-                                            {{ advertFormPhotoLabel }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                </div>
+                <vimeo-uploader
+                    :route-get-video-post-ticket="routeGetVideoPostTicket"
+                    :route-del-tempo-video="routeDelTempoVideo"
+                    :route-get-status-video="routeGetStatusVideo"
+                    :max-video-file-size="parseInt(maxVideoFileSize)"
+                    :session-video-id="sessionVideoId"
+                    :advert-form-video-btn-label="advertFormVideoSeparator"
+                    :advert-form-video-label="advertFormVideoLabel"
+                    :advert-form-video-btn-delete="advertFormVideoBtnDelete"
+                    :advert-form-video-btn-cancel="advertFormVideoBtnCancel"
+                    :waiting-message="waitingMessage"
+                ></vimeo-uploader>
 
+                <h4 class="ui horizontal divider header">
+                    <i class="film icon"></i>
+                    {{ advertFormVideoSeparator }}
+                </h4>
                 <div class="field">
                     <button type="submit" class="ui primary button" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
                 </div>
@@ -180,15 +169,9 @@
         props: [
             //vue routes
             'routeAdvertFormPost',
-            'routePostTempoPicture',
-            'routeGetListTempoThumbs',
-            'routeGetTempoThumb',
-            'routeDelTempoPicture',
             'routeGetCost',
             //vue vars
             'old',
-            'advertFormPhotoNbFreePicture',
-            'maxFiles',
             'formTitleMinValid',
             'formTitleMaxValid',
             'formDescriptionMinValid',
@@ -201,13 +184,6 @@
             'advertFormPriceLabel',
             'advertFormGooglemapLabel',
             'advertFormPhotoSeparator',
-            'advertFormPhotoLabel',
-            'advertFormFreePhotoHelpHeaderSingular',
-            'advertFormFreePhotoHelpHeaderPlural',
-            'advertFormPayPhotoHelpHeaderSingular',
-            'advertFormPayPhotoHelpHeaderPlural',
-            'advertFormPhotoHelpContent',
-            'advertFormMainPhotoLabel',
             'loadErrorMessage',
             'filesizeErrorMessage',
             'formValidationButtonLabel',
@@ -237,6 +213,32 @@
             //geomap component
             'geolocHelpMsg',
             'geolocHelpMsgTwo',
+            //Photo component
+            'routePostTempoPicture',
+            'routeGetListTempoThumbs',
+            'routeGetTempoThumb',
+            'routeDelTempoPicture',
+            'advertFormPhotoNbFreePicture',
+            'maxFiles',
+            'advertFormPhotoBtnLabel',
+            'advertFormPhotoLabel',
+            'advertFormFreePhotoHelpHeaderSingular',
+            'advertFormFreePhotoHelpHeaderPlural',
+            'advertFormPayPhotoHelpHeaderSingular',
+            'advertFormPayPhotoHelpHeaderPlural',
+            'advertFormPhotoHelpContent',
+            'advertFormMainPhotoLabel',
+            //vimeo component
+            'routeGetVideoPostTicket',
+            'routeDelTempoVideo',
+            'routeGetStatusVideo',
+            'maxVideoFileSize',
+            'sessionVideoId',
+            'advertFormVideoSeparator',
+            'advertFormVideoLabel',
+            'advertFormVideoBtnDelete',
+            'advertFormVideoBtnCancel',
+            'waitingMessage'
         ],
         data: () => {
             return {
@@ -261,14 +263,7 @@
                 geoloc: '',
                 dataCompleteGeoloc: '',
                 searchPlace: '',
-                helpUploadP: '',
-                helpUploadA: '',
-                helpUploadAHref: '',
-                fileToPost: new FormData(),
-                formFileInputName: 'addpicture',
                 thumbs: [],
-                nbPicturesIndicator: '',
-                helpHeaderIndicator: '',
                 mainPicture: '',
                 steps: [],
                 successFormSubmit: false,
@@ -315,19 +310,21 @@
             this.$on('locationChange', function (event) {
                 this.latLngChange(event);
             });
+            this.$on('updateThumbs', function (event) {
+                this.thumbs = event;
+                this.setSteps();
+            });
+            this.$on('updateMainPicture', function (event) {
+                this.mainPicture = event;
+            });
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
             });
-            this.xCsrfToken = Laravel.csrfToken;
-            this.setPicturesIndicators();
-            this.setSteps();
-            this.helpUpload();
-            this.getListThumbs();
-            this.$watch('thumbs', function () {
-                this.setPicturesIndicators();
-                this.setSteps();
-                this.setMainPicture();
+            this.$on('sendToast', function (event) {
+                this.sendToast(event.message, event.type);
             });
+            this.xCsrfToken = Laravel.csrfToken;
+            this.setSteps();
             this.$watch('isUrgent', function () {
                 this.setSteps();
                 if(this.isUrgent){
@@ -341,13 +338,6 @@
         },
         updated () {
             let that = this;
-            for(let index in this.thumbs){
-                $('#slider1-'+this._uid+'-'+index).checkbox({
-                    onChange: function () {
-                        that.mainPicture = this.value;
-                    }
-                });
-            }
             $('#isUrgent'+this._uid).checkbox({
                 onChecked: function() {that.isUrgent = true;},
                 onUnchecked: function() {that.isUrgent = false;}
@@ -374,82 +364,6 @@
                 this.geoloc= event.geoloc;
                 this.dataCompleteGeoloc = sessionStorage.getItem('geoloc');
                 this.searchPlace = sessionStorage.getItem('searchPlace');
-            },
-            helpUpload: function () {
-                let htmlObject = $('<p>'+this.advertFormPhotoHelpContent+'</p>');
-                this.helpUploadP = htmlObject[0].firstChild.data;
-                this.helpUploadA = htmlObject[0].firstElementChild.innerHTML;
-                this.helpUploadAHref = htmlObject[0].firstElementChild.href;
-            },
-            upload: function (event) {
-                this.fileToPost.append(this.formFileInputName, event.target.files[0]);
-                let that = this;
-                this.$http.post(this.routePostTempoPicture, this.fileToPost)
-                        .then(
-                                function (response) {
-                                    that.fileToPost.delete(that.formFileInputName);
-                                    that.thumbs = response.body;
-                                },
-                                function (response) {
-                                    that.fileToPost.delete(that.formFileInputName);
-                                    if (response.status == 422) {
-                                        let msg = response.body.addpicture[0];
-                                        that.sendToast(msg, 'error');
-                                    } else if(response.status == 413) {
-                                        that.sendToast(that.filesizeErrorMessage, 'error');
-                                    } else {
-                                        that.sendToast(that.loadErrorMessage, 'error');
-                                    }
-                                }
-                        );
-            },
-            getListThumbs: function (event) {
-                let that = this;
-                this.$http.get(this.routeGetListTempoThumbs)
-                        .then(
-                                function (response) {
-                                    that.thumbs = response.body;
-                                },
-                                function (response) {
-                                    that.sendToast(that.loadErrorMessage, 'error');
-                                }
-                        );
-            },
-            delPhoto: function (event) {
-                event.preventDefault();
-                let that=this;
-                this.$http.delete(this.routeDelTempoPicture+'/'+event.target.dataset.file)
-                        .then(
-                                function (response) {
-                                    that.thumbs = response.body;
-                                },
-                                function (response) {
-                                    that.sendToast(that.loadErrorMessage, 'error');
-                                }
-                        );
-            },
-            setPicturesIndicators () {
-                let resultIndicator;
-                if(this.isDelegation==1){
-                    resultIndicator =  this.maxFiles - this.thumbs.length;
-                } else {
-                    resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
-                }
-                if(resultIndicator>=0){
-                    this.nbPicturesIndicator = resultIndicator;
-                    if(resultIndicator>1){
-                        this.helpHeaderIndicator = this.advertFormFreePhotoHelpHeaderPlural;
-                    } else {
-                        this.helpHeaderIndicator = this.advertFormFreePhotoHelpHeaderSingular;
-                    }
-                } else {
-                    this.nbPicturesIndicator = -resultIndicator;
-                    if(this.nbPicturesIndicator>1){
-                        this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderPlural;
-                    } else {
-                        this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderSingular;
-                    }
-                }
             },
             setSteps () {
                 let resultIndicator;
@@ -478,13 +392,6 @@
                     this.cost = 0;
                     (this.steps[2]).title = this.stepThreeTitle;
                     (this.steps[2]).isDisabled = true;
-                }
-            },
-            setMainPicture() {
-                if(this.thumbs.length == 0){
-                    this.mainPicture ='';
-                } else if(this.thumbs.length == 1 || this.thumbs.indexOf(this.mainPicture)==-1){
-                    $('#slider1-'+this._uid+'-0').checkbox('check');
                 }
             },
             submitForm (event) {

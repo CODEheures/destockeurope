@@ -25,7 +25,7 @@ class PictureAdvertRequest extends FormRequest
     public function rules()
     {
 
-        $maxSize = env('FILE_MAX_SIZE')*1024;
+        $maxSize = env('PHOTO_MAX_SIZE_MB')*1024;
 
         return [
             'addpicture' => 'required|image|min:2|max:'.$maxSize.'|dimensions:min_width='. env('MIN_WIDTH'). ',min_height=' . env('MIN_HEIGHT')

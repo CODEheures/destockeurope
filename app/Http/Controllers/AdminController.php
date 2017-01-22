@@ -12,13 +12,18 @@ use App\Stats;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Vinkla\Vimeo\VimeoManager;
 
 class AdminController extends Controller
 {
+    private $pictureManager;
+    private $vimeoManager;
 
-
-    public function __construct() {
+    public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
         $this->middleware('isAdminUser');
+        $this->pictureManager = $picturesManager;
+        $this->vimeoManager = $vimeoManager;
     }
 
     public function manage(){
@@ -80,8 +85,7 @@ class AdminController extends Controller
 
     public function cleanApp() {
         try {
-            $pictureManager = new Common\PicturesManager();
-            $advertManager = new Common\AdvertsManager($pictureManager);
+            $advertManager = new Common\AdvertsManager($this->pictureManager, $this->vimeoManager);
             $info = $advertManager->purge();
             //update stats
             $statsManager = new Common\StatsManager();
@@ -123,5 +127,16 @@ class AdminController extends Controller
             $transList[$key] =  $item;
         }
         return response()->json($transList);
+    }
+
+    public function testLangs() {
+        $lines = [];
+        $arglist = [];
+        foreach (config('app.locales') as $locale) {
+            $lines[$locale] = Lang::get('strings',[],$locale);
+            $arglist[] = $lines[$locale];
+        }
+
+        return call_user_func_array("array_diff_key", $arglist);
     }
 }

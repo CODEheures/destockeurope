@@ -33,6 +33,7 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
         Route::get('/transfertMedias/{sizeInMb?}', 'AdminController@transfertMedias')->name('application.transfertMedias');
         Route::get('/progressTransfertMedias', 'AdminController@progressTransfertMedias')->name('application.progressTransfertMedias');
         Route::get('/stats', 'AdminController@getStats')->name('application.getStats');
+        Route::get('/testLangs', 'AdminController@testLangs');
     });
 
     //Auth::routes();
@@ -119,6 +120,13 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
     });
     Route::resource('advert', 'AdvertController');
+
+    Route::group(['prefix' => 'videos'] , function () {
+        Route::put('/ticket', ['as' => 'videos.ticket', 'uses' => 'VideoController@ticket']);
+        Route::patch('/ticket', ['as' => 'videos.closeTicket', 'uses' => 'VideoController@closeTicket']);
+        Route::delete('/tempo/', ['as' => 'videos.delTempo', 'uses' => 'VideoController@delTempoVideo']);
+        Route::get('/status/', ['as' => 'videos.status', 'uses' => 'VideoController@status']);
+    });
 
     //Pictures
     Route::group(['prefix' => 'picture'] , function () {

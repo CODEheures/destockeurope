@@ -13,8 +13,8 @@ window.moment = require('moment');
 window.ionRangeSlider = require('ion-rangeslider');
 window.destock = require('./destockeurope');
 window.Parser = require('url');
+window.axios = require('axios');
 /*require('bootstrap-sass');*/
-
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
  * using reactive data binding and reusable components. Vue's API is clean

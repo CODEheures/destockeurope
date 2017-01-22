@@ -4,14 +4,18 @@ namespace App\Common;
 
 use App\Advert;
 use App\Notifications\AlertObsoleteAdvert;
+use App\Persistent;
 use Carbon\Carbon;
+use Vinkla\Vimeo\VimeoManager;
 
 class AdvertsManager
 {
     private $pictureManager;
+    private $vimeoManager;
 
-    public function __construct(PicturesManager $picturesManager) {
+    public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
         $this->pictureManager = $picturesManager;
+        $this->vimeoManager = $vimeoManager;
     }
 
     private function definitiveDestroy(Advert $advert) {
@@ -30,10 +34,13 @@ class AdvertsManager
         return $counter;
     }
 
+
+    //Manually Purge in Admin Panel
     public function purge() {
         try {
             $counterDelPictures = 0;
             $counterDelAdvert = 0;
+            $counterDelVideo = 0;
             //1 get Adverts where is Valid = false
             $invalidAdverts = Advert::invalid()->get();
             foreach ($invalidAdverts as $advert){
@@ -63,7 +70,19 @@ class AdvertsManager
             //5 deleted Tempo files with life time pass
             $counterDelPictures += $this->pictureManager->purgeObsoleteLocalTempo(env('TEMPO_HOURS_LIFE_TIME'));
 
-            return trans('strings.admin_purge_response', ['nbadvert' => $counterDelAdvert, 'nbimg' => $counterDelPictures]);
+            //6 Purge Videos On Vimeo WithOut Advert
+            $persistents = Persistent::where('key', '=', 'videoId')->get();
+            foreach ($persistents as $persistent) {
+                if(Carbon::parse($persistent->updated_at)->isPast(Carbon::now()->subHours(env('TEMPO_HOURS_LIFE_TIME')))){
+                    $response = $this->vimeoManager->request('/videos/'.$persistent->value,[],'DELETE');
+                    if($response['status']<300){
+                        $counterDelVideo++;
+                    }
+                    $persistent->delete();
+                }
+            }
+
+            return trans('strings.admin_purge_response', ['nbadvert' => $counterDelAdvert, 'nbimg' => $counterDelPictures, 'nbvideos' => $counterDelVideo]);
         } catch (\Exception $e) {
             throw  new \Exception(trans('strings.admin_purge_error') . ': ' . $e->getMessage());
         }

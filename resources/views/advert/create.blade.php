@@ -25,7 +25,8 @@
             advert-form-price-label="{{ trans('strings.view_advert_form_price_label') }}"
             advert-form-googlemap-label="{{ trans('strings.form_googlemap_label') }}"
             advert-form-photo-separator="{{ trans('strings.form_file_add_photo_separator') }}"
-            advert-form-photo-label="{{ trans('strings.form_file_add_photo_label', ['minwidth' => env('MIN_WIDTH'), 'minheight' => env('MIN_HEIGHT'), 'maxsize' => env('FILE_MAX_SIZE')]) }}"
+            advert-form-photo-btn-label="{{ trans('strings.form_file_add_photo_btn_label') }}"
+            advert-form-photo-label="{{ trans('strings.form_file_add_photo_label', ['minwidth' => env('MIN_WIDTH'), 'minheight' => env('MIN_HEIGHT'), 'maxsize' => env('PHOTO_MAX_SIZE_MB')]) }}"
             advert-form-free-photo-help-header-singular="{{ trans_choice('strings.form_file_add_free_photo_help_header',1) }}"
             advert-form-free-photo-help-header-plural="{{ trans_choice('strings.form_file_add_free_photo_help_header',2) }}"
             advert-form-pay-photo-help-header-singular="{{ trans_choice('strings.form_file_add_pay_photo_help_header',1) }}"
@@ -60,8 +61,20 @@
             currencies-first-menu-name="{{ trans('strings.view_user_account_currency_dropdown_label') }}"
 
             geoloc-help-msg="{{ trans('strings.form_googlemap_help') }}"
-            geoloc-help-msg-two="{{ trans('strings.form_googlemap_help2') }}">
-    </create-advert-form>
+            geoloc-help-msg-two="{{ trans('strings.form_googlemap_help2') }}"
+
+            route-get-video-post-ticket="{{ route('videos.ticket') }}"
+            route-del-tempo-video="{{ route('videos.delTempo') }}"
+            route-get-status-video="{{ route('videos.status') }}"
+            max-video-file-size="{{ env('VIDEO_MAX_SIZE_MB')*1024*1024 }}"
+            session-video-id="{{ session()->has('videoId') ? session('videoId') : null }}"
+            advert-form-video-separator="{{ trans('strings.form_file_add_video_separator') }}"
+            advert-form-video-label="{{ trans('strings.form_file_add_video_label', ['maxsize' => env('VIDEO_MAX_SIZE_MB')]) }}"
+            advert-form-video-btn-delete="{{ trans('strings.form_file_del_video_label') }}"
+            advert-form-video-btn-cancel="{{ trans('strings.form_file_cancel_video_label') }}"
+            waiting-message="{{ trans('strings.form_waiting_for_process') }}"
+
+    ></create-advert-form>
 
 @endsection
 

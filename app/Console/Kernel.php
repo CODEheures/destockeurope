@@ -30,8 +30,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+
+        //Scheduler for STATS and Adverts Ends, Purges, Alerts
         $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
             $result1='';
@@ -62,6 +62,7 @@ class Kernel extends ConsoleKernel
 
         })->dailyAt('05:57');
 
+        //Scheduler for Update GEOIP
         $schedule->call(function(){
             try {
                 $geoIpResult = GeoIPUpdater::updateGeoIpFiles();
