@@ -61,9 +61,13 @@ class UtilsController extends Controller
         //test changement bio
         //$response = $this->vimeoManager->request('/me', ['bio'=>'essair'], 'PATCH');
 
+        //Check quota
+//        $response = $this->vimeoManager->request('/me/videos', ['type'=>'streaming'], 'POST');
+//        dd($response);
+
         //test upload serveur
 //        $content = Storage::disk('local')->url('public/1.mp4');
-//        $content = ($_SERVER["DOCUMENT_ROOT"].'/videos/1.mp4');
+//        $content = ($_SERVER["DOCUMENT_ROOT"].'/video/1.mp4');
 //        $response = $this->vimeoManager->upload($content, false);
 //        dd($response);
 
@@ -75,8 +79,15 @@ class UtilsController extends Controller
         //return null;
 
 
+//        $response = $this->vimeoManager->request('/users/61078479/tickets/f25e11bfccf379c47454064572494e34',null,'GET');
+//        dd($response);
 
-
+//        session([
+//            'totok' => 'totov',
+//            'tatak' => 'tatav'
+//        ]);
+        //session(['videoId'=>'200465680']);
+        return session()->all();
 
 //        $success = Common\GeoIPUpdater::updateGeoIpFiles();
 //        if($success) {
@@ -87,6 +98,6 @@ class UtilsController extends Controller
 
 
 
-        return (new Common\PicturesManager())->purgeObsoleteLocalTempo(120/3600);
+//        return response('ok',308,['Range'=>'bytes=0-1000']);
     }
 }
