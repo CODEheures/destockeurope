@@ -87,7 +87,7 @@ class UtilsController extends Controller
 //            'tatak' => 'tatav'
 //        ]);
         //session(['videoId'=>'200465680']);
-        return session()->all();
+        return storage_path('whitelists').DIRECTORY_SEPARATOR.'facebook';
 
 //        $success = Common\GeoIPUpdater::updateGeoIpFiles();
 //        if($success) {

@@ -2,6 +2,10 @@
 
 return [
 
+    //whiteList Facebook:
+    //whois -h whois.radb.net -- '-i origin AS32934' | grep ^route > facebook
+
+
     /**
      * Blacklisted IP  addresses, ranges, countries, files and/or files of files
      *
@@ -29,8 +33,8 @@ return [
         // '10.0.1.1-10.0.1.255'
         // '172.16.*.*'
         'country:fr',
-        '192.168.*.*'
-        // storage_path().DIRECTORY_SEPARATOR.'whitelisted.txt',
+        '192.168.*.*',
+        storage_path('whitelists').DIRECTORY_SEPARATOR.'facebook',
     ],
 
     /**

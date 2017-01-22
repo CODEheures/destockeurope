@@ -53,6 +53,11 @@ return [
             'root' => storage_path('logs'),
         ],
 
+        'whitelists' => [
+            'driver' => 'local',
+            'root' => storage_path('whitelists'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
