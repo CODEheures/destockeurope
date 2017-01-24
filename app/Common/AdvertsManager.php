@@ -30,6 +30,13 @@ class AdvertsManager
                 $counter++;
             }
         }
+        $videoId = $advert->video_id;
+        if($videoId && strlen($videoId)>0){
+            $count = Advert::withVideoId($videoId)->count();
+            if($count<=1){
+                $response = $this->vimeoManager->request('/videos/'.$videoId,[],'DELETE');
+            }
+        }
         $advert->forceDelete();
         return $counter;
     }

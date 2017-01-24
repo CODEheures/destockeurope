@@ -42,7 +42,7 @@
                                    v-on:blur="blured={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}">
                         </div>
                     </div>
-                    <div class="two fields">
+                    <div class="three fields">
                         <div class="field">
                             <label>{{ advertUrgentCostLabel }}</label>
                             <input type="number"
@@ -52,6 +52,16 @@
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'urgentCost', 'value': parameters.urgentCost}"
                                    v-on:blur="blured={'name': 'urgentCost', 'value': parameters.urgentCost}">
+                        </div>
+                        <div class="field">
+                            <label>{{ advertVideoCostLabel }}</label>
+                            <input type="number"
+                                   name="videoCost"
+                                   min="0"
+                                   v-model="parameters.videoCost"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'videoCost', 'value': parameters.videoCost}"
+                                   v-on:blur="blured={'name': 'videoCost', 'value': parameters.videoCost}">
                         </div>
                         <div class="field">
                             <label>{{ advertRenewCostLabel }}</label>
@@ -209,6 +219,7 @@
             advertNbFreePicturesLabel: String,
             advertNbMaxPicturesLabel: String,
             advertUrgentCostLabel: String,
+            advertVideoCostLabel: String,
             advertRenewCostLabel: String,
             advertPerPageLabel: String,
             advertResumeLenghtLabel: String,

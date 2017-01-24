@@ -269,6 +269,7 @@
             'modalValidDescription',
             'modalNo',
             'modalYes',
+            'allLabel',
             //advertById component
             'routeHome',
             'actualLocale',
@@ -439,6 +440,10 @@
                 breadcrumb.push(lastBread);
 
                 this.breadcrumbItems = [];
+                this.breadcrumbItems.push({
+                    name: this.allLabel,
+                    value: 0
+                });
                 for(let index in breadcrumb){
                     this.breadcrumbItems.push({
                         name: breadcrumb[index]['description'][this.actualLocale],

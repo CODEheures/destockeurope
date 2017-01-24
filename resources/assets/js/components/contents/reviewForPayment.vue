@@ -65,7 +65,7 @@
                     <div class="right aligned column">
                         <div id="cgvSlider" class="ui toggle checkbox">
                             <input type="checkbox" name="cgv">
-                            <label>{{ dataCgvText }} <a :href="dataCgvHref">{{ dataCgvA }}</a></label>
+                            <label>{{ dataCgvText }} <a :href="dataCgvHref" target="_blank">{{ dataCgvA }}</a></label>
                         </div>
                     </div>
                 </div>

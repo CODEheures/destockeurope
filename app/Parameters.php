@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Common extends Model
+class Parameters extends Model
 {
     use SoftDeletes;
     /**
@@ -21,6 +21,7 @@ class Common extends Model
         'adsFrequency',
         'advertsPerPage',
         'urgentCost',
+        'videoCost',
         'renewCost',
         'nbFreePictures',
         'nbMaxPictures',

@@ -150,6 +150,7 @@
                     :advert-form-video-btn-delete="advertFormVideoBtnDelete"
                     :advert-form-video-btn-cancel="advertFormVideoBtnCancel"
                     :waiting-message="waitingMessage"
+                    :transcode-message="transcodeMessage"
                 ></vimeo-uploader>
 
                 <h4 class="ui horizontal divider header">
@@ -238,7 +239,8 @@
             'advertFormVideoLabel',
             'advertFormVideoBtnDelete',
             'advertFormVideoBtnCancel',
-            'waitingMessage'
+            'waitingMessage',
+            'transcodeMessage',
         ],
         data: () => {
             return {
@@ -268,7 +270,9 @@
                 steps: [],
                 successFormSubmit: false,
                 isUrgent: false,
-                cost: 0
+                hasVideo: false,
+                cost: 0,
+                onSetSteps: false,
             };
         },
         mounted () {
@@ -314,6 +318,10 @@
                 this.thumbs = event;
                 this.setSteps();
             });
+            this.$on('vimeoStateChange', function (hasVideo) {
+                this.hasVideo = hasVideo;
+                this.setSteps();
+            });
             this.$on('updateMainPicture', function (event) {
                 this.mainPicture = event;
             });
@@ -324,7 +332,6 @@
                 this.sendToast(event.message, event.type);
             });
             this.xCsrfToken = Laravel.csrfToken;
-            this.setSteps();
             this.$watch('isUrgent', function () {
                 this.setSteps();
                 if(this.isUrgent){
@@ -334,6 +341,7 @@
                     $('#isUrgent'+this._uid).checkbox('uncheck');
                 }
             });
+
             this.getStorage();
         },
         updated () {
@@ -372,7 +380,7 @@
                 } else {
                     resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
                 }
-                if(this.isDelegation!=1 && (resultIndicator>=1 || this.isUrgent)) {
+                if(this.isDelegation!=1 && (resultIndicator<0 || this.isUrgent || this.hasVideo)) {
                     if(this.isDelegation != 1) {
                         (this.steps[2]).isDisabled = false;
                     }

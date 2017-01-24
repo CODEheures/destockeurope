@@ -1,21 +1,15 @@
 <template>
     <div :id="_uid" style="width: 100%">
-        <swiper :options="swiperOptionTop" class="gallery-top" :style="'height: ' + dataHeightTop + 'px;'">
-            <template v-for="picture in pictures" v-if="!picture.isThumb">
-                <swiper-slide :style="">
-                    <img :data-src="picture.url" class="swiper-lazy" v-on:click="lightBoxMe(picture.url)">
-                    <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-                </swiper-slide>
-            </template>
-            <div class="swiper-pagination" slot="pagination"></div>
-            <div class="swiper-button-next" slot="button-next"><i class="huge chevron right icon"></i></div>
-            <div class="swiper-button-prev" slot="button-prev"><i class="huge chevron left icon"></i></div>
-        </swiper>
-        <swiper :options="swiperOptionThumbs" class="gallery-thumbs" :style="'height: ' + dataHeightThumb + 'px;'">
-            <template v-for="picture in pictures" v-if="picture.isThumb">
-                <swiper-slide :style="'background-image:url('+picture.url+')'"></swiper-slide>
-            </template>
-        </swiper>
+        <swiper-top class="gallery-top" :style="'height: ' + dataHeightTop + 'px;'"
+                :options="swiperOptionTop"
+                :video-id="videoId"
+                :pictures="pictures"
+        ></swiper-top>
+        <swiper-thumbs class="gallery-thumbs" :style="'height: ' + dataHeightThumb + 'px;'"
+                :options="swiperOptionThumbs"
+                :video-id="videoId"
+                :pictures="pictures"
+        ></swiper-thumbs>
     </div>
 </template>
 
@@ -26,6 +20,11 @@
             //vue vars
             pictures: {
                 type: Array
+            },
+            videoId: {
+                type: Number,
+                required: false,
+                default: null
             },
             imageRatio: {
                 type: Number
@@ -66,11 +65,12 @@
             swiperThumbs.params.control = swiperTop;
             this.dataHeightTop = $('#'+this._uid).width()/this.imageRatio;
             this.dataHeightThumb = this.dataHeightTop*20/80;
+            this.$on('openLightBox', function (imgUrl) {
+                this.$parent.$emit('openLightBox', imgUrl)
+            })
         },
         methods: {
-            lightBoxMe (imgUrl) {
-                this.$parent.$emit('openLightBox', imgUrl)
-            }
+
         }
     }
 </script>

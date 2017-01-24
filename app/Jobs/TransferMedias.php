@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Common;
 use App\Common\PicturesManager;
 use App\Common\StatsManager;
+use App\Parameters;
 use App\Picture;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -33,15 +33,15 @@ class TransferMedias implements ShouldQueue
      */
     public function handle()
     {
-        $commons = Common::latest()->first();
-        if($commons && !$commons->isOnTransfert){
+        $parameters = Parameters::latest()->first();
+        if($parameters && !$parameters->isOnTransfert){
             $total = $this->quantity*1024; //kb
             $partial = 0;
             $sizeBeforeMove = 0;
-            $commons->isOnTransfert = true;
-            $commons->transfertPartial = $partial;
-            $commons->transfertTotal = $total;
-            $commons->save();
+            $parameters->isOnTransfert = true;
+            $parameters->transfertPartial = $partial;
+            $parameters->transfertTotal = $total;
+            $parameters->save();
             //move pictures to distant disk
             $pictureManager = new PicturesManager();
             $picture = Picture::onLocalDisk()->first();
@@ -51,8 +51,8 @@ class TransferMedias implements ShouldQueue
                     $pictureManager->moveToDistantFinal($picture);
                     $partial += round($sizeBeforeMove/1024,0);
                     $picture = Picture::onLocalDisk()->first();
-                    $commons->transfertPartial = $partial;
-                    $commons->save();
+                    $parameters->transfertPartial = $partial;
+                    $parameters->save();
                 } else {
                     break;
                 }
@@ -60,8 +60,8 @@ class TransferMedias implements ShouldQueue
             //update stats
             $statsManager = new StatsManager();
             $statsManager->getStats();
-            $commons->isOnTransfert = false;
-            $commons->save();
+            $parameters->isOnTransfert = false;
+            $parameters->save();
         }
         return null;
     }

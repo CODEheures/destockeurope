@@ -57,6 +57,7 @@
             modal-valid-description="{{ trans('strings.view_advert_show_modal_delete_description') }}"
             modal-no="{{ trans('strings.modal_no') }}"
             modal-yes="{{ trans('strings.modal_yes') }}"
+            all-label="{{ trans('strings.view_all_all') }}"
 
             route-home="{{ route('home') }}"
             actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"

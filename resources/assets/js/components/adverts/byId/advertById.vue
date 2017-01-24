@@ -8,7 +8,8 @@
         </div>
         <div class="sixteen wide column">
             <swiper-gallerie
-                    :pictures="dataPictures"
+                    :pictures="advert.pictures"
+                    :video-id="advert.video_id"
                     :image-ratio="imageRatio"
             ></swiper-gallerie>
         </div>
@@ -104,7 +105,8 @@
                 isLoaded: false,
                 dataLightBoxUrl: '',
                 dataHeight: '',
-                dataPictures: []
+                dataPictures: [],
+                dataVideoId: '',
             };
         },
         mounted () {
@@ -112,9 +114,6 @@
                 this.openLightBox(imgUrl);
             });
             this.dataHeight = $('#modal-'+this._uid).width()/this.imageRatio;
-        },
-        updated () {
-          this.dataPictures = this.advert.pictures;
         },
         methods: {
             getMoment: function (dateTime) {

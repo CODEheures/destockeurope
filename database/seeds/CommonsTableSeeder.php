@@ -1,6 +1,6 @@
 <?php
 
-use App\Common;
+use App\Parameters;
 use Illuminate\Database\Seeder;
 
 class CommonsTableSeeder extends Seeder
@@ -12,7 +12,7 @@ class CommonsTableSeeder extends Seeder
      */
     public function run()
     {
-        $parameters = new Common();
+        $parameters = new Parameters();
         $parameters->save();
     }
 }

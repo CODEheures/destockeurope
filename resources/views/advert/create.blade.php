@@ -73,6 +73,7 @@
             advert-form-video-btn-delete="{{ trans('strings.form_file_del_video_label') }}"
             advert-form-video-btn-cancel="{{ trans('strings.form_file_cancel_video_label') }}"
             waiting-message="{{ trans('strings.form_waiting_for_process') }}"
+            transcode-message="{{ trans('strings.form_waiting_for_transcode') }}"
 
     ></create-advert-form>
 

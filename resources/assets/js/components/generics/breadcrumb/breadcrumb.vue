@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div style="display: inline-block">
         <div class="row breadcrumb">
-            <div class="ui breadcrumb">
+            <div class="ui big breadcrumb">
                 <template v-for="(item, index) in items">
                     <template v-if="index==items.length-1">
                         <div class="section active" :data-value="item.value">{{ item.name }}</div>

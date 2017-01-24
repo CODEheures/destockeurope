@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Common;
 use App\Common\MoneyUtils;
+use App\Parameters;
 use Closure;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
@@ -27,29 +27,30 @@ class GetConfig
         $requestLocale = \Locale::getPrimaryLanguage($request->server('HTTP_ACCEPT_LANGUAGE'));
         $requestRegion = \Locale::getRegion($httpAccept);
 
-        $config = Common::first();
-        if(!$config) {
-            Common::create();
-            $config = Common::first();
+        $parameters = Parameters::first();
+        if(!$parameters) {
+            Parameters::create();
+            $parameters = Parameters::first();
         }
-        if($config){
-            config(['runtime.masterAds' => $config->masterAds]);
-            config(['runtime.urlMasterAds' => $config->urlMasterAds]);
-            config(['runtime.urlLinkMasterAds' => $config->urlLinkMasterAds]);
-            config(['runtime.offsetYMasterAds' => $config->offsetYMasterAds]);
-            config(['runtime.adsFrequency' => $config->adsFrequency]);
-            config(['runtime.advertsPerPage' => $config->advertsPerPage]);
-            config(['runtime.urgentCost' => $config->urgentCost]);
-            config(['runtime.renewCost' => $config->renewCost]);
-            config(['runtime.nbFreePictures' => $config->nbFreePictures]);
-            config(['runtime.nbMaxPictures' => $config->nbMaxPictures]);
-            config(['runtime.welcomeType' => $config->welcomeType]);
-            config(['runtime.advertResumeLenght' => $config->advertResumeLenght]);
-            config(['runtime.minLengthSearch' => $config->minLengthSearch]);
-            config(['runtime.maxNumberOfSearchResults' => $config->maxNumberOfSearchResults]);
-            if($config->masterAds && $config->urlMasterAds && $config->urlMasterAds != ''){
+        if($parameters){
+            config(['runtime.masterAds' => $parameters->masterAds]);
+            config(['runtime.urlMasterAds' => $parameters->urlMasterAds]);
+            config(['runtime.urlLinkMasterAds' => $parameters->urlLinkMasterAds]);
+            config(['runtime.offsetYMasterAds' => $parameters->offsetYMasterAds]);
+            config(['runtime.adsFrequency' => $parameters->adsFrequency]);
+            config(['runtime.advertsPerPage' => $parameters->advertsPerPage]);
+            config(['runtime.urgentCost' => $parameters->urgentCost]);
+            config(['runtime.videoCost' => $parameters->videoCost]);
+            config(['runtime.renewCost' => $parameters->renewCost]);
+            config(['runtime.nbFreePictures' => $parameters->nbFreePictures]);
+            config(['runtime.nbMaxPictures' => $parameters->nbMaxPictures]);
+            config(['runtime.welcomeType' => $parameters->welcomeType]);
+            config(['runtime.advertResumeLenght' => $parameters->advertResumeLenght]);
+            config(['runtime.minLengthSearch' => $parameters->minLengthSearch]);
+            config(['runtime.maxNumberOfSearchResults' => $parameters->maxNumberOfSearchResults]);
+            if($parameters->masterAds && $parameters->urlMasterAds && $parameters->urlMasterAds != ''){
                 try {
-                    $width = Image::make($config->urlMasterAds)->width();
+                    $width = Image::make($parameters->urlMasterAds)->width();
                     config(['runtime.widthUrlMasterAds' => $width]);
                 } catch (NotReadableException $e) {
                     config(['runtime.widthUrlMasterAds' => 0]);

@@ -40,11 +40,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="computer only sixteen wide column">
-                <breadcrumb
-                    :items="breadcrumbItems">
-                </breadcrumb>
-            </div>
             <div :id="'column1_'+_uid" class="computer only four wide column">
                 <div>
                     <categories-lateral-accordion-menu
@@ -61,6 +56,7 @@
                 <div class="row filters">
                     <advert-filter
                         :filter-ribbon="filterRibbon"
+                        :breadcrumb-items="breadcrumbItems"
                         :urgent-label="filterUrgentLabel"
                         :update="update"
                         :filter="filter"
@@ -120,6 +116,7 @@
             'modalValidDescription',
             'modalNo',
             'modalYes',
+            'allLabel',
             //category dropdown menu component
             'routeCategory',
             'categoriesDropdownMenuFirstMenuName',
@@ -275,6 +272,10 @@
                         .then(
                             function (response) {
                                 let chainedCategories = response.data;
+                                that.breadcrumbItems.push({
+                                    name: that.allLabel,
+                                    value: 0
+                                });
                                 for(let index in chainedCategories){
                                     that.breadcrumbItems.push({
                                         name: chainedCategories[index]['description'][that.actualLocale],

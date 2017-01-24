@@ -356,14 +356,16 @@ class AdvertController extends Controller
                 $persistent=null;
                 if(session()->has('videoId')){
                     $advert->video_id = session('videoId');
-                    $persistent = Persistent::where('key', '=', 'videoId')->where('value', '=', session('videoId'))->get();
+                    $persistent = Persistent::where('key', '=', 'videoId')->where('value', '=', session('videoId'))->first();
                 }
 
                 $advert->price = MoneyUtils::setPriceWithoutDecimal($request->price,$request->currency);
 
+                //pass picture from local tempo to final and count them
                 $results = $this->pictureManager->storeLocalFinal();
 
-                $cost = $this->getCost(count($results)/2, $advert->isUrgent, false);
+                //Cost for picture is based on final file number
+                $cost = $this->getCost(count($results)/2, $advert->isUrgent, false, session()->has('videoId'));
 
 
                 DB::beginTransaction();
@@ -381,15 +383,16 @@ class AdvertController extends Controller
                         'invoice_number' => $next_invoice_number,
                         //'method' => Invoice::PAYPAL,
                         'cost' => $cost,
-                        'options' => $this->setOptions(count($results)/2, $advert->isUrgent, null)
+                        'options' => $this->setOptions(count($results)/2, $advert->isUrgent, null, session()->has('videoId'))
                     ]);
 
                     $advert->invoice()->associate($invoice);
                 }
 
                 $advert->save();
+
                 if($persistent){
-                    $persistent::delete();
+                    $persistent->delete();
                 }
                 foreach ($results as $result){
                     $picture = new Picture();
@@ -400,6 +403,7 @@ class AdvertController extends Controller
                     $advert->pictures()->save($picture);
                     $picture->save();
                 }
+
                 DB::commit();
                 if(auth()->user()->isDelegation){
                     return redirect(route('advert.publish', ['id' =>$advert->id]));
@@ -415,7 +419,7 @@ class AdvertController extends Controller
         }
     }
 
-    private function setOptions($nbPictures, $isUrgent, $isRenew=null) {
+    private function setOptions($nbPictures, $isUrgent, $isRenew=null, $haveVideo=null) {
         $options = [];
         if($nbPictures > config('runtime.nbFreePictures')){
             $options['payedPictures'] = [
@@ -441,6 +445,14 @@ class AdvertController extends Controller
                 'tva' => env('TVA')
             ];
         }
+        if($haveVideo){
+            $options['haveVideo'] = [
+                'name' => trans('strings.option_haveVideo_name'),
+                'quantity' => 1,
+                'cost' => $this->getCostVideo($haveVideo),
+                'tva' => env('TVA')
+            ];
+        }
         return $options;
     }
 
@@ -458,6 +470,13 @@ class AdvertController extends Controller
         return 0;
     }
 
+    private function getCostVideo($haveVideo){
+        if($haveVideo){
+            return config('runtime.videoCost')*100;
+        }
+        return 0;
+    }
+
     private function getCostIsRenew($isRenew){
         if($isRenew){
             return config('runtime.renewCost')*100;
@@ -465,19 +484,21 @@ class AdvertController extends Controller
         return 0;
     }
 
-    private function getCost($nbPictures, $isUrgent=false, $isRenew=false){
+    private function getCost($nbPictures, $isUrgent=false, $isRenew=false, $haveVideo=false){
         $cost = 0;
         if(!auth()->user()->isDelegation) {
             $cost += $this->getCostPictures($nbPictures);
             $cost += $this->getCostIsUrgent($isUrgent);
+            $cost += $this->getCostVideo($haveVideo);
             $cost += $this->getCostIsRenew($isRenew);
         }
         return $cost;
     }
 
+    //Public function for get Cost of Advert on create
     public function cost($nbPictures, $isUrgent) {
         if(isset($nbPictures) && isset($isUrgent) && is_numeric($nbPictures)){
-            return response()->json($this->getCost((int)$nbPictures,filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN)));
+            return response()->json($this->getCost((int)$nbPictures,filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN), false, session()->has('videoId')));
         } else {
             return response('error', 500);
         }
@@ -551,7 +572,7 @@ class AdvertController extends Controller
     public function destroy($id)
     {
         $advert = Advert::find($id);
-        if($advert && auth()->user()->id === $advert->user->id){
+        if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == 'admin')){
             $advert->delete();
             session()->flash('info', trans('strings.view_advert_show_delete_success'));
             return response(route('home'), 200);
@@ -1264,8 +1285,8 @@ class AdvertController extends Controller
                     'user_id' => $advert->user->id,
                     'invoice_number' => $next_invoice_number,
                     //'method' => Invoice::PAYPAL,
-                    'cost' => $this->getCost(null, null, true),
-                    'options' => $this->setOptions(null, null, true)
+                    'cost' => $this->getCost(null, null, true, false),
+                    'options' => $this->setOptions(null, null, true, false)
                 ]);
                 $newAdvert->invoice()->associate($invoice);
 

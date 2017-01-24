@@ -47,7 +47,7 @@
         <div :id="'vimeodiv-'+_uid" class="sixteen wide column" v-show="videoId!=''">
             <div class="ui basic compact segment" v-if="videoId && !videoReady">
                 <div class="ui inverted active dimmer">
-                    <div class="ui massive text loader">{{ waitingMessage }}</div>
+                    <div class="ui massive text loader">{{ transcodeMessage }}</div>
                 </div>
                 <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             </div>
@@ -76,7 +76,8 @@
             advertFormVideoLabel: String,
             advertFormVideoBtnDelete: String,
             advertFormVideoBtnCancel: String,
-            waitingMessage: String
+            waitingMessage: String,
+            transcodeMessage: String
         },
         data: () => {
             return {
@@ -96,7 +97,9 @@
         },
         mounted () {
             this.$watch('videoId', function () {
-                if(this.videoId != undefined && this.videoId != null && this.videoId != ''){
+                let hasVideo = this.videoId != undefined && this.videoId != null && this.videoId != '';
+                this.$parent.$emit('vimeoStateChange', hasVideo);
+                if(hasVideo){
                     let that = this;
                     let counter = 0;
                     function timeout(seconds) {
@@ -107,22 +110,17 @@
                                 method: 'get',
                             })
                                 .then(function (response) {
-                                    console.log(response.data.status);
                                     if(response.data.status=='available'){
                                         setTimeout(function () {
                                             that.videoReady = true;
                                         },2000)
                                     } else {
-                                        if(counter<20){
-                                            timeout(counter);
-                                        }
+                                        timeout(10+(Math.random()*10));
                                     }
                                 })
                                 .catch(function (error) {
-                                    console.log('là');
-                                    console.log(error);
-                                    if(counter<20){
-                                        timeout(counter);
+                                    if(counter<4){
+                                        timeout(10+(Math.random()*10));
                                     }
                                 });
                         }, seconds*1000);
@@ -131,6 +129,7 @@
                 }
             });
             this.videoId = this.sessionVideoId;
+            console.log('vimeo mounted')
         },
         methods: {
             triggerClickInput: function () {
@@ -247,7 +246,6 @@
                     }
                 })
                     .then(function (response) {
-                        console.log('progress 308 headers:');
                         let perform = that.extractPerformUpload(response.headers.range);
                         $('#progress-'+this._uid).progress({
                             total: that.fileToUpload.size,

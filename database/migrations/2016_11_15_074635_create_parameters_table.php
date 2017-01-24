@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommonsTable extends Migration
+class CreateParametersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCommonsTable extends Migration
      */
     public function up()
     {
-        Schema::create('commons', function (Blueprint $table) {
+        Schema::create('parameters', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->softDeletes();
@@ -25,6 +25,7 @@ class CreateCommonsTable extends Migration
             $table->tinyInteger('advertsPerPage')->default(6);
             $table->smallInteger('urgentCost')->default(49);
             $table->smallInteger('renewCost')->default(9);
+            $table->smallInteger('videoCost')->default(9);
             $table->tinyInteger('nbFreePictures')->default(3);
             $table->tinyInteger('nbMaxPictures')->default(6);
             $table->enum('welcomeType', ['1', '2'])->default(1);
@@ -44,6 +45,6 @@ class CreateCommonsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commons');
+        Schema::dropIfExists('parameters');
     }
 }

@@ -3,6 +3,9 @@
         <div :id="'filter-accordion-'+_uid" class="ui fluid accordion">
             <div class="active title">
                 <span class="ui blue ribbon label"><i class="dropdown icon"></i>{{ filterRibbon }}</span>
+                <breadcrumb
+                        :items="breadcrumbItems">
+                </breadcrumb>
             </div>
             <div class="active content">
                 <div class="ui middle aligned grid">
@@ -116,6 +119,9 @@
             },
             locationPlaceHolder: {
                 type: String
+            },
+            breadcrumbItems: {
+                type: Array
             }
         },
         data: () => {
@@ -162,6 +168,9 @@
             });
             this.$on('clearLocationResults', function () {
                 this.$parent.$emit('clearLocationResults');
+            });
+            this.$on('categoryChoice', function (event) {
+                this.$parent.$emit('categoryChoice', event);
             });
             let that = this;
             let isUrgent = $('#isUrgent'+this._uid);

@@ -204,13 +204,12 @@
                 }
             },
             setMainPicture() {
-
                 if(this.thumbs.length == 0){
                     this.mainPicture ='';
                 } else if(this.thumbs.length == 1 || this.thumbs.indexOf(this.mainPicture)==-1){
-                    //TODO BUG MAIN
-                    console.log('trigger check main picture');
-                    $('#slider1-'+this._uid+'-0').checkbox('check');
+                    let firstElem = $('#slider1-'+this._uid+'-0');
+                    this.mainPicture=firstElem.children('input').val();
+                    firstElem.checkbox('check');
                 }
             },
         }

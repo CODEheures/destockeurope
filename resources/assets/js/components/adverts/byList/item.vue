@@ -465,7 +465,6 @@
                 window.location.assign(this.advert.url);
             },
             updateCoefficient: function () {
-                console.log(this.routeUpdatePriceCoefficient + '/' + this.advert.id + '/' + (this.advert.price_coefficient*100).toFixed(0));
                 let that = this;
                 this.$http.patch(this.routeUpdatePriceCoefficient + '/' + this.advert.id + '/' + (this.advert.price_coefficient*100).toFixed(0))
                     .then(

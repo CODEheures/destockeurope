@@ -37,6 +37,30 @@
                 </div>
                 <form>
                     <div v-for="(advert,index) in advertsList" class="ui segment">
+
+                        <div class="ui cards">
+                            <div class="card">
+                                <div class="content">
+                                    <!--<img class="right floated mini ui image" src="/images/avatar/large/elliot.jpg">-->
+                                    <div class="header">
+                                        {{ advert.user.compagnyName }}
+                                    </div>
+                                    <div class="meta">
+                                        {{ advert.user.name }} / {{ advert.user.email }}
+                                    </div>
+                                    <div class="description">
+                                        {{ getFormattedAddress(advert.user.geoloc) }}
+                                    </div>
+                                </div>
+                                <!--<div class="extra content">-->
+                                    <!--<div class="ui two buttons">-->
+                                        <!--<div class="ui basic green button">Approve</div>-->
+                                        <!--<div class="ui basic red button">Decline</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+
                         <table class="ui definition table">
                             <tbody>
                             <tr>
@@ -62,6 +86,7 @@
                             </tbody>
                         </table>
 
+
                         <div class="ui doubling three column grid">
                             <div class="column" v-for="(picture,index) in advert.pictures" v-if="picture.isThumb">
                                     <div :class="!advert.user.isDelegation && index>=(advertNbFreePicture*2) ? 'ui pink segment' : 'ui segment'">
@@ -74,6 +99,14 @@
                                     </div>
                             </div>
                         </div>
+
+
+                        <div class="ui grid" v-if="advert.video_id!=undefined && advert.video_id!=null">
+                            <div class="sixteen wide column">
+                                <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                            </div>
+                        </div>
+
 
                         <div class="ui grid">
                             <div class="right floated sixteen wide mobile eight wide tablet five wide computer column" v-if="!advert.user.isDelegation">
@@ -180,7 +213,6 @@
         },
         mounted () {
             this.getAdvertsList();
-            console.log('mounte');
         },
         updated () {
             let that = this;
@@ -189,7 +221,6 @@
                     onChange: function () {
                         that.action = true;
                         that.approveList[this.name] = {'isApprove': this.value};
-                        console.log(that.approveList);
                     }
                 });
                 $('#slider2-'+this._uid+'-'+this.advertsList[index]['id']).checkbox({
@@ -250,6 +281,12 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
+            },
+            getFormattedAddress(geoloc) {
+                let parsed = JSON.parse(geoloc);
+                if(parsed && parsed.length>0 && 'formatted_address' in parsed[0]) {
+                    return (JSON.parse(geoloc)[0]['formatted_address']);
+                }
             }
         }
     }

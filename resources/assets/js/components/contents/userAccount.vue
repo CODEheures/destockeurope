@@ -418,22 +418,26 @@
                     }
                 } else {
                     let that = this;
-                    let interval = setInterval(function () {
-                        if(that.updateInProgress == 0){
-                            if(parseFloat(that.advertCost)>0) {
-                                window.location.assign(that.routeNextUrlWithPayment+'/'+that.advertId);
+                    let timer = function () {
+                        setTimeout(function () {
+                            if(that.updateInProgress == 0){
+                                if(parseFloat(that.advertCost)>0) {
+                                    window.location.assign(that.routeNextUrlWithPayment+'/'+that.advertId);
+                                } else {
+                                    window.location.assign(that.routeNextUrlWithoutPayment+'/'+that.advertId);
+                                }
                             } else {
-                                window.location.assign(that.routeNextUrlWithoutPayment+'/'+that.advertId);
+                                counter++;
+                                if (counter < 20) {
+                                    timer();
+                                } else {
+                                    that.isLoaded = true;
+                                    that.updateFails = true;
+                                }
                             }
-                        } else {
-                            counter++;
-                            if (counter == 20) {
-                                clearInterval(interval);
-                                that.isLoaded = true;
-                                that.updateFails = true;
-                            }
-                        }
-                    }, 250);
+                        }, 250);
+                    };
+                    timer();
                 }
             },
             sendToast: function(message,type) {

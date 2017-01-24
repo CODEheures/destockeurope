@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Common;
+use App\Common\PicturesManager;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use SoapClient;
 use Symfony\Component\HttpFoundation\Request;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
@@ -38,8 +37,8 @@ class UtilsController extends Controller
     public function testGame() {
         $testFiles = Storage::disk('local')->files('/testGame');
         foreach ($testFiles as $file){
-            if(!Storage::disk('local')->exists(Common\PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
-                Storage::disk('local')->copy($file, Common\PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
+            if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
+                Storage::disk('local')->copy($file, PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
             }
         }
         $exitCode = Artisan::call('migrate:refresh', ['--seed' => true]);

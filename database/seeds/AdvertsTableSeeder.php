@@ -1,6 +1,7 @@
 <?php
 
 use App\Advert;
+use App\Common\StatsManager;
 use App\Picture;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -17,7 +18,7 @@ class AdvertsTableSeeder extends Seeder
      */
     public function run()
     {
-        $statsManager = new \App\Common\StatsManager();
+        $statsManager = new StatsManager();
 
         $user2 = \App\User::where('email', '=', 'vendeur@d.e')->first();
         $user4 = \App\User::where('email', '=', 'delegation@d.e')->first();

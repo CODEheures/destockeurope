@@ -126,6 +126,7 @@ return [
     'form_urgent' => 'Marquez cette annonce urgente pour seulement :price€ HT',
     'form_urgent_delegation' => 'Marquez cette annonce urgente',
     'form_waiting_for_process' => 'Traitement en cours',
+    'form_waiting_for_transcode' => 'Encodage en cours. Si celui-ci vous semble trop long vous pouvez passer à l`\'étape suivante, nos services verifierons votre vidéo',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',
@@ -170,6 +171,7 @@ return [
     'option_payedPicture_name' => 'Photos supplémentaires',
     'option_isUrgent_name' => 'Annonce urgente',
     'option_isRenew_name' => 'Renouvellement de mon annonce',
+    'option_haveVideo_name' => 'Vidéo',
 
     'view_all_error_load_message' => 'Ho non! Erreur de chargement :-( , essayez de rafraichir la page',
     'view_all_error_reload_message' => 'rafraichir la page SVP',
@@ -183,6 +185,7 @@ return [
     'view_all_error_filesize_message' => 'Fichier trop gros!',
     'view_all_error_invalid_image_message' => 'Image invalide',
     'view_all_urgent' => 'urgent',
+    'view_all_all' => 'Tous',
     'view_category_add_exist' => 'Cette catégorie existe déjà',
     'view_category_add_parent_not_exist' => 'La catégorie parente n\'existe pas',
     'view_category_patch_exist' => 'Cette catégorie existe déjà',
@@ -198,6 +201,7 @@ return [
     'view_manage_adverts_nb_free_pictures_label' => 'Nombre d\'images gratuites par annonce',
     'view_manage_adverts_nb_max_pictures_label' => 'Nombre maximal d\'images par annonce',
     'view_manage_adverts_urgent_cost_label' => 'Prix de l\'option URGENT (€ HT)',
+    'view_manage_adverts_video_cost_label' => 'Prix de l\'option Video (€ HT)',
     'view_manage_adverts_renew_cost_label' => 'Prix de renouvellement (€ HT)',
     'view_manage_adverts_per_page_label' => 'Nombre d\'annonces par page',
     'view_manage_resume_length_label' => 'Longeur du résumé (nb caractères)',
@@ -332,8 +336,8 @@ return [
     'payment_paypal_generic_product_name' => 'Une annonce avec :nb option:|Une annonce avec :nb options:',
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho non! Le paiement a échoué :-(',
-    'payment_paypal_success' => 'Merci pour votre paiement. Celui-ci sera définitif quand votre annonce sera validé par nos service.',
-    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours.',
+    'payment_paypal_success' => 'Merci pour votre paiement. Notez que celui-ci ne sera éxécuté que si votre annonce est validée par nos services. Vous recevrez alors votre facture par mail.',
+    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours.  Votre facture vous a été envoyéé par mail.',
 
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',

@@ -12,6 +12,7 @@
                 modal-valid-description="{{ trans('strings.view_advert_show_modal_delete_description') }}"
                 modal-no="{{ trans('strings.modal_no') }}"
                 modal-yes="{{ trans('strings.modal_yes') }}"
+                all-label="{{ trans('strings.view_all_all') }}"
 
                 route-category="{{ route('category.index') }}"
                 categories-dropdown-menu-first-menu-name="{{ trans('strings.menu_category') }}"
@@ -57,6 +58,7 @@
                 modal-valid-description="{{ trans('strings.view_advert_show_modal_delete_description') }}"
                 modal-no="{{ trans('strings.modal_no') }}"
                 modal-yes="{{ trans('strings.modal_yes') }}"
+                all-label="{{ trans('strings.view_all_all') }}"
 
                 route-category="{{ route('category.index') }}"
                 categories-dropdown-menu-first-menu-name="{{ trans('strings.menu_category') }}"
