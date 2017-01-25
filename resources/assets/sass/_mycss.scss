@@ -77,11 +77,18 @@ div.ui.vertical.segment.separator {
         z-index: 99;
       }
     }
-    & p.price span:not(.tag), & div[class*="geodate-"] {
+    & p.infos span:not(.label), & div[class*="geodate-"] {
       color: rgba(0,0,0,0.6);
     }
     & span.ui.red.horizontal.label {
       margin-top: 0.2rem;
+    }
+    & span.label.price {
+      color: $color-blue !important;
+    }
+    & .ptpb2  {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
     }
   }
   & div.item.ads {
@@ -93,7 +100,7 @@ div.ui.vertical.segment.separator {
     & div.description p {
       white-space: pre-wrap;
       &.resume {
-        max-height: 4em;
+        max-height: 3em;
         overflow: hidden;
       }
     }

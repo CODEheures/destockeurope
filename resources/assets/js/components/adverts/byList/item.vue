@@ -3,85 +3,122 @@
         <template  v-if="!isPersonnalList">
             <a :href="advert.url">
                 <div class="ui grid">
-                    <div class="six wide aligned mobile four wide tablet four wide computer column">
-                        <div class="ui image">
-                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
-                            <div class="ui right blue corner label">
-                                <i class="icon">{{ advert.pictures.length/2 }}</i>
+                    <div class="sixteen wide tablet only sixteen wide computer only column">
+                        <div class="ui vertical middle aligned grid">
+                            <div class="four wide tablet four wide computer column">
+                                <div class="ui image">
+                                    <template v-if="advert.video_id">
+                                        <div class="ui top aligned medium bordered rounded image">
+                                            <div style="width:100%; height:100%; background-color: rgba(0,0,0,0.1); position: absolute; z-index: 2"></div>
+                                            <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
+                                        </div>
+                                        <div class="ui right blue corner label">
+                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                        <div class="ui right blue corner label">
+                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="twelve wide tablet only twelve wide computer only column">
-                        <div class="ui grid">
-                            <div class="ten wide left aligned column">
-                                <div class="header"><h3>{{ advert.title }}</h3></div>
-                                <p>
+                            <div class="twelve wide tablet only twelve wide computer only column">
+                                <div class="ui grid">
+                                    <div class="eleven wide left aligned column">
+                                        <div class="header"><h4>{{ advert.title }}</h4></div>
+                                        <p>
                                 <span class="ui breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
                                         <div class="active section">{{ item.description[actualLocale] }}</div>
                                         <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                                     </template>
                                 </span>
-                                </p>
-                            </div>
-                            <div class="six wide right aligned vertical middle aligned column">
-                                <p class="price">
-                                    <span class="ui small blue tag label">{{ advert.price_margin }}</span><br/>
-                                    <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
-                                    <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
-                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
-                                </p>
-                            </div>
-                            <div class="sixteen wide column item-description">
-                                <div class="description">
-                                    <p class="resume">{{ advert.resume }}</p>
+                                        </p>
+                                    </div>
+                                    <div class="five wide right aligned vertical top aligned column">
+                                        <p class="infos">
+                                            <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
+                                            <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span><br />
+                                            <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                        </p>
+                                    </div>
+                                    <div class="sixteen wide column item-description">
+                                        <div class="description">
+                                            <p class="resume">{{ advert.resume }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="four wide column">
+                                        <span class="ui big yellow left floated left pointing label price">{{ advert.price_margin }}</span>
+                                    </div>
+                                    <div class="twelve wide right aligned column geodate-computer">
+                                        <p>
+                                            <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
+                                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
+                                            <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
+                                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
+                                            <i class="empty large heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
+                                            <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="sixteen wide right aligned column geodate-computer">
+                        </div>
+                    </div>
+                    <div class="sixteen wide mobile only ptpb2 column">
+                        <div class="ui grid">
+                            <div class="six wide mobile only column">
+                                <div class="ui image">
+                                    <template v-if="advert.video_id">
+                                        <div class="ui top aligned medium bordered rounded image">
+                                            <div style="width:100%; height:100%; background-color: rgba(0,0,0,0.1); position: absolute; z-index: 2"></div>
+                                            <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
+                                        </div>
+                                        <div class="ui right blue corner label">
+                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                        <div class="ui right blue corner label">
+                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="ten wide mobile only column">
+                                <div class="header"><h4>{{ advert.title }}</h4></div>
+                                <span class="ui mini breadcrumb">
+                                    <template v-for="(item,index) in advert.breadCrumb">
+                                        <div class="active section">{{ item.description[actualLocale] }}</div>
+                                        <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                    </template>
+                                </span>
+                                <div class="ui grid">
+                                    <div class="sixteen wide mobile only column">
+                                        <p class="infos">
+                                            <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
+                                            <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                            <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                        </p>
+                                        <p>
+                                            <span class="ui yellow left pointing label price">{{ advert.price_margin }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sixteen wide right aligned mobile only column geodate-mobile">
                                 <p>
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                                     <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                     <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                                     <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
-                                    <i class="empty large heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
+                                    <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                     <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                 </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="ten wide mobile only column">
-                    <span class="ui mini breadcrumb">
-                        <template v-for="(item,index) in advert.breadCrumb">
-                            <div class="active section">{{ item.description[actualLocale] }}</div>
-                            <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
-                        </template>
-                    </span>
-                        <div class="header"><h3>{{ advert.title }}</h3></div>
-                        <div class="ui grid">
-                            <div class="sixteen wide mobile only right aligned column">
-                                <p class="price">
-                                    <span class="ui small blue tag label">{{ advert.price_margin }}</span><br/>
-                                    <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                    <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
-                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sixteen wide mobile only column">
-                        <div class="description">
-                            <p class="resume">{{ advert.resume }}</p>
-                        </div>
-                    </div>
-                    <div class="sixteen wide right aligned mobile only column geodate-mobile">
-                        <p>
-                            <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
-                            <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
-                            <i class="yellow large heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
-                            <i class="empty yellow large heart icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
-                            <i class="large heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
-                        </p>
                     </div>
                 </div>
             </a>
@@ -91,16 +128,28 @@
                 <div class="ui grid">
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
                         <div class="ui image">
-                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
-                            <div class="ui right blue corner label">
-                                <i class="icon">{{ advert.pictures.length/2 }}</i>
-                            </div>
+                            <template v-if="advert.video_id">
+                                <div class="ui top aligned medium bordered rounded image">
+                                    <div style="width:100%; height:100%; background-color: rgba(0,0,0,0.1); position: absolute; z-index: 2"></div>
+                                    <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
+                                </div>
+                                <div class="ui right blue corner label">
+                                    <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                <div class="ui right blue corner label">
+                                    <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                </div>
+                            </template>
+                            <a :href="advert.url" class="ui primary button">{{ seeAdvertLabel }}</a>
                         </div>
                     </div>
                     <div class="twelve wide tablet only twelve wide computer only column">
                         <div class="ui grid">
                             <div class="ten wide left aligned column">
-                                <div class="header"><h3>{{ advert.title }}</h3></div>
+                                <div class="header"><h4>{{ advert.title }}</h4></div>
                                 <p>
                                 <span class="ui breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
@@ -111,8 +160,8 @@
                                 </p>
                             </div>
                             <div class="six wide right aligned vertical middle aligned column">
-                                <p class="price">
-                                    <span class="ui small blue tag label">{{ advert.price }}</span><br/>
+                                <p class="infos">
+                                    <span class="ui big yellow left pointing label price">{{ advert.price }}</span><br/>
                                     <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                     <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -147,11 +196,11 @@
                             <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                         </template>
                     </span>
-                        <div class="header"><h3>{{ advert.title }}</h3></div>
+                        <div class="header"><h4>{{ advert.title }}</h4></div>
                         <div class="ui grid">
                             <div class="sixteen wide mobile only right aligned column">
-                                <p class="price">
-                                    <span class="ui small blue tag label">{{ advert.price }}</span><br/>
+                                <p class="infos">
+                                    <span class="ui big blue left pointing label">{{ advert.price }}</span><br/>
                                     <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                     <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -184,21 +233,27 @@
                 <div class="ui grid">
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
                         <div class="ui image">
-                            <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
-                            <div class="ui right blue corner label">
-                                <template v-if="!advert.deleted_at">
+                            <template v-if="advert.video_id">
+                                <div class="ui top aligned medium bordered rounded image">
+                                    <div style="width:100%; height:100%; background-color: rgba(0,0,0,0.1); position: absolute; z-index: 2"></div>
+                                    <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
+                                </div>
+                                <div class="ui right blue corner label">
                                     <i class="icon">{{ advert.pictures.length/2 }}</i>
-                                </template>
-                                <template v-else>
-                                    <i class="icon">{{ advert.picturesWithTrashedCount/2 }}</i>
-                                </template>
-                            </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                <div class="ui right blue corner label">
+                                    <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                </div>
+                            </template>
                         </div>
                     </div>
                     <div class="twelve wide tablet only twelve wide computer only column">
                         <div class="ui grid">
                             <div class="ten wide left aligned column">
-                                <div class="header"><h3>{{ advert.title }}</h3></div>
+                                <div class="header"><h4>{{ advert.title }}</h4></div>
                                 <p>
                                 <span class="ui breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
@@ -239,7 +294,7 @@
                                         <div class="ui yellow button">
                                             <i class="heart icon"></i> {{ bookmarkInfo }}
                                         </div>
-                                        <a class="ui basic yellow left pointing label">
+                                        <a class="ui basic yellow left left pointing label">
                                             {{ advert.bookmarkCount }}
                                         </a>
                                     </div>
@@ -247,7 +302,7 @@
                                         <div class="ui olive button">
                                             <i class="unhide icon"></i> {{ viewsInfo }}
                                         </div>
-                                        <a class="ui basic olive left pointing label">
+                                        <a class="ui basic olive left left pointing label">
                                             {{ advert.views }}
                                         </a>
                                     </div>
@@ -282,7 +337,7 @@
                                 <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                             </template>
                         </span>
-                        <div class="header"><h3>{{ advert.title }}</h3></div>
+                        <div class="header"><h4>{{ advert.title }}</h4></div>
                         <div class="sixteen wide centered column" v-if="advert.isValid">
                             <template v-if="advert.isRenew">
                                 <a href="#" class="ui disabled button">
@@ -317,7 +372,7 @@
                                 <div class="ui yellow button">
                                     <i class="heart icon"></i> {{ bookmarkInfo }}
                                 </div>
-                                <a class="ui basic yellow left pointing label">
+                                <a class="ui basic yellow left left pointing label">
                                     {{ advert.bookmarkCount }}
                                 </a>
                             </div>
@@ -325,7 +380,7 @@
                                 <div class="ui olive button">
                                     <i class="unhide icon"></i> {{ viewsInfo }}
                                 </div>
-                                <a class="ui basic olive left pointing label">
+                                <a class="ui basic olive left left pointing label">
                                     {{ advert.views }}
                                 </a>
                             </div>
