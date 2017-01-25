@@ -249,7 +249,7 @@ return [
     'view_advert_steps_2_description_delegation' => env('DEFAULT_DELEGATE'),
     'view_advert_steps_3_title' => 'Payment',
     'view_advert_steps_3_title_post' => '€ excl. taxes',
-    'view_advert_steps_3_description' => 'if urgent, extra photos or renew',
+    'view_advert_steps_3_description' => '(urgent, photos+, video or renew)',
     'view_advert_steps_3_description_delegation' => '0€: Included in the offer',
     'view_advert_show_contact_label' => 'Contact the seller',
     'view_advert_show_bookmark_info' => 'Bookmarks',

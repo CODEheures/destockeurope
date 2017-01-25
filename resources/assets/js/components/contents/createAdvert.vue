@@ -154,11 +154,11 @@
                 ></vimeo-uploader>
 
                 <h4 class="ui horizontal divider header">
-                    <i class="film icon"></i>
-                    {{ advertFormVideoSeparator }}
+                    <i class="share icon"></i>
+                    {{ formValidationButtonLabel }}
                 </h4>
                 <div class="field">
-                    <button type="submit" class="ui primary button" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
+                    <button type="submit" class="ui positive fluid button" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
                 </div>
             </form>
         </div>

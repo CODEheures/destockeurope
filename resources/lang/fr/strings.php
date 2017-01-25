@@ -249,7 +249,7 @@ return [
     'view_advert_steps_2_description_delegation' => env('DEFAULT_DELEGATE'),
     'view_advert_steps_3_title' => 'Paiement',
     'view_advert_steps_3_title_post' => '€ HT',
-    'view_advert_steps_3_description' => 'si urgent, photos supplémentaires, ou renouvellement',
+    'view_advert_steps_3_description' => '(urgent, photos +, video, renouvellement)',
     'view_advert_steps_3_description_delegation' => '0€: inclus dans l\'offre ',
     'view_advert_show_contact_label' => 'Contacter le vendeur',
     'view_advert_show_bookmark_info' => 'Favoris',
