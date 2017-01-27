@@ -12,4 +12,6 @@
 //TODO post mail to admin si renew fails
 //TODO creer administration compte de delegation
 //TODO SVG MIX-BLEND-MODE IE EDGE A SUPPRIMER
-//TODO Changer template de list
+//TODO bug validation compte apres maj tva
+//TODO indicateur de chargement images
+//TODO generaliser axios

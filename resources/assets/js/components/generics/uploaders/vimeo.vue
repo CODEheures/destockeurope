@@ -129,7 +129,6 @@
                 }
             });
             this.videoId = this.sessionVideoId;
-            console.log('vimeo mounted')
         },
         methods: {
             triggerClickInput: function () {
@@ -153,7 +152,7 @@
                     if (this.fileToUpload.size > this.maxVideoFileSize) {
                         this.videoInputEventTarget.value="";
                         this.videoBlob = undefined;
-                        this.$parent.$emit('sendToast', {'message' : this.filesizeErrorMessage, 'type':'error'});
+                        this.$parent.$emit('fileSizeError');
                     } else {
                         //get ticket to set routes post
                         this.getTicket();

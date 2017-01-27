@@ -331,6 +331,9 @@
             this.$on('sendToast', function (event) {
                 this.sendToast(event.message, event.type);
             });
+            this.$on('fileSizeError', function () {
+                this.sendToast(this.filesizeErrorMessage, 'error');
+            });
             this.xCsrfToken = Laravel.csrfToken;
             this.$watch('isUrgent', function () {
                 this.setSteps();

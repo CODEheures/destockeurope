@@ -145,11 +145,11 @@
                                 event.target.value="";
                                 if (response.status == 422) {
                                     let msg = response.body.addpicture[0];
-                                    that.sendToast(msg, 'error');
+                                    that.$parent.$emit('sendToast', {'message': msg, 'type':'error'});
                                 } else if(response.status == 413) {
-                                    that.sendToast(that.filesizeErrorMessage, 'error');
+                                    that.$parent.$emit('fileSizeError');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.$parent.$emit('loadError');
                                 }
                             }
                         );
@@ -163,7 +163,7 @@
                             that.thumbs = response.body;
                         },
                         function (response) {
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.$parent.$emit('loadError');
                         }
                     );
             },
@@ -176,7 +176,7 @@
                             that.thumbs = response.body;
                         },
                         function (response) {
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.$parent.$emit('loadError');
                         }
                     );
             },
