@@ -5,8 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use SoapClient;
-use SoapFault;
 
 class ValidatorServiceProvider extends ServiceProvider
 {
@@ -26,7 +24,7 @@ class ValidatorServiceProvider extends ServiceProvider
             //FR56749988721
             //DE811569869
             //BE0877241373
-            $saop = new SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl");
+            $saop = new \SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl");
             $request = App::make('request');
 
             try {
@@ -54,7 +52,7 @@ class ValidatorServiceProvider extends ServiceProvider
                     });
                     return false;
                 }
-            } catch (SoapFault $e) {
+            } catch (\SoapFault $e) {
                 $request->request->add(['vatSaopFault'=>$e->getMessage()]);
                 $transVatError = trans('strings.request_vat_invalid');
                 if ($request->has('vatSaopFault')) {

@@ -18,7 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('invoice_number')->unsigned();
+            $table->integer('invoice_number')->unsigned()->nullable()->default(null);
             $table->tinyInteger('method')->unsigned()->nullable()->default(null);
             $table->string('authorization')->nullable()->default(null);
             $table->string('captureId')->nullable()->default(null);

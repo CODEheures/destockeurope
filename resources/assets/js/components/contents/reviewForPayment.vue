@@ -340,7 +340,7 @@
                 this.tva = 0;
                 if(this.dataInvoice.tvaSubject){
                     for(let index in this.dataInvoice.options){
-                        this.tva = this.tva + (this.dataInvoice.options[index].cost - this.dataInvoice.options[index].cost/(1+(this.dataInvoice.options[index].tva/100)));
+                        this.tva = this.tva + (this.dataInvoice.options[index].tvaVal);
                     }
                 }
             }

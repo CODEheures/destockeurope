@@ -27,7 +27,9 @@ use App\Stats;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
@@ -371,16 +373,9 @@ class AdvertController extends Controller
                 DB::beginTransaction();
                 //create invoice
                 if($cost > 0 && !$advert->invoice){
-                    $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
-                    if($previousInvoice){
-                        $next_invoice_number = $previousInvoice->invoice_number + 1;
-                    } else {
-                        $next_invoice_number = 1;
-                    }
-
                     $invoice = Invoice::create([
                         'user_id' => $advert->user->id,
-                        'invoice_number' => $next_invoice_number,
+                        //'invoice_number' => $next_invoice_number,
                         //'method' => Invoice::PAYPAL,
                         'cost' => $cost,
                         'options' => $this->setOptions(count($results)/2, $advert->isUrgent, null, session()->has('videoId'))
@@ -453,6 +448,12 @@ class AdvertController extends Controller
                 'tva' => env('TVA')
             ];
         }
+
+        foreach ($options as $key => $option){
+            $options[$key]['tvaVal'] = (int)($options[$key]['cost']*$options[$key]['tva']/100);
+            $options[$key]['costTTC'] = $options[$key]['cost']+$options[$key]['tvaVal'];
+        }
+
         return $options;
     }
 
@@ -711,6 +712,16 @@ class AdvertController extends Controller
 
                             DB::beginTransaction();
                             if($originalAdvert){ $originalAdvert->save();}
+
+                            //get invoice number
+                            $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
+                            if($previousInvoice){
+                                $next_invoice_number = $previousInvoice->invoice_number + 1;
+                            } else {
+                                $next_invoice_number = 1;
+                            }
+
+                            $invoice->invoice_number = $next_invoice_number;
                             $invoice->save();
                             $advert->save();
                             $stats->save();
@@ -825,6 +836,10 @@ class AdvertController extends Controller
             $invoice->tva_customer = $invoice->user->registrationNumber;
             $invoice->tva_requester = $invoice->user->requesterNumber;
             $invoice->vatIdentifier = $invoice->user->vatIdentifier;
+
+            if(!$invoice->user->requesterNumber){
+                $invoice->tva_requester = env('TVA_REQUESTER_COUNTRY_CODE').env('TVA_REQUESTER_VAT_NUMBER');
+            }
 
             if(!$invoice->vatIdentifier || substr($invoice->tva_customer,0,2)=='FR'){
                 $invoice->tvaSubject = true;
@@ -1003,7 +1018,7 @@ class AdvertController extends Controller
             $i = 0;
             foreach ($invoice->options as $option){
                 if($invoice->tvaSubject){
-                    $tva = $tva + ($option['cost'] - $option['cost']/(1+($option['tva']/100)));
+                    $tva = $tva + $option['tvaVal'];
                 }
                 $productName .= ($i > 0 ? ' + #' : ' #') . $option['quantity'] . ' ' . $option['name'];
                 $i++;
@@ -1099,7 +1114,7 @@ class AdvertController extends Controller
             $transaction->setAmount($amount)
                 ->setItemList($item_list)
                 ->setDescription(trans('strings.payment_paypal_invoice_description', ['name' => config('app.name')]))
-                ->setInvoiceNumber($invoice->invoice_number);
+                ->setInvoiceNumber($invoice->id);
 
 
             //Paypal Payment
@@ -1274,16 +1289,9 @@ class AdvertController extends Controller
 
                 //Create Invoice
                 DB::beginTransaction();
-                $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
-                if($previousInvoice){
-                    $next_invoice_number = $previousInvoice->invoice_number + 1;
-                } else {
-                    $next_invoice_number = 1;
-                }
-
                 $invoice = Invoice::create([
                     'user_id' => $advert->user->id,
-                    'invoice_number' => $next_invoice_number,
+                    //'invoice_number' => $next_invoice_number,
                     //'method' => Invoice::PAYPAL,
                     'cost' => $this->getCost(null, null, true, false),
                     'options' => $this->setOptions(null, null, true, false)
@@ -1326,5 +1334,62 @@ class AdvertController extends Controller
 
     public function vimeoQuota() {
         dd($this->vimeoManager->request('/CODEheures', [], 'GET'));
+    }
+
+    public function invoice($id) {
+        //TODO test admin ou owner
+        $invoice = Invoice::find($id);
+        if($invoice){
+            //Invoice TTC Cost
+            $tva = 0;
+            if($invoice->tvaSubject){
+                foreach ($invoice->options as $option){
+                    $tva = $tva + $option['tvaVal'];
+                }
+            }
+
+            //Invoice & Address
+            $invoice->load('user');
+            $address = json_decode($invoice->user->geoloc)[0]->formatted_address;
+
+            //PDF FileName
+            $year = Carbon::parse($invoice->created_at)->year;
+            $month = Carbon::parse($invoice->created_at)->month;
+            $fileName = storage_path('app/invoices/' . $year . '/' . $month . '/' .$id.'.pdf');
+            Storage::makeDirectory('invoices/' . $year . '/' . $month );
+
+            //Create PDF
+            $content = view('pdf.invoice.index', compact('invoice', 'address', 'tva'))->__toString();
+            $header = view('pdf.header.view', compact('invoice'))->__toString();
+            $footer = view('pdf.footer.view')->__toString();
+            $this->createPdf($content, $header, $footer, $fileName);
+
+            return $fileName;
+        }
+        return null;
+    }
+
+    private function createPdf($content, $header, $footer, $fileName) {
+        try {
+            $css = file_get_contents(asset('css/pdf.css'),false,stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false))));
+
+            $mpdf = new \mPDF();
+            $mpdf->SetHTMLHeader($header);
+            $mpdf->SetHTMLFooter($footer);
+            $mpdf->AddPageByArray([
+                'margin-left' => 10,
+                'margin-right' => 10,
+                'margin-top' => 30,
+                'margin-bottom' => 30,
+                'margin-header' => 10,
+                'margin-footer' => 10
+            ]);
+            $mpdf->WriteHTML($css,1);
+            $mpdf->WriteHTML($content,2);
+            $mpdf->Output($fileName, 'F');
+            return true;
+        } catch (\Exception $e) {
+            Throw new \Exception($e);
+        }
     }
 }

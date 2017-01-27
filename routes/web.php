@@ -118,6 +118,7 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
         Route::get('/mines', ['as' => 'advert.mines', 'uses' => 'AdvertController@mines']);
         Route::get('/bookmarks', ['as' => 'advert.bookmarks', 'uses' => 'AdvertController@bookmarks']);
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
+        Route::get('/invoice/{id}', ['as' => 'advert.invoice', 'uses' => 'AdvertController@invoice']);
     });
     Route::resource('advert', 'AdvertController');
 
