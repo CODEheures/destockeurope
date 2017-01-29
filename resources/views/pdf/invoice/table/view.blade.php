@@ -20,7 +20,7 @@
     @endforeach
     </tbody>
 </table>
-<p class="line-info">Cette facture contient {{ count($invoice->options) }} lignes.</p>
+<p class="line-info">{{ trans_choice('strings.pdf_invoice_number_lines',count($invoice->options), ['num' => count($invoice->options)]) }}</p>
 <div class="invoice-total">
     <div class="invoice-total-title">
         <p class="ht">{{ trans('strings.pdf_table_header_total_ht') }}</p>

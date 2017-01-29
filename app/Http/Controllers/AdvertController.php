@@ -16,10 +16,12 @@ use App\Common\UserUtils;
 use App\Http\Requests\CreditCardRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Invoice;
+use App\Notifications\AdminAdvertApprove;
 use App\Notifications\AdvertApprove;
 use App\Notifications\AdvertNotApprove;
 use App\Notifications\AdvertRenew;
 use App\Notifications\CustomerContactSeller;
+use App\Notifications\InvoicePdf;
 use App\Notifications\ReportAdvert;
 use App\Persistent;
 use App\Picture;
@@ -659,6 +661,7 @@ class AdvertController extends Controller
             $advert = Advert::find($key);
             if($advert) {
                 $advert->price_coefficient = $priceCoefficient;
+                $invoiceFileName = null;
                 //IF EXIST AUTHORIZATION PAYMENT
                 if($advert->invoice
                     && $advert->invoice->authorization
@@ -726,6 +729,11 @@ class AdvertController extends Controller
                             $advert->save();
                             $stats->save();
                             DB::commit();
+                            try {
+                                $invoiceFileName = $this->createInvoice($advert);
+                            } catch (\Exception $e) {
+
+                            }
                         } else {
                             //VOID PAYMENT
                             $getVoid = $authorization->void($this->_api_context);
@@ -755,6 +763,15 @@ class AdvertController extends Controller
                     }
                 }
 
+                if($invoiceFileName){
+                    $recipients = User::where('role', '=', 'admin')->get();
+                    $senderMail = env('SERVICE_MAIL_FROM');
+                    $senderName = ucfirst(config('app.name'));
+                    foreach ($recipients as $recipient){
+                        $recipient->notify(new InvoicePdf($advert, $senderName, $senderMail));
+                    }
+                }
+
                 $recipient = $advert->user;
                 $senderMail = env('SERVICE_MAIL_FROM');
                 $senderName = ucfirst(config('app.name'));
@@ -768,6 +785,7 @@ class AdvertController extends Controller
                     $recipient->notify(new AdvertNotApprove($advert, $senderName, $senderMail));
                     return null;
                 }
+
             }
         }
     }
@@ -1336,9 +1354,16 @@ class AdvertController extends Controller
         dd($this->vimeoManager->request('/CODEheures', [], 'GET'));
     }
 
-    public function invoice($id) {
-        //TODO test admin ou owner
-        $invoice = Invoice::find($id);
+    public function test($id) {
+        $advert = Advert::find($id);
+        $this->createInvoice($advert);
+    }
+
+    private  function createInvoice(Advert $advert) {
+        $invoice = $advert->invoice;
+        $user = $advert->user;
+        LocaleUtils::switchToUserLocale($user);
+        $fileName = null;
         if($invoice){
             //Invoice TTC Cost
             $tva = 0;
@@ -1353,20 +1378,17 @@ class AdvertController extends Controller
             $address = json_decode($invoice->user->geoloc)[0]->formatted_address;
 
             //PDF FileName
-            $year = Carbon::parse($invoice->created_at)->year;
-            $month = Carbon::parse($invoice->created_at)->month;
-            $fileName = storage_path('app/invoices/' . $year . '/' . $month . '/' .$id.'.pdf');
-            Storage::makeDirectory('invoices/' . $year . '/' . $month );
+            $fileName = $advert->getInvoiceFilePath();
+            Storage::makeDirectory($advert->getInvoiceStoragePath() );
 
             //Create PDF
             $content = view('pdf.invoice.index', compact('invoice', 'address', 'tva'))->__toString();
             $header = view('pdf.header.view', compact('invoice'))->__toString();
             $footer = view('pdf.footer.view')->__toString();
             $this->createPdf($content, $header, $footer, $fileName);
-
-            return $fileName;
         }
-        return null;
+        LocaleUtils::switchToRuntimeLocale();
+        return $fileName;
     }
 
     private function createPdf($content, $header, $footer, $fileName) {

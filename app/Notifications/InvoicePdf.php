@@ -3,25 +3,28 @@
 namespace App\Notifications;
 
 use App\Advert;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class AdvertRenew extends Notification
+class InvoicePdf extends Notification
 {
 
     use Queueable;
     private $advert;
+    private $senderName;
+    private $senderMail;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Advert $advert)
+    public function __construct(Advert $advert, $senderName, $senderMail)
     {
         $this->advert = $advert;
+        $this->senderName = $senderName;
+        $this->senderMail = $senderMail;
     }
 
     /**
@@ -43,14 +46,10 @@ class AdvertRenew extends Notification
      */
     public function toMail($notifiable)
     {
-        $message = (new MailMessage)
-                    ->subject(trans('strings.mail_advertRenew_subject'))
-                    ->greeting(trans('strings.mail_advertRenew_greeting',['username' => $notifiable->name]))
-                    ->line(trans('strings.mail_advertRenew_line',[
-                        'title' => $this->advert->title,
-                        'date' => Carbon::parse($this->advert->online_at)->toDateTimeString()
-                    ]))
-                    ->line(trans('strings.mail_advertApprove_line2'));
+        $message =  (new MailMessage)
+                    ->subject(trans('strings.mail_newInvoice_subject'))
+                    ->greeting(trans('strings.mail_newInvoice_greeting',['username' => $notifiable->name]))
+                    ->line(trans('strings.mail_newInvoice_line'));
 
         if($this->advert->getInvoiceFilePath() && file_exists($this->advert->getInvoiceFilePath())){
             $message->attach($this->advert->getInvoiceFilePath(),['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->advert->invoice->invoice_number]), 'mime' => 'application/pdf']);

@@ -85,6 +85,10 @@ return [
     'mail_advertRenew_line' => 'Your advert ":title" is renewed from :date for a period of '. env('ADVERT_LIFE_TIME') . ' days',
     'mail_advertRenew_line2' => 'Thank you for using our application!',
 
+    'mail_newInvoice_subject' => 'New Invoice!',
+    'mail_newInvoice_greeting' => 'Hello :username !',
+    'mail_newInvoice_line' => 'A new payed invoice is approved. The invoice is in attachment',
+
     'form_label_name' => 'Your name',
     'form_label_email' => 'Your E-mail',
     'form_label_phone' => 'Your phone number',
@@ -482,6 +486,7 @@ return [
     'pdf_invoice_total_cost_excl_vat' => 'Total cost: :cost € (excl Vat)',
     'pdf_invoice_seller_designation' => 'Seller\'s designation',
     'pdf_invoice_customer_designation' => 'Customer designation',
+    'pdf_invoice_number_lines' => 'This invoice have :num line.|This invoice have :num lines.',
     'pdf_table_header_product' => 'Product',
     'pdf_table_header_cost_ht' => 'Prix excl. VAT',
     'pdf_table_header_quantity' => 'Quantity',
@@ -492,5 +497,6 @@ return [
     'pdf_table_header_total_vat' => 'Total VAT',
     'pdf_table_header_total_ttc' => 'Total incl. VAT',
     'pdf_footer_page' => 'Page',
-    'pdf_footer_on' => 'on'
+    'pdf_footer_on' => 'on',
+    'pdf_invoice_attachment_name' => 'invoice_:num',
 ];

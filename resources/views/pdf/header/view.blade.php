@@ -7,7 +7,7 @@
 
     @if(isset($invoice))
         <p class="navbar-menu">
-            <a href="{{ route('advert.invoice', ['id' => $invoice->id]) }}">{{ trans('strings.pdf_invoice_number') . $invoice->invoice_number }}<br/>
+            <a href="{{ route('home') }}">{{ trans('strings.pdf_invoice_number') . $invoice->invoice_number }}<br/>
                 <span class="created_at">
                     {{ trans('strings.pdf_invoice_emission'). ': '
                     . trans('strings.'. strtolower(\Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%A'))) . ' '

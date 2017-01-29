@@ -3,6 +3,7 @@
 namespace App\Common;
 
 
+use App\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 
@@ -93,5 +94,14 @@ trait LocaleUtils
         } else {
             App::setLocale(config('app.fallback_locale'));
         }
+    }
+
+    public static function switchToUserLocale(User $user) {
+        session(['runtimeLocale' => App::getLocale()]);
+        self::setAppLocale(\Locale::getPrimaryLanguage($user->locale));
+    }
+
+    public static function switchToRuntimeLocale() {
+        self::setAppLocale(session('runtimeLocale'));
     }
 }

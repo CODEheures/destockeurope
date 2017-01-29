@@ -85,6 +85,10 @@ return [
     'mail_advertRenew_line' => 'Votre annonce ":title" est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours',
     'mail_advertRenew_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
+    'mail_newInvoice_subject' => 'Nouvelle facture!',
+    'mail_newInvoice_greeting' => 'Bonjour :username !',
+    'mail_newInvoice_line' => 'Une annonce payante a été approuvée. La facture est en pièce jointe',
+
     'form_label_name' => 'Votre nom',
     'form_label_email' => 'Votre E-mail',
     'form_label_phone' => 'Votre n° de téléphone',
@@ -482,6 +486,7 @@ return [
     'pdf_invoice_total_cost_excl_vat' => 'Coût total: :cost HT',
     'pdf_invoice_seller_designation' => 'Designation du vendeur',
     'pdf_invoice_customer_designation' => 'Designation du client',
+    'pdf_invoice_number_lines' => 'Cette facture contient :num ligne.|Cette facture contient :num lignes.',
     'pdf_table_header_product' => 'Produit',
     'pdf_table_header_cost_ht' => 'Prix Ht',
     'pdf_table_header_quantity' => 'Quantité',
@@ -492,5 +497,6 @@ return [
     'pdf_table_header_total_vat' => 'Total TVA',
     'pdf_table_header_total_ttc' => 'Total TTC',
     'pdf_footer_page' => 'Page',
-    'pdf_footer_on' => 'sur'
+    'pdf_footer_on' => 'sur',
+    'pdf_invoice_attachment_name' => 'facture_:num',
 ];

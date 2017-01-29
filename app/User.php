@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Common\LocaleUtils;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Notifications\Dispatcher;
 
 class User extends Authenticatable
 {
@@ -94,5 +96,17 @@ class User extends Authenticatable
 
     public function scopeWhereRole($query, $role) {
         return $query->where('role', '=', $role);
+    }
+
+    //override
+    /**
+     * @override
+     * @param $instance
+     */
+    public function notify($instance)
+    {
+        LocaleUtils::switchToUserLocale($this);
+        app(Dispatcher::class)->send($this, $instance);
+        LocaleUtils::switchToRuntimeLocale();
     }
 }

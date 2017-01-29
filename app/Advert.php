@@ -208,6 +208,28 @@ class Advert extends Model {
         $this->bookmarkCount = $this->bookmarks()->count();
     }
 
+    public function getInvoiceFilePath() {
+        $invoiceFilePath = null;
+        if($this->invoice && $this->invoice->invoice_number){
+            $invoice = $this->invoice;
+            $year = Carbon::parse($invoice->created_at)->year;
+            $month = Carbon::parse($invoice->created_at)->month;
+            $invoiceFilePath = storage_path('app/invoices/' . $year . '/' . $month . '/' .$invoice->id.'.pdf');
+        }
+        return $invoiceFilePath;
+    }
+
+    public function getInvoiceStoragePath() {
+        $invoiceStoragePath = null;
+        if($this->invoice && $this->invoice->invoice_number){
+            $invoice = $this->invoice;
+            $year = Carbon::parse($invoice->created_at)->year;
+            $month = Carbon::parse($invoice->created_at)->month;
+            $invoiceStoragePath = 'invoices/' . $year . '/' . $month ;
+        }
+        return $invoiceStoragePath;
+    }
+
     //Locals Scopes
     public function scopeInvalid($query) {
         return $query->where('isValid', '=', false);
@@ -280,6 +302,7 @@ class Advert extends Model {
                 })
                 ->orderBy('adverts.online_at', 'desc');
         }
+        return $query;
     }
 
     public function scopeOnlyPublish($query){

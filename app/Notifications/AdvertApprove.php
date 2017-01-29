@@ -46,12 +46,18 @@ class AdvertApprove extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        $message =  (new MailMessage)
                     ->subject(trans('strings.mail_advertApprove_subject'))
                     ->greeting(trans('strings.mail_advertApprove_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_advertApprove_line',['title' => $this->advert->title]))
                     ->action(trans('strings.mail_advertApprove_action'), route('advert.show', ['id' => $this->advert->id]))
                     ->line(trans('strings.mail_advertApprove_line2'));
+
+        if($this->advert->getInvoiceFilePath() && file_exists($this->advert->getInvoiceFilePath())){
+            $message->attach($this->advert->getInvoiceFilePath(),['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->advert->invoice->invoice_number]), 'mime' => 'application/pdf']);
+        }
+
+        return $message;
     }
 
     /**
