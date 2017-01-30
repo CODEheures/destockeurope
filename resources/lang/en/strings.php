@@ -171,6 +171,7 @@ return [
 
     'middleware_admin' => 'You do not have the correct security credentials to access this page...',
     'middleware_complete_account' => 'Please fill in all required fields (marked with a red asterisk) before validation',
+    'middleware_captcha_fail' => 'Bizarre, you seem to be a robot ...',
 
     'option_payedPicture_name' => 'Extra Photos',
     'option_isUrgent_name' => 'Urgent advert',

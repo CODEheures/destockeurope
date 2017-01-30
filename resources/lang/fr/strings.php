@@ -171,6 +171,7 @@ return [
 
     'middleware_admin' => 'Vous n\'avez pas les droits nécéssaires pour acceder à cette page...',
     'middleware_complete_account' => 'Merci de remplir tous les champs obligatoires (marqués d\'une astérisque rouge) avant validation',
+    'middleware_captcha_fail' => 'Bizarre, vous semblez être un robot...',
 
     'option_payedPicture_name' => 'Photos supplémentaires',
     'option_isUrgent_name' => 'Annonce urgente',

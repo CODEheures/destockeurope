@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('headscripts')
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+@endsection
+
 @section('content')
     <h2 class="ui center aligned icon header"><i
                 class="circular add user icon"></i> {{ trans('strings.menu_register') }} </h2>
@@ -28,7 +32,8 @@
                         <input id="password-confirm" type="password" name="password_confirmation">
                     </div>
                 </div>
-                <div class="fields">
+                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_CAPTCHA_SITE_KEY') }}"></div>
+                <div class="fields spaced-top-2">
                     <div class="field">
                         <button type="submit" class="ui primary button">
                             {{ trans('strings.menu_register') }}

@@ -39,6 +39,7 @@ class RegisterController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('guest');
+        $this->middleware('captcha', ['only' => ['register']]);
         $this->request = $request;
     }
 

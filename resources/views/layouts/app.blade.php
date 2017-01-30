@@ -29,6 +29,7 @@
                 'csrfToken' => csrf_token(),
         ]); ?>
     </script>
+    @yield('headscripts')
 </head>
 <body class="yellowbg">
     <?php $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName() ?>
