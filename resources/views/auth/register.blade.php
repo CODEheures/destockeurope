@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('headscripts')
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+    <script>
+        window.submitRegister = function(token) {
+            document.getElementById("register-form").submit();
+        }
+    </script>
 @endsection
 
 @section('content')
@@ -9,7 +14,7 @@
                 class="circular add user icon"></i> {{ trans('strings.menu_register') }} </h2>
     <div class="ui centered grid">
         <div class="row">
-            <form method="POST" action="{{ url('/register') }}" class="ui ten wide column form register">
+            <form id="register-form" method="POST" action="{{ url('/register') }}" class="ui ten wide column form register">
                 {{ csrf_field() }}
                 <div class="fields">
                     <div class="eight wide field">
@@ -32,12 +37,18 @@
                         <input id="password-confirm" type="password" name="password_confirmation">
                     </div>
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_CAPTCHA_SITE_KEY') }}"></div>
+                {{--<div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_CAPTCHA_SITE_KEY') }}"></div>--}}
                 <div class="fields spaced-top-2">
                     <div class="field">
-                        <button type="submit" class="ui primary button">
+                        <button
+                                class="g-recaptcha ui primary button"
+                                data-sitekey="{{ env('GOOGLE_CAPTCHA_SITE_KEY') }}"
+                                data-callback="submitRegister">
                             {{ trans('strings.menu_register') }}
                         </button>
+                        {{--<button type="submit" class="ui primary button">--}}
+                            {{--{{ trans('strings.menu_register') }}--}}
+                        {{--</button>--}}
                     </div>
                 </div>
             </form>
