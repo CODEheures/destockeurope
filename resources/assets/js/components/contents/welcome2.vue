@@ -69,6 +69,10 @@
                         :flag-reset-search="dataFlagResetSearch"
                         :search-place-holder="filterSearchPlaceHolder"
                         :location-place-holder="filterLocationPlaceHolder"
+                        :route-notifications-exist-in="routeNotificationsExistIn"
+                        :route-notifications-add="routeNotificationsAdd"
+                        :route-notifications-remove="routeNotificationsRemove"
+                        :notifications-checkbox-label="notificationsCheckboxLabel"
                     ></advert-filter>
                 </div>
                 <div class="row">
@@ -142,6 +146,10 @@
             'priceInfoLabel',
             'noResultFoundHeader',
             'noResultFoundMessage',
+            'routeNotificationsExistIn',
+            'routeNotificationsAdd',
+            'routeNotificationsRemove',
+            'notificationsCheckboxLabel',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',
@@ -168,6 +176,7 @@
             }
         },
         mounted () {
+            let that = this;
             if(this.clearStorage){
                 sessionStorage.clear();
             }
@@ -195,7 +204,6 @@
                 this.setBreadCrumbItems(this.filter.categoryId);
                 this.updateResults();
             }
-            let that = this;
             this.$on('categoryChoice', function (event) {
                 if(event.id != undefined && event.id > 0) {
                     if(parseInt(event.id) != this.filter.categoryId) {
@@ -256,7 +264,7 @@
             });
             this.$on('deleteAdvert', function (event) {
                 this.destroyMe(event.url);
-            })
+            });
         },
         methods: {
             sendToast: function(message,type) {

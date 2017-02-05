@@ -1,5 +1,6 @@
 {
 	"name": "DestockEurope",
+	"short_name": "DestockEurope",
 	"icons": [
 		{
 			"src": "\/android-chrome-192x192.png",
@@ -13,5 +14,7 @@
 		}
 	],
 	"theme_color": "#dca300",
-	"display": "standalone"
+	"display": "standalone",
+	"start_url": "/",
+	"gcm_sender_id": "103953800507"
 }

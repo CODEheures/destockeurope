@@ -34,6 +34,7 @@ return [
         // '172.16.*.*'
         'country:fr',
         '192.168.*.*',
+        '::1',
         storage_path('whitelists').DIRECTORY_SEPARATOR.'facebook',
     ],
 

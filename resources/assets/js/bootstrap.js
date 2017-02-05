@@ -11,7 +11,7 @@ window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 // window.noUiSlider = require('./nouislider');
 window.ionRangeSlider = require('ion-rangeslider');
-window.destock = require('./destockeurope');
+window.DestockMap = require('./destockMap');
 window.Parser = require('url');
 window.axios = require('axios');
 /*require('bootstrap-sass');*/
@@ -28,21 +28,21 @@ require('vue-focus');
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
  * the outgoing requests issued by this application. The CSRF middleware
- * included with Laravel will automatically verify the header's value.
+ * included with  will automatically verify the header's value.
  */
 
 Vue.http.interceptors.push((request, next) => {
     let myHost = window.location.hostname;
     let requestHost = Parser.parse(request.url).hostname;
     if(myHost == requestHost){
-        request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+        request.headers.set('X-CSRF-TOKEN', destockShareVar.csrfToken);
     }
     next();
 });
 Vue.config.devtools = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
+ * for events that are broadcast by . Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
 

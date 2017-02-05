@@ -131,6 +131,7 @@ return [
     'form_urgent_delegation' => 'Mark this advert as urgent',
     'form_waiting_for_process' => 'Waiting for process',
     'form_waiting_for_transcode' => 'Encoding in progress. If this one seems too long you can go to the next step, our services will verify your video',
+    'form_notification_activer_label' => 'Be informed about new adverts?',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',

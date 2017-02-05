@@ -229,7 +229,7 @@
             this.dataAdvert = JSON.parse(this.advert);
             this.dataInvoice = this.dataAdvert.invoice;
             this.dataCardsTypes = JSON.parse(this.cardsTypes);
-            this.xCsrfToken = Laravel.csrfToken;
+            this.xCsrfToken = destockShareVar.csrfToken;
             this.dataUrlImgPaypal = this.urlImgPaypalDisabled;
             this.dataRoutePaypalChoice = null;
             this.steps = [

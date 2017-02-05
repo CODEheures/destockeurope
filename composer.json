@@ -6,8 +6,9 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "laravel/framework": "5.3.*",
-        "laravel/socialite": "^2.0",
+        "laravel/framework": "5.4.*",
+        "laravel/tinker": "~1.0",
+        "laravel/socialite": "^3.0",
         "caouecs/laravel-lang": "~3.0",
         "moneyphp/money": "dev-master",
         "kalnoy/nestedset": "^4.2",
@@ -18,12 +19,13 @@
         "vinkla/vimeo": "dev-master",
         "pragmarx/firewall": "^1.0",
         "geoip2/geoip2": "~2.0",
-        "mpdf/mpdf": "dev-master"
+        "mpdf/mpdf": "dev-master",
+        "sngrl/php-firebase-cloud-messaging": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.0",
+        "phpunit/phpunit": "~5.7",
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
         "barryvdh/laravel-debugbar": "^2.3"
@@ -37,9 +39,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-root-package-install": [
@@ -58,6 +60,7 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }

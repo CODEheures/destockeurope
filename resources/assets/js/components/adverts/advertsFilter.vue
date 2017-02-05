@@ -66,6 +66,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="ui grid">
+                    <div class="sixteen wide column">
+                        <notifications-activer
+                                :route-exist-in="routeNotificationsExistIn"
+                                :route-add="routeNotificationsAdd"
+                                :route-remove="routeNotificationsRemove"
+                                :topic_id="parseInt(1)"
+                                :checkbox-label="notificationsCheckboxLabel"
+                        ></notifications-activer>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -122,6 +133,13 @@
             },
             breadcrumbItems: {
                 type: Array
+            },
+            //notification-activer component
+            routeNotificationsExistIn: String,
+            routeNotificationsAdd: String,
+            routeNotificationsRemove: String,
+            notificationsCheckboxLabel: {
+                type: String
             }
         },
         data: () => {

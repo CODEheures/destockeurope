@@ -131,6 +131,7 @@ return [
     'form_urgent_delegation' => 'Marquez cette annonce urgente',
     'form_waiting_for_process' => 'Traitement en cours',
     'form_waiting_for_transcode' => 'Encodage en cours. Si celui-ci vous semble trop long vous pouvez passer à l`\'étape suivante, nos services verifierons votre vidéo',
+    'form_notification_activer_label' => 'Être informé des nouvelles annonces?',
 
     'modal_yes' => 'Oui',
     'modal_no' => 'Non',

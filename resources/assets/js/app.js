@@ -2,7 +2,7 @@
 /**
  * First we will load all of this project's JavaScript dependencies which
  * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and Laravel.
+ * building robust, powerful web applications using Vue and .
  */
 
 require('./bootstrap');
@@ -37,6 +37,7 @@ Vue.component('swiper-thumbs', require('./components/generics/swipers/swiperThum
 Vue.component('margin-input-field', require('./components/generics/fields/marginInput.vue'));
 Vue.component('vimeo-uploader', require('./components/generics/uploaders/vimeo.vue'));
 Vue.component('photo-uploader', require('./components/generics/uploaders/photo.vue'));
+Vue.component('notifications-activer', require('./components/generics/notifications/activer.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));

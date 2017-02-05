@@ -1,9 +1,9 @@
 <script type="text/javascript">
-    var geolocType = {{ $geolocType }};
-    var zoomMap = {{ $zoomMap }};
+    {!! 'let geolocType =  ' . $geolocType .';'!!}
+    {!! 'let zoomMap =  ' . $zoomMap .';'!!}
     function initMap() {
-        window.map = new destock.destockMap(
-                google,
+        let destockMap = new DestockMap();
+        destockMap.constructMap(
                 'map',
                 zoomMap,
                 'geoloc',
@@ -12,7 +12,6 @@
                 '{{ trans('strings.form_googlemap_marker') }}',
                 '{{ trans('strings.form_googlemap_geoloc_fail') }}'
         );
-        map.constructMap();
     }
 </script>
 <script async defer

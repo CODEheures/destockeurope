@@ -1,10 +1,7 @@
 <script type="text/javascript">
     function initAutocomplete() {
-        let autocomplete = new destock.destockAutocomplete(
-                google,
-                'filter_location'
-        );
-        autocomplete.initAutocomplete();
+        let destockMap = new DestockMap();
+        destockMap.initAutocomplete('filter_location');
     }
 </script>
 <script async defer

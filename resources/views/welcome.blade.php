@@ -42,11 +42,15 @@
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
                 no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
+                route-notifications-exist-in="{{ route('notification.existIn') }}"
+                route-notifications-add="{{ route('notification.add') }}"
+                route-notifications-remove="{{ route('notification.remove') }}"
+                notifications-checkbox-label="{{ trans('strings.form_notification_activer_label') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
-                page-next-label="{{ trans('strings.view_pagination_next_label') }}">
-        </welcome1>
+                page-next-label="{{ trans('strings.view_pagination_next_label') }}"
+        ></welcome1>
     @elseif(config('runtime.welcomeType')=='1')
         <welcome2
                 clear-storage="{{ session()->has('clear') ? true : false }}"
@@ -88,11 +92,15 @@
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
                 no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
+                route-notifications-exist-in="{{ route('notification.existIn') }}"
+                route-notifications-add="{{ route('notification.add') }}"
+                route-notifications-remove="{{ route('notification.remove') }}"
+                notifications-checkbox-label="{{ trans('strings.form_notification_activer_label') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
-                page-next-label="{{ trans('strings.view_pagination_next_label') }}">
-        </welcome2>
+                page-next-label="{{ trans('strings.view_pagination_next_label') }}"
+        ></welcome2>
     @endif
 @endsection
 

@@ -8,10 +8,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('opengraph')
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ elixir("css/app.css", '') }}">
+    <link rel="stylesheet" href="{{ mix("css/app.css") }}">
     @yield('css')
 
 
@@ -24,10 +24,49 @@
     <meta name="application-name" content="DestockEurope">
     <meta name="theme-color" content="#dca300">
     <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     <script>
-        window.Laravel = <?php echo json_encode([
-                'csrfToken' => csrf_token(),
-        ]); ?>
+         window.destockShareVar={
+            'serviceWorkerScope': '{{ mix('js/sw.js') }}',
+            'csrfToken': '{{ csrf_token() }}',
+            'firebase': {
+                'config': {
+                    apiKey: '{{ env('GOOGLE_FIREBASE_APIKEY') }}',
+                    authDomain: '{{ env('GOOGLE_FIREBASE_AUTHDOMAIN') }}',
+                    databaseURL: '{{ env('GOOGLE_FIREBASE_DATABASEURL') }}',
+                    storageBucket: '{{ env('GOOGLE_FIREBASE_STORAGEBUCKET') }}',
+                    messagingSenderId: '{{ env('GOOGLE_FIREBASE_MESSAGINGSENDERID') }}'
+                },
+                'token': undefined
+            }
+        };
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {
+                if(reg.installing) {
+                    console.log('Service worker installing');
+                } else if(reg.waiting) {
+                    console.log('Service worker installed');
+                } else if(reg.active) {
+                    console.log('Service worker active');
+                }
+                firebase.initializeApp(destockShareVar.firebase.config);
+                window.cloudMessaging = firebase.messaging();
+                cloudMessaging.useServiceWorker(reg);
+                cloudMessaging.requestPermission().then(function () {
+                    console.log('have permission');
+                    return cloudMessaging.getToken();
+                }).then(function (token) {
+                    destockShareVar.firebase.token=token;
+                }).catch(function (err) {
+                    console.log('error messaging firebase', err);
+                });
+//                cloudMessaging.onMessage(function (payload) {
+//                    console.log('onMessage', payload);
+//                })
+            });
+        } else {
+            console.log('Service workers aren\'t supported in this browser.');
+        }
     </script>
     @yield('headscripts')
 </head>
@@ -67,7 +106,7 @@
 
 
     <!-- Scripts -->
-    <script src="{{ elixir("js/app.js", '') }}"></script>
+    <script src="{{ mix("js/app.js") }}"></script>
     @yield('scripts')
 </body>
 </html>

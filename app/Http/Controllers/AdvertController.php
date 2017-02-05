@@ -1393,7 +1393,7 @@ class AdvertController extends Controller
 
     private function createPdf($content, $header, $footer, $fileName) {
         try {
-            $css = file_get_contents(asset('css/pdf.css'),false,stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false))));
+            $css = file_get_contents(mix('css/pdf.css'),false,stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false))));
 
             $mpdf = new \mPDF();
             $mpdf->SetHTMLHeader($header);

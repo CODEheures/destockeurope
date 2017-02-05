@@ -143,9 +143,17 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
         Route::get('/add/{advertId?}', ['as' => 'bookmark.add', 'uses' => 'BookmarkController@add']);
         Route::get('/remove/{advertId?}', ['as' => 'bookmark.remove', 'uses' => 'BookmarkController@remove']);
     });
+
+    //Notifications
+    Route::group(['prefix' => 'notification'] , function () {
+        Route::post('/existIn/', ['as' => 'notification.existIn', 'uses' => 'NotificationController@existIn']);
+        Route::post('/add', ['as' => 'notification.add', 'uses' => 'NotificationController@add']);
+        Route::delete('/remove', ['as' => 'notification.remove', 'uses' => 'NotificationController@remove']);
+    });
     //DANGEROUS
     Route::group(['prefix' => 'dangerous'] , function () {
-//        Route::get('/testGame', 'UtilsController@testGame');
+        Route::get('/testGame', 'UtilsController@testGame');
+        Route::get('/send', 'UtilsController@send');
 //        Route::get('/tempo', 'UtilsController@tempo');
 //        Route::get('/test/{id}', 'AdvertController@test');
     });

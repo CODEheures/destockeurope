@@ -334,7 +334,7 @@
             this.$on('fileSizeError', function () {
                 this.sendToast(this.filesizeErrorMessage, 'error');
             });
-            this.xCsrfToken = Laravel.csrfToken;
+            this.xCsrfToken = destockShareVar.csrfToken;
             this.$watch('isUrgent', function () {
                 this.setSteps();
                 if(this.isUrgent){

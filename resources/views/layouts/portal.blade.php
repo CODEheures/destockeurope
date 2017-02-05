@@ -8,10 +8,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ elixir("css/app.css", '') }}">
+    <link rel="stylesheet" href="{{ mix("css/app.css") }}">
     @yield('css')
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -24,9 +24,23 @@
     <meta name="theme-color" content="#dca300">
     <!-- Scripts -->
     <script>
-        window.Laravel = <?php echo json_encode([
-                'csrfToken' => csrf_token(),
-        ]); ?>
+        window.destockShareVar={
+            'serviceWorkerScope': '{{ mix('js/sw.js') }}',
+            'csrfToken': '{{ csrf_token() }}',
+        };
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {
+                if(reg.installing) {
+                    console.log('Service worker installing');
+                } else if(reg.waiting) {
+                    console.log('Service worker installed');
+                } else if(reg.active) {
+                    console.log('Service worker active');
+                }
+            });
+        } else {
+            console.log('Service workers aren\'t supported in this browser.');
+        }
     </script>
 </head>
 <body class="portal yellowbg">
@@ -73,7 +87,7 @@
     <!-- footer -->
     @include('layouts.footer.common')
     <!-- Scripts -->
-    <script src="{{ elixir("js/app.js", '') }}"></script>
+    <script src="{{ mix("js/app.js") }}"></script>
     @yield('scripts')
 </body>
 </html>
