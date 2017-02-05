@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 
-class AddNotificationRequest extends FormRequest
+class RemoveTopicsSubscribeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class AddNotificationRequest extends FormRequest
     {
         return [
             'token' => 'required|string',
-            'topic_id' => 'required|integer|min:1'
+            'topic_id' => 'integer|min:1'
         ];
     }
 }

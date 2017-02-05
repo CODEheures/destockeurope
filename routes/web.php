@@ -146,9 +146,9 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
 
     //Notifications
     Route::group(['prefix' => 'notification'] , function () {
-        Route::post('/existIn/', ['as' => 'notification.existIn', 'uses' => 'NotificationController@existIn']);
-        Route::post('/add', ['as' => 'notification.add', 'uses' => 'NotificationController@add']);
-        Route::delete('/remove', ['as' => 'notification.remove', 'uses' => 'NotificationController@remove']);
+        Route::post('/existIn/', ['as' => 'notification.existIn', 'uses' => 'TopicsSubscribeController@existIn']);
+        Route::post('/add', ['as' => 'notification.add', 'uses' => 'TopicsSubscribeController@add']);
+        Route::delete('/remove', ['as' => 'notification.remove', 'uses' => 'TopicsSubscribeController@remove']);
     });
     //DANGEROUS
     Route::group(['prefix' => 'dangerous'] , function () {
