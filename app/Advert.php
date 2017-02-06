@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Advert extends Model {
     use SoftDeletes;
@@ -23,6 +24,7 @@ class Advert extends Model {
         'invoice_id',
         'type',
         'title',
+        'slug',
         'description',
         'price',
         'price_coefficient',
@@ -81,6 +83,13 @@ class Advert extends Model {
                 $model->attributes['is_delegation'] = true;
             }
         });
+
+        static::saving(function($model) {
+            $slug = Str::slug($model->title);
+            $count = Advert::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+            $model->slug = $count ? "{$slug}-{$count}" : $slug;
+            return true;
+        });
     }
 
     //Attributs Getters
@@ -113,7 +122,7 @@ class Advert extends Model {
     }
 
     public function getUrlAttribute() {
-        return route('advert.show', ['id' => $this->id]);
+        return route('advert.show', ['slug' => $this->slug]);
     }
 
     public function getRenewUrlAttribute() {

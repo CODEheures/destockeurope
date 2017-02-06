@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 use PayPal\Api\Capture;
@@ -513,9 +514,9 @@ class AdvertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function show($id, Request $request)
+    public function show($slug, Request $request)
     {
-        $advert = Advert::find($id);
+        $advert = Advert::where('slug', '=', $slug)->first();
         if($advert && $advert->isValid && $advert->online_at != null && Carbon::parse($advert->online_at)->isPast(Carbon::now())) {
                 //+1 Views to advert
                 $advert->timestamps = false;

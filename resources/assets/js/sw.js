@@ -15,3 +15,15 @@ cloudMessaging.setBackgroundMessageHandler(function(payload) {
     //     notificationOptions);
     return self.registration.showNotification();
 });
+
+self.addEventListener('install', function(e) {
+    e.waitUntil(caches.open('destockEuropeCache')
+        .then(function(cache) {
+            return cache.addAll([
+                '/',
+                '/home',
+                '/advert/create',
+            ]);
+        })
+    );
+});

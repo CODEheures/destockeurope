@@ -119,7 +119,8 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
         Route::get('/bookmarks', ['as' => 'advert.bookmarks', 'uses' => 'AdvertController@bookmarks']);
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
     });
-    Route::resource('advert', 'AdvertController');
+    Route::resource('advert', 'AdvertController', ['except' => ['show']]);
+    Route::get('/{slug}', ['as' => 'advert.show', 'uses' => 'AdvertController@show']);
 
     Route::group(['prefix' => 'videos'] , function () {
         Route::put('/ticket', ['as' => 'videos.ticket', 'uses' => 'VideoController@ticket']);

@@ -25,6 +25,7 @@ class CreateAdvertsTable extends Migration
             $table->integer('invoice_id')->unsigned()->index()->nullable()->default(null);
             $table->enum('type', ['bid', 'request']);
             $table->string('title',config('db_limits.adverts.maxTitle'));
+            $table->string('slug');
             $table->text('description');
             $table->integer('price')->unsigned();
             $table->mediumInteger('price_coefficient')->unsigned()->default(0);
