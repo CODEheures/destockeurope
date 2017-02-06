@@ -104,7 +104,7 @@ class AdvertsTableSeeder extends Seeder
 
         $this->advertCreate(
             $user2->id,
-            $subCategory11->id,
+            $subCategory12->id,
             Carbon::now()->subDays(4),
             0,
             '250 Gear VR',
