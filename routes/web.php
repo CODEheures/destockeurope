@@ -55,7 +55,6 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
         Route::post('/reset', 'Auth\ResetPasswordController@reset');
     });
 
-
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function() {
         Route::get('social/{provider}', ['as' => 'social.login', 'uses' => 'SocialiteController@redirectToProvider'])
             ->where(['provider' => '[a-zA-Z]+']);

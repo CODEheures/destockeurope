@@ -25,24 +25,14 @@
     <!-- Scripts -->
     <script>
         window.destockShareVar={
-            'serviceWorkerScope': 'sw.js',
+            'serviceWorkerScope': '/sw.js',
             'csrfToken': '{{ csrf_token() }}',
-            'appJsVersionFile': '{{ mix('js/app.js') }}',
-            'appCssVersionFile': '{{ mix('css/app.css') }}'
         };
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {
-                if(reg.installing) {
-                    console.log('Service worker installing');
-                } else if(reg.waiting) {
-                    console.log('Service worker installed');
-                } else if(reg.active) {
-                    console.log('Service worker active');
-                }
+                if(reg.installing) {} else if(reg.waiting) {} else if(reg.active) {}
             });
-        } else {
-            console.log('Service workers aren\'t supported in this browser.');
-        }
+        } else {}
     </script>
 </head>
 <body class="portal yellowbg">

@@ -5,6 +5,7 @@ namespace App\Common;
 
 use App\Picture;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\File;
@@ -254,10 +255,11 @@ class PicturesManager
         }
     }
 
-    public function save($request) {
+    public function save(Request $request) {
         $this->setType(static::TYPE_TEMPO_LOCAL);
-
-        $file = $request->file('addpicture')->store($this->personnalPath(), $this->disk);
+        $md5Name = md5_file($request->file('addpicture')->getRealPath());
+        $guessExtension = $request->file('addpicture')->guessExtension();
+        $file = $request->file('addpicture')->storeAs($this->personnalPath(), $md5Name.'.'.$guessExtension  ,$this->disk);
         $this->setExt($request->file('addpicture')->extension());
         $this->setFileName(pathinfo($file, PATHINFO_FILENAME));
 

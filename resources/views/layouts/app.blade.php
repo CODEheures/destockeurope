@@ -27,10 +27,8 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     <script>
          window.destockShareVar={
-            'serviceWorkerScope': 'sw.js',
+            'serviceWorkerScope': '/sw.js',
             'csrfToken': '{{ csrf_token() }}',
-            'appJsVersionFile': '{{ mix('js/app.js') }}',
-            'appCssVersionFile': '{{ mix('css/app.css') }}',
             'firebase': {
                 'config': {
                     apiKey: '{{ env('GOOGLE_FIREBASE_APIKEY') }}',
@@ -44,31 +42,23 @@
         };
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {
-                if(reg.installing) {
-                    console.log('Service worker installing');
-                } else if(reg.waiting) {
-                    console.log('Service worker installed');
-                } else if(reg.active) {
-                    console.log('Service worker active');
-                }
+                if(reg.installing) {} else if(reg.waiting) {} else if(reg.active) {}
                 firebase.initializeApp(destockShareVar.firebase.config);
                 window.cloudMessaging = firebase.messaging();
                 cloudMessaging.useServiceWorker(reg);
                 cloudMessaging.requestPermission().then(function () {
-                    console.log('have permission');
+                    //console.log('have permission');
                     return cloudMessaging.getToken();
                 }).then(function (token) {
                     destockShareVar.firebase.token=token;
                 }).catch(function (err) {
-                    console.log('error messaging firebase', err);
+                    //console.log('error messaging firebase', err);
                 });
 //                cloudMessaging.onMessage(function (payload) {
 //                    console.log('onMessage', payload);
 //                })
             });
-        } else {
-            console.log('Service workers aren\'t supported in this browser.');
-        }
+        } else {}
     </script>
     @yield('headscripts')
 </head>
