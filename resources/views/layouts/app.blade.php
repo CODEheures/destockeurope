@@ -27,8 +27,10 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     <script>
          window.destockShareVar={
-            'serviceWorkerScope': '{{ mix('js/sw.js') }}',
+            'serviceWorkerScope': 'sw.js',
             'csrfToken': '{{ csrf_token() }}',
+            'appJsVersionFile': '{{ mix('js/app.js') }}',
+            'appCssVersionFile': '{{ mix('css/app.css') }}',
             'firebase': {
                 'config': {
                     apiKey: '{{ env('GOOGLE_FIREBASE_APIKEY') }}',

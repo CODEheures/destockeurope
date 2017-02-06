@@ -25,8 +25,10 @@
     <!-- Scripts -->
     <script>
         window.destockShareVar={
-            'serviceWorkerScope': '{{ mix('js/sw.js') }}',
+            'serviceWorkerScope': 'sw.js',
             'csrfToken': '{{ csrf_token() }}',
+            'appJsVersionFile': '{{ mix('js/app.js') }}',
+            'appCssVersionFile': '{{ mix('css/app.css') }}'
         };
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {

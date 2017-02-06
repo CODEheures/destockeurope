@@ -16,7 +16,7 @@ cloudMessaging.setBackgroundMessageHandler(function(payload) {
     return self.registration.showNotification();
 });
 
-let version='v1::';
+let version='v3::';
 self.addEventListener('install', function(e) {
     e.waitUntil(caches.open(version + 'destockEuropeCache')
         .then(function(cache) {
@@ -24,8 +24,11 @@ self.addEventListener('install', function(e) {
                 '/',
                 '/home',
                 '/advert/create',
-                '/js/app.js',
-                '/css/app.css'
+                '/js/app.40a793dba8c6262a963e.js',
+                '/css/app.9b73ddb81bc251a73525.css',
+                '/css/themes/basic/assets/fonts/icons.woff',
+                '/css/themes/basic/assets/fonts/icons.woff2',
+                '/css/themes/basic/assets/fonts/icons.ttf'
             ]);
         })
     );
