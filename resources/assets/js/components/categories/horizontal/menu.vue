@@ -71,21 +71,22 @@
                 this.$parent.$emit('categoryChoice', {id: value});
             },
             setPopup () {
-                for(var index in this.categories){
-                    let $elem = $('#browse-'+index+'-'+this._uid);
+                let that = this;
+                (this.categories).forEach(function (elem, index) {
+                    let $elem = $('#browse-'+index+'-'+that._uid);
                     $elem.popup({
-                                inline: false,
-                                hoverable: true,
-                                exclusive: true,
-                                position: 'bottom left',
-                                lastResort: true,
-                                delay: {
-                                    show: 300,
-                                    hide: 800
-                                }
-                            })
+                        inline: false,
+                        hoverable: true,
+                        exclusive: true,
+                        position: 'bottom left',
+                        lastResort: true,
+                        delay: {
+                            show: 300,
+                            hide: 800
+                        }
+                    })
                     ;
-                }
+                });
             }
         }
     }

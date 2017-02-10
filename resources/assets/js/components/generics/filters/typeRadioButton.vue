@@ -6,9 +6,11 @@
             </div>
             <label class="text">{{ firstMenuName }}</label>
             <div v-for="(type,index) in listType" :class="isDisabled ? 'disabled field':'filed'" :data-value="index">
-                <div :id="'radio-'+index+'-'+_uid" class="ui radio checkbox">
-                    <input type="radio" name="type" :value="index" :checked="oldChoice == index ? true : false">
-                    <label>{{ type }}</label>
+                <div class="field">
+                    <div :id="'radio-'+index+'-'+_uid" class="ui radio checkbox">
+                        <input type="radio" name="type" :value="index" :checked="oldChoice == index ? true : false">
+                        <label>{{ type }}</label>
+                    </div>
                 </div>
             </div>
         </div>

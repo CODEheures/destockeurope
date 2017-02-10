@@ -40,18 +40,18 @@
         },
         methods: {
             filterChange () {
+                let that = this;
                 let addressComponents = JSON.parse(sessionStorage.getItem('autoCompleteResult'));
                 let parsed = this.parseAddressComponent(addressComponents);
                 let event = {};
-                for(let index in this.accurateList){
-                    let key = this.accurateList[index];
-                    if(this.accurateList[index] in parsed){
-                        event[key] = parsed[key];
-                        this.wantSearch=false;
+                (this.accurateList).forEach(function (elem,index) {
+                    if(elem in parsed){
+                        event[elem] = parsed[elem];
+                        that.wantSearch=false;
                     } else {
-                        event[key] = null;
+                        event[elem] = null;
                     }
-                }
+                });
                 if(!this.wantSearch){
                     sessionStorage.setItem('filterLocationInputVal', $('#filter_location').val());
                     this.$parent.$emit('locationUpdate', event);

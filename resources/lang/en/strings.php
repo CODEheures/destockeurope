@@ -315,7 +315,8 @@ return [
     'view_user_account_compagny_number_warning_label' => 'Provide a good VAT number for a correct calculation of rates',
     'view_user_account_compagny_number_check_progress' => 'Number check progress...',
     'view_user_account_compagny_number_identifier' => 'verification n°',
-    'view_filter_ribbon' => 'Filters',
+    'view_filter_ribbon_open' => 'Close Filters',
+    'view_filter_ribbon_close' => 'Open Filters',
     'view_filter_price_title' => 'Range Price',
 
     'view_reviewForPayment_header' => 'Summary of your order',

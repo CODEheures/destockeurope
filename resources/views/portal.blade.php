@@ -19,6 +19,7 @@
     <portal
         route-home="{{ route('home') }}"
         route-subscribe-news-letter="{{ route('subscribeNewsLetter') }}"
+        browser="{{ $browser }}"
         countries="{{ json_encode(\App\Common\LocaleUtils::getListCountries()) }}"
         see-advert-label="{{ trans('strings.view_portal_button_filter_label') }}"
         news-letter-title="{{ trans('strings.view_portal_newsletter_title') }}"

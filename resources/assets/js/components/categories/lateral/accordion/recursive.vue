@@ -38,16 +38,17 @@
         },
         data: () => {
             return {
-
+                toto: {'tab':['A','B']}
             } ;
         },
         mounted () {
+            let that = this;
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });
-            for(var index in this.categories){
-                $('#'+this._uid+'-'+index).dropdown();
-            }
+            (this.categories).forEach(function (elem, index) {
+                $('#'+that._uid+'-'+index).dropdown();
+            });
         },
         methods: {
             emitCategoryChoice: function (value) {

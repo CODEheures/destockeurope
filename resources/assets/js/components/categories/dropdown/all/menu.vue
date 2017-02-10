@@ -3,28 +3,34 @@
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <div :id="_uid" class="ui floating dropdown" :class="isButton ? 'button' : ''">
-            <div class="text">{{ firstMenuName }}</div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <div class="item" data-value="0" :data-text="allItem" v-if="withAll">
-                    <span class="text">{{ allItem }}</span>
-                </div>
-                <div v-for="category in categories" class="item" >
-                    <i class="dropdown icon" v-if="category.children.length>0"></i>
-                    <span class="text">{{ category['description'][actualLocale] }}</span>
-                    <recursive-categories-dropdown-menu
-                            :parent-description="category['description'][actualLocale]"
-                            :categories="category.children"
-                            :actual-locale="actualLocale"
-                            :parent-id="category.id"
-                            :with-all="withAll"
-                            :all-item="allItem"
-                            :left="false">
-                    </recursive-categories-dropdown-menu>
+        <div class="ui mini labeled right action input">
+            <div class="ui blue label">
+                {{ firstMenuName }}
+            </div>
+            <div :id="_uid" class="ui mini floating dropdown" :class="isButton ? 'button' : ''">
+                <div class="text">{{ firstMenuName }}</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" data-value="0" :data-text="allItem" v-if="withAll">
+                        <span class="text">{{ allItem }}</span>
+                    </div>
+                    <div v-for="category in categories" class="item" >
+                        <i class="dropdown icon" v-if="category.children.length>0"></i>
+                        <span class="text">{{ category['description'][actualLocale] }}</span>
+                        <recursive-categories-dropdown-menu
+                                :parent-description="category['description'][actualLocale]"
+                                :categories="category.children"
+                                :actual-locale="actualLocale"
+                                :parent-id="category.id"
+                                :with-all="withAll"
+                                :all-item="allItem"
+                                :left="false">
+                        </recursive-categories-dropdown-menu>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -102,6 +108,10 @@
                         }
                     })
             ;
+            this.$watch('oldChoice', function (categorieId) {
+                console.log(categorieId);
+                dropdown.dropdown('set selected',  categorieId.toString())
+            })
         }
     }
 </script>

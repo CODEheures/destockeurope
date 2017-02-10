@@ -431,6 +431,7 @@
                 this.sendMessage = !this.sendMessage;
             },
             setBreadCrumbItems: function () {
+                let that = this;
                 let breadcrumb = this.dataAdvert.breadCrumb;
                 let lastBread = {
                     description: [],
@@ -438,18 +439,17 @@
                 };
                 lastBread.description[this.actualLocale] = this.dataAdvert.title;
                 breadcrumb.push(lastBread);
-
                 this.breadcrumbItems = [];
                 this.breadcrumbItems.push({
                     name: this.allLabel,
                     value: 0
                 });
-                for(let index in breadcrumb){
-                    this.breadcrumbItems.push({
-                        name: breadcrumb[index]['description'][this.actualLocale],
-                        value: breadcrumb[index].id
+                breadcrumb.forEach(function (element){
+                    that.breadcrumbItems.push({
+                        name: element['description'][that.actualLocale],
+                        value: element.id
                     });
-                }
+                });
             },
             openMessageBox: function () {
                 let modalForm = $('#modal1-'+this._uid);

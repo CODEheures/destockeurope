@@ -27,18 +27,6 @@
                 </div>
             </div>
         </div>
-        <div class="mobile only tablet only row">
-            <div class="ui one column grid">
-                <categories-dropdown-menu
-                        :route-category="routeCategory"
-                        :first-menu-name="categoriesDropdownMenuFirstMenuName"
-                        :actual-locale="actualLocale"
-                        :old-choice="parseInt(filter.categoryId)"
-                        :with-all="true"
-                        :all-item="categoriesAllItem">
-                </categories-dropdown-menu>
-            </div>
-        </div>
         <div class="row">
             <div :id="'column1_'+_uid" class="computer only four wide column">
                 <div>
@@ -55,7 +43,8 @@
             <div class="sixteen wide tablet twelve wide computer column">
                 <div class="row filters">
                     <advert-filter
-                        :filter-ribbon="filterRibbon"
+                        :filter-ribbon-open="filterRibbonOpen"
+                        :filter-ribbon-close="filterRibbonClose"
                         :breadcrumb-items="breadcrumbItems"
                         :urgent-label="filterUrgentLabel"
                         :update="update"
@@ -73,6 +62,11 @@
                         :route-notifications-add="routeNotificationsAdd"
                         :route-notifications-remove="routeNotificationsRemove"
                         :notifications-checkbox-label="notificationsCheckboxLabel"
+                        :route-category="routeCategory"
+                        :categories-dropdown-menu-first-menu-name="categoriesDropdownMenuFirstMenuName"
+                        :actual-locale="actualLocale"
+                        :category-old-choice="parseInt(filter.categoryId)"
+                        :categories-all-item="categoriesAllItem"
                     ></advert-filter>
                 </div>
                 <div class="row">
@@ -129,7 +123,8 @@
             //filter advert component
             'filterMinLengthSearch',
             'filterLocationAccurateList',
-            'filterRibbon',
+            'filterRibbonOpen',
+            'filterRibbonClose',
             'filterUrgentLabel',
             'filterSearchPlaceHolder',
             'filterLocationPlaceHolder',
@@ -284,12 +279,12 @@
                                     name: that.allLabel,
                                     value: 0
                                 });
-                                for(let index in chainedCategories){
+                                chainedCategories.forEach(function (elem,index) {
                                     that.breadcrumbItems.push({
-                                        name: chainedCategories[index]['description'][that.actualLocale],
-                                        value: chainedCategories[index].id
+                                        name: elem['description'][that.actualLocale],
+                                        value: elem.id
                                     });
-                                }
+                                });
                             },
                             function (response) {
                                 that.breadcrumbItems.push({

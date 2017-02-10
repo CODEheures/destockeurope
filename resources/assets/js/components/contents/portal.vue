@@ -12,15 +12,14 @@
                         <div class="ui grid">
                             <div class="sixteen wide mobile eight wide tablet ten wide computer column">
                                 <div class="ui centered grid flags">
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="it" :data-country-name="dataCountries.italy">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" >
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="it" :data-country-name="dataCountries.italy" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973"  :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
                                         <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
                                         <path fill="#00892E" d="M.132.1h29.886v59.772H.132z"/>
                                         <path fill="#E1001A" d="M59.904.1H89.79v59.772H59.904z"/>
                                         <path fill="#FFF" d="M30.018.1h29.886v59.772H30.018z"/>
-                                        <linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-3.308" y1="52.4946" x2="93.2305" y2="7.478">
+                                        <linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-3.308" y1="52.4946" x2="93.2305" y2="7.478" v-if="browser!='edge'">
                                             <stop offset="0" stop-color="#707173"/>
                                             <stop offset=".0289" stop-color="#9A9B9C"/>
                                             <stop offset=".0577" stop-color="#BCBDBE"/>
@@ -50,144 +49,122 @@
                                             <stop offset=".9579" stop-color="#707072"/>
                                             <stop offset="1" stop-color="#58585A"/>
                                         </linearGradient>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.italy }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="de" :data-country-name="dataCountries.germany">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="de" :data-country-name="dataCountries.germany" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.082.1 30.018.05H89.79l.05 59.872"/>
                                         <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
                                         <path fill="#231F20" d="M.132.112H89.79v19.917H.132z"/>
                                         <path fill="#E32328" d="M.132 20.028H89.79v19.917H.132z"/>
                                         <path fill="#FFDC15" d="M.132 39.945H89.79v19.917H.132z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.773H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.773H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.germany }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="fr" :data-country-name="dataCountries.france">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="fr" :data-country-name="dataCountries.france" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.082.1 30.018.05h59.773l.049 59.872"/>
                                         <path fill="#1A171B" d="M89.791.1v59.772H.132V.1H89.791m.1-.1H.032v59.972h89.86V0h-.001z"/>
                                         <path fill="#0B52B5" d="M.132.1h29.886v59.772H.132z"/>
                                         <path fill="#E1001A" d="M59.905.1h29.887v59.772H59.905z"/>
                                         <path fill="#FFF" d="M30.018.1h29.887v59.772H30.018z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.905.1H.132v59.773H89.791V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.905.1H.132v59.773H89.791V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.france }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="ch" :data-country-name="dataCountries.swiss">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="ch" :data-country-name="dataCountries.swiss" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.051 59.872"/>
                                         <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
                                         <path fill="#E2001A" d="M59.903.1H.132v59.773H89.79V.1"/>
                                         <path fill="#FFF" d="M38.247 9.986h13.43v40h-13.43z"/>
                                         <path fill="#FFF" d="M24.962 23.271h40v13.43h-40z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.1H.132v59.773H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.1H.132v59.773H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.swiss }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="be" :data-country-name="dataCountries.belgium">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="be" :data-country-name="dataCountries.belgium" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.133 59.922L.082.1 30.017.05h59.774l.049 59.872"/>
                                         <path fill="#1A171B" d="M89.791.1v59.772H.133V.1h89.658m.1-.1H.033v59.972h89.859V0h-.001z"/>
                                         <path fill="#231F20" d="M.133.1h29.885v59.772H.133z"/>
                                         <path fill="#E1001A" d="M59.904.1h29.885v59.772H59.904z"/>
                                         <path fill="#FFDC15" d="M30.017.1h29.887v59.772H30.017z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.133v59.773h89.658V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.133v59.773h89.658V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.belgium }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="dk" :data-country-name="dataCountries.denmark">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="dk" :data-country-name="dataCountries.denmark" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
                                         <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
                                         <path fill="#E2001A" d="M59.903.1H.132v59.772H89.79V.1"/>
                                         <path fill="#FFF" d="M.132 24.986H89.79v10H.132z"/>
                                         <path fill="#FFF" d="M25.68.111h10v59.771h-10z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.denmark }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="nl" :data-country-name="dataCountries.netherlands">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="nl" :data-country-name="dataCountries.netherlands" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.082.1 30.018.05H89.79l.05 59.872"/>
                                         <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
                                         <path fill="#E32328" d="M.132.111H89.79v19.917H.132z"/>
                                         <path fill="#FFF" d="M.132 20.028H89.79v19.917H.132z"/>
                                         <path fill="#0B52B5" d="M.132 39.944H89.79v19.917H.132z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.netherlands }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="ie" :data-country-name="dataCountries.ireland">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="ie" :data-country-name="dataCountries.ireland" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.082.1 30.018.05h59.773l.049 59.872"/>
                                         <path fill="#1A171B" d="M89.791.1v59.772H.132V.1H89.791m.1-.1H.032v59.972h89.86V0h-.001z"/>
                                         <path fill="#008947" d="M.132.1h29.886v59.772H.132z"/>
                                         <path fill="#E7511E" d="M59.904.1h29.887v59.772H59.904z"/>
                                         <path fill="#FFF" d="M30.018.1h29.887v59.772H30.018z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.791V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.791V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.ireland }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="fi" :data-country-name="dataCountries.finland">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="fi" :data-country-name="dataCountries.finland" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.083.1 30.019.05H89.79l.051 59.872"/>
                                         <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
                                         <path fill="#FFF" d="M59.903.1H.132v59.772H89.79V.1"/>
                                         <path fill="#0B72B5" d="M.132 24.986H89.79v10H.132z"/>
                                         <path fill="#0B72B5" d="M25.681.111h10v59.771h-10z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.1H.132v59.772H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.1H.132v59.772H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.finland }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="at" :data-country-name="dataCountries.austria">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="at" :data-country-name="dataCountries.austria" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.1 59.922L.05.1 29.985.05h59.773l.05 59.872"/>
                                         <path fill="#1A171B" d="M89.758.1v59.772H.1V.1h89.658m.099-.1H0v59.972h89.859V0h-.002z"/>
                                         <path fill="#E32328" d="M.1.111h89.657v19.917H.1z"/>
                                         <path fill="#FFF" d="M.1 20.028h89.657v19.917H.1z"/>
                                         <path fill="#E32328" d="M.1 39.944h89.657v19.917H.1z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.871.1H.1v59.772h89.658V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.871.1H.1v59.772h89.658V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.austria }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="se" :data-country-name="dataCountries.sweden">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="se" :data-country-name="dataCountries.sweden" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.923L.083.1 30.018.05H89.79l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#0B458F" d="M59.903.1H.132v59.772H89.79V.1"/>
                                         <path fill="#FFDC15" d="M.132 24.986H89.79v10H.132z"/>
                                         <path fill="#FFDC15" d="M25.68.111h10v59.771h-10z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.sweden }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="no" :data-country-name="dataCountries.norway">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="no" :data-country-name="dataCountries.norway" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.923L.082.1 30.018.05H89.79l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#E2001A" d="M59.903.1H.132v59.772H89.79V.1"/>
@@ -195,14 +172,12 @@
                                         <path fill="#FFF" d="M22.679.111h16v59.761h-16z"/>
                                         <path fill="#0B458F" d="M.132 24.986H89.79v10H.132z"/>
                                         <path fill="#0B458F" d="M25.68.111h10v59.771h-10z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.norway }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="is" :data-country-name="dataCountries.iceland">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="is" :data-country-name="dataCountries.iceland" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.923L.082.1 30.018.05h59.773l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.132V.1H89.791m.1-.1H.032V59.973h89.86V0h-.001z"/>
                                         <path fill="#0B458F" d="M59.904.1H.132v59.772H89.791V.1"/>
@@ -210,39 +185,33 @@
                                         <path fill="#FFF" d="M22.679.111h16v59.761h-16z"/>
                                         <path fill="#E2001A" d="M.132 24.986h89.659v10H.132z"/>
                                         <path fill="#E2001A" d="M25.68.111h10v59.771h-10z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.791V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.132v59.772H89.791V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.iceland }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.england">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.england" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.923L.083.1 30.019.05H89.79l.051 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#FFF" d="M59.903.1H.132v59.772H89.79V.1"/>
                                         <path fill="#E2001A" d="M.134 24.986H89.79v10H.134z"/>
                                         <path fill="#E2001A" d="M39.962.111h10v59.771h-10z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.1H.132v59.772H89.79V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.1H.132v59.772H89.79V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.england }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.scotland">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.scotland" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.133 59.923L.082.1 30.018.05h59.773l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.133V.1h89.658m.1-.1H.033V59.973h89.859V0h-.001z"/>
                                         <path fill="#0B458F" d="M78.707.11H10.951l33.877 22.711M.133 7.031v45.753l34.125-22.877M89.791 52.961V6.853L55.4 29.907M.133 60.336h.09l-.09-.136M10.684 59.883h68.291L44.828 36.994"/>
                                         <path fill="#FFF" d="M89.791.11H78.707L44.828 22.821 10.951.11H.133v6.921l34.125 22.876L.133 52.784v6.964l.09.135h10.461l34.144-22.889 34.147 22.889h10.816v-6.922L55.4 29.907 89.791 6.853"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.133v59.772h89.658V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.133v59.772h89.658V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.scotland }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.united_kingdom">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="gb" :data-country-name="dataCountries.united_kingdom" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.923L.083.1 30.018.05H89.79l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#FFF" d="M.132 20.52H89.79v18.945H.132z"/>
@@ -262,51 +231,43 @@
                                         <path fill="#FFF" d="M31.113 20.52h-8.33L.131 5.663V.2M35.487 20.52h-.299L4.063.106h2.835l28.589 18.749"/>
                                         <path fill="#E2001A" d="M.131.2V.106h3.932L35.188 20.52h-4.075"/>
                                         <path fill="#0C3183" d="M30.018.106h5.469V18.855L6.898.106"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.099H.132v59.774H89.79V.099"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.099H.132v59.774H89.79V.099"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.united_kingdom }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="ua" :data-country-name="dataCountries.ukraine">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="ua" :data-country-name="dataCountries.ukraine" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.923L.082.1 30.018.05H89.79l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#0B72B5" d="M.133.119H89.79v29.887H.133z"/>
                                         <path fill="#FFE615" d="M.133 30.005H89.79v29.887H.133z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.099H.132v59.772H89.79V.099"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.099H.132v59.772H89.79V.099"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.ukraine }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="pl" :data-country-name="dataCountries.poland">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="pl" :data-country-name="dataCountries.poland" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.924L.082.1 30.018.05h59.773l.049 59.874"/>
                                         <path fill="#1A171B" d="M89.791.1v59.774H.132V.1H89.791m.1-.1H.032V59.974h89.86V0h-.001z"/>
                                         <path fill="#E2001A" d="M.132 29.985h89.659v29.887H.132z"/>
                                         <path fill="#FFF" d="M.132.098h89.659v29.887H.132z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.114H.132v59.772H89.791V.114"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.114H.132v59.772H89.791V.114"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.poland }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="ro" :data-country-name="dataCountries.romania">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="ro" :data-country-name="dataCountries.romania" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.923L.083.1 30.019.05H89.79l.051 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#0B52B5" d="M.134.117h29.885v59.772H.134z"/>
                                         <path fill="#E1001A" d="M59.905.117h29.887v59.772H59.905z"/>
                                         <path fill="#FFDC15" d="M30.019.117h29.887v59.772H30.019z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.099H.132v59.774H89.79V.099"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.099H.132v59.774H89.79V.099"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.romania }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="es" :data-country-name="dataCountries.spain">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="es" :data-country-name="dataCountries.spain" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.133 59.923L.082.1 30.018.05h59.773l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.133V.1h89.658m.1-.1H.033V59.973h89.859V0h-.001z"/>
                                         <path fill="#FFDC15" d="M.133 14.667h89.656V45.34H.133z"/>
@@ -949,14 +910,12 @@
                                             <path fill="none" stroke="#000" stroke-width=".0254" d="M-634.427-106.038v-.019"/>
                                             <path fill="none" stroke="#000" stroke-width=".0013" d="M-633.44-105.964v-.168m-.084.173l.001-.178m-.063.18v-.181"/>
                                         </g>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.099H.133v59.774h89.658V.099"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.099H.133v59.774h89.658V.099"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.spain }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="gr" :data-country-name="dataCountries.greece">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="gr" :data-country-name="dataCountries.greece" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.924L.083.1 30.018.051H89.79l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#2D72A3" d="M.133.111H89.79v6.643H.133z"/>
@@ -970,14 +929,12 @@
                                         <path fill="#2D72A3" d="M.133 53.236H89.79v6.643H.133zM.132.111h33.2v33.201H.132z"/>
                                         <path fill="#FFF" d="M.132 13.391h33.2v6.643H.132z"/>
                                         <path fill="#FFF" d="M13.412.111h6.642v33.201h-6.642z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772H89.79V.115"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772H89.79V.115"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.greece }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="pt" :data-country-name="dataCountries.portugal">
-                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="pt" :data-country-name="dataCountries.portugal" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.928L.082.104 30.018.055h59.771l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.789.104v59.773H.132V.104h89.657m.1-.1H.032V59.977h89.857V.004z"/>
                                         <path fill="#060" d="M.132 0h35.621v59.771H.132z"/>
@@ -1143,120 +1100,103 @@
                                             <path fill="#FD0" stroke="#1A171B" stroke-width=".046" stroke-linecap="round" stroke-linejoin="round" d="M29.318 35.854l.578-.54-.215-.246-.578.539zM29.493 34.793l.578-.541-.215-.246-.578.541z"/>
                                             <path fill="#1A171B" d="M29.821 35.938l.116-.112-.198-.226-.117.109M29.99 34.902l.116-.109-.198-.227-.116.108"/>
                                         </g>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#c)" d="M59.904.117H.132v59.772h89.657V.117"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#c)" d="M59.904.117H.132v59.772h89.657V.117"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.portugal }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="cz" :data-country-name="dataCountries.czech_republic">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="cz" :data-country-name="dataCountries.czech_republic" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.924L.082.1 30.018.051h59.773l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.132V.1H89.791m.1-.1H.032V59.973h89.86V0h-.001z"/>
                                         <path fill="#E2001A" d="M.132 29.984h89.659v29.887H.132z"/>
                                         <path fill="#FFF" d="M.132.098h89.659v29.887H.132z"/>
                                         <path fill="#222473" d="M.132.098l42.163 30.054L.132 60.207"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.113H.132v59.772H89.791V.113"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.113H.132v59.772H89.791V.113"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.czech_republic }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="tr" :data-country-name="dataCountries.turkey">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="tr" :data-country-name="dataCountries.turkey" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.924L.083.1 30.019.051H89.79l.051 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#E2001A" d="M.132.111v59.762H89.79V.111"/>
                                         <path fill="#FFF" d="M45.276 23.42l3.172 4.174 4.99-1.653-2.976 4.303 3.1 4.24-4.999-1.504-3.087 4.262-.098-5.222-5.024-1.616 4.95-1.711"/>
                                         <path fill="#FFF" d="M32.835 41.297c-6.336 0-11.475-5.065-11.475-11.311s5.139-11.31 11.475-11.31c3.195 0 6.084 1.291 8.164 3.367-2.58-3.898-7.002-6.473-12.025-6.473-7.963 0-14.418 6.453-14.418 14.416 0 7.961 6.455 14.416 14.418 14.416 5.023 0 9.445-2.574 12.025-6.475-2.08 2.079-4.969 3.37-8.164 3.37z"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.115H.132v59.772H89.79V.115"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.903.115H.132v59.772H89.79V.115"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.turkey }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="hu" :data-country-name="dataCountries.hungary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="hu" :data-country-name="dataCountries.hungary" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.133 59.924L.082.1 30.018.051h59.773l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.133V.1h89.658m.1-.1H.033V59.973h89.859V0h-.001z"/>
                                         <path fill="#E32328" d="M.133.111h89.656v19.918H.133z"/>
                                         <path fill="#FFF" d="M.133 20.029h89.656v19.916H.133z"/>
                                         <path fill="#00892E" d="M.133 39.945h89.656v19.916H.133z"/>
                                         <path fill="#0B458F" d="M.133 60.336h.09l-.09-.137"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.133v59.771h89.658V.1"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.1H.133v59.771h89.658V.1"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.hungary }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="ru" :data-country-name="dataCountries.russia">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="ru" :data-country-name="dataCountries.russia" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.083.1 30.018.049H89.79l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.101-.1H.032V59.973H89.89V0h.001z"/>
                                         <path fill="#FFF" d="M.132.111h89.657v19.918H.132z"/>
                                         <path fill="#294EA3" d="M.132 20.029h89.657v19.916H.132z"/>
                                         <path fill="#D60829" d="M.132 39.945h89.657v19.916H.132z"/>
                                         <path fill="#0B458F" d="M.132 59.13h.091l-.091-.137"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772H89.79V.115"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772H89.79V.115"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.russia }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="am" :data-country-name="dataCountries.armenia">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="am" :data-country-name="dataCountries.armenia" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.082.1 30.018.049H89.79l.05 59.873"/>
                                         <path fill="#1A171B" d="M89.79.1v59.773H.132V.1H89.79m.1-.1H.032V59.973H89.89V0z"/>
                                         <path fill="#F62421" d="M.132.111H89.79v19.918H.132z"/>
                                         <path fill="#2713AD" d="M.132 20.029H89.79v19.916H.132z"/>
                                         <path fill="#F8991E" d="M.132 39.945H89.79v19.916H.132z"/>
                                         <path fill="#0B458F" d="M.132 60.336h.091l-.091-.137"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772H89.79V.115"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772H89.79V.115"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.armenia }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="bg" :data-country-name="dataCountries.bulgaria">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="bg" :data-country-name="dataCountries.bulgaria" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.082.1 30.019.049h59.772l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.132V.1H89.791m.1-.1H.032V59.973h89.86V0h-.001z"/>
                                         <path fill="#FFF" d="M.132.111h89.659v19.918H.132z"/>
                                         <path fill="#2FAA5B" d="M.132 20.029h89.659v19.916H.132z"/>
                                         <path fill="#D03534" d="M.132 39.945h89.659v19.916H.132z"/>
                                         <path fill="#0B458F" d="M.132 60.336h.092l-.092-.137"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772h89.659V.115"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.132v59.772h89.659V.115"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.bulgaria }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="ee" :data-country-name="dataCountries.estonia">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="ee" :data-country-name="dataCountries.estonia" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.133 59.922L.082.1 30.019.049h59.772l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.133V.1h89.658m.1-.1H.033V59.973h89.859V0h-.001z"/>
                                         <path fill="#3182BA" d="M.133.111h89.658v19.918H.133z"/>
                                         <path fill="#040404" d="M.133 20.029h89.658v19.916H.133z"/>
                                         <path fill="#EEEFEF" d="M.133 39.945h89.658v19.916H.133z"/>
                                         <path fill="#0B458F" d="M.133 60.336h.092l-.092-.137"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.133v59.772h89.658V.115"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.115H.133v59.772h89.658V.115"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.estonia }}</span>
-                                    </div>
-                                    <div class="three wide mobile five wide tablet three wide computer center aligned column">
-                                        <a v-on:click.stop.prevent="goHome" href="#" data-country="" data-country-name="">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973">
+                                    </a>
+                                    <a v-on:click.stop.prevent="goHome" href="#" data-country="" data-country-name="" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.133 59.922L.082.1 30.02.049h59.771l.049 59.873"/>
                                         <path fill="#1A171B" d="M89.791.1v59.773H.133V.1h89.658m.1-.1H.033V59.973h89.859V0h-.001z"/>
                                         <path fill="#0B458F" d="M.133 60.336h.092l-.092-.137"/>
                                         <path fill="#0C3183" d="M59.902.1H.131v59.773h89.658V.1"/>
                                         <path fill="#FD0" d="M44.791 50.201l1.012 2.047 2.259.328-1.636 1.594.388 2.252-2.023-1.063-2.02 1.063.385-2.252-1.635-1.594 2.26-.328M33.203 46.771l1.01 2.047 2.262.328-1.637 1.594.389 2.252-2.024-1.062-2.021 1.062.386-2.252-1.634-1.594 2.257-.328M24.697 38.223l1.01 2.048 2.26.329-1.635 1.593.387 2.25-2.022-1.062-2.021 1.062.385-2.25-1.635-1.593 2.26-.329M21.627 26.676l1.012 2.047 2.259.328-1.636 1.594.388 2.251-2.023-1.062-2.022 1.062.387-2.251-1.635-1.594 2.26-.328M24.709 15.127l1.012 2.048 2.259.329-1.636 1.594.388 2.25-2.023-1.063-2.022 1.063.387-2.25-1.635-1.594 2.26-.329M33.174 6.662l1.012 2.047 2.259.329-1.634 1.594.386 2.251-2.023-1.063-2.02 1.063.385-2.251-1.635-1.594 2.26-.329M56.395 46.771l-1.012 2.047-2.26.328 1.635 1.594-.387 2.252 2.024-1.062 2.019 1.062-.385-2.252 1.635-1.594-2.26-.328M64.9 38.223l-1.011 2.048-2.26.329 1.637 1.593-.389 2.25 2.023-1.062 2.022 1.062-.387-2.25L68.17 40.6l-2.26-.329M67.969 26.676l-1.01 2.047-2.26.328 1.635 1.594-.387 2.251 2.022-1.062 2.021 1.062-.387-2.251 1.635-1.594-2.258-.328M64.887 15.127l-1.01 2.048-2.26.329 1.635 1.594-.387 2.25 2.022-1.063 2.021 1.063-.387-2.25 1.635-1.594-2.258-.329M56.422 6.662l-1.01 2.047-2.262.329 1.637 1.594-.389 2.251 2.024-1.063 2.021 1.063-.386-2.251 1.634-1.594-2.259-.329M44.791 3.551L45.803 5.6l2.259.328-1.636 1.594.388 2.249-2.023-1.062-2.02 1.062.385-2.249-1.635-1.594 2.26-.328"/>
-                                        <path opacity=".7" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.101H.133v59.771h89.658V.101"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.101H.133v59.771h89.658V.101"/>
                                     </svg>
-                                        </a>
                                         <span>{{ dataCountries.europe }}</span>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                             <div class="sixteen wide mobile eight wide tablet six wide computer column">
@@ -1316,6 +1256,7 @@
             'routeHome',
             'routeSubscribeNewsLetter',
             //vue vars
+            'browser',
             'countries',
             //vue strings
             'seeAdvertLabel',

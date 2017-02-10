@@ -1,13 +1,25 @@
 <template>
     <div class="ui blue colored segment">
-        <div :id="'filter-accordion-'+_uid" class="ui fluid accordion">
+        <div :id="'filter-accordion-'+_uid" class="ui fluid accordion filter">
             <div class="active title">
-                <span class="ui blue ribbon label"><i class="dropdown icon"></i>{{ filterRibbon }}</span>
+                <span class="ui blue ribbon label"><i class="dropdown icon"></i><span class="close">{{ filterRibbonClose }}</span><span class="open">{{ filterRibbonOpen }}</span></span>
                 <breadcrumb
                         :items="breadcrumbItems">
                 </breadcrumb>
             </div>
             <div class="active content">
+                <div class="ui grid">
+                    <div class="sixteen wide mobile only sixteen wide tablet only column">
+                        <categories-dropdown-menu
+                                :route-category="routeCategory"
+                                :first-menu-name="categoriesDropdownMenuFirstMenuName"
+                                :actual-locale="actualLocale"
+                                :old-choice="categoryOldChoice"
+                                :with-all="true"
+                                :all-item="categoriesAllItem">
+                        </categories-dropdown-menu>
+                    </div>
+                </div>
                 <div class="ui middle aligned grid">
                     <div class="sixteen wide mobile height wide computer center aligned column price">
                         <range-filter
@@ -95,7 +107,10 @@
                 type: Object
             },
             //vue strings
-            filterRibbon: {
+            filterRibbonClose: {
+                type: String
+            },
+            filterRibbonOpen: {
                 type: String
             },
             urgentLabel: {
@@ -140,6 +155,20 @@
             routeNotificationsRemove: String,
             notificationsCheckboxLabel: {
                 type: String
+            },
+            //category dropdown
+            routeCategory: String,
+            categoriesDropdownMenuFirstMenuName: String,
+            actualLocale: String,
+            categoryOldChoice: {
+                type: Number,
+                required: false,
+                default: 0
+            },
+            categoriesAllItem: {
+                type: String,
+                required: false,
+                default: ''
             }
         },
         data: () => {
@@ -196,7 +225,13 @@
                 onChecked: function() {that.isUrgent = true;},
                 onUnchecked: function() {that.isUrgent = false;}
             });
-            $('#filter-accordion-'+this._uid).accordion();
+
+            let accordionElement = $('#filter-accordion-'+this._uid);
+            if($(window).width()<768){
+                accordionElement.accordion('close',0);
+            } else {
+                accordionElement.accordion();
+            }
         },
         updated () {
             //$('filter-accordion-'+this._uid).accordion();

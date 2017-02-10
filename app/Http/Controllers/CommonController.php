@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Anonymous;
+use App\Common\BrowserUtils;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
 
@@ -19,7 +20,8 @@ class CommonController extends Controller
      */
     public function portal() {
         $masterAdsControllerFlag = true;
-        return view('portal', compact('masterAdsControllerFlag'));
+        $browser = BrowserUtils::getBrowserName();
+        return view('portal', compact('masterAdsControllerFlag', 'browser'));
     }
 
     /**

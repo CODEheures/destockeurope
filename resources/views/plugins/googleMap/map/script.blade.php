@@ -1,8 +1,8 @@
 <script type="text/javascript">
-    {!! 'let geolocType =  ' . $geolocType .';'!!}
-    {!! 'let zoomMap =  ' . $zoomMap .';'!!}
+    {!! 'var geolocType =  ' . $geolocType .';'!!}
+    {!! 'var zoomMap =  ' . $zoomMap .';'!!}
     function initMap() {
-        let destockMap = new DestockMap();
+        var destockMap = new DestockMap();
         destockMap.constructMap(
                 'map',
                 zoomMap,

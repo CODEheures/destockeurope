@@ -31,10 +31,6 @@
             'csrfToken': '{{ csrf_token() }}',
             'firebase': {
                 'config': {
-                    apiKey: '{{ env('GOOGLE_FIREBASE_APIKEY') }}',
-                    authDomain: '{{ env('GOOGLE_FIREBASE_AUTHDOMAIN') }}',
-                    databaseURL: '{{ env('GOOGLE_FIREBASE_DATABASEURL') }}',
-                    storageBucket: '{{ env('GOOGLE_FIREBASE_STORAGEBUCKET') }}',
                     messagingSenderId: '{{ env('GOOGLE_FIREBASE_MESSAGINGSENDERID') }}'
                 },
                 'token': undefined

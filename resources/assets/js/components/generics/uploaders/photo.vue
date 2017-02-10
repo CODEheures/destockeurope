@@ -110,14 +110,13 @@
         },
         updated () {
             let that = this;
-            for(let index in this.thumbs){
-                $('#slider1-'+this._uid+'-'+index).checkbox({
+            (this.thumbs).forEach(function (elem,index) {
+                $('#slider1-'+that._uid+'-'+index).checkbox({
                     onChange: function () {
-                        console.log('on change slider Main Picture');
                         that.mainPicture = this.value;
                     }
                 });
-            }
+            });
         },
         methods: {
             triggerClickInput: function () {

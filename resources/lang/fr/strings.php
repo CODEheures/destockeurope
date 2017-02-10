@@ -315,7 +315,8 @@ return [
     'view_user_account_compagny_number_warning_label' => 'Fournissez un bon numéro de TVA pour un calcul correct des tarifs',
     'view_user_account_compagny_number_check_progress' => 'N° en cours de vérification...',
     'view_user_account_compagny_number_identifier' => 'vérification n°',
-    'view_filter_ribbon' => 'Filtres',
+    'view_filter_ribbon_open' => 'Replier les Filtres',
+    'view_filter_ribbon_close' => 'Déplier les Filtres',
     'view_filter_price_title' => 'Tranche de Prix',
 
     'view_reviewForPayment_header' => 'Recapitulatif de votre commande',

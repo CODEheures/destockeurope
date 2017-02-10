@@ -660,7 +660,7 @@ class AdvertController extends Controller
     private function approveAdvert($key, $value, $priceCoefficient=null) {
         if($value != null) {
             $advert = Advert::find($key);
-            if($advert) {
+            if($advert && is_null($advert->isValid)) {
                 $advert->price_coefficient = $priceCoefficient;
                 $invoiceFileName = null;
                 //IF EXIST AUTHORIZATION PAYMENT

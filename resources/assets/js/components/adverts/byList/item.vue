@@ -68,7 +68,16 @@
                     </div>
                     <div class="sixteen wide mobile only ptpb2 column">
                         <div class="ui grid">
-                            <div class="six wide mobile only column">
+                            <div class="sixteen wide mobile only column">
+                                <div class="header"><h4>{{ advert.title }}</h4></div>
+                                <span class="ui mini breadcrumb">
+                                    <template v-for="(item,index) in advert.breadCrumb">
+                                        <div class="active section">{{ item.description[actualLocale] }}</div>
+                                        <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
+                                    </template>
+                                </span>
+                            </div>
+                            <div class="ten wide mobile only column">
                                 <div class="ui image">
                                     <template v-if="advert.video_id">
                                         <div class="ui top aligned medium bordered rounded image">
@@ -87,26 +96,19 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="ten wide mobile only column">
-                                <div class="header"><h4>{{ advert.title }}</h4></div>
-                                <span class="ui mini breadcrumb">
-                                    <template v-for="(item,index) in advert.breadCrumb">
-                                        <div class="active section">{{ item.description[actualLocale] }}</div>
-                                        <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
-                                    </template>
-                                </span>
-                                <div class="ui grid">
-                                    <div class="sixteen wide mobile only column">
-                                        <p class="infos">
-                                            <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                            <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
-                                            <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
-                                        </p>
-                                        <p>
-                                            <span class="ui yellow left pointing label price">{{ advert.price_margin }}</span>
-                                        </p>
-                                    </div>
-                                </div>
+                            <div class="six wide mobile only column">
+                                <p class="infos">
+                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                </p>
+                                <p class="infos">
+                                    <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
+                                </p>
+                                <p class="infos">
+                                    <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                </p>
+                                <p>
+                                    <span class="ui yellow left pointing label price">{{ advert.price_margin }}</span>
+                                </p>
                             </div>
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
                                 <p>
@@ -114,7 +116,7 @@
                                     <i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                     <i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
                                     <br /><i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
+                                    <br /><i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                     <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                                 </p>
                             </div>
