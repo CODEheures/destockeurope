@@ -22,7 +22,7 @@ window.axios = require('axios');
  */
 
 window.Vue = require('vue');
-require('vue-resource');
+//require('vue-resource');
 require('vue-focus');
 
 /**
@@ -31,14 +31,27 @@ require('vue-focus');
  * included with  will automatically verify the header's value.
  */
 
-Vue.http.interceptors.push((request, next) => {
-    let myHost = window.location.hostname;
-    let requestHost = Parser.parse(request.url).hostname;
-    if(myHost == requestHost){
-        request.headers.set('X-CSRF-TOKEN', destockShareVar.csrfToken);
-    }
-    next();
-});
+// Vue.http.interceptors.push((request, next) => {
+//     let myHost = window.location.hostname;
+//     let requestHost = Parser.parse(request.url).hostname;
+//     if(myHost == requestHost){
+//         request.headers.set('X-CSRF-TOKEN', destockShareVar.csrfToken);
+//     }
+//     next();
+// });
+
+// axios.interceptors.request.use(function (config) {
+//     let myHost = window.location.hostname;
+//     let requestHost = Parser.parse(config.url).hostname;
+//     if(myHost == requestHost){
+//         config.headers['X-CSRF-TOKEN'] =  destockShareVar.csrfToken;
+//     }
+//     return config;
+// }, function (error) {
+//     return Promise.reject(error);
+// });
+
+
 Vue.config.devtools = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

@@ -120,27 +120,24 @@
             getStats() {
                 let that = this;
                 this.dataStatsLoading = true;
-                this.$http.get(this.routeGetStats)
-                    .then(
-                        function (response) {
-                            that.dataStatsLoading = false;
-                            that.isLoaded = true;
-                            that.dataStats = response.body;
-                            that.chartLocalFileSize();
-                            that.chartDistantFileSize();
-                            that.chartFilesBalance();
-                            that.chartAdverts();
-                            that.chartViews();
-                            that.chartCosts();
-                            that.sizeToTransfert = 0;
-                        },
-                        function (response) {
-                            that.dataCleanLoading = false;
-                            that.isLoaded = true;
-                            that.sendToast(that.loadErrorMessage, 'error');
-                        }
-                    )
-                ;
+                axios.get(this.routeGetStats)
+                    .then(function (response) {
+                        that.dataStatsLoading = false;
+                        that.isLoaded = true;
+                        that.dataStats = response.data;
+                        that.chartLocalFileSize();
+                        that.chartDistantFileSize();
+                        that.chartFilesBalance();
+                        that.chartAdverts();
+                        that.chartViews();
+                        that.chartCosts();
+                        that.sizeToTransfert = 0;
+                    })
+                    .catch(function (error) {
+                        that.dataCleanLoading = false;
+                        that.isLoaded = true;
+                        that.sendToast(that.loadErrorMessage, 'error');
+                    });
             },
             chartLocalFileSize () {
                 let that = this;
@@ -525,75 +522,66 @@
             cleanApp() {
                 let that = this;
                 this.dataCleanLoading = true;
-                this.$http.get(this.routeCleanApp)
-                    .then(
-                        function (response) {
-                            that.dataCleanLoading = false;
-                            that.getStats();
-                            that.sendToast(response.body, 'success');
-                        }
-                        ,
-                        function (response) {
-                            that.dataCleanLoading = false;
-                            that.sendToast(response.body, 'error');
-                        }
-                    )
-                ;
+                axios.get(this.routeCleanApp)
+                    .then(function (response) {
+                        that.dataCleanLoading = false;
+                        that.getStats();
+                        that.sendToast(response.data, 'success');
+                    })
+                    .catch(function (error) {
+                        that.dataCleanLoading = false;
+                        error.response ? that.sendToast(error.response.data, 'error') : null;
+                    });
             },
             transfertMedias() {
                 let that = this;
                 this.dataTransfertMediasLoading = true;
-                this.$http.get(this.routeTransfertMedias+'/'+this.sizeToTransfert)
-                    .then(
-                        function (response) {
-                            that.getProgressTransfertMedias();
-                            that.sendToast(response.body, 'success');
-                        }
-                        ,
-                        function (response) {
-                            that.dataTransfertMediasLoading = false;
-                            that.sendToast(response.body, 'error');
-                        }
-                    )
-                ;
+                axios.get(this.routeTransfertMedias+'/'+this.sizeToTransfert)
+                    .then(function (response) {
+                        console.log('axios15');
+                        that.getProgressTransfertMedias();
+                        that.sendToast(response.data, 'success');
+                    })
+                    .catch(function (error) {
+                        that.dataTransfertMediasLoading = false;
+                        error.response ? that.sendToast(error.response.data, 'error') : null;
+                    });
             },
             getProgressTransfertMedias () {
                 let that = this;
                 let myTimeout = setTimeout(function () {
-                    that.$http.get(that.routeProgressTransfertMedias)
-                        .then(
-                            function (response) {
-                                let progress = response.body;
-                                if(progress[2] > 0){
-                                    let percent = progress[1]/progress[2]*100;
-                                    if(percent<100){
-                                        that.dataTransfertMediasProgress= progress[1]/progress[2]*100;
-                                    } else {
-                                        that.dataTransfertMediasProgress= 100;
-                                    }
+                    axios.get(that.routeProgressTransfertMedias)
+                        .then(function (response) {
+                            console.log('axios16');
+                            let progress = response.data;
+                            if(progress[2] > 0){
+                                let percent = progress[1]/progress[2]*100;
+                                if(percent<100){
+                                    that.dataTransfertMediasProgress= progress[1]/progress[2]*100;
                                 } else {
-                                    that.dataTransfertMediasProgress = 0;
+                                    that.dataTransfertMediasProgress= 100;
                                 }
-                                if(progress[0] == 0 && progress[2] !=0) {
-                                    that.dataTransfertMediasLoading = false;
-                                    that.dataTransfertMediasProgress = 0;
-                                    $('#progress-'+that._uid).progress({
-                                        percent: that.dataTransfertMediasProgress
-                                    });
-                                    that.getStats();
-                                } else {
-                                    that.getProgressTransfertMedias();
-                                    $('#progress-'+that._uid).progress({
-                                        percent: that.dataTransfertMediasProgress
-                                    });
-                                }
+                            } else {
+                                that.dataTransfertMediasProgress = 0;
                             }
-                            ,
-                            function (response) {
-                                that.dataCleanLoading = false;
-                                that.sendToast(response.body, 'error');
+                            if(progress[0] == 0 && progress[2] !=0) {
+                                that.dataTransfertMediasLoading = false;
+                                that.dataTransfertMediasProgress = 0;
+                                $('#progress-'+that._uid).progress({
+                                    percent: that.dataTransfertMediasProgress
+                                });
+                                that.getStats();
+                            } else {
+                                that.getProgressTransfertMedias();
+                                $('#progress-'+that._uid).progress({
+                                    percent: that.dataTransfertMediasProgress
+                                });
                             }
-                        );
+                        })
+                        .catch(function (error) {
+                            that.dataCleanLoading = false;
+                            error.response ? that.sendToast(error.response.data, 'error') : null;
+                        });
                 }, 1000);
             },
             readSizeLocalFiles() {

@@ -283,58 +283,56 @@
         },
         methods: {
             currencyChoice: function (cur) {
-                this.$http.patch(this.routeUserSetPrefCurrency, {currency: cur})
-                        .then(
-                                (response) => {
-                                    this.sendToast(this.accountPatchSuccess, 'success');
-                                },
-                                (response) => {
-                                    if(response.status == 409) {
-                                        this.sendToast(response.body, 'error');
-                                    } else {
-                                        this.sendToast(this.loadErrorMessage, 'error');
-                                    }
-                                }
-                        );
+                let that = this;
+                axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
+                    .then(function (response) {
+                        that.sendToast(that.accountPatchSuccess, 'success');
+                    })
+                    .catch(function (error) {
+                        if(error.response && error.response.status == 409) {
+                            that.sendToast(error.response.data, 'error');
+                        } else {
+                            that.sendToast(that.loadErrorMessage, 'error');
+                        }
+                    });
             },
             localeChoice: function (locale) {
-                this.$http.patch(this.routeUserSetPrefLocale, {localisation: locale})
-                        .then(
-                                (response) => {
-                                        this.sendToast(this.accountPatchSuccess, 'success');
-                                        this.currenciesDropDownUpdate = !this.currenciesDropDownUpdate;
-                                },
-                                (response) => {
-                                    if(response.status == 409) {
-                                        this.sendToast(response.body, 'error');
-                                    } else {
-                                        this.sendToast(this.loadErrorMessage, 'error');
-                                    }
-                                }
-                );
+                let that = this;
+                axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
+                    .then(function (response) {
+                        that.sendToast(that.accountPatchSuccess, 'success');
+                        that.currenciesDropDownUpdate = !that.currenciesDropDownUpdate;
+                    })
+                    .catch(function (error) {
+                        if(error.response && error.response.status == 409) {
+                            that.sendToast(error.response.data, 'error');
+                        } else {
+                            that.sendToast(that.loadErrorMessage, 'error');
+                        }
+                    });
             },
             latLngChange: function (event) {
+                let that = this;
                 this.lat= event.lat;
                 this.lng= event.lng;
                 this.geoloc= event.geoloc;
                 if(this.dataFirstGeoloc || parseFloat(this.lat) != parseFloat(this.latitude) || parseFloat(this.lng) != parseFloat(this.longitude)){
-                    this.$http.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
-                            .then(
-                                    (response) => {
-                                        this.dataFirstGeoloc = false;
-                                        this.sendToast(this.accountPatchSuccess, 'success');
-                                    },
-                                    (response) => {
-                                        if(response.status == 409) {
-                                            this.sendToast(response.body, 'error');
-                                        } else {
-                                            this.sendToast(this.loadErrorMessage, 'error');
-                                        }
-                                    }
-                            );
+                    axios.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
+                        .then(function (response) {
+                            that.dataFirstGeoloc = false;
+                            that.sendToast(that.accountPatchSuccess, 'success');
+                        })
+                        .catch(function (error) {
+                            if(error.response && error.response.status == 409) {
+                                that.sendToast(error.response.data, 'error');
+                            } else {
+                                that.sendToast(that.loadErrorMessage, 'error');
+                            }
+                        });
                 }
             },
             updateAccount: function (inputName, value){
+                let that = this;
                 let updateRoute = '';
                 if(inputName == 'name'){
                     updateRoute = this.routeUserSetName;
@@ -346,53 +344,50 @@
                 } else if(inputName == 'phone') {
                     updateRoute = this.routeUserSetPhone;
                 }
-                this.$http.patch(updateRoute, {'value': value})
-                        .then(
-                                function (response) {
-                                    this.updateFails = false;
-                                    this.sendToast(this.accountPatchSuccess, 'success');
-                                    this.updateInProgress--;
-                                    if(inputName == 'registration-number'){
-                                        this.userGetMe();
-                                    }
-                                },
-                                function (response) {
-                                    this.updateFails = true;
-                                    this.vatOnCheckProgress=false;
-                                    if(response.status == 409) {
-                                        this.sendToast(response.body, 'error');
-                                    } else if(response.status == 422) {
-                                        this.sendToast(response.body.value[0], 'error');
-                                    } else {
-                                        this.sendToast(this.loadErrorMessage, 'error');
-                                    }
-                                    this.userGetMe();
-                                }
-                        );
+                axios.patch(updateRoute, {'value': value})
+                    .then(function (response) {
+                        that.updateFails = false;
+                        that.sendToast(that.accountPatchSuccess, 'success');
+                        that.updateInProgress--;
+                        if(inputName == 'registration-number'){
+                            that.userGetMe();
+                        }
+                    })
+                    .catch(function (error) {
+                        that.updateFails = true;
+                        that.vatOnCheckProgress=false;
+                        if(error.response && error.response.status == 409) {
+                            that.sendToast(error.response.data, 'error.response');
+                        } else if(error.response && error.response.status == 422) {
+                            that.sendToast(error.response.data.value[0], 'error');
+                        } else {
+                            that.sendToast(that.loadErrorMessage, 'error');
+                        }
+                        that.userGetMe();
+                    });
             },
             userGetMe: function () {
-                this.$http.get(this.routeUserGetMe)
-                    .then(
-                        function (response) {
-                            this.dataUserName = response.body.userName;
-                            this.dataCompagnyName = response.body.compagnyName;
-                            this.dataRegistrationNumber = response.body.registrationNumber;
-                            this.dataVatIdentifier= response.body.vatIdentifier;
-                            this.hasValidVat = this.dataVatIdentifier != null && this.dataVatIdentifier != '';
-                            this.lng= response.body.lng;
-                            this.lat= response.body.lat;
-                            this.geoloc= response.body.geoloc;
-                            sessionStorage.setItem('lat', this.lat);
-                            sessionStorage.setItem('lng', this.lng);
-                            sessionStorage.setItem('geoloc', this.geoloc);
-                            window.map.constructMap();
-                            this.vatOnCheckProgress=false;
-                        },
-                        function (response) {
-                            this.vatOnCheckProgress=false;
-                            this.sendToast(this.loadErrorMessage, 'error');
-                        }
-                    );
+                let that = this;
+                axios.get(this.routeUserGetMe)
+                    .then(function (response) {
+                        that.dataUserName = response.data.userName;
+                        that.dataCompagnyName = response.data.compagnyName;
+                        that.dataRegistrationNumber = response.data.registrationNumber;
+                        that.dataVatIdentifier= response.data.vatIdentifier;
+                        that.hasValidVat = that.dataVatIdentifier != null && that.dataVatIdentifier != '';
+                        that.lng= response.data.lng;
+                        that.lat= response.data.lat;
+                        that.geoloc= response.data.geoloc;
+                        sessionStorage.setItem('lat', that.lat);
+                        sessionStorage.setItem('lng', that.lng);
+                        sessionStorage.setItem('geoloc', that.geoloc);
+                        window.map.constructMap();
+                        that.vatOnCheckProgress=false;
+                    })
+                    .catch(function (error) {
+                        that.vatOnCheckProgress=false;
+                        that.sendToast(that.loadErrorMessage, 'error');
+                    });
             },
             updateByEnter: function (event) {
                 this.focused={'input': event.target.name, 'value': event.target.value};

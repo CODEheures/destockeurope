@@ -176,8 +176,8 @@
                     })
                     .catch(function (error) {
                         that.resetUploadVideoState();
-                        if(error.status == 503) {
-                            that.$parent.$emit('sendToast', {'message': error.body, 'type':'error'});
+                        if(error.response && error.response.status == 503) {
+                            that.$parent.$emit('sendToast', {'message': error.response.data, 'type':'error'});
                         } else {
                             that.$parent.$emit('loadError');
                         }

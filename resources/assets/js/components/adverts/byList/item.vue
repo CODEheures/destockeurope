@@ -475,42 +475,37 @@
                 event.preventDefault();
                 event.stopPropagation();
                 let that = this;
-                this.$http.get(this.routeBookmarkAdd+'/'+this.advert.id)
-                    .then(
-                        function (response) {
-                            that.dataIsUserBookmark = true;
-                            that.$parent.$emit('bookmarkSuccess');
-                            that.advert.isUserBookmark = true;
-                        },
-                        function (response) {
-                            if (response.status == 409) {
-                                that.$parent.$emit('sendToast', {'message': response.body, 'type': 'error'});
-                            } else {
-                                that.$parent.$emit('loadError')
-                            }
+                axios.get(this.routeBookmarkAdd+'/'+this.advert.id)
+                    .then(function (response) {
+                        that.dataIsUserBookmark = true;
+                        that.$parent.$emit('bookmarkSuccess');
+                        that.advert.isUserBookmark = true;
+                    })
+                    .catch(function (error) {
+                        if (error.response && error.response.status == 409) {
+                            that.$parent.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
+                        } else {
+                            that.$parent.$emit('loadError')
                         }
-                    );
+                    });
             },
             unbookmarkMe: function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 let that = this;
-                this.$http.get(this.routeBookmarkRemove+'/'+this.advert.id)
-                    .then(
-                        function (response) {
-                            that.dataIsUserBookmark = false;
-                            that.$parent.$emit('unbookmarkSuccess');
-                            that.advert.isUserBookmark = false;
-                        },
-                        function (response) {
-                            if (response.status == 409) {
-                                that.$parent.$emit('sendToast', {'message': response.body, 'type': 'error'});
-                            } else {
-                                that.$parent.$emit('loadError')
-                            }
+                axios.get(this.routeBookmarkRemove+'/'+this.advert.id)
+                    .then(function (response) {
+                        that.dataIsUserBookmark = false;
+                        that.$parent.$emit('unbookmarkSuccess');
+                        that.advert.isUserBookmark = false;
+                    })
+                    .catch(function (error) {
+                        if (error.response && error.response.status == 409) {
+                            that.$parent.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
+                        } else {
+                            that.$parent.$emit('loadError')
                         }
-                    )
-                ;
+                    });
             },
             destroyMe: function () {
                 this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
@@ -523,17 +518,13 @@
             },
             updateCoefficient: function () {
                 let that = this;
-                this.$http.patch(this.routeUpdatePriceCoefficient + '/' + this.advert.id + '/' + (this.advert.price_coefficient*100).toFixed(0))
-                    .then(
-                        function (response) {
-                            that.$parent.$emit('updateSuccess')
-                        }
-                        ,
-                        function (response) {
-                            that.$parent.$emit('loadError')
-                        }
-                    )
-                ;
+                axios.patch(this.routeUpdatePriceCoefficient + '/' + this.advert.id + '/' + (this.advert.price_coefficient*100).toFixed(0))
+                    .then(function (response) {
+                        that.$parent.$emit('updateSuccess')
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError')
+                    });
             }
         }
     }

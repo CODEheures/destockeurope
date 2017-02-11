@@ -458,19 +458,17 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
-                            .then(
-                                function (response) {
-                                    that.sendToast(that.sendSuccessMessage, 'success');
-                                },
-                                function (response) {
-                                    if (response.status == 409) {
-                                        that.sendToast(response.body, 'error');
-                                    } else {
-                                        that.sendToast(that.loadErrorMessage, 'error');
-                                    }
+                        axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
+                            .then(function (response) {
+                                that.sendToast(that.sendSuccessMessage, 'success');
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
                                 }
-                            );
+                            });
                     }
                 }).modal('show');
             },
@@ -481,19 +479,17 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
-                            .then(
-                                function (response) {
-                                    that.sendToast(that.sendSuccessReportMessage, 'success');
-                                },
-                                function (response) {
-                                    if (response.status == 409) {
-                                        that.sendToast(response.body, 'error');
-                                    } else {
-                                        that.sendToast(that.loadErrorMessage, 'error');
-                                    }
+                        axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
+                            .then(function (response) {
+                                that.sendToast(that.sendSuccessReportMessage, 'success');
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
                                 }
-                            );
+                            });
                     }
                 }).modal('show');
             },
@@ -505,39 +501,35 @@
             },
             bookmarkMe: function () {
                 let that = this;
-                this.$http.get(this.routeBookmarkAdd)
-                    .then(
-                        function (response)  {
-                            that.dataIsUserBookmark = true;
-                            that.sendToast(that.bookmarkSuccess, 'success');
-                        },
-                        function (response)  {
-                            if (response.status == 409) {
-                                that.sendToast(response.body, 'error');
-                            } else {
-                                that.sendToast(that.loadErrorMessage, 'error');
-                            }
-                            that.isLoaded = false;
+                axios.get(this.routeBookmarkAdd)
+                    .then(function (response)  {
+                        that.dataIsUserBookmark = true;
+                        that.sendToast(that.bookmarkSuccess, 'success');
+                    })
+                    .catch(function (error)  {
+                        if (error.response && error.response.status == 409) {
+                            that.sendToast(error.response.data, 'error');
+                        } else {
+                            that.sendToast(that.loadErrorMessage, 'error');
                         }
-                    );
+                        that.isLoaded = false;
+                    });
             },
             unbookmarkMe: function () {
                 let that = this;
-                this.$http.get(this.routeBookmarkRemove)
-                    .then(
-                        function (response)  {
-                            that.dataIsUserBookmark = false;
-                            that.sendToast(that.unbookmarkSuccess, 'success');
-                        },
-                        function (response)  {
-                            if (response.status == 409) {
-                                that.sendToast(response.body, 'error');
-                            } else {
-                                that.sendToast(that.loadErrorMessage, 'error');
-                            }
-                            that.isLoaded = false;
+                axios.get(this.routeBookmarkRemove)
+                    .then(function (response)  {
+                        that.dataIsUserBookmark = false;
+                        that.sendToast(that.unbookmarkSuccess, 'success');
+                    })
+                    .catch(function (error)  {
+                        if (error.response && error.response.status == 409) {
+                            that.sendToast(error.response.data, 'error');
+                        } else {
+                            that.sendToast(that.loadErrorMessage, 'error');
                         }
-                    );
+                        that.isLoaded = false;
+                    });
             },
             destroyMe: function () {
                 let modalForm = $('#modal2-'+this._uid);
@@ -546,20 +538,18 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.delete(that.routeDeleteAdvert)
-                            .then(
-                                function (response) {
-                                    window.location.assign(response.body);
-                                },
-                                function (response) {
-                                    if (response.status == 409) {
-                                        that.sendToast(response.body, 'error');
-                                    } else {
-                                        that.sendToast(that.loadErrorMessage, 'error');
-                                    }
-                                    that.isLoaded = false;
+                        axios.delete(that.routeDeleteAdvert)
+                            .then(function (response) {
+                                window.location.assign(response.data);
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
                                 }
-                            );
+                                that.isLoaded = false;
+                            });
                     }
                 }).modal('show');
             }

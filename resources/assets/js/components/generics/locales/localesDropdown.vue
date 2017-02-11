@@ -45,17 +45,16 @@
             getListLocales: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeListLocales)
-                        .then(
-                                (response) => {
-                                    this.locales = response.data;
-                                    this.isLoaded = true;
-                                    this.$parent.$emit('localeChoice', {locale: this.locales.userPrefLocale, initial:true});
-                                },
-                                (response) => {
-                                    this.$parent.$emit('loadError');
-                                }
-                        );
+                let that = this;
+                axios.get(this.routeListLocales)
+                    .then(function (response) {
+                        that.locales = response.data;
+                        that.isLoaded = true;
+                        that.$parent.$emit('localeChoice', {locale: that.locales.userPrefLocale, initial:true});
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                    });
             }
         },
         updated () {
@@ -63,7 +62,7 @@
                 this.locales.userPrefLocale = this.oldLocale;
             }
 
-            var that = this;
+            let that = this;
             $('#'+this._uid)
                     .dropdown('set selected', that.locales.userPrefLocale)
                     .dropdown({

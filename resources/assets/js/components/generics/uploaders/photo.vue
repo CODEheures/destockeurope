@@ -132,52 +132,46 @@
                 if(event.target.files[0] != undefined){
                     this.filePhotoToPost.append(this.formPhotoFileInputName, event.target.files[0]);
                     let that = this;
-                    this.$http.post(this.routePostTempoPicture, this.filePhotoToPost)
-                        .then(
-                            function (response) {
-                                that.filePhotoToPost.delete(that.formPhotoFileInputName);
-                                event.target.value="";
-                                that.thumbs = response.body;
-                            },
-                            function (response) {
-                                that.filePhotoToPost.delete(that.formPhotoFileInputName);
-                                event.target.value="";
-                                if (response.status == 422) {
-                                    let msg = response.body.addpicture[0];
-                                    that.$parent.$emit('sendToast', {'message': msg, 'type':'error'});
-                                } else if(response.status == 413) {
-                                    that.$parent.$emit('fileSizeError');
-                                } else {
-                                    that.$parent.$emit('loadError');
-                                }
+                    axios.post(this.routePostTempoPicture, this.filePhotoToPost)
+                        .then(function (response) {
+                            that.filePhotoToPost.delete(that.formPhotoFileInputName);
+                            event.target.value="";
+                            that.thumbs = response.data;
+                        })
+                        .catch(function (error) {
+                            that.filePhotoToPost.delete(that.formPhotoFileInputName);
+                            event.target.value="";
+                            if (error.response && error.response.status == 422) {
+                                let msg = error.response.data.addpicture[0];
+                                that.$parent.$emit('sendToast', {'message': msg, 'type':'error'});
+                            } else if(error.response && error.response.status == 413) {
+                                that.$parent.$emit('fileSizeError');
+                            } else {
+                                that.$parent.$emit('loadError');
                             }
-                        );
+                        });
                 }
             },
             getListThumbs: function (event) {
                 let that = this;
-                this.$http.get(this.routeGetListTempoThumbs)
-                    .then(
-                        function (response) {
-                            that.thumbs = response.body;
-                        },
-                        function (response) {
-                            that.$parent.$emit('loadError');
-                        }
-                    );
+                axios.get(this.routeGetListTempoThumbs)
+                    .then(function (response) {
+                        that.thumbs = response.data;
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                    });
             },
             delPhoto: function (event) {
                 event.preventDefault();
                 let that=this;
-                this.$http.delete(this.routeDelTempoPicture+'/'+event.target.dataset.file)
-                    .then(
-                        function (response) {
-                            that.thumbs = response.body;
-                        },
-                        function (response) {
-                            that.$parent.$emit('loadError');
-                        }
-                    );
+                axios.delete(this.routeDelTempoPicture+'/'+event.target.dataset.file)
+                    .then(function (response) {
+                        that.thumbs = response.data;
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                    });
             },
             setPicturesIndicators () {
                 let resultIndicator;

@@ -259,9 +259,14 @@
             });
             let that = this;
             $('#slider1-'+this._uid).checkbox({
-               onChange: function () {
-                   that.activeMasterAds(that.parameters.masterAds);
-               }
+                onChecked: function() {
+                    that.parameters['masterAds']=1;
+                    that.activeMasterAds(1);
+                },
+                onUnchecked: function() {
+                    that.parameters['masterAds']=0;
+                    that.activeMasterAds(0);
+                }
             });
             this.$watch('blured', function () {
                 if (this.blured.name == this.focused.name && this.blured.value != this.focused.value) {
@@ -274,19 +279,15 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                this.$http.get(this.routeParameters)
-                        .then(
-                                function (response) {
-                                    that.parameters = response.data;
-                                    that.oldType=that.parameters.welcomeType;
-                                    that.isLoaded = true;
-                                }
-                                ,
-                                function (response) {
-                                    that.sendToast(that.loadErrorMessage, 'error');
-                                }
-                        )
-                ;
+                axios.get(this.routeParameters)
+                    .then(function (response) {
+                        that.parameters = response.data;
+                        that.oldType=that.parameters.welcomeType;
+                        that.isLoaded = true;
+                    })
+                    .catch(function (error) {
+                        that.sendToast(that.loadErrorMessage, 'error');
+                    });
             },
             typeChoice: function (type) {
                 this.blured.name = 'welcomeType';
@@ -311,7 +312,7 @@
                 }
                 if (name != undefined && patchValue[name] != undefined) {
                     if(name=='urlMasterAds' && patchValue[name] != ''){
-                        var that = this;
+                        let that = this;
                         this.testValidImgUrl(patchValue[name], function () {
                             that.updateRequest(patchValue);
                         });
@@ -325,47 +326,39 @@
             },
             updateRequest(patchValue) {
                 let that = this;
-                this.$http.patch(this.routeParameters, patchValue)
-                        .then(
-                                function (response) {
-                                    that.getParameters(false);
-                                    that.sendToast(that.patchSuccessMessage, 'success');
-                                }
-                                ,
-                                function (response) {
-                                    that.getParameters(false);
-                                    if (response.status == 409) {
-                                        that.sendToast(response.body, 'error');
-                                    } else {
-                                        that.sendToast(that.patchErrorMessage, 'error');
-                                    }
-                                }
-                        )
-                ;
+                axios.patch(this.routeParameters, patchValue)
+                    .then(function (response) {
+                        that.getParameters(false);
+                        that.sendToast(that.patchSuccessMessage, 'success');
+                    })
+                    .catch(function (error) {
+                        that.getParameters(false);
+                        if (error.response && error.response.status == 409) {
+                            that.sendToast(error.response.data, 'error');
+                        } else {
+                            that.sendToast(that.patchErrorMessage, 'error');
+                        }
+                    });
             },
             testValidImgUrl(url, callback){
                 let that = this;
                 this.isLoaded = false;
-                this.$http.post(this.routeTestIsPicture, {url: url})
-                        .then(
-                                function (response) {
-                                    that.isLoaded = true;
-                                    if(response.body && response.body == true){
-                                        that.isValidImage = true;
-                                        callback();
-                                    } else {
-                                        that.isValidImage = false;
-                                        that.sendToast(this.invalidImageMessage, 'error');
-                                    }
-                                }
-                                ,
-                                function (response) {
-                                    that.isLoaded = true;
-                                    that.isValidImage = false;
-                                    that.sendToast(this.invalidImageMessage, 'error');
-                                }
-                        )
-                ;
+                axios.post(this.routeTestIsPicture, {url: url})
+                    .then(function (response) {
+                        that.isLoaded = true;
+                        if(response.data && response.data == true){
+                            that.isValidImage = true;
+                            callback();
+                        } else {
+                            that.isValidImage = false;
+                            that.sendToast(this.invalidImageMessage, 'error');
+                        }
+                    })
+                    .catch(function (error) {
+                        that.isLoaded = true;
+                        that.isValidImage = false;
+                        that.sendToast(that.invalidImageMessage, 'error');
+                    });
             },
             sendToast: function (message, type) {
                 this.typeMessage = type;

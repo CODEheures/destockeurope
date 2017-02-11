@@ -37,17 +37,16 @@
             getListCurrencies: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeListCurrencies)
-                        .then(
-                                (response) => {
-                                    this.currencies = response.data;
-                                    this.isLoaded = true;
-                                    this.$parent.$emit('currencyChoice', {cur: this.currencies.userPrefCurrency, initial:true});
-                                },
-                                (response) => {
-                                    this.$parent.$emit('loadError');
-                                }
-                        );
+                let that = this;
+                axios.get(this.routeListCurrencies)
+                    .then(function (response) {
+                        that.currencies = response.data;
+                        that.isLoaded = true;
+                        that.$parent.$emit('currencyChoice', {cur: that.currencies.userPrefCurrency, initial:true});
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                    });
             }
         },
         updated () {
@@ -55,7 +54,7 @@
                 this.currencies.userPrefCurrency = this.oldCurrency;
             }
 
-            var that = this;
+            let that = this;
             $('#'+this._uid)
                     .dropdown('set selected', that.currencies.userPrefCurrency)
                     .dropdown({

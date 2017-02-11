@@ -271,28 +271,26 @@
                 this.breadcrumbItems = [];
                 let that = this;
                 if(categoryId != undefined && categoryId>0 ) {
-                    this.$http.get(this.routeCategory+'/'+categoryId)
-                        .then(
-                            function (response) {
-                                let chainedCategories = response.data;
+                    axios.get(this.routeCategory+'/'+categoryId)
+                        .then(function (response) {
+                            let chainedCategories = response.data;
+                            that.breadcrumbItems.push({
+                                name: that.allLabel,
+                                value: 0
+                            });
+                            chainedCategories.forEach(function (elem,index) {
                                 that.breadcrumbItems.push({
-                                    name: that.allLabel,
-                                    value: 0
+                                    name: elem['description'][that.actualLocale],
+                                    value: elem.id
                                 });
-                                chainedCategories.forEach(function (elem,index) {
-                                    that.breadcrumbItems.push({
-                                        name: elem['description'][that.actualLocale],
-                                        value: elem.id
-                                    });
-                                });
-                            },
-                            function (response) {
-                                that.breadcrumbItems.push({
-                                    name: this.loadErrorMessage,
-                                    value:''
-                                });
-                            }
-                        );
+                            });
+                        })
+                        .catch(function (error) {
+                            that.breadcrumbItems.push({
+                                name: this.loadErrorMessage,
+                                value:''
+                            });
+                        });
                 }
             },
             urlForFilter(priceOnly=false, init=false) {
@@ -333,20 +331,18 @@
             },
             getMinMaxPrices: function (url, callBack) {
                 let that = this;
-                this.$http.get(url)
-                    .then(
-                        function (response) {
-                            that.filter.minRangePrice = parseFloat((response.data).minPrice);
-                            that.filter.maxRangePrice = parseFloat((response.data).maxPrice);
-                            that.filter.minRangeQuantity = parseInt((response.data).minQuantity);
-                            that.filter.maxRangeQuantity = parseInt((response.data).maxQuantity);
-                            that.dataFilterPricePrefix = (response.data).currencySymbol;
-                            callBack();
-                        },
-                        function (response) {
-                            this.sendToast(this.loadErrorMessage, 'error');
-                        }
-                    );
+                axios.get(url)
+                    .then(function (response) {
+                        that.filter.minRangePrice = parseFloat((response.data).minPrice);
+                        that.filter.maxRangePrice = parseFloat((response.data).maxPrice);
+                        that.filter.minRangeQuantity = parseInt((response.data).minQuantity);
+                        that.filter.maxRangeQuantity = parseInt((response.data).maxQuantity);
+                        that.dataFilterPricePrefix = (response.data).currencySymbol;
+                        callBack();
+                    })
+                    .catch(function (error) {
+                        this.sendToast(that.loadErrorMessage, 'error');
+                    });
             },
             clearInputSearch() {
                 if('resultsFor' in this.filter) {
@@ -437,20 +433,18 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.delete(url)
-                            .then(
-                                function (response) {
-                                    that.updateResults();
-                                },
-                                function (response) {
-                                    if (response.status == 409) {
-                                        that.sendToast(response.body, 'error');
-                                    } else {
-                                        that.sendToast(that.loadErrorMessage, 'error');
-                                    }
-                                    that.isLoaded = false;
+                        axios.delete(url)
+                            .then(function (response) {
+                                that.updateResults();
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
                                 }
-                            );
+                                that.isLoaded = false;
+                            });
                     }
                 }).modal('show');
             }

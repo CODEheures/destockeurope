@@ -211,19 +211,16 @@
             getCategories: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeCategory)
-                        .then(
-                                function (response) {
-                                    this.categories = response.data;
-                                    this.flagRefresh=!this.flagRefresh;
-                                    this.isLoaded = true;
-                                }
-                                ,
-                                function (response) {
-                                    this.sendToast(this.loadErrorMessage, 'error');
-                                }
-                        )
-                ;
+                let that = this;
+                axios.get(this.routeCategory)
+                    .then(function (response) {
+                        that.categories = response.data;
+                        that.flagRefresh=!that.flagRefresh;
+                        that.isLoaded = true;
+                    })
+                    .catch(function (error) {
+                        that.sendToast(that.loadErrorMessage, 'error');
+                    });
             },
             addCategory: function (event, emitPostValue) {
                 let isEmpty = true;
@@ -244,26 +241,23 @@
                 if (!isEmpty) {
                     this.isLoaded = false;
                     this.categoryName = [];
-                    this.$http.post(this.routeCategory, postValue)
-                            .then(
-                                    function (response) {
-                                        this.getCategories();
-                                    }
-                                    ,
-                                    function (response) {
-                                        this.isLoaded = true;
-                                        if (response.status == 409) {
-                                            this.sendToast(response.body, 'error');
-                                        } else {
-                                            this.sendToast(this.addErrorMessage, 'error');
-                                        }
-                                    }
-                            )
-                    ;
+                    let that = this;
+                    axios.post(this.routeCategory, postValue)
+                        .then(function (response) {
+                            that.getCategories();
+                        })
+                        .catch(function (error) {
+                            that.isLoaded = true;
+                            if (error.response && error.response.status == 409) {
+                                that.sendToast(error.response.data, 'error');
+                            } else {
+                                that.sendToast(that.addErrorMessage, 'error');
+                            }
+                        });
                 }
             },
             delCategory: function (event, id) {
-                var categoryId = undefined;
+                let categoryId = undefined;
                 if (event != undefined && event.target.dataset.id != undefined && event.target.dataset.id > 0) {
                     categoryId = event.target.dataset.id;
                 } else if (id != undefined && id > 0) {
@@ -271,27 +265,23 @@
                 }
 
                 if (categoryId != undefined && categoryId > 0) {
-                    var that = this;
+                    let that = this;
                     $('#modal-'+this._uid).modal({
                         closable: false,
                         onApprove: function () {
                             that.isLoaded = false;
-                            that.$http.delete(that.routeCategory + '/' + categoryId)
-                                    .then(
-                                            function (response) {
-                                                that.getCategories();
-                                            }
-                                            ,
-                                            function (response) {
-                                                that.isLoaded = true;
-                                                if (response.status == 409) {
-                                                    that.sendToast(response.body, 'error');
-                                                } else {
-                                                    that.sendToast(that.delErrorMessage, 'error');
-                                                }
-                                            }
-                                    )
-                            ;
+                            axios.delete(that.routeCategory + '/' + categoryId)
+                                .then(function (response) {
+                                    that.getCategories();
+                                })
+                                .catch(function (error) {
+                                    that.isLoaded = true;
+                                    if (error.response && error.response.status == 409) {
+                                        that.sendToast(error.response.data, 'error');
+                                    } else {
+                                        that.sendToast(that.delErrorMessage, 'error');
+                                    }
+                                });
                         }
                     }).modal('show');
                 }
@@ -300,6 +290,7 @@
                 let postValue = {};
                 let key = '';
                 let id = '';
+                let that = this;
                 if (emitPostValue != undefined) {
                     postValue = emitPostValue.postValue;
                     key = emitPostValue.key;
@@ -317,23 +308,19 @@
                     }
                 }
                 if (postValue[key] != undefined && postValue[key] != '') {
-                    this.$http.patch(this.routeCategory + '/' + id, {description: postValue})
-                            .then(
-                                    function (response) {
-                                        this.getCategories(false);
-                                        this.sendToast(this.patchSuccessMessage, 'success');
-                                    }
-                                    ,
-                                    function (response) {
-                                        this.getCategories(false);
-                                        if (response.status == 409) {
-                                            this.sendToast(response.body, 'error');
-                                        } else {
-                                            this.sendToast(this.patchErrorMessage, 'error');
-                                        }
-                                    }
-                            )
-                    ;
+                    axios.patch(this.routeCategory + '/' + id, {description: postValue})
+                        .then(function (response) {
+                            that.getCategories(false);
+                            that.sendToast(that.patchSuccessMessage, 'success');
+                        })
+                        .catch(function (error) {
+                            that.getCategories(false);
+                            if (error.response && error.response.status == 409) {
+                                that.sendToast(error.response.data, 'error');
+                            } else {
+                                that.sendToast(that.patchErrorMessage, 'error');
+                            }
+                        });
                 } else {
                     this.getCategories(false);
                     this.sendToast(this.patchErrorMessage, 'error');
@@ -351,18 +338,18 @@
                 this.shiftCategory(event, 'down');
             },
             shiftCategory(event, way){
-                var animTime = 600;
-                var me = $(event.target).closest('.accordion');
+                let animTime = 600;
+                let me = $(event.target).closest('.accordion');
 
-                var sibling = null;
+                let sibling = null;
                 if (way == 'down') {
                     sibling = $(me).next('.accordion');
                 } else {
                     sibling = $(me).prev('.accordion');
                 }
 
-                var meTop = ($(me).position()).top;
-                var siblingTop = ($(sibling).position()).top;
+                let meTop = ($(me).position()).top;
+                let siblingTop = ($(sibling).position()).top;
 
                 //Animation
                 $(me).addClass('main-action');
@@ -376,59 +363,55 @@
                             }
                         }
                 );
-                var that = this;
+                let that = this;
                 $(sibling).animate(
                         {top: meTop - siblingTop},
                         {
                             duration: animTime,
                             complete: function () {
                                 $(sibling).removeClass('sub-action');
-                                var route = null;
+                                let route = null;
                                 if (way == 'down') {
                                     route = that.routeShiftDownCategory;
                                 } else {
                                     route = that.routeShiftUpCategory;
                                 }
-                                that.$http.patch(route, {id: event.target.dataset.value})
-                                        .then(
-                                                function (response) {
-                                                    that.getCategories(false);
-                                                    $(me).css('top', 0);
-                                                    $(sibling).css('top', 0);
-                                                    that.sendToast(that.patchSuccessMessage, 'success');
-                                                },
-                                                function (response) {
-                                                    that.getCategories(false);
-                                                    $(me).animate('top', 0);
-                                                    $(sibling).animate('top', 0);
-                                                    if (response.status == 409) {
-                                                        that.sendToast(response.body, 'error');
-                                                    } else {
-                                                        that.sendToast(this.patchErrorMessage, 'error');
-                                                    }
-                                                }
-                                        );
+                                axios.patch(route, {id: event.target.dataset.value})
+                                    .then(function (response) {
+                                        that.getCategories(false);
+                                        $(me).css('top', 0);
+                                        $(sibling).css('top', 0);
+                                        that.sendToast(that.patchSuccessMessage, 'success');
+                                    })
+                                    .catch(function (error) {
+                                        that.getCategories(false);
+                                        $(me).animate('top', 0);
+                                        $(sibling).animate('top', 0);
+                                        if (error.response && error.response.status == 409) {
+                                            that.sendToast(error.response.data, 'error');
+                                        } else {
+                                            that.sendToast(this.patchErrorMessage, 'error');
+                                        }
+                                    });
                             }
                         }
                 );
 
             },
             appendToCategory(childId, parentId){
-                var that = this;
-                that.$http.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
-                        .then(
-                                function (response) {
-                                    that.getCategories(false);
-                                    that.sendToast(that.patchSuccessMessage, 'success');
-                                },
-                                function (response) {
-                                    if (response.status == 409) {
-                                        that.sendToast(response.body, 'error');
-                                    } else {
-                                        that.sendToast(this.patchErrorMessage, 'error');
-                                    }
-                                }
-                        );
+                let that = this;
+                axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
+                    .then(function (response) {
+                        that.getCategories(false);
+                        that.sendToast(that.patchSuccessMessage, 'success');
+                    })
+                    .catch(function (error) {
+                        if (error.response && error.response.status == 409) {
+                            that.sendToast(error.response.data, 'error');
+                        } else {
+                            that.sendToast(this.patchErrorMessage, 'error');
+                        }
+                    });
             }
         }
     }

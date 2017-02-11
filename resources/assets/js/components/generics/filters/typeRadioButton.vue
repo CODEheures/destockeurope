@@ -56,16 +56,15 @@
         },
         methods: {
             getListType: function () {
-                this.$http.get(this.routeGetListType)
-                        .then(
-                                function (response) {
-                                    this.listType = response.data;
-                                    this.isLoaded = true;
-                                },
-                                function (response) {
-                                    this.$parent.$emit('loadError');
-                                }
-                        );
+                let that = this;
+                axios.get(this.routeGetListType)
+                    .then(function (response) {
+                        that.listType = response.data;
+                        that.isLoaded = true;
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                    });
             }
         }
     }

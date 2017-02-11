@@ -197,20 +197,18 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.$http.delete(url)
-                            .then(
-                                function (response) {
-                                    that.flagForceReload = !that.flagForceReload;
-                                },
-                                function (response) {
-                                    if (response.status == 409) {
-                                        that.sendToast(response.body, 'error');
-                                    } else {
-                                        that.sendToast(that.loadErrorMessage, 'error');
-                                    }
-                                    that.isLoaded = false;
+                        axios.delete(url)
+                            .then(function (response) {
+                                that.flagForceReload = !that.flagForceReload;
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
                                 }
-                            );
+                                that.isLoaded = false;
+                            });
                     }
                 }).modal('show');
             }

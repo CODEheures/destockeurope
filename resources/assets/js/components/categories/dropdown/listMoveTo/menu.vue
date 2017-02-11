@@ -46,22 +46,21 @@
             getCategories: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                var route = this.routeGetAvailableMoveToCategory + '/' + this.routeParam;
-                this.$http.get(route)
-                        .then(
-                                function (response) {
-                                    this.categories = response.data;
-                                    this.isLoaded = true;
-                                },
-                                function (response) {
-                                    this.$parent.$emit('loadError');
-                                    this.isLoaded = true;
-                                }
-                        );
+                let that = this;
+                let route = this.routeGetAvailableMoveToCategory + '/' + this.routeParam;
+                axios.get(route)
+                    .then(function (response) {
+                        that.categories = response.data;
+                        that.isLoaded = true;
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                        that.isLoaded = true;
+                    });
             }
         },
         updated () {
-            var that = this;
+            let that = this;
             let dropdown = $('#'+that._uid);
             dropdown.on('click', function () {
                $(this).closest('.accordion').css({'z-index':'2'});

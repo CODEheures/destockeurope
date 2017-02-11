@@ -44,16 +44,15 @@
             getCategories: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeCategory)
-                        .then(
-                                (response) => {
-                                    this.categories = response.data;
-                                    this.isLoaded = true;
-                                },
-                                (response) => {
-                                    this.$parent.$emit('loadError');
-                                }
-                        );
+                let that = this;
+                axios.get(this.routeCategory)
+                    .then(function (resposne) {
+                        that.categories = response.data;
+                        that.isLoaded = true;
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                    });
             },
             emitCategoryChoice: function(value){
                 this.$parent.$emit('categoryChoice', {id: value});

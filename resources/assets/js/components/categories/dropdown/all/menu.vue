@@ -81,22 +81,21 @@
         },
         methods: {
             getCategories: function (withLoadIndicator) {
+                let that = this;
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                this.$http.get(this.routeCategory)
-                        .then(
-                                function (response) {
-                                    this.categories = response.data;
-                                    this.isLoaded = true;
-                                },
-                                function (response) {
-                                    this.$parent.$emit('loadError');
-                                }
-                        );
+                axios.get(this.routeCategory)
+                    .then(function (response) {
+                        that.categories = response.data;
+                        that.isLoaded = true;
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError');
+                    });
             }
         },
         updated () {
-            var that = this;
+            let that = this;
             let dropdown = $('#'+this._uid);
             dropdown.dropdown('set selected',  that.oldChoice.toString())
                  .dropdown({

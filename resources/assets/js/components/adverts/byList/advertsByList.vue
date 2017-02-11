@@ -243,24 +243,22 @@
             getAdvertsList: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                var that = this;
+                let that = this;
                 this.advertsList = [];
-                this.$http.get(this.routeGetAdvertsList)
-                    .then(
-                        function (response) {
-                            that.advertsList = (response.data).adverts.data;
-                            that.minPrice = parseFloat((response.data).minPrice);
-                            that.maxPrice = parseFloat((response.data).maxPrice);
-                            that.isLoaded = true;
-                            let paginate = response.data.adverts;
-                            delete paginate.data;
-                            that.$parent.$emit('paginate', paginate);
-                        },
-                        function (response) {
-                            that.$parent.$emit('loadError')
-                        }
-                    );
-            },
+                axios.get(this.routeGetAdvertsList)
+                    .then(function (response) {
+                        that.advertsList = (response.data).adverts.data;
+                        that.minPrice = parseFloat((response.data).minPrice);
+                        that.maxPrice = parseFloat((response.data).maxPrice);
+                        that.isLoaded = true;
+                        let paginate = response.data.adverts;
+                        delete paginate.data;
+                        that.$parent.$emit('paginate', paginate);
+                    })
+                    .catch(function (error) {
+                        that.$parent.$emit('loadError')
+                    });
+            }
         }
     }
 </script>

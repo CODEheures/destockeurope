@@ -1324,26 +1324,23 @@
             },
             subscribeNewsletter () {
                 let that = this;
-                this.$http.post(this.routeSubscribeNewsLetter, {'name': that.dataName, 'email': that.dataEmail, 'phone': that.dataPhone})
-                    .then(
-                        function (response) {
-                            that.sendToast(response.body, 'success');
-                        },
-                        function (response) {
-                            if(response.status == 422){
-                                let i = 0;
-                                for(let item in response.body) {
-                                    if(i==0){
-                                        that.sendToast(response.body[item][0], 'error');
-                                        i++;
-                                    }
+                axios.post(this.routeSubscribeNewsLetter, {'name': that.dataName, 'email': that.dataEmail, 'phone': that.dataPhone})
+                    .then(function (response) {
+                        that.sendToast(response.data, 'success');
+                    })
+                    .catch(function (error) {
+                        if(error.response.status == 422){
+                            let i = 0;
+                            for(let item in error.response.data) {
+                                if(i==0){
+                                    that.sendToast(error.response.data[item][0], 'error');
+                                    i++;
                                 }
-                            } else {
-                                that.sendToast(response.body, 'error');
                             }
-
+                        } else {
+                            that.sendToast(error.response.data, 'error');
                         }
-                    );
+                    });
             }
         }
     }

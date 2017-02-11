@@ -388,17 +388,15 @@
                         (this.steps[2]).isDisabled = false;
                     }
                     let that = this;
-                    this.$http.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent)
-                            .then(
-                                    function (response) {
-                                        that.cost = response.body;
-                                        (that.steps[2]).title = that.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.stepThreeTitlePost + ')';
-                                    },
-                                    function (response) {
-                                        that.cost = 0;
-                                        that.sendToast(that.loadErrorMessage, 'error');
-                                    }
-                            );
+                    axios.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent)
+                        .then(function (response) {
+                            that.cost = response.data;
+                            (that.steps[2]).title = that.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.stepThreeTitlePost + ')';
+                        })
+                        .catch(function (error) {
+                            that.cost = 0;
+                            that.sendToast(that.loadErrorMessage, 'error');
+                        });
                 } else {
                     this.cost = 0;
                     (this.steps[2]).title = this.stepThreeTitle;

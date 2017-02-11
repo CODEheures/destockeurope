@@ -238,16 +238,14 @@
                 let that = this;
                 this.approveList={};
                 this.advertsList={};
-                this.$http.get(this.routeGetAdvertsList)
-                        .then(
-                                function (response) {
-                                    that.advertsList = response.data;
-                                    that.isLoaded = true;
-                                },
-                                function (response)  {
-                                    that.sendToast(that.loadErrorMessage, 'error');
-                                }
-                        );
+                axios.get(this.routeGetAdvertsList)
+                    .then(function (response) {
+                        that.advertsList = response.data;
+                        that.isLoaded = true;
+                    })
+                    .catch(function (error)  {
+                        that.sendToast(that.loadErrorMessage, 'error');
+                    });
             },
             approveAll: function (event) {
                 event.preventDefault();
@@ -259,21 +257,19 @@
                     closable: false,
                     onApprove: function () {
                         that.isLoaded = false;
-                        that.$http.post(that.routeAdvertApprove, that.approveList)
-                                .then(
-                                        function (response) {
-                                            that.getAdvertsList();
-                                            that.sendToast(that.advertApproveSuccess, 'success');
-                                        },
-                                        function (response) {
-                                            if (response.status == 409) {
-                                                that.sendToast(response.body, 'error');
-                                            } else {
-                                                that.sendToast(that.loadErrorMessage, 'error');
-                                            }
-                                            that.isLoaded = false;
-                                        }
-                                );
+                        axios.post(that.routeAdvertApprove, that.approveList)
+                            .then(function (response) {
+                                that.getAdvertsList();
+                                that.sendToast(that.advertApproveSuccess, 'success');
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
+                                }
+                                that.isLoaded = false;
+                            });
                     }
                 }).modal('show');
             },
