@@ -105,10 +105,7 @@
                     function timeout(seconds) {
                         setTimeout(function () {
                             counter++;
-                            axios.request({
-                                url: that.routeGetStatusVideo,
-                                method: 'get',
-                            })
+                            axios.get(that.routeGetStatusVideo)
                                 .then(function (response) {
                                     if(response.data.status=='available'){
                                         setTimeout(function () {
@@ -163,14 +160,7 @@
                 //Get Ticket, return routes
                 let that = this;
                 this.videoOnUpload = true;
-                axios.request({
-                    url: this.routeGetVideoPostTicket,
-                    method: 'put',
-                    data: {
-                        'size': that.fileToUpload.size,
-                        'type': that.fileToUpload.type
-                    },
-                })
+                axios.put(this.routeGetVideoPostTicket, {'size': that.fileToUpload.size,'type': that.fileToUpload.type})
                     .then(function (response) {
                         that.postVideo(response.data);
                     })
@@ -216,7 +206,7 @@
                             if(this.retry < 10) {
                                 setTimeout(function () {
                                     let calc_offset = that.extractPerformUpload(response.headers.range)+1;
-                                    console.log('retry upload n°' + passRetry + ' at ' + calc_offset + ' bytes');
+                                    //console.log('retry upload n°' + passRetry + ' at ' + calc_offset + ' bytes');
                                     this.postVideo(routes,calc_offset);
                                 },this.retry*1000)
                             } else {
@@ -255,20 +245,14 @@
                         }
                     })
                     .catch(function (error) {
-                        console.log('error get Progress');
+                        //console.log('error get Progress');
                     });
             },
             closeTicket: function (routeCloseTicket, routesCompleteVideoUpload) {
                 let that = this;
                 this.onCloseTicket = true;
                 this.resetUploadVideoState();
-                axios.request({
-                    url: routeCloseTicket,
-                    method: 'patch',
-                    data: {
-                        'completeVideoUpload': routesCompleteVideoUpload
-                    }
-                })
+                axios.patch(routeCloseTicket, {'completeVideoUpload': routesCompleteVideoUpload})
                     .then(function (response) {
                         that.onCloseTicket = false;
                         let location = response.headers.location;
@@ -290,13 +274,7 @@
             },
             delVideo: function () {
                 let that = this;
-                axios.request({
-                    url: this.routeDelTempoVideo,
-                    method: 'delete',
-                    data: {
-                        'videoId': that.videoId
-                    },
-                })
+                axios.delete(this.routeDelTempoVideo, {'videoId': that.videoId})
                     .then(function (response) {
                         that.videoId = '';
                         that.videoReady = false;

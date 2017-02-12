@@ -108,7 +108,6 @@
                     })
             ;
             this.$watch('oldChoice', function (categorieId) {
-                console.log(categorieId);
                 dropdown.dropdown('set selected',  categorieId.toString())
             })
         }

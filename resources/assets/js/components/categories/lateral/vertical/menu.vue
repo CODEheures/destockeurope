@@ -46,7 +46,7 @@
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
                 axios.get(this.routeCategory)
-                    .then(function (resposne) {
+                    .then(function (response) {
                         that.categories = response.data;
                         that.isLoaded = true;
                     })

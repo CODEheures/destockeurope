@@ -538,7 +538,6 @@
                 this.dataTransfertMediasLoading = true;
                 axios.get(this.routeTransfertMedias+'/'+this.sizeToTransfert)
                     .then(function (response) {
-                        console.log('axios15');
                         that.getProgressTransfertMedias();
                         that.sendToast(response.data, 'success');
                     })
@@ -552,7 +551,6 @@
                 let myTimeout = setTimeout(function () {
                     axios.get(that.routeProgressTransfertMedias)
                         .then(function (response) {
-                            console.log('axios16');
                             let progress = response.data;
                             if(progress[2] > 0){
                                 let percent = progress[1]/progress[2]*100;

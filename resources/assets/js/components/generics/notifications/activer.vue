@@ -33,7 +33,6 @@
             }
 
             this.$watch('destockShareVarData.firebase.token', function (token) {
-                console.log('wathcer token', token);
                 that.existInToken(token);
             });
 
@@ -47,35 +46,21 @@
 
             subscribeCheckbox.checkbox({
                 onChecked: function() {
-                    axios.request({
-                        url: that.routeAdd,
-                        method: 'post',
-                        data: {
-                            'token': that.destockShareVarData.firebase.token,
-                            'topic_id': that.topic_id
-                        }
-                    })
+                    axios.post(that.routeAdd, {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id})
                         .then(function (response) {
-                            console.log('subscribe success', response)
+                            //console.log('subscribe success', response)
                         })
                         .catch(function (error) {
-                            console.log('subscribe error', error)
+                            //console.log('subscribe error', error)
                         });
                 },
                 onUnchecked: function() {
-                    axios.request({
-                        url: that.routeRemove,
-                        method: 'delete',
-                        data: {
-                            'token': that.destockShareVarData.firebase.token,
-                            'topic_id': that.topic_id
-                        }
-                    })
+                    axios.delete(that.routeRemove, {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id})
                         .then(function (response) {
-                            console.log('unsubscribe success', response)
+                            //console.log('unsubscribe success', response)
                         })
                         .catch(function (error) {
-                            console.log('unsubscribe error', error)
+                            //console.log('unsubscribe error', error)
                         });
                 }
             });
@@ -83,22 +68,14 @@
         methods: {
             existInToken: function (token) {
                 let that = this;
-                console.log('axios existIn');
-                axios.request({
-                    url: that.routeExistIn,
-                    method: 'post',
-                    data: {
-                        'token': token,
-                        'topic_id': that.topic_id
-                    }
-                })
+                axios.post(that.routeExistIn, {'token': token,'topic_id': that.topic_id})
                     .then(function (response) {
                         that.existIn = response.data.existIn == true;
                     })
                     .catch(function (error) {
                         that.existIn = false;
                     });
-            },
+            }
         }
     }
 </script>
