@@ -28,7 +28,7 @@
     <script>
          window.destockShareVar={
             'serviceWorkerScope': '/sw.js',
-            'vueJsDevTool': {{ env('APP_DEBUG') }},
+             'vueJsDevTool': <?php echo (bool)(env('APP_DEBUG')) ? 'true':'false' ?>,
             'csrfToken': '{{ csrf_token() }}',
             'firebase': {
                 'config': {
