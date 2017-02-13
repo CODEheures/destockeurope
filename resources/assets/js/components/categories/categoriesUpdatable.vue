@@ -4,7 +4,8 @@
             <div class="title flex">
                 <div>
                     <i class="dropdown icon"></i>
-                    <i :class="'large ' + colors[colorNumber%colors.length] + ' minus square icon'" v-on:click="delCategory" :data-id="category.id"></i>
+                    <i :class="'large ' + colors[colorNumber%colors.length] + ' minus square icon'" v-on:click="delCategory" :data-id="category.id" v-if="category.canBeDeleted"></i>
+                    <i class="big ban icon" v-else></i>
                     <span v-for="locale in availablesDatasLocalesList">
                     <div class="ui mini labeled input">
                         <div class="ui label">{{ locale }}</div>
@@ -60,7 +61,6 @@
         </div>
         <div :class="'ui ' + colors[colorNumber%colors.length] + ' segment'">
             <i :class="'large ' + colors[colorNumber%colors.length] + ' add square icon'"
-               :data-value="categoryName"
                :data-parent-id="parentId"
                v-on:click="addCategory">
             </i>
@@ -68,11 +68,11 @@
                         <div class="ui mini labeled input">
                             <div class="ui label">{{ locale }}</div>
                             <input type="text" placeholder="Nouvelle sous-catégorie"
-                                   :name="'newCategory_' + locale"
+                                   :name="'newCategory-' + _uid + '_' + locale"
                                    :data-parent-id="parentId"
                                    :data-key="locale"
                                    v-on:keyup.enter="addCategory"
-                                   v-model:value="categoryName[locale]"
+                                   v-model="categoryName[locale]"
                                    v-on:focus="focused={}"
                                    v-on:blur="blured={}"
                             />
@@ -102,7 +102,7 @@
         data: () => {
             return {
                 isLoaded: false,
-                categoryName: [],
+                categoryName: {},
                 availablesDatasLocalesList: {},
                 focused: {},
                 blured: {},
@@ -171,7 +171,7 @@
                     }
                     if (!isEmpty) {
                         this.isLoaded = false;
-                        this.categoryName = [];
+                        this.categoryName = {};
                         this.$parent.$emit('addCategory', postValue);
                     }
                 }

@@ -44,7 +44,8 @@
                             <div>
                                 <i class="dropdown icon"></i>
                                 <i class="big blue minus square icon" v-on:click="delCategory"
-                                   :data-id="category.id"></i>
+                                   :data-id="category.id" v-if="category.canBeDeleted"></i>
+                                <i class="big ban icon" v-else></i>
                                 <span v-for="locale in availablesDatasLocalesList">
                                     <div class="ui labeled input">
                                         <div class="ui label">{{ locale }}</div>
@@ -96,16 +97,15 @@
                         </div>
                     </div>
                     <div class="ui blue segment">
-                        <i class="big blue add square icon" v-on:click="addCategory"
-                           :data-value="categoryName"></i>
+                        <i class="big blue add square icon" v-on:click="addCategory"></i>
                         <span v-for="locale in availablesDatasLocalesList">
                             <div class="ui labeled input">
                                 <div class="ui mini label">{{ locale }}</div>
                                 <input type="text" placeholder="Nouvelle Catégorie"
-                                       :name="'newCategory_' + locale"
+                                       :name="'newCategory-' + _uid + '_' + locale"
                                        :data-key="locale"
                                        v-on:keyup.enter="addCategory"
-                                       v-model:value="categoryName[locale]"
+                                       v-model="categoryName[locale]"
                                        v-on:focus="focused={}"
                                        v-on:blur="blured={}"
                                 />
@@ -157,7 +157,7 @@
                 focused: {},
                 blured: {},
                 categories: {},
-                categoryName: [],
+                categoryName: {},
                 flagRefresh: false
             };
         },
@@ -199,7 +199,7 @@
             });
         },
         updated () {
-            for(var index in this.categories){
+            for(let index in this.categories){
                 $('#accordion-'+this._uid+'-'+index).accordion({
                     selector: {
                         trigger: '.title > div > .dropdown.icon'
@@ -212,7 +212,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.routeCategory)
+                axios.get(this.routeCategory+'?withInfos=true')
                     .then(function (response) {
                         that.categories = response.data;
                         that.flagRefresh=!that.flagRefresh;
@@ -240,7 +240,7 @@
                 }
                 if (!isEmpty) {
                     this.isLoaded = false;
-                    this.categoryName = [];
+                    this.categoryName = {};
                     let that = this;
                     axios.post(this.routeCategory, postValue)
                         .then(function (response) {

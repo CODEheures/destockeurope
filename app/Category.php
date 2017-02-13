@@ -8,6 +8,8 @@ use Kalnoy\Nestedset\NodeTrait;
 
 class Category extends Model
 {
+    private $canBeDeleted = false;
+
     use SoftDeletes;
     use NodeTrait;
 
@@ -16,9 +18,18 @@ class Category extends Model
     protected $casts = [
         'description' => 'array'
     ];
+    protected $appends = ['canBeDeleted'];
 
     public function adverts() {
         return $this->hasMany('App\Advert');
+    }
+
+    public function getCanBeDeletedAttribute() {
+        return $this->canBeDeleted;
+    }
+
+    public function setCanBeDeleted($value) {
+        $this->canBeDeleted = $value;
     }
 
     //local scopes

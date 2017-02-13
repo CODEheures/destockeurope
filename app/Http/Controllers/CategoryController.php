@@ -27,9 +27,15 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tree = Category::defaultOrder()->get()->toTree();
+        $categories = Category::defaultOrder()->get();
+        if($request->has('withInfos') && $request->get('withInfos')=='true'){
+            foreach ($categories as $category){
+                $category->setCanBeDeleted($this->availableToDelete($category->id));
+            }
+        }
+        $tree = $categories->toTree();
         return response()->json($tree);
     }
 
@@ -283,6 +289,28 @@ class CategoryController extends Controller
             return response('error', 500);
         }
 
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return bool
+     */
+    private function availableToDelete($id)
+    {
+        if($id && $id > 0 ) {
+            $category = Category::find($id);
+            $nbSubAdverts=0;
+            if($category) {
+                $ids = CategoryUtils::getListSubTree($category->id);
+                if ($ids) {
+                    $nbSubAdverts = Advert::withTrashed()->whereIn('category_id', $ids)->count();
+                }
+            }
+            return !$nbSubAdverts;
+        } else {
+            return false;
+        }
     }
 
     /**
