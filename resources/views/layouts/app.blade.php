@@ -11,6 +11,7 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
+    <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">
     @yield('css')
 
@@ -95,6 +96,8 @@
 
 
     <!-- Scripts -->
+    <script src="{{ mix("js/manifest.js") }}"></script>
+    <script src="{{ mix("js/vendor.js") }}"></script>
     <script src="{{ mix("js/app.js") }}"></script>
     @yield('scripts')
 </body>

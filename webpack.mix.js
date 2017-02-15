@@ -13,6 +13,14 @@ const { mix } = require('laravel-mix');
 
 mix//.js('resources/assets/js/sw.js', 'public')
     .js('resources/assets/js/app.js', 'public/js')
+    .extract(['vue'])
     .sass('resources/assets/sass/pdf.scss', 'public/css')
     .sass('resources/assets/sass/app.scss', 'public/css')
+    .combine([
+        'resources/assets/css/motionControlFont.css',
+        'resources/assets/semantic/dist/semantic.min.css',
+        'resources/assets/css/ion.rangeSlider.css',
+        'resources/assets/css/ion.rangeSlider.skinFlat.css',
+        'resources/assets/css/swiper.css',
+    ], 'public/css/vendor.css')
     .version();
