@@ -51,7 +51,7 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
     Route::group(['prefix' => 'password'], function() {
         Route::get('/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
         Route::post('/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-        Route::get('/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+        Route::get('/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
         Route::post('/reset', 'Auth\ResetPasswordController@reset');
     });
 

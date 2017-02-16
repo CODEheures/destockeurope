@@ -71,6 +71,7 @@ class AdvertController extends Controller
      */
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report']]);
+        $this->middleware('isEmailConfirmed', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report', 'bookmarks', 'unbookmarks']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient']]);
         $this->pictureManager  = $picturesManager;

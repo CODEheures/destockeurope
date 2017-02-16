@@ -85,6 +85,10 @@ return [
     'mail_advertRenew_line' => 'Your advert ":title" is renewed from :date for a period of '. env('ADVERT_LIFE_TIME') . ' days',
     'mail_advertRenew_line2' => 'Thank you for using our application!',
 
+    'mail_passwordRenew_subject' => 'Resetting your password on ',
+    'mail_passwordRenew_line' => 'You will be able to reset your password by clicking on the button below',
+    'mail_passwordRenew_action' => 'Reset',
+
     'mail_newInvoice_subject' => 'New Invoice!',
     'mail_newInvoice_greeting' => 'Hello :username !',
     'mail_newInvoice_line' => 'A new payed invoice is approved. The invoice is in attachment',
@@ -166,6 +170,7 @@ return [
     'auth_register_global_error' => 'an error occurred during your login / registration. Thank you to contact the site administrator',
     'auth_register_provider_error' => 'Connection problem with ',
     'auth_register_oauth_success' => 'Welcome on :appname :username. Thank you for your trust. You can henceforth enjoy your customer area',
+    'auth_passwordReset_success' => 'Your password is reset',
 
     'divider_register' => 'or use',
     'divider_payment' => 'or use card',

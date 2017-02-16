@@ -85,6 +85,10 @@ return [
     'mail_advertRenew_line' => 'Votre annonce ":title" est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours',
     'mail_advertRenew_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
+    'mail_passwordRenew_subject' => 'Réinitialisation de votre mot de passe sur ',
+    'mail_passwordRenew_line' => 'Vous allez pouvoir réinitialiser votre mot de passe en cliquant sur le bouton ci-dessous',
+    'mail_passwordRenew_action' => 'Réinitialiser',
+
     'mail_newInvoice_subject' => 'Nouvelle facture!',
     'mail_newInvoice_greeting' => 'Bonjour :username !',
     'mail_newInvoice_line' => 'Une annonce payante a été approuvée. La facture est en pièce jointe',
@@ -166,6 +170,7 @@ return [
     'auth_register_global_error' => 'une erreur est survenue pendant votre connexion/inscription. Merci de contacter l\'administrateur du site',
     'auth_register_provider_error' => 'Probleme de connexion avec ',
     'auth_register_oauth_success' => 'Bienvenu sur :appname :username. Merci de votre confiance. Vous pouvez desormais profiter de votre espace client',
+    'auth_passwordReset_success' => 'Votre mot de passe est réinitialisé',
 
     'divider_register' => 'ou utiliser',
     'divider_payment' => 'ou payer par carte',

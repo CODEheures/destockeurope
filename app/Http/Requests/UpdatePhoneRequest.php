@@ -31,7 +31,7 @@ class UpdatePhoneRequest extends FormRequest
     {
 
         return [
-            'value' => 'max:'.config('db_limits.users.maxPhone'),
+            'value' => 'nullable|max:'.config('db_limits.users.maxPhone'),
         ];
     }
 

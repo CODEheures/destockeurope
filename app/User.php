@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Common\LocaleUtils;
+use App\Notifications\ResetPassword;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -108,5 +109,10 @@ class User extends Authenticatable
         LocaleUtils::switchToUserLocale($this);
         app(Dispatcher::class)->send($this, $instance);
         LocaleUtils::switchToRuntimeLocale();
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }

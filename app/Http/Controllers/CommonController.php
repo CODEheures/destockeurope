@@ -12,6 +12,7 @@ class CommonController extends Controller
 {
     public function __construct() {
         $this->middleware('auth', ['except' => ['portal', 'subscribeNewsLetter', 'home', 'cgv']]);
+        $this->middleware('isEmailConfirmed', ['only' => ['mines']]);
     }
 
     /**

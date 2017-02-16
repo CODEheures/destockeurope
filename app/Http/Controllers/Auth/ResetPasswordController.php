@@ -29,4 +29,10 @@ class ResetPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+
+    public function sendResetResponse($response)
+    {
+        return redirect(route('home'))
+            ->with('success', 'Votre mot de passe est réinitialisé');
+    }
 }

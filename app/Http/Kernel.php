@@ -70,5 +70,7 @@ class Kernel extends HttpKernel
         'appOnDevelMode' => \App\Http\Middleware\AppOnDevelMode::class,
         'haveCompleteAccount' => \App\Http\Middleware\HaveCompleteAccount::class,
         'captcha' => \App\Http\Middleware\Captcha::class,
+        'isNotOauth' => \App\Http\Middleware\IsNotOauth::class,
+        'isEmailConfirmed' => \App\Http\Middleware\IsEmailConfirmed::class,
     ];
 }

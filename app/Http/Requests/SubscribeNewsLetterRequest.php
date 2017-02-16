@@ -31,8 +31,8 @@ class SubscribeNewsLetterRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
-            'name' => 'min:'.config('db_limits.users.minName'),
-            'phone' => 'max:'.config('db_limits.users.maxPhone'),
+            'name' => 'nullable|min:'.config('db_limits.users.minName'),
+            'phone' => 'nullable|max:'.config('db_limits.users.maxPhone'),
         ];
     }
 
