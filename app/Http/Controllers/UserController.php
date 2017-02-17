@@ -69,13 +69,18 @@ class UserController extends Controller
      */
     public function completeAccount($id, $title=null){
         $user = $this->auth->user();
+        if(!is_null($user->avatar) && filter_var($user->avatar, FILTER_VALIDATE_URL)) {
+            $routeAvatar = $user->avatar;
+        } else {
+            $routeAvatar = '';
+        }
         $ip=config('runtime.ip');
         $geolocType = 0;
         $zoomMap = 16;
         $advertAccountVerifiedStep = true;
         $advert = Advert::find($id);
         if($advert && $advert->user->id === $user->id && !$advert->isPublish){
-            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title'));
+            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title', 'routeAvatar'));
         } else {
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
         }
