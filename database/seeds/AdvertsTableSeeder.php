@@ -20,8 +20,8 @@ class AdvertsTableSeeder extends Seeder
     {
         $statsManager = new StatsManager();
 
-        $user2 = \App\User::where('email', '=', 'vendeur@d.e')->first();
-        $user4 = \App\User::where('email', '=', 'delegation@d.e')->first();
+        $user2 = \App\User::where('email', '=', 'vendeur@codeheures.fr')->first();
+        $user4 = \App\User::where('email', '=', 'delegation@codeheures.fr')->first();
 
         $subCategory212 = \App\Category::where('description', '=', '{"fr":"homme","en":"men"}')->first();
         $subCategory12 = \App\Category::where('description', '=', '{"fr":"electroniques","en":"electronics"}')->first();

@@ -10,6 +10,7 @@
 //      mkdir /resources/geoip
 //
 //      MAIL: http://www.alaxos.org/wikitips/doku.php?id=tips_informatiques:linux:soft:email:systeme:systeme
+//      apt-get install bsd-mailx
 //      dpkg-reconfigure exim4-config (choisir internet mail)
 //TODO post mail to admin si renew fails
 //TODO creer administration compte de delegation
