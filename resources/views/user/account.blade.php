@@ -11,7 +11,7 @@
             route-user-set-phone="{{ route('user.phone') }}"
             route-user-set-compagny-name="{{ route('user.compagnyName') }}"
             route-user-set-registration-number="{{ route('user.registrationNumber') }}"
-            route-avatar="{{ asset('/images/matt.jpg') }}"
+            route-avatar="{{ $routeAvatar }}"
             route-next-url-with-payment="{{ route('advert.reviewForPayment') }}"
             route-next-url-without-payment="{{ route('advert.publish') }}"
 

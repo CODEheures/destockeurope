@@ -49,7 +49,16 @@ class UserController extends Controller
         $ip=config('runtime.ip');
         $geolocType = 0;
         $zoomMap = 16;
-        return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap'));
+
+
+        if(!is_null($user->avatar) && filter_var($user->avatar, FILTER_VALIDATE_URL)) {
+            $routeAvatar = $user->avatar;
+        } else {
+            $routeAvatar = '';
+        }
+
+
+        return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'routeAvatar'));
     }
 
     /**

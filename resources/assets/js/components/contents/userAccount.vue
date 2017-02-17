@@ -18,7 +18,7 @@
         </template>
         <template v-else>
             <div class="column">
-                <h2 class="ui header"><img :src="routeAvatar" alt="" class="ui circular image">{{ dataUserName }}</h2>
+                <h2 class="ui header"><img :src="routeAvatar" alt="" class="ui circular image" v-if="routeAvatar && routeAvatar!=''">{{ dataUserName }}</h2>
             </div>
         </template>
         <div class="column">
