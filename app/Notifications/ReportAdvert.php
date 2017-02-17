@@ -54,7 +54,7 @@ class ReportAdvert extends Notification
             ->greeting(trans('strings.mail_report_greeting'))
             ->line(trans('strings.mail_report_line',['customermail' => $this->customerMail]))
             ->customerLines($this->message)
-            ->action(trans('strings.mail_report_action'), route('advert.show', ['id' => $this->advert->id]));
+            ->action(trans('strings.mail_report_action'), $this->advert->url);
 
         return $mailMessage;
     }
