@@ -134,7 +134,6 @@
             'filterLocationPlaceHolder',
             'filterPriceTitle',
             'filterQuantityTitle',
-            'filterRouteListCurrencies',
             'filterCurrenciesFirstMenuName',
             'filterCurrenciesInputSearchLabel',
             'filterCurrenciesWithAllLabel',
