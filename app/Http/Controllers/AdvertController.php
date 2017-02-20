@@ -160,8 +160,8 @@ class AdvertController extends Controller
 
         $finalCurrencyList = [];
         if($nbCurrencies==1){
-            $currency = $currenciesList->first()->currency;
-            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+            //$currency = $currenciesList->first()->currency;
+            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currenciesList->first()->currency);
         } else {
             $currenciesListArray = $currenciesList->pluck('currency');
             foreach ($currenciesListArray as $currencyCode) {

@@ -21,45 +21,74 @@
                     </div>
                 </div>
                 <div class="ui middle aligned grid">
-                    <div class="sixteen wide mobile nine wide computer center aligned column price">
-                        <div class="ui grid">
-                            <div class="fourteen wide column">
-                                <range-filter
-                                        :mini="dataMinPrice"
-                                        :maxi="dataMaxPrice"
-                                        :handle-min="dataHandleMinPrice"
-                                        :handle-max="dataHandleMaxPrice"
-                                        :step="0.01"
-                                        :update="dataUpdate"
-                                        name="price"
-                                        :prefix="filterPricePrefix"
-                                        :title="filterPriceTitle"
-                                ></range-filter>
-                            </div>
-                            <div class="two wide column">
-                                <currencies-button
-                                        :currencies-list="currenciesList"
-                                        :first-menu-name="currenciesFirstMenuName"
-                                        :input-search-label="currenciesInputSearchLabel"
-                                        :with-all-label="currenciesWithAllLabel"
-                                        :oldCurrency="filter.currency"
-                                        :withAll="true">
-                                </currencies-button>
+                    <template v-if="currenciesList.length > 1">
+                        <div class="sixteen wide mobile nine wide computer center aligned column price">
+                            <div class="ui grid">
+                                <div class="fourteen wide column">
+                                    <range-filter
+                                            :mini="dataMinPrice"
+                                            :maxi="dataMaxPrice"
+                                            :handle-min="dataHandleMinPrice"
+                                            :handle-max="dataHandleMaxPrice"
+                                            :step="0.01"
+                                            :update="dataUpdate"
+                                            name="price"
+                                            :prefix="filterPricePrefix"
+                                            :title="filterPriceTitle"
+                                    ></range-filter>
+                                </div>
+                                <div class="two wide column">
+                                    <currencies-button
+                                            :currencies-list="currenciesList"
+                                            :first-menu-name="currenciesFirstMenuName"
+                                            :input-search-label="currenciesInputSearchLabel"
+                                            :with-all-label="currenciesWithAllLabel"
+                                            :oldCurrency="filter.currency"
+                                            :withAll="true">
+                                    </currencies-button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="sixteen wide mobile seven wide computer center aligned column price">
-                        <range-filter
-                                :mini="dataMinQuantity"
-                                :maxi="dataMaxQuantity"
-                                :handle-min="dataHandleMinQuantity"
-                                :handle-max="dataHandleMaxQuantity"
-                                :update="dataUpdate"
-                                name="quantity"
-                                prefix=""
-                                :title="filterQuantityTitle"
-                        ></range-filter>
-                    </div>
+                        <div class="sixteen wide mobile seven wide computer center aligned column price">
+                            <range-filter
+                                    :mini="dataMinQuantity"
+                                    :maxi="dataMaxQuantity"
+                                    :handle-min="dataHandleMinQuantity"
+                                    :handle-max="dataHandleMaxQuantity"
+                                    :update="dataUpdate"
+                                    name="quantity"
+                                    prefix=""
+                                    :title="filterQuantityTitle"
+                            ></range-filter>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="sixteen wide mobile eight wide computer center aligned column price">
+                            <range-filter
+                                    :mini="dataMinPrice"
+                                    :maxi="dataMaxPrice"
+                                    :handle-min="dataHandleMinPrice"
+                                    :handle-max="dataHandleMaxPrice"
+                                    :step="0.01"
+                                    :update="dataUpdate"
+                                    name="price"
+                                    :prefix="filterPricePrefix"
+                                    :title="filterPriceTitle"
+                            ></range-filter>
+                        </div>
+                        <div class="sixteen wide mobile eight wide computer center aligned column price">
+                            <range-filter
+                                    :mini="dataMinQuantity"
+                                    :maxi="dataMaxQuantity"
+                                    :handle-min="dataHandleMinQuantity"
+                                    :handle-max="dataHandleMaxQuantity"
+                                    :update="dataUpdate"
+                                    name="quantity"
+                                    prefix=""
+                                    :title="filterQuantityTitle"
+                            ></range-filter>
+                        </div>
+                    </template>
                 </div>
                 <div class="ui grid">
                     <div class="doubling two column row">
