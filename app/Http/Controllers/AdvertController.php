@@ -105,25 +105,30 @@ class AdvertController extends Controller
         $adverts = Advert::where('isValid', true)->where('online_at', '<', Carbon::now());
 
         //where currency
+        $currency = null;
         $currencySymbol = '';
-        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)){
-            $currency = $request->currency;
-            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-        } elseif($request->has('country')){
-            $pseudoLocale = LocaleUtils::getFirstLocaleByCountryCode($request->country);
-            if($pseudoLocale){
-                $currency = MoneyUtils::getDefaultMoneyByLocale($pseudoLocale);
-                $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-            }
-        } else {
-            $currency = config('runtime.currency');
-            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-        }
-        if(!MoneyUtils::isAvailableCurrency($currency)){
-            $currency = config('runtime.currency');
-            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-        }
-        $adverts = $adverts->where('currency', $currency);
+
+//        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)) {
+//            $currency = $request->currency;
+//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+//        } elseif (auth()->check() && auth()->user()->currency && MoneyUtils::isAvailableCurrency(auth()->user()->currency)) {
+//            $currency = auth()->user()->currency;
+//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+//        } elseif($request->has('country')){
+//            $pseudoLocale = LocaleUtils::getFirstLocaleByCountryCode($request->country);
+//            if($pseudoLocale){
+//                $currency = MoneyUtils::getDefaultMoneyByLocale($pseudoLocale);
+//                $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+//            }
+//        } else {
+//            $currency = config('runtime.currency');
+//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+//        }
+//        if(!MoneyUtils::isAvailableCurrency($currency)){
+//            $currency = config('runtime.currency');
+//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+//        }
+//        $adverts = $adverts->where('currency', $currency);
 
         if($request->has('categoryId') && $request->categoryId != 0){
             $ids = CategoryUtils::getListSubTree($request->categoryId);
@@ -141,22 +146,50 @@ class AdvertController extends Controller
             });
         }
 
+        //if location
+        foreach (GeoManager::$accurate as $item){
+            if($request->has($item) && $request->$item != null){
+                $adverts = $adverts->where($item, '=', $request->$item);
+            }
+        }
+
+        //Currencies
+        $cloneAdverts = clone($adverts);
+        $currenciesList = $cloneAdverts->select('currency')->groupBy('currency')->get();
+        $nbCurrencies = $currenciesList->count();
+
+        $finalCurrencyList = [];
+        if($nbCurrencies==1){
+            $currency = $currenciesList->first()->currency;
+            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+        } else {
+            $currenciesListArray = $currenciesList->pluck('currency');
+            foreach ($currenciesListArray as $currencyCode) {
+                $finalCurrencyList[] = [
+                    'code' => $currencyCode,
+                    'symbol' =>   MoneyUtils::getSymbolByCurrencyCode($currencyCode)
+                ];
+            }
+        }
+
+        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)) {
+            $currency = $request->currency;
+            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+            $adverts = $adverts->where('currency', $currency);
+        }
+
         //Set min & max prices only if not $isSearchRequest
         if(!$isSearchRequest) {
-            $minAllPrice = $adverts->min('price_margin');
-            $maxAllPrice = $adverts->max('price_margin');
+            $minAllPrice = $adverts->min('price_margin_decimal');
+            $maxAllPrice = $adverts->max('price_margin_decimal');
             $minAllQuantity = $adverts->min('totalQuantity');
             $maxAllQuantity = $adverts->max('totalQuantity');
 
-            if ($minAllPrice) {
-                $minAllPrice = MoneyUtils::getPriceWithDecimal($minAllPrice, $currency, false);
-            } else {
+            if (!$minAllPrice) {
                 $minAllPrice = 0;
             }
 
-            if ($maxAllPrice) {
-                $maxAllPrice = MoneyUtils::getPriceWithDecimal($maxAllPrice, $currency, false);
-            } else {
+            if (!$maxAllPrice){
                 $maxAllPrice = 0;
             }
 
@@ -169,11 +202,14 @@ class AdvertController extends Controller
             }
         }
 
+
         //STOP REQUEST HERE IF only RANGE PRICES
         if($isRangePricesOnly){
             return response()->json([
                 'minPrice'=> $minAllPrice,
                 'maxPrice' => $maxAllPrice,
+                'currenciesList' => $finalCurrencyList,
+                'currency' => $currency,
                 'currencySymbol' => $currencySymbol,
                 'minQuantity'=> $minAllQuantity,
                 'maxQuantity' => $maxAllQuantity,
@@ -187,9 +223,9 @@ class AdvertController extends Controller
 
         //if range price
         if($request->has('minPrice') && $request->has('maxPrice') ){
-            $minPrice = MoneyUtils::setPriceWithoutDecimal($request->minPrice, $currency);
-            $maxPrice = MoneyUtils::setPriceWithoutDecimal($request->maxPrice, $currency);
-            $adverts = $adverts->where('price_margin', '>=', $minPrice)->where('price_margin', '<=', $maxPrice);
+//            $minPrice = MoneyUtils::setPriceWithoutDecimal($request->minPrice, $currency);
+//            $maxPrice = MoneyUtils::setPriceWithoutDecimal($request->maxPrice, $currency);
+            $adverts = $adverts->where('price_margin_decimal', '>=', $request->minPrice)->where('price_margin_decimal', '<=', $request->maxPrice);
         }
 
         //if range quantity
@@ -197,13 +233,6 @@ class AdvertController extends Controller
             $minQuantity = ($request->minQuantity);
             $maxQuantity = ($request->maxQuantity);
             $adverts = $adverts->where('totalQuantity', '>=', $minQuantity)->where('totalQuantity', '<=', $maxQuantity);
-        }
-
-        //if location
-        foreach (GeoManager::$accurate as $item){
-            if($request->has($item) && $request->$item != null){
-                $adverts = $adverts->where($item, '=', $request->$item);
-            }
         }
 
         if($isSearchRequest){

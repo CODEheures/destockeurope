@@ -28,6 +28,10 @@
                 filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-quantity-title="{{ trans('strings.form_quantity_label') }}"
+                filter-route-list-currencies="{{ route('utils.getListCurrencies') }}"
+                filter-currencies-first-menu-name="{{ trans('strings.view_user_account_currency_dropdown_label') }}"
+                filter-currencies-input-search-label="{{ trans('strings.form_input_search_label') }}"
+                filter-currencies-with-all-label="{{ trans('strings.form_dropdown_all_item') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-bookmark-add="{{ route('bookmark.add') }}"
@@ -75,6 +79,10 @@
                 filter-location-place-holder="{{ trans('strings.form_input_location_label') }}"
                 filter-price-title="{{ trans('strings.view_filter_price_title') }}"
                 filter-quantity-title="{{ trans('strings.form_quantity_label') }}"
+                filter-route-list-currencies="{{ route('utils.getListCurrencies') }}"
+                filter-currencies-first-menu-name="{{ trans('strings.view_user_account_currency_dropdown_label') }}"
+                filter-currencies-input-search-label="{{ trans('strings.form_input_search_label') }}"
+                filter-currencies-with-all-label="{{ trans('strings.form_dropdown_all_item') }}"
 
                 route-get-adverts-list="{{ route('advert.index') }}"
                 route-bookmark-add="{{ route('bookmark.add') }}"

@@ -28,7 +28,7 @@ class UtilsController extends Controller
     private $vimeoManager;
 
     public function __construct(VimeoManager $vimeoManager) {
-        $this->middleware('auth', ['only' => ['getListCurrencies', 'getListLocales', 'getListCardsType']]);
+        $this->middleware('auth', ['only' => ['getListLocales', 'getListCardsType']]);
         $this->middleware('isAdminUser', ['only' => ['isPicture', 'tempo']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->vimeoManager = $vimeoManager;

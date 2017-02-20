@@ -29,6 +29,7 @@ class Advert extends Model {
         'price',
         'price_coefficient',
         'price_margin',
+        'price_margin_decimal',
         'currency',
         'latitude',
         'longitude',
@@ -79,6 +80,7 @@ class Advert extends Model {
             } elseif (!key_exists('price_coefficient',$model->attributes) && !key_exists('price',$model->attributes)) {
                 throw new ModelNotFoundException('error in price of advert');
             }
+            $model->attributes['price_margin_decimal'] = MoneyUtils::getPriceWithDecimal($model->attributes['price_coefficient'], $model->currency,false);
             if(auth()->check() && auth()->user()->role=='delegation'){
                 $model->attributes['is_delegation'] = true;
             }

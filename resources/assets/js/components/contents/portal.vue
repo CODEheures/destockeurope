@@ -1100,7 +1100,7 @@
                                             <path fill="#FD0" stroke="#1A171B" stroke-width=".046" stroke-linecap="round" stroke-linejoin="round" d="M29.318 35.854l.578-.54-.215-.246-.578.539zM29.493 34.793l.578-.541-.215-.246-.578.541z"/>
                                             <path fill="#1A171B" d="M29.821 35.938l.116-.112-.198-.226-.117.109M29.99 34.902l.116-.109-.198-.227-.116.108"/>
                                         </g>
-                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#c)" d="M59.904.117H.132v59.772h89.657V.117"/>
+                                        <path opacity=".7" v-if="browser!='edge'" style="mix-blend-mode:multiply" fill="url(#a)" d="M59.904.117H.132v59.772h89.657V.117"/>
                                     </svg>
                                         <span>{{ dataCountries.portugal }}</span>
                                     </a>

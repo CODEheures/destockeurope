@@ -21,20 +21,34 @@
                     </div>
                 </div>
                 <div class="ui middle aligned grid">
-                    <div class="sixteen wide mobile height wide computer center aligned column price">
-                        <range-filter
-                                :mini="dataMinPrice"
-                                :maxi="dataMaxPrice"
-                                :handle-min="dataHandleMinPrice"
-                                :handle-max="dataHandleMaxPrice"
-                                :step="0.01"
-                                :update="dataUpdate"
-                                name="price"
-                                :prefix="filterPricePrefix"
-                                :title="filterPriceTitle"
-                        ></range-filter>
+                    <div class="sixteen wide mobile nine wide computer center aligned column price">
+                        <div class="ui grid">
+                            <div class="fourteen wide column">
+                                <range-filter
+                                        :mini="dataMinPrice"
+                                        :maxi="dataMaxPrice"
+                                        :handle-min="dataHandleMinPrice"
+                                        :handle-max="dataHandleMaxPrice"
+                                        :step="0.01"
+                                        :update="dataUpdate"
+                                        name="price"
+                                        :prefix="filterPricePrefix"
+                                        :title="filterPriceTitle"
+                                ></range-filter>
+                            </div>
+                            <div class="two wide column">
+                                <currencies-button
+                                        :currencies-list="currenciesList"
+                                        :first-menu-name="currenciesFirstMenuName"
+                                        :input-search-label="currenciesInputSearchLabel"
+                                        :with-all-label="currenciesWithAllLabel"
+                                        :oldCurrency="filter.currency"
+                                        :withAll="true">
+                                </currencies-button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="sixteen wide mobile height wide computer center aligned column price">
+                    <div class="sixteen wide mobile seven wide computer center aligned column price">
                         <range-filter
                                 :mini="dataMinQuantity"
                                 :maxi="dataMaxQuantity"
@@ -169,6 +183,24 @@
                 type: String,
                 required: false,
                 default: ''
+            },
+            //Currencies component
+            currenciesList: {
+                type: Array,
+                required: false,
+                default: []
+            },
+            currenciesFirstMenuName: {
+                type: String
+            },
+            currenciesInputSearchLabel: {
+                type: String
+            },
+            currenciesWithAllLabel: {
+                type: String
+            },
+            oldCurrency: {
+                type: String
             }
         },
         data: () => {
@@ -218,6 +250,9 @@
             });
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', event);
+            });
+            this.$on('currencyChoice', function (event) {
+                this.$parent.$emit('updateFilter', {'currency' : event.cur});
             });
             let that = this;
             let isUrgent = $('#isUrgent'+this._uid);

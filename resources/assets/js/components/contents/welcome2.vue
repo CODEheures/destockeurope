@@ -67,6 +67,10 @@
                         :actual-locale="actualLocale"
                         :category-old-choice="parseInt(filter.categoryId)"
                         :categories-all-item="categoriesAllItem"
+                        :currencies-list="dataFilterCurrenciesList"
+                        :currencies-first-menu-name="filterCurrenciesFirstMenuName"
+                        :currencies-input-search-label="filterCurrenciesInputSearchLabel"
+                        :currencies-with-all-label="filterCurrenciesWithAllLabel"
                     ></advert-filter>
                 </div>
                 <div class="row">
@@ -130,6 +134,10 @@
             'filterLocationPlaceHolder',
             'filterPriceTitle',
             'filterQuantityTitle',
+            'filterRouteListCurrencies',
+            'filterCurrenciesFirstMenuName',
+            'filterCurrenciesInputSearchLabel',
+            'filterCurrenciesWithAllLabel',
             //advertByList component
             'routeGetAdvertsList',
             'routeBookmarkAdd',
@@ -157,6 +165,7 @@
                 sendMessage: false,
                 breadcrumbItems: [],
                 dataFilterLocationAccurateList: [],
+                dataFilterCurrenciesList: [],
                 dataFilterPricePrefix: '',
                 oldMinRangePrice: -1,
                 oldMaxRangePrice: -1,
@@ -304,7 +313,7 @@
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
 
                 for(let elem in this.filter){
-                    if(elem != 'minRangePrice' && elem != 'maxRangePrice' && elem != 'maxRangeQuantity' && elem != 'maxRangeQuantity'){
+                    if(this.filter[elem] != null && elem != 'minRangePrice' && elem != 'maxRangePrice' && elem != 'minRangeQuantity' && elem != 'maxRangeQuantity'){
                         parsed.query[elem]=(this.filter[elem]).toString();
                     }
                 }
@@ -337,11 +346,13 @@
                         that.filter.maxRangePrice = parseFloat((response.data).maxPrice);
                         that.filter.minRangeQuantity = parseInt((response.data).minQuantity);
                         that.filter.maxRangeQuantity = parseInt((response.data).maxQuantity);
+                        that.dataFilterCurrenciesList = (response.data).currenciesList;
+                        that.filter.currency = (response.data).currency;
                         that.dataFilterPricePrefix = (response.data).currencySymbol;
                         callBack();
                     })
                     .catch(function (error) {
-                        this.sendToast(that.loadErrorMessage, 'error');
+                        that.sendToast(that.loadErrorMessage, 'error');
                     });
             },
             clearInputSearch() {

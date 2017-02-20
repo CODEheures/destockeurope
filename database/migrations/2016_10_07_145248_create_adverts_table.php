@@ -30,6 +30,7 @@ class CreateAdvertsTable extends Migration
             $table->integer('price')->unsigned();
             $table->mediumInteger('price_coefficient')->unsigned()->default(0);
             $table->integer('price_margin')->unsigned();
+            $table->decimal('price_margin_decimal',6,5)->unsigned();
             $table->string('currency', 3);
             $table->decimal('latitude',6,4);
             $table->decimal('longitude',19,16);
