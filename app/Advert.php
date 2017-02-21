@@ -136,7 +136,9 @@ class Advert extends Model {
     }
 
     public function getIsEligibleForRenewAttribute() {
-        return (!$this->is_delegation && !$this->isRenew && ($this->deleted_at || Carbon::parse($this->online_at)->addDay(env('ADVERT_LIFE_TIME'))->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now())));
+        $online = Carbon::parse($this->online_at);
+        $isPast = Carbon::create($online->year, $online->month, $online->day, 0,0,0)->addDay(env('ADVERT_LIFE_TIME'))->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now());
+        return (!$this->is_delegation && !$this->isRenew && ($this->deleted_at || $isPast));
     }
 
     public function getThumbAttribute() {
