@@ -683,12 +683,12 @@ class AdvertController extends Controller
      * private function to approve One advert
      *
      * @param $key
-     * @param $value
+     * @param $isApproved
      * @return null
      * @throws \Exception
      */
-    private function approveAdvert($key, $value, $priceCoefficient=null) {
-        if($value != null) {
+    private function approveAdvert($key, $isApproved, $priceCoefficient=null) {
+        if($isApproved != null) {
             $advert = Advert::find($key);
             if($advert && is_null($advert->isValid)) {
                 $advert->price_coefficient = $priceCoefficient;
@@ -702,7 +702,7 @@ class AdvertController extends Controller
                         $invoice = $advert->invoice;
                         $authorizationId = $advert->invoice->authorization;
                         $authorization = Authorization::get($authorizationId, $this->_api_context);
-                        if((boolean)$value==true){
+                        if((boolean)$isApproved==true){
                             //First try to setting some params to advert before capture payment
                             $originalAdvert = null;
                             if($advert->originalAdvertId && $advert->originalAdvertId > 0) {
@@ -732,7 +732,7 @@ class AdvertController extends Controller
                             $capture->setAmount($amt);
                             $getCapture = $authorization->capture($capture, $this->_api_context);
                             $invoice->captureId = $getCapture->getId();
-                            $advert->isValid=(boolean)$value;
+                            $advert->isValid=(boolean)$isApproved;
 
 
 
@@ -769,7 +769,7 @@ class AdvertController extends Controller
                             //VOID PAYMENT
                             $getVoid = $authorization->void($this->_api_context);
                             $invoice->voidId = $getVoid->getId();
-                            $advert->isValid=(boolean)$value;
+                            $advert->isValid=(boolean)$isApproved;
 
                             DB::beginTransaction();
                             $invoice->save();
@@ -780,8 +780,8 @@ class AdvertController extends Controller
                         throw new \Exception($e);
                     }
                 } else {
-                    $advert->isValid=(boolean)$value;
-                    if((boolean)$value){
+                    $advert->isValid=(boolean)$isApproved;
+                    if((boolean)$isApproved){
                         $advert->online_at = Carbon::now();
                         $stats = Stats::latest()->first();
                         $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
@@ -1329,12 +1329,14 @@ class AdvertController extends Controller
         if($advert && auth()->user()->id === $advert->user->id && $advert->isValid && !$advert->isRenew && $advert->online_at){
             try {
                 $newAdvert = $advert->replicate();
+                $newAdvert->isValid= null;
                 $newAdvert->isPublish = false;
                 $newAdvert->invoice_id = null;
                 $newAdvert->deleted_at = null;
                 $newAdvert->online_at = null;
                 $newAdvert->lastObsoleteMail = null;
                 $newAdvert->originalAdvertId = $advert->id;
+                $newAdvert->slug=null;
 
                 //Create Invoice
                 DB::beginTransaction();
@@ -1381,15 +1383,6 @@ class AdvertController extends Controller
         return response('error', 500);
     }
 
-    public function vimeoQuota() {
-        dd($this->vimeoManager->request('/CODEheures', [], 'GET'));
-    }
-
-    public function test($id) {
-        $advert = Advert::find($id);
-        $this->createInvoice($advert);
-    }
-
     private  function createInvoice(Advert $advert) {
         $invoice = $advert->invoice;
         $user = $advert->user;
@@ -1424,7 +1417,7 @@ class AdvertController extends Controller
 
     private function createPdf($content, $header, $footer, $fileName) {
         try {
-            $css = file_get_contents(mix('css/pdf.css'),false,stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false))));
+            $css = file_get_contents(asset(mix('css/pdf.css')->toHtml()),false,stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false))));
 
             $mpdf = new \mPDF();
             $mpdf->SetHTMLHeader($header);

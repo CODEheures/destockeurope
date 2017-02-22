@@ -62,10 +62,12 @@
                     </div>
                 </div>
                 <div class="ui grid">
-                    <div class="right aligned column">
-                        <div id="cgvSlider" class="ui toggle checkbox">
-                            <input type="checkbox" name="cgv">
-                            <label>{{ dataCgvText }} <a :href="dataCgvHref" target="_blank">{{ dataCgvA }}</a></label>
+                    <div class="column">
+                        <div class="ui compact right floated segment">
+                            <div id="cgvSlider" class="ui toggle checkbox">
+                                <input type="checkbox" name="cgv">
+                                <label>{{ dataCgvText }} <a :href="dataCgvHref" target="_blank">{{ dataCgvA }}</a></label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -91,22 +93,22 @@
                         <div class="sixteen wide mobile eight wide tablet six wide computer centered column">
                             <form accept-charset="UTF-8" autocomplete="off" :action="routeCardChoice"  id="payment-form" method="post" class="ui form" >
                                 <input type="hidden" name="_token" :value="xCsrfToken"/>
-                                <div class="field">
+                                <div :class="isCgvApprove ? 'field' : 'disabled field'">
                                     <select class="ui fluid search dropdown" name="card_type">
                                         <option value="">{{ paymentCardTypeLabel }}</option>
                                         <option :value="index" v-for="(card, index) in dataCardsTypes">{{ card }}</option>
                                     </select>
                                 </div>
-                                <div class="field">
+                                <div :class="isCgvApprove ? 'field' : 'disabled field'">
                                     <label>{{ paymentCardNameLabel }}</label>
                                     <input type='text' name="name">
                                 </div>
                                 <div class="two fields">
-                                    <div class="twelve wide field">
+                                    <div :class="isCgvApprove ? 'twelve wide field' : 'twelve wide disabled field'">
                                         <label>{{ paymentCardNumberLabel }}</label>
                                         <input type="text" name="card_no" maxlength="25" :placeholder="paymentCardNumberPlaceholder">
                                     </div>
-                                    <div class="four wide field">
+                                    <div :class="isCgvApprove ? 'four wide field' : 'four wide disabled field'">
                                         <label>{{ paymentCardCvcLabel }}</label>
                                         <input type="text" name="cvc" maxlength="3" :placeholder="paymentCardCvcLabel">
                                     </div>
@@ -114,7 +116,7 @@
                                 <div class="field">
                                     <label>{{ paymentCardExpirationLabel }}</label>
                                     <div class="two fields">
-                                        <div class="field">
+                                        <div :class="isCgvApprove ? 'field' : 'disabled field'">
                                             <select class="ui fluid search dropdown" name="expiration_month">
                                                 <option value="">{{ paymentCardExpirationMonthPlaceholder }}</option>
                                                 <option value="1">{{ january }}</option>
@@ -131,7 +133,7 @@
                                                 <option value="12">{{ december }}</option>
                                             </select>
                                         </div>
-                                        <div class="field">
+                                        <div :class="isCgvApprove ? 'field' : 'disabled field'">
                                             <input type="text" name="expiration_year" maxlength="4" :placeholder="paymentCardExpirationYearPlaceholder">
                                         </div>
                                     </div>

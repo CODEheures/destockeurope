@@ -7,11 +7,8 @@ use App\Common\PicturesManager;
 use Carbon\Carbon;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class Advert extends Model {
     use SoftDeletes;
@@ -62,37 +59,6 @@ class Advert extends Model {
     public function pictures() { return $this->hasMany('App\Picture'); }
     public function picturesWithTrashed() { return $this->hasMany('App\Picture')->withTrashed(); }
     public function invoice() { return $this->belongsTo('App\Invoice'); }
-
-    /**
-     * Boot function for using with User Events
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model)
-        {
-            if(!key_exists('price_coefficient',$model->attributes) && key_exists('price',$model->attributes)){
-                $model->attributes['price_coefficient'] = 0;
-                $model->attributes['price_margin'] = $model->attributes['price'];
-            } elseif (!key_exists('price_coefficient',$model->attributes) && !key_exists('price',$model->attributes)) {
-                throw new ModelNotFoundException('error in price of advert');
-            }
-            $model->attributes['price_margin_decimal'] = MoneyUtils::getPriceWithDecimal($model->attributes['price_coefficient'], $model->currency,false);
-            if(auth()->check() && auth()->user()->role=='delegation'){
-                $model->attributes['is_delegation'] = true;
-            }
-        });
-
-        static::saving(function($model) {
-            $slug = Str::slug($model->title);
-            $count = Advert::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-            $model->slug = $count ? "{$slug}-{$count}" : $slug;
-            return true;
-        });
-    }
 
     //Attributs Getters
     public function getCurrencySymbolAttribute() {
@@ -184,14 +150,6 @@ class Advert extends Model {
     public function setPriceCoefficientAttribute($value) {
         //Use this mutator to ensure Margin value
         //Example Value: 5.08 => 508 in BDD
-        if((int)($value*100) > 0) {
-            $price=(int)$this->attributes['price'];
-            $coefficient=(int)round($value*100,0)/10000;
-            $margin = (int)($price*$coefficient);
-            $this->attributes['price_margin'] =  $price+$margin;
-        } else {
-            $this->attributes['price_margin'] =  (int)$this->attributes['price'];
-        }
         $this->attributes['price_coefficient'] =  (int)round(($value*100),0);
     }
 

@@ -153,9 +153,6 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
     //DANGEROUS
     Route::group(['prefix' => 'dangerous'] , function () {
         Route::get('/testGame', 'UtilsController@testGame');
-        Route::get('/send', 'UtilsController@send');
-//        Route::get('/tempo', 'UtilsController@tempo');
-//        Route::get('/test/{id}', 'AdvertController@test');
     });
 
 });

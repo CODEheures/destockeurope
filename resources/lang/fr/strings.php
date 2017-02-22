@@ -296,7 +296,7 @@ return [
     'view_advert_approve_modal_valid_header' => 'Valider toutes les actions',
     'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',
     'view_advert_approve_error' => 'Une erreur est survenue pendant l\'approbation d\'une annonce',
-    'view_advert_auto_approve_error' => 'Une erreur est survenue pendant l\'approbation automatique de votre annonce renouvellée. Nos service sont avertis et traitent votre problème au plus vite',
+    'view_advert_auto_approve_error' => 'Une erreur est survenue pendant l\'approbation automatique de votre annonce renouvellée. Nos services sont avertis et traitent votre problème au plus vite',
     'view_advert_approve_success' => 'Approbations des annonces envoyées',
 
     'view_advert_by_link_label' => 'Voir l\'annonce',
@@ -349,7 +349,7 @@ return [
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho non! Le paiement a échoué :-(',
     'payment_paypal_success' => 'Merci pour votre paiement. Notez que celui-ci ne sera éxécuté que si votre annonce est validée par nos services. Vous recevrez alors votre facture par mail.',
-    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours.  Votre facture vous a été envoyéé par mail.',
+    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours.  Votre facture vous a été envoyée par mail.',
 
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',

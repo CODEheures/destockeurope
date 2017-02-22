@@ -165,7 +165,7 @@ class AdvertsTableSeeder extends Seeder
             4,
             'Ces crayons neuf sont vendus au kilo sans possibilité de choisir.' . PHP_EOL . 'Prix imbattable',
             true,
-            27.50
+            1527.50
         );
 
         $this->advertCreate(
