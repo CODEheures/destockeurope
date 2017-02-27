@@ -456,7 +456,7 @@ form {
       top: 8px;
       z-index: 1;
       color: $color-blue;
-      font-size: 0.73rem;
+      font-size: 0.93rem;
     }
 
   }
@@ -464,6 +464,7 @@ form {
 
 .irs-from, .irs-to, .irs-single {
   background: $color-blue;
+  font-size: 12px;
   &:after {
     border-top-color: $color-blue;
   }

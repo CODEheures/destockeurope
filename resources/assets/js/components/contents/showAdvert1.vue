@@ -39,6 +39,15 @@
                 </div>
             </div>
             <div class="actions">
+                <div style="float: left" v-if="dataOwnerUser.phone && dataOwnerUser.phone!=null && dataOwnerUser.phone!=''">
+                    <div class="ui blue button" v-on:click="seePhone()" v-if="!phoneIsVisible">
+                        Voir le Téléphone
+                    </div>
+                    <div class="ui large label" style="float: left" v-else>
+                        <i class="phone icon"></i> {{ dataOwnerUser.phone }}
+                    </div>
+                </div>
+
                 <div class="ui black deny button">
                     {{ formMessageCancelLabel }}
                 </div>
@@ -289,6 +298,7 @@
                 sendMessage: false,
                 breadcrumbItems: [],
                 dataAdvert: {},
+                dataOwnerUser: {},
                 dataUserName: '',
                 dataUserMail: '',
                 dataUserPhone: '',
@@ -297,11 +307,13 @@
                 dataReportMessage: '',
                 dataEnabledMessage: false,
                 dataEnabledReportMessage: false,
-                dataIsUserBookmark: false
+                dataIsUserBookmark: false,
+                phoneIsVisible: false
             }
         },
         mounted () {
             this.dataAdvert= JSON.parse(this.advert);
+            this.dataOwnerUser = this.dataAdvert.user;
             this.dataUserMail = this.userMail;
             this.dataUserName = this.userName;
             this.dataUserPhone = this.userPhone;
@@ -378,8 +390,7 @@
                             ]
                         }
                     },
-                    inline : true,
-                    on     : 'change'
+                    inline : true
                 })
             ;
             let messageReportForm = $('#reportform-'+this._uid);
@@ -554,6 +565,9 @@
                             });
                     }
                 }).modal('show');
+            },
+            seePhone: function() {
+                this.phoneIsVisible = true;
             }
         }
     }

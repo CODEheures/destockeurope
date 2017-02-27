@@ -44,6 +44,7 @@
                             :filter-ribbon-close="filterRibbonClose"
                             :breadcrumb-items="breadcrumbItems"
                             :urgent-label="filterUrgentLabel"
+                            :is-negociated-label="isNegociatedLabel"
                             :update="update"
                             :filter="filter"
                             :filter-price-prefix="dataFilterPricePrefix"

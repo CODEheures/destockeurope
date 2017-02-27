@@ -100,6 +100,7 @@ class AdvertController extends Controller
         $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
         $isRangePricesOnly = ($request->has('priceOnly') && filter_var($request->priceOnly, FILTER_VALIDATE_BOOLEAN) == true);
         $isUrgentOnly = ($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true );
+        $isNegociatedOnly = ($request->has('isNegociated') && filter_var($request->isNegociated, FILTER_VALIDATE_BOOLEAN) == true );
 
         //only valid advert & online_at < now
         $adverts = Advert::where('isValid', true)->where('online_at', '<', Carbon::now());
@@ -107,28 +108,6 @@ class AdvertController extends Controller
         //where currency
         $currency = null;
         $currencySymbol = '';
-
-//        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)) {
-//            $currency = $request->currency;
-//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-//        } elseif (auth()->check() && auth()->user()->currency && MoneyUtils::isAvailableCurrency(auth()->user()->currency)) {
-//            $currency = auth()->user()->currency;
-//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-//        } elseif($request->has('country')){
-//            $pseudoLocale = LocaleUtils::getFirstLocaleByCountryCode($request->country);
-//            if($pseudoLocale){
-//                $currency = MoneyUtils::getDefaultMoneyByLocale($pseudoLocale);
-//                $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-//            }
-//        } else {
-//            $currency = config('runtime.currency');
-//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-//        }
-//        if(!MoneyUtils::isAvailableCurrency($currency)){
-//            $currency = config('runtime.currency');
-//            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
-//        }
-//        $adverts = $adverts->where('currency', $currency);
 
         if($request->has('categoryId') && $request->categoryId != 0){
             $ids = CategoryUtils::getListSubTree($request->categoryId);
@@ -219,6 +198,11 @@ class AdvertController extends Controller
         //if urgent
         if($isUrgentOnly){
             $adverts = $adverts->where('isUrgent', true);
+        }
+
+        //if urgent
+        if($isNegociatedOnly){
+            $adverts = $adverts->where('isNegociated', true);
         }
 
         //if range price
@@ -562,6 +546,9 @@ class AdvertController extends Controller
                 $advert->load('bookmarks');
                 $advert->load('pictures');
                 $advert->load('category');
+                $advert->load(['user' => function ($query) {
+                    $query->select(['id','role','phone']);
+                }]);
                 $ancestors = $advert->category->getAncestors();
                 $ancestors->add($advert->category);
                 $advert->setBreadCrumb($ancestors);

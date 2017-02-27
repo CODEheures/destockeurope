@@ -103,26 +103,32 @@
                             </search-filter>
                         </div>
                         <div class="column">
-                            <div class="ui grid">
-                                <div class="ten wide column">
-                                    <location-filter
-                                            :accurate-list="locationAccurateList"
-                                            :update="dataUpdate"
-                                            :place-holder="locationPlaceHolder"
-                                    ></location-filter>
+                            <location-filter
+                                    :accurate-list="locationAccurateList"
+                                    :update="dataUpdate"
+                                    :place-holder="locationPlaceHolder"
+                            ></location-filter>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui stackable two column grid">
+                    <div class="column">
+                        <div class="ui grid">
+                            <div class="eight wide column">
+                                <div :id="'isUrgent'+_uid" class="ui checkbox filter">
+                                    <input type="checkbox" name="isUrgent">
+                                    <label> <span class="ui red horizontal label">{{ urgentLabel }}</span></label>
                                 </div>
-                                <div class="six wide center aligned middle aligned column">
-                                    <div :id="'isUrgent'+_uid" class="ui checkbox filter">
-                                        <input type="checkbox" name="isUrgent">
-                                        <label> <span class="ui red horizontal label">{{ urgentLabel }}</span></label>
-                                    </div>
+                            </div>
+                            <div class="eight wide column">
+                                <div :id="'isNegociated'+_uid" class="ui checkbox filter">
+                                    <input type="checkbox" name="isegociated">
+                                    <label> <span class="ui blue horizontal label">{{ isNegociatedLabel }}</span></label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="ui grid">
-                    <div class="sixteen wide column">
+                    <div class="column">
                         <notifications-activer
                                 :route-exist-in="routeNotificationsExistIn"
                                 :route-add="routeNotificationsAdd"
@@ -157,6 +163,9 @@
                 type: String
             },
             urgentLabel: {
+                type: String
+            },
+            isNegociatedLabel: {
                 type: String
             },
             //range component
@@ -235,6 +244,7 @@
         data: () => {
             return {
                 isUrgent: false,
+                isNegociated: false,
                 dataMinPrice: 0,
                 dataMaxPrice: 0,
                 dataHandleMinPrice: 0,
@@ -250,6 +260,7 @@
         mounted () {
             this.$watch('update', function () {
                 this.setIsUrgent();
+                this.setIsNegociated();
                 this.setRangeFilter();
                 this.setSearchFilter();
                 this.dataUpdate = !this.dataUpdate;
@@ -264,6 +275,9 @@
             });
             this.$watch('isUrgent', function () {
                 this.$parent.$emit('updateFilter', {'isUrgent' : this.isUrgent})
+            });
+            this.$watch('isNegociated', function () {
+                this.$parent.$emit('updateFilter', {'isNegociated' : this.isNegociated, 'minPrice': 0})
             });
             this.$on('locationUpdate', function (event) {
                 this.$parent.$emit('updateFilter', event)
@@ -289,6 +303,11 @@
                 onChecked: function() {that.isUrgent = true;},
                 onUnchecked: function() {that.isUrgent = false;}
             });
+            let isNegociated = $('#isNegociated'+this._uid);
+            isNegociated.checkbox({
+                onChecked: function() {that.isNegociated = true;},
+                onUnchecked: function() {that.isNegociated = false;}
+            });
 
             let accordionElement = $('#filter-accordion-'+this._uid);
             if($(window).width()<768){
@@ -309,6 +328,16 @@
                 } else {
                     isUrgent.checkbox('set unchecked');
                     this.isUrgent = false;
+                }
+            },
+            setIsNegociated: function () {
+                let isNegociated = $('#isNegociated'+this._uid);
+                if (this.filter.isNegociated != undefined && this.filter.isNegociated == true ) {
+                    isNegociated.checkbox('set checked');
+                    this.isNegociated = true;
+                } else {
+                    isNegociated.checkbox('set unchecked');
+                    this.isNegociated = false;
                 }
             },
             setRangeFilter: function () {

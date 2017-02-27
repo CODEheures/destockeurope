@@ -40,7 +40,8 @@ class AdvertsTableSeeder extends Seeder
             0,
             'Super sac à dos antivol à prix cassé !' . PHP_EOL . 'A l’extérieur, il a beaucoup de poches cachées pour le transport urbain.' . PHP_EOL . 'A l’intérieur, des compartiments rembourrés pour ordinateur portable.',
             true,
-            35.00
+            35.00,
+            false
         );
         $advert = Advert::first();
         $advert->is_delegation=true;
@@ -59,7 +60,8 @@ class AdvertsTableSeeder extends Seeder
             1,
             'Super lot de 700 enceintes bluetooth avec motif géométrique',
             true,
-            5.00
+            5.00,
+            false
         );
 
         $stat1 = $statsManager->getStats();
@@ -84,7 +86,8 @@ class AdvertsTableSeeder extends Seeder
             2,
             'Lot de 1000 montres "MOON" de la marque LEXON.' . PHP_EOL . 'Résistant à l\'eau.' . PHP_EOL . 'Mouvement SEIKO.',
             true,
-            10.00
+            10.00,
+            true
         );
 
         $this->advertCreate(
@@ -99,7 +102,8 @@ class AdvertsTableSeeder extends Seeder
             0,
             'Superbe lot de 8000 mini radio "DOLMEN" de la marque LEXON' . PHP_EOL . 'Disponible en plusieurs couleurs.',
             true,
-            8.00
+            8.00,
+            false
         );
 
         $this->advertCreate(
@@ -114,7 +118,8 @@ class AdvertsTableSeeder extends Seeder
             0,
             'Destockage de 250 GEAR VR.'. PHP_EOL .'Très haute qualité, zero defaut et garanties 1 an.',
             false,
-            119.95
+            119.95,
+            false
         );
 
         $stat2 = $statsManager->getStats();
@@ -139,7 +144,8 @@ class AdvertsTableSeeder extends Seeder
             3,
             'A saisir rapidement, 500 sacs à dos de marque EastPack.' . PHP_EOL . 'TOP QUALITY. Envoi rapide.',
             true,
-            57.65
+            57.65,
+            false
         );
 
         $stat3 = $statsManager->getStats();
@@ -165,7 +171,8 @@ class AdvertsTableSeeder extends Seeder
             4,
             'Ces crayons neuf sont vendus au kilo sans possibilité de choisir.' . PHP_EOL . 'Prix imbattable',
             true,
-            1527.50
+            1527.50,
+            false
         );
 
         $this->advertCreate(
@@ -180,7 +187,8 @@ class AdvertsTableSeeder extends Seeder
             0,
             'Exceptionnel: ' . PHP_EOL .'Clés très haute capacités de 128Gb USB3.0' . PHP_EOL . 'Matériel de qualité sui vous assurera une revente dans des délai courts',
             true,
-            18.95
+            18.95,
+            false
         );
 
         $this->advertCreate(
@@ -198,7 +206,8 @@ class AdvertsTableSeeder extends Seeder
             . PHP_EOL . PHP_EOL . 'Pour apprécier des vidéos 3D, des jeux VR et encore plus! Convient à la plupart des smartphones.'
             . PHP_EOL . PHP_EOL . 'Fourni sous écrin cadeau. Plastique ABS et silicone. 116.',
             true,
-            3.64
+            3.64,
+            false
         );
 
 
@@ -211,13 +220,14 @@ class AdvertsTableSeeder extends Seeder
         $stat4->save();
     }
 
-    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $setNullValid=null, $price=null){
+    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $setNullValid=null, $price=null, $isNegociated=false){
         $advert = new Advert();
         $advert->user_id = $userId;
         $advert->category_id = $catId;
         $advert->created_at = $created_at;
         $advert->type = 'bid';
         $advert->title = $title;
+        $advert->isNegociated = $isNegociated;
         if($description){
             $advert->description = $description;
         } else {
