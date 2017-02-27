@@ -130,7 +130,7 @@ class Kernel extends ConsoleKernel
             }
             Storage::disk('logs')->append('notifications.log' , Carbon::now()->toDateTimeString() . ';' . $status . ';' . $msgTxt );
 
-        })->dailyAt('11:48');
+        })->dailyAt('6:48');
 
         //Scheduler for Update GEOIP
         $schedule->call(function(){
