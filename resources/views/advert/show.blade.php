@@ -65,6 +65,7 @@
             total-quantity-label="{{ trans('strings.form_quantity_label') }}"
             lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
             urgent-label="{{ trans('strings.view_all_urgent') }}"
+            is-negociated-label="{{ trans('strings.view_all_negociate') }}"
             price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
             price-label="{{ trans('strings.view_advert_form_price_label') }}">
     </show-advert1>

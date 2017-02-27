@@ -73,7 +73,7 @@ class StoreAdvertRequest extends FormRequest
             'category' => 'required|numeric|exists:categories,id',
             'title' => 'required|min:'. config('db_limits.adverts.minTitle') . '|max:'. config('db_limits.adverts.maxTitle') ,
             'description' => 'required|min:' . config('db_limits.adverts.minDescription') . '|max:' . config('db_limits.adverts.maxDescription'),
-            'price' => 'required|numeric|min:0.01',
+            'price' => 'required|numeric|min:0.00',
             'currency' => 'required|in:'.$line2,
             'lat' => 'required|numeric|min:-90|max:90',
             'lng' => 'required|numeric|min:-180|max:180',
@@ -81,7 +81,8 @@ class StoreAdvertRequest extends FormRequest
             'main_picture' => 'required|size:32|in:'.$line3,
             'total_quantity' => 'required|numeric|min:1',
             'lot_mini_quantity' => 'required|numeric|min:1',
-            'is_urgent' => 'required|boolean'
+            'is_urgent' => 'required|boolean',
+            'is_negociated' => 'required|boolean'
         ];
     }
 

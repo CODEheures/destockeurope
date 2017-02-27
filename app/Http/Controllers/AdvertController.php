@@ -388,6 +388,7 @@ class AdvertController extends Controller
                 $advert->totalQuantity=$request->total_quantity;
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
+                $advert->isNegociated=filter_var($request->is_negociated, FILTER_VALIDATE_BOOLEAN);
                 $persistent=null;
                 if(session()->has('videoId')){
                     $advert->video_id = session('videoId');
@@ -1352,11 +1353,13 @@ class AdvertController extends Controller
 
                 //Advert Pictures
                 $newPictures = [];
-                foreach ($advert->pictures as $picture){
+                $advertPictures = Picture::findByAdvertIdWithTrashed($advert->id)->get();
+                foreach ($advertPictures as $picture){
                     $newPictures[] = $picture->replicate();
                 }
                 $newAdvert->save();
                 foreach ($newPictures as $picture){
+                    $picture->deleted_at = null;
                     $newAdvert->pictures()->save($picture);
                     $picture->save();
                 }

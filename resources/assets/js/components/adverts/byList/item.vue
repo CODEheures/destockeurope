@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
                                     <div class="four wide column">
-                                        <span class="ui big yellow left floated left pointing label price">{{ advert.price_margin }}</span>
+                                        <span :class="advert.isNegociated ? 'ui big blue left floated left pointing label price negociated' : 'ui big yellow left floated left pointing label price'">{{ advert.isNegociated ? isNegociatedLabel : advert.price_margin }}</span>
                                     </div>
                                     <div class="twelve wide right aligned column geodate-computer">
                                         <p>
@@ -107,7 +107,7 @@
                                     <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                 </p>
                                 <p>
-                                    <span class="ui yellow left pointing label price">{{ advert.price_margin }}</span>
+                                    <span :class="advert.isNegociated ? 'ui blue left pointing label price negociated' : 'ui yellow left pointing label price'">{{ advert.isNegociated ? isNegociatedLabel : advert.price_margin }}</span>
                                 </p>
                             </div>
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
@@ -163,7 +163,7 @@
                             </div>
                             <div class="six wide right aligned vertical middle aligned column">
                                 <p class="infos">
-                                    <span class="ui big yellow left pointing label price">{{ advert.price }}</span><br/>
+                                    <span :class="advert.isNegociated ? 'ui big blue left pointing label price negociated' : 'ui big yellow left pointing label price'">{{ advert.isNegociated ? isNegociatedLabel : advert.price }}</span><br/>
                                     <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                     <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -202,7 +202,7 @@
                         <div class="ui grid">
                             <div class="sixteen wide mobile only right aligned column">
                                 <p class="infos">
-                                    <span class="ui big blue left pointing label">{{ advert.price }}</span><br/>
+                                    <span class="ui big blue left pointing label">{{ advert.isNegociated ? isNegociatedLabel : advert.price }}</span><br/>
                                     <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                     <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
@@ -439,6 +439,7 @@
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
             urgentLabel: String,
+            isNegociatedLabel: String,
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,

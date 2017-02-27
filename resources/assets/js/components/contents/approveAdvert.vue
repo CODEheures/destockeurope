@@ -73,7 +73,7 @@
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ advertPriceLabel }}</td>
-                                <td>{{ advert.price }}</td>
+                                <td>{{ advert.isNegociated ? advertIsNegociatedLabel : advert.price }}</td>
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ totalQuantityLabel }} / {{ lotMiniQuantityLabel }}</td>
@@ -195,6 +195,7 @@
             'advertTitleLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',
+            'advertIsNegociatedLabel',
             'advertAddressLabel',
             'advertApproveSuccess',
             'totalQuantityLabel',

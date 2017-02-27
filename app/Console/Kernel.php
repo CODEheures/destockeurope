@@ -36,6 +36,33 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
+        $schedule->call(function(){
+            $message = null;
+            $result1='';
+
+            try {
+                $pictureManager = new PicturesManager();
+                $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
+                $advertManager = new AdvertsManager($pictureManager, $vimeoManager);
+                $result1 = $advertManager->stopAdverts();
+
+                if($result1>0){
+                    $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';';
+                }
+            } catch (\Exception $e) {
+                $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';' .  $e->getMessage().';';
+            }
+            if(!Storage::disk('logs')->exists('stopadvert.log')){
+                Storage::disk('logs')->append('stopadvert.log' , 'DATE;STOP ADVERTS;FAILS;');
+            }
+
+            if($message){
+                Storage::disk('logs')->append('stopadvert.log' , $message);
+            }
+
+        })->everyMinute();
+
+
         //Scheduler for STATS and Adverts Ends, Purges, Alerts
         $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
@@ -51,18 +78,17 @@ class Kernel extends ConsoleKernel
                 $pictureManager = new PicturesManager();
                 $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
                 $advertManager = new AdvertsManager($pictureManager, $vimeoManager);
-                $result1 = $advertManager->stopAdverts();
                 $result2 = $advertManager->purgeObsoletesAdverts();
                 $result3 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_1'));
                 $result4 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_2'));
                 $result5 = $advertManager->alertEndOfAdverts(0);
 
-                $message = $message . ';' . $result1 . ';' . $result2[0] . ';' . $result2[1] .';' . $result3 . ';' . $result4 . ';' . $result5 .';;';
+                $message = $message  . ';' . $result2[0] . ';' . $result2[1] .';' . $result3 . ';' . $result4 . ';' . $result5 .';;';
             } catch (\Exception $e) {
-                $message = $message . ';' . $result1 . ';' . $result2[0] . ';' . $result2[1] . ';' . $result3 . ';' . $result4 . ';' . $result5 . ';' .  $e->getMessage().';';
+                $message = $message . ';' . $result2[0] . ';' . $result2[1] . ';' . $result3 . ';' . $result4 . ';' . $result5 . ';' .  $e->getMessage().';';
             }
             if(!Storage::disk('logs')->exists('schedule.log')){
-                Storage::disk('logs')->append('schedule.log' , 'DATE;STOP ADVERTS;PURGE ADVERTS;DELETE PICTURES;ALERT USER J-5;ALERT USER J-1;ALERT USER J0;FAILS;');
+                Storage::disk('logs')->append('schedule.log' , 'DATE;PURGE ADVERTS;DELETE PICTURES;ALERT USER J-5;ALERT USER J-1;ALERT USER J0;FAILS;');
             }
             Storage::disk('logs')->append('schedule.log' , $message);
 

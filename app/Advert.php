@@ -42,7 +42,8 @@ class Advert extends Model {
         'isRenew',
         'is_delegation',
         'originalAdvertId',
-        'video_id'
+        'video_id',
+        'isNegociated'
     ];
     protected $dates = ['deleted_at', 'online_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];

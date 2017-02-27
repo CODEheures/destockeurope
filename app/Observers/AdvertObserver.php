@@ -27,6 +27,11 @@ class AdvertObserver
     }
 
     public function saving(Advert $advert) {
+        //isNegociated?
+        if($advert->isNegociated) {
+            $advert->price = 0;
+        }
+
         //Have a price coefficient before saving
         if(!key_exists('price_coefficient',$advert->getAttributes())) {
             $advert->price_coefficient = 0;

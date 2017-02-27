@@ -183,6 +183,24 @@ class AdvertsTableSeeder extends Seeder
             18.95
         );
 
+        $this->advertCreate(
+            $user2->id,
+            $subCategory12->id,
+            Carbon::now()->subDays(1),
+            0,
+            'Lunettes Réalité Virtuelle pliables.',
+            ['e6274b78ea4710d8bc6c597997ab3466','d1bf34a836f0e09067b15d581659f771','9231afb06cb5197625602e181ff4a44d'],
+            1500,
+            50,
+            0,
+            'Lunettes Réalité Virtuelle pliables. '
+            . PHP_EOL . PHP_EOL .'Ces lunettes de réalité Virtuelle en silicone sont idéales quand vous êtes en déplacement. Elles sont légères, pliables et assez réduites pour être glissées dans une poche. Glissez votre téléphone dans la fente et lancez une application VR pour plonger dans le monde de la réalité virtuelle en quelques secondes.'
+            . PHP_EOL . PHP_EOL . 'Pour apprécier des vidéos 3D, des jeux VR et encore plus! Convient à la plupart des smartphones.'
+            . PHP_EOL . PHP_EOL . 'Fourni sous écrin cadeau. Plastique ABS et silicone. 116.',
+            true,
+            3.64
+        );
+
 
         $stat4 = $statsManager->getStats();
         $stat4->created_at = Carbon::now()->subDays(1);

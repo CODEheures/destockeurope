@@ -82,8 +82,11 @@ div.ui.vertical.segment.separator {
     & span.ui.red.horizontal.label {
       margin-top: 0.2rem;
     }
-    & span.label.price {
+    & span.label.price:not(.negociated) {
       color: $color-blue !important;
+    }
+    & span.label.price.negociated {
+      white-space: nowrap;
     }
     & .ptpb2  {
       padding-top: 2rem;

@@ -125,6 +125,7 @@
                                 :total-quantity-label="totalQuantityLabel"
                                 :lot-mini-quantity-label="lotMiniQuantityLabel"
                                 :urgent-label="urgentLabel"
+                                :is-negociated-label="isNegociatedLabel"
                                 :price-info-label="priceInfoLabel"
                                 :price-label="priceLabel"
                         ></advert-by-id>
@@ -277,6 +278,7 @@
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
+            'isNegociatedLabel',
             'priceInfoLabel',
             'priceLabel'
         ],

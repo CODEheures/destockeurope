@@ -26,6 +26,7 @@
             advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
             advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-price-label="{{ trans('strings.view_advert_form_price_label') }}"
+            advert-is-negociated-label="{{ trans('strings.view_all_negociate') }}"
             advert-address-label="{{ trans('strings.view_advert_form_address_label') }}"
             advert-approve-success="{{ trans('strings.view_advert_approve_success') }}"
             total-quantity-label="{{ trans('strings.form_quantity_label') }}"

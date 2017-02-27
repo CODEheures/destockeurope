@@ -82,6 +82,7 @@
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
+                            :is-negociated-label="isNegociatedLabel"
                             :price-info-label="priceInfoLabel"
                             :no-result-found-header="noResultFoundHeader"
                             :no-result-found-message="noResultFoundMessage"
@@ -153,6 +154,7 @@
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
+            'isNegociatedLabel',
             'priceInfoLabel',
             'noResultFoundHeader',
             'noResultFoundMessage',

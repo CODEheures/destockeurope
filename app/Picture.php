@@ -59,4 +59,8 @@ class Picture extends Model
     public function scopeOnLocalDisk($query) {
         return $query->where('disk', '=', 'local');
     }
+
+    public function scopeFindByAdvertIdWithTrashed($query, $advertId) {
+        return $query->withTrashed()->where('advert_id','=',$advertId);
+    }
 }

@@ -26,13 +26,22 @@
                 <input type="hidden" name="searchPlace" :value="searchPlace" />
                 <input type="hidden" name="main_picture" :value="mainPicture" />
                 <input type="hidden" name="is_urgent" :value="isUrgent ? 1 : 0" />
+                <input type="hidden" name="is_negociated" :value="isNegociated ? 1 : 0" />
                 <div class="ui error message"></div>
-                <type-radio-button
-                        :route-get-list-type="routeGetListType"
-                        :first-menu-name="listTypeFirstMenuName"
-                        :old-choice="isDelegation ? 'bid' : oldType"
-                        :is-disabled="isDelegation==true"
-                ></type-radio-button>
+                <div style="display:none">
+                    <type-radio-button
+                            :route-get-list-type="routeGetListType"
+                            :first-menu-name="listTypeFirstMenuName"
+                            :old-choice="'bid'"
+                            :is-disabled="true"
+                    ></type-radio-button>
+                </div>
+                <!--<type-radio-button-->
+                        <!--:route-get-list-type="routeGetListType"-->
+                        <!--:first-menu-name="listTypeFirstMenuName"-->
+                        <!--:old-choice="isDelegation ? 'bid' : oldType"-->
+                        <!--:is-disabled="isDelegation==true"-->
+                <!--&gt;</type-radio-button>-->
                 <div class="field">
                     <categories-dropdown-menu
                             :route-category="routeCategory"
@@ -59,18 +68,26 @@
 
                 <div class="field">
                     <div class="ui grid">
-                        <div class="doubling four column row">
+                        <div class="doubling four column row" v-show="isNegociated==0">
                             <div class="column">
                                 <div class="required field">
                                     <label>{{ advertFormPriceLabel }}</label>
                                     <div class="ui right labeled input">
-                                        <input name="price" type="number" min="0.01" step="0.01" v-model="price" />
+                                        <input name="price" type="number" min="0.00" step="0.01" v-model="price" />
                                         <currencies-input-right-label
                                                 :route-list-currencies="routeListCurrencies"
                                                 :first-menu-name="currenciesFirstMenuName"
                                                 :old-currency="oldCurrency">
                                         </currencies-input-right-label>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sixteen wide column" v-if="isDelegation!=1">
+                            <div class="field">
+                                <div :id="'isNegociated'+_uid" class="ui checkbox">
+                                    <input type="checkbox" name="isNegociated">
+                                    <label> <span class="ui blue horizontal label">{{ advertExampleIsNegociatedLabel }}</span>{{ advertFormIsNegociatedLabel }}</label>
                                 </div>
                             </div>
                         </div>
@@ -193,6 +210,8 @@
             'advertFormLotMiniQuantityLabel',
             'advertFormUrgentLabel',
             'advertExampleUrgentLabel',
+            'advertFormIsNegociatedLabel',
+            'advertExampleIsNegociatedLabel',
             //steps component
             'stepOneTitle',
             'stepTwoTitle',
@@ -249,7 +268,7 @@
                 type: '',
                 title: '',
                 description: '',
-                price: '',
+                price: '0',
                 totalQuantity: 1,
                 lotMiniQuantity: 1,
                 xCsrfToken: '',
@@ -270,6 +289,7 @@
                 steps: [],
                 successFormSubmit: false,
                 isUrgent: false,
+                isNegociated: false,
                 hasVideo: false,
                 cost: 0,
                 onSetSteps: false,
@@ -353,6 +373,10 @@
                 onChecked: function() {that.isUrgent = true;},
                 onUnchecked: function() {that.isUrgent = false;}
             });
+            $('#isNegociated'+this._uid).checkbox({
+                onChecked: function() {that.isNegociated = true;},
+                onUnchecked: function() {that.isNegociated = false;}
+            });
         },
         methods: {
             typeChoice: function (type) {
@@ -420,6 +444,7 @@
                 sessionStorage.setItem('lat', this.lat);
                 sessionStorage.setItem('lng', this.lng);
                 sessionStorage.setItem('isUrgent', this.isUrgent);
+                sessionStorage.setItem('isNegociated', this.isNegociated);
             },
             getStorage() {
                 sessionStorage.getItem('successFormSubmit') != undefined ? this.successFormSubmit = sessionStorage.getItem('successFormSubmit') : null;
@@ -437,6 +462,7 @@
                 sessionStorage.getItem('lat') != undefined ? this.lat =  sessionStorage.getItem('lat') : null;
                 sessionStorage.getItem('lng') != undefined ? this.lng =  sessionStorage.getItem('lng') : null;
                 sessionStorage.getItem('isUrgent') != undefined ? this.isUrgent =  sessionStorage.getItem('isUrgent') == 'true' : null;
+                sessionStorage.getItem('isNegociated') != undefined ? this.isNegociated =  sessionStorage.getItem('isNegociated') == 'true' : null;
             }
         }
     }

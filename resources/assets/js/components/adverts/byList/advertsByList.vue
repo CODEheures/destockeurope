@@ -60,6 +60,7 @@
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
+                            :is-negociated-label="isNegociatedLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
                             :delete-advert-label="deleteAdvertLabel"
@@ -118,6 +119,7 @@
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
+                            :is-negociated-label="isNegociatedLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
                             :delete-advert-label="deleteAdvertLabel"
@@ -175,6 +177,7 @@
             totalQuantityLabel: String,
             lotMiniQuantityLabel: String,
             urgentLabel: String,
+            isNegociatedLabel: String,
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,

@@ -41,6 +41,8 @@
             advert-form-lot-mini-quantity-label="{{ trans('strings.form_lot_mini_label') }}"
             advert-form-urgent-label="{{ isset($user) && $user->isDelegation ? trans('strings.form_urgent_delegation', ['price' => config('runtime.urgentCost')]):trans('strings.form_urgent', ['price' => config('runtime.urgentCost')]) }}"
             advert-example-urgent-label="{{ trans('strings.view_all_urgent') }}"
+            advert-form-is-negociated-label="{{ trans('strings.form_isNegociated') }}"
+            advert-example-is-negociated-label="{{ trans('strings.view_all_negociate') }}"
 
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"

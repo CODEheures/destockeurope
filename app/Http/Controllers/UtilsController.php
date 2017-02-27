@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Advert;
 use App\Common\AdvertsManager;
 use App\Common\PicturesManager;
 use App\Stats;
@@ -66,6 +67,7 @@ class UtilsController extends Controller
     }
 
     public function tempo(){
-
+        $advert = Advert::find(12);
+        $advert->save();
     }
 }

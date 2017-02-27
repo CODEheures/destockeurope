@@ -46,6 +46,7 @@
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
                             :urgent-label="urgentLabel"
+                            :is-negociated-label="isNegociatedLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
                             :delete-advert-label="deleteAdvertLabel"
@@ -116,6 +117,7 @@
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
+            'isNegociatedLabel',
             'manageAdvertLabel',
             'renewAdvertLabel',
             'deleteAdvertLabel',
