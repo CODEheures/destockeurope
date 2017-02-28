@@ -9,6 +9,8 @@
 <script>
     export default {
         props: [
+            //vue routes
+            'routeImageServer',
             //vue vars
             'isActive',
             'urlImg',
@@ -28,7 +30,6 @@
             this.dataIsActive = this.isActive == '1';
             this.setDatasrc();
             this.setDataWidth();
-
         },
         updated () {
             let that = this;
@@ -39,8 +40,12 @@
         },
         methods: {
             setDatasrc() {
-                if(this.url != ''){
-                    this.datasrc = this.urlImg;
+                if(this.urlImg != ''){
+                    let urlBase = this.routeImageServer;
+                    let parsed = Parser.parse(urlBase, true);
+                    parsed.query={};
+                    parsed.query['url']=this.urlImg;
+                    this.datasrc = Parser.format(parsed);
                 }
             },
             setDataWidth() {

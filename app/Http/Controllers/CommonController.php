@@ -7,11 +7,14 @@ use App\Anonymous;
 use App\Common\BrowserUtils;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
+use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CommonController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth', ['except' => ['portal', 'subscribeNewsLetter', 'home', 'cgv']]);
+        $this->middleware('auth', ['except' => ['portal', 'subscribeNewsLetter', 'home', 'cgv', 'imageServer']]);
         $this->middleware('isEmailConfirmed', ['only' => ['mines']]);
     }
 
@@ -74,5 +77,21 @@ class CommonController extends Controller
      */
     public function cgv(){
         return 'cgv';
+    }
+
+    public function imageServer(Request $request) {
+        $clientResponse=null;
+
+        if($request->has('url')){
+            $client = new Client();
+            $clientResponse = $client->get($request->url);
+        }
+
+
+        if($clientResponse->getStatusCode()<300){
+            return response($clientResponse->getBody()->getContents(),200)->header("Content-Type", $clientResponse->getHeader("Content-Type"));
+        } else {
+            return response('not found',404);
+        }
     }
 }

@@ -20,6 +20,7 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
     Route::get('/mines', ['as' => 'mines', 'uses' => 'CommonController@mines']);
     Route::get('/bookmarks', ['as' => 'bookmarks', 'uses' => 'CommonController@bookmarks']);
     Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
+    Route::get('/imageserver', 'CommonController@imageServer')->name('imageServer');
 
     // Admin Routes...
     Route::group(['prefix' => 'admin'], function() {

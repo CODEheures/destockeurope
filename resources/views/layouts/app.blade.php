@@ -75,6 +75,7 @@
         <!-- main content -->
 
         <masterads
+            route-image-server = "{{ route('imageServer') }}"
             is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
             url-img="{{config('runtime.urlMasterAds')}}"
             url-redirect="{{ config('runtime.urlLinkMasterAds') }}"
