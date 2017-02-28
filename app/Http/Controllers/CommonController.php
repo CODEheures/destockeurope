@@ -20,7 +20,7 @@ class CommonController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function portal() {
-        $masterAdsControllerFlag = true;
+        $masterAdsControllerFlag = false;
         $browser = BrowserUtils::getBrowserName();
         return view('portal', compact('masterAdsControllerFlag', 'browser'));
     }

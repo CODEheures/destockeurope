@@ -1,7 +1,7 @@
 <template>
-    <div v-if="dataIsActive">
-        <a :href="urlRedirect">
-            <img class="ui fluid image masterads" :src="datasrc" :style="'width:'+datawidth+'px; left:calc(50% - '+datawidth/2+'px);'">
+    <div v-if="dataIsActive" class="masterads">
+        <a :href="urlRedirect" target="_blank">
+            <img :id="'img_masterads'+_uid" class="ui fluid image masterads" :src="datasrc">
         </a>
     </div>
 </template>
@@ -13,6 +13,7 @@
             'isActive',
             'urlImg',
             'urlRedirect',
+            'offsetYMainContainer',
             'width'
         ],
         data: () => {
@@ -23,9 +24,18 @@
             }
         },
         mounted () {
+            let that = this;
             this.dataIsActive = this.isActive == '1';
             this.setDatasrc();
             this.setDataWidth();
+
+        },
+        updated () {
+            let that = this;
+            this.adaptView();
+            $(window).bind('resize', function () {
+                that.adaptView();
+            })
         },
         methods: {
             setDatasrc() {
@@ -36,6 +46,30 @@
             setDataWidth() {
                 if(this.urlImg != '' && this.width != undefined){
                     this.datawidth = this.width;
+                }
+            },
+            adaptView () {
+                if(this.dataIsActive) {
+                    let that = this;
+                    let img = $('#img_masterads'+that._uid);
+                    let mainContainer = $('div.ui.main.container');
+                    if(this.width < $(document).width()) {
+                        img.css({
+                            'display': 'block',
+                            'width': that.width+'px',
+                            'left': 'calc(50% - '+ that.width/2+'px)'
+                        });
+                        mainContainer.animate({
+                            'margin-top': that.offsetYMainContainer+'px'
+                        },800);
+                    } else {
+                        img.css({
+                            'display': 'none'
+                        });
+                        mainContainer.css({
+                            'margin-top': ''
+                        });
+                    }
                 }
             }
         }

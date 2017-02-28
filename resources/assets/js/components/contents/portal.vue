@@ -4,8 +4,9 @@
         <div class="row">
             <div class="ui grid">
                 <div class="four wide tablet only four wide computer only column">
-                    <div class="ui small rectangle test ad " data-text="Small Rectangle"></div>
-                    <div class="ui small rectangle test ad spaced-top-2" data-text="Small Rectangle"></div>
+                    <div class="ui small rectangle test ad " data-text="Small Rectangle 180x150"></div>
+                    <div class="ui small rectangle test ad spaced-top-2" data-text="Small Rectangle 180x150"></div>
+                    <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper 160x600"></div>-->
                 </div>
                 <div class="sixteen wide mobile twelve wide tablet twelve wide computer column">
                     <div class="ui segment">

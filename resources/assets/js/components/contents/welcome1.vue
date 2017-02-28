@@ -103,10 +103,10 @@
             </div>
             <div id="welcome-ads" class="computer only four wide column">
                 <div>
-                    <div class="sixteen right aligned column">
-                        <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
-                        <div class="ui small rectangle centered test ad" data-text="Small Rectangle"></div>
-                        <!--<div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper"></div>-->
+                    <div class="sixteen right aligned column spaced-top-2">
+                        <!--<div class="ui small rectangle centered test ad" data-text="Small Rectangle 180x150"></div>-->
+                        <!--<div class="ui small rectangle centered test ad" data-text="Small Rectangle 180x150"></div>-->
+                        <div class="ui wide skyscraper test ad welcome-ads" data-text="Wide Skyscraper 160x600"></div>
                     </div>
                 </div>
             </div>

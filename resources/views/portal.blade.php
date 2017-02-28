@@ -5,7 +5,7 @@
     <div class="ui grid">
         <div class="four wide tablet only four wide computer only column"></div>
         <div class="twelve wide computer only column">
-            <div class="ui leaderboard test ad" data-text="Leaderboard"></div>
+            <div class="ui leaderboard test ad" data-text="Leaderboard 728x90"></div>
         </div>
         <div class="twelve wide tablet only column">
             <div class="ui banner test ad" data-text="banner"></div>

@@ -64,14 +64,7 @@
 
     <div class="container" id="app">
         <!-- main content -->
-        <masterads
-            is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
-            url-img="{{config('runtime.urlMasterAds')}}"
-            url-redirect="{{ config('runtime.urlLinkMasterAds') }}"
-            width="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? config('runtime.widthUrlMasterAds') : 0 }}">
-        </masterads>
-
-        <div class="ui container" style="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && (isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false) ? 'margin-top:' . config('runtime.offsetYMasterAds').'px;' : null}}">
+        <div class="ui container">
             <div class="content row">
                 @yield('content')
             </div>
