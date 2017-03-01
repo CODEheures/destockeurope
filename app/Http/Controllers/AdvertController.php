@@ -720,11 +720,11 @@ class AdvertController extends Controller
                             $capture->setAmount($amt);
                             $getCapture = $authorization->capture($capture, $this->_api_context);
                             $invoice->captureId = $getCapture->getId();
+                            $invoice->save();
                             $advert->isValid=(boolean)$isApproved;
 
-
+                            $stats = Stats::latest()->first();
                             if(!$advert->originalAdvertId) {
-                                $stats = Stats::latest()->first();
                                 if($invoice->cost > 0){
                                     $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
                                     $stats->totalCosts = $stats->totalCosts + $invoice->cost;
@@ -768,6 +768,7 @@ class AdvertController extends Controller
                         }
                     } catch (\Exception $e) {
                         throw new \Exception($e);
+                        //TODO ENVOI MAIL A ADMIN
                     }
                 } else {
                     $advert->isValid=(boolean)$isApproved;
