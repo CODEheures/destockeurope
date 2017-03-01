@@ -201,7 +201,8 @@
 
             //Init dataRoute
             if(sessionStorage.getItem('goToCategory') != undefined){
-                //En cas de changement de categorie on reinit tout
+                this.initFilterBySessionStorage();
+                //En cas de changement de categorie on reinit (presque) tout
                 this.choiceCategory(sessionStorage.getItem('goToCategory'));
                 sessionStorage.removeItem('goToCategory');
             } else {

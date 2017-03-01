@@ -20,10 +20,12 @@ class AdvertObserver
         if(auth()->check() && auth()->user()->role=='delegation'){
             $advert->is_delegation = true;
         }
+    }
 
-        $slug = Str::slug($advert->title);
-        $count = Advert::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
-        $advert->slug = $count ? "{$slug}-{$count}" : $slug;
+    public function created(Advert $advert) {
+        //slug when have id
+        $advert->slug = Str::slug($advert->title).'-'.$advert->id;
+        $advert->save();
     }
 
     public function saving(Advert $advert) {

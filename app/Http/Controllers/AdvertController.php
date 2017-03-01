@@ -723,14 +723,16 @@ class AdvertController extends Controller
                             $advert->isValid=(boolean)$isApproved;
 
 
-
-                            $stats = Stats::latest()->first();
-                            if($invoice->cost > 0){
-                                $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
-                                $stats->totalCosts = $stats->totalCosts + $invoice->cost;
-                            } else {
-                                $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+                            if(!$advert->originalAdvertId) {
+                                $stats = Stats::latest()->first();
+                                if($invoice->cost > 0){
+                                    $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
+                                    $stats->totalCosts = $stats->totalCosts + $invoice->cost;
+                                } else {
+                                    $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+                                }
                             }
+
 
                             DB::beginTransaction();
                             if($originalAdvert){ $originalAdvert->save();}

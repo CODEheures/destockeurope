@@ -67,7 +67,6 @@ class UtilsController extends Controller
     }
 
     public function tempo(){
-        $advert = Advert::find(12);
-        $advert->save();
+
     }
 }
