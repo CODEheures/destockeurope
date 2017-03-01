@@ -20,6 +20,7 @@ class AdvertObserver
         if(auth()->check() && auth()->user()->role=='delegation'){
             $advert->is_delegation = true;
         }
+        $advert->slug='';
     }
 
     public function created(Advert $advert) {
