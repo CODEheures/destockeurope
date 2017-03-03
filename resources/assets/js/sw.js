@@ -7,7 +7,7 @@ cloudMessaging.setBackgroundMessageHandler(function(payload) {
     const notificationTitle = 'DestockEurope';
     const notificationOptions = {
         body: 'Il y a de nouvelles annonces',
-        icon: '/mstile-150x150.png',
+        icon: '/android-chrome-192x192.png',
     };
 
     // return self.registration.showNotification(notificationTitle,
