@@ -145,6 +145,13 @@ div.ui.vertical.segment.separator {
   max-width: 100%;
 }
 
+#app .ui.category.menu {
+  flex-wrap: wrap;
+  & > a.browse.item:last-of-type:before {
+    opacity: 0
+  }
+}
+
 .hidden.menu {
   display: none;
 }

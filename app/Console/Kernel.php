@@ -36,6 +36,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
+        //Stop Adverts Every Minutes
         $schedule->call(function(){
             $message = null;
             $result1='';
@@ -63,7 +64,8 @@ class Kernel extends ConsoleKernel
         })->everyMinute();
 
 
-        //Scheduler for STATS and Adverts Ends, Purges, Alerts
+        //Scheduler for STATS and Adverts Purges, Alerts
+        //NOTA: purge only OBSOLETES ADVERTS, purge ABANDONNED IS MANUAL To UNDERSTAND WHY
         $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
             $result1='';

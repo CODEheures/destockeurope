@@ -23,14 +23,15 @@ class AdvertsTableSeeder extends Seeder
         $user2 = \App\User::where('email', '=', 'vendeur@codeheures.fr')->first();
         $user4 = \App\User::where('email', '=', 'delegation@codeheures.fr')->first();
 
-        $subCategory212 = \App\Category::where('description', '=', '{"fr":"homme","en":"men"}')->first();
-        $subCategory12 = \App\Category::where('description', '=', '{"fr":"electroniques","en":"electronics"}')->first();
-        $subCategory11 = \App\Category::where('description', '=', '{"fr":"crayons","en":"pens"}')->first();
-        $subCategory22 = \App\Category::where('description', '=', '{"fr":"Sacs","en":"Bags"}')->first();
+        $cat_bagagerie = \App\Category::where('description', '=', '{"fr":"Bagagerie & sacs","en":"Luggage & Bags"}')->first();
+        $cat_image_sons = \App\Category::where('description', '=', '{"fr":"Image & son","en":"Picture & sound"}')->first();
+        $cat_montres = \App\Category::where('description', '=', '{"fr":"Montres & horloges","en":"Watches & clocks"}')->first();
+        $cat_loisirs_autres = \App\Category::where('description', '=', '{"fr":"Autres loisirs","en":"Other hobbies"}')->first();
+        $cat_info_composants = \App\Category::where('description', '=', '{"fr":"Composants Informatiques & Logiciels","en":"Computer Components & Software"}')->first();
 
         $this->advertCreate(
             $user4->id,
-            $subCategory22->id,
+            $cat_bagagerie->id,
             Carbon::now()->subDays(5),
             0,
             '1000 supers sacs à dos antivol à saisir',
@@ -50,7 +51,7 @@ class AdvertsTableSeeder extends Seeder
 
         $this->advertCreate(
             $user2->id,
-            $subCategory12->id,
+            $cat_image_sons->id,
             Carbon::now()->subDays(5),
             0,
             'Lot de 700 enceintes bluetooth',
@@ -76,7 +77,7 @@ class AdvertsTableSeeder extends Seeder
         // J-4
         $this->advertCreate(
             $user2->id,
-            $subCategory12->id,
+            $cat_montres->id,
             Carbon::now()->subDays(4),
             6900,
             'MONTRES LEXON "MOON"',
@@ -92,11 +93,11 @@ class AdvertsTableSeeder extends Seeder
 
         $this->advertCreate(
             $user2->id,
-            $subCategory12->id,
+            $cat_image_sons->id,
             Carbon::now()->subDays(4),
             2000,
             'Lot de Mini Radio "DOLMEN" LEXON',
-            ['c1c528fdad42239b82a57bee7410081d'],
+            ['c1c528fdad42239b82a57bee7410081d', '90144aa33c3408905bcab83a4ba7fedf'],
             8000,
             100,
             0,
@@ -108,7 +109,7 @@ class AdvertsTableSeeder extends Seeder
 
         $this->advertCreate(
             $user2->id,
-            $subCategory12->id,
+            $cat_image_sons->id,
             Carbon::now()->subDays(4),
             0,
             '250 Gear VR',
@@ -134,7 +135,7 @@ class AdvertsTableSeeder extends Seeder
         // J-2
         $this->advertCreate(
             $user2->id,
-            $subCategory22->id,
+            $cat_bagagerie->id,
             Carbon::now()->subDays(2),
             1000,
             '500 sacs à dos EastPack Gris à saisir',
@@ -161,7 +162,7 @@ class AdvertsTableSeeder extends Seeder
         //J - 1
         $this->advertCreate(
             $user2->id,
-            $subCategory11->id,
+            $cat_loisirs_autres->id,
             Carbon::now()->subDays(1),
             4900,
             '42 kilos de crayons tout venant',
@@ -177,7 +178,7 @@ class AdvertsTableSeeder extends Seeder
 
         $this->advertCreate(
             $user2->id,
-            $subCategory12->id,
+            $cat_info_composants->id,
             Carbon::now()->subDays(1),
             1234,
             '200 clés USB3 suite à depot de bilan',
@@ -193,7 +194,7 @@ class AdvertsTableSeeder extends Seeder
 
         $this->advertCreate(
             $user2->id,
-            $subCategory12->id,
+            $cat_image_sons->id,
             Carbon::now()->subDays(1),
             0,
             'Lunettes Réalité Virtuelle pliables.',
@@ -207,6 +208,22 @@ class AdvertsTableSeeder extends Seeder
             . PHP_EOL . PHP_EOL . 'Fourni sous écrin cadeau. Plastique ABS et silicone. 116.',
             true,
             3.64,
+            false
+        );
+
+        $this->advertCreate(
+            $user2->id,
+            $cat_bagagerie->id,
+            Carbon::now()->subDays(1),
+            0,
+            'Housse à vêtements Rollor®',
+            ['bca2c9301a0cebc344f7f5149a14c036','9c7d1bbc5aa4f85cfe2d6b4595b54b66','8da67b8454d9e01b562d0ba5d9882721'],
+            2420,
+            50,
+            0,
+            'Housse à vêtements Rollor® avec système anti-froissage. La technologie anti-froissage rollology® permet de compacter les vêtements sans risque de froissage.',
+            true,
+            59.00,
             false
         );
 

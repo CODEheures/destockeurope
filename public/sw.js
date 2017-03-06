@@ -15,7 +15,7 @@ cloudMessaging.setBackgroundMessageHandler(function(payload) {
     return self.registration.showNotification();
 });
 
-let version='v1::';
+let version='v2::';
 
 self.addEventListener('activate', function activator(event) {
     event.waitUntil(
@@ -82,7 +82,8 @@ self.addEventListener("fetch", function(event) {
                     || event.request.url.indexOf('.svg')!==-1
                     || event.request.url.indexOf('.json')!==-1
                     || event.request.url.indexOf('/images/')!==-1
-                    || event.request.url.indexOf('/picture/')!==-1
+                    || event.request.url.indexOf('/picture/thumb/2/')!==-1
+                    || event.request.url.indexOf('/picture/normal/')!==-1
                 ){
                     //console.log('cache first for: ', event.request.url);
                     return cached || networked;

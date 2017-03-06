@@ -82,7 +82,8 @@ self.addEventListener("fetch", function(event) {
                     || event.request.url.indexOf('.svg')!==-1
                     || event.request.url.indexOf('.json')!==-1
                     || event.request.url.indexOf('/images/')!==-1
-                    || event.request.url.indexOf('/picture/')!==-1
+                    || event.request.url.indexOf('/picture/thumbs/2/')!==-1
+                    || event.request.url.indexOf('/picture/normal/')!==-1
                 ){
                     //console.log('cache first for: ', event.request.url);
                     return cached || networked;
@@ -135,12 +136,12 @@ self.addEventListener("fetch", function(event) {
                      response body, and the second one defines the options for the response.
                      */
                     return cached || new Response('<h1>Service Unavailable</h1>', {
-                            status: 503,
-                            statusText: 'Service Unavailable',
-                            headers: new Headers({
-                                'Content-Type': 'text/html'
-                            })
-                        });
+                        status: 503,
+                        statusText: 'Service Unavailable',
+                        headers: new Headers({
+                            'Content-Type': 'text/html'
+                        })
+                    });
                 }
             })
     );

@@ -73,7 +73,7 @@ class StoreAdvertRequest extends FormRequest
             'category' => 'required|numeric|exists:categories,id',
             'title' => 'required|min:'. config('db_limits.adverts.minTitle') . '|max:'. config('db_limits.adverts.maxTitle') ,
             'description' => 'required|min:' . config('db_limits.adverts.minDescription') . '|max:' . config('db_limits.adverts.maxDescription'),
-            'price' => 'required|numeric|min:0.00',
+            'price' => 'required_if:is_negociated,false|numeric|min:0.00',
             'currency' => 'required|in:'.$line2,
             'lat' => 'required|numeric|min:-90|max:90',
             'lng' => 'required|numeric|min:-180|max:180',

@@ -41,7 +41,7 @@
             <div class="actions">
                 <div style="float: left" v-if="dataOwnerUser.phone && dataOwnerUser.phone!=null && dataOwnerUser.phone!=''">
                     <div class="ui blue button" v-on:click="seePhone()" v-if="!phoneIsVisible">
-                        Voir le Téléphone
+                        {{ formSeePhoneLabel }}
                     </div>
                     <div class="ui large label" style="float: left" v-else>
                         <i class="phone icon"></i> {{ dataOwnerUser.phone }}
@@ -271,6 +271,7 @@
             'formMessageNameLabel',
             'formMessagePhoneLabel',
             'formMessageCompagnyLabel',
+            'formSeePhoneLabel',
             'formMessageSendLabel',
             'formMessageCancelLabel',
             'bookmarkSuccess',

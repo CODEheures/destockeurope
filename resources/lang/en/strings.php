@@ -137,11 +137,12 @@ return [
     'form_waiting_for_process' => 'Waiting for process',
     'form_waiting_for_transcode' => 'Encoding in progress. If this one seems too long you can go to the next step, our services will verify your video',
     'form_notification_activer_label' => 'Be informed about new adverts?',
+    'form_see_phone_label' => 'See phone number',
 
     'modal_yes' => 'Yes',
     'modal_no' => 'No',
-    'modal_send'=> 'Envoyer',
-    'modal_cancel'=> 'Annuler',
+    'modal_send'=> 'Send',
+    'modal_cancel'=> 'Cancel',
 
     'link_forgot_password' => 'Forgot your password',
     'link_send_reset_link' => 'Send reset link',

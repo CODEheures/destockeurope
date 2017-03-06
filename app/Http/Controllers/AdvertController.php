@@ -379,7 +379,7 @@ class AdvertController extends Controller
                     $persistent = Persistent::where('key', '=', 'videoId')->where('value', '=', session('videoId'))->first();
                 }
 
-                $advert->price = MoneyUtils::setPriceWithoutDecimal($request->price,$request->currency);
+                $advert->price = MoneyUtils::setPriceWithoutDecimal($request->has('price') ? $request->price : '0',$request->currency);
 
                 //pass picture from local tempo to final and count them
                 $results = $this->pictureManager->storeLocalFinal();

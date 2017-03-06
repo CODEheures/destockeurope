@@ -49,6 +49,7 @@
             form-message-name-label="{{ trans('strings.form_label_name') }}"
             form-message-phone-label="{{ trans('strings.form_label_phone') }}"
             form-message-compagny-label="{{ trans('strings.view_user_account_compagny_name_label') }}"
+            form-see-phone-label="{{ trans('strings.form_see_phone_label') }}"
             form-message-send-label="{{ trans('strings.modal_send') }}"
             form-message-cancel-label="{{ trans('strings.modal_cancel') }}"
             bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"

@@ -1,6 +1,6 @@
 <template>
-    <div :class="level==1 ? 'ui flowing basic admission popup' : 'ui link list'">
-        <template v-if="level==1">
+    <div :class="level==1 ? 'ui fluid popup' : 'ui link list'">
+        <template v-if="level==1 && maxLevel>1">
             <div :class="'ui ' + numberToWord(categories.length) +' column relaxed equal height divided grid'">
                 <template v-for="(category,index) in categories">
                     <div class="column">
@@ -9,11 +9,25 @@
                                 :categories="category.children"
                                 :actual-locale="actualLocale"
                                 :parent-id="category.id"
+                                :parent-description="category.description[actualLocale]"
                                 :all-item="allItem"
                                 :level="level+1"
+                                :max-level="parseInt(0)"
                         ></recursive-categories-horizontal-menu>
                     </div>
                 </template>
+            </div>
+        </template>
+        <template v-if="level==1 && maxLevel==1">
+            <div class="ui one  column relaxed equal height divided grid">
+                <div class="column">
+                    <h4 class="ui header">{{ parentDescription }}</h4>
+                    <div class="ui link list">
+                        <template v-for="(category,index) in categories">
+                            <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)">{{ category['description'][actualLocale] }}</a>
+                        </template>
+                    </div>
+                </div>
             </div>
         </template>
         <template v-if="level>1">
@@ -33,7 +47,9 @@
             actualLocale: String,
             allItem: String,
             parentId: Number,
-            level: Number
+            parentDescription: String,
+            level: Number,
+            maxLevel: Number
         },
         data: () => {
             return {
@@ -54,7 +70,7 @@
                 this.$parent.$emit('categoryChoice', {id: value});
             },
             numberToWord: function (num) {
-                var a = ['', 'one','two','three','four', 'five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen'];
+                var a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
                 return a[num];
             }
         }

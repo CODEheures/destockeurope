@@ -3,27 +3,29 @@
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <div class="ui menu">
+        <div class="ui blue inverted category menu">
             <a class="browse item" v-on:click="emitCategoryChoice(0)">
             {{ allItem }}
             </a>
             <template v-for="(category,index) in categories">
-                    <template>
-                        <a :id="'browse-'+index+'-'+_uid" class="browse item"
-                           v-on:click="emitCategoryChoice(category.id)">
-                            {{ category['description'][actualLocale] }}
-                            <i class="dropdown icon"></i>
-                        </a>
-                        <recursive-categories-horizontal-menu
-                                :categories="category.children"
-                                :actual-locale="actualLocale"
-                                :parent-id="category.id"
-                                :all-item="allItem"
-                                :old-choice="oldChoice"
-                                :level="1"
-                        ></recursive-categories-horizontal-menu>
-                    </template>
+                <a :id="'browse-'+index+'-'+_uid" class="browse item"
+                   v-on:click="emitCategoryChoice(category.id)">
+                    {{ category['description'][actualLocale] }}
+                    <i class="dropdown icon"></i>
+                </a>
             </template>
+        </div>
+        <div :id="'popup-'+index+'-'+_uid" v-for="(category,index) in categories">
+            <recursive-categories-horizontal-menu
+                    :categories="category.children"
+                    :actual-locale="actualLocale"
+                    :parent-id="category.id"
+                    :parent-description="category.description[actualLocale]"
+                    :all-item="allItem"
+                    :old-choice="oldChoice"
+                    :level="1"
+                    :max-level="countLevel(category)"
+            ></recursive-categories-horizontal-menu>
         </div>
     </div>
 </template>
@@ -73,8 +75,12 @@
                 let that = this;
                 (this.categories).forEach(function (elem, index) {
                     let $elem = $('#browse-'+index+'-'+that._uid);
+                    let $popup = $('#popup-'+index+'-'+that._uid + ' div.ui.fluid.popup');
+                    let $target = $elem.parent().parent();
                     $elem.popup({
-                        inline: false,
+                        inline: true,
+                        target: $target,
+                        popup: $popup,
                         hoverable: true,
                         exclusive: true,
                         position: 'bottom left',
@@ -86,6 +92,13 @@
                     })
                     ;
                 });
+            },
+            countLevel: function (category) {
+                let level = 1;
+                for(let i=0; i<category.children.length;i++) {
+                    category.children[i].children.length > 0 ? level = 2: null;
+                }
+                return level;
             }
         }
     }

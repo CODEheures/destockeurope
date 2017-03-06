@@ -21,6 +21,11 @@ class AdvertObserver
             $advert->is_delegation = true;
         }
         $advert->slug='';
+
+        //Have a price coefficient before saving
+        if(!key_exists('price',$advert->getAttributes())) {
+            $advert->price = 0;
+        }
     }
 
     public function created(Advert $advert) {

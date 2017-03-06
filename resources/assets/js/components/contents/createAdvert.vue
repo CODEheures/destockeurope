@@ -68,12 +68,17 @@
 
                 <div class="field">
                     <div class="ui grid">
-                        <div class="doubling four column row" v-show="isNegociated==0">
+                        <div class="doubling four column row">
                             <div class="column">
                                 <div class="required field">
                                     <label>{{ advertFormPriceLabel }}</label>
                                     <div class="ui right labeled input">
-                                        <input name="price" type="number" min="0.00" step="0.01" v-model="price" />
+                                        <template v-if="isNegociated==0">
+                                            <input  name="price" type="number" min="0.00" step="0.01" v-model="price"/>
+                                        </template>
+                                        <template v-else>
+                                            <input  name="price" type="number" min="0.00" step="0.01" v-model="price" disabled/>
+                                        </template>
                                         <currencies-input-right-label
                                                 :route-list-currencies="routeListCurrencies"
                                                 :first-menu-name="currenciesFirstMenuName"
@@ -362,6 +367,14 @@
                 } else {
 
                     $('#isUrgent'+this._uid).checkbox('uncheck');
+                }
+            });
+            this.$watch('isNegociated', function () {
+                if(this.isNegociated){
+                    $('#isNegociated'+this._uid).checkbox('check');
+                } else {
+
+                    $('#isNegociated'+this._uid).checkbox('uncheck');
                 }
             });
 
