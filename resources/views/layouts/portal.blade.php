@@ -19,7 +19,7 @@
     <!-- Scripts -->
     <script>
         window.destockShareVar={
-            'serviceWorkerScope': '/sw.js',
+            'serviceWorkerScope': '/sw-v3.js',
             'vueJsDevTool': <?php echo (bool)(env('APP_DEBUG')) ? 'true':'false' ?>,
             'csrfToken': '{{ csrf_token() }}',
         };
