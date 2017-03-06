@@ -56,7 +56,7 @@
             let fixedMenu = $('.horizontal-category-menu');
             fixedMenu.visibility({
                 type   : 'fixed',
-                offset : 100 // give some space from top of screen
+                offset : 66 // give some space from top of screen
             });
         },
         methods: {
