@@ -81,10 +81,9 @@
                 (this.categories).forEach(function (elem, index) {
                     let $elem = $('#browse-'+index+'-'+that._uid);
                     let $popup = $('#popup-'+index+'-'+that._uid + ' div.ui.fluid.popup');
-                    let $target = $elem.parent().parent();
                     $elem.popup({
                         inline: true,
-                        target: $target,
+                        target: $('.ui.category.menu'),
                         popup: $popup,
                         hoverable: true,
                         exclusive: true,
