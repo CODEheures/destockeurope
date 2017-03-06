@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="horizontal-category-menu">
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
@@ -53,6 +53,11 @@
         },
         updated() {
             this.setPopup();
+            let fixedMenu = $('.horizontal-category-menu');
+            fixedMenu.visibility({
+                type   : 'fixed',
+                offset : 100 // give some space from top of screen
+            });
         },
         methods: {
             getCategories: function (withLoadIndicator) {

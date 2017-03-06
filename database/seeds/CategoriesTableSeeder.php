@@ -57,7 +57,7 @@ class CategoriesTableSeeder extends Seeder
                 $subCategory121->description = ['fr' => 'Matières premières', 'en'=>'Raw materials'];
 
                 $subCategory122 = new Category();
-                $subCategory122->description = ['fr' => html_entity_decode('&Eacute;').'lectricité et &Eacute;nergie', 'en'=>'Electricity and Energy'];
+                $subCategory122->description = ['fr' => html_entity_decode('&Eacute;').'lectricité et ' .html_entity_decode('&Eacute;').'nergie', 'en'=>'Electricity and Energy'];
 
                 $subCategory123 = new Category();
                 $subCategory123->description = ['fr' => 'Matériaux', 'en'=>'Materials'];

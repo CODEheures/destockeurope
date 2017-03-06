@@ -3,10 +3,10 @@
         .ready(function() {
 
             // fix menu when passed
-            $('.masthead')
+            $('.masthead .ui.secondary.menu')
                 .visibility({
                     once: false,
-                    onBottomPassed: function() {
+                    onTopPassed: function() {
                         $('.fixed.menu').transition('fade in');
                     },
                     onBottomPassedReverse: function() {

@@ -152,6 +152,11 @@ div.ui.vertical.segment.separator {
   }
 }
 
+#app div.horizontal-category-menu.fixed {
+  width:100% !important;
+  left:0 !important;
+}
+
 .hidden.menu {
   display: none;
 }
