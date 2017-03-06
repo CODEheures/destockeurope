@@ -212,6 +212,9 @@
                 this.updateResults();
             }
             this.$on('categoryChoice', function (event) {
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 600);
                 if(event.id != undefined && event.id > 0) {
                     if(parseInt(event.id) != this.filter.categoryId) {
                         this.choiceCategory(event.id)

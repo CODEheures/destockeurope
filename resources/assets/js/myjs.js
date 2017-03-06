@@ -9,7 +9,7 @@
                     onTopPassed: function() {
                         $('.fixed.menu').transition('fade in');
                     },
-                    onBottomPassedReverse: function() {
+                    onTopPassedReverse: function() {
                         $('.fixed.menu').transition('fade out');
                     }
                 })
