@@ -15,7 +15,7 @@ cloudMessaging.setBackgroundMessageHandler(function(payload) {
     return self.registration.showNotification();
 });
 
-let version='v2::';
+let version='v3::';
 
 self.addEventListener('activate', function activator(event) {
     event.waitUntil(
@@ -73,7 +73,7 @@ self.addEventListener("fetch", function(event) {
                  */
                 if(
                     event.request.url.indexOf('.css')!==-1
-                    || event.request.url.indexOf('.js')!==-1
+                    || (event.request.url.indexOf('.js')!==-1 && event.request.url.indexOf('sw.js')===-1)
                     || event.request.url.indexOf('.woff')!==-1
                     || event.request.url.indexOf('.woff2')!==-1
                     || event.request.url.indexOf('.ttf')!==-1
