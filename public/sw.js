@@ -73,7 +73,7 @@ self.addEventListener("fetch", function(event) {
                  */
                 if(
                     event.request.url.indexOf('.css')!==-1
-                    || (event.request.url.indexOf('.js')!==-1 && event.request.url.indexOf('sw-v3.js')===-1)
+                    || (event.request.url.indexOf('.js')!==-1 && event.request.url.indexOf('sw.js')===-1)
                     || event.request.url.indexOf('.woff')!==-1
                     || event.request.url.indexOf('.woff2')!==-1
                     || event.request.url.indexOf('.ttf')!==-1

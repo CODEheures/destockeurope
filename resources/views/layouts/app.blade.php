@@ -21,7 +21,7 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     <script>
          window.destockShareVar={
-            'serviceWorkerScope': '/sw-v3.js',
+            'serviceWorkerScope': '/sw.js',
              'vueJsDevTool': <?php echo (bool)(env('APP_DEBUG')) ? 'true':'false' ?>,
             'csrfToken': '{{ csrf_token() }}',
             'firebase': {
