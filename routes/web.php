@@ -12,7 +12,7 @@
 */
 
 
-Route::group(['middleware' => 'fw-allow-wl'], function () {
+//Route::group(['middleware' => 'fw-allow-wl'], function () {
     //Common
     Route::get('/', 'CommonController@portal')->name('portal');
     Route::get('/home', 'CommonController@home')->name('home');
@@ -157,4 +157,4 @@ Route::group(['middleware' => 'fw-allow-wl'], function () {
         //Route::get('/tempo', 'UtilsController@tempo');
     });
 
-});
+//});
