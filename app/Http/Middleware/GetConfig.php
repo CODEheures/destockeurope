@@ -23,11 +23,11 @@ class GetConfig
      */
     public function handle($request, Closure $next)
     {
-        $httpAccept = \Locale::acceptFromHttp($request->server('HTTP_ACCEPT_LANGUAGE'));
-        if(!session()->has('runtime.http_accept_language') || $httpAccept != session('runtime.http_accept_language')){
+        if(!session()->has('runtime.http_accept_language') || $request->server('HTTP_ACCEPT_LANGUAGE') != session('runtime.http_accept_language')){
             session()->forget('runtime.locale');
-            session(['runtime.http_accept_language' => $httpAccept]);
+            session(['runtime.http_accept_language' => $request->server('HTTP_ACCEPT_LANGUAGE')]);
         }
+        $httpAccept = \Locale::acceptFromHttp($request->server('HTTP_ACCEPT_LANGUAGE'));
         $requestLocale = \Locale::getPrimaryLanguage($request->server('HTTP_ACCEPT_LANGUAGE'));
         $requestRegion = \Locale::getRegion($httpAccept);
 
