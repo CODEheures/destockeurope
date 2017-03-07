@@ -244,6 +244,12 @@ return [
     'view_portal_newsletter_subscribe_success' => 'Your subscription is save',
     'view_portal_newsletter_subscribe_error' => 'Ho no! Votre request fail \'-(',
 
+    'view_contact_title' => 'Contact Us',
+    'view_contact_description' => 'Contact us by filling in the form below',
+    'view_contact_button_label' => 'Send',
+    'view_contact_success' => 'Your message will be sent. We will respond as soon as possible',
+    'view_contact_error' => 'Oh no! Your request could not be completed \'- (',
+
     'view_advert_create_header' => 'Create new advert',
     'view_advert_create_header_delegation' => 'Create new advert (Delegation of sales to ' . env('DEFAULT_DELEGATE') .')',
     'view_advert_form_title_label' => 'Advert Title',

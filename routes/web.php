@@ -21,6 +21,9 @@
     Route::get('/bookmarks', ['as' => 'bookmarks', 'uses' => 'CommonController@bookmarks']);
     Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
     Route::get('/imageserver', 'CommonController@imageServer')->name('imageServer');
+    Route::get('/contact', 'CommonController@contact')->name('contact');
+    Route::post('/contact', 'CommonController@contactPost')->name('contactPost');
+    Route::get('/cgv', 'CommonController@cgv')->name('cgv');
 
     // Admin Routes...
     Route::group(['prefix' => 'admin'], function() {

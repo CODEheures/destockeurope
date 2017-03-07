@@ -38,7 +38,7 @@
             <div class="item">
                 <div class="ui grid">
                     <div class="six wide mobile four wide tablet four wide computer column">
-                        <img src="{{ asset('images/logo.svg') }}" class="ui big image">
+                        <a href="{{ route('portal') }}"><img src="{{ asset('images/logo.svg') }}" class="ui big image"></a>
                     </div>
                     <div class="ten wide mobile twelve wide tablet twelve wide computer bottom aligned column keywords">
                         <h1>

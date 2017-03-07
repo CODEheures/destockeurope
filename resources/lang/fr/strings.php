@@ -244,6 +244,12 @@ return [
     'view_portal_newsletter_subscribe_success' => 'Votre demande est enregistrée',
     'view_portal_newsletter_subscribe_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
 
+    'view_contact_title' => 'Nous contacter',
+    'view_contact_description' => 'Contactez nous en remplissant le formulaire ci-dessous',
+    'view_contact_button_label' => 'Envoyer',
+    'view_contact_success' => 'Votre message est envoyé. Nous vous repondrons dans les plus brefs délais',
+    'view_contact_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
+
     'view_advert_create_header' => 'Créer une annonce',
     'view_advert_create_header_delegation' => 'Créer une annonce (délégation de vente à ' . env('DEFAULT_DELEGATE') .')',
     'view_advert_form_title_label' => 'Titre de l\'annonce',

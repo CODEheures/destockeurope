@@ -14,7 +14,7 @@ use Illuminate\Http\Response;
 class CommonController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth', ['except' => ['portal', 'subscribeNewsLetter', 'home', 'cgv', 'imageServer']]);
+        $this->middleware('auth', ['except' => ['portal', 'subscribeNewsLetter', 'home', 'cgv', 'contact', 'contactPost', 'imageServer']]);
         $this->middleware('isEmailConfirmed', ['only' => ['mines']]);
     }
 
@@ -76,7 +76,20 @@ class CommonController extends Controller
      * @return string
      */
     public function cgv(){
-        return 'cgv';
+        return view('global.cgv');
+    }
+
+    /**
+     * Return view of contact
+     * @return string
+     */
+    public function contact(){
+        return view('global.contact');
+    }
+
+    public function contactPost(Request $request){
+        //TODO ENVOI MAIL CONTACT A ADMIN
+        return redirect(route('home'))->with('success', trans('strings.view_contact_success'));
     }
 
     public function imageServer(Request $request) {
