@@ -119,6 +119,7 @@ class AdvertsManager
             foreach ($invalidAdverts as $advert){
                 $counter++;
                 $advert->delete();
+                $advert->isEligibleForRenewMailZero ? $this->alertEndOfAdverts(0,[$advert]) : null;
             }
             return $counter;
         } catch (\Exception $e) {
@@ -126,12 +127,12 @@ class AdvertsManager
         }
     }
 
-    public function alertEndOfAdverts($days) {
+    public function alertEndOfAdverts($days, $advertZero = null) {
         try {
             //alert advert with online_at > lifeTime-$days
             $counter = 0;
             $alertEndOfAdverts = null;
-            $alertEndOfAdverts = Advert::EligibleForMailRenew($days)->get();
+            $alertEndOfAdverts = $advertZero ? $advertZero : Advert::EligibleForMailRenew($days)->get();
 
             foreach ($alertEndOfAdverts as $advert){
                 $counter++;

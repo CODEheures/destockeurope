@@ -42,6 +42,12 @@
                         <div class="sixteen wide column">
                             <table id="table-advert-infos" class="ui very basic celled table advert-infos">
                                 <tbody>
+                                <tr v-if="advert.manu_ref">
+                                    <td class="collapsing">
+                                        <i class="barcode icon"></i> {{ refLabel }}
+                                    </td>
+                                    <td>{{ advert.manu_ref }}</td>
+                                </tr>
                                 <tr>
                                     <td class="collapsing">
                                         <i class="cubes icon"></i> {{ totalQuantityLabel }}
@@ -99,7 +105,8 @@
             urgentLabel: String,
             isNegociatedLabel: String,
             priceInfoLabel: String,
-            priceLabel: String
+            priceLabel: String,
+            refLabel: String
         },
         data: () => {
             return {

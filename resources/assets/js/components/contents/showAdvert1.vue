@@ -137,6 +137,7 @@
                                 :is-negociated-label="isNegociatedLabel"
                                 :price-info-label="priceInfoLabel"
                                 :price-label="priceLabel"
+                                :ref-label="refLabel"
                         ></advert-by-id>
                     </div>
                 </div>
@@ -290,7 +291,8 @@
             'urgentLabel',
             'isNegociatedLabel',
             'priceInfoLabel',
-            'priceLabel'
+            'priceLabel',
+            'refLabel'
         ],
         data: () => {
             return {

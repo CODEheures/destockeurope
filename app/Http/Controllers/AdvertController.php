@@ -16,7 +16,6 @@ use App\Common\UserUtils;
 use App\Http\Requests\CreditCardRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Invoice;
-use App\Notifications\AdminAdvertApprove;
 use App\Notifications\AdvertApprove;
 use App\Notifications\AdvertNotApprove;
 use App\Notifications\AdvertRenew;
@@ -29,11 +28,9 @@ use App\Stats;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 use PayPal\Api\Capture;
@@ -117,13 +114,14 @@ class AdvertController extends Controller
         }
 
         //search results before range price
-        if($isSearchResults){
-            $search = $request->resultsFor;
-            $adverts = $adverts->where(function ($query) use ($search) {
-                $query->where('title', 'LIKE', '%' .$search .'%')
-                    ->orWhere('description', 'LIKE', '%' .$search .'%');
-            });
-        }
+//        if($isSearchResults){
+//            $search = $request->resultsFor;
+//            $adverts = $adverts->where(function ($query) use ($search) {
+//                $query->where('title', 'LIKE', '%' .$search .'%')
+//                    ->orWhere('description', 'LIKE', '%' .$search .'%')
+//                    ->orWhere('manu_ref', 'LIKE', '%' .$search .'%');
+//            });
+//        }
 
         //if location
         foreach (GeoManager::$accurate as $item){
@@ -223,7 +221,8 @@ class AdvertController extends Controller
             $search = $request->search;
             $adverts = $adverts->where(function ($query) use ($search) {
                 $query->where('title', 'LIKE', '%' .$search .'%')
-                    ->orWhere('description', 'LIKE', '%' .$search .'%');
+                    ->orWhere('description', 'LIKE', '%' .$search .'%')
+                    ->orWhere('manu_ref', 'LIKE', '%' .$search .'%');
             });
         }
 
@@ -241,7 +240,8 @@ class AdvertController extends Controller
                 'url' => '#',
                 'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
             ];
-            return response()->json(['results'=> $loadCompleteAdverts[1], 'action' => $action]);
+            //choisir $loadCompleteAdverts[1] pour trier les resultats par categories
+            return response()->json(['results'=> $loadCompleteAdverts[0], 'action' => $action]);
         } else {
             return response()->json(['adverts'=> $loadCompleteAdverts[0], 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice]);
         }
@@ -360,6 +360,7 @@ class AdvertController extends Controller
                 $advert->category_id = $request->category;
                 $advert->type = $request->type;
                 $advert->title = $request->title;
+                $advert->manu_ref = $request->manu_ref;
                 $advert->description = $request->description;
                 $advert->latitude = $request->lat;
                 $advert->longitude = $request->lng;
@@ -376,6 +377,7 @@ class AdvertController extends Controller
                 $persistent=null;
                 if(session()->has('videoId')){
                     $advert->video_id = session('videoId');
+                    //sert a garder trace de l'upload de la video en cas d'echec de l'enregistrement l'advertManager purgera cette video de vimeo
                     $persistent = Persistent::where('key', '=', 'videoId')->where('value', '=', session('videoId'))->first();
                 }
 
@@ -595,6 +597,10 @@ class AdvertController extends Controller
     {
         $advert = Advert::find($id);
         if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == 'admin')){
+            if (auth()->user()->role == 'admin') {
+                $advert->isValid = false;
+                $advert->save();
+            }
             $advert->delete();
             session()->flash('info', trans('strings.view_advert_show_delete_success'));
             return response(route('home'), 200);

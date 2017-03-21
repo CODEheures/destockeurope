@@ -42,7 +42,8 @@ class AdvertsTableSeeder extends Seeder
             'Super sac à dos antivol à prix cassé !' . PHP_EOL . 'A l’extérieur, il a beaucoup de poches cachées pour le transport urbain.' . PHP_EOL . 'A l’intérieur, des compartiments rembourrés pour ordinateur portable.',
             true,
             35.00,
-            false
+            false,
+            null
         );
         $advert = Advert::first();
         $advert->is_delegation=true;
@@ -62,7 +63,8 @@ class AdvertsTableSeeder extends Seeder
             'Super lot de 700 enceintes bluetooth avec motif géométrique',
             true,
             5.00,
-            false
+            false,
+            "BLT-125-FE3"
         );
 
         $stat1 = $statsManager->getStats();
@@ -88,7 +90,8 @@ class AdvertsTableSeeder extends Seeder
             'Lot de 1000 montres "MOON" de la marque LEXON.' . PHP_EOL . 'Résistant à l\'eau.' . PHP_EOL . 'Mouvement SEIKO.',
             true,
             10.00,
-            true
+            true,
+            "LM2424"
         );
 
         $this->advertCreate(
@@ -104,7 +107,8 @@ class AdvertsTableSeeder extends Seeder
             'Superbe lot de 8000 mini radio "DOLMEN" de la marque LEXON' . PHP_EOL . 'Disponible en plusieurs couleurs.',
             true,
             8.00,
-            false
+            false,
+            null
         );
 
         $this->advertCreate(
@@ -120,7 +124,8 @@ class AdvertsTableSeeder extends Seeder
             'Destockage de 250 GEAR VR.'. PHP_EOL .'Très haute qualité, zero defaut et garanties 1 an.',
             false,
             119.95,
-            false
+            false,
+            "VR-A5632"
         );
 
         $stat2 = $statsManager->getStats();
@@ -146,7 +151,8 @@ class AdvertsTableSeeder extends Seeder
             'A saisir rapidement, 500 sacs à dos de marque EastPack.' . PHP_EOL . 'TOP QUALITY. Envoi rapide.',
             true,
             57.65,
-            false
+            false,
+            null
         );
 
         $stat3 = $statsManager->getStats();
@@ -173,7 +179,8 @@ class AdvertsTableSeeder extends Seeder
             'Ces crayons neuf sont vendus au kilo sans possibilité de choisir.' . PHP_EOL . 'Prix imbattable',
             true,
             1527.50,
-            false
+            false,
+            null
         );
 
         $this->advertCreate(
@@ -189,7 +196,8 @@ class AdvertsTableSeeder extends Seeder
             'Exceptionnel: ' . PHP_EOL .'Clés très haute capacités de 128Gb USB3.0' . PHP_EOL . 'Matériel de qualité sui vous assurera une revente dans des délai courts',
             true,
             18.95,
-            false
+            false,
+            "HCU3-128"
         );
 
         $this->advertCreate(
@@ -208,7 +216,8 @@ class AdvertsTableSeeder extends Seeder
             . PHP_EOL . PHP_EOL . 'Fourni sous écrin cadeau. Plastique ABS et silicone. 116.',
             true,
             3.64,
-            false
+            false,
+            null
         );
 
         $this->advertCreate(
@@ -224,7 +233,8 @@ class AdvertsTableSeeder extends Seeder
             'Housse à vêtements Rollor® avec système anti-froissage. La technologie anti-froissage rollology® permet de compacter les vêtements sans risque de froissage.',
             true,
             59.00,
-            false
+            false,
+            null
         );
 
 
@@ -237,13 +247,14 @@ class AdvertsTableSeeder extends Seeder
         $stat4->save();
     }
 
-    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $setNullValid=null, $price=null, $isNegociated=false){
+    private function advertCreate($userId, $catId, $created_at, $cost, $title, Array $pictures, $maxQuantity, $lotMini, $location, $description=null, $setNullValid=null, $price=null, $isNegociated=false, $manu_ref=null){
         $advert = new Advert();
         $advert->user_id = $userId;
         $advert->category_id = $catId;
         $advert->created_at = $created_at;
         $advert->type = 'bid';
         $advert->title = $title;
+        $advert->manu_ref = $manu_ref;
         $advert->isNegociated = $isNegociated;
         if($description){
             $advert->description = $description;

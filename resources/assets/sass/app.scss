@@ -201,6 +201,10 @@ div.ui.vertical.segment.separator {
   border-radius: 0.28571429rem;
 }
 
+.ui.search.filter .results .result .content .title {
+  white-space: pre-wrap !important;
+}
+
 .ui.checkbox.filter {
   & label:before, & label:after {
     top: 3px;

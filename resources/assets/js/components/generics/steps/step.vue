@@ -25,7 +25,7 @@
         mounted () {
             $('.ui.steps').visibility({
                 type   : 'fixed',
-                offset : 112
+                offset : 70
             });
         },
         methods: {

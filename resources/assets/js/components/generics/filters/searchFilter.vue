@@ -49,8 +49,9 @@
                                 apiSettings: {
                                     url: url.replace('query', '{query}')
                                 },
-                                type: 'category',
+                                //type: 'category',
                                 fields: {
+                                    title: 'titleWithManuRef',
                                     description : 'resume',
                                     image: 'thumb'
                                 },

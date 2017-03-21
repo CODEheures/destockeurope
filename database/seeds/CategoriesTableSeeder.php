@@ -65,6 +65,9 @@ class CategoriesTableSeeder extends Seeder
                 $subCategory124 = new Category();
                 $subCategory124->description = ['fr' => 'Matériaux second œuvre', 'en'=>'Second Work Materials'];
 
+                $subCategory125 = new Category();
+                $subCategory125->description = ['fr' => 'Composants électroniques', 'en'=>'Electronic components'];
+
             $subCategory13 = new Category();
             $subCategory13->description = ['fr' => 'Protection & Médical', 'en'=>'Protection & Medical'];
 
@@ -111,6 +114,7 @@ class CategoriesTableSeeder extends Seeder
                     $parent12->appendNode($subCategory122);
                     $parent12->appendNode($subCategory123);
                     $parent12->appendNode($subCategory124);
+                    $parent12->appendNode($subCategory125);
             $parent1->appendNode($subCategory13);
                 $parent13 = Category::find($subCategory13->id);
                     $parent13->appendNode($subCategory131);

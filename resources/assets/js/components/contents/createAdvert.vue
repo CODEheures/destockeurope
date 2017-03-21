@@ -58,6 +58,10 @@
                         <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{formPointingMinimumChars }}</span>
                     </transition>
                 </div>
+                <div class="field">
+                    <label>{{ advertFormRefLabel }}</label>
+                    <input name="manu_ref" type="text" :placeholder="advertFormRefLabel" v-model:value="manuRef">
+                </div>
                 <div class="required field">
                     <label>{{ advertFormDescriptionLabel }}</label>
                     <textarea name="description" v-model="description" :maxlength="formDescriptionMaxValid"></textarea>
@@ -203,6 +207,7 @@
             //vue strings
             'contentHeader',
             'advertFormTitleLabel',
+            'advertFormRefLabel',
             'advertFormDescriptionLabel',
             'advertFormPriceLabel',
             'advertFormGooglemapLabel',
@@ -272,6 +277,7 @@
                 listType: [],
                 type: '',
                 title: '',
+                manuRef: '',
                 description: '',
                 price: '0',
                 totalQuantity: 1,
@@ -448,6 +454,7 @@
             setStorage() {
                 sessionStorage.setItem('category', this.categoryId);
                 sessionStorage.setItem('title', this.title);
+                sessionStorage.setItem('manuRef', this.manuRef);
                 sessionStorage.setItem('description', this.description);
                 sessionStorage.setItem('price', this.price);
                 sessionStorage.setItem('totalQuantity', this.totalQuantity);
@@ -464,6 +471,7 @@
                 sessionStorage.getItem('category') != undefined ? this.categoryId = sessionStorage.getItem('category') : null;
                 sessionStorage.getItem('category') != undefined? this.oldCategoryId = parseInt(sessionStorage.getItem('category')): null;
                 sessionStorage.getItem('title') != undefined ? this.title = sessionStorage.getItem('title') : null;
+                sessionStorage.getItem('manuRef') != undefined ? this.manuRef = sessionStorage.getItem('manuRef') : null;
                 sessionStorage.getItem('description') != undefined ? this.description = sessionStorage.getItem('description') : null;
                 sessionStorage.getItem('price') != undefined ? this.price = sessionStorage.getItem('price') : null;
                 sessionStorage.getItem('totalQuantity') != undefined ? this.totalQuantity = sessionStorage.getItem('totalQuantity') : null;

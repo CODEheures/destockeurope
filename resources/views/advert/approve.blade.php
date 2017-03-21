@@ -24,6 +24,7 @@
             modal-yes="{{ trans('strings.modal_yes') }}"
             advert-pay-photo-singular="{{ trans_choice('strings.form_file_add_pay_photo_help_header',1) }}"
             advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
+            advert-ref-label="{{ trans('strings.view_advert_form_ref_label') }}"
             advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-price-label="{{ trans('strings.view_advert_form_price_label') }}"
             advert-is-negociated-label="{{ trans('strings.view_all_negociate') }}"

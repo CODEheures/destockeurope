@@ -68,6 +68,10 @@
                                 <td>{{ advert.title }}</td>
                             </tr>
                             <tr>
+                                <td class="three wide column">{{ advertRefLabel }}</td>
+                                <td>{{ advert.manu_ref }}</td>
+                            </tr>
+                            <tr>
                                 <td class="three wide column">{{ advertDescriptionLabel }}</td>
                                 <td><p style="white-space: pre-wrap;">{{ advert.description }}</p></td>
                             </tr>
@@ -193,6 +197,7 @@
             'modalYes',
             'advertPayPhotoSingular',
             'advertTitleLabel',
+            'advertRefLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',
             'advertIsNegociatedLabel',

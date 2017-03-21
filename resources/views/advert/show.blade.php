@@ -68,8 +68,9 @@
             urgent-label="{{ trans('strings.view_all_urgent') }}"
             is-negociated-label="{{ trans('strings.view_all_negociate') }}"
             price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
-            price-label="{{ trans('strings.view_advert_form_price_label') }}">
-    </show-advert1>
+            price-label="{{ trans('strings.view_advert_form_price_label') }}"
+            ref-label="{{ trans('strings.view_advert_form_ref_label') }}"
+    ></show-advert1>
 
 @endsection
 

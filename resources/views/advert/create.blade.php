@@ -21,6 +21,7 @@
 
             content-header="{{ isset($user) && $user->isDelegation ? trans('strings.view_advert_create_header_delegation'):trans('strings.view_advert_create_header') }}"
             advert-form-title-label="{{ trans('strings.view_advert_form_title_label') }}"
+            advert-form-ref-label="{{ trans('strings.view_advert_form_ref_label') }}"
             advert-form-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-form-price-label="{{ trans('strings.view_advert_form_price_label') }}"
             advert-form-googlemap-label="{{ trans('strings.form_googlemap_label') }}"

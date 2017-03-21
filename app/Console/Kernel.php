@@ -68,11 +68,9 @@ class Kernel extends ConsoleKernel
         //NOTA: purge only OBSOLETES ADVERTS, purge ABANDONNED IS MANUAL To UNDERSTAND WHY
         $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
-            $result1='';
             $result2=['',''];
             $result3='';
             $result4='';
-            $result5='';
             try {
                 $statManager = new StatsManager();
                 $statManager->getStats();
@@ -83,14 +81,13 @@ class Kernel extends ConsoleKernel
                 $result2 = $advertManager->purgeObsoletesAdverts();
                 $result3 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_1'));
                 $result4 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_2'));
-                $result5 = $advertManager->alertEndOfAdverts(0);
 
-                $message = $message  . ';' . $result2[0] . ';' . $result2[1] .';' . $result3 . ';' . $result4 . ';' . $result5 .';;';
+                $message = $message  . ';' . $result2[0] . ';' . $result2[1] .';' . $result3 . ';' . $result4  .';;';
             } catch (\Exception $e) {
-                $message = $message . ';' . $result2[0] . ';' . $result2[1] . ';' . $result3 . ';' . $result4 . ';' . $result5 . ';' .  $e->getMessage().';';
+                $message = $message . ';' . $result2[0] . ';' . $result2[1] . ';' . $result3 . ';' . $result4  . ';' .  $e->getMessage().';';
             }
             if(!Storage::disk('logs')->exists('schedule.log')){
-                Storage::disk('logs')->append('schedule.log' , 'DATE;PURGE ADVERTS;DELETE PICTURES;ALERT USER J-5;ALERT USER J-1;ALERT USER J0;FAILS;');
+                Storage::disk('logs')->append('schedule.log' , 'DATE;PURGE ADVERTS;DELETE PICTURES;ALERT USER J-'. env('ALERT_BEFORE_END_1') . ';ALERT USER J-'. env('ALERT_BEFORE_END_2') .';FAILS;');
             }
             Storage::disk('logs')->append('schedule.log' , $message);
 

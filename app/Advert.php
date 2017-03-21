@@ -43,11 +43,12 @@ class Advert extends Model {
         'is_delegation',
         'originalAdvertId',
         'video_id',
-        'isNegociated'
+        'isNegociated',
+        'manu_ref'
     ];
     protected $dates = ['deleted_at', 'online_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
-    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'thumb', 'isEligibleForRenew', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
+    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -119,6 +120,13 @@ class Advert extends Model {
         return ucfirst(substr($this->description, 0,$this->resumeLength)).'...';
     }
 
+    public function getTitleWithManuRefAttribute() {
+        if (!is_null($this->manu_ref)) {
+            return ucfirst($this->title) . PHP_EOL . '[ref: ' . $this->manu_ref . ']';
+        }
+        return ucfirst($this->title);
+    }
+
     public function getUpdatedAtAttribute($time) {
         return Carbon::parse($time)->toAtomString();
     }
@@ -146,6 +154,12 @@ class Advert extends Model {
         return $this->hasMany('App\Picture')->withTrashed()->count();
     }
 
+    public function getIsEligibleForRenewMailZeroAttribute() {
+        if ($this->isValid && !$this->isRenew && $this->lastObsoleteMail <> 0){
+            return true;
+        }
+        return false;
+    }
 
     //Setter Attribute
     public function setPriceCoefficientAttribute($value) {
@@ -253,6 +267,7 @@ class Advert extends Model {
         return $query->withTrashed()
             ->where('user_id', '=', auth()->id())
             ->where('isPublish', true)
+            ->where('isValid', '<>', false)
             ->where(function ($query_in) {
                 $query_in->where('online_at', '<', Carbon::now())
                     ->orWhere(function ($query_in2) {
