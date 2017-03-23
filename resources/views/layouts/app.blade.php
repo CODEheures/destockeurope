@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ app()->getLocale() }}">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <link rel="canonical" href="{{ \Illuminate\Support\Facades\Request::getFacadeRoot()->url() }}" >
+    <title>{{ config('app.name') }}</title>
+    <meta name="description" content="{{ trans('strings.app_meta_description_portal') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- opengraph -->
     @yield('opengraph')
-    <title>{{ config('app.name') }}</title>
-
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">
     @yield('css')
-
-
     @include('layouts.favicons.fav')
     <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>

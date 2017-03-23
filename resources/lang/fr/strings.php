@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'app_meta_description_portal' => 'Annonces pour destockages, fins de séries, arrivages, faillites, redressements et fins de stocks',
+    'app_meta_description_home' => 'Cherher ou déposer une annonces de destockages, fins de séries, arrivages, faillites, redressements et fins de stocks',
+
     'meta_menu_common' => 'Annonces',
     'meta_menu_admin' => 'Admin',
     'meta_menu_user' => 'Utilisateur',
@@ -57,6 +60,11 @@ return [
     'mail_report_greeting' => 'Bonjour chèr(e) administrateur/administratice',
     'mail_report_line' => ':customermail a signalé une annonce en laissant le message suivant:',
     'mail_report_action' => 'Vérifier l\'annonce',
+
+    'mail_apperror_subject' => 'Rapport d\'erreur de l\'application',
+    'mail_apperror_pdfinvoice_line' => 'La facture PDF de l\'annonce n°:advertNumber n\'a pas pu être générée et envoyée au client :mailClient',
+    'mail_apperror_autoapprove_line' => 'L\'approbation automatique de l\'annonce renouvellée n°:advertNumber a échoué! (annonce d\'origine n°:originNumber, client :mailClient)',
+    'mail_apperror_approve_line' => 'L\'approbation de l\'annonce n°:advertNumber a échoué! (client :mailClient)',
 
     'mail_advertApprove_subject' => 'Votre annonce est en ligne!',
     'mail_advertApprove_greeting' => 'Félicitation :username !',

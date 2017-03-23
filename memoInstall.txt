@@ -1,4 +1,4 @@
-//TODO bucket 64 nginx + file body size nginx
+//      bucket 64 nginx + file body size nginx
 //      INTL EXTENSION apt-get install php5-intl
 //      php.ini: upload_max_filesize = 5M
 //      pas de php artisan config:cache , googlemap foire
@@ -17,7 +17,6 @@
 //      cd vendor/mpdf
 //      chmod 775 tmp
 //      chmod 775 ttfFontsdata
-//TODO post mail to admin si renew fails
 //TODO creer administration compte de delegation
 //TODO bug validation compte apres maj tva
 //TODO indicateur de chargement images

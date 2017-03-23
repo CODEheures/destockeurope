@@ -38,6 +38,7 @@
         Route::get('/progressTransfertMedias', 'AdminController@progressTransfertMedias')->name('application.progressTransfertMedias');
         Route::get('/stats', 'AdminController@getStats')->name('application.getStats');
         Route::get('/testLangs', 'AdminController@testLangs');
+        Route::get('/testPdf', 'AdminController@testPdf');
     });
 
     //Auth::routes();
@@ -158,6 +159,7 @@
     Route::group(['prefix' => 'dangerous'] , function () {
         Route::get('/testGame', 'UtilsController@testGame');
         //Route::get('/tempo', 'UtilsController@tempo');
+        Route::get('/testInvoice', 'AdvertController@testInvoice');
     });
 
 //});

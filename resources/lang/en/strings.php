@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'app_meta_description_portal' => 'Ads for destocking, end of series, arrivals, bankruptcies, adjustments and end of stocks',
+    'app_meta_description_home' => 'Find or place an ads of destocking, end of series, arrivals, bankruptcies, adjustments and ends of stocks',
+
     'meta_menu_common' => 'Adverts',
     'meta_menu_admin' => 'Admin',
     'meta_menu_user' => 'User',
@@ -57,6 +60,11 @@ return [
     'mail_report_greeting' => 'Hello dear admin',
     'mail_report_line' => ':customermail posted a report on an advert leaving the following message:',
     'mail_report_action' => 'Check Advert',
+
+    'mail_apperror_subject' => 'Application Error Report',
+    'mail_apperror_pdfinvoice_line' => 'The PDF invoice of ad n °:advertNumber could not be generated and sent to the customer :mailClient',
+    'mail_apperror_autoapprove_line' => 'The automatic approval of the renewed advert n°:advertNumber failed! (Original advert n°:originNumber, customer :mailClient)',
+    'mail_apperror_approve_line' => 'The approval of the advert n°:advertNumber failed! (customer :mailClient)',
 
     'mail_advertApprove_subject' => 'Your advert is online!',
     'mail_advertApprove_greeting' => 'Congratulations :username !',

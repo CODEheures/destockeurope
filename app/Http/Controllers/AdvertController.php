@@ -22,6 +22,7 @@ use App\Notifications\AdvertRenew;
 use App\Notifications\CustomerContactSeller;
 use App\Notifications\InvoicePdf;
 use App\Notifications\ReportAdvert;
+use App\Notifications\ReportAppError;
 use App\Persistent;
 use App\Picture;
 use App\Stats;
@@ -31,6 +32,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Mpdf\Mpdf;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 use PayPal\Api\Capture;
@@ -771,8 +773,14 @@ class AdvertController extends Controller
                             DB::commit();
                         }
                     } catch (\Exception $e) {
+                        $recipients = User::where('role', '=', 'admin')->get();
+                        $senderMail = env('SERVICE_MAIL_FROM');
+                        $senderName = ucfirst(config('app.name'));
+                        $message = trans('strings.mail_apperror_approve_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);
+                        foreach ($recipients as $recipient){
+                            $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
+                        }
                         throw new \Exception($e);
-                        //TODO ENVOI MAIL A ADMIN
                     }
                 } else {
                     $advert->isValid=(boolean)$isApproved;
@@ -1295,13 +1303,20 @@ class AdvertController extends Controller
         $authorization = $relatedResources[0]->getAuthorization();
         $authorizationId = $authorization->getId();
         $this->advertPublish($advert, $request, $authorizationId);
+        //Auto Approve renew advert
         if($advert->originalAdvertId){
             try {
                 $saveAdvert = $this->approveAdvert($advert->id, true, null);
                 return redirect(route('home'))
                     ->with('success', trans('strings.payment_renew_success', ['date' => Carbon::parse($saveAdvert->online_at)->toDateTimeString()]));
             } catch (\Exception $e) {
-                //TODO MAIL TO ADMIN FOR THIS CASE
+                $recipients = User::where('role', '=', 'admin')->get();
+                $senderMail = env('SERVICE_MAIL_FROM');
+                $senderName = ucfirst(config('app.name'));
+                $message = trans('strings.mail_apperror_autoapprove_line', ['advertNumber' => $advert->id, 'originNumber'=> $advert->originalAdvertId, 'mailClient' => $advert->user->email]);
+                foreach ($recipients as $recipient){
+                    $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
+                }
                 return redirect(route('home'))
                     ->withErrors(trans('strings.view_advert_auto_approve_error'));
             }
@@ -1406,17 +1421,17 @@ class AdvertController extends Controller
             $content = view('pdf.invoice.index', compact('invoice', 'address', 'tva'))->__toString();
             $header = view('pdf.header.view', compact('invoice'))->__toString();
             $footer = view('pdf.footer.view')->__toString();
-            $this->createPdf($content, $header, $footer, $fileName);
+            $this->createPdf($content, $header, $footer, $fileName, $advert);
         }
         LocaleUtils::switchToRuntimeLocale();
         return $fileName;
     }
 
-    private function createPdf($content, $header, $footer, $fileName) {
+    private function createPdf($content, $header, $footer, $fileName, $advert) {
         try {
             $css = file_get_contents(asset(mix('css/pdf.css')->toHtml()),false,stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false))));
 
-            $mpdf = new \mPDF();
+            $mpdf = new mPDF();
             $mpdf->SetHTMLHeader($header);
             $mpdf->SetHTMLFooter($footer);
             $mpdf->AddPageByArray([
@@ -1432,6 +1447,14 @@ class AdvertController extends Controller
             $mpdf->Output($fileName, 'F');
             return true;
         } catch (\Exception $e) {
+            //Mail to admin
+            $recipients = User::where('role', '=', 'admin')->get();
+            $senderMail = env('SERVICE_MAIL_FROM');
+            $senderName = ucfirst(config('app.name'));
+            $message = trans('strings.mail_apperror_pdfinvoice_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);
+            foreach ($recipients as $recipient){
+                $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
+            }
             Throw new \Exception($e);
         }
     }
