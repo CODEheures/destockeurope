@@ -381,6 +381,7 @@
                         sessionStorage.setItem('lat', that.lat);
                         sessionStorage.setItem('lng', that.lng);
                         sessionStorage.setItem('geoloc', that.geoloc);
+                        //TODO window.map not exist window.destockMap?
                         window.map.constructMap();
                         that.vatOnCheckProgress=false;
                     })

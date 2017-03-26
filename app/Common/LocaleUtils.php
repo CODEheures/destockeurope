@@ -69,6 +69,7 @@ trait LocaleUtils
         if(is_null($ip)){
             $ip = config('runtime.ip');
         }
+        //TODO refactoring var $reader
         $reader = new Reader(base_path('vendor/pragmarx/support/src/GeoIp/').'GeoLite2-City.mmdb');
         $record = $reader->city($ip);
         $result = [
