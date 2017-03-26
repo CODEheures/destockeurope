@@ -89,6 +89,7 @@
         Route::get('/get-list-currencies', ['as' => 'utils.getListCurrencies', 'uses' => 'UtilsController@getListCurrencies']);
         Route::get('/get-list-locales', ['as' => 'utils.getListLocales', 'uses' => 'UtilsController@getListLocales']);
         Route::post('/isPicture', 'UtilsController@isPicture')->name('utils.isPicture');
+        Route::get('/geoByIp/{ip?}', ['as' => 'utils.getGeoByIp', 'uses' => 'UtilsController@geoByIp']);
     });
 
     //Categories
@@ -159,7 +160,6 @@
     Route::group(['prefix' => 'dangerous'] , function () {
         Route::get('/testGame', 'UtilsController@testGame');
         //Route::get('/tempo', 'UtilsController@tempo');
-        Route::get('/testInvoice', 'AdvertController@testInvoice');
     });
 
 //});

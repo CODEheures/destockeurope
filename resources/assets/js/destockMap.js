@@ -7,11 +7,12 @@ let DestockMap = function ()  {
     let _geolocType;
     let _markerMsg;
     let _errorGeoCodeMsg;
+    let _routeGetGeoByIp;
     let _position;
     let _marker;
     let _options;
 
-    this.constructMap = function(idMap, zoomMap, idGeoLoc, geolocType, idMapInput, markerMsg, errorGeoCodeMsg) {
+    this.constructMap = function(idMap, zoomMap, idGeoLoc, geolocType, idMapInput, markerMsg, errorGeoCodeMsg,routeGetGeoByIp) {
         _geocoder = new google.maps.Geocoder;
         _elemMap = document.getElementById(idMap);
         _geoloc = document.getElementById(idGeoLoc);
@@ -20,6 +21,7 @@ let DestockMap = function ()  {
         _geolocType = geolocType;
         _markerMsg = markerMsg;
         _errorGeoCodeMsg = errorGeoCodeMsg;
+        _routeGetGeoByIp = routeGetGeoByIp;
         if (_elemMap != undefined && _geoloc != undefined) {
             this.initLocation();
         }
@@ -53,7 +55,7 @@ let DestockMap = function ()  {
     };
     this.latLngByIp= function() {
         let that = this;
-        $.getJSON("https://ipinfo.io/geo", function (response) {
+        $.getJSON(_routeGetGeoByIp, function (response) {
             let loc = response.loc.split(',');
             let position = {
                 coords: {

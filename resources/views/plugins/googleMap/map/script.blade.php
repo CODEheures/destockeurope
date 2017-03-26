@@ -10,7 +10,8 @@
                 geolocType,
                 'mapInput',
                 '{{ trans('strings.form_googlemap_marker') }}',
-                '{{ trans('strings.form_googlemap_geoloc_fail') }}'
+                '{{ trans('strings.form_googlemap_geoloc_fail') }}',
+                '{{ route('utils.getGeoByIp') }}'
         );
     }
 </script>

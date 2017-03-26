@@ -4,6 +4,7 @@ namespace App\Common;
 
 
 use App\User;
+use GeoIp2\Database\Reader;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 
@@ -64,16 +65,33 @@ trait LocaleUtils
         }
     }
 
+    public static function getGeoByIp($ip=null) {
+        if(is_null($ip)){
+            $ip = config('runtime.ip');
+        }
+        $reader = new Reader(base_path('vendor/pragmarx/support/src/GeoIp/').'GeoLite2-City.mmdb');
+        $record = $reader->city($ip);
+        $result = [
+            "ip" => $ip,
+            "city" => $record->city->name,
+            "region" => $record->subdivisions[0]->name,
+            "country" => $record->country->isoCode,
+            "loc" => $record->location->latitude . ',' . $record->location->longitude,
+            "postal" => $record->postal->code
+        ];
+        return $result;
+    }
+
     public static function getCountryByIp($ip) {
-        $details = file_get_contents("http://ipinfo.io/{$ip}/country");
+        $details = self::getGeoByIp($ip)['country'];
         return $details;
     }
 
     public static function getGeoLocByIp($ip) {
         $loc = false;
-        $details = file_get_contents("http://ipinfo.io/{$ip}/geo");
+        $details = self::getGeoByIp($ip);
         if($details){
-            $loc = explode(',', json_decode($details)->loc);
+            $loc = explode(',', $details['loc']);
         }
         return $loc;
     }
