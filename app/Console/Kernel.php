@@ -3,11 +3,11 @@
 namespace App\Console;
 
 use App\Common\AdvertsManager;
-use App\Common\GeoIPUpdater;
 use App\Common\PicturesManager;
 use App\Common\StatsManager;
 use App\Stats;
 use Carbon\Carbon;
+use Codeheures\LaravelGeoUtils\Traits\GeoIPUpdater;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Storage;

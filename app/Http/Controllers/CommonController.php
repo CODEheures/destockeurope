@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 
 use App\Anonymous;
-use App\Common\BrowserUtils;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
+use Codeheures\LaravelTools\Traits\Browser;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CommonController extends Controller
 {
@@ -24,7 +23,7 @@ class CommonController extends Controller
      */
     public function portal() {
         $masterAdsControllerFlag = false;
-        $browser = BrowserUtils::getBrowserName();
+        $browser = Browser::getBrowserName();
         return view('portal', compact('masterAdsControllerFlag', 'browser'));
     }
 

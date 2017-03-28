@@ -2,36 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Advert;
-use App\Common\AdvertsManager;
 use App\Common\PicturesManager;
-use App\Stats;
-use Carbon\Carbon;
-use GeoIp2\Database\Reader;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Mockery\Matcher\Not;
-use sngrl\PhpFirebaseCloudMessaging\Client;
-use sngrl\PhpFirebaseCloudMessaging\Message;
-use sngrl\PhpFirebaseCloudMessaging\Notification;
-use sngrl\PhpFirebaseCloudMessaging\Recipient\Device;
-use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
 use Vinkla\Vimeo\VimeoManager;
 
 class UtilsController extends Controller
 {
-
-    use LocaleUtils;
-    use MoneyUtils;
-
     private $vimeoManager;
 
     public function __construct(VimeoManager $vimeoManager) {
-        $this->middleware('auth', ['only' => ['getListLocales', 'getListCardsType', 'getGeoByIp']]);
+        $this->middleware('auth', ['only' => ['getListLocales', 'getListCardsType']]);
         $this->middleware('isAdminUser', ['only' => ['isPicture', 'tempo']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->vimeoManager = $vimeoManager;
@@ -39,11 +23,11 @@ class UtilsController extends Controller
 
 
     public function getListCurrencies()  {
-        return response()->json($this->listUserCurrencies());
+        return response()->json(MoneyUtils::listUserCurrencies());
     }
 
     public function getListLocales() {
-        return response()->json($this->listUserLocales());
+        return response()->json(LocaleUtils::listUserLocales());
     }
 
     public function testGame() {
@@ -66,15 +50,6 @@ class UtilsController extends Controller
             }
         }
         return response()->json(false);
-    }
-
-    public function geoByIp($ip=null) {
-        $result = $this->getGeoByIp($ip);
-        $response = new Response();
-        $response->header('Content-Type','application/json ; charset=UTF-8');
-        $response->setContent(json_encode($result));
-        $response->setStatusCode(200);
-        return $response;
     }
 
     public function tempo(){

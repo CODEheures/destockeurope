@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Advert;
 use App\Common\MoneyUtils;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 
 class AdvertObserver

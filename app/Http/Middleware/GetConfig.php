@@ -2,17 +2,17 @@
 
 namespace App\Http\Middleware;
 
-use App\Common\MoneyUtils;
 use App\Parameters;
 use Closure;
+use Codeheures\LaravelGeoUtils\Traits\GeoUtils;
+use Codeheures\LaravelTools\Traits\Currencies;
+use Codeheures\LaravelTools\Traits\Ip;
+use Codeheures\LaravelTools\Traits\Locale;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
-use App\Common\LocaleUtils;
 
 class GetConfig
 {
-
-    use LocaleUtils;
 
     /**
      * Handle an incoming request.
@@ -23,13 +23,6 @@ class GetConfig
      */
     public function handle($request, Closure $next)
     {
-        if(!session()->has('runtime.http_accept_language') || $request->server('HTTP_ACCEPT_LANGUAGE') != session('runtime.http_accept_language')){
-            session()->forget('runtime.locale');
-            session(['runtime.http_accept_language' => $request->server('HTTP_ACCEPT_LANGUAGE')]);
-        }
-        $httpAccept = \Locale::acceptFromHttp($request->server('HTTP_ACCEPT_LANGUAGE'));
-        $requestLocale = \Locale::getPrimaryLanguage($request->server('HTTP_ACCEPT_LANGUAGE'));
-        $requestRegion = \Locale::getRegion($httpAccept);
 
         $parameters = Parameters::first();
         if(!$parameters) {
@@ -65,9 +58,16 @@ class GetConfig
         }
 
         //config('runtime.ip')
-        strpos($request->ip(), '198') != false ? config(['runtime.ip' => $request->ip()]) : config(['runtime.ip' => env('DEFAULT_IP')]);
+        config(['runtime.ip' => Ip::getNonPrivateIpByRequest($request)]);
 
         //config('runtime.locale')
+        if(!session()->has('runtime.http_accept_language') || $request->server('HTTP_ACCEPT_LANGUAGE') != session('runtime.http_accept_language')){
+            session()->forget('runtime.locale');
+            session(['runtime.http_accept_language' => $request->server('HTTP_ACCEPT_LANGUAGE')]);
+        }
+        $httpAccept = \Locale::acceptFromHttp($request->server('HTTP_ACCEPT_LANGUAGE'));
+        $requestLocale = \Locale::getPrimaryLanguage($request->server('HTTP_ACCEPT_LANGUAGE'));
+        $requestRegion = \Locale::getRegion($httpAccept);
         try {
             if (auth()->check()) {
                 config(['runtime.locale' => auth()->user()->locale]);
@@ -76,15 +76,15 @@ class GetConfig
             } else {
                 $locale = null;
                 if ($requestLocale != '' && $requestRegion != '') {
-                    $locale = LocaleUtils::composeLocale($requestLocale, $requestRegion);
+                    $locale = Locale::composeLocale($requestLocale, $requestRegion);
                 } elseif ($requestLocale == '') {
                     $locale = env('DEFAULT_LOCALE');
                 } else {
-                    $country = $this->getCountryByIp(config('runtime.ip'));
+                    $country = GeoUtils::getCountryByIp(config('runtime.ip'));
                     if (!$country || $country == '') {
                         $locale = env('DEFAULT_LOCALE');
                     } else {
-                        $locale = LocaleUtils::composeLocale($country, $requestLocale);
+                        $locale = Locale::composeLocale($country, $requestLocale);
                     }
                 }
 
@@ -94,7 +94,7 @@ class GetConfig
                 config(['runtime.locale' => $locale]);
             }
 
-            if(!LocaleUtils::existLocale(config('runtime.locale'))){
+            if(!Locale::existLocale(config('runtime.locale'))){
                 config(['runtime.locale' => env('DEFAULT_LOCALE')]);
             }
 
@@ -112,7 +112,7 @@ class GetConfig
                 config(['runtime.currency' => $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
             }
 
-            if(!MoneyUtils::isAvailableCurrency(config('runtime.currency'))) {
+            if(!Currencies::isAvailableCurrency(config('runtime.currency'))) {
                 config(['runtime.currency' => env('DEFAULT_CURRENCY')]);
             }
         } catch (\Exception $e) {

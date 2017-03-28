@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 
 use App\Common\AdvertsManager;
-use App\Common\DBUtils;
 use App\Common\PicturesManager;
 use App\Common\StatsManager;
 use App\Jobs\TransferMedias;
 use App\Parameters;
 use App\Stats;
 use Carbon\Carbon;
+use Codeheures\LaravelTools\Traits\Database;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
@@ -165,7 +165,7 @@ class AdminController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getWelcomeType() {
-        $list = DBUtils::getEnumValues('commons', 'welcomeType');
+        $list = Database::getEnumValues('commons', 'welcomeType');
         $transList = [];
         foreach ($list as $key => $item) {
             $transList[$key] =  $item;

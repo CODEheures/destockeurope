@@ -4,36 +4,13 @@ namespace App\Common;
 
 
 use App\User;
-use GeoIp2\Database\Reader;
+use Codeheures\LaravelTools\Traits\Locale;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
 
 trait LocaleUtils
 {
-    public static function listLocales() {
-        $locales = \ResourceBundle::getLocales('');
-
-        $listLocales = [];
-        foreach ($locales as $locale) {
-            $listLocales[$locale] = [
-                'code' => $locale,
-                'name' => \Locale::getDisplayName($locale),
-                'region' => strtolower(\Locale::getDisplayRegion($locale))
-            ];
-        }
-
-        return $listLocales;
-    }
-
-    public static function existLocale($locale) {
-        $listLocales = self::listLocales();
-        foreach ($listLocales as $item) {
-            if($item['code'] == $locale){
-                return true;
-            }
-        }
-        return false;
-    }
+    use Locale;
 
     public static function listUserLocales() {
         $response = [
@@ -42,59 +19,6 @@ trait LocaleUtils
         ];
 
         return $response;
-    }
-
-    public static function getFirstLocaleByCountryCode($countryCode){
-        foreach (self::listLocales() as $locale){
-            if(strpos($locale['code'], '_'. strtoupper($countryCode))){
-                return $locale['code'];
-            }
-        }
-        return null;
-    }
-
-    public static function composeLocale($language, $country){
-        $locale = \Locale::composeLocale( [
-            'language' => $language,
-            'region' => $country
-        ] );
-        if(self::existLocale($locale)){
-            return $locale;
-        } else {
-            return null;
-        }
-    }
-
-    public static function getGeoByIp($ip=null) {
-        if(is_null($ip)){
-            $ip = config('runtime.ip');
-        }
-        //TODO refactoring var $reader
-        $reader = new Reader(base_path('vendor/pragmarx/support/src/GeoIp/').'GeoLite2-City.mmdb');
-        $record = $reader->city($ip);
-        $result = [
-            "ip" => $ip,
-            "city" => $record->city->name,
-            "region" => $record->subdivisions[0]->name,
-            "country" => $record->country->isoCode,
-            "loc" => $record->location->latitude . ',' . $record->location->longitude,
-            "postal" => $record->postal->code
-        ];
-        return $result;
-    }
-
-    public static function getCountryByIp($ip) {
-        $details = self::getGeoByIp($ip)['country'];
-        return $details;
-    }
-
-    public static function getGeoLocByIp($ip) {
-        $loc = false;
-        $details = self::getGeoByIp($ip);
-        if($details){
-            $loc = explode(',', $details['loc']);
-        }
-        return $loc;
     }
 
     public static function getListCountries(){

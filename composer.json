@@ -10,7 +10,6 @@
         "laravel/tinker": "~1.0",
         "laravel/socialite": "^3.0",
         "caouecs/laravel-lang": "~3.0",
-        "moneyphp/money": "^3.0",
         "kalnoy/nestedset": "^4.2",
         "intervention/image": "^2.3",
         "league/flysystem-dropbox": "^1.0",
@@ -18,7 +17,7 @@
         "paypal/rest-api-sdk-php": "*",
         "vinkla/vimeo": "^3.5",
         "pragmarx/firewall": "^1.0",
-        "geoip2/geoip2": "~2.0",
+        "codeheures/laravel-geo-utils": "^1.0",
         "mpdf/mpdf": "dev-master#d495e4ca230297ea8ae044ea664f6bd5c8805a90",
         "sngrl/php-firebase-cloud-messaging": "dev-master"
     },

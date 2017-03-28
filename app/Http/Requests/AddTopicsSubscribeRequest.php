@@ -2,13 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Common\DBUtils;
-use App\Common\PicturesManager;
-use App\Http\Controllers\UtilsController;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
 
 class AddTopicsSubscribeRequest extends FormRequest
 {

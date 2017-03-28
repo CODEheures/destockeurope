@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Common\DBUtils;
 use App\Common\PicturesManager;
+use Codeheures\LaravelTools\Traits\Database;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 use Money\Currencies\ISOCurrencies;
@@ -28,7 +28,7 @@ class StoreAdvertRequest extends FormRequest
     public function rules()
     {
 
-        $inType = DBUtils::getEnumValues('adverts', 'type');
+        $inType = Database::getEnumValues('adverts', 'type');
         $line='';
         foreach ($inType as $key => $item) {
             if ($line == '') {

@@ -8,8 +8,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-
-use App\Common\LocaleUtils;
+use Codeheures\LaravelGeoUtils\Traits\GeoUtils;
 use App\Notifications\SendToken;
 use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -64,7 +63,7 @@ trait CreateUser {
     {
         $lat = 0;
         $lng = 0;
-        $geoloc = LocaleUtils::getGeoLocByIp(config('runtime.ip'));
+        $geoloc = GeoUtils::getGeoLocByIp(config('runtime.ip'));
         if($geoloc){
             $lat = $geoloc[0];
             $lng = $geoloc[1];
@@ -108,7 +107,7 @@ trait CreateUser {
             try {
                 $lat = 0;
                 $lng = 0;
-                $geoloc = LocaleUtils::getGeoLocByIp(config('runtime.ip'));
+                $geoloc = GeoUtils::getGeoLocByIp(config('runtime.ip'));
                 if($geoloc){
                     $lat = $geoloc[0];
                     $lng = $geoloc[1];

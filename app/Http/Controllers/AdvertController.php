@@ -7,7 +7,6 @@ use App\Anonymous;
 use App\Bookmark;
 use App\Category;
 use App\Common\CategoryUtils;
-use App\Common\DBUtils;
 use App\Common\GeoManager;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
@@ -28,6 +27,8 @@ use App\Picture;
 use App\Stats;
 use App\User;
 use Carbon\Carbon;
+use Codeheures\LaravelTools\Traits\Currencies;
+use Codeheures\LaravelTools\Traits\Database;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -55,9 +56,6 @@ use Vinkla\Vimeo\VimeoManager;
 
 class AdvertController extends Controller
 {
-
-    use CategoryUtils;
-    use UserUtils;
     private $pictureManager;
     private $vimeoManager;
     private $_api_context;
@@ -140,20 +138,20 @@ class AdvertController extends Controller
         $finalCurrencyList = [];
         if($nbCurrencies==1){
             //$currency = $currenciesList->first()->currency;
-            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currenciesList->first()->currency);
+            $currencySymbol = Currencies::getSymbolByCurrencyCode($currenciesList->first()->currency, config('runtime.locale'));
         } else {
             $currenciesListArray = $currenciesList->pluck('currency');
             foreach ($currenciesListArray as $currencyCode) {
                 $finalCurrencyList[] = [
                     'code' => $currencyCode,
-                    'symbol' =>   MoneyUtils::getSymbolByCurrencyCode($currencyCode)
+                    'symbol' =>   Currencies::getSymbolByCurrencyCode($currencyCode, config('runtime.locale'))
                 ];
             }
         }
 
-        if($request->has('currency') && MoneyUtils::isAvailableCurrency($request->currency)) {
+        if($request->has('currency') && Currencies::isAvailableCurrency($request->currency)) {
             $currency = $request->currency;
-            $currencySymbol = MoneyUtils::getSymbolByCurrencyCode($currency);
+            $currencySymbol = Currencies::getSymbolByCurrencyCode($currency, config('runtime.locale'));
             $adverts = $adverts->where('currency', $currency);
         }
 
@@ -207,8 +205,6 @@ class AdvertController extends Controller
 
         //if range price
         if($request->has('minPrice') && $request->has('maxPrice') ){
-//            $minPrice = MoneyUtils::setPriceWithoutDecimal($request->minPrice, $currency);
-//            $maxPrice = MoneyUtils::setPriceWithoutDecimal($request->maxPrice, $currency);
             $adverts = $adverts->where('price_margin_decimal', '>=', $request->minPrice)->where('price_margin_decimal', '<=', $request->maxPrice);
         }
 
@@ -618,7 +614,7 @@ class AdvertController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getListType()  {
-        $list = DBUtils::getEnumValues('adverts', 'type');
+        $list = Database::getEnumValues('adverts', 'type');
         $transList = [];
         foreach ($list as $key => $item) {
             $transList[$key] = trans('strings.view_advert_list_type_' . $item);
@@ -875,7 +871,7 @@ class AdvertController extends Controller
      * @return AdvertController|\Illuminate\Http\RedirectResponse
      */
     public function reviewForPayment($id) {
-        if(!$this->haveCompleteAccount()){
+        if(!UserUtils::haveCompleteAccount()){
             return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
         }
         $advert = Advert::find($id);
@@ -950,7 +946,7 @@ class AdvertController extends Controller
             $sender->save();
         } else {
             //create anonymous user
-            $this->createAnonymous($request->email, $request->name, $request->phone, $request->compagnyName);
+            UserUtils::createAnonymous($request->email, $request->name, $request->phone, $request->compagnyName);
         }
         //Test compagnyName mini car pas de test dans message car pas required
         $advert = Advert::find($request->id);

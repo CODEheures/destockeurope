@@ -5,6 +5,7 @@ namespace App;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
 use Carbon\Carbon;
+use Codeheures\LaravelTools\Traits\Currencies;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -64,7 +65,7 @@ class Advert extends Model {
 
     //Attributs Getters
     public function getCurrencySymbolAttribute() {
-        return MoneyUtils::getSymbolByCurrencyCode($this->currency);
+        return Currencies::getSymbolByCurrencyCode($this->currency, config('runtime.locale'));
     }
 
     public function getOriginalPriceAttribute() {
@@ -72,7 +73,7 @@ class Advert extends Model {
     }
 
     public function getPriceSubUnitAttribute() {
-        return MoneyUtils::getSubUnit($this->currency);
+        return Currencies::getSubUnit($this->currency);
     }
 
     public function getPriceAttribute($value) {
