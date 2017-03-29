@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
         $user1->phone = '06.87.34.06.83';
         $user1->password = bcrypt('123456');
         $user1->locale = env('DEFAULT_LOCALE');
-        $user1->currency = config('runtime.currency');
+        $user1->currency = env('DEFAULT_CURRENCY');
         $user1->latitude = $lat;
         $user1->longitude = $lng;
         $user1->setRememberToken(Str::random(60));
@@ -35,7 +35,7 @@ class UsersTableSeeder extends Seeder
         $user2->email = 'vendeur@codeheures.fr';
         $user2->password = bcrypt('123456');
         $user2->locale = env('DEFAULT_LOCALE');
-        $user2->currency = config('runtime.currency');
+        $user2->currency = env('DEFAULT_CURRENCY');
         $user2->latitude = $lat;
         $user2->longitude = $lng;
         $user2->setRememberToken(Str::random(60));
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
         $user3->email = 'admin@codeheures.fr';
         $user3->password = bcrypt('123456');
         $user3->locale = env('DEFAULT_LOCALE');
-        $user3->currency = config('runtime.currency');
+        $user3->currency = env('DEFAULT_CURRENCY');
         $user3->latitude = $lat;
         $user3->longitude = $lng;
         $user3->setRememberToken(Str::random(60));
