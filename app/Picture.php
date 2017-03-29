@@ -19,6 +19,9 @@ class Picture extends Model
     ];
     protected $dates = ['deleted_at'];
     protected $appends = array('url');
+    protected $casts = [
+        'isThumb' => 'Boolean',
+    ];
 
     public function advert(){
         return $this->belongsTo('App\Advert');

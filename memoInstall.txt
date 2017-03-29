@@ -1,5 +1,15 @@
-//      bucket 64 nginx + file body size nginx
-//      INTL EXTENSION apt-get install php5-intl
+/*
+NGINX
+*/
+
+/etc/nginx/nginx.conf:
+======================
+server_name_hash_bucket_size 64;
+server_tokens off;
+client_max_body_size 10M;
+
+
+//
 //      php.ini: upload_max_filesize = 5M
 //      pas de php artisan config:cache , googlemap foire
 //      php artisan route:cache

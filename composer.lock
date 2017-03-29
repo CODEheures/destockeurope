@@ -48,16 +48,16 @@
         },
         {
             "name": "codeheures/laravel-geo-utils",
-            "version": "v1.0.2",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CODEheures/laravelGeoUtils.git",
-                "reference": "16b8dd8c24be7c776c5c321e39e4cd4f3bd60a3f"
+                "reference": "653d4e207f77130fd1d54503a06b5a4aea84e82a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelGeoUtils/zipball/16b8dd8c24be7c776c5c321e39e4cd4f3bd60a3f",
-                "reference": "16b8dd8c24be7c776c5c321e39e4cd4f3bd60a3f",
+                "url": "https://api.github.com/repos/CODEheures/laravelGeoUtils/zipball/653d4e207f77130fd1d54503a06b5a4aea84e82a",
+                "reference": "653d4e207f77130fd1d54503a06b5a4aea84e82a",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
             ],
             "description": "Geo Utility for Laravel 5.4",
             "homepage": "http://github.com/codeheures/laravelGeoUtils",
-            "time": "2017-03-27T22:41:44+00:00"
+            "time": "2017-03-29T09:48:34+00:00"
         },
         {
             "name": "codeheures/laravel-tools",
@@ -325,16 +325,16 @@
         },
         {
             "name": "erusev/parsedown",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "20ff8bbb57205368b4b42d094642a3e52dac85fb"
+                "reference": "1bf24f7334fe16c88bf9d467863309ceaf285b01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/20ff8bbb57205368b4b42d094642a3e52dac85fb",
-                "reference": "20ff8bbb57205368b4b42d094642a3e52dac85fb",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/1bf24f7334fe16c88bf9d467863309ceaf285b01",
+                "reference": "1bf24f7334fe16c88bf9d467863309ceaf285b01",
                 "shasum": ""
             },
             "require": {
@@ -363,7 +363,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2016-11-02T15:56:58+00:00"
+            "time": "2017-03-29T16:04:15+00:00"
         },
         {
             "name": "geoip2/geoip2",

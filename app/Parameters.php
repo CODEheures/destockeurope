@@ -30,4 +30,8 @@ class Parameters extends Model
         'maxNumberOfSearchResults',
         'minLengthSearch'
     ];
+
+    protected $casts = [
+        'masterAds' => 'Boolean',
+    ];
 }

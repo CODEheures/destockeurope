@@ -14,6 +14,10 @@ class Anonymous extends Model
         'isNewsLetterSubscriber'
     ];
 
+    protected $casts = [
+        'isNewsLetterSubscriber' => 'Boolean',
+    ];
+
     //local scopes
     public function scopeWhereMail($query, $email) {
         return $query->where('email', '=', $email);

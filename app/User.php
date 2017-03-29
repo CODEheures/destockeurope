@@ -52,6 +52,9 @@ class User extends Authenticatable
         'password', 'remember_token', 'role'
     ];
     protected $appends = array('isDelegation');
+    protected $casts = [
+        'confirmed' => 'Boolean',
+    ];
 
     public function oAuthProvider($providers) {
         $refOauth = '';

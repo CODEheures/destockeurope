@@ -55,6 +55,15 @@ class Advert extends Model {
     private $isUserBookmark = false;
     private $bookmarkCount = 0;
 
+    protected $casts = [
+        'isPublish' => 'Boolean',
+        'isValid' => 'Boolean',
+        'isUrgent' => 'Boolean',
+        'isRenew' => 'Boolean',
+        'is_delegation' => 'Boolean',
+        'isNegociated' => 'Boolean',
+    ];
+
     //Relations
     public function user() { return $this->belongsTo('App\User'); }
     public function bookmarks() { return $this->hasMany('App\Bookmark'); }
@@ -156,7 +165,7 @@ class Advert extends Model {
     }
 
     public function getIsEligibleForRenewMailZeroAttribute() {
-        if ($this->isValid && !$this->isRenew && $this->lastObsoleteMail <> 0){
+        if ($this->isValid && !$this->isRenew && $this->lastObsoleteMail!==0){
             return true;
         }
         return false;
