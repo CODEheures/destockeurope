@@ -5,7 +5,7 @@ namespace App;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
 use Carbon\Carbon;
-use Codeheures\LaravelTools\Traits\Currencies;
+use Codeheures\LaravelUtils\Traits\Tools\Currencies;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

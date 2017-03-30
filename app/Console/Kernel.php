@@ -7,7 +7,7 @@ use App\Common\PicturesManager;
 use App\Common\StatsManager;
 use App\Stats;
 use Carbon\Carbon;
-use Codeheures\LaravelGeoUtils\Traits\GeoIPUpdater;
+use Codeheures\LaravelUtils\Traits\Geo\GeoIPUpdater;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Storage;

@@ -17,7 +17,7 @@
         "paypal/rest-api-sdk-php": "*",
         "vinkla/vimeo": "^3.5",
         "pragmarx/firewall": "^1.0",
-        "codeheures/laravel-geo-utils": "^1.0",
+        "codeheures/laravel-utils": "^1.0",
         "mpdf/mpdf": "dev-master#d495e4ca230297ea8ae044ea664f6bd5c8805a90",
         "sngrl/php-firebase-cloud-messaging": "dev-master"
     },

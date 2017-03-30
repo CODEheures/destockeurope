@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Common\PicturesManager;
-use Codeheures\LaravelTools\Traits\Database;
+use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 use Money\Currencies\ISOCurrencies;

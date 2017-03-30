@@ -11,7 +11,7 @@
                 'mapInput',
                 '{{ trans('strings.form_googlemap_marker') }}',
                 '{{ trans('strings.form_googlemap_geoloc_fail') }}',
-                '{{ route(config('geoUtils.routes.geoByIp.name')) }}'
+                '{{ route(config('codeheuresUtils.geoIp.routes.geoByIp.name')) }}'
         );
     }
 </script>

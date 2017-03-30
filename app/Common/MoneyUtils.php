@@ -2,7 +2,7 @@
 
 namespace App\Common;
 
-use Codeheures\LaravelTools\Traits\Currencies;
+use Codeheures\LaravelUtils\Traits\Tools\Currencies;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;

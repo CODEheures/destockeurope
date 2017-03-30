@@ -10,7 +10,7 @@ use App\Jobs\TransferMedias;
 use App\Parameters;
 use App\Stats;
 use Carbon\Carbon;
-use Codeheures\LaravelTools\Traits\Database;
+use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;

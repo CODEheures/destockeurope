@@ -171,7 +171,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Vinkla\Vimeo\VimeoServiceProvider::class,
         PragmaRX\Firewall\Vendor\Laravel\ServiceProvider::class,
-        Codeheures\LaravelGeoUtils\LaravelGeoUtilsServiceProvider::class,
+        Codeheures\LaravelUtils\LaravelUtilsServiceProvider::class,
         //Barryvdh\Debugbar\ServiceProvider::class,
         //Laravel\Scout\ScoutServiceProvider::class,
 

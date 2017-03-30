@@ -8,9 +8,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Codeheures\LaravelGeoUtils\Traits\GeoUtils;
 use App\Notifications\SendToken;
 use App\User;
+use Codeheures\LaravelUtils\Traits\Geo\GeoUtils;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait CreateUser {

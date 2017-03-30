@@ -4,10 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Parameters;
 use Closure;
-use Codeheures\LaravelGeoUtils\Traits\GeoUtils;
-use Codeheures\LaravelTools\Traits\Currencies;
-use Codeheures\LaravelTools\Traits\Ip;
-use Codeheures\LaravelTools\Traits\Locale;
+use Codeheures\LaravelUtils\Traits\Tools\Currencies;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
 
@@ -57,51 +54,6 @@ class GetConfig
             }
         }
 
-        //config('runtime.ip')
-        config(['runtime.ip' => Ip::getNonPrivateIpByRequest($request)]);
-
-        //config('runtime.locale')
-        if(!session()->has('runtime.http_accept_language') || $request->server('HTTP_ACCEPT_LANGUAGE') != session('runtime.http_accept_language')){
-            session()->forget('runtime.locale');
-            session(['runtime.http_accept_language' => $request->server('HTTP_ACCEPT_LANGUAGE')]);
-        }
-        $httpAccept = \Locale::acceptFromHttp($request->server('HTTP_ACCEPT_LANGUAGE'));
-        $requestLocale = \Locale::getPrimaryLanguage($request->server('HTTP_ACCEPT_LANGUAGE'));
-        $requestRegion = \Locale::getRegion($httpAccept);
-        try {
-            if (auth()->check()) {
-                config(['runtime.locale' => auth()->user()->locale]);
-            } elseif (session('runtime.locale')) {
-                config(['runtime.locale' => session('runtime.locale')]);
-            } else {
-                $locale = null;
-                if ($requestLocale != '' && $requestRegion != '') {
-                    $locale = Locale::composeLocale($requestLocale, $requestRegion);
-                } elseif ($requestLocale == '') {
-                    $locale = env('DEFAULT_LOCALE');
-                } else {
-                    $country = GeoUtils::getCountryByIp(config('runtime.ip'));
-                    if (!$country || $country == '') {
-                        $locale = env('DEFAULT_LOCALE');
-                    } else {
-                        $locale = Locale::composeLocale($country, $requestLocale);
-                    }
-                }
-
-                if ($locale == null) {
-                    $locale = env('DEFAULT_LOCALE');
-                }
-                config(['runtime.locale' => $locale]);
-            }
-
-            if(!Locale::existLocale(config('runtime.locale'))){
-                config(['runtime.locale' => env('DEFAULT_LOCALE')]);
-            }
-
-        } catch(\Exception $e) {
-            config(['runtime.locale' => env('DEFAULT_LOCALE')]);
-        }
-        session(['runtime.locale' => config('runtime.locale')]);
 
         //config('runtime.currency')
         try {

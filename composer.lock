@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c23f3fddaa4dc1b98c4117ac4b0b42a",
+    "content-hash": "c01a1b5b81a82e87da43f869623f6e62",
     "packages": [
         {
             "name": "caouecs/laravel-lang",
@@ -47,60 +47,21 @@
             "time": "2017-03-22T16:40:16+00:00"
         },
         {
-            "name": "codeheures/laravel-geo-utils",
-            "version": "v1.0.8",
+            "name": "codeheures/laravel-utils",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/CODEheures/laravelGeoUtils.git",
-                "reference": "61da94f2b615478caebea9114b67b9aa939d7351"
+                "url": "https://github.com/CODEheures/laravelUtils.git",
+                "reference": "6789fb738c826ba420656adf05ea440d1faee842"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelGeoUtils/zipball/61da94f2b615478caebea9114b67b9aa939d7351",
-                "reference": "61da94f2b615478caebea9114b67b9aa939d7351",
+                "url": "https://api.github.com/repos/CODEheures/laravelUtils/zipball/6789fb738c826ba420656adf05ea440d1faee842",
+                "reference": "6789fb738c826ba420656adf05ea440d1faee842",
                 "shasum": ""
             },
             "require": {
-                "codeheures/laravel-tools": "^1.0",
                 "geoip2/geoip2": "~2.0",
-                "illuminate/support": "~5.4",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Codeheures\\LaravelGeoUtils\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache2"
-            ],
-            "authors": [
-                {
-                    "name": "Sylvain Gagnot",
-                    "email": "webmaster@codeheures.fr"
-                }
-            ],
-            "description": "Geo Utility for Laravel 5.4",
-            "homepage": "http://github.com/codeheures/laravelGeoUtils",
-            "time": "2017-03-30T10:15:23+00:00"
-        },
-        {
-            "name": "codeheures/laravel-tools",
-            "version": "v1.0.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CODEheures/laravelTools.git",
-                "reference": "f89a3ad50ac777368d2a2a89c3628f8f0031973d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelTools/zipball/f89a3ad50ac777368d2a2a89c3628f8f0031973d",
-                "reference": "f89a3ad50ac777368d2a2a89c3628f8f0031973d",
-                "shasum": ""
-            },
-            "require": {
                 "illuminate/support": "~5.4",
                 "moneyphp/money": "^3.0",
                 "php": ">=5.4.0"
@@ -108,7 +69,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Codeheures\\LaravelTools\\": "src/"
+                    "Codeheures\\LaravelUtils\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -121,9 +82,9 @@
                     "email": "webmaster@codeheures.fr"
                 }
             ],
-            "description": "Tools for Laravel 5.4",
-            "homepage": "http://github.com/codeheures/laravelTools",
-            "time": "2017-03-30T10:14:10+00:00"
+            "description": "Utility for Laravel 5.4",
+            "homepage": "http://github.com/codeheures/laravelUtils",
+            "time": "2017-03-30T23:47:15+00:00"
         },
         {
             "name": "composer/ca-bundle",

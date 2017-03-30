@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Http\Middleware\IsAdminUser;
+use Codeheures\LaravelUtils\Http\Middleware\RuntimeIp;
+use Codeheures\LaravelUtils\Http\Middleware\RuntimeLocale;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -34,6 +36,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Codeheures\LaravelUtils\Http\Middleware\RuntimeIp::class,
+            \Codeheures\LaravelUtils\Http\Middleware\RuntimeLocale::class,
             \App\Http\Middleware\GetConfig::class,
             \App\Http\Middleware\SetLocale::class,
         ],

@@ -3,15 +3,21 @@
 namespace App\Common;
 
 
-use App\User;
-use Codeheures\LaravelTools\Traits\Locale;
-use Illuminate\Support\Facades\App;
+use Codeheures\LaravelUtils\Traits\Tools\Locale;
+use Codeheures\LaravelUtils\Traits\Locale\ManageLocale;
 use Illuminate\Support\Facades\Lang;
 
 trait LocaleUtils
 {
     use Locale;
+    use ManageLocale;
 
+    /**
+     *
+     * Une liste des locales et de la locale user
+     *
+     * @return array
+     */
     public static function listUserLocales() {
         $response = [
             'listLocales' => self::listLocales(),
@@ -21,6 +27,12 @@ trait LocaleUtils
         return $response;
     }
 
+    /**
+     *
+     * List de noms de pays traduits
+     *
+     * @return array
+     */
     public static function getListCountries(){
         $countries = [];
         foreach (Lang::get('strings') as $key => $item){
@@ -29,22 +41,5 @@ trait LocaleUtils
             }
         }
         return $countries;
-    }
-
-    public static function setAppLocale($locale){
-        if(in_array($locale,config('app.locales'))){
-            App::setLocale($locale);
-        } else {
-            App::setLocale(config('app.fallback_locale'));
-        }
-    }
-
-    public static function switchToUserLocale(User $user) {
-        session(['runtimeLocale' => App::getLocale()]);
-        self::setAppLocale(\Locale::getPrimaryLanguage($user->locale));
-    }
-
-    public static function switchToRuntimeLocale() {
-        self::setAppLocale(session('runtimeLocale'));
     }
 }

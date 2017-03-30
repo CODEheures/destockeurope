@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Anonymous;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
-use Codeheures\LaravelTools\Traits\Browser;
+use Codeheures\LaravelUtils\Traits\Tools\Browser;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
