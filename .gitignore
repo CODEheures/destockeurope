@@ -1,13 +1,11 @@
 /node_modules
 /public/storage
-/storage/app
-/storage/debugbar
-/storage/framework
-/storage/logs
+/storage/*
+!/storage/whitelists
 /vendor
 /.idea/*
 Homestead.json
 Homestead.yaml
 .env
 .env.prod
-/resources/geoip/*
+/composer.lock

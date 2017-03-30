@@ -48,16 +48,16 @@
         },
         {
             "name": "codeheures/laravel-geo-utils",
-            "version": "v1.0.4",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CODEheures/laravelGeoUtils.git",
-                "reference": "653d4e207f77130fd1d54503a06b5a4aea84e82a"
+                "reference": "61da94f2b615478caebea9114b67b9aa939d7351"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelGeoUtils/zipball/653d4e207f77130fd1d54503a06b5a4aea84e82a",
-                "reference": "653d4e207f77130fd1d54503a06b5a4aea84e82a",
+                "url": "https://api.github.com/repos/CODEheures/laravelGeoUtils/zipball/61da94f2b615478caebea9114b67b9aa939d7351",
+                "reference": "61da94f2b615478caebea9114b67b9aa939d7351",
                 "shasum": ""
             },
             "require": {
@@ -84,20 +84,20 @@
             ],
             "description": "Geo Utility for Laravel 5.4",
             "homepage": "http://github.com/codeheures/laravelGeoUtils",
-            "time": "2017-03-29T09:48:34+00:00"
+            "time": "2017-03-30T10:15:23+00:00"
         },
         {
             "name": "codeheures/laravel-tools",
-            "version": "v1.0.5",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CODEheures/laravelTools.git",
-                "reference": "4fa65476824359349855e7382a51fd49409a1ce6"
+                "reference": "f89a3ad50ac777368d2a2a89c3628f8f0031973d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelTools/zipball/4fa65476824359349855e7382a51fd49409a1ce6",
-                "reference": "4fa65476824359349855e7382a51fd49409a1ce6",
+                "url": "https://api.github.com/repos/CODEheures/laravelTools/zipball/f89a3ad50ac777368d2a2a89c3628f8f0031973d",
+                "reference": "f89a3ad50ac777368d2a2a89c3628f8f0031973d",
                 "shasum": ""
             },
             "require": {
@@ -123,7 +123,7 @@
             ],
             "description": "Tools for Laravel 5.4",
             "homepage": "http://github.com/codeheures/laravelTools",
-            "time": "2017-03-28T20:00:08+00:00"
+            "time": "2017-03-30T10:14:10+00:00"
         },
         {
             "name": "composer/ca-bundle",
