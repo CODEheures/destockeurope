@@ -15,22 +15,22 @@ return [
             'geoByIp' => [
                 'uri' => 'geoByIp',
                 'name' => 'codeheures.geoUtils.getGeoByIp',
-                'middlewares' => []
+                'middlewares' => ['auth']
             ],
             'geoLocByIp' => [
                 'uri' => 'geoLocByIp',
                 'name' => 'codeheures.geoUtils.getGeoLocByIp',
-                'middlewares' => []
+                'middlewares' => ['auth']
             ],
             'countryByIp' => [
                 'uri' => 'countryByIp',
                 'name' => 'codeheures.geoUtils.getCountryByIp',
-                'middlewares' => []
+                'middlewares' => ['auth']
             ],
             'refreshDb' => [
                 'uri' => 'refreshDb',
-                'name' => 'codeheurs.geoUtils.refreshDb',
-                'middlewares' => []
+                'name' => 'codeheures.geoUtils.refreshDb',
+                'middlewares' => ['auth', 'isAdminUser']
             ]
         ],
     ],

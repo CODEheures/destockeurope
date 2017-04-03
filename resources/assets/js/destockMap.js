@@ -55,24 +55,27 @@ let DestockMap = function ()  {
     };
     this.latLngByIp= function() {
         let that = this;
-        $.getJSON(_routeGetGeoByIp, function (response) {
-            let loc = response.loc.split(',');
-            let position = {
-                coords: {
-                    latitude: loc[0],
-                    longitude: loc[1]
-                }
-            };
-            that.latLng(position);
-        }).fail(function () {
-            let position = {
-                coords: {
-                    latitude: 0,
-                    longitude: 0
-                }
-            };
-            that.latLng(position);
-        });
+
+        axios.get(_routeGetGeoByIp)
+            .then(function (response)  {
+                let loc = response.data.loc.split(',');
+                let position = {
+                    coords: {
+                        latitude: loc[0],
+                        longitude: loc[1]
+                    }
+                };
+                that.latLng(position);
+            })
+            .catch(function (error)  {
+                let position = {
+                    coords: {
+                        latitude: 0,
+                        longitude: 0
+                    }
+                };
+                that.latLng(position);
+            });
     };
     this.latLng= function(position) {
         _position = position;

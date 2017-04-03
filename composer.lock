@@ -48,16 +48,16 @@
         },
         {
             "name": "codeheures/laravel-utils",
-            "version": "v1.1.4",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CODEheures/laravelUtils.git",
-                "reference": "4aad37477053263cb61210e8fd5d802baa8afec4"
+                "reference": "caaad3bab75cb9d7e519ebe34cfc81cd29675fbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelUtils/zipball/4aad37477053263cb61210e8fd5d802baa8afec4",
-                "reference": "4aad37477053263cb61210e8fd5d802baa8afec4",
+                "url": "https://api.github.com/repos/CODEheures/laravelUtils/zipball/caaad3bab75cb9d7e519ebe34cfc81cd29675fbc",
+                "reference": "caaad3bab75cb9d7e519ebe34cfc81cd29675fbc",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
             ],
             "description": "Utility for Laravel 5.4",
             "homepage": "http://github.com/codeheures/laravelUtils",
-            "time": "2017-04-03T08:16:36+00:00"
+            "time": "2017-04-03T13:28:56+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -861,16 +861,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.4.16",
+            "version": "v5.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6cf379ec34d08bcdc9c7183e369a8fdf04ade80d"
+                "reference": "f7675d59e3863a58ecdff1a5ee1dcd0cff788f4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6cf379ec34d08bcdc9c7183e369a8fdf04ade80d",
-                "reference": "6cf379ec34d08bcdc9c7183e369a8fdf04ade80d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f7675d59e3863a58ecdff1a5ee1dcd0cff788f4b",
+                "reference": "f7675d59e3863a58ecdff1a5ee1dcd0cff788f4b",
                 "shasum": ""
             },
             "require": {
@@ -986,7 +986,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-03-21T19:34:41+00:00"
+            "time": "2017-04-03T13:07:39+00:00"
         },
         {
             "name": "laravel/socialite",

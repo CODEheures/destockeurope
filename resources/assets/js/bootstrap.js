@@ -11,9 +11,9 @@ window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 // window.noUiSlider = require('./nouislider');
 window.ionRangeSlider = require('ion-rangeslider');
-window.DestockMap = require('./destockMap');
 window.Parser = require('url');
 window.axios = require('axios');
+window.DestockMap = require('./destockMap');
 /*require('bootstrap-sass');*/
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
