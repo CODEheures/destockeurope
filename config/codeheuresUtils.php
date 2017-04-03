@@ -11,22 +11,26 @@ return [
         'destination_directory' => storage_path('maxmind'),
 
         'routes' => [
-            'prefix' => 'utils',
+            'prefix' => 'geoIp',
             'geoByIp' => [
                 'uri' => 'geoByIp',
-                'name' => 'codeheures.geoUtils.getGeoByIp'
+                'name' => 'codeheures.geoUtils.getGeoByIp',
+                'middlewares' => []
             ],
             'geoLocByIp' => [
                 'uri' => 'geoLocByIp',
-                'name' => 'codeheures.geoUtils.getGeoLocByIp'
+                'name' => 'codeheures.geoUtils.getGeoLocByIp',
+                'middlewares' => []
             ],
             'countryByIp' => [
                 'uri' => 'countryByIp',
-                'name' => 'codeheures.geoUtils.getCountryByIp'
+                'name' => 'codeheures.geoUtils.getCountryByIp',
+                'middlewares' => []
             ],
             'refreshDb' => [
                 'uri' => 'refreshDb',
-                'name' => 'codeheures.geoUtils.refreshDb'
+                'name' => 'codeheurs.geoUtils.refreshDb',
+                'middlewares' => []
             ]
         ],
     ],
@@ -35,7 +39,6 @@ return [
 
     'availableLocales' => [
         'fr',
-        'en',
-        'es'
+        'en'
     ]
 ];

@@ -62,7 +62,7 @@ class CategoryController extends Controller
 
         //1 test langages in lang
         foreach ($descriptions as $lang=>$description){
-            if(!in_array($lang,config('app.locales'))){
+            if(!in_array($lang,config('codeheuresUtils.availableLocales'))){
                 return response('error', 500);
             }
         }
@@ -150,7 +150,7 @@ class CategoryController extends Controller
 
         //1 test langages in lang
         foreach ($descriptions as $lang=>$description){
-            if(!in_array($lang,config('app.locales'))){
+            if(!in_array($lang,config('codeheuresUtils.availableLocales'))){
                 return response('error', 500);
             }
         }
@@ -272,7 +272,7 @@ class CategoryController extends Controller
 
                 if(!$category->isRoot()){
                     $descriptions = [];
-                    foreach (config('app.locales') as $lang){
+                    foreach (config('codeheuresUtils.availableLocales') as $lang){
                         $descriptions[$lang] = trans('strings.form_dropdown_move_as_root',[],'',$lang);
                     }
                     $cat = new Category();

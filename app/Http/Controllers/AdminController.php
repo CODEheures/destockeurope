@@ -180,7 +180,7 @@ class AdminController extends Controller
     public function testLangs() {
         $lines = [];
         $arglist = [];
-        foreach (config('app.locales') as $locale) {
+        foreach (config('codeheuresUtils.availableLocales') as $locale) {
             $lines[$locale] = Lang::get('strings',[],$locale);
             $arglist[] = $lines[$locale];
         }

@@ -23,7 +23,7 @@
             categories-dropdown-menu-first-menu-name="{{ trans('strings.form_dropdown_move_item') }}"
             actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
 
-            availables-locales-list="{{ json_encode(config('app.locales')) }}">
+            availables-locales-list="{{ json_encode(config('codeheuresUtils.availableLocales')) }}">
     </manage-categories>
 
 @endsection

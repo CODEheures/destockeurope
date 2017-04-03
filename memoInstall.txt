@@ -16,7 +16,7 @@ client_max_body_size 10M;
 //      php artisan run:schedule (premiere fois pour creer une ligne de stats)
 //      crontab -e creer le cron du schedule
 //      supervisor https://laravel.com/docs/5.3/queues#supervisor-configuration
-//      php artisan queue:work mysql --timeout=600 --tries=1 (1ere fois) | php artisan queue:restart
+//      php artisan queue:work --timeout=600 --tries=1 -- database (1ere fois) | php artisan queue:restart
 //      mkdir /resources/geoip
 //
 //      MAIL: http://www.alaxos.org/wikitips/doku.php?id=tips_informatiques:linux:soft:email:systeme:systeme
