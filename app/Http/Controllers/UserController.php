@@ -12,11 +12,9 @@ use App\Http\Requests\UpdatePhoneRequest;
 use App\Http\Requests\UpdateRegistrationRequest;
 use App\Http\Requests\UpdateUserLocationRequest;
 use App\Http\Requests\UpdateUserNameRequest;
+use Codeheures\LaravelUtils\Traits\Tools\Currencies;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
 
 class UserController extends Controller
 {
@@ -111,10 +109,9 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function setCurrency(Request $request) {
-        $currencies = new ISOCurrencies();
         $prefCurrency = $request->currency;
 
-        if($currencies->contains(new Currency($prefCurrency)) && $prefCurrency != '') {
+        if(Currencies::isAvailableCurrency($prefCurrency)) {
             $this->auth->user()->currency = $prefCurrency;
             $this->auth->user()->save();
             return response('ok', 200);

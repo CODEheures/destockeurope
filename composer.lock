@@ -48,16 +48,16 @@
         },
         {
             "name": "codeheures/laravel-utils",
-            "version": "v1.1.5",
+            "version": "v1.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CODEheures/laravelUtils.git",
-                "reference": "caaad3bab75cb9d7e519ebe34cfc81cd29675fbc"
+                "reference": "f687514b50eaaddc22fc810e17d07f9e5e443220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelUtils/zipball/caaad3bab75cb9d7e519ebe34cfc81cd29675fbc",
-                "reference": "caaad3bab75cb9d7e519ebe34cfc81cd29675fbc",
+                "url": "https://api.github.com/repos/CODEheures/laravelUtils/zipball/f687514b50eaaddc22fc810e17d07f9e5e443220",
+                "reference": "f687514b50eaaddc22fc810e17d07f9e5e443220",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
             ],
             "description": "Utility for Laravel 5.4",
             "homepage": "http://github.com/codeheures/laravelUtils",
-            "time": "2017-04-03T13:28:56+00:00"
+            "time": "2017-04-04T15:08:03+00:00"
         },
         {
             "name": "composer/ca-bundle",

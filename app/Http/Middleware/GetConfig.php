@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Parameters;
 use Closure;
-use Codeheures\LaravelUtils\Traits\Tools\Currencies;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
 
@@ -54,22 +53,6 @@ class GetConfig
             }
         }
 
-
-        //config('runtime.currency')
-        try {
-            if(auth()->check()) {
-                config(['runtime.currency' => auth()->user()->currency]);
-            } else {
-                $formatter = new \NumberFormatter(config('runtime.locale'), \NumberFormatter::CURRENCY);
-                config(['runtime.currency' => $formatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)]);
-            }
-
-            if(!Currencies::isAvailableCurrency(config('runtime.currency'))) {
-                config(['runtime.currency' => env('DEFAULT_CURRENCY')]);
-            }
-        } catch (\Exception $e) {
-            config(['runtime.currency' => env('DEFAULT_CURRENCY')]);
-        }
         return $next($request);
 
     }
