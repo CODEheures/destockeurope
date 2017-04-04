@@ -256,6 +256,7 @@ class Advert extends Model {
             return $query->whereDate('online_at' , '=', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')-$days)->toDateString())
                 ->where('isValid', true)
                 ->where('isRenew', false)
+                ->where('is_delegation', false)
                 ->where(function ($query) use ($days){
                     $query->whereNull('lastObsoleteMail')
                         ->orWhere('lastObsoleteMail', '>', $days);
@@ -264,6 +265,7 @@ class Advert extends Model {
             return $query->onlyTrashed()
                 ->where('isValid', true)
                 ->where('isRenew', false)
+                ->where('is_delegation', false)
                 ->where('lastObsoleteMail', '<>', 0);
         }
     }
