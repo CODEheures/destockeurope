@@ -99,8 +99,8 @@ class CommonController extends Controller
      * Return view of joinUS
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function joinUS() {
-        return view('global.joinUS');
+    public function joinUs() {
+        return view('global.joinUs');
     }
 
     /**

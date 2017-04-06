@@ -23,7 +23,7 @@
 
     //Footer
     Route::get('/whoAreWe', 'CommonController@whoAreWe')->name('whoAreWe');
-    Route::get('/joinUS', 'CommonController@joinUS')->name('joinUS');
+    Route::get('/joinUs', 'CommonController@joinUs')->name('joinUs');
     Route::get('/environmentalImpact', 'CommonController@environmentalImpact')->name('environmentalImpact');
     Route::get('/ads', 'CommonController@ads')->name('ads');
 
