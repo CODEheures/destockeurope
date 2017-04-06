@@ -19,11 +19,23 @@
     Route::post('/subscribeNewsLetter', 'CommonController@subscribeNewsLetter')->name('subscribeNewsLetter');
     Route::get('/mines', ['as' => 'mines', 'uses' => 'CommonController@mines']);
     Route::get('/bookmarks', ['as' => 'bookmarks', 'uses' => 'CommonController@bookmarks']);
-    Route::get('/conditions-generales-de-vente', 'CommonController@cgv')->name('cgv');
     Route::get('/imageserver', 'CommonController@imageServer')->name('imageServer');
+
+    //Footer
+    Route::get('/whoAreWe', 'CommonController@whoAreWe')->name('whoAreWe');
+    Route::get('/joinUS', 'CommonController@joinUS')->name('joinUS');
+    Route::get('/environmentalImpact', 'CommonController@environmentalImpact')->name('environmentalImpact');
+    Route::get('/ads', 'CommonController@ads')->name('ads');
+
+    Route::get('/legalMentions', 'CommonController@legalMentions')->name('legalMentions');
+    Route::get('/cgu', 'CommonController@cgu')->name('cgu');
+    Route::get('/diffusionRules', 'CommonController@diffusionRules')->name('diffusionRules');
+    Route::get('/cgv', 'CommonController@cgv')->name('cgv');
+
+    Route::get('/help', 'CommonController@help')->name('help');
     Route::get('/contact', 'CommonController@contact')->name('contact');
     Route::post('/contact', 'CommonController@contactPost')->name('contactPost');
-    Route::get('/cgv', 'CommonController@cgv')->name('cgv');
+    Route::get('/areInOtherCountry', 'CommonController@areInOtherCountry')->name('areInOtherCountry');
 
     // Admin Routes...
     Route::group(['prefix' => 'admin'], function() {

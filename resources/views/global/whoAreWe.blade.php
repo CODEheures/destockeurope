@@ -27,7 +27,7 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1>Conditions Générales de ventes</h1>
+                            <h1>Qui sommes nous?</h1>
                         </div>
                         {{--<div class="ui segment">--}}
                             {{--<h1>Conditions Générales d'utilisation</h1>--}}

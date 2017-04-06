@@ -13,7 +13,24 @@ use Illuminate\Http\Request;
 class CommonController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth', ['except' => ['portal', 'subscribeNewsLetter', 'home', 'cgv', 'contact', 'contactPost', 'imageServer']]);
+        $this->middleware('auth', ['except' => [
+            'portal',
+            'subscribeNewsLetter',
+            'home',
+            'whoAreWe',
+            'joinUS',
+            'environmentalImpact',
+            'ads',
+            'legalMentions',
+            'cgu',
+            'diffusionRules',
+            'cgv',
+            'help',
+            'contact',
+            'contactPost',
+            'areInOtherCountry',
+            'imageServer'
+        ]]);
         $this->middleware('isEmailConfirmed', ['only' => ['mines']]);
     }
 
@@ -71,11 +88,76 @@ class CommonController extends Controller
     }
 
     /**
+     * Return view of whoAreWe
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function whoAreWe() {
+        return view('global.whoAreWe');
+    }
+
+    /**
+     * Return view of joinUS
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function joinUS() {
+        return view('global.joinUS');
+    }
+
+    /**
+     * Return view of environmentalImpact
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function environmentalImpact() {
+        return view('global.environmentalImpact');
+    }
+
+    /**
+     * Return view of ads
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function ads() {
+        return view('global.ads');
+    }
+
+
+    /**
+     * Return view of legalMentions
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function legalMentions() {
+        return view('global.legalMentions');
+    }
+
+    /**
      * Return view of CGV
-     * @return string
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function cgu(){
+        return view('global.cgu');
+    }
+
+    /**
+     * Return view of diffusionRules
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function diffusionRules() {
+        return view('global.diffusionRules');
+    }
+
+    /**
+     * Return view of CGV
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function cgv(){
         return view('global.cgv');
+    }
+
+    /**
+     * Return view of CGV
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function help(){
+        return view('global.help');
     }
 
     /**
@@ -89,6 +171,14 @@ class CommonController extends Controller
     public function contactPost(Request $request){
         //TODO ENVOI MAIL CONTACT A ADMIN
         return redirect(route('home'))->with('success', trans('strings.view_contact_success'));
+    }
+
+    /**
+     * Return view of CGV
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function areInOtherCountry(){
+        return view('global.areInOtherCountry');
     }
 
     public function imageServer(Request $request) {

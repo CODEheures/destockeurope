@@ -419,11 +419,12 @@ return [
     'footer_list_5_4' => 'Advertising',
 
     'footer_list_header_6' => 'LEGAL INFORMATIONS',
-    'footer_list_6_1' => 'Terms of Service',
-    'footer_list_6_2' => 'Dissemination Rules',
-    'footer_list_6_3' => 'Terms of Sales',
-    'footer_list_6_4' => 'Privacy Policy / Cookies',
-    'footer_list_6_5' => 'Your rights and obligations',
+    'footer_list_6_1' => 'Legal Mentions',
+    'footer_list_6_2' => 'Terms of Service',
+    'footer_list_6_3' => 'Dissemination Rules',
+    'footer_list_6_4' => 'Terms of Sales',
+    'footer_list_6_5' => 'Privacy Policy / Cookies',
+    'footer_list_6_6' => 'Your rights and obligations',
 
     'footer_list_header_7' => 'SOME QUESTIONS ?',
     'footer_list_7_1' => 'Help',

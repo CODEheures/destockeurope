@@ -58,28 +58,29 @@
         <div class="column">
             <h4 class="ui header">{{ trans('strings.footer_list_header_5') }}</h4>
             <div class="ui link list">
-                <a class="item" href="#">{{ trans('strings.footer_list_5_1') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_5_2') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_5_3') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_5_4') }}</a>
+                <a class="item" href="{{ route('whoAreWe') }}">{{ trans('strings.footer_list_5_1') }}</a>
+                <a class="item" href="{{ route('joinUS') }}">{{ trans('strings.footer_list_5_2') }}</a>
+                <a class="item" href="{{ route('environmentalImpact') }}">{{ trans('strings.footer_list_5_3') }}</a>
+                <a class="item" href="{{ route('ads') }}">{{ trans('strings.footer_list_5_4') }}</a>
             </div>
         </div>
         <div class="column">
             <h4 class="ui header">{{ trans('strings.footer_list_header_6') }}</h4>
             <div class="ui link list">
-                <a class="item" href="{{ route('cgv') }}">{{ trans('strings.footer_list_6_1') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_6_2') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_6_3') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_6_4') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_6_5') }}</a>
+                <a class="item" href="{{ route('legalMentions') }}">{{ trans('strings.footer_list_6_1') }}</a>
+                <a class="item" href="{{ route('cgu') }}">{{ trans('strings.footer_list_6_2') }}</a>
+                <a class="item" href="{{ route('diffusionRules') }}">{{ trans('strings.footer_list_6_3') }}</a>
+                <a class="item" href="{{ route('cgv') }}">{{ trans('strings.footer_list_6_4') }}</a>
+                {{--<a class="item" href="#">{{ trans('strings.footer_list_6_5') }}</a>--}}
+                {{--<a class="item" href="#">{{ trans('strings.footer_list_6_6') }}</a>--}}
             </div>
         </div>
         <div class="column">
             <h4 class="ui header">{{ trans('strings.footer_list_header_7') }}</h4>
             <div class="ui link list">
-                <a class="item" href="#">{{ trans('strings.footer_list_7_1') }}</a>
+                <a class="item" href="{{ route('help') }}">{{ trans('strings.footer_list_7_1') }}</a>
                 <a class="item" href="{{ route('contact') }}">{{ trans('strings.footer_list_7_2') }}</a>
-                <a class="item" href="#">{{ trans('strings.footer_list_7_3') }}</a>
+                <a class="item" href="{{ route('areInOtherCountry') }}">{{ trans('strings.footer_list_7_3') }}</a>
             </div>
         </div>
     </div>

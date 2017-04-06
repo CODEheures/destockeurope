@@ -419,11 +419,12 @@ return [
     'footer_list_5_4' => 'Publicité',
 
     'footer_list_header_6' => 'INFORMATIONS LÉGALES',
-    'footer_list_6_1' => 'Conditions générales d\'utilisation',
-    'footer_list_6_2' => 'Règles de diffusion',
-    'footer_list_6_3' => 'Conditions Générales de Vente',
-    'footer_list_6_4' => 'Vie privée / cookies',
-    'footer_list_6_5' => 'Vos droits et obligations',
+    'footer_list_6_1' => 'Mentions Légales',
+    'footer_list_6_2' => 'Conditions générales d\'utilisation',
+    'footer_list_6_3' => 'Règles de diffusion',
+    'footer_list_6_4' => 'Conditions Générales de Vente',
+    'footer_list_6_5' => 'Vie privée / cookies',
+    'footer_list_6_6' => 'Vos droits et obligations',
 
     'footer_list_header_7' => 'DES QUESTIONS ?',
     'footer_list_7_1' => 'Aide',
