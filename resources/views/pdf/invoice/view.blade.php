@@ -16,10 +16,6 @@
 
 <div class="invoice-title">
     <h2>
-        {{ trans('strings.pdf_invoice_payed').' '
-            . trans('strings.'. strtolower(\Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%A'))) . ' '
-            . \Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%e') . ' '
-            . trans('strings.'. strtolower(\Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%B'))) . ' '
-            . \Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%Y') }}
+        {{ trans('strings.pdf_invoice_payed').' '. \App\Common\LocaleUtils::getTransDate($invoice->created_at) }}
     </h2>
 </div>

@@ -165,7 +165,7 @@ class Advert extends Model {
     }
 
     public function getIsEligibleForRenewMailZeroAttribute() {
-        if ($this->isValid && !$this->isRenew && $this->lastObsoleteMail!==0){
+        if ($this->isValid && !$this->isRenew && !$this->is_delegation && $this->lastObsoleteMail!==0){
             return true;
         }
         return false;

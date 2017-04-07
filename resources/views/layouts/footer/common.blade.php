@@ -59,7 +59,7 @@
             <h4 class="ui header">{{ trans('strings.footer_list_header_5') }}</h4>
             <div class="ui link list">
                 <a class="item" href="{{ route('whoAreWe') }}">{{ trans('strings.footer_list_5_1') }}</a>
-                <a class="item" href="{{ route('joinUS') }}">{{ trans('strings.footer_list_5_2') }}</a>
+                <a class="item" href="{{ route('joinUs') }}">{{ trans('strings.footer_list_5_2') }}</a>
                 <a class="item" href="{{ route('environmentalImpact') }}">{{ trans('strings.footer_list_5_3') }}</a>
                 <a class="item" href="{{ route('ads') }}">{{ trans('strings.footer_list_5_4') }}</a>
             </div>

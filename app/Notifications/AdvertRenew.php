@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Advert;
+use App\Common\LocaleUtils;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -48,7 +49,7 @@ class AdvertRenew extends Notification
                     ->greeting(trans('strings.mail_advertRenew_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_advertRenew_line',[
                         'title' => $this->advert->title,
-                        'date' => Carbon::parse($this->advert->online_at)->toDateTimeString()
+                        'date' => LocaleUtils::getTransDate($this->advert->online_at)
                     ]))
                     ->line(trans('strings.mail_advertApprove_line2'));
 

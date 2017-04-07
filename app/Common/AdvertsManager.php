@@ -117,9 +117,15 @@ class AdvertsManager
             $counter = 0;
             $invalidAdverts = Advert::finished()->get();
             foreach ($invalidAdverts as $advert){
-                $counter++;
-                $advert->delete();
-                $advert->isEligibleForRenewMailZero ? $this->alertEndOfAdverts(0,[$advert]) : null;
+                if(!$advert->is_delegation) {
+                    $counter++;
+                    $advert->delete();
+                    $advert->isEligibleForRenewMailZero ? $this->alertEndOfAdverts(0,[$advert]) : null;
+                } else {
+                    //automatic renew for delegations
+                    $advert->online_at = Carbon::now();
+                    $advert->save();
+                }
             }
             return $counter;
         } catch (\Exception $e) {

@@ -9,11 +9,7 @@
         <p class="navbar-menu">
             <a href="{{ route('home') }}">{{ trans('strings.pdf_invoice_number') . $invoice->invoice_number }}<br/>
                 <span class="created_at">
-                    {{ trans('strings.pdf_invoice_emission'). ': '
-                    . trans('strings.'. strtolower(\Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%A'))) . ' '
-                    . \Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%e') . ' '
-                    . trans('strings.'. strtolower(\Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%B'))) . ' '
-                    . \Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%Y')}}
+                    {{ trans('strings.pdf_invoice_emission'). ': ' . \App\Common\LocaleUtils::getTransDate($invoice->created_at)}}
                 </span>
             </a>
         </p>

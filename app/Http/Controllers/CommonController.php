@@ -18,7 +18,7 @@ class CommonController extends Controller
             'subscribeNewsLetter',
             'home',
             'whoAreWe',
-            'joinUS',
+            'joinUs',
             'environmentalImpact',
             'ads',
             'legalMentions',

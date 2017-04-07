@@ -3,6 +3,7 @@
 namespace App\Common;
 
 
+use Carbon\Carbon;
 use Codeheures\LaravelUtils\Traits\Tools\Locale;
 use Codeheures\LaravelUtils\Traits\Locale\ManageLocale;
 use Illuminate\Support\Facades\Lang;
@@ -41,5 +42,22 @@ trait LocaleUtils
             }
         }
         return $countries;
+    }
+
+    /**
+     *
+     * get a translate date without php setlocale() (because of this is process not a thread)
+     * return type = "vendredi 7 avril 2017"
+     *
+     * @param $date
+     * @return string
+     */
+    public static function getTransDate($date) {
+        $dateString = trans('strings.'. strtolower(Carbon::parse($date)->formatLocalized('%A'))) . ' '
+            . Carbon::parse($date)->formatLocalized('%e') . ' '
+            . trans('strings.'. strtolower(Carbon::parse($date)->formatLocalized('%B'))) . ' '
+            . Carbon::parse($date)->formatLocalized('%Y');
+
+        return $dateString;
     }
 }
