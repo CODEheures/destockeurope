@@ -307,6 +307,7 @@ return [
     'view_advert_approve_header' => 'Approve this adverts',
     'view_advert_approve_toggle_label' => 'I approve this advert',
     'view_advert_disapprove_toggle_label' => 'I disapprove this advert',
+    'view_advert_disapprove_reason_label' => 'Reason for refusal',
     'view_advert_priceCoefficient_label' => 'Margin % Coefficient',
     'view_advert_priceCoefficient_new_price' => 'New public price',
     'view_advert_priceCoefficient_unit_margin' => 'Unit Margin',

@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Advert;
+use App\Common\CustomMailMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,16 +16,18 @@ class AdvertNotApprove extends Notification
     private $advert;
     private $senderName;
     private $senderMail;
+    private $disapproveReason;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Advert $advert, $senderName, $senderMail)
+    public function __construct(Advert $advert, $senderName, $senderMail, $disapproveReason)
     {
         $this->advert = $advert;
         $this->senderName = $senderName;
         $this->senderMail = $senderMail;
+        $this->disapproveReason = $disapproveReason;
     }
 
     /**
@@ -46,10 +49,11 @@ class AdvertNotApprove extends Notification
      */
     public function toMail($notifiable)
     {
-        $message = (new MailMessage)
+        $message = (new CustomMailMessage)
                     ->subject(trans('strings.mail_advertNotApprove_subject'))
                     ->greeting(trans('strings.mail_advertNotApprove_greeting',['username' => $notifiable->name]))
-                    ->line(trans('strings.mail_advertNotApprove_line',['title' => $this->advert->title]));
+                    ->line(trans('strings.mail_advertNotApprove_line',['title' => $this->advert->title]))
+                    ->customLines($this->disapproveReason);
 
         if($this->advert->invoice && $this->advert->invoice->voidId){
             $message->line(trans('strings.mail_advertNotApprove_line_voidPayment'));

@@ -13,6 +13,7 @@
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             toggle-approve-label="{{ trans('strings.view_advert_approve_toggle_label') }}"
             toggle-disapprove-label="{{ trans('strings.view_advert_disapprove_toggle_label') }}"
+            text-disapprove-reason="{{ trans('strings.view_advert_disapprove_reason_label') }}"
             form-advert-price-coefficient-label="{{ trans('strings.view_advert_priceCoefficient_label') }}"
             form-advert-price-coefficient-new-price-label="{{ trans('strings.view_advert_priceCoefficient_new_price') }}"
             form-advert-price-coefficient-unit-margin-label="{{ trans('strings.view_advert_priceCoefficient_unit_margin') }}"

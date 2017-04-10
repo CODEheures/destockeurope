@@ -161,6 +161,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="ui grid" v-if="((advert.id) in approveList) && ((approveList[advert.id]).isApprove=='0')">
+                            <div class="sixteen wide column">
+                                <div class="ui form">
+                                    <div class="field">
+                                        <label>{{ textDisapproveReason }}</label>
+                                        <textarea rows="2" v-model="(approveList[advert.id]).disapproveReason"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <button class="ui primary button" :class="action ? '': 'disabled'" v-on:click="approveAll">
                         {{ formValidationButtonLabel }}
@@ -186,6 +196,7 @@
             'loadErrorMessage',
             'toggleApproveLabel',
             'toggleDisapproveLabel',
+            'textDisapproveReason',
             'formAdvertPriceCoefficientLabel',
             'formAdvertPriceCoefficientNewPriceLabel',
             'formAdvertPriceCoefficientUnitMarginLabel',
@@ -226,13 +237,21 @@
                 $('#slider1-'+this._uid+'-'+this.advertsList[index]['id']).checkbox({
                     onChange: function () {
                         that.action = true;
-                        that.approveList[this.name] = {'isApprove': this.value};
+                        if(!(this.name in that.approveList)){
+                            that.$set(that.approveList, this.name, {'isApprove': this.value, 'disapproveReason': ''});
+                        } else {
+                            (that.approveList[this.name]).isApprove = this.value;
+                        }
                     }
                 });
                 $('#slider2-'+this._uid+'-'+this.advertsList[index]['id']).checkbox({
                     onChange: function () {
                         that.action = true;
-                        that.approveList[this.name] = {'isApprove': this.value}
+                        if(!(this.name in that.approveList)){
+                            that.$set(that.approveList, this.name, {'isApprove': this.value, 'disapproveReason': ''});
+                        } else {
+                            (that.approveList[this.name]).isApprove = this.value;
+                        }
                     }
                 });
             }

@@ -662,7 +662,7 @@ class AdvertController extends Controller
         $approveList = $request->all();
         try {
             foreach ($approveList as $key=>$value) {
-                $this->approveAdvert($key, $value['isApprove'], $value['priceCoefficient']);
+                $this->approveAdvert($key, $value['isApprove'], $value['priceCoefficient'], $value['disapproveReason']);
             }
         } catch (\Exception $e) {
             return response(trans('strings.view_advert_approve_error'), 500);
@@ -679,7 +679,7 @@ class AdvertController extends Controller
      * @return null
      * @throws \Exception
      */
-    private function approveAdvert($key, $isApproved, $priceCoefficient=null) {
+    private function approveAdvert($key, $isApproved, $priceCoefficient=null, $disapproveReason=null) {
         if($isApproved != null) {
             $advert = Advert::find($key);
             if($advert && is_null($advert->isValid)) {
@@ -812,7 +812,7 @@ class AdvertController extends Controller
                     $recipient->notify(new AdvertRenew($advert));
                     return $advert;
                 } else {
-                    $recipient->notify(new AdvertNotApprove($advert, $senderName, $senderMail));
+                    $recipient->notify(new AdvertNotApprove($advert, $senderName, $senderMail, $disapproveReason));
                     return null;
                 }
 
@@ -1302,7 +1302,7 @@ class AdvertController extends Controller
         //Auto Approve renew advert
         if($advert->originalAdvertId){
             try {
-                $saveAdvert = $this->approveAdvert($advert->id, true, null);
+                $saveAdvert = $this->approveAdvert($advert->id, true, null, null);
                 return redirect(route('home'))
                     ->with('success', trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($saveAdvert->online_at)]));
             } catch (\Exception $e) {

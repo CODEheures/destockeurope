@@ -103,17 +103,17 @@ $style = [
                                         @endforeach
 
                                         <!--Customer Message -->
-                                        @if(isset($customerMessage) && count($customerMessage)>=1)
+                                        @if(isset($customMessage) && count($customMessage)>=1)
                                             <hr>
                                             <p style="{{ $style['paragraph-sub'] }}">
-                                            @foreach($customerMessage as $line)
+                                            @foreach($customMessage as $line)
                                                     {{ $line }}<br />
                                             @endforeach
                                             </p>
 
                                             <!--Customer Contact -->
                                             <p style="{{ $style['paragraph-sub'] }}">
-                                                @foreach($customerContact as $line)
+                                                @foreach($customContact as $line)
                                                     {{ $line }}<br />
                                                 @endforeach
                                             </p>

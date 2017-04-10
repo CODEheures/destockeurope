@@ -10,9 +10,9 @@ if (! empty($introLines)) {
     echo implode("\n", $introLines), "\n\n";
 }
 
-if (isset($customerMessage) && count($customerMessage)>=1){
-    echo implode("\n", $customerMessage), "\n\n";
-    echo implode("\n", $customerContact), "\n\n";
+if (isset($customMessage) && count($customMessage)>=1){
+    echo implode("\n", $customMessage), "\n\n";
+    echo implode("\n", $customContact), "\n\n";
 }
 
 if (isset($actionText)) {

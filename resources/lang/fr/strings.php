@@ -307,6 +307,7 @@ return [
     'view_advert_approve_header' => 'Approuver les annonces',
     'view_advert_approve_toggle_label' => 'J\'approuve cette annonce',
     'view_advert_disapprove_toggle_label' => 'Je désapprouve cette annonce',
+    'view_advert_disapprove_reason_label' => 'Raison du refus',
     'view_advert_priceCoefficient_label' => 'Coefficient de marge  en %',
     'view_advert_priceCoefficient_new_price' => 'Nouveau prix affiché',
     'view_advert_priceCoefficient_unit_margin' => 'Marge/unité',

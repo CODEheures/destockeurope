@@ -5,18 +5,18 @@ namespace App\Common;
 use Illuminate\Notifications\Action;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CustomerToSellerMailMessage extends MailMessage
+class CustomMailMessage extends MailMessage
 {
 
-    public $customerMessage = [];
+    public $customMessage = [];
     public $contact = [];
 
     /**
      * @param $message
      * @return $this
      */
-    public function customerLines($message) {
-        $this->customerMessage = preg_split("/\r\n|\n|\r/", $message);
+    public function customLines($message) {
+        $this->customMessage = preg_split("/\r\n|\n|\r/", $message);
         return $this;
     }
 
@@ -25,7 +25,7 @@ class CustomerToSellerMailMessage extends MailMessage
      * @param $contact
      * @return $this
      */
-    public function customerContact($contact){
+    public function customContact($contact){
         $this->contact[] = $contact;
         return $this;
     }
@@ -34,7 +34,7 @@ class CustomerToSellerMailMessage extends MailMessage
     {
         if ($line instanceof Action) {
             $this->action($line->text, $line->url);
-        } elseif (! $this->actionText && ! $this->customerMessage) {
+        } elseif (! $this->actionText && ! $this->customMessage) {
             $this->introLines[] = $this->formatLine($line);
         } else {
             $this->outroLines[] = $this->formatLine($line);
@@ -54,8 +54,8 @@ class CustomerToSellerMailMessage extends MailMessage
             'outroLines' => $this->outroLines,
             'actionText' => $this->actionText,
             'actionUrl' => $this->actionUrl,
-            'customerMessage' => $this->customerMessage,
-            'customerContact' => $this->contact
+            'customMessage' => $this->customMessage,
+            'customContact' => $this->contact
         ];
     }
 
