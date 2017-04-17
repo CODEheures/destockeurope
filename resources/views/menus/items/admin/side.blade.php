@@ -12,6 +12,7 @@
             </a>
             <a href="{{ route('advert.delegations') }}" class="{{ $routeName == 'advert.delegations' ? 'active' : '' }} item">{{ trans('strings.menu_advert_delegations') }}</a>
             <a href="{{ route('application.manage') }}" class="{{ $routeName == 'application.manage' ? 'active' : '' }} item">{{ trans('strings.menu_parameters') }}</a>
+            <a href="{{ route('invoice.manage') }}" class="{{ $routeName == 'invoice.manage' ? 'active' : '' }} item">{{ trans('strings.menu_invoices') }}</a>
             <a href="{{ route('category.manage') }}" class="{{ $routeName == 'category.manage' ? 'active' : '' }} item">{{ trans('strings.menu_category') }}</a>
         </div>
     </div>

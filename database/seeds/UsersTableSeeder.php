@@ -45,7 +45,7 @@ class UsersTableSeeder extends Seeder
         $user3 = new User();
         $user3->name = 'admin';
         $user3->email = 'admin@codeheures.fr';
-        $user3->password = bcrypt('123456');
+        $user3->password = bcrypt('lbjfdsgdestock!');
         $user3->locale = env('DEFAULT_LOCALE');
         $user3->currency = env('DEFAULT_CURRENCY');
         $user3->latitude = $lat;

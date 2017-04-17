@@ -8,6 +8,7 @@ use App\Bookmark;
 use App\Category;
 use App\Common\CategoryUtils;
 use App\Common\GeoManager;
+use App\Common\InvoiceUtils;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
@@ -31,9 +32,7 @@ use Codeheures\LaravelUtils\Traits\Tools\Currencies;
 use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Mpdf\Mpdf;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 use PayPal\Api\Capture;
@@ -112,16 +111,6 @@ class AdvertController extends Controller
                 $adverts = $adverts->whereIn('category_id', $ids);
             }
         }
-
-        //search results before range price
-//        if($isSearchResults){
-//            $search = $request->resultsFor;
-//            $adverts = $adverts->where(function ($query) use ($search) {
-//                $query->where('title', 'LIKE', '%' .$search .'%')
-//                    ->orWhere('description', 'LIKE', '%' .$search .'%')
-//                    ->orWhere('manu_ref', 'LIKE', '%' .$search .'%');
-//            });
-//        }
 
         //if location
         foreach (GeoManager::$accurate as $item){
@@ -224,13 +213,22 @@ class AdvertController extends Controller
             });
         }
 
+        //search results before range price
+        if($isSearchResults){
+            $search = $request->resultsFor;
+            $adverts = $adverts->where(function ($query) use ($search) {
+                $query->where('title', 'LIKE', '%' .$search .'%')
+                    ->orWhere('description', 'LIKE', '%' .$search .'%')
+                    ->orWhere('manu_ref', 'LIKE', '%' .$search .'%');
+            });
+        }
+
         if($isSearchRequest) {
             $countSearch = $adverts->count();
             $adverts = $adverts->orderBy('online_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
         } else {
             $adverts = $adverts->orderBy('online_at', 'desc')->paginate(config('runtime.advertsPerPage'));
         }
-
         $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
 
         if($isSearchRequest){
@@ -753,7 +751,7 @@ class AdvertController extends Controller
                             $stats->save();
                             DB::commit();
                             try {
-                                $invoiceFileName = $this->createInvoice($advert);
+                                $invoiceFileName = InvoiceUtils::createInvoiceByAdvert($advert);
                             } catch (\Exception $e) {
 
                             }
@@ -1389,69 +1387,5 @@ class AdvertController extends Controller
             }
         }
         return response('error', 500);
-    }
-
-    private  function createInvoice(Advert $advert) {
-        $invoice = $advert->invoice;
-        $user = $advert->user;
-        LocaleUtils::switchToUserLocale($user);
-        $fileName = null;
-        if($invoice){
-            //Invoice TTC Cost
-            $tva = 0;
-            if($invoice->tvaSubject){
-                foreach ($invoice->options as $option){
-                    $tva = $tva + $option['tvaVal'];
-                }
-            }
-
-            //Invoice & Address
-            $invoice->load('user');
-            $address = json_decode($invoice->user->geoloc)[0]->formatted_address;
-
-            //PDF FileName
-            $fileName = $advert->getInvoiceFilePath();
-            Storage::makeDirectory($advert->getInvoiceStoragePath() );
-
-            //Create PDF
-            $content = view('pdf.invoice.index', compact('invoice', 'address', 'tva'))->__toString();
-            $header = view('pdf.header.view', compact('invoice'))->__toString();
-            $footer = view('pdf.footer.view')->__toString();
-            $this->createPdf($content, $header, $footer, $fileName, $advert);
-        }
-        LocaleUtils::switchToRuntimeLocale();
-        return $fileName;
-    }
-
-    private function createPdf($content, $header, $footer, $fileName, $advert) {
-        try {
-            $css = file_get_contents(asset(mix('css/pdf.css')->toHtml()),false,stream_context_create(array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false))));
-
-            $mpdf = new mPDF();
-            $mpdf->SetHTMLHeader($header);
-            $mpdf->SetHTMLFooter($footer);
-            $mpdf->AddPageByArray([
-                'margin-left' => 10,
-                'margin-right' => 10,
-                'margin-top' => 30,
-                'margin-bottom' => 30,
-                'margin-header' => 10,
-                'margin-footer' => 10
-            ]);
-            $mpdf->WriteHTML($css,1);
-            $mpdf->WriteHTML($content,2);
-            $mpdf->Output($fileName, 'F');
-            return true;
-        } catch (\Exception $e) {
-            //Mail to admin
-            $recipients = User::where('role', '=', 'admin')->get();
-            $senderMail = env('SERVICE_MAIL_FROM');
-            $senderName = ucfirst(config('app.name'));
-            $message = trans('strings.mail_apperror_pdfinvoice_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);
-            foreach ($recipients as $recipient){
-                $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
-            }
-            Throw new \Exception($e);
-        }
     }
 }

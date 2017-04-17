@@ -171,9 +171,6 @@
             this.$watch('flagForceReload', function () {
                 this.getAdvertsList();
             });
-            this.$watch('flagForceReload', function () {
-                this.getAdvertsList();
-            });
             this.$watch('minPrice', function () {
                 this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
             });

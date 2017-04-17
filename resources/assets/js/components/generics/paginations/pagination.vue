@@ -22,7 +22,7 @@
             //vue routes
             //vue vars
             'pages',
-            'routeGetAdvertList',
+            'routeGetList',
             //vue strings
             'pageLabel',
             'pagePreviousLabel',
@@ -41,7 +41,7 @@
         },
         methods: {
             urlForPageNumber(pageNumber) {
-                let parsed = Parser.parse(this.routeGetAdvertList, true);
+                let parsed = Parser.parse(this.routeGetList, true);
                 parsed.search=undefined;
                 parsed.query.page=pageNumber.toString();
                 return Parser.format(parsed);

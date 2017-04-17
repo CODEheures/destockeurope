@@ -70,7 +70,7 @@
                     <div class="sixteen wide column pagination">
                         <pagination
                             :pages="paginate"
-                            :route-get-advert-list="dataRouteGetAdvertList"
+                            :route-get-list="dataRouteGetAdvertList"
                             :page-label="pageLabel"
                             :page-previous-label="pagePreviousLabel"
                             :page-next-label="pageNextLabel">

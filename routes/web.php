@@ -51,6 +51,12 @@
         Route::get('/stats', 'AdminController@getStats')->name('application.getStats');
         Route::get('/testLangs', 'AdminController@testLangs');
         Route::get('/testPdf', 'AdminController@testPdf');
+
+        Route::group(['prefix'=> 'invoice'], function () {
+            Route::get('/manage', 'AdminController@invoiceManage')->name('invoice.manage');
+            Route::get('/list', 'AdminController@listInvoices')->name('invoice.list');
+            Route::get('/{id?}', 'AdminController@showInvoice')->name('invoice.show');
+        });
     });
 
     //Auth::routes();

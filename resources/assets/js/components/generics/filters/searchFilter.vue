@@ -30,6 +30,14 @@
             update: {
                 type: Boolean
             },
+            withXsrfToken: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            fields: {
+                type: Object,
+            },
             //vue strings
             placeHolder: String
         },
@@ -47,14 +55,16 @@
                     elemSearch
                             .search({
                                 apiSettings: {
-                                    url: url.replace('query', '{query}')
+                                    url: url.replace('query', '{query}'),
+                                    beforeXHR: function(xhr) {
+                                        // adjust XHR with additional headers
+                                        if(that.withXsrfToken===true){
+                                            xhr.setRequestHeader ('X-XSRF-TOKEN', that.readCookie('XSRF-TOKEN'));
+                                        }
+                                    }
                                 },
                                 //type: 'category',
-                                fields: {
-                                    title: 'titleWithManuRef',
-                                    description : 'resume',
-                                    image: 'thumb'
-                                },
+                                fields: that.fields,
                                 minCharacters : that.minLengthSearch,
                                 onResultsOpen: function () {
                                     $(this).children('a.action').click(function (event) {
@@ -98,7 +108,11 @@
                     elemSearch.search('set value',this.resultsFor);
                     this.wantSearch = false;
                 }
-            }
+            },
+            readCookie: function read(name) {
+                let match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+                return (match ? decodeURIComponent(match[3]) : null);
+            },
         }
     }
 </script>

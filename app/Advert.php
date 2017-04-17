@@ -206,22 +206,18 @@ class Advert extends Model {
 
     public function getInvoiceFilePath() {
         $invoiceFilePath = null;
-        if($this->invoice && $this->invoice->invoice_number){
+        if(!is_null($this->invoice)){
             $invoice = $this->invoice;
-            $year = Carbon::parse($invoice->created_at)->year;
-            $month = Carbon::parse($invoice->created_at)->month;
-            $invoiceFilePath = storage_path('app/invoices/' . $year . '/' . $month . '/' .$invoice->id.'.pdf');
+            $invoiceFilePath = $invoice->filePath;
         }
         return $invoiceFilePath;
     }
 
     public function getInvoiceStoragePath() {
         $invoiceStoragePath = null;
-        if($this->invoice && $this->invoice->invoice_number){
+        if(!is_null($this->invoice)){
             $invoice = $this->invoice;
-            $year = Carbon::parse($invoice->created_at)->year;
-            $month = Carbon::parse($invoice->created_at)->month;
-            $invoiceStoragePath = 'invoices/' . $year . '/' . $month ;
+            $invoiceStoragePath = $invoice->storagePath ;
         }
         return $invoiceStoragePath;
     }

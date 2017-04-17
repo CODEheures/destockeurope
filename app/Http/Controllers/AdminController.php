@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 
 use App\Common\AdvertsManager;
+use App\Common\InvoiceUtils;
 use App\Common\PicturesManager;
 use App\Common\StatsManager;
+use App\Invoice;
 use App\Jobs\TransferMedias;
 use App\Parameters;
 use App\Stats;
 use Carbon\Carbon;
 use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Mpdf\Mpdf;
@@ -324,5 +327,104 @@ class AdminController extends Controller
 
         $mpdf->Output($storage, 'F');
         return response('Fichier ici: ' . $storage,200);
+    }
+
+    /**
+     * Return the view of dashboard
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function invoiceManage() {
+        session(['clear' => true]);
+        return view('invoice.manage');
+    }
+
+    /**
+     *
+     * Get List of Invoices
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listInvoices(Request $request) {
+
+        //Init vars
+        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
+        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
+
+
+        //$invoices = Invoice::orderBy('created_at', 'desc');
+//        $invoices = DB::table('invoices')
+//            ->join('users', 'users.id', '=', 'invoices.user_id')
+//            ->select(array(DB::raw('users.email as usermail'),DB::raw('invoices.*')));
+        $invoices = Invoice::join('users', 'users.id', '=', 'invoices.user_id')
+            ->select(array(DB::raw('users.email as usermail'),DB::raw('invoices.*')));
+
+        if($isSearchRequest){
+            $search = $request->search;
+            $invoices = $invoices->where(function ($query) use ($search) {
+                $query->where('invoices.invoice_number', 'LIKE', '%' .$search .'%')
+                    ->orWhere('invoices.captureId', 'LIKE', '%' .$search .'%')
+                    ->orWhere('users.email', 'LIKE', '%' .$search .'%')
+                    ->orWhere(function ($query) use ($search) {
+                        try {
+                            $query->whereDate('invoices.created_at', Carbon::parse($search));
+                        } catch (\Exception $e) {
+
+                        }
+                    });
+            });
+        }
+
+        //search results before range price
+        if($isSearchResults){
+            $search = $request->resultsFor;
+            $invoices = $invoices->where(function ($query) use ($search) {
+                $query->where('invoices.invoice_number', 'LIKE', '%' .$search .'%')
+                    ->orWhere('invoices.captureId', 'LIKE', '%' .$search .'%')
+                    ->orWhere('users.email', 'LIKE', '%' .$search .'%')
+                    ->orWhere(function ($query) use ($search) {
+                        try {
+                            $query->whereDate('invoices.created_at', Carbon::parse($search));
+                        } catch (\Exception $e) {
+
+                        }
+                    });
+            });
+        }
+
+        if($isSearchRequest) {
+            $countSearch = $invoices->count();
+            $invoices = $invoices->orderBy('invoices.created_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
+        } else {
+            $invoices = $invoices->orderBy('invoices.created_at', 'desc')->paginate(10);
+        }
+
+        $invoices->load('user');
+        if($isSearchRequest){
+            $action = [
+                'url' => '#',
+                'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
+            ];
+            //choisir $loadCompleteAdverts[1] pour trier les resultats par categories
+            return response()->json(['results'=> $invoices, 'action' => $action]);
+        } else {
+            return response()->json(['invoices'=> $invoices]);
+        }
+    }
+
+
+    public function showInvoice($id) {
+        $invoice = Invoice::find($id);
+        $file = null;
+        if(!is_null($invoice)){
+            $file = InvoiceUtils::getInvoiceFile($invoice);
+        }
+
+        if(!is_null($file)){
+            return response(file_get_contents($file),200)->header("Content-Type", "application/pdf");
+        } else {
+            return response(trans('strings.view_all_error_download_file'), 404);
+        }
+
     }
 }

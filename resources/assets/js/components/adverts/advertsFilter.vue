@@ -99,8 +99,9 @@
                                     :place-holder="searchPlaceHolder"
                                     :results-for="dataResultsFor"
                                     :update="dataUpdate"
-                                    :flag-reset="flagResetSearch">
-                            </search-filter>
+                                    :flag-reset="flagResetSearch"
+                                    :fields="{title: 'titleWithManuRef', description : 'resume', image: 'thumb'}"
+                            ></search-filter>
                         </div>
                         <div class="column">
                             <location-filter

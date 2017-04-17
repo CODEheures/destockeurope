@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('css')
-    @include('plugins.amcharts.css')
-@endsection
-
 @section('content')
 
     <manage-application
@@ -39,8 +35,4 @@
             list-type-first-menu-name="{{ trans('strings.view_manage_welcome_type_label') }}">
     </manage-application>
 
-@endsection
-
-@section('scripts')
-    @include('plugins.amcharts.scripts')
 @endsection

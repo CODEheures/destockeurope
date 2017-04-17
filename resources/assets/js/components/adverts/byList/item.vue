@@ -449,8 +449,6 @@
             isRenewAdvertLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
-            noResultFoundHeader: String,
-            noResultFoundMessage: String,
             //margin input field
             formAdvertPriceCoefficientLabel: String,
             formAdvertPriceCoefficientNewPriceLabel: String,

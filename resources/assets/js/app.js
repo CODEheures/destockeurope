@@ -6,7 +6,8 @@
  */
 
 require('./bootstrap');
-require('./semantic');
+require('../semantic/dist/semantic');
+//require('./semantic');
 require('swiper');
 require('./myjs');
 /**
@@ -59,6 +60,11 @@ Vue.component('adverts-by-list', require('./components/adverts/byList/advertsByL
 Vue.component('adverts-by-list-item', require('./components/adverts/byList/item.vue'));
 Vue.component('advert-by-id', require('./components/adverts/byId/advertById.vue'));
 
+//invoices
+Vue.component('invoice-filter', require('./components/invoices/invoicesFilter.vue'));
+Vue.component('invoices-by-list', require('./components/invoices/byList/invoicesByList.vue'));
+Vue.component('invoices-by-list-item', require('./components/invoices/byList/item.vue'));
+
 //Portal page vue
 Vue.component('portal', require('./components/contents/portal.vue'));
 //Welcome page vue
@@ -73,6 +79,8 @@ Vue.component('manage-categories', require('./components/contents/manageCategori
 Vue.component('manage-application', require('./components/contents/manageApplication.vue'));
 //Dashboard page
 Vue.component('dashboard-admin', require('./components/contents/dashboardAdmin.vue'));
+//review payment page
+Vue.component('manage-invoices', require('./components/contents/manageInvoices.vue'));
 //createAdvert page
 Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
 //approve advert page
