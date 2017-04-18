@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
 
         $user1 = new User();
         $user1->name = 'client';
-        $user1->email = 'client@codeheures.fr';
+        $user1->email = 'client@destockeurope.com';
         $user1->phone = '06.87.34.06.83';
         $user1->password = bcrypt('123456');
         $user1->locale = env('DEFAULT_LOCALE');
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
 
         $user2 = new User();
         $user2->name = 'vendeur';
-        $user2->email = 'vendeur@codeheures.fr';
+        $user2->email = 'vendeur@destockeurope.com';
         $user2->password = bcrypt('123456');
         $user2->locale = env('DEFAULT_LOCALE');
         $user2->currency = env('DEFAULT_CURRENCY');
@@ -44,7 +44,7 @@ class UsersTableSeeder extends Seeder
 
         $user3 = new User();
         $user3->name = 'admin';
-        $user3->email = 'admin@codeheures.fr';
+        $user3->email = 'admin@destockeurope.com';
         $user3->password = bcrypt('lbjfdsgdestock!');
         $user3->locale = env('DEFAULT_LOCALE');
         $user3->currency = env('DEFAULT_CURRENCY');
@@ -57,7 +57,7 @@ class UsersTableSeeder extends Seeder
 
         $user4 = new User();
         $user4->name = 'delegation';
-        $user4->email = 'delegation@codeheures.fr';
+        $user4->email = 'delegation@destockeurope.com';
         $user4->password = bcrypt('123456');
         $user4->locale = env('DEFAULT_LOCALE');
         $user4->currency = env('DEFAULT_CURRENCY');

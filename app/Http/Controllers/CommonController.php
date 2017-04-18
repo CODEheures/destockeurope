@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Advert;
 use App\Anonymous;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
@@ -41,6 +42,7 @@ class CommonController extends Controller
     public function portal() {
         $masterAdsControllerFlag = false;
         $browser = Browser::getBrowserName();
+        session()->forget('clear');
         return view('portal', compact('masterAdsControllerFlag', 'browser'));
     }
 
@@ -125,7 +127,10 @@ class CommonController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function legalMentions() {
-        return view('global.legalMentions');
+        $randomAdvertUrl = route('advert.show',['slug' => 'montres-lexon-moon-3615882']);
+        $randomAdvertId = 3615882;
+
+        return view('global.legalMentions', compact('randomAdvertUrl', 'randomAdvertId'));
     }
 
     /**
