@@ -54,6 +54,7 @@
                             <h2 class="ui dividing header">Article 7: Responsabilité et garanties de {{ env('LEGAL_COMPAGNY_PSEUDONAME') }}</h2>
                             @include('global.cg.u.responsabilityDestock')
                             @include('global.cg.u.warrantyDestock')
+                            @include('global.cg.u.subcontractor')
 
                             <h2  class="ui dividing header">Article 8: Cookies</h2>
                             @include('global.cg.u.cookies')
