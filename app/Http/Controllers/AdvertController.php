@@ -7,6 +7,7 @@ use App\Anonymous;
 use App\Bookmark;
 use App\Category;
 use App\Common\CategoryUtils;
+use App\Common\CostUtils;
 use App\Common\GeoManager;
 use App\Common\InvoiceUtils;
 use App\Common\LocaleUtils;
@@ -383,7 +384,7 @@ class AdvertController extends Controller
                 $results = $this->pictureManager->storeLocalFinal();
 
                 //Cost for picture is based on final file number
-                $cost = $this->getCost(count($results)/2, $advert->isUrgent, false, session()->has('videoId'));
+                $cost = CostUtils::getCost(count($results)/2, $advert->isUrgent, false, session()->has('videoId'));
 
 
                 DB::beginTransaction();
@@ -436,7 +437,7 @@ class AdvertController extends Controller
             $options['payedPictures'] = [
                 'name' => trans('strings.option_payedPicture_name'),
                 'quantity' => $nbPictures - config('runtime.nbFreePictures'),
-                'cost' => $this->getCostPictures($nbPictures),
+                'cost' => CostUtils::getCostPictures($nbPictures),
                 'tva' => env('TVA')
             ];
         }
@@ -444,7 +445,7 @@ class AdvertController extends Controller
             $options['isUrgent'] = [
                 'name' => trans('strings.option_isUrgent_name'),
                 'quantity' => 1,
-                'cost' => $this->getCostIsUrgent($isUrgent),
+                'cost' => CostUtils::getCostIsUrgent($isUrgent),
                 'tva' => env('TVA')
             ];
         }
@@ -452,7 +453,7 @@ class AdvertController extends Controller
             $options['isRenew'] = [
                 'name' => trans('strings.option_isRenew_name'),
                 'quantity' => 1,
-                'cost' => $this->getCostIsRenew($isRenew),
+                'cost' => CostUtils::getCostIsRenew($isRenew),
                 'tva' => env('TVA')
             ];
         }
@@ -460,7 +461,7 @@ class AdvertController extends Controller
             $options['haveVideo'] = [
                 'name' => trans('strings.option_haveVideo_name'),
                 'quantity' => 1,
-                'cost' => $this->getCostVideo($haveVideo),
+                'cost' => CostUtils::getCostVideo($haveVideo),
                 'tva' => env('TVA')
             ];
         }
@@ -473,49 +474,10 @@ class AdvertController extends Controller
         return $options;
     }
 
-    private function getCostPictures($nbPictures){
-        if($nbPictures > config('runtime.nbFreePictures')){
-            return ($nbPictures - config('runtime.nbFreePictures'))*10*100;
-        }
-        return 0;
-    }
-
-    private function getCostIsUrgent($isUrgent){
-        if($isUrgent){
-            return config('runtime.urgentCost')*100;
-        }
-        return 0;
-    }
-
-    private function getCostVideo($haveVideo){
-        if($haveVideo){
-            return config('runtime.videoCost')*100;
-        }
-        return 0;
-    }
-
-    private function getCostIsRenew($isRenew){
-        if($isRenew){
-            return config('runtime.renewCost')*100;
-        }
-        return 0;
-    }
-
-    private function getCost($nbPictures, $isUrgent=false, $isRenew=false, $haveVideo=false){
-        $cost = 0;
-        if(!auth()->user()->isDelegation) {
-            $cost += $this->getCostPictures($nbPictures);
-            $cost += $this->getCostIsUrgent($isUrgent);
-            $cost += $this->getCostVideo($haveVideo);
-            $cost += $this->getCostIsRenew($isRenew);
-        }
-        return $cost;
-    }
-
     //Public function for get Cost of Advert on create
     public function cost($nbPictures, $isUrgent) {
         if(isset($nbPictures) && isset($isUrgent) && is_numeric($nbPictures)){
-            return response()->json($this->getCost((int)$nbPictures,filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN), false, session()->has('videoId')));
+            return response()->json(CostUtils::getCost((int)$nbPictures,filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN), false, session()->has('videoId')));
         } else {
             return response('error', 500);
         }
@@ -1348,7 +1310,7 @@ class AdvertController extends Controller
                     'user_id' => $advert->user->id,
                     //'invoice_number' => $next_invoice_number,
                     //'method' => Invoice::PAYPAL,
-                    'cost' => $this->getCost(null, null, true, false),
+                    'cost' => CostUtils::getCost(null, null, true, false),
                     'options' => $this->setOptions(null, null, true, false)
                 ]);
                 $newAdvert->invoice()->associate($invoice);
