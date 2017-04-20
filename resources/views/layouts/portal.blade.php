@@ -57,6 +57,19 @@
         <!-- main content -->
         <div class="ui container">
             <div class="content row">
+                <!-- banner -->
+                <div class="ui grid">
+                    <div class="four wide tablet only four wide computer only column"></div>
+                    <div class="twelve wide computer only column">
+                        <horizontal-728x90></horizontal-728x90>
+                    </div>
+                    <div class="twelve wide tablet only column">
+                        <div class="ui banner test ad" data-text="banner"></div>
+                    </div>
+                    <div class="sixteen wide mobile only column">
+                        <div class="ui half banner test centered ad" data-text="Half Banner"></div>
+                    </div>
+                </div>
                 @yield('content')
             </div>
         </div>

@@ -1,20 +1,6 @@
 @extends('layouts.portal')
 
 @section('content')
-    <!-- banner -->
-    <div class="ui grid">
-        <div class="four wide tablet only four wide computer only column"></div>
-        <div class="twelve wide computer only column">
-            <div class="ui leaderboard test ad" data-text="728 x 90"></div>
-        </div>
-        <div class="twelve wide tablet only column">
-            <div class="ui banner test ad" data-text="banner"></div>
-        </div>
-        <div class="sixteen wide mobile only column">
-            <div class="ui half banner test centered ad" data-text="Half Banner"></div>
-        </div>
-    </div>
-
     <!-- main page -->
     <portal
         route-home="{{ route('home') }}"

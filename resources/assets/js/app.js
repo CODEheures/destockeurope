@@ -32,7 +32,6 @@ Vue.component('steps', require('./components/generics/steps/step.vue'));
 Vue.component('steps-light', require('./components/generics/steps/stepLight.vue'));
 Vue.component('googleMap', require('./components/generics/location/map.vue'));
 Vue.component('pagination', require('./components/generics/paginations/pagination.vue'));
-Vue.component('masterads', require('./components/generics/ads/master.vue'));
 Vue.component('swiper-gallerie', require('./components/generics/swipers/gallerie.vue'));
 Vue.component('swiper-top', require('./components/generics/swipers/swiperTop.vue'));
 Vue.component('swiper-thumbs', require('./components/generics/swipers/swiperThumbs.vue'));
@@ -40,6 +39,11 @@ Vue.component('margin-input-field', require('./components/generics/fields/margin
 Vue.component('vimeo-uploader', require('./components/generics/uploaders/vimeo.vue'));
 Vue.component('photo-uploader', require('./components/generics/uploaders/photo.vue'));
 Vue.component('notifications-activer', require('./components/generics/notifications/activer.vue'));
+//ADS
+Vue.component('masterads', require('./components/generics/ads/master.vue'));
+Vue.component('double-square', require('./components/generics/ads/doubleSquares.vue'));
+Vue.component('vertical-160x600', require('./components/generics/ads/vertical160x600.vue'));
+Vue.component('horizontal-728x90', require('./components/generics/ads/horizontal728x90.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));
