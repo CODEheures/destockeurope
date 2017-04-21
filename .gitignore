@@ -1,6 +1,7 @@
 /node_modules
 /public/storage
 /storage/*
+!/storage/app/watermark.png
 !/storage/whitelists
 /vendor
 /.idea/*
