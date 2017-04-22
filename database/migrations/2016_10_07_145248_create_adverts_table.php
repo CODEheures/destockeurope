@@ -18,6 +18,7 @@ class CreateAdvertsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->timestamp('online_at')->nullable()->default(null);
+            $table->timestamp('ended_at')->nullable()->default(null);
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('category_id')->unsigned()->index();

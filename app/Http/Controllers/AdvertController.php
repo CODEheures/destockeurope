@@ -665,14 +665,17 @@ class AdvertController extends Controller
                                     $originalAdvert->isRenew = true;
                                     if(!$originalAdvert->deleted_at) {
                                         //renew after deleted original
-                                        $advert->online_at = Carbon::parse($originalAdvert->online_at)->addDays(env('ADVERT_LIFE_TIME'));
+                                        $advert->online_at = $originalAdvert->ended_at;
+                                        $advert->setEndedAt();
                                     } else {
                                         //renew now!
                                         $advert->online_at = Carbon::now();
+                                        $advert->setEndedAt();
                                     }
                                 }
                             } else {
                                 $advert->online_at = Carbon::now();
+                                $advert->setEndedAt();
                             }
 
 
@@ -742,6 +745,7 @@ class AdvertController extends Controller
                     $advert->isValid=(boolean)$isApproved;
                     if((boolean)$isApproved){
                         $advert->online_at = Carbon::now();
+                        $advert->setEndedAt();
                         $stats = Stats::latest()->first();
                         $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
                         DB::beginTransaction();
@@ -1300,6 +1304,7 @@ class AdvertController extends Controller
                 $newAdvert->invoice_id = null;
                 $newAdvert->deleted_at = null;
                 $newAdvert->online_at = null;
+                $newAdvert->ended_at = null;
                 $newAdvert->lastObsoleteMail = null;
                 $newAdvert->originalAdvertId = $advert->id;
                 $newAdvert->slug=null;

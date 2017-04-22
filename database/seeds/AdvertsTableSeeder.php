@@ -20,8 +20,8 @@ class AdvertsTableSeeder extends Seeder
     {
         $statsManager = new StatsManager();
 
-        $user2 = \App\User::where('email', '=', 'vendeur@codeheures.fr')->first();
-        $user4 = \App\User::where('email', '=', 'delegation@codeheures.fr')->first();
+        $user2 = \App\User::where('email', '=', 'vendeur@destockeurope.com')->first();
+        $user4 = \App\User::where('email', '=', 'delegation@destockeurope.com')->first();
 
         $cat_bagagerie = \App\Category::where('description', '=', '{"fr":"Bagagerie & sacs","en":"Luggage & Bags"}')->first();
         $cat_image_sons = \App\Category::where('description', '=', '{"fr":"Image & son","en":"Picture & sound"}')->first();
@@ -334,6 +334,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
 
         if($advert->isValid) {
             $advert->online_at = $created_at;
+            $advert->setEndedAt();
         }
 
         DB::beginTransaction();

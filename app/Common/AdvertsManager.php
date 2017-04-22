@@ -124,6 +124,7 @@ class AdvertsManager
                 } else {
                     //automatic renew for delegations
                     $advert->online_at = Carbon::now();
+                    $advert->setEndedAt();
                     $advert->save();
                 }
             }

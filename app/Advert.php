@@ -17,6 +17,7 @@ class Advert extends Model {
 
     protected $fillable = [
         'online_at',
+        'ended_at',
         'user_id',
         'category_id',
         'invoice_id',
@@ -47,7 +48,7 @@ class Advert extends Model {
         'isNegociated',
         'manu_ref'
     ];
-    protected $dates = ['deleted_at', 'online_at'];
+    protected $dates = ['deleted_at', 'online_at', 'ended_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
     protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
@@ -114,8 +115,8 @@ class Advert extends Model {
     }
 
     public function getIsEligibleForRenewAttribute() {
-        $online = Carbon::parse($this->online_at);
-        $isPast = Carbon::create($online->year, $online->month, $online->day, 0,0,0)->addDay(env('ADVERT_LIFE_TIME'))->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now());
+        $ended = Carbon::parse($this->ended_at);
+        $isPast = Carbon::create($ended->year, $ended->month, $ended->day, 0,0,0)->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now());
         return (!$this->is_delegation && !$this->isRenew && ($this->deleted_at || $isPast));
     }
 
@@ -222,6 +223,10 @@ class Advert extends Model {
         return $invoiceStoragePath;
     }
 
+    public function setEndedAt() {
+        $this->ended_at = Carbon::parse($this->online_at)->addDays(env('ADVERT_LIFE_TIME'));
+    }
+
     //Locals Scopes
     public function scopeInvalid($query) {
         return $query->where('isValid', '=', false);
@@ -244,12 +249,12 @@ class Advert extends Model {
     }
 
     public function scopeFinished($query) {
-        return $query->where('online_at', '<', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')));
+        return $query->where('ended_at', '<', Carbon::now());
     }
 
     public function scopeEligibleForMailRenew($query, $days) {
         if($days > 0) {
-            return $query->whereDate('online_at' , '=', Carbon::now()->subDay(env('ADVERT_LIFE_TIME')-$days)->toDateString())
+            return $query->whereDate('ended_at' , '=', Carbon::now()->addDay($days)->toDateString())
                 ->where('isValid', true)
                 ->where('isRenew', false)
                 ->where('is_delegation', false)
