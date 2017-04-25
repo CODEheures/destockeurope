@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Advert;
 use App\Common\LocaleUtils;
+use App\Invoice;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -15,14 +16,16 @@ class AdvertRenew extends Notification
 
     use Queueable;
     private $advert;
+    private $invoice;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Advert $advert)
+    public function __construct(Advert $advert, Invoice $invoice)
     {
         $this->advert = $advert;
+        $this->invoice = $invoice;
     }
 
     /**
@@ -53,8 +56,8 @@ class AdvertRenew extends Notification
                     ]))
                     ->line(trans('strings.mail_advertApprove_line2'));
 
-        if($this->advert->getInvoiceFilePath() && file_exists($this->advert->getInvoiceFilePath())){
-            $message->attach($this->advert->getInvoiceFilePath(),['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->advert->invoice->invoice_number]), 'mime' => 'application/pdf']);
+        if($this->invoice->filePath && file_exists($this->invoice->filePath)){
+            $message->attach($this->invoice->filePath,['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->invoice->invoice_number]), 'mime' => 'application/pdf']);
         }
 
         return $message;

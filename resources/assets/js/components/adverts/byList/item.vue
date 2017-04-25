@@ -267,30 +267,22 @@
                             </div>
                             <div class="sixteen wide column item-description">
                                 <div class="description" v-if="advert.isValid">
-                                    <template v-if="advert.isRenew">
-                                        <a href="#" class="ui disabled button">
-                                            <i class="history icon"></i>
-                                            {{ isRenewAdvertLabel }}
-                                        </a>
+                                    <template v-if="!advert.deleted_at">
+                                        <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
+                                            <i class="wrench icon"></i>
+                                            <span class="text">{{ manageAdvertLabel }}</span>
+                                            <div class="menu">
+                                                <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
+                                                <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
+                                                <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
+                                            </div>
+                                        </div>
                                     </template>
                                     <template v-else>
-                                        <template v-if="!advert.deleted_at">
-                                            <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
-                                                <i class="wrench icon"></i>
-                                                <span class="text">{{ manageAdvertLabel }}</span>
-                                                <div class="menu">
-                                                    <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
-                                                    <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
-                                                    <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
-                                                </div>
-                                            </div>
-                                        </template>
-                                        <template v-else>
-                                            <a :href="advert.renewUrl" class="ui primary button">
-                                                <i class="power icon"></i>
-                                                {{ renewAdvertLabel }}
-                                            </a>
-                                        </template>
+                                        <a :href="advert.renewUrl" class="ui primary button">
+                                            <i class="power icon"></i>
+                                            {{ renewAdvertLabel }}
+                                        </a>
                                     </template>
                                     <div class="ui labeled button disabled-bookmark">
                                         <div class="ui yellow button">
@@ -341,30 +333,22 @@
                         </span>
                         <div class="header"><h4>{{ advert.title }}</h4></div>
                         <div class="sixteen wide centered column" v-if="advert.isValid">
-                            <template v-if="advert.isRenew">
-                                <a href="#" class="ui disabled button">
-                                    <i class="history icon"></i>
-                                    {{ isRenewAdvertLabel }}
-                                </a>
+                            <template v-if="!advert.deleted_at">
+                                <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
+                                    <i class="wrench icon"></i>
+                                    <span class="text">{{ manageAdvertLabel }}</span>
+                                    <div class="menu">
+                                        <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
+                                        <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
+                                        <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
+                                    </div>
+                                </div>
                             </template>
                             <template v-else>
-                                <template v-if="!advert.deleted_at">
-                                    <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
-                                        <i class="wrench icon"></i>
-                                        <span class="text">{{ manageAdvertLabel }}</span>
-                                        <div class="menu">
-                                            <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
-                                            <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
-                                            <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-else>
-                                    <a :href="advert.renewUrl" class="ui primary button">
-                                        <i class="power icon"></i>
-                                        {{ renewAdvertLabel }}
-                                    </a>
-                                </template>
+                                <a :href="advert.renewUrl" class="ui primary button">
+                                    <i class="power icon"></i>
+                                    {{ renewAdvertLabel }}
+                                </a>
                             </template>
                         </div>
                     </div>
@@ -446,7 +430,6 @@
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             validationOnProgressLabel: String,
-            isRenewAdvertLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
             //margin input field

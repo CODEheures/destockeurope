@@ -23,7 +23,6 @@ class CreateAdvertsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('category_id')->unsigned()->index();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->integer('invoice_id')->unsigned()->index()->nullable()->default(null);
             $table->enum('type', ['bid', 'request']);
             $table->string('title',config('db_limits.adverts.maxTitle'));
             $table->string('slug');
@@ -47,10 +46,9 @@ class CreateAdvertsTable extends Migration
             $table->boolean('isUrgent')->default(false);
             $table->mediumInteger('views')->unsigned()->default(0);
             $table->tinyInteger('lastObsoleteMail')->unsigned()->nullable()->default(null);
-            $table->boolean('isRenew')->default(false);
             $table->boolean('is_delegation')->default(false);
-            $table->integer('originalAdvertId')->unsigned()->nullable()->default(null);
             $table->bigInteger('video_id')->unsigned()->nullable()->default(null);
+            $table->string('nextUrl')->nullable()->default(null);
         });
     }
 

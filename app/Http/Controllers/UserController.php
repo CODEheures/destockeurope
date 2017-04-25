@@ -76,8 +76,8 @@ class UserController extends Controller
         $geolocType = 0;
         $zoomMap = 16;
         $advertAccountVerifiedStep = true;
-        $advert = Advert::find($id);
-        if($advert && $advert->user->id === $user->id && !$advert->isPublish){
+        $advert = Advert::withTrashed()->find($id);
+        if($advert && $advert->user->id === $user->id){
             return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title', 'routeAvatar'));
         } else {
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));

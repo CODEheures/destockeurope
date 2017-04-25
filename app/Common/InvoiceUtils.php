@@ -12,11 +12,6 @@ use Mpdf\Mpdf;
 
 trait InvoiceUtils
 {
-    public static function createInvoiceByAdvert(Advert $advert) {
-        $invoice = $advert->invoice;
-        return self::createInvoiceByInvoice($invoice);
-    }
-
     public static function createInvoiceByInvoice(Invoice $invoice) {
         $user = $invoice->user;
         LocaleUtils::switchToUserLocale($user);

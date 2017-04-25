@@ -64,7 +64,7 @@ return [
 
     'mail_apperror_subject' => 'Rapport d\'erreur de l\'application',
     'mail_apperror_pdfinvoice_line' => 'La facture PDF de l\'annonce n°:advertNumber n\'a pas pu être générée et envoyée au client :mailClient',
-    'mail_apperror_autoapprove_line' => 'L\'approbation automatique de l\'annonce renouvellée n°:advertNumber a échoué! (annonce d\'origine n°:originNumber, client :mailClient)',
+    'mail_apperror_renew_line' => 'L\'annonce renouvellée n°:advertNumber a échoué! (client :mailClient)',
     'mail_apperror_approve_line' => 'L\'approbation de l\'annonce n°:advertNumber a échoué! (client :mailClient)',
 
     'mail_advertApprove_subject' => 'Votre annonce est en ligne!',
@@ -322,7 +322,7 @@ return [
     'view_advert_approve_modal_valid_header' => 'Valider toutes les actions',
     'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',
     'view_advert_approve_error' => 'Une erreur est survenue pendant l\'approbation d\'une annonce',
-    'view_advert_auto_approve_error' => 'Une erreur est survenue pendant l\'approbation automatique de votre annonce renouvellée. Nos services sont avertis et traitent votre problème au plus vite',
+    'view_advert_renew_error' => 'Une erreur est survenue pendant le renouvellement de votre annonce. Nos services sont avertis et traitent votre problème au plus vite',
     'view_advert_approve_success' => 'Approbations des annonces envoyées',
 
     'view_advert_by_link_label' => 'Voir l\'annonce',
@@ -375,7 +375,7 @@ return [
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho non! Le paiement a échoué :-(',
     'payment_paypal_success' => 'Merci pour votre paiement. Notez que celui-ci ne sera éxécuté que si votre annonce est validée par nos services. Vous recevrez alors votre facture par mail.',
-    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours.  Votre facture vous a été envoyée par mail.',
+    'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est prolongée jusqu\'au :date.  Votre facture vous a été envoyée par mail.',
 
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',
@@ -533,5 +533,5 @@ return [
     'pdf_table_header_total_ttc' => 'Total TTC',
     'pdf_footer_page' => 'Page',
     'pdf_footer_on' => 'sur',
-    'pdf_invoice_attachment_name' => 'facture_:num',
+    'pdf_invoice_attachment_name' => 'facture_:num'.'.pdf',
 ];

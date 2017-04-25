@@ -30,7 +30,6 @@
                 delete-advert-label="{{ trans('strings.view_advert_show_delete2_label') }}"
                 see-advert-label="{{ trans('strings.view_advert_show_see_label') }}"
                 validation-on-progress-label="{{ trans('strings.view_advert_validation_on_progress') }}"
-                is-renew-advert-label="{{ trans('strings.view_advert_show_is_renew_label') }}"
                 bookmark-info="{{ trans('strings.view_advert_show_bookmark_info') }}"
                 views-info="{{ trans('strings.view_advert_show_views_info') }}"
                 no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"

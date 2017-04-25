@@ -156,7 +156,7 @@
             'routePaypalChoice',
             'routeCardChoice',
             //vue vars
-            'advert',
+            'invoice',
             'cardsTypes',
             'urlImgPaypalDisabled',
             'urlImgPaypalEnabled',
@@ -222,14 +222,12 @@
                 dataRoutePaypalChoice: '',
                 dataUrlImgPaypal: null,
                 xCsrfToken: '',
-                dataAdvert: {},
                 dataInvoice: {},
                 dataCardsTypes: []
             };
         },
         mounted () {
-            this.dataAdvert = JSON.parse(this.advert);
-            this.dataInvoice = this.dataAdvert.invoice;
+            this.dataInvoice = JSON.parse(this.invoice);
             this.dataCardsTypes = JSON.parse(this.cardsTypes);
             this.xCsrfToken = destockShareVar.csrfToken;
             this.dataUrlImgPaypal = this.urlImgPaypalDisabled;

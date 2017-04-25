@@ -121,8 +121,9 @@
 
     //Adverts
     Route::group(['prefix' => 'advert'] , function () {
+        Route::get('/nextStep/{id?}', ['as' => 'advert.nextStep', 'uses' => 'AdvertController@nextStep']);
         Route::get('/publish/{id?}', ['as' => 'advert.publish', 'uses' => 'AdvertController@publish']);
-        Route::get('/reviewForPayment/{id?}', ['as' => 'advert.reviewForPayment', 'uses' => 'AdvertController@reviewForPayment']);
+        Route::get('/reviewForPayment/{invoiceId?}', ['as' => 'advert.reviewForPayment', 'uses' => 'AdvertController@reviewForPayment']);
         Route::get('/get-list-type', ['as' => 'advert.getListType', 'uses' => 'AdvertController@getListType']);
         Route::get('/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
         Route::get('/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
@@ -132,11 +133,11 @@
         Route::get('/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
         Route::post('/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
         Route::post('/report', ['as' => 'advert.report', 'uses' => 'AdvertController@report']);
-        Route::get('/pay/paypal/{id}', ['as' => 'advert.payByPaypal', 'uses' => 'AdvertController@payByPaypal']);
-        Route::get('/pay/paypal/status/{id}/{success}', ['as' => 'advert.paypalStatus', 'uses' => 'AdvertController@paypalStatus'])
-            ->where(['id' => '[0-9]+'])
+        Route::get('/pay/paypal/{invoiceId}', ['as' => 'advert.payByPaypal', 'uses' => 'AdvertController@payByPaypal']);
+        Route::get('/pay/paypal/status/{invoiceId}/{success}', ['as' => 'advert.paypalStatus', 'uses' => 'AdvertController@paypalStatus'])
+            ->where(['invoiceId' => '[0-9]+'])
             ->where(['success' => '\b(true|false)\b']);
-        Route::post('/pay/card/{id}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
+        Route::post('/pay/card/{invoiceId}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
         Route::get('/mines', ['as' => 'advert.mines', 'uses' => 'AdvertController@mines']);
         Route::get('/bookmarks', ['as' => 'advert.bookmarks', 'uses' => 'AdvertController@bookmarks']);
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
@@ -175,7 +176,7 @@
     });
     //DANGEROUS
     Route::group(['prefix' => 'dangerous'] , function () {
-        Route::get('/testGame', 'UtilsController@testGame');
+        //Route::get('/testGame', 'UtilsController@testGame');
         //Route::get('/tempo', 'UtilsController@tempo');
     });
 

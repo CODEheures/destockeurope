@@ -12,8 +12,7 @@
             route-user-set-compagny-name="{{ route('user.compagnyName') }}"
             route-user-set-registration-number="{{ route('user.registrationNumber') }}"
             route-avatar="{{ $routeAvatar }}"
-            route-next-url-with-payment="{{ route('advert.reviewForPayment') }}"
-            route-next-url-without-payment="{{ route('advert.publish') }}"
+            route-next-url="{{ isset($advert) ? route('advert.nextStep', ['id' => $advert->id]) : '' }}"
 
             user-email="{{ $user->email }}"
             user-name="{{ $user->name }}"

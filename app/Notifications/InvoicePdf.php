@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Advert;
+use App\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,6 +14,7 @@ class InvoicePdf extends Notification
 
     use Queueable;
     private $advert;
+    private $invoice;
     private $senderName;
     private $senderMail;
     /**
@@ -20,9 +22,10 @@ class InvoicePdf extends Notification
      *
      * @return void
      */
-    public function __construct(Advert $advert, $senderName, $senderMail)
+    public function __construct(Advert $advert, Invoice $invoice, $senderName, $senderMail)
     {
         $this->advert = $advert;
+        $this->invoice = $invoice;
         $this->senderName = $senderName;
         $this->senderMail = $senderMail;
     }
@@ -51,8 +54,8 @@ class InvoicePdf extends Notification
                     ->greeting(trans('strings.mail_newInvoice_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_newInvoice_line'));
 
-        if($this->advert->getInvoiceFilePath() && file_exists($this->advert->getInvoiceFilePath())){
-            $message->attach($this->advert->getInvoiceFilePath(),['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->advert->invoice->invoice_number]), 'mime' => 'application/pdf']);
+        if($this->invoice->filePath && file_exists($this->invoice->filePath)){
+            $message->attach($this->invoice->filePath,['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->invoice->invoice_number]), 'mime' => 'application/pdf']);
         }
 
         return $message;

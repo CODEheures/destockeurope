@@ -168,7 +168,7 @@ class AdminController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getWelcomeType() {
-        $list = Database::getEnumValues('commons', 'welcomeType');
+        $list = Database::getEnumValues('parameters', 'welcomeType');
         $transList = [];
         foreach ($list as $key => $item) {
             $transList[$key] =  $item;

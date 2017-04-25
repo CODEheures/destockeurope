@@ -64,7 +64,7 @@ return [
 
     'mail_apperror_subject' => 'Application Error Report',
     'mail_apperror_pdfinvoice_line' => 'The PDF invoice of ad n °:advertNumber could not be generated and sent to the customer :mailClient',
-    'mail_apperror_autoapprove_line' => 'The automatic approval of the renewed advert n°:advertNumber failed! (Original advert n°:originNumber, customer :mailClient)',
+    'mail_apperror_renew_line' => 'The renew advert n°:advertNumber failed! (customer :mailClient)',
     'mail_apperror_approve_line' => 'The approval of the advert n°:advertNumber failed! (customer :mailClient)',
 
     'mail_advertApprove_subject' => 'Your advert is online!',
@@ -322,7 +322,7 @@ return [
     'view_advert_approve_modal_valid_header' => 'Approve all actions',
     'view_advert_approve_modal_valid_description' => 'WARNING!! The validation of all actions resulting sending mails approval or disapproval to customers.',
     'view_advert_approve_error' => 'Advert approve error',
-    'view_advert_auto_approve_error' => 'Error while automatic advert approve process. Our services are warned and deal with your problem as soon as possible',
+    'view_advert_renew_error' => 'Error while advert renew process. Our services are warned and deal with your problem as soon as possible',
     'view_advert_approve_success' => 'Advert approve send',
 
     'view_advert_by_link_label' => 'See Advert',
@@ -375,7 +375,7 @@ return [
     'payment_paypal_invoice_description' => 'Votre achat sur :name',
     'payment_all_error' => 'Ho no! Payment fails :-(',
     'payment_paypal_success' => 'Thank you for your payment. Note that this will only be executed if your ad is validated by our services. You will then receive your invoice by e-mail.',
-    'payment_renew_success' => 'Thank you for your payment. Your advert is renew from :date for a period of '. env('ADVERT_LIFE_TIME') . ' days. Your invoice is send by e-mail.',
+    'payment_renew_success' => 'Thank you for your payment. Your advert is extended to :date. Your invoice is send by e-mail.',
 
     'footer_list_header_1' => 'HOUSE',
     'footer_list_1_1' => 'Furnishings',
@@ -533,5 +533,5 @@ return [
     'pdf_table_header_total_ttc' => 'Total incl. VAT',
     'pdf_footer_page' => 'Page',
     'pdf_footer_on' => 'on',
-    'pdf_invoice_attachment_name' => 'invoice_:num',
+    'pdf_invoice_attachment_name' => 'invoice_:num'.'.pdf',
 ];

@@ -12,13 +12,18 @@ class Invoice extends Model {
     const PAYPAL = 0;
     const CARD_STRIPE = 1;
 
+    const STATE_CREATION = 0;
+    const STATE_RENEW = 1;
+
     protected $fillable = [
         'user_id',
+        'advert_id',
         'invoice_number',
         'method',
         'authorization',
         'captureId',
         'voidId',
+        'state',
         'options',
         'cost',
         'tva_customer',
@@ -37,7 +42,7 @@ class Invoice extends Model {
     }
 
     public function advert() {
-        return $this->hasOne('App\Advert');
+        return $this->belongsTo('App\Advert');
     }
 
     public function getUrlAttribute() {

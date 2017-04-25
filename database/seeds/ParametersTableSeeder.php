@@ -3,7 +3,7 @@
 use App\Parameters;
 use Illuminate\Database\Seeder;
 
-class CommonsTableSeeder extends Seeder
+class ParametersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

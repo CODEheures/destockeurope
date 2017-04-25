@@ -62,22 +62,15 @@ class AdvertsManager
                 $counterDelPictures += $this->definitiveDestroy($advert);
             }
 
-            //3 get abandonned renew Adverts
-            $abandonedRenewAdverts = Advert::abandonnedRenew()->get();
-            foreach ($abandonedRenewAdverts as $advert){
-                $counterDelAdvert++;
-                $counterDelPictures += $this->definitiveDestroy($advert);
-            }
-
-            //4 get Adverts where deleted_at > env delay
+            //3 get Adverts where deleted_at > env delay
             $obsoletesResults = $this->purgeObsoletesAdverts();
             $counterDelAdvert += $obsoletesResults[0];
             $counterDelPictures += $obsoletesResults[1];
 
-            //5 deleted Tempo files with life time pass
+            //4 deleted Tempo files with life time pass
             $counterDelPictures += $this->pictureManager->purgeObsoleteLocalTempo(env('TEMPO_HOURS_LIFE_TIME'));
 
-            //6 Purge Videos On Vimeo WithOut Advert
+            //5 Purge Videos On Vimeo WithOut Advert
             $persistents = Persistent::where('key', '=', 'videoId')->get();
             foreach ($persistents as $persistent) {
                 if(Carbon::parse($persistent->updated_at)->isPast(Carbon::now()->subHours(env('TEMPO_HOURS_LIFE_TIME')))){

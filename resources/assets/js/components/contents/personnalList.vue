@@ -52,7 +52,6 @@
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
-                            :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
@@ -121,7 +120,6 @@
             'deleteAdvertLabel',
             'seeAdvertLabel',
             'validationOnProgressLabel',
-            'isRenewAdvertLabel',
             'bookmarkInfo',
             'viewsInfo',
             'priceInfoLabel',

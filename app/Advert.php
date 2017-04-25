@@ -20,7 +20,6 @@ class Advert extends Model {
         'ended_at',
         'user_id',
         'category_id',
-        'invoice_id',
         'type',
         'title',
         'slug',
@@ -41,12 +40,11 @@ class Advert extends Model {
         'isUrgent',
         'views',
         'lastObsoleteMail',
-        'isRenew',
         'is_delegation',
-        'originalAdvertId',
         'video_id',
         'isNegociated',
-        'manu_ref'
+        'manu_ref',
+        'nextUrl'
     ];
     protected $dates = ['deleted_at', 'online_at', 'ended_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
@@ -60,7 +58,6 @@ class Advert extends Model {
         'isPublish' => 'Boolean',
         'isValid' => 'Boolean',
         'isUrgent' => 'Boolean',
-        'isRenew' => 'Boolean',
         'is_delegation' => 'Boolean',
         'isNegociated' => 'Boolean',
     ];
@@ -71,7 +68,7 @@ class Advert extends Model {
     public function category() { return $this->belongsTo('App\Category'); }
     public function pictures() { return $this->hasMany('App\Picture'); }
     public function picturesWithTrashed() { return $this->hasMany('App\Picture')->withTrashed(); }
-    public function invoice() { return $this->belongsTo('App\Invoice'); }
+    public function invoices() { return $this->hasMany('App\Invoice'); }
 
     //Attributs Getters
     public function getCurrencySymbolAttribute() {
@@ -117,7 +114,7 @@ class Advert extends Model {
     public function getIsEligibleForRenewAttribute() {
         $ended = Carbon::parse($this->ended_at);
         $isPast = Carbon::create($ended->year, $ended->month, $ended->day, 0,0,0)->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now());
-        return (!$this->is_delegation && !$this->isRenew && ($this->deleted_at || $isPast));
+        return (!$this->is_delegation && $this->isValid && ($this->deleted_at || $isPast));
     }
 
     public function getThumbAttribute() {
@@ -166,7 +163,7 @@ class Advert extends Model {
     }
 
     public function getIsEligibleForRenewMailZeroAttribute() {
-        if ($this->isValid && !$this->isRenew && !$this->is_delegation && $this->lastObsoleteMail!==0){
+        if ($this->isValid && !$this->is_delegation && $this->lastObsoleteMail!==0){
             return true;
         }
         return false;
@@ -205,24 +202,6 @@ class Advert extends Model {
         $this->bookmarkCount = $this->bookmarks()->count();
     }
 
-    public function getInvoiceFilePath() {
-        $invoiceFilePath = null;
-        if(!is_null($this->invoice)){
-            $invoice = $this->invoice;
-            $invoiceFilePath = $invoice->filePath;
-        }
-        return $invoiceFilePath;
-    }
-
-    public function getInvoiceStoragePath() {
-        $invoiceStoragePath = null;
-        if(!is_null($this->invoice)){
-            $invoice = $this->invoice;
-            $invoiceStoragePath = $invoice->storagePath ;
-        }
-        return $invoiceStoragePath;
-    }
-
     public function setEndedAt() {
         $this->ended_at = Carbon::parse($this->online_at)->addDays(env('ADVERT_LIFE_TIME'));
     }
@@ -240,10 +219,6 @@ class Advert extends Model {
         return $query->where('isPublish', '=', false)->where('created_at', '<', Carbon::now()->subHours(2));
     }
 
-    public function scopeAbandonnedRenew($query) {
-        return $query->whereNotNull('originalAdvertId')->whereNull('invoice_id')->whereNull('online_at')->where('created_at', '<', Carbon::now()->subHours(2));
-    }
-
     public function scopeObsoletes($query) {
         return $query->onlyTrashed()->where('deleted_at', '<', Carbon::now()->subDay(env('DELAY_DAYS_FOR_RENEW_ADVERT')));
     }
@@ -256,7 +231,6 @@ class Advert extends Model {
         if($days > 0) {
             return $query->whereDate('ended_at' , '=', Carbon::now()->addDay($days)->toDateString())
                 ->where('isValid', true)
-                ->where('isRenew', false)
                 ->where('is_delegation', false)
                 ->where(function ($query) use ($days){
                     $query->whereNull('lastObsoleteMail')
@@ -265,7 +239,6 @@ class Advert extends Model {
         } else {
             return $query->onlyTrashed()
                 ->where('isValid', true)
-                ->where('isRenew', false)
                 ->where('is_delegation', false)
                 ->where('lastObsoleteMail', '<>', 0);
         }
@@ -288,20 +261,13 @@ class Advert extends Model {
                             ->where('deleted_at', null);
                     });
             })
-            ->where(function ($queryIn){
-                $queryIn->where('isRenew', false)
-                    ->orWhere('deleted_at', null);
-            })
             ->orderBy('online_at', 'desc');
     }
 
     public function scopeDelegations($query) {
         if(auth()->check() && auth()->user()->role == 'admin'){
             return $query->where('is_delegation', true)
-                ->where(function ($queryIn){
-                    $queryIn->where('adverts.isRenew', false)
-                        ->orWhere('adverts.deleted_at', null);
-                })
+                ->where('adverts.deleted_at', null)
                 ->orderBy('adverts.online_at', 'desc');
         }
         return $query;

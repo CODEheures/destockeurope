@@ -46,7 +46,6 @@
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
-                            :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
@@ -85,7 +84,6 @@
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
-                            :is-renew-advert-label="isRenewAdvertLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
@@ -144,7 +142,6 @@
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             validationOnProgressLabel: String,
-            isRenewAdvertLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
             noResultFoundHeader: String,

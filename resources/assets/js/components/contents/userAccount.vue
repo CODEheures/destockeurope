@@ -139,8 +139,7 @@
             'routeUserSetCompagnyName',
             'routeUserSetRegistrationNumber',
             'routeAvatar',
-            'routeNextUrlWithPayment',
-            'routeNextUrlWithoutPayment',
+            'routeNextUrl',
             //vue vars
             'userEmail',
             'userName',
@@ -407,21 +406,13 @@
                 this.isLoaded = false;
                 let counter = 0;
                 if(this.updateInProgress == 0){
-                    if(parseFloat(this.advertCost)>0) {
-                        window.location.assign(this.routeNextUrlWithPayment+'/'+this.advertId);
-                    } else {
-                        window.location.assign(this.routeNextUrlWithoutPayment+'/'+this.advertId);
-                    }
+                    window.location.assign(this.routeNextUrl);
                 } else {
                     let that = this;
                     let timer = function () {
                         setTimeout(function () {
                             if(that.updateInProgress == 0){
-                                if(parseFloat(that.advertCost)>0) {
-                                    window.location.assign(that.routeNextUrlWithPayment+'/'+that.advertId);
-                                } else {
-                                    window.location.assign(that.routeNextUrlWithoutPayment+'/'+that.advertId);
-                                }
+                                window.location.assign(this.routeNextUrl);
                             } else {
                                 counter++;
                                 if (counter < 20) {

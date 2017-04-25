@@ -33,4 +33,24 @@ trait UserUtils
         ]);
         $anonymous->save();
     }
+
+    /**
+     *
+     * Return array with firstName and lastName
+     *
+     * @param $name
+     * @return array
+     */
+    public static function splitName($name) {
+        $result = (explode(' ', $name));
+        $firstname = '';
+        $lastname = '';
+        for($i=0; $i<count($result); $i++) {
+            $i < count($result)/2 ? $firstname .= ' ' . $result[$i]: $lastname .= ' ' . $result[$i];
+        }
+        return [
+            'firstName' => substr($firstname,1),
+            'lastName' => substr($lastname,1),
+        ];
+    }
 }
