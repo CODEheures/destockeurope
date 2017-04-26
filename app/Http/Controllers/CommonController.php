@@ -17,6 +17,7 @@ class CommonController extends Controller
         $this->middleware('auth', ['except' => [
             'portal',
             'subscribeNewsLetter',
+            'main',
             'home',
             'whoAreWe',
             'joinUs',
