@@ -333,8 +333,8 @@ class AdminController extends Controller
      * Return the view of dashboard
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function invoiceManage() {
-        session(['clear' => true]);
+    public function invoiceManage(Request $request) {
+        $request->session()->flash('clear',true);
         return view('invoice.manage');
     }
 

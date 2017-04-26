@@ -1308,7 +1308,7 @@
                     this.filter['country']=(event.currentTarget.dataset.country).toUpperCase();
                     if(event.currentTarget.dataset.countryName != ''){
                         let countryChoice = event.currentTarget.dataset.countryName;
-                        sessionStorage.setItem('filterLocationInputVal', countryChoice.charAt(0).toUpperCase() + countryChoice.slice(1));
+                        sessionStorage.setItem('filterLocationInputVal', JSON.stringify(countryChoice.charAt(0).toUpperCase() + countryChoice.slice(1)));
                     } else {
                         sessionStorage.removeItem('filterLocationInputVal');
                     }

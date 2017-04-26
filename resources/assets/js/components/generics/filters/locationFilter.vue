@@ -53,7 +53,7 @@
                     }
                 });
                 if(!this.wantSearch){
-                    sessionStorage.setItem('filterLocationInputVal', $('#filter_location').val());
+                    sessionStorage.setItem('filterLocationInputVal', JSON.stringify($('#filter_location').val()));
                     this.$parent.$emit('locationUpdate', event);
                 }
             },
@@ -71,7 +71,7 @@
                 withEmit ? this.$parent.$emit('clearLocationResults') : null;
             },
             updateSearch() {
-                let previousVal = sessionStorage.getItem('filterLocationInputVal');
+                let previousVal = JSON.parse(sessionStorage.getItem('filterLocationInputVal'));
                 if(previousVal && previousVal.length > 0){
                     $('#filter_location').val(previousVal);
                     this.wantSearch = false;

@@ -15,6 +15,7 @@
 //Route::group(['middleware' => 'fw-allow-wl'], function () {
     //Common
     Route::get('/', 'CommonController@portal')->name('portal');
+    Route::get('/main', 'CommonController@main')->name('main');
     Route::get('/home', 'CommonController@home')->name('home');
     Route::post('/subscribeNewsLetter', 'CommonController@subscribeNewsLetter')->name('subscribeNewsLetter');
     Route::get('/mines', ['as' => 'mines', 'uses' => 'CommonController@mines']);

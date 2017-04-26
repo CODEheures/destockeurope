@@ -181,16 +181,20 @@
         },
         mounted () {
             let that = this;
-            if(this.clearStorage){
-                sessionStorage.clear();
-            }
             this.dataFilterLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
-            //Visibility for ADS
-//            $('#column1_'+this._uid).children('div').visibility({
-//                type   : 'fixed',
-//                offset : 112
-//            });
-
+            if(this.clearStorage){
+                console.log('clear');
+                //keep only country
+                this.initFilterBySessionStorage(true);
+                let inputLocationVal = JSON.parse(sessionStorage.getItem('filterLocationInputVal'));
+                //reset storage
+                sessionStorage.clear();
+                //recup country
+                sessionStorage.setItem('filter', JSON.stringify(this.filter));
+                if(inputLocationVal !== null){
+                    sessionStorage.setItem('filterLocationInputVal', JSON.stringify(inputLocationVal));
+                }
+            }
 
             //On load Error
             this.$on('loadError', function () {
@@ -199,15 +203,15 @@
 
             //Init dataRoute
             if(sessionStorage.getItem('goToCategory') != undefined){
-                this.initFilterBySessionStorage();
-                //En cas de changement de categorie on reinit (presque) tout
+                //En cas de changement de categorie on reinit tout
+                this.initFilterBySessionStorage(true);
                 this.choiceCategory(sessionStorage.getItem('goToCategory'));
                 sessionStorage.removeItem('goToCategory');
             } else {
                 //on reconstruit le filtre
                 this.initFilterBySessionStorage();
                 this.setBreadCrumbItems(this.filter.categoryId);
-                this.updateResults();
+                this.updateResults(true);
             }
             this.$on('categoryChoice', function (event) {
                 $('html, body').animate({
@@ -238,13 +242,15 @@
                 $('html, body').animate({
                     scrollTop: 0
                 }, 600, function () {
-                    that.dataRouteGetAdvertList = url;
+                    let parsed = Parser.parse(url, true);
+                    that.filter['page']=parsed.query.page;
+                    that.updateResults(true);
                 });
             });
             this.$on('refreshResults', function (query) {
                 if(query != undefined && query.length >= this.filterMinLengthSearch){
                     this.filter.resultsFor = query;
-                    this.updateResults(true);
+                    this.updateResults();
                 }
             });
             this.$on('clearSearchResults', function () {
@@ -254,7 +260,7 @@
                     this.filter.maxPrice=0;
                     this.filter.minQuantity=0;
                     this.filter.maxQuantity=0;
-                    this.updateResults(true);
+                    this.updateResults();
                 }
             });
             this.$on('clearLocationResults', function () {
@@ -386,7 +392,17 @@
                 this.clearInputSearch();
                 this.updateResults();
             },
-            updateResults(){
+            updateResults(withPage=false){
+                if(withPage==false && 'page' in this.filter){
+                    delete this.filter.page;
+                } else {
+                    if('minRangePrice' in this.filter && 'maxRangePrice' in this.filter && 'minRangeQuantity' in this.filter && 'maxRangeQuantity' in this.filter){
+                        this.oldMinRangePrice = this.filter.minRangePrice;
+                        this.oldMaxRangePrice = this.filter.maxRangePrice;
+                        this.oldMinRangeQuantity = this.filter.minRangeQuantity;
+                        this.oldMaxRangeQuantity = this.filter.maxRangeQuantity;
+                    }
+                }
                 let url = this.urlForFilter(true, true);
                 //s'assurer que les range min et max sont tjrs valables
                 let that = this;
@@ -439,6 +455,18 @@
             initFilterBySessionStorage: function () {
                 if(sessionStorage.getItem('filter') != null){
                     this.filter = JSON.parse(sessionStorage.getItem('filter'));
+                    if(onlyLocation===true){
+                        for(let elem in this.filter){
+                            let isIn = false;
+                            for(let index in this.dataFilterLocationAccurateList){
+                                let key  = this.dataFilterLocationAccurateList[index];
+                                if(elem == key){
+                                    isIn = true;
+                                }
+                            }
+                            !isIn ? delete this.filter[elem] : null;
+                        }
+                    }
                 }
             },
             destroyMe: function (url) {

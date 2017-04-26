@@ -42,7 +42,6 @@ class CommonController extends Controller
     public function portal() {
         $masterAdsControllerFlag = false;
         $browser = Browser::getBrowserName();
-        session()->forget('clear');
         return view('portal', compact('masterAdsControllerFlag', 'browser'));
     }
 
@@ -61,6 +60,15 @@ class CommonController extends Controller
         } catch (\Exception $e) {
             return response(trans('strings.view_portal_newsletter_subscribe_error'), 500);
         }
+    }
+
+    /**
+     * Return Home Adverts View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function main(Request $request) {
+        $request->session()->flash('clear',true);
+        return redirect(route('home'));
     }
 
     /**
