@@ -204,7 +204,7 @@ return [
     'option_haveVideo_name' => 'Vidéo',
 
     'view_all_error_load_message' => 'Ho no! Load error :-( , try to refresh the page',
-    'view_all_error_reload_message' => 'refresh the page Please',
+    'view_all_error_reload_message' => 'refresh (F5) the page Please',
     'view_all_error_add_message' => 'Ho no! Adding Fails error :-(',
     'view_all_error_saving_message' => 'Ho no! Save Fails error :-(',
     'view_all_error_del_message' => 'Ho no! Delete Fails error :-(',
