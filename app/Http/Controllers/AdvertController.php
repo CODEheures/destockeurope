@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Advert;
-use App\Anonymous;
 use App\Bookmark;
 use App\Category;
 use App\Common\CategoryUtils;
@@ -34,7 +33,6 @@ use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\In;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 use PayPal\Api\Capture;

@@ -61,7 +61,7 @@ class CustomerContactSeller extends Notification
             ->line(trans('strings.mail_customerToSeller_line',['customername' => ucfirst($this->customerName), 'title' => ucfirst($this->advert->title)]))
             ->customLines($this->message)
             ->customContact(trans('strings.mail_customerToSeller_line2', ['customername' => ucfirst($this->customerName)]))
-            ->customContact(trans('strings.mail_customerToSeller_comapgnyName', ['compagnyName' => $this->customerCompagnyName]))
+            ->customContact(trans('strings.mail_customerToSeller_compagnyName', ['compagnyName' => $this->customerCompagnyName]))
             ->customContact(trans('strings.mail_customerToSeller_mail', ['mail' => $this->customerMail]))
             ->customContact(trans('strings.mail_customerToSeller_phone', ['phone' => $this->customerPhone]))
             ->line(trans('strings.mail_customerToSeller_line3'));

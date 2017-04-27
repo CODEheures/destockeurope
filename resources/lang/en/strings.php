@@ -53,7 +53,7 @@ return [
     'mail_customerToSeller_line2' => 'Contact informations:',
     'mail_customerToSeller_mail' => 'Mail: :mail',
     'mail_customerToSeller_phone' => 'Phone: :phone',
-    'mail_customerToSeller_comapgnyName' => 'Compagny Name: :compagnyName',
+    'mail_customerToSeller_compagnyName' => 'Compagny Name: :compagnyName',
     'mail_customerToSeller_line3' => 'Thank you for using our application!',
     'mail_customerToSeller_send_error' => 'Ho no! The email could not be sent \'-(',
 
@@ -62,6 +62,10 @@ return [
     'mail_report_greeting' => 'Hello dear admin',
     'mail_report_line' => ':customermail posted a report on an advert leaving the following message:',
     'mail_report_action' => 'Check Advert',
+
+    'mail_global_subject' => 'New global message',
+    'mail_global_greeting' => 'Hello dear admin',
+    'mail_global_line' => ':customermail (name: :name) posted the following message:',
 
     'mail_apperror_subject' => 'Application Error Report',
     'mail_apperror_pdfinvoice_line' => 'The PDF invoice of ad n °:advertNumber could not be generated and sent to the customer :mailClient',

@@ -27,6 +27,7 @@
             });
         } else {}
     </script>
+    @yield('headscripts')
 </head>
 <body class="portal yellowbg">
 

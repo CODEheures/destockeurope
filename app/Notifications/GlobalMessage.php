@@ -8,23 +8,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ReportAdvert extends Notification
+class GlobalMessage extends Notification
 {
 
     use Queueable;
 
-    private $advert;
     private $customerMail;
+    private $name;
     private $message;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Advert $advert, $customerMail, $message)
+    public function __construct($customerMail, $name, $message)
     {
-        $this->advert = $advert;
         $this->customerMail = $customerMail;
+        $this->name = $name && $name !='' ? $name : '-';
         $this->message = $message;
     }
 
@@ -50,11 +50,10 @@ class ReportAdvert extends Notification
 
         $mailMessage = new CustomMailMessage();
         $mailMessage
-            ->subject(trans('strings.mail_report_subject'))
-            ->greeting(trans('strings.mail_report_greeting'))
-            ->line(trans('strings.mail_report_line',['customermail' => $this->customerMail]))
-            ->customLines($this->message)
-            ->action(trans('strings.mail_report_action'), $this->advert->url);
+            ->subject(trans('strings.mail_global_subject'))
+            ->greeting(trans('strings.mail_global_greeting'))
+            ->line(trans('strings.mail_global_line',['customermail' => $this->customerMail, 'name' => $this->name]))
+            ->customLines($this->message);
 
         return $mailMessage;
     }

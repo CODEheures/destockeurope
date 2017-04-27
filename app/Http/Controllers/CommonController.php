@@ -8,9 +8,12 @@ use App\Anonymous;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
 use App\Http\Requests\UnsubscribeNewsLetterRequest;
+use App\Notifications\GlobalMessage;
+use App\User;
 use Codeheures\LaravelUtils\Traits\Tools\Browser;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommonController extends Controller
 {
@@ -210,7 +213,25 @@ class CommonController extends Controller
     }
 
     public function contactPost(Request $request){
-        //TODO ENVOI MAIL CONTACT A ADMIN
+        //valid Request here because not possible back in pop-up message
+        $validator = Validator::make($request->all(), [
+            'message' => 'required|min:' . config('db_limits.messages.minLength') . '|max:' . config('db_limits.messages.maxLength'),
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors((trans('strings.mail_report_send_error')));
+        }
+
+        $senderMail = $request->email;
+        $name = $request->name;
+        $message = $request->message;
+
+        $recipients = User::whereRole('admin')->get();
+        foreach ($recipients as $recipient){
+            $recipient->notify(new GlobalMessage($senderMail, $name, $message));
+        }
+
         return redirect(route('home'))->with('success', trans('strings.view_contact_success'));
     }
 

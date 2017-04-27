@@ -53,7 +53,7 @@ return [
     'mail_customerToSeller_line2' => 'Coordonnées de :customername:',
     'mail_customerToSeller_mail' => 'Mail: :mail',
     'mail_customerToSeller_phone' => 'Téléphone: :phone',
-    'mail_customerToSeller_comapgnyName' => 'Société: :compagnyName',
+    'mail_customerToSeller_compagnyName' => 'Société: :compagnyName',
     'mail_customerToSeller_line3' => 'Merci d\'utiliser notre application!',
     'mail_customerToSeller_send_error' => 'Ho non! Nous n\'avons pas réussi à envoyé l\'email \'-(',
 
@@ -62,6 +62,10 @@ return [
     'mail_report_greeting' => 'Bonjour chèr(e) administrateur/administratice',
     'mail_report_line' => ':customermail a signalé une annonce en laissant le message suivant:',
     'mail_report_action' => 'Vérifier l\'annonce',
+
+    'mail_global_subject' => 'Nouveau message global',
+    'mail_global_greeting' => 'Bonjour chèr(e) administrateur/administratice',
+    'mail_global_line' => ':customermail (nom: :name) vous a laissé le message suivant:',
 
     'mail_apperror_subject' => 'Rapport d\'erreur de l\'application',
     'mail_apperror_pdfinvoice_line' => 'La facture PDF de l\'annonce n°:advertNumber n\'a pas pu être générée et envoyée au client :mailClient',

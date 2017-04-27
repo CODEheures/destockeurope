@@ -1,5 +1,14 @@
 @extends('layouts.portal')
 
+@section('headscripts')
+    <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+    <script>
+        window.submitMessage = function(token) {
+            document.getElementById("message-form").submit();
+        }
+    </script>
+@endsection
+
 @section('content')
     <!-- main page -->
     <div class="ui grid">
@@ -13,7 +22,7 @@
                         <div class="ui blue inverted newsletter segment">
                             <div class="ui top right attached yellow label">{{trans('strings.view_contact_title')}}</div>
                             <p>{{ trans('strings.view_contact_description') }}</p>
-                            <form class="ui inverted form" accept-charset="UTF-8" action="{{ route('contactPost') }}"  method="post">
+                            <form id="message-form" class="ui inverted form" accept-charset="UTF-8" action="{{ route('contactPost') }}"  method="post">
                                 {{ csrf_field() }}
                                 <div class="required field">
                                     <input type="email" name="email" placeholder="{{ trans('strings.form_label_email') }}">
@@ -24,7 +33,12 @@
                                 <div class="required field">
                                     <textarea name="message">{{ trans('strings.form_label_message_input') }}</textarea>
                                 </div>
-                                <button class="ui button" type="submit">{{ trans('strings.view_contact_button_label') }}</button>
+                                <button
+                                        class="g-recaptcha ui button"
+                                        data-sitekey="{{ env('GOOGLE_CAPTCHA_SITE_KEY') }}"
+                                        data-callback="submitMessage">
+                                    {{ trans('strings.view_contact_button_label') }}
+                                </button>
                             </form>
                         </div>
                     </div>
