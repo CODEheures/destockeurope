@@ -34,6 +34,22 @@ trait UserUtils
         $anonymous->save();
     }
 
+    public static function updateAnonymous(Anonymous $anonymous, $name=null, $phone=null, $compagnyName=null, $isNewsLetterSubscriber=false) {
+        !is_null($name) && $name!='' ? $anonymous->name = $name : null;
+        !is_null($phone) && $phone!='' ? $anonymous->phone = $phone : null;
+        !is_null($compagnyName) && $compagnyName!='' ? $anonymous->compagnyName = $compagnyName : null;
+        $anonymous->isNewsLetterSubscriber = $isNewsLetterSubscriber;
+        $anonymous->save();
+    }
+
+    public static function createOrUpdateAnonymous($email, $name=null, $phone=null, $compagnyName=null, $isNewsLetterSubscriber=false) {
+        $existAnonymous = Anonymous::whereMail($email)->first();
+        if(!$existAnonymous){
+            self::createAnonymous($email, $name, $phone, $compagnyName, $isNewsLetterSubscriber);
+        } else {
+            self::updateAnonymous($existAnonymous, $name, $phone, $compagnyName, $isNewsLetterSubscriber);
+        }
+    }
     /**
      *
      * Return array with firstName and lastName
