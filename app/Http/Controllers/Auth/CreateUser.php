@@ -68,6 +68,12 @@ trait CreateUser {
             $lat = $geoloc[0];
             $lng = $geoloc[1];
         }
+
+        //set session subscribeNewsLetter for UserObserver created event
+        if(key_exists('subscribeNewsLetter', $data) && $data['subscribeNewsLetter']==true){
+            session(['subscribeNewsLetter' => true]);
+        }
+
         $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],

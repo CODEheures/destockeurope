@@ -16,7 +16,7 @@ class CreateAnonymousesTable extends Migration
         Schema::create('anonymouses', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('name');
+            $table->string('name')->nullable()->default(null);
             $table->string('email')->unique();
             $table->string('compagnyName',config('db_limits.users.maxCompagnyName'))->nullable()->default(null);
             $table->string('phone',config('db_limits.users.maxPhone'))->nullable()->default(null);

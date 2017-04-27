@@ -842,13 +842,9 @@ class AdvertController extends Controller
         } else {
             //test if User exist
             $sender = User::whereMail($request->email)->first();
-            if(!$sender){
-                //test if anonymous exist
-                $sender = Anonymous::whereMail($request->email)->first();
-            }
         }
+
         if($sender){
-            //complete infos
             $sender->name = $request->name;
             if($request->has('phone') && $request->phone != ''){
                 $sender->phone = $request->phone;
@@ -859,7 +855,7 @@ class AdvertController extends Controller
             $sender->save();
         } else {
             //create anonymous user
-            UserUtils::createAnonymous($request->email, $request->name, $request->phone, $request->compagnyName);
+            UserUtils::createOrUpdateAnonymous($request->email, $request->name, $request->phone, $request->compagnyName, false);
         }
         //Test compagnyName mini car pas de test dans message car pas required
         $advert = Advert::find($request->id);

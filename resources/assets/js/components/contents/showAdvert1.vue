@@ -391,7 +391,8 @@
                             ]
                         }
                     },
-                    inline : true
+                    inline : true,
+                    on: 'change'
                 })
             ;
             let messageReportForm = $('#reportform-'+this._uid);

@@ -7,6 +7,7 @@ use App\Advert;
 use App\Anonymous;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
+use App\Http\Requests\UnsubscribeNewsLetterRequest;
 use Codeheures\LaravelUtils\Traits\Tools\Browser;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ class CommonController extends Controller
         $this->middleware('auth', ['except' => [
             'portal',
             'subscribeNewsLetter',
+            'getUnsubscribeNewsLetter',
+            'postUnsubscribeNewsLetter',
             'main',
             'home',
             'whoAreWe',
@@ -53,13 +56,37 @@ class CommonController extends Controller
      */
     public function subscribeNewsLetter(SubscribeNewsLetterRequest $request) {
         try {
-            $existUser = Anonymous::whereMail($request->email)->first();
-            if(!$existUser){
-                UserUtils::createAnonymous($request->email, $request->name, $request->phone, null, true);
-            }
+            UserUtils::createOrUpdateAnonymous($request->email, $request->name, $request->phone, null, true);
             return response(trans('strings.view_portal_newsletter_subscribe_success'), 200);
         } catch (\Exception $e) {
             return response(trans('strings.view_portal_newsletter_subscribe_error'), 500);
+        }
+    }
+
+    /**
+     *
+     * Return the view for unsubscribe newsletter
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getUnsubscribeNewsLetter() {
+        return view('user.unsubscribeNewsLetter');
+    }
+
+    /**
+     * Process to newsletter unsubrcription XMLHttpRequest
+     * @param SubscribeNewsLetterRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function postUnsubscribeNewsLetter(UnsubscribeNewsLetterRequest $request) {
+        try {
+            $existUser = Anonymous::whereMail($request->email)->first();
+            if($existUser){
+                UserUtils::updateAnonymous($existUser, null, null, null, false);
+            }
+            return redirect('home')->with('success', trans('strings.view_portal_newsletter_unsubscribe_success'));
+        } catch (\Exception $e) {
+            return redirect('home')->withErrors(trans('strings.view_portal_newsletter_subscribe_error'));
         }
     }
 

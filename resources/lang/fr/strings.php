@@ -17,6 +17,7 @@ return [
     'menu_logout' => 'Se déconnecter',
     'menu_register' => 'S\'enregistrer',
     'menu_subscribe' => 'S\'inscrire',
+    'menu_unsubscibeNewsLetter' => 'Se désinscire de la newsletter',
     'menu_account' => 'Mon compte',
     'menu_category' => 'Catégories',
     'menu_parameters' => 'Paramètres Application',
@@ -172,6 +173,8 @@ return [
     'request_vat_service_unavailable' => 'Le service de vérification europeen des TVA n\'est pas disponible, réessayer plus tard svp',
     'request_vat_blocked' => 'Désolé, le service europeen de vérification des TVA nous indique que ce numéro de TVA est un numéro bloqué',
 
+    'auth_register_cgu_check' => 'J`accepte les <a href=":link">Conditions générales d\'utilisation</a>',
+    'auth_register_newsletter_check' => 'Je souhaite recevoir tous les bons plan en m\'inscrivant à la newsletter',
     'auth_register_success' => 'Votre compte est créé. Merci de le valider en cliquant le lien reçu à votre adresse email.',
     'auth_register_resend_token' => 'Le lien de confirmation de votre email vous a été renvoyé.',
     'auth_register_account_confirm' => 'Félicitation, votre compte est maintenant validé.',
@@ -257,6 +260,7 @@ return [
     'view_portal_newsletter_title' => 'Newsletter',
     'view_portal_newsletter_description' => 'Soyez les premiers pour les bonnes affaires en remplissant le formulaire ci-dessous',
     'view_portal_newsletter_subscribe_success' => 'Votre demande est enregistrée',
+    'view_portal_newsletter_unsubscribe_success' => 'Votre désincription est enregistrée',
     'view_portal_newsletter_subscribe_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
 
     'view_contact_title' => 'Nous contacter',

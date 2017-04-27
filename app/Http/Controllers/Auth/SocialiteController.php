@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use Symfony\Component\HttpFoundation\Request;
 
 
 class SocialiteController extends Controller
@@ -37,6 +37,9 @@ class SocialiteController extends Controller
      */
     public function redirectToProvider($provider)
     {
+        if($this->request->has('subscribeNewsLetter') && $this->request->subscribeNewsLetter == true){
+            session(['subscribeNewsLetter' => true]);
+        }
         return Socialite::driver($provider)->redirect();
     }
 

@@ -17,6 +17,7 @@ return [
     'menu_logout' => 'Logout',
     'menu_register' => 'Register',
     'menu_subscribe' => 'Subscribe',
+    'menu_unsubscibeNewsLetter' => 'Unsubscribe newsletter',
     'menu_account' => 'My account',
     'menu_category' => 'Categories',
     'menu_parameters' => 'Application parameters',
@@ -172,6 +173,8 @@ return [
     'request_vat_service_unavailable' => 'The European VAT verification service is not available, please try again later',
     'request_vat_blocked' => 'Sorry, the European VAT verification service tells us that this VAT number is a blocked number',
 
+    'auth_register_cgu_check' => 'I accept the <a href=":link">General terms of use</a>',
+    'auth_register_newsletter_check' => 'I would like to receive all the good news by subscribing to the newsletter',
     'auth_register_success' => 'Your account is create. Thank you validate it by clicking the link received in your email address',
     'auth_register_resend_token' => 'Confirmation link send to your e-mail.',
     'auth_register_account_confirm' => 'Congratulations, your account has been validated.',
@@ -257,7 +260,8 @@ return [
     'view_portal_newsletter_title' => 'Newsletter',
     'view_portal_newsletter_description' => 'Be the first for bargains by filling out the form below',
     'view_portal_newsletter_subscribe_success' => 'Your subscription is save',
-    'view_portal_newsletter_subscribe_error' => 'Ho no! Votre request fail \'-(',
+    'view_portal_newsletter_unsubscribe_success' => 'Your unsubscription is save',
+    'view_portal_newsletter_subscribe_error' => 'Ho no! your request fail \'-(',
 
     'view_contact_title' => 'Contact Us',
     'view_contact_description' => 'Contact us by filling in the form below',
