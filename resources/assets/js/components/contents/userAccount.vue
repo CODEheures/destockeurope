@@ -275,7 +275,6 @@
             this.firstGeoloc == '1' ? this.dataFirstGeoloc = true :  null;
             this.$watch('blured', function () {
                 if (this.blured.input == this.focused.input && this.blured.value != this.focused.value) {
-                    this.updateInProgress++;
                     this.updateAccount(this.blured.input, this.blured.value);
                 }
             });
@@ -333,6 +332,7 @@
             updateAccount: function (inputName, value){
                 let that = this;
                 let updateRoute = '';
+                this.updateInProgress++;
                 if(inputName == 'name'){
                     updateRoute = this.routeUserSetName;
                 } else if(inputName == 'compagny-name') {
@@ -354,6 +354,7 @@
                     })
                     .catch(function (error) {
                         that.updateFails = true;
+                        that.updateInProgress--;
                         that.vatOnCheckProgress=false;
                         if(error.response && error.response.status == 409) {
                             that.sendToast(error.response.data, 'error.response');
@@ -380,8 +381,7 @@
                         sessionStorage.setItem('lat', that.lat);
                         sessionStorage.setItem('lng', that.lng);
                         sessionStorage.setItem('geoloc', that.geoloc);
-                        //TODO window.map not exist window.destockMap?
-                        window.map.constructMap();
+                        window.destockMap.initLocation();
                         that.vatOnCheckProgress=false;
                     })
                     .catch(function (error) {
@@ -405,7 +405,7 @@
                 event.preventDefault();
                 this.isLoaded = false;
                 let counter = 0;
-                if(this.updateInProgress == 0){
+                if(this.updateInProgress <= 0){
                     window.location.assign(this.routeNextUrl);
                 } else {
                     let that = this;

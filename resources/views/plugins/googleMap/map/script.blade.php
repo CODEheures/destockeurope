@@ -2,8 +2,8 @@
     {!! 'var geolocType =  ' . $geolocType .';'!!}
     {!! 'var zoomMap =  ' . $zoomMap .';'!!}
     function initMap() {
-        var destockMap = new DestockMap();
-        destockMap.constructMap(
+        window.destockMap = new DestockMap();
+        window.destockMap.constructMap(
                 'map',
                 zoomMap,
                 'geoloc',
