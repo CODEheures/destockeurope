@@ -18,7 +18,7 @@
             {{ $address }}
             @if($invoice->tva_requester && $invoice->vatIdentifier)
                 <br />{{  trans('strings.pdf_invoice_vat_number') . $invoice->tva_customer}}
-                @if($invoice->vatIdentifier && substr($invoice->tva_customer,0,2)!='FR')
+                @if($invoice->vatIdentifier && strtoupper(substr($invoice->tva_customer,0,2))!='FR')
                      {{ trans('strings.pdf_table_header_autoliquidation') }}
                 @endif
                 <br />{{ '(' . trans('strings.view_user_account_compagny_number_identifier') . $invoice->vatIdentifier .')' }}

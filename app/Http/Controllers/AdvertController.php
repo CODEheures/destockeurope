@@ -801,7 +801,7 @@ class AdvertController extends Controller
             }
 
             if ($result->getState() == 'approved') { // payment made
-                return $this->saveApprovedAuthorization($payment, $invoice, $request);
+                return $this->saveAuthorizationAndPublish($payment, $invoice, $request);
             }
 
             return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
@@ -1016,11 +1016,11 @@ class AdvertController extends Controller
     private function approveAdvert($key, $isApproved, $priceCoefficient=null, $disapproveReason=null) {
         if($isApproved != null) {
             $advert = Advert::find($key);
+            $invoice = null;
             if($advert && is_null($advert->isValid)) {
                 $advert->price_coefficient = $priceCoefficient;
                 $invoiceFileName = null;
                 //Get latest invoice with create state
-                $invoice = null;
                 $invoice = $advert->invoices()
                     ->where('state', Invoice::STATE_CREATION)
                     ->latest()->first();
@@ -1029,97 +1029,14 @@ class AdvertController extends Controller
                     && $invoice->authorization
                     && $invoice->authorization != '')
                 {
-                    try {
-                        if((boolean)$isApproved==true){
-                            //First try to setting some params to advert before capture payment
-                            $advert->online_at = Carbon::now();
-                            $advert->setEndedAt();
-
-                            $this->capturePayment($invoice);
-                            $advert->isValid=(boolean)$isApproved;
-
-                            $stats = Stats::latest()->first();
-                            if($invoice->cost > 0){
-                                $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
-                                $stats->totalCosts = $stats->totalCosts + $invoice->cost;
-                            } else {
-                                $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
-                            }
-
-                            DB::beginTransaction();
-                            //get invoice number
-                            $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
-                            if($previousInvoice){
-                                $next_invoice_number = $previousInvoice->invoice_number + 1;
-                            } else {
-                                $next_invoice_number = 1;
-                            }
-
-                            $invoice->invoice_number = $next_invoice_number;
-                            $invoice->save();
-                            $advert->save();
-                            $stats->save();
-                            DB::commit();
-                            try {
-                                $invoiceFileName = InvoiceUtils::createInvoiceByInvoice($invoice);
-                            } catch (\Exception $e) {
-
-                            }
-                        } else {
-                            //VOID PAYMENT
-                            $this->voidPayment($invoice);
-                            $advert->isValid=(boolean)$isApproved;
-                            $advert->save();
-                        }
-                    } catch (\Exception $e) {
-                        $recipients = User::where('role', '=', 'admin')->get();
-                        $senderMail = env('SERVICE_MAIL_FROM');
-                        $senderName = ucfirst(config('app.name'));
-                        $message = trans('strings.mail_apperror_approve_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);
-                        foreach ($recipients as $recipient){
-                            $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
-                        }
-                        throw new \Exception($e);
-                    }
+                    $this->autoProcess($advert,$invoice,(boolean)$isApproved,null,false);
                 } else {
-                    $advert->isValid=(boolean)$isApproved;
+                    $this->advertUpdate($advert, Invoice::STATE_CREATION,(boolean)$isApproved);
                     if((boolean)$isApproved){
-                        $advert->online_at = Carbon::now();
-                        $advert->setEndedAt();
-                        $stats = Stats::latest()->first();
-                        $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
-                        DB::beginTransaction();
-                        $advert->save();
-                        $stats->save();
-                        DB::commit();
-                    } else {
-                        $advert->save();
+                        $this->updateStats(null);
                     }
+                    $this->notifyEvent($advert, $invoice, $disapproveReason);
                 }
-
-                if($invoiceFileName){
-                    $recipients = User::where('role', '=', 'admin')->get();
-                    $senderMail = env('SERVICE_MAIL_FROM');
-                    $senderName = ucfirst(config('app.name'));
-                    foreach ($recipients as $recipient){
-                        $recipient->notify(new InvoicePdf($advert, $invoice, $senderName, $senderMail));
-                    }
-                }
-
-                $recipient = $advert->user;
-                $senderMail = env('SERVICE_MAIL_FROM');
-                $senderName = ucfirst(config('app.name'));
-                if($advert->isValid && (is_null($invoice) || $invoice->state==Invoice::STATE_CREATION)) {
-                    $recipient->notify(new AdvertApprove($advert, $invoice, $senderName, $senderMail));
-                    return null;
-                } elseif ($advert->isValid && $invoice->state==Invoice::STATE_RENEW) {
-                    $recipient->notify(new AdvertRenew($advert, $invoice));
-                    return $advert;
-                } else {
-                    $recipient->notify(new AdvertNotApprove($advert, $invoice, $senderName, $senderMail, $disapproveReason));
-                    return null;
-                }
-
             }
         }
     }
@@ -1299,7 +1216,7 @@ class AdvertController extends Controller
                 }
             } elseif ($type == self::CARD) {
                 if ($payment->getState() == 'approved') { // payment made
-                    return $this->saveApprovedAuthorization($payment, $invoice, $request);
+                    return $this->saveAuthorizationAndPublish($payment, $invoice, $request);
                 }
             }
         }
@@ -1324,7 +1241,21 @@ class AdvertController extends Controller
         $capture->setAmount($amt);
         $getCapture = $authorization->capture($capture, $this->_api_context);
         $invoice->captureId = $getCapture->getId();
+
+        //GET INVOICE NUMBER
+        $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
+        if($previousInvoice){
+            $next_invoice_number = $previousInvoice->invoice_number + 1;
+        } else {
+            $next_invoice_number = 1;
+        }
+        $invoice->invoice_number = $next_invoice_number;
+
+        //SAVE INVOICE
         $invoice->save();
+
+        //CREATE INVOICE FILE
+        try { InvoiceUtils::createInvoiceByInvoice($invoice); } catch (\Exception $e) { }
     }
 
     /**
@@ -1350,7 +1281,7 @@ class AdvertController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function saveApprovedAuthorization(Payment $payment, Invoice $invoice, Request $request) {
+    private function saveAuthorizationAndPublish(Payment $payment, Invoice $invoice, Request $request) {
         $transactions = $payment->getTransactions();
         $relatedResources = $transactions[0]->getRelatedResources();
         $authorization = $relatedResources[0]->getAuthorization();
@@ -1359,45 +1290,12 @@ class AdvertController extends Controller
         if($invoice->state == Invoice::STATE_CREATION){
             $advert = $invoice->advert;
             $this->advertPublish($advert, $request, $authorizationId, $invoice);
-            return redirect(route('home'))
-                ->with('success', trans('strings.payment_paypal_success'));
+            //stop process here, admin approve is required
+            return redirect(route('home'))->with('success', trans('strings.payment_paypal_success'));
         } elseif ($invoice->state == Invoice::STATE_RENEW) {
             $advert = Advert::withTrashed()->find($invoice->advert_id);
             $this->advertPublish($advert, $request, $authorizationId, $invoice);
-            try {
-                $this->capturePayment($invoice);
-                if(!is_null($advert->deleted_at)){
-                    DB::beginTransaction();
-                    $advert->online_at = Carbon::now();
-                    $advert->setEndedAt();
-                    $advert->deleted_at = null;
-                    $advert->save();
-                    $advertPictures = Picture::findByAdvertIdWithTrashed($advert->id)->get();
-                    foreach ($advertPictures as $picture){
-                        $picture->deleted_at = null;
-                        $picture->save();
-                    }
-                    DB::commit();
-                } else {
-                    DB::beginTransaction();
-                    $advert->online_at = Carbon::now();
-                    $advert->ended_at = Carbon::parse($advert->ended_at)->addDay(env('ADVERT_LIFE_TIME'));
-                    $advert->save();
-                    DB::commit();
-                }
-                return redirect(route('home'))
-                    ->with('success', trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]));
-            } catch (\Exception $e) {
-                $recipients = User::where('role', '=', 'admin')->get();
-                $senderMail = env('SERVICE_MAIL_FROM');
-                $senderName = ucfirst(config('app.name'));
-                $message = trans('strings.mail_apperror_renew_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);
-                foreach ($recipients as $recipient){
-                    $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
-                }
-                return redirect(route('home'))
-                    ->withErrors(trans('strings.view_advert_renew_error'));
-            }
+            return $this->autoProcess($advert, $invoice,null,null, true);
         }
     }
 
@@ -1421,5 +1319,148 @@ class AdvertController extends Controller
         $this->pictureManager->purgeSessionLocalTempo();
         session()->has('videoId') ? session()->forget('videoId'): null;
         $request->session()->flash('clear', true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param Advert $advert
+     * @param Invoice $invoice
+     * @return AdvertController|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    private function autoProcess(Advert $advert, Invoice $invoice, $isApproved=null, $disapproveReason=null, $withRedirect=true) {
+
+        $redirectSuccessMessage='';
+        $redirectErrorMessage='';
+        switch ($invoice->state) {
+            case Invoice::STATE_RENEW:
+                $redirectSuccessMessage = trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]);
+                $redirectErrorMessage = trans('strings.view_advert_renew_error');
+                break;
+        }
+
+        try {
+            if(is_null($isApproved) || $isApproved==true){
+                $this->capturePayment($invoice);
+                $this->advertUpdate($advert, $invoice->state,$isApproved);
+                $this->updateStats($invoice);
+                $this->notifyEvent($advert, $invoice, $disapproveReason);
+            } else {
+                $this->voidPayment($invoice);
+                $this->advertUpdate($advert, $invoice->state,$isApproved);
+                $this->notifyEvent($advert, $invoice, $disapproveReason);
+            }
+            return $withRedirect == true ? redirect(route('home'))->with('success', $redirectSuccessMessage) : null;
+        } catch (\Exception $e) {
+            $this->notifyError($advert);
+            return $withRedirect == true ? redirect(route('home'))->withErrors($redirectErrorMessage) : null;
+        }
+    }
+
+    /**
+     *
+     * Update advert when a capture paiement for option is done
+     *
+     * @param Advert $advert
+     * @param $typeUpdate
+     */
+    private function advertUpdate(Advert $advert, $typeUpdate, $isApproved=null) {
+        if($typeUpdate == Invoice::STATE_CREATION){
+            $advert->isValid=(boolean)$isApproved;
+            if($isApproved==true){
+                $advert->online_at = Carbon::now();
+                $advert->setEndedAt();
+            }
+            $advert->save();
+        } elseif ($typeUpdate == Invoice::STATE_RENEW){
+            if(!is_null($advert->deleted_at)){
+                DB::beginTransaction();
+                $advert->online_at = Carbon::now();
+                $advert->setEndedAt();
+                $advert->deleted_at = null;
+                $advert->save();
+                $advertPictures = Picture::findByAdvertIdWithTrashed($advert->id)->get();
+                foreach ($advertPictures as $picture){
+                    $picture->deleted_at = null;
+                    $picture->save();
+                }
+                DB::commit();
+            } else {
+                DB::beginTransaction();
+                $advert->online_at = Carbon::now();
+                $advert->ended_at = Carbon::parse($advert->ended_at)->addDay(env('ADVERT_LIFE_TIME'));
+                $advert->save();
+                DB::commit();
+            }
+        }
+    }
+
+    /**
+     *
+     * Update stats
+     *
+     * @param Invoice|null $invoice
+     */
+    private function updateStats(Invoice $invoice = null){
+        $stats = Stats::latest()->first();
+        if(!is_null($invoice) && $invoice->cost > 0){
+            $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
+            $stats->totalCosts = $stats->totalCosts + $invoice->cost;
+        } else {
+            $stats->totalNewFreeAdverts = $stats->totalNewFreeAdverts + 1;
+        }
+        $stats->save();
+    }
+
+    /**
+     *
+     * Notify an event on advert
+     *
+     * @param Advert $advert
+     * @param Invoice|null $invoice
+     * @param null $disapproveReason
+     * @return Advert|null
+     */
+    private function notifyEvent(Advert $advert, Invoice $invoice = null, $disapproveReason = null) {
+
+        if(!is_null($invoice)){
+            $recipients = User::where('role', '=', 'admin')->get();
+            $senderMail = env('SERVICE_MAIL_FROM');
+            $senderName = ucfirst(config('app.name'));
+            foreach ($recipients as $recipient){
+                $recipient->notify(new InvoicePdf($advert, $invoice, $senderName, $senderMail));
+            }
+        }
+
+        $recipient = $advert->user;
+        $senderMail = env('SERVICE_MAIL_FROM');
+        $senderName = ucfirst(config('app.name'));
+        if($advert->isValid && (is_null($invoice) || $invoice->state==Invoice::STATE_CREATION)) {
+            $recipient->notify(new AdvertApprove($advert, $invoice, $senderName, $senderMail));
+            return null;
+        } elseif ($advert->isValid && $invoice->state==Invoice::STATE_RENEW) {
+            $recipient->notify(new AdvertRenew($advert, $invoice));
+            return $advert;
+        } else {
+            $recipient->notify(new AdvertNotApprove($advert, $invoice, $senderName, $senderMail, $disapproveReason));
+            return null;
+        }
+    }
+
+    /**
+     *
+     * Notify Admin off error on advert process
+     *
+     * @param Advert $advert
+     */
+    private function notifyError(Advert $advert) {
+        $recipients = User::where('role', '=', 'admin')->get();
+        $senderMail = env('SERVICE_MAIL_FROM');
+        $senderName = ucfirst(config('app.name'));
+        $message = trans('strings.mail_apperror_renew_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);
+        foreach ($recipients as $recipient){
+            $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
+        }
     }
 }
