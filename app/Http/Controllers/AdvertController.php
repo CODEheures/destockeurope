@@ -471,7 +471,7 @@ class AdvertController extends Controller
                 $invoice->tva_requester = env('TVA_REQUESTER_COUNTRY_CODE').env('TVA_REQUESTER_VAT_NUMBER');
             }
 
-            if(!$invoice->vatIdentifier || substr($invoice->tva_customer,0,2)=='FR'){
+            if(!$invoice->vatIdentifier || strtoupper(substr($invoice->tva_customer,0,2))=='FR'){
                 $invoice->tvaSubject = true;
             } else {
                 $invoice->tvaSubject = false;
