@@ -52,7 +52,7 @@ class AdvertRenew extends Notification
                     ->greeting(trans('strings.mail_advertRenew_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_advertRenew_line',[
                         'title' => $this->advert->title,
-                        'date' => LocaleUtils::getTransDate($this->advert->online_at)
+                        'date' => LocaleUtils::getTransDate($this->advert->ended_at)
                     ]))
                     ->line(trans('strings.mail_advertApprove_line2'));
 

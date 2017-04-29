@@ -96,7 +96,7 @@ return [
 
     'mail_advertRenew_subject' => 'Your advert is renewed!',
     'mail_advertRenew_greeting' => 'Congratulations :username !',
-    'mail_advertRenew_line' => 'Your advert ":title" is renewed from :date for a period of '. env('ADVERT_LIFE_TIME') . ' days',
+    'mail_advertRenew_line' => 'Your advert ":title" is extended until :date',
     'mail_advertRenew_line2' => 'Thank you for using our application!',
 
     'mail_passwordRenew_subject' => 'Resetting your password on ',

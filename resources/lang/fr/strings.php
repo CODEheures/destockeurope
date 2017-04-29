@@ -96,7 +96,7 @@ return [
 
     'mail_advertRenew_subject' => 'Votre annonce est renouvellée!',
     'mail_advertRenew_greeting' => 'Félicitation :username !',
-    'mail_advertRenew_line' => 'Votre annonce ":title" est renouvellée à partir du :date pour une durée de '. env('ADVERT_LIFE_TIME') . ' jours',
+    'mail_advertRenew_line' => 'Votre annonce ":title" est prolongée jusqu\'au :date',
     'mail_advertRenew_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
     'mail_passwordRenew_subject' => 'Réinitialisation de votre mot de passe sur ',
