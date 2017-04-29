@@ -1424,7 +1424,7 @@ class AdvertController extends Controller
      */
     private function notifyEvent(Advert $advert, Invoice $invoice = null, $disapproveReason = null) {
 
-        if(!is_null($invoice)){
+        if(!is_null($invoice) && file_exists($invoice->filePath)){
             $recipients = User::where('role', '=', 'admin')->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
