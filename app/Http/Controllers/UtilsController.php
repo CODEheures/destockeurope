@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Common\PicturesManager;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
 use Vinkla\Vimeo\VimeoManager;
@@ -16,8 +13,7 @@ class UtilsController extends Controller
 
     public function __construct(VimeoManager $vimeoManager) {
         $this->middleware('auth', ['only' => ['getListLocales', 'getListCardsType']]);
-        $this->middleware('isAdminUser', ['only' => ['isPicture', 'tempo']]);
-        $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
+        $this->middleware('isAdminUser', ['only' => ['isPicture']]);
         $this->vimeoManager = $vimeoManager;
     }
 
@@ -30,17 +26,6 @@ class UtilsController extends Controller
         return response()->json(LocaleUtils::listUserLocales());
     }
 
-    public function testGame() {
-        $testFiles = Storage::disk('local')->files('/testGame');
-        foreach ($testFiles as $file){
-            if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
-                Storage::disk('local')->copy($file, PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
-            }
-        }
-        $exitCode = Artisan::call('migrate:refresh', ['--seed' => true]);
-        return redirect(route('home'))->with('info', $exitCode);
-    }
-
     //test if a resource is a picture. Only use for advertissement on welcome page
     public function isPicture(Request $request){
         $url = $request->url;
@@ -50,9 +35,5 @@ class UtilsController extends Controller
             }
         }
         return response()->json(false);
-    }
-
-    public function tempo(){
-
     }
 }

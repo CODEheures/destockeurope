@@ -473,6 +473,7 @@ return [
     'admin_transfert_image_response' => ':nb Mb en cours de transfert vers le disque :disk',
     'admin_transfert_image_exist' => 'L\'application signale qu\'un transfert est déjà en cours',
     'admin_transfert_size_null' => 'Taille du transfert trop petite',
+    'admin_testGame_memo' => 'Aviez-vous penser à supprimer tout ce qui est sous storage/app/final et storage/app/invoices?',
 
     'dashboard_size_local_files_label' => 'Charge disque local',
     'dashboard_size_distant_files_label' => 'Charge disque ' . \App\Common\PicturesManager::DISK_DISTANT,

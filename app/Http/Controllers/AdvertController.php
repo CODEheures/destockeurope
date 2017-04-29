@@ -662,7 +662,7 @@ class AdvertController extends Controller
      * redirect to the next step
      *
      * @param $id
-     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return AdvertController|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function nextStep($id) {
         $advert = Advert::withTrashed()->find($id);

@@ -330,9 +330,9 @@
                 }
             },
             updateAccount: function (inputName, value){
+                this.updateInProgress++;
                 let that = this;
                 let updateRoute = '';
-                this.updateInProgress++;
                 if(inputName == 'name'){
                     updateRoute = this.routeUserSetName;
                 } else if(inputName == 'compagny-name') {
@@ -405,27 +405,23 @@
                 event.preventDefault();
                 this.isLoaded = false;
                 let counter = 0;
-                if(this.updateInProgress <= 0){
-                    window.location.assign(this.routeNextUrl);
-                } else {
-                    let that = this;
-                    let timer = function () {
-                        setTimeout(function () {
-                            if(that.updateInProgress == 0){
-                                window.location.assign(this.routeNextUrl);
+                let that = this;
+                let timer = function () {
+                    setTimeout(function () {
+                        if(that.updateInProgress <= 0){
+                            window.location.assign(that.routeNextUrl);
+                        } else {
+                            counter++;
+                            if (counter < 20) {
+                                timer();
                             } else {
-                                counter++;
-                                if (counter < 20) {
-                                    timer();
-                                } else {
-                                    that.isLoaded = true;
-                                    that.updateFails = true;
-                                }
+                                that.isLoaded = true;
+                                that.updateFails = true;
                             }
-                        }, 250);
-                    };
-                    timer();
-                }
+                        }
+                    }, 250);
+                };
+                timer();
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;

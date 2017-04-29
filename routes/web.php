@@ -60,6 +60,12 @@
             Route::get('/list', 'AdminController@listInvoices')->name('invoice.list');
             Route::get('/{id?}', 'AdminController@showInvoice')->name('invoice.show');
         });
+
+        //DANGEROUS
+        Route::group(['prefix' => 'dangerous'] , function () {
+            Route::get('/testGame', 'AdminController@testGame');
+            //Route::get('/tempo', 'AdminController@tempo');
+        });
     });
 
     //Auth::routes();
@@ -176,11 +182,6 @@
         Route::post('/existIn/', ['as' => 'notification.existIn', 'uses' => 'TopicsSubscribeController@existIn']);
         Route::post('/add', ['as' => 'notification.add', 'uses' => 'TopicsSubscribeController@add']);
         Route::delete('/remove', ['as' => 'notification.remove', 'uses' => 'TopicsSubscribeController@remove']);
-    });
-    //DANGEROUS
-    Route::group(['prefix' => 'dangerous'] , function () {
-        //Route::get('/testGame', 'UtilsController@testGame');
-        //Route::get('/tempo', 'UtilsController@tempo');
     });
 
 //});

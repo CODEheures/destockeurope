@@ -14,6 +14,7 @@ use App\Stats;
 use Carbon\Carbon;
 use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
@@ -27,6 +28,7 @@ class AdminController extends Controller
 
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
         $this->middleware('isAdminUser');
+        $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;
     }
@@ -426,5 +428,20 @@ class AdminController extends Controller
             return response(trans('strings.view_all_error_download_file'), 404);
         }
 
+    }
+
+    public function tempo(){
+
+    }
+
+    public function testGame() {
+        $testFiles = Storage::disk('local')->files('/testGame');
+        foreach ($testFiles as $file){
+            if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
+                Storage::disk('local')->copy($file, PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
+            }
+        }
+        $exitCode = Artisan::call('migrate:refresh', ['--seed' => true]);
+        return redirect(route('home'))->with('info', $exitCode . ': ' . trans('strings.admin_testGame_memo'));
     }
 }

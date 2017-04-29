@@ -473,6 +473,7 @@ return [
     'admin_transfert_image_response' => ':nb Mb moving to disk :disk',
     'admin_transfert_image_exist' => 'Application indicates that a transfer is already in progress',
     'admin_transfert_size_null' => 'Transfert size too small',
+    'admin_testGame_memo' => 'Were you thinking of deleting everything under storage/app/final et storage/app/invoices',
 
     'dashboard_size_local_files_label' => 'local disk charge',
     'dashboard_size_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT . 'disk charge',
