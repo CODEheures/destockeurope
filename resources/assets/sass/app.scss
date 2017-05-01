@@ -132,12 +132,10 @@ div.ui.vertical.segment.separator {
 }
 
 #app div.masterads {
-  position: relative;
+  position: absolute;
 }
 
 #app img.masterads {
-  position: absolute;
-  top: 22px;
   height: auto;
 
   z-index: -1;

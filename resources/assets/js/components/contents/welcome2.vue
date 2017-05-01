@@ -27,7 +27,19 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="sixteen wide column" v-if="masteradsIsActive=='1'">
+            <masterads
+                    :route-image-server = "masteradsRouteImageServer"
+                    :is-active="masteradsIsActive"
+                    :url-img="masteradsUrlImg"
+                    :url-redirect="masteradsUrlRedirect"
+                    :offset-y-main-container="masteradsOffsetYMainContainer"
+                    :selector-main-container="'#ads-offset-y-'+_uid"
+                    :width="masteradsWidth"
+                    :ads-offset-y="10"
+            ></masterads>
+        </div>
+        <div class="row" :id="'ads-offset-y-'+_uid">
             <div :id="'column1_'+_uid" class="computer only four wide column">
                 <div>
                     <categories-lateral-accordion-menu
@@ -35,7 +47,9 @@
                             :actual-locale="actualLocale"
                             :all-item="categoriesAllItem">
                     </categories-lateral-accordion-menu>
-                    <vertical-160x600></vertical-160x600>
+                    <div class="spaced-top-2">
+                        <vertical-160x600></vertical-160x600>
+                    </div>
                 </div>
             </div>
             <div class="sixteen wide tablet twelve wide computer column">
@@ -124,6 +138,13 @@
             'categoriesDropdownMenuFirstMenuName',
             'categoriesAllItem',
             'actualLocale',
+            //master ads component
+            'masteradsRouteImageServer',
+            'masteradsIsActive',
+            'masteradsUrlImg',
+            'masteradsUrlRedirect',
+            'masteradsOffsetYMainContainer',
+            'masteradsWidth',
             //filter advert component
             'filterMinLengthSearch',
             'filterLocationAccurateList',
@@ -452,7 +473,7 @@
                     this.updateResults();
                 }
             },
-            initFilterBySessionStorage: function () {
+            initFilterBySessionStorage: function (onlyLocation=false) {
                 if(sessionStorage.getItem('filter') != null){
                     this.filter = JSON.parse(sessionStorage.getItem('filter'));
                     if(onlyLocation===true){

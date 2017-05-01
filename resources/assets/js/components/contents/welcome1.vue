@@ -36,7 +36,19 @@
                 </categories-horizontal-menu>
             </div>
         </div>
-        <div class="row">
+        <div class="sixteen wide column" v-if="masteradsIsActive=='1'">
+            <masterads
+                    :route-image-server = "masteradsRouteImageServer"
+                    :is-active="masteradsIsActive"
+                    :url-img="masteradsUrlImg"
+                    :url-redirect="masteradsUrlRedirect"
+                    :offset-y-main-container="masteradsOffsetYMainContainer"
+                    :selector-main-container="'#ads-offset-y-'+_uid"
+                    :width="masteradsWidth"
+                    :ads-offset-y="-10"
+            ></masterads>
+        </div>
+        <div class="row" :id="'ads-offset-y-'+_uid">
             <div class="sixteen wide column">
                 <div class="row filters">
                     <advert-filter
@@ -132,6 +144,13 @@
             'categoriesDropdownMenuFirstMenuName',
             'categoriesAllItem',
             'actualLocale',
+            //master ads component
+            'masteradsRouteImageServer',
+            'masteradsIsActive',
+            'masteradsUrlImg',
+            'masteradsUrlRedirect',
+            'masteradsOffsetYMainContainer',
+            'masteradsWidth',
             //filter advert component
             'filterMinLengthSearch',
             'filterLocationAccurateList',
@@ -286,7 +305,7 @@
             });
             this.$on('deleteAdvert', function (event) {
                 this.destroyMe(event.url);
-            })
+            });
         },
         methods: {
             sendToast: function(message,type) {

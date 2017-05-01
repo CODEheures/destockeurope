@@ -16,7 +16,9 @@
             'urlImg',
             'urlRedirect',
             'offsetYMainContainer',
-            'width'
+            'selectorMainContainer',
+            'width',
+            'adsOffsetY'
         ],
         data: () => {
             return {
@@ -56,13 +58,14 @@
             adaptView () {
                 if(this.dataIsActive) {
                     let that = this;
-                    let img = $('#img_masterads'+that._uid);
-                    let mainContainer = $('div.ui.main.container');
+                    let img = $('div.masterads');
+                    let mainContainer = $(that.selectorMainContainer);
                     if(this.width < $(document).width()) {
                         img.css({
                             'display': 'block',
                             'width': that.width+'px',
-                            'left': 'calc(50% - '+ that.width/2+'px)'
+                            'left': 'calc(50% - '+ that.width/2+'px)',
+                            'top': that.adsOffsetY+'px'
                         });
                         mainContainer.animate({
                             'margin-top': that.offsetYMainContainer+'px'

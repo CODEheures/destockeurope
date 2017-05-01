@@ -65,15 +65,6 @@
         @include('menus.top.master')
 
         <!-- main content -->
-
-        <masterads
-            route-image-server = "{{ route('imageServer') }}"
-            is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
-            url-img="{{config('runtime.urlMasterAds')}}"
-            url-redirect="{{ config('runtime.urlLinkMasterAds') }}"
-            offset-y-main-container="{{ config('runtime.offsetYMasterAds') }}"
-            width="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? config('runtime.widthUrlMasterAds') : 0 }}">
-        </masterads>
         <div class="ui main container">
             <!-- Erreurs -->
             <div class="one column row">

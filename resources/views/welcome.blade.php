@@ -19,6 +19,13 @@
                 categories-all-item="{{ trans('strings.form_dropdown_all_item') }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
 
+                masterads-route-image-server = "{{ route('imageServer') }}"
+                masterads-is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
+                masterads-url-img="{{config('runtime.urlMasterAds')}}"
+                masterads-url-redirect="{{ config('runtime.urlLinkMasterAds') }}"
+                masterads-offset-y-main-container="{{ config('runtime.offsetYMasterAds') }}"
+                masterads-width="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? config('runtime.widthUrlMasterAds') : 0 }}"
+
                 filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
                 filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
                 filter-ribbon-open="{{ trans('strings.view_filter_ribbon_open') }}"
@@ -69,6 +76,13 @@
                 categories-dropdown-menu-first-menu-name="{{ trans('strings.menu_category') }}"
                 categories-all-item="{{ trans('strings.form_dropdown_all_item') }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
+
+                masterads-route-image-server = "{{ route('imageServer') }}"
+                masterads-is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
+                masterads-url-img="{{config('runtime.urlMasterAds')}}"
+                masterads-url-redirect="{{ config('runtime.urlLinkMasterAds') }}"
+                masterads-offset-y-main-container="{{ config('runtime.offsetYMasterAds') }}"
+                masterads-width="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? config('runtime.widthUrlMasterAds') : 0 }}"
 
                 filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
                 filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
