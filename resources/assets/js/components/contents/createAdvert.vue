@@ -78,10 +78,10 @@
                                     <label>{{ advertFormPriceLabel }}</label>
                                     <div class="ui right labeled input">
                                         <template v-if="isNegociated==0">
-                                            <input  name="price" type="number" min="0.00" step="0.01" v-model="price"/>
+                                            <input  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="price"/>
                                         </template>
                                         <template v-else>
-                                            <input  name="price" type="number" min="0.00" step="0.01" v-model="price" disabled/>
+                                            <input  name="" type="number" value="0" disabled/>
                                         </template>
                                         <currencies-input-right-label
                                                 :route-list-currencies="routeListCurrencies"
@@ -290,6 +290,8 @@
                 typeMessage: '',
                 message:'',
                 currency:'',
+                subunit: 2,
+                calcSubUnit: 0.01,
                 lat: '',
                 lng: '',
                 geoloc: '',
@@ -340,7 +342,7 @@
                 this.categoryChoice(event.id);
             });
             this.$on('currencyChoice', function (event) {
-                this.currencyChoice(event.cur);
+                this.currencyChoice(event.cur, event.subunit, event.initial);
             });
             this.$on('locationChange', function (event) {
                 this.latLngChange(event);
@@ -383,6 +385,10 @@
                     $('#isNegociated'+this._uid).checkbox('uncheck');
                 }
             });
+            this.$watch('subunit', function () {
+               this.calcSubUnit = Math.pow(10,-(this.subunit));
+               this.price = parseFloat(this.price).toFixed(this.subunit);
+            });
 
             this.getStorage();
         },
@@ -404,8 +410,11 @@
             categoryChoice: function (id) {
                 this.categoryId = parseInt(id);
             },
-            currencyChoice: function (currency) {
-                this.currency = currency;
+            currencyChoice: function (currency, subunit, initial) {
+                if(this.oldCurrency == '' || initial==false){
+                    this.currency = currency;
+                    this.subunit = subunit;
+                }
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;
@@ -461,6 +470,7 @@
                 sessionStorage.setItem('lotMiniQuantity', this.lotMiniQuantity);
                 sessionStorage.setItem('type', this.type);
                 sessionStorage.setItem('currency', this.currency);
+                sessionStorage.setItem('subunit', this.subunit);
                 sessionStorage.setItem('lat', this.lat);
                 sessionStorage.setItem('lng', this.lng);
                 sessionStorage.setItem('isUrgent', this.isUrgent);
@@ -480,6 +490,8 @@
                 sessionStorage.getItem('type') != undefined ? this.oldType = sessionStorage.getItem('type') : null;
                 sessionStorage.getItem('currency') != undefined ? this.currency= sessionStorage.getItem('currency') : null;
                 sessionStorage.getItem('currency') != undefined ? this.oldCurrency= sessionStorage.getItem('currency') : null;
+                sessionStorage.getItem('subunit') != undefined ? this.subunit= sessionStorage.getItem('subunit') : null;
+                sessionStorage.getItem('subunit') != undefined ? this.oldSubunit= sessionStorage.getItem('subunit') : null;
                 sessionStorage.getItem('lat') != undefined ? this.lat =  sessionStorage.getItem('lat') : null;
                 sessionStorage.getItem('lng') != undefined ? this.lng =  sessionStorage.getItem('lng') : null;
                 sessionStorage.getItem('isUrgent') != undefined ? this.isUrgent =  sessionStorage.getItem('isUrgent') == 'true' : null;

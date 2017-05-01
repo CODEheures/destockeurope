@@ -48,16 +48,16 @@
         },
         {
             "name": "codeheures/laravel-utils",
-            "version": "v1.1.11",
+            "version": "v1.1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CODEheures/laravelUtils.git",
-                "reference": "78cc97aec9060d02ac6b15676d790d382d0fc172"
+                "reference": "379d2a81d69bd010bee764a1e7c288add0347078"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CODEheures/laravelUtils/zipball/78cc97aec9060d02ac6b15676d790d382d0fc172",
-                "reference": "78cc97aec9060d02ac6b15676d790d382d0fc172",
+                "url": "https://api.github.com/repos/CODEheures/laravelUtils/zipball/379d2a81d69bd010bee764a1e7c288add0347078",
+                "reference": "379d2a81d69bd010bee764a1e7c288add0347078",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
             ],
             "description": "Utility for Laravel 5.4",
             "homepage": "http://github.com/codeheures/laravelUtils",
-            "time": "2017-04-05T14:59:49+00:00"
+            "time": "2017-04-30T23:53:41+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -1227,6 +1227,7 @@
                 }
             ],
             "description": "Flysystem adapter for Dropbox",
+            "abandoned": "spatie/flysystem-dropbox",
             "time": "2016-04-25T18:51:39+00:00"
         },
         {
@@ -3574,12 +3575,12 @@
             "version": "0.9.9",
             "source": {
                 "type": "git",
-                "url": "https://github.com/padraic/mockery.git",
+                "url": "https://github.com/mockery/mockery.git",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856",
                 "shasum": ""
             },

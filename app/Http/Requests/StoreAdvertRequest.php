@@ -74,7 +74,7 @@ class StoreAdvertRequest extends FormRequest
             'title' => 'required|min:'. config('db_limits.adverts.minTitle') . '|max:'. config('db_limits.adverts.maxTitle') ,
             'manu_ref' => 'nullable|string',
             'description' => 'required|min:' . config('db_limits.adverts.minDescription') . '|max:' . config('db_limits.adverts.maxDescription'),
-            'price' => 'required_if:is_negociated,false|numeric|min:0.00',
+            'price' => 'required_if:is_negociated,false|numeric|min:0.01',
             'currency' => 'required|in:'.$line2,
             'lat' => 'required|numeric|min:-90|max:90',
             'lng' => 'required|numeric|min:-180|max:180',
@@ -90,7 +90,8 @@ class StoreAdvertRequest extends FormRequest
     public function messages()
     {
         return [
-            'main_picture.required' => trans('strings.request_main_picture_require')
+            'main_picture.required' => trans('strings.request_main_picture_require'),
+            'price.min' => trans('strings.request_min_price')
         ];
     }
 }

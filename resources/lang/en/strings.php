@@ -163,6 +163,7 @@ return [
     'link_send_reset_link' => 'Send reset link',
 
     'request_main_picture_require' => 'At least one picture is required',
+    'request_min_price' => 'The sale price can not be null, or check the "to negociate" box',
     'request_input_generic_error' => 'The ":name" field is not valid',
     'request_input_require' => 'The ":name" field is required',
     'request_input_numeric' => 'The ":name" field must contain only numbers',

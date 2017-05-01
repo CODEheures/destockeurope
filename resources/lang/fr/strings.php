@@ -163,6 +163,7 @@ return [
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',
 
     'request_main_picture_require' => 'Il faut au moins une image à votre annonce',
+    'request_min_price' => 'Le prix de vente ne peux pas être null, ou bien cochez la case "à négocier"',
     'request_input_generic_error' => 'Le champ ":name" est invalide',
     'request_input_require' => 'Le champ ":name" est obligatoire',
     'request_input_numeric' => 'Le champ ":name" ne doit contenir que des chiffres',
