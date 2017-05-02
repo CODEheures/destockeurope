@@ -49,6 +49,7 @@
                             :is-negociated-label="isNegociatedLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :back-to-top-label="backToTopAdvertLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
@@ -79,7 +80,7 @@
             </div>
             <div id="welcome-ads" class="computer only four wide column">
                 <div>
-                    <div class="sixteen right aligned column spaced-top-2">
+                    <div class="sixteen right aligned column">
                         <vertical-160x600></vertical-160x600>
                     </div>
                 </div>
@@ -117,6 +118,7 @@
             'isNegociatedLabel',
             'manageAdvertLabel',
             'renewAdvertLabel',
+            'backToTopAdvertLabel',
             'deleteAdvertLabel',
             'seeAdvertLabel',
             'validationOnProgressLabel',

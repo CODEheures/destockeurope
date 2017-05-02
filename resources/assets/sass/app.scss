@@ -60,6 +60,10 @@ div.ui.vertical.segment.separator {
   margin-bottom: 4rem;
   //background-color: white;
 
+  & .ui.huge.message {
+    margin-bottom: 2rem;
+  }
+
   & div.item.advert {
     & .ui.image > .corner i {
       color: white;

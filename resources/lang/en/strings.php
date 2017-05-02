@@ -99,6 +99,11 @@ return [
     'mail_advertRenew_line' => 'Your advert ":title" is extended until :date',
     'mail_advertRenew_line2' => 'Thank you for using our application!',
 
+    'mail_advertBackToTop_subject' => 'Your advert is back to top of the list!',
+    'mail_advertBackToTop_greeting' => 'Congratulations :username !',
+    'mail_advertBackToTop_line' => 'Your advert ":title" has just been moved back to the top of the list',
+    'mail_advertBackToTop_line2' => 'Thank you for using our application!',
+
     'mail_passwordRenew_subject' => 'Resetting your password on ',
     'mail_passwordRenew_line' => 'You will be able to reset your password by clicking on the button below',
     'mail_passwordRenew_action' => 'Reset',
@@ -202,6 +207,7 @@ return [
     'option_payedPicture_name' => 'Extra Photos',
     'option_isUrgent_name' => 'Urgent advert',
     'option_isRenew_name' => 'Renewal of my advert',
+    'option_isBackToTop_name' => 'Back my advert to top of the list',
     'option_haveVideo_name' => 'Vidéo',
 
     'view_all_error_load_message' => 'Ho no! Load error :-( , try to refresh the page',
@@ -215,6 +221,7 @@ return [
     'view_all_error_service_unavailable' => 'Ho non! This service is not available for the moment',
     'view_all_error_filesize_message' => 'File to Big!',
     'view_all_error_invalid_image_message' => 'Unvaillable Image',
+    'view_all_ineligible_advert_action' => 'Sorry but this advert is not eligible for this action',
     'view_all_urgent' => 'urgent',
     'view_all_negociate' => 'to negociate',
     'view_all_all' => 'All',
@@ -232,9 +239,11 @@ return [
     'view_manage_adverts_label' => 'Offers',
     'view_manage_adverts_nb_free_pictures_label' => 'Number of free advert pictures',
     'view_manage_adverts_nb_max_pictures_label' => 'Number of max advert pictures',
+    'view_manage_cost_label' => 'Costs',
     'view_manage_adverts_urgent_cost_label' => 'Cost of URGENT option (€ excl. taxes)',
     'view_manage_adverts_video_cost_label' => 'Cost of Video option (€ excl. taxes)',
     'view_manage_adverts_renew_cost_label' => 'Price for renew (€ excl. taxes)',
+    'view_manage_adverts_backToTop_cost_label' => 'Price for back To Top of list(€ excl. taxes)',
     'view_manage_adverts_per_page_label' => 'Number adverts per page',
     'view_manage_resume_length_label' => 'Advert resume length',
     'view_manage_search_label' => 'Search Filter',
@@ -307,6 +316,7 @@ return [
     'view_advert_show_views_info' => 'Views',
     'view_advert_show_manage_label' => 'Manage',
     'view_advert_show_renew_label' => 'Renew it',
+    'view_advert_show_backToTop_label' => 'Go back to the top of the list',
     'view_advert_show_delete2_label' => 'Delete it',
     'view_advert_show_see_label' => 'See it',
     'view_advert_show_update_label' => 'Update',
@@ -332,6 +342,7 @@ return [
     'view_advert_approve_modal_valid_description' => 'WARNING!! The validation of all actions resulting sending mails approval or disapproval to customers.',
     'view_advert_approve_error' => 'Advert approve error',
     'view_advert_renew_error' => 'Error while advert renew process. Our services are warned and deal with your problem as soon as possible',
+    'view_advert_backToTop_error' => 'Error while advert back to top of the list process. Our services are warned and deal with your problem as soon as possible',
     'view_advert_approve_success' => 'Advert approve send',
 
     'view_advert_by_link_label' => 'See Advert',
@@ -385,6 +396,7 @@ return [
     'payment_all_error' => 'Ho no! Payment fails :-(',
     'payment_paypal_success' => 'Thank you for your payment. Note that this will only be executed if your ad is validated by our services. You will then receive your invoice by e-mail.',
     'payment_renew_success' => 'Thank you for your payment. Your advert is extended to :date. Your invoice is send by e-mail.',
+    'payment_backToTop_success' => 'Thank you for your payment. Your advert has just been moved back to the top of the list. Your invoice is send by e-mail.',
 
     'footer_list_header_1' => 'HOUSE',
     'footer_list_1_1' => 'Furnishings',

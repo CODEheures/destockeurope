@@ -21,6 +21,7 @@ class Parameters extends Model
         'adsFrequency',
         'advertsPerPage',
         'urgentCost',
+        'backToTopCost',
         'videoCost',
         'renewCost',
         'nbFreePictures',

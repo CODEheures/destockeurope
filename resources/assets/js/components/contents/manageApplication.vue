@@ -19,7 +19,7 @@
                 </div>
                 <h4 class="ui horizontal divider header"><i class="browser icon"></i> {{ advertPreferencesLabel }} </h4>
                 <div class="field">
-                    <div class="two fields">
+                    <div class="three fields">
                         <div class="field">
                             <label>{{ advertNbFreePicturesLabel }}</label>
                             <input type="number"
@@ -41,7 +41,20 @@
                                    v-on:focus="focused={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}"
                                    v-on:blur="blured={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}">
                         </div>
+                        <div class="field">
+                            <label>{{ advertResumeLenghtLabel }}</label>
+                            <input type="number"
+                                   name="advertResumeLenght"
+                                   min="20"
+                                   v-model="parameters.advertResumeLenght"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}"
+                                   v-on:blur="blured={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}">
+                        </div>
                     </div>
+                </div>
+                <h4 class="ui horizontal divider header"><i class="euro icon"></i> {{ costLabel }} </h4>
+                <div class="field">
                     <div class="three fields">
                         <div class="field">
                             <label>{{ advertUrgentCostLabel }}</label>
@@ -74,28 +87,16 @@
                                    v-on:blur="blured={'name': 'renewCost', 'value': parameters.renewCost}">
                         </div>
                     </div>
-                </div>
-                <div class="field">
                     <div class="three fields">
                         <div class="field">
-                            <label>{{ advertPerPageLabel }}</label>
+                            <label>{{ advertBackToTopCostLabel }}</label>
                             <input type="number"
-                                   name="advertsPerPage"
-                                   min="4"
-                                   v-model="parameters.advertsPerPage"
+                                   name="backToTopCost"
+                                   min="0"
+                                   v-model="parameters.backToTopCost"
                                    v-on:keyup.enter="updateParameter"
-                                   v-on:focus="focused={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}"
-                                   v-on:blur="blured={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}">
-                        </div>
-                        <div class="field">
-                            <label>{{ advertResumeLenghtLabel }}</label>
-                            <input type="number"
-                                   name="advertResumeLenght"
-                                   min="20"
-                                   v-model="parameters.advertResumeLenght"
-                                   v-on:keyup.enter="updateParameter"
-                                   v-on:focus="focused={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}"
-                                   v-on:blur="blured={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}">
+                                   v-on:focus="focused={'name': 'backToTopCost', 'value': parameters.backToTopCost}"
+                                   v-on:blur="blured={'name': 'backToTopCost', 'value': parameters.backToTopCost}">
                         </div>
                     </div>
                 </div>
@@ -126,21 +127,27 @@
                 </div>
                 <h4 class="ui horizontal divider header"><i class="announcement icon"></i> {{ adsPreferencesLabel }} </h4>
                 <div class="field">
-                    <div class="ui grid">
-                        <div class="doubling four column row">
-                            <div class="column">
-                                <div class="field">
-                                    <label>{{ adsFrequencyLabel }}</label>
-                                    <input type="number"
-                                           name="adsFrequency"
-                                           min="0"
-                                           :max="parameters.advertPerPage"
-                                           v-model="parameters.adsFrequency"
-                                           v-on:keyup.enter="updateParameter"
-                                           v-on:focus="focused={'name': 'adsFrequency', 'value': parameters.adsFrequency}"
-                                           v-on:blur="blured={'name': 'adsFrequency', 'value': parameters.adsFrequency}">
-                                </div>
-                            </div>
+                    <div class="three fields">
+                        <div class="field">
+                            <label>{{ advertPerPageLabel }}</label>
+                            <input type="number"
+                                   name="advertsPerPage"
+                                   min="4"
+                                   v-model="parameters.advertsPerPage"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}"
+                                   v-on:blur="blured={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}">
+                        </div>
+                        <div class="field">
+                            <label>{{ adsFrequencyLabel }}</label>
+                            <input type="number"
+                                   name="adsFrequency"
+                                   min="0"
+                                   :max="parameters.advertPerPage"
+                                   v-model="parameters.adsFrequency"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'adsFrequency', 'value': parameters.adsFrequency}"
+                                   v-on:blur="blured={'name': 'adsFrequency', 'value': parameters.adsFrequency}">
                         </div>
                     </div>
                 </div>
@@ -218,9 +225,11 @@
             advertPreferencesLabel: String,
             advertNbFreePicturesLabel: String,
             advertNbMaxPicturesLabel: String,
+            costLabel: String,
             advertUrgentCostLabel: String,
             advertVideoCostLabel: String,
             advertRenewCostLabel: String,
+            advertBackToTopCostLabel: String,
             advertPerPageLabel: String,
             advertResumeLenghtLabel: String,
             searchLabel: String,

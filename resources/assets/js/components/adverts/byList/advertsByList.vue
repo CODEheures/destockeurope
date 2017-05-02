@@ -43,6 +43,7 @@
                             :is-negociated-label="isNegociatedLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :back-to-top-label="backToTopLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
@@ -81,6 +82,7 @@
                             :is-negociated-label="isNegociatedLabel"
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
+                            :back-to-top-label="backToTopLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
@@ -139,6 +141,7 @@
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,
+            backToTopLabel: String,
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             validationOnProgressLabel: String,

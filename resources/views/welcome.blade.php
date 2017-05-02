@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @if(config('runtime.welcomeType')=='2')
+    @if(config('runtime.welcomeType')=='1')
         <welcome1
                 clear-storage="{{ session()->has('clear') ? true : false }}"
 
@@ -59,7 +59,7 @@
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
                 page-next-label="{{ trans('strings.view_pagination_next_label') }}"
         ></welcome1>
-    @elseif(config('runtime.welcomeType')=='1')
+    @elseif(config('runtime.welcomeType')=='2')
         <welcome2
                 clear-storage="{{ session()->has('clear') ? true : false }}"
 

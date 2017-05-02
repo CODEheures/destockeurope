@@ -115,7 +115,7 @@
             </div>
             <div id="welcome-ads" class="computer only four wide column">
                 <div>
-                    <div class="sixteen right aligned column spaced-top-2">
+                    <div class="sixteen right aligned column">
                         <vertical-160x600></vertical-160x600>
                     </div>
                 </div>

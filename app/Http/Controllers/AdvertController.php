@@ -17,6 +17,7 @@ use App\Http\Requests\CreditCardRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Invoice;
 use App\Notifications\AdvertApprove;
+use App\Notifications\AdvertBackToTop;
 use App\Notifications\AdvertNotApprove;
 use App\Notifications\AdvertRenew;
 use App\Notifications\CustomerContactSeller;
@@ -348,7 +349,7 @@ class AdvertController extends Controller
      */
     public function cost($nbPictures, $isUrgent) {
         if(isset($nbPictures) && isset($isUrgent) && is_numeric($nbPictures)){
-            return response()->json(CostUtils::getCost((int)$nbPictures,filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN), false, session()->has('videoId')));
+            return response()->json(CostUtils::getCost((int)$nbPictures,filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN), session()->has('videoId'), false, false));
         } else {
             return response('error', 500);
         }
@@ -534,7 +535,7 @@ class AdvertController extends Controller
                 $results = $this->pictureManager->storeLocalFinal();
 
                 //Cost for picture is based on final file number
-                $cost = CostUtils::getCost(count($results)/2, $advert->isUrgent, false, session()->has('videoId'));
+                $cost = CostUtils::getCost(count($results)/2, $advert->isUrgent, session()->has('videoId'), false, false);
 
 
                 DB::beginTransaction();
@@ -547,7 +548,7 @@ class AdvertController extends Controller
                         'advert_id' => $advert->id,
                         'state' => Invoice::STATE_CREATION,
                         'cost' => $cost,
-                        'options' => $this->setOptions(count($results)/2, $advert->isUrgent, null, session()->has('videoId'))
+                        'options' => $this->setOptions(count($results)/2, $advert->isUrgent, session()->has('videoId'), false, false)
                     ]);
                     $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
                 } else {
@@ -691,8 +692,8 @@ class AdvertController extends Controller
                     'user_id' => $advert->user->id,
                     'advert_id' => $advert->id,
                     'state' => Invoice::STATE_RENEW,
-                    'cost' => CostUtils::getCost(null, null, true, false),
-                    'options' => $this->setOptions(null, null, true, false)
+                    'cost' => CostUtils::getCost(null, null, false, true, false),
+                    'options' => $this->setOptions(0, false, false, true, false)
                 ]);
                 $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
                 $advert->save();
@@ -702,7 +703,40 @@ class AdvertController extends Controller
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }
         } else {
-            return redirect(route('home'));
+            return redirect(route('mines'))->withErrors(trans('strings.view_all_ineligible_advert_action'));
+        }
+    }
+
+    /**
+     *
+     * Back To Top an Advert
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function backToTop($id)
+    {
+        $advert = Advert::find($id);
+        if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForBackToTop()){
+            try {
+                //Create Invoice
+                DB::beginTransaction();
+                $invoice = Invoice::create([
+                    'user_id' => $advert->user->id,
+                    'advert_id' => $advert->id,
+                    'state' => Invoice::STATE_BACKTOTOP,
+                    'cost' => CostUtils::getCost(null, null, false, false, true),
+                    'options' => $this->setOptions(0, false, false, false, true)
+                ]);
+                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
+                $advert->save();
+                DB::commit();
+                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name')]));
+            } catch (\Exception $e) {
+                return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
+            }
+        } else {
+            return redirect(route('mines'))->withErrors(trans('strings.view_all_ineligible_advert_action'));
         }
     }
 
@@ -961,7 +995,7 @@ class AdvertController extends Controller
      * @param null $haveVideo
      * @return array
      */
-    private function setOptions($nbPictures, $isUrgent, $isRenew=null, $haveVideo=null) {
+    private function setOptions($nbPictures, $isUrgent, $haveVideo=null, $isRenew=null, $isBackToTop=null) {
         $options = [];
         if($nbPictures > config('runtime.nbFreePictures')){
             $options['payedPictures'] = [
@@ -979,6 +1013,14 @@ class AdvertController extends Controller
                 'tva' => env('TVA')
             ];
         }
+        if($haveVideo){
+            $options['haveVideo'] = [
+                'name' => trans('strings.option_haveVideo_name'),
+                'quantity' => 1,
+                'cost' => CostUtils::getCostVideo($haveVideo),
+                'tva' => env('TVA')
+            ];
+        }
         if($isRenew){
             $options['isRenew'] = [
                 'name' => trans('strings.option_isRenew_name'),
@@ -987,11 +1029,11 @@ class AdvertController extends Controller
                 'tva' => env('TVA')
             ];
         }
-        if($haveVideo){
-            $options['haveVideo'] = [
-                'name' => trans('strings.option_haveVideo_name'),
+        if($isBackToTop){
+            $options['isBackToTop'] = [
+                'name' => trans('strings.option_isBackToTop_name'),
                 'quantity' => 1,
-                'cost' => CostUtils::getCostVideo($haveVideo),
+                'cost' => CostUtils::getCostIsBackToTop($isBackToTop),
                 'tva' => env('TVA')
             ];
         }
@@ -1296,6 +1338,10 @@ class AdvertController extends Controller
             $advert = Advert::withTrashed()->find($invoice->advert_id);
             $this->advertPublish($advert, $request, $authorizationId, $invoice);
             return $this->autoProcess($advert, $invoice,null,null, true);
+        } elseif ($invoice->state == Invoice::STATE_BACKTOTOP) {
+            $advert = Advert::find($invoice->advert_id);
+            $this->advertPublish($advert, $request, $authorizationId, $invoice);
+            return $this->autoProcess($advert, $invoice, null, null, true);
         }
     }
 
@@ -1331,15 +1377,6 @@ class AdvertController extends Controller
      */
     private function autoProcess(Advert $advert, Invoice $invoice, $isApproved=null, $disapproveReason=null, $withRedirect=true) {
 
-        $redirectSuccessMessage='';
-        $redirectErrorMessage='';
-        switch ($invoice->state) {
-            case Invoice::STATE_RENEW:
-                $redirectSuccessMessage = trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]);
-                $redirectErrorMessage = trans('strings.view_advert_renew_error');
-                break;
-        }
-
         try {
             if(is_null($isApproved) || $isApproved==true){
                 $this->capturePayment($invoice);
@@ -1351,6 +1388,22 @@ class AdvertController extends Controller
                 $this->advertUpdate($advert, $invoice->state,$isApproved);
                 $this->notifyEvent($advert, $invoice, $disapproveReason);
             }
+
+
+            $redirectSuccessMessage='';
+            $redirectErrorMessage='';
+            switch ($invoice->state) {
+                case Invoice::STATE_RENEW:
+                    $redirectSuccessMessage = trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]);
+                    $redirectErrorMessage = trans('strings.view_advert_renew_error');
+                    break;
+                case Invoice::STATE_BACKTOTOP:
+                    $redirectSuccessMessage = trans('strings.payment_backToTop_success');
+                    $redirectErrorMessage = trans('strings.view_advert_backToTop_error');
+                    break;
+            }
+
+
             return $withRedirect == true ? redirect(route('home'))->with('success', $redirectSuccessMessage) : null;
         } catch (\Exception $e) {
             $this->notifyError($advert);
@@ -1387,12 +1440,13 @@ class AdvertController extends Controller
                 }
                 DB::commit();
             } else {
-                DB::beginTransaction();
                 $advert->online_at = Carbon::now();
                 $advert->ended_at = Carbon::parse($advert->ended_at)->addDay(env('ADVERT_LIFE_TIME'));
                 $advert->save();
-                DB::commit();
             }
+        }  elseif ($typeUpdate == Invoice::STATE_BACKTOTOP){
+                $advert->online_at = Carbon::now();
+                $advert->save();
         }
     }
 
@@ -1441,6 +1495,9 @@ class AdvertController extends Controller
             return null;
         } elseif ($advert->isValid && $invoice->state==Invoice::STATE_RENEW) {
             $recipient->notify(new AdvertRenew($advert, $invoice));
+            return $advert;
+        } elseif ($advert->isValid && $invoice->state==Invoice::STATE_BACKTOTOP) {
+            $recipient->notify(new AdvertBackToTop($advert, $invoice));
             return $advert;
         } else {
             $recipient->notify(new AdvertNotApprove($advert, $invoice, $senderName, $senderMail, $disapproveReason));

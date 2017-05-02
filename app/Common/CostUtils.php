@@ -33,13 +33,21 @@ trait CostUtils
         return 0;
     }
 
-    public static function getCost($nbPictures, $isUrgent=false, $isRenew=false, $haveVideo=false){
+    public static function getCostIsBackToTop($isBackToTop){
+        if($isBackToTop){
+            return config('runtime.backToTopCost')*100;
+        }
+        return 0;
+    }
+
+    public static function getCost($nbPictures, $isUrgent=false, $haveVideo=false, $isRenew=false, $isBackToTop=false){
         $cost = 0;
         if(!auth()->user()->isDelegation) {
             $cost += self::getCostPictures($nbPictures);
             $cost += self::getCostIsUrgent($isUrgent);
             $cost += self::getCostVideo($haveVideo);
             $cost += self::getCostIsRenew($isRenew);
+            $cost += self::getCostIsBackToTop($isBackToTop);
         }
         return $cost;
     }

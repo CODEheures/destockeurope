@@ -75,7 +75,7 @@
                 </h4>
                 <div class="field">
                     <div class="two fields">
-                        <div class="field">
+                        <div class="required field">
                             <label>{{ compagnyNumberLabel }}</label>
                             <div :class="vatOnCheckProgress ? 'ui icon input loading' : 'ui icon input'">
                                 <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="compagnyNumberLabel" v-model:value="dataRegistrationNumber"

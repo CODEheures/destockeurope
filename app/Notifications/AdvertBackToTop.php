@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class AdvertRenew extends Notification
+class AdvertBackToTop extends Notification
 {
 
     use Queueable;
@@ -48,13 +48,12 @@ class AdvertRenew extends Notification
     public function toMail($notifiable)
     {
         $message = (new MailMessage)
-                    ->subject(trans('strings.mail_advertRenew_subject'))
-                    ->greeting(trans('strings.mail_advertRenew_greeting',['username' => $notifiable->name]))
-                    ->line(trans('strings.mail_advertRenew_line',[
+                    ->subject(trans('strings.mail_advertBackToTop_subject'))
+                    ->greeting(trans('strings.mail_advertBackToTop_greeting',['username' => $notifiable->name]))
+                    ->line(trans('strings.mail_advertBackToTop_line',[
                         'title' => $this->advert->title,
-                        'date' => LocaleUtils::getTransDate($this->advert->ended_at)
                     ]))
-                    ->line(trans('strings.mail_advertRenew_line2'));
+                    ->line(trans('strings.mail_advertBackToTop_line2'));
 
         if($this->invoice->filePath && file_exists($this->invoice->filePath)){
             $message->attach($this->invoice->filePath,['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->invoice->invoice_number]), 'mime' => 'application/pdf']);

@@ -27,6 +27,7 @@
                 price-info-label="{{ trans('strings.view_advert_list_price_info') }}"
                 manage-advert-label="{{ trans('strings.view_advert_show_manage_label') }}"
                 renew-advert-label="{{ trans('strings.view_advert_show_renew_label') }}"
+                back-to-top-advert-label="{{ trans('strings.view_advert_show_backToTop_label') }}"
                 delete-advert-label="{{ trans('strings.view_advert_show_delete2_label') }}"
                 see-advert-label="{{ trans('strings.view_advert_show_see_label') }}"
                 validation-on-progress-label="{{ trans('strings.view_advert_validation_on_progress') }}"

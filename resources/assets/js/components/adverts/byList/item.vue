@@ -274,6 +274,7 @@
                                             <div class="menu">
                                                 <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
                                                 <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
+                                                <div class="item" v-on:click="backToTopMe()">{{ backToTopLabel }}</div>
                                                 <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
                                             </div>
                                         </div>
@@ -334,12 +335,13 @@
                         <div class="header"><h4>{{ advert.title }}</h4></div>
                         <div class="sixteen wide centered column" v-if="advert.isValid">
                             <template v-if="!advert.deleted_at">
-                                <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
+                                <div :id="'manage-btn-2-'+_uid" class="ui labeled icon top right pointing dropdown button">
                                     <i class="wrench icon"></i>
                                     <span class="text">{{ manageAdvertLabel }}</span>
                                     <div class="menu">
                                         <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
                                         <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
+                                        <div class="item" v-on:click="backToTopMe()">{{ backToTopLabel }}</div>
                                         <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
                                     </div>
                                 </div>
@@ -427,6 +429,7 @@
             priceInfoLabel: String,
             manageAdvertLabel: String,
             renewAdvertLabel: String,
+            backToTopLabel: String,
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             validationOnProgressLabel: String,
@@ -494,6 +497,9 @@
             },
             renewMe: function () {
                 window.location.assign(this.advert.renewUrl);
+            },
+            backToTopMe: function () {
+                window.location.assign(this.advert.backToTopUrl);
             },
             seeMe: function () {
                 window.location.assign(this.advert.url);

@@ -52,3 +52,6 @@
 
 <h4 class="ui header">Renouvellement d'une annonce</h4>
 @include('global.cg.v.options.renew')
+
+<h4 class="ui header">Remontée en tête de liste d'une annonce</h4>
+@include('global.cg.v.options.backToTop')

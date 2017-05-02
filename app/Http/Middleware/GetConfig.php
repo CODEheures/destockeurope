@@ -33,6 +33,7 @@ class GetConfig
             config(['runtime.adsFrequency' => $parameters->adsFrequency]);
             config(['runtime.advertsPerPage' => $parameters->advertsPerPage]);
             config(['runtime.urgentCost' => $parameters->urgentCost]);
+            config(['runtime.backToTopCost' => $parameters->backToTopCost]);
             config(['runtime.videoCost' => $parameters->videoCost]);
             config(['runtime.renewCost' => $parameters->renewCost]);
             config(['runtime.nbFreePictures' => $parameters->nbFreePictures]);

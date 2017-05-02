@@ -48,7 +48,7 @@ class Advert extends Model {
     ];
     protected $dates = ['deleted_at', 'online_at', 'ended_at'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
-    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'destroyUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
+    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'backToTopUrl', 'destroyUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -105,6 +105,10 @@ class Advert extends Model {
 
     public function getRenewUrlAttribute() {
         return route('advert.renew', ['id' => $this->id]);
+    }
+
+    public function getBackToTopUrlAttribute() {
+        return route('advert.backToTop', ['id' => $this->id]);
     }
 
     public function getDestroyUrlAttribute() {
@@ -188,6 +192,14 @@ class Advert extends Model {
             }
         }
         return $bread;
+    }
+
+    public function isEligibleForBackToTop() {
+        $firstAdvert = Advert::orderBy('online_at', 'DESC')->first();
+        if($firstAdvert->id != $this->id && is_null($this->deleted_at) &&  Carbon::parse($this->ended_at)->subDay(1)->isFuture() ){
+            return true;
+        }
+        return false;
     }
 
     public function setBreadCrumb($ancestors) {
