@@ -13,12 +13,13 @@
             filter-ribbon-close="{{ trans('strings.view_filter_ribbon_close') }}"
             filter-search-place-holder="{{ trans('strings.form_input_search_label3') }}"
 
-            route-get-invoices-list="{{ route('invoice.list') }}"
+            route-get-invoices-list="{{ route('admin.invoice.list') }}"
             no-result-found-header="{{ trans('strings.view_advert_list_no_result_header') }}"
             no-result-found-message="{{ trans('strings.view_advert_list_no_result_message') }}"
             actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
             see-invoice-label="{{ trans('strings.view_manage_invoices_list_see_button_label') }}"
-            list-header-paypal="{{ trans('strings.view_manage_invoices_list_header_paypal') }}"
+            list-header-paypal-capture="{{ trans('strings.view_manage_invoices_list_header_paypal_capture') }}"
+            list-header-paypal-void="{{ trans('strings.view_manage_invoices_list_header_paypal_void') }}"
             list-header-usermail="{{ trans('strings.view_manage_invoices_list_header_usermail') }}"
             list-header-date="{{ trans('strings.view_manage_invoices_list_header_date') }}"
 

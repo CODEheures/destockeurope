@@ -132,7 +132,7 @@ class AdvertsManager
             //alert advert with online_at > lifeTime-$days
             $counter = 0;
             $alertEndOfAdverts = null;
-            $alertEndOfAdverts = $advertZero ? $advertZero : Advert::EligibleForMailRenew($days)->get();
+            $alertEndOfAdverts = $advertZero ? $advertZero : Advert::eligibleForMailRenew($days)->get();
 
             foreach ($alertEndOfAdverts as $advert){
                 $counter++;

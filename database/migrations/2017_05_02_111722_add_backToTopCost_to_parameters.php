@@ -14,7 +14,7 @@ class AddBackToTopCostToParameters extends Migration
     public function up()
     {
         Schema::table('parameters', function (Blueprint $table) {
-            $table->smallInteger('backToTopCost')->default(9);
+            $table->smallInteger('backToTopCost')->default(5);
         });
     }
 

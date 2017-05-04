@@ -62,12 +62,6 @@ class SocialiteController extends Controller
         } else {
             Auth::login($authUser, true);
 
-//            if ($authUser->role == 'admin') {
-//                $route = route('admin.monitor.index');
-//            } else {
-//                $route = route('customer.monitor.index');
-//            }
-
             $route = ($this->redirectTo);
 
             if($this->isNewOauthUser) {

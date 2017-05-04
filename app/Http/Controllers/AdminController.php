@@ -11,6 +11,7 @@ use App\Invoice;
 use App\Jobs\TransferMedias;
 use App\Parameters;
 use App\Stats;
+use App\User;
 use Carbon\Carbon;
 use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Http\Request;
@@ -32,6 +33,10 @@ class AdminController extends Controller
         $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;
     }
+
+    /************************************************************************
+     * PUBLIC PARTS: RETURN VIEWS
+     *************************************************************************/
 
     /**
      * Return the view for manage application
@@ -58,6 +63,20 @@ class AdminController extends Controller
         $title = trans('strings.menu_advert_delegations');
         return view('user.personnalList', compact('routeList', 'title'));
     }
+
+    /**
+     * Return the view of invoice manager
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function invoiceManage(Request $request) {
+        $request->session()->flash('clear',true);
+        return view('invoice.manage');
+    }
+
+
+    /************************************************************************
+     * PUBLIC PARTS: RETURN INFOS
+     *************************************************************************/
 
     /**
      * Return JSON of Stats for XMLHttpRequest
@@ -100,6 +119,64 @@ class AdminController extends Controller
     }
 
     /**
+     * Get the Progress of Transfert XMLHttpRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function progressTransfertMedias() {
+        $parameters = Parameters::latest()->first();
+        return response()->json([$parameters->isOnTransfert, $parameters->transfertPartial, $parameters->transfertTotal]);
+    }
+
+    /**
+     * Return the typ of welcome page XMLHttpRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getWelcomeType() {
+        $list = Database::getEnumValues('parameters', 'welcomeType');
+        $transList = [];
+        foreach ($list as $key => $item) {
+            $transList[$key] =  $item;
+        }
+        return response()->json($transList);
+    }
+
+    /**
+     * Return the view of user manager
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function userManage(Request $request) {
+        $request->session()->flash('clear',true);
+        return view('user.manage');
+    }
+
+    /**
+     *
+     * Return invoice file
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function showInvoice($id) {
+        $invoice = Invoice::find($id);
+        $file = null;
+        if(!is_null($invoice)){
+            $file = InvoiceUtils::getInvoiceFile($invoice);
+        }
+
+        if(!is_null($file)){
+            return response(file_get_contents($file),200)->header("Content-Type", "application/pdf");
+        } else {
+            return response(trans('strings.view_all_error_download_file'), 404);
+        }
+
+    }
+
+
+    /************************************************************************
+     * PUBLIC PARTS: PROCESS
+     *************************************************************************/
+
+    /**
      * Patch App Parameters
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
@@ -109,6 +186,26 @@ class AdminController extends Controller
         if($parameters){
             $parameters->update($request->all());
             $parameters->save();
+            return response('ok',200);
+        } else {
+            return response('error', 500);
+        }
+    }
+
+    /**
+     * Patch App Parameters
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function patchRole($id, Request $request) {
+        $user = User::find($id);
+        if($user
+            && $user->id != auth()->user()->id
+            && $request->has('role')
+            && in_array($request->role, User::ROLES))
+        {
+            $user->role = $request->role;
+            $user->save();
             return response('ok',200);
         } else {
             return response('error', 500);
@@ -154,28 +251,6 @@ class AdminController extends Controller
         } else {
             return response(trans('strings.admin_transfert_image_exist'), 500);
         }
-    }
-
-    /**
-     * Get the Progress of Transfert XMLHttpRequest
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function progressTransfertMedias() {
-        $parameters = Parameters::latest()->first();
-        return response()->json([$parameters->isOnTransfert, $parameters->transfertPartial, $parameters->transfertTotal]);
-    }
-
-    /**
-     * Return the typ of welcome page XMLHttpRequest
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getWelcomeType() {
-        $list = Database::getEnumValues('parameters', 'welcomeType');
-        $transList = [];
-        foreach ($list as $key => $item) {
-            $transList[$key] =  $item;
-        }
-        return response()->json($transList);
     }
 
     /**
@@ -332,13 +407,33 @@ class AdminController extends Controller
     }
 
     /**
-     * Return the view of dashboard
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * Tempo tests
      */
-    public function invoiceManage(Request $request) {
-        $request->session()->flash('clear',true);
-        return view('invoice.manage');
+    public function tempo(){
+
     }
+
+    /**
+     *
+     * Reset app with testGame
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function testGame() {
+        $testFiles = Storage::disk('local')->files('/testGame');
+        foreach ($testFiles as $file){
+            if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
+                Storage::disk('local')->copy($file, PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
+            }
+        }
+        $exitCode = Artisan::call('migrate:refresh', ['--seed' => true]);
+        return redirect(route('home'))->with('info', $exitCode . ': ' . trans('strings.admin_testGame_memo'));
+    }
+
+
+    /************************************************************************
+     * PUBLIC PARTS: RETURN LISTS
+     *************************************************************************/
 
     /**
      *
@@ -353,33 +448,17 @@ class AdminController extends Controller
         $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
         $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
 
-
-        //$invoices = Invoice::orderBy('created_at', 'desc');
-//        $invoices = DB::table('invoices')
-//            ->join('users', 'users.id', '=', 'invoices.user_id')
-//            ->select(array(DB::raw('users.email as usermail'),DB::raw('invoices.*')));
         $invoices = Invoice::join('users', 'users.id', '=', 'invoices.user_id')
             ->select(array(DB::raw('users.email as usermail'),DB::raw('invoices.*')));
 
+        $search = null;
         if($isSearchRequest){
             $search = $request->search;
-            $invoices = $invoices->where(function ($query) use ($search) {
-                $query->where('invoices.invoice_number', 'LIKE', '%' .$search .'%')
-                    ->orWhere('invoices.captureId', 'LIKE', '%' .$search .'%')
-                    ->orWhere('users.email', 'LIKE', '%' .$search .'%')
-                    ->orWhere(function ($query) use ($search) {
-                        try {
-                            $query->whereDate('invoices.created_at', Carbon::parse($search));
-                        } catch (\Exception $e) {
-
-                        }
-                    });
-            });
+        } elseif ($isSearchResults) {
+            $search = $request->resultsFor;
         }
 
-        //search results before range price
-        if($isSearchResults){
-            $search = $request->resultsFor;
+        if(!is_null($search)){
             $invoices = $invoices->where(function ($query) use ($search) {
                 $query->where('invoices.invoice_number', 'LIKE', '%' .$search .'%')
                     ->orWhere('invoices.captureId', 'LIKE', '%' .$search .'%')
@@ -407,41 +486,61 @@ class AdminController extends Controller
                 'url' => '#',
                 'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
             ];
-            //choisir $loadCompleteAdverts[1] pour trier les resultats par categories
             return response()->json(['results'=> $invoices, 'action' => $action]);
         } else {
             return response()->json(['invoices'=> $invoices]);
         }
     }
 
+    /**
+     *
+     * Get List of Invoices
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listUsers(Request $request) {
 
-    public function showInvoice($id) {
-        $invoice = Invoice::find($id);
-        $file = null;
-        if(!is_null($invoice)){
-            $file = InvoiceUtils::getInvoiceFile($invoice);
+        //Init vars
+        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
+        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
+
+        $users = User::query();
+
+        $search = null;
+        if($isSearchRequest){
+            $search = $request->search;
+        } elseif ($isSearchResults){
+            $search = $request->resultsFor;
         }
 
-        if(!is_null($file)){
-            return response(file_get_contents($file),200)->header("Content-Type", "application/pdf");
+        //search results before range price
+        if(!is_null($search)){
+            $users = $users->where(function ($query) use ($search) {
+                $query->where('email', 'LIKE', '%' .$search .'%')
+                    ->orWhere('name', 'LIKE', '%' .$search .'%')
+                    ->orWhere('compagnyName', 'LIKE', '%' .$search .'%')
+                    ->orWhere('registrationNumber', 'LIKE', '%' .$search .'%')
+                    ->orWhere('role', 'LIKE', '%' .$search .'%');
+            });
+        }
+
+        if($isSearchRequest) {
+            $countSearch = $users->count();
+            $users = $users->orderBy('created_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
         } else {
-            return response(trans('strings.view_all_error_download_file'), 404);
+            $users = $users->orderBy('created_at', 'desc')->paginate(10);
         }
 
-    }
-
-    public function tempo(){
-
-    }
-
-    public function testGame() {
-        $testFiles = Storage::disk('local')->files('/testGame');
-        foreach ($testFiles as $file){
-            if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
-                Storage::disk('local')->copy($file, PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
-            }
+        if($isSearchRequest){
+            $action = [
+                'url' => '#',
+                'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
+            ];
+            return response()->json(['results'=> $users, 'action' => $action]);
+        } else {
+            $users->makeVisible(['role', 'rolesList', 'urlSetRole'])->toArray();
+            return response()->json(['users'=> $users]);
         }
-        $exitCode = Artisan::call('migrate:refresh', ['--seed' => true]);
-        return redirect(route('home'))->with('info', $exitCode . ': ' . trans('strings.admin_testGame_memo'));
     }
 }

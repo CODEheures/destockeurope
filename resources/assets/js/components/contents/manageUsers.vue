@@ -7,37 +7,39 @@
         <div class="row">
             <div class="sixteen wide column">
                 <div class="row filters">
-                    <invoice-filter
+                    <user-filter
                             :filter-ribbon-open="filterRibbonOpen"
                             :filter-ribbon-close="filterRibbonClose"
                             :update="update"
                             :filter="filter"
-                            :route-search="dataRouteGetInvoicesList"
+                            :route-search="dataRouteGetUsersList"
                             :min-length-search="parseInt(filterMinLengthSearch)"
                             :flag-reset-search="dataFlagResetSearch"
                             :search-place-holder="filterSearchPlaceHolder"
-                    ></invoice-filter>
+                    ></user-filter>
                 </div>
             </div>
             <div class="sixteen wide column">
                 <div class="row">
-                    <invoices-by-list
-                            :route-get-invoices-list="dataRouteGetInvoicesList"
+                    <users-by-list
+                            :route-get-users-list="dataRouteGetUsersList"
                             :no-result-found-header="noResultFoundHeader"
                             :no-result-found-message="noResultFoundMessage"
                             :actual-locale="actualLocale"
-                            :see-invoice-label="seeInvoiceLabel"
-                            :list-header-paypal-capture="listHeaderPaypalCapture"
-                            :list-header-paypal-void="listHeaderPaypalVoid"
+                            :role-user-label="roleUserLabel"
                             :list-header-usermail="listHeaderUsermail"
-                            :list-header-date="listHeaderDate"
-                    ></invoices-by-list>
+                            :list-header-name="listHeaderName"
+                            :list-header-compagny="listHeaderCompagny"
+                            :list-header-register-date="listHeaderRegisterDate"
+                            :list-header-vat-number="listHeaderVatNumber"
+                            :list-vat-verification-number-label="listVatVerificationNumberLabel"
+                    ></users-by-list>
                 </div>
                 <div class="ui right aligned grid">
                     <div class="sixteen wide column pagination">
                         <pagination
                                 :pages="paginate"
-                                :route-get-list="dataRouteGetInvoicesList"
+                                :route-get-list="dataRouteGetUsersList"
                                 :page-label="pageLabel"
                                 :page-previous-label="pagePreviousLabel"
                                 :page-next-label="pageNextLabel">
@@ -66,15 +68,17 @@
             'filterRibbonClose',
             'filterSearchPlaceHolder',
             //invoiceByList component
-            'routeGetInvoicesList',
+            'routeGetUsersList',
             'noResultFoundHeader',
             'noResultFoundMessage',
             'actualLocale',
-            'seeInvoiceLabel',
-            'listHeaderPaypalCapture',
-            'listHeaderPaypalVoid',
+            'roleUserLabel',
             'listHeaderUsermail',
-            'listHeaderDate',
+            'listHeaderName',
+            'listHeaderCompagny',
+            'listHeaderRegisterDate',
+            'listHeaderVatNumber',
+            'listVatVerificationNumberLabel',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',
@@ -87,7 +91,7 @@
                 message: '',
                 filter: {},
                 paginate: {},
-                dataRouteGetInvoicesList: '',
+                dataRouteGetUsersList: '',
                 dataFlagResetSearch: false,
                 oldChoice: {},
                 update: false
@@ -117,7 +121,7 @@
                 $('html, body').animate({
                     scrollTop: 0
                 }, 600, function () {
-                    that.dataRouteGetInvoicesList = url;
+                    that.dataRouteGetUsersList = url;
                 });
             });
             this.$on('refreshResults', function (query) {
@@ -143,7 +147,7 @@
                 this.sendMessage = !this.sendMessage;
             },
             urlForFilter(init=false) {
-                let urlBase = init ? this.routeGetInvoicesList : this.dataRouteGetInvoicesList;
+                let urlBase = init ? this.routeGetUsersList : this.dataRouteGetUsersList;
                 let parsed = Parser.parse(urlBase, true);
                 parsed.search=undefined;
                 parsed.query={};
@@ -170,7 +174,7 @@
             },
             updateResults(){
                 this.update = !this.update;
-                this.dataRouteGetInvoicesList = this.urlForFilter(true);
+                this.dataRouteGetUsersList = this.urlForFilter(true);
             },
             updateFilter(result){
                 let oldFilter= _.cloneDeep(this.filter);

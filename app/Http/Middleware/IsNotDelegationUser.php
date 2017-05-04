@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 
 class IsNotDelegationUser
@@ -16,7 +17,7 @@ class IsNotDelegationUser
     public function handle($request, Closure $next)
     {
 
-        if(auth()->check() && auth()->user()->role != 'delegation') {
+        if(auth()->check() && auth()->user()->role != User::ROLES[User::ROLE_DELEGATION]) {
             return $next($request);
         }
 

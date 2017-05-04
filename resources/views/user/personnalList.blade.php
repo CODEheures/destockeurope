@@ -11,10 +11,10 @@
                 modal-yes="{{ trans('strings.modal_yes') }}"
 
                 route-get-adverts-list="{{ $routeList }}"
-                route-update-price-coefficient="{{ auth()->user()->role=='admin' ? route('advert.updateCoefficient'):'' }}"
+                route-update-price-coefficient="{{ auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN] ? route('advert.updateCoefficient'):'' }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
                 ads-frequency="{{ 0 }}"
-                is-admin-user="{{ auth()->user()->role=='admin' }}"
+                is-admin-user="{{ auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN] }}"
                 is-personnal-list="{{ true }}"
                 advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
                 advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"

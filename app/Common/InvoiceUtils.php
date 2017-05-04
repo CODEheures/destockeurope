@@ -3,7 +3,6 @@
 namespace App\Common;
 
 
-use App\Advert;
 use App\Invoice;
 use App\Notifications\ReportAppError;
 use App\User;
@@ -67,7 +66,7 @@ trait InvoiceUtils
             return true;
         } catch (\Exception $e) {
             //Mail to admin
-            $recipients = User::where('role', '=', 'admin')->get();
+            $recipients = User::where('role', '=', User::ROLES[User::ROLE_ADMIN])->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
             $message = trans('strings.mail_apperror_pdfinvoice_line', ['advertNumber' => is_null($advert) ? '0' : $advert->id, 'mailClient' => $advert->user->email]);

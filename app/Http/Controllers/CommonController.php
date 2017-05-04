@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 
-use App\Advert;
 use App\Anonymous;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
@@ -227,7 +226,7 @@ class CommonController extends Controller
         $name = $request->name;
         $message = $request->message;
 
-        $recipients = User::whereRole('admin')->get();
+        $recipients = User::whereRole(User::ROLES[User::ROLE_ADMIN])->get();
         foreach ($recipients as $recipient){
             $recipient->notify(new GlobalMessage($senderMail, $name, $message));
         }

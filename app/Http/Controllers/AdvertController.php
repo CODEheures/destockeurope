@@ -20,6 +20,7 @@ use App\Notifications\AdvertApprove;
 use App\Notifications\AdvertBackToTop;
 use App\Notifications\AdvertNotApprove;
 use App\Notifications\AdvertRenew;
+use App\Notifications\CustomerContactDelegation;
 use App\Notifications\CustomerContactSeller;
 use App\Notifications\InvoicePdf;
 use App\Notifications\ReportAdvert;
@@ -418,12 +419,18 @@ class AdvertController extends Controller
                 $advert->load(['user' => function ($query) {
                     $query->select(['id','role','phone']);
                 }]);
+
+                //bypass user phone on delegation
+                if($advert->is_delegation){
+                    $advert->user->phone = env('DELEGATE_PHONE');
+                }
+
                 $ancestors = $advert->category->getAncestors();
                 $ancestors->add($advert->category);
                 $advert->setBreadCrumb($ancestors);
                 $advert->setBookmarkCount();
                 return view('advert.show', compact('advert'));
-        } elseif ($advert && $request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == 'admin')) {
+        } elseif ($advert && $request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])) {
             return response()->json(['advert' => $advert]);
         } else {
             return redirect(route('home'));
@@ -626,8 +633,8 @@ class AdvertController extends Controller
     public function destroy($id)
     {
         $advert = Advert::find($id);
-        if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == 'admin')){
-            if (auth()->user()->role == 'admin') {
+        if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])){
+            if (auth()->user()->role == User::ROLES[User::ROLE_ADMIN]) {
                 $advert->isValid = false;
                 $advert->save();
             }
@@ -897,9 +904,17 @@ class AdvertController extends Controller
             $senderPhone = $request->phone;
             $senderCompagnyName = $request->compagnyName;
             $message = $request->message;
-            $recipient = $advert->user;
 
-            $recipient->notify(new CustomerContactSeller($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
+            //ByPass if delegation
+            if($advert->is_delegation){
+                $advert->load('user');
+                $recipient = User::where('email', env('DELEGATE_MAIL'))->first();
+                $recipient->notify(new CustomerContactDelegation($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
+            } else {
+                $recipient = $advert->user;
+                $recipient->notify(new CustomerContactSeller($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
+            }
+
             return response('ok', 200);
         } else {
             return response(trans('strings.mail_customerToSeller_send_error'), 409);
@@ -929,7 +944,7 @@ class AdvertController extends Controller
             $senderMail = $request->email;
             $message = $request->message;
 
-            $recipients = User::whereRole('admin')->get();
+            $recipients = User::whereRole(User::ROLES[User::ROLE_ADMIN])->get();
             foreach ($recipients as $recipient){
                 $recipient->notify(new ReportAdvert($advert, $senderMail, $message));
             }
@@ -1479,7 +1494,7 @@ class AdvertController extends Controller
     private function notifyEvent(Advert $advert, Invoice $invoice = null, $disapproveReason = null) {
 
         if(!is_null($invoice) && file_exists($invoice->filePath)){
-            $recipients = User::where('role', '=', 'admin')->get();
+            $recipients = User::where('role', '=', User::ROLES[User::ROLE_ADMIN])->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
             foreach ($recipients as $recipient){
@@ -1512,7 +1527,7 @@ class AdvertController extends Controller
      * @param Advert $advert
      */
     private function notifyError(Advert $advert) {
-        $recipients = User::where('role', '=', 'admin')->get();
+        $recipients = User::where('role', '=', User::ROLES[User::ROLE_ADMIN])->get();
         $senderMail = env('SERVICE_MAIL_FROM');
         $senderName = ucfirst(config('app.name'));
         $message = trans('strings.mail_apperror_renew_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);

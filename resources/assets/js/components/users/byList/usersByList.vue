@@ -3,7 +3,7 @@
         <div class="ui active inverted dimmer" v-if="!isLoaded">
             <div class="ui large text loader">Loading</div>
         </div>
-        <template v-if="invoicesList.length==0">
+        <template v-if="usersList.length==0">
             <div class="item ads">
                 <div class="ui info message">
                     <div class="header">{{ noResultFoundHeader }}</div>
@@ -11,27 +11,29 @@
                 </div>
             </div>
         </template>
-        <template v-if="invoicesList.length>0">
+        <template v-if="usersList.length>0">
             <table class="ui celled table">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{ listHeaderDate }}</th>
+                        <th>{{ listHeaderRegisterDate }}</th>
                         <th>{{ listHeaderUsermail }}</th>
-                        <th>{{ listHeaderPaypalCapture }}</th>
-                        <th>{{ listHeaderPaypalVoid }}</th>
-                        <th></th>
+                        <th>{{ listHeaderName }}</th>
+                        <th>{{ listHeaderCompagny }}</th>
+                        <th>{{ listHeaderVatNumber }}</th>
+                        <th>{{ roleUserLabel }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="(invoice, index) in invoicesList">
-                        <invoices-by-list-item
-                                :invoice="invoice"
+                    <template v-for="(user, index) in usersList">
+                        <users-by-list-item
+                                :user="user"
                                 :actual-locale="actualLocale"
-                                :see-invoice-label="seeInvoiceLabel"
-                        ></invoices-by-list-item>
+                                :role-user-label="roleUserLabel"
+                        ></users-by-list-item>
                     </template>
                 </tbody>
+
             </table>
         </template>
     </div>
@@ -40,34 +42,36 @@
 <script>
     export default {
         props: {
-            routeGetInvoicesList: String,
+            routeGetUsersList: String,
             flagForceReload: {
                 type: Boolean,
                 default: false,
                 required: false
             },
             actualLocale: String,
-            seeInvoiceLabel: String,
+            roleUserLabel: String,
             noResultFoundHeader: String,
             noResultFoundMessage: String,
-            listHeaderPaypalCapture: String,
-            listHeaderPaypalVoid: String,
             listHeaderUsermail: String,
-            listHeaderDate: String
+            listHeaderName: String,
+            listHeaderCompagny: String,
+            listHeaderRegisterDate: String,
+            listHeaderVatNumber: String,
+            listVatVerificationNumberLabel: String
         },
         data: () => {
             return {
-                invoicesList: [],
+                usersList: [],
                 isLoaded: false,
             };
         },
         mounted () {
             let that = this;
-            this.$watch('routeGetInvoicesList', function () {
-                this.getInvoicesList();
+            this.$watch('routeGetUsersList', function () {
+                this.getUsersList();
             });
             this.$watch('flagForceReload', function () {
-                this.getInvoicesList();
+                this.getUsersList();
             });
             this.$on('sendToast', function (message) {
                 that.$parent.$emit('sendToast', message);
@@ -75,23 +79,38 @@
             this.$on('loadError', function () {
                 that.$parent.$emit('loadError');
             });
+            this.$on('changeRole', function (event) {
+                that.patchUserRole(event.url, event.role);
+            })
         },
         methods: {
-            getInvoicesList: function (withLoadIndicator) {
+            getUsersList: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                this.invoicesList = [];
-                axios.get(this.routeGetInvoicesList)
+                this.usersList = [];
+                axios.get(this.routeGetUsersList)
                     .then(function (response) {
-                        that.invoicesList = (response.data).invoices.data;
+                        that.usersList = (response.data).users.data;
                         that.isLoaded = true;
-                        let paginate = response.data.invoices;
+                        let paginate = response.data.users;
                         delete paginate.data;
                         that.$parent.$emit('paginate', paginate);
                     })
                     .catch(function (error) {
                         that.$parent.$emit('loadError')
+                    });
+            },
+            patchUserRole: function (url, role) {
+                this.isLoaded = false;
+                let that = this;
+                axios.patch(url, {'role': role})
+                    .then(function (response) {
+                        that.getUsersList();
+                    })
+                    .catch(function (error) {
+                        that.getUsersList();
+                        that.$parent.$emit('loadError');
                     });
             }
         }

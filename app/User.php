@@ -15,6 +15,12 @@ class User extends Authenticatable
     use Notifiable;
     use SoftDeletes;
     use CascadeSoftDeletes;
+
+    const ROLE_USER = 0;
+    const ROLE_DELEGATION = 1;
+    const ROLE_ADMIN = 2;
+    const ROLES = ['user', 'delegation', 'admin'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -48,14 +54,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $cascadeDeletes = ['adverts', 'bookmarks'];
-    protected $hidden = [
-        'password', 'remember_token', 'role'
-    ];
-    protected $appends = array('isDelegation');
+    protected $appends = array('isDelegation', 'rolesList', 'urlSetRole');
     protected $casts = [
         'confirmed' => 'Boolean',
     ];
-
+    protected $hidden = [
+        'password', 'remember_token', 'role', 'rolesList', 'urlSetRole'
+    ];
     public function oAuthProvider($providers) {
         $refOauth = '';
         foreach ($providers as $testId) {
@@ -90,7 +95,15 @@ class User extends Authenticatable
     }
 
     public function getIsDelegationAttribute() {
-        return $this->role=='delegation';
+        return $this->role==static::ROLES[static::ROLE_DELEGATION];
+    }
+
+    public function getRolesListAttribute() {
+        return static::ROLES;
+    }
+
+    public function getUrlSetRoleAttribute() {
+        return route('admin.user.role.patch', ['id' => $this->id]);
     }
 
     //local scopes

@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 60)->nullable()->default(null);
             $table->boolean('confirmed')->default(false);
             $table->string('confirmationToken',60)->nullable()->default(null);
-            $table->string('role')->default('user'); //user, admin
+            $table->string('role')->default(\App\User::ROLES[\App\User::ROLE_USER]); //user, admin
             $table->string('avatar')->nullable()->default(null);
             $table->string('currency', 3)->default(env('DEFAULT_CURRENCY'));
             $table->string('locale',50)->default(env('DEFAULT_LOCALE'));

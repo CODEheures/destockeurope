@@ -47,7 +47,7 @@ class Invoice extends Model {
     }
 
     public function getUrlAttribute() {
-        return route('invoice.show', ['id' => $this->id]);
+        return route('admin.invoice.show', ['id' => $this->id]);
     }
 
     public function getStoragePathAttribute() {

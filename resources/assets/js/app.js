@@ -64,10 +64,15 @@ Vue.component('adverts-by-list', require('./components/adverts/byList/advertsByL
 Vue.component('adverts-by-list-item', require('./components/adverts/byList/item.vue'));
 Vue.component('advert-by-id', require('./components/adverts/byId/advertById.vue'));
 
-//invoices
+//invoices manager
 Vue.component('invoice-filter', require('./components/invoices/invoicesFilter.vue'));
 Vue.component('invoices-by-list', require('./components/invoices/byList/invoicesByList.vue'));
 Vue.component('invoices-by-list-item', require('./components/invoices/byList/item.vue'));
+
+//users manager
+Vue.component('user-filter', require('./components/users/usersFilter.vue'));
+Vue.component('users-by-list', require('./components/users/byList/usersByList.vue'));
+Vue.component('users-by-list-item', require('./components/users/byList/item.vue'));
 
 //Portal page vue
 Vue.component('portal', require('./components/contents/portal.vue'));
@@ -84,8 +89,10 @@ Vue.component('manage-categories', require('./components/contents/manageCategori
 Vue.component('manage-application', require('./components/contents/manageApplication.vue'));
 //Dashboard page
 Vue.component('dashboard-admin', require('./components/contents/dashboardAdmin.vue'));
-//review payment page
+//mange invoices page
 Vue.component('manage-invoices', require('./components/contents/manageInvoices.vue'));
+//mange users page
+Vue.component('manage-users', require('./components/contents/manageUsers.vue'));
 //createAdvert page
 Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
 //approve advert page

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Advert;
 use App\Common\MoneyUtils;
+use App\User;
 use Illuminate\Support\Str;
 
 class AdvertObserver
@@ -16,7 +17,7 @@ class AdvertObserver
      */
     public function creating(Advert $advert)
     {
-        if(auth()->check() && auth()->user()->role=='delegation'){
+        if(auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_DELEGATION]){
             $advert->is_delegation = true;
         }
         $advert->slug='';
