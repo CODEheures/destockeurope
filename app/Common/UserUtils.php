@@ -4,12 +4,17 @@ namespace App\Common;
 
 
 use App\Anonymous;
+use App\User;
 
 trait UserUtils
 {
-    public static function haveCompleteAccount() {
+    public static function haveCompleteAccount($userparam=null) {
         if(auth()->check()) {
-            $user = auth()->user();
+            if(!is_null($userparam) && auth()->user()->role==User::ROLES[User::ROLE_ADMIN]){
+                $user = $userparam;
+            } else {
+                $user = auth()->user();
+            }
             if(
                 $user->name != null
                 && $user->compagnyName != null

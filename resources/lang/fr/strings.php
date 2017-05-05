@@ -237,6 +237,7 @@ return [
     'view_all_error_filesize_message' => 'Fichier trop gros!',
     'view_all_error_invalid_image_message' => 'Image invalide',
     'view_all_ineligible_advert_action' => 'Désolé, mais cette annonce n\'est pas éligible pour cette action',
+    'view_all_incomplete_account' => 'Désolé, mais l\'utilisateur doit avoir un compte avec toutes les informations remplies',
     'view_all_urgent' => 'urgent',
     'view_all_negociate' => 'à negocier',
     'view_all_all' => 'Tous',
@@ -286,6 +287,7 @@ return [
     'view_manage_users_list_header_register_date' => 'Date d\'enregistrement',
     'view_manage_users_list_header_vat_number' => 'N° TVA',
     'view_manage_users_list_vat_verification_number_label' => 'N° de vérification',
+    'view_manage_users_list_header_address' => 'Adresse',
     'view_manage_invoices_list_role_button_label' => 'Rôle',
 
     'view_portal_list_header_1' => 'Fins de series',

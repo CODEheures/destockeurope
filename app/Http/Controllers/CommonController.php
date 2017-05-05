@@ -39,6 +39,7 @@ class CommonController extends Controller
             'imageServer'
         ]]);
         $this->middleware('isEmailConfirmed', ['only' => ['mines']]);
+        $this->middleware('isNotValidator', ['only' => ['mines']]);
     }
 
     /**

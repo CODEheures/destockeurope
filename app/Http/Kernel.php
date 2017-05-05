@@ -68,6 +68,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'isAdminUser' => \App\Http\Middleware\IsAdminUser::class,
+        'isValidatorOrAdminUser' => \App\Http\Middleware\IsValidatorOrAdminUser::class,
+        'isNotValidator' => \App\Http\Middleware\IsNotValidator::class,
         'isNotDelegationUser' => \App\Http\Middleware\IsNotDelegationUser::class,
         'appOnDevelMode' => \App\Http\Middleware\AppOnDevelMode::class,
         'haveCompleteAccount' => \App\Http\Middleware\HaveCompleteAccount::class,

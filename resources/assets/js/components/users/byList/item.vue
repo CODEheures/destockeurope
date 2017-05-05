@@ -7,16 +7,15 @@
             {{ getMoment(user.created_at) }}
         </td>
         <td>
-            {{ user.email }}
-        </td>
-        <td>
             {{ user.name }}
+            <br />{{ user.email }}
         </td>
         <td>
             {{ user.compagnyName }}
+            <br />{{ user.registrationNumber }}
         </td>
         <td>
-            {{ user.registrationNumber }}
+            {{ getFormattedAddress() }}
         </td>
         <td>
             <div :id="'dropdown-'+_uid" class="ui selection dropdown">
@@ -57,6 +56,14 @@
             getMoment: function (dateTime) {
                 moment.locale(this.actualLocale);
                 return moment(dateTime).format('L');
+            },
+            getFormattedAddress() {
+                let geoloc = JSON.parse(this.user.geoloc);
+                if(geoloc != undefined && geoloc != null && Array.isArray(geoloc) && 'formatted_address' in geoloc[0]){
+                    return geoloc[0].formatted_address
+                } else {
+                    return '';
+                }
             }
         }
     }

@@ -12,15 +12,14 @@
             </div>
         </template>
         <template v-if="usersList.length>0">
-            <table class="ui celled table">
+            <table class="ui small compact celled table">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>{{ listHeaderRegisterDate }}</th>
-                        <th>{{ listHeaderUsermail }}</th>
-                        <th>{{ listHeaderName }}</th>
-                        <th>{{ listHeaderCompagny }}</th>
-                        <th>{{ listHeaderVatNumber }}</th>
+                        <th>{{ listHeaderName }} / {{ listHeaderUsermail }}</th>
+                        <th>{{ listHeaderCompagny }} / {{ listHeaderVatNumber }}</th>
+                        <th>{{ listHeaderAddress }}</th>
                         <th>{{ roleUserLabel }}</th>
                     </tr>
                 </thead>
@@ -57,7 +56,8 @@
             listHeaderCompagny: String,
             listHeaderRegisterDate: String,
             listHeaderVatNumber: String,
-            listVatVerificationNumberLabel: String
+            listVatVerificationNumberLabel: String,
+            listHeaderAddress: String
         },
         data: () => {
             return {
@@ -109,8 +109,13 @@
                         that.getUsersList();
                     })
                     .catch(function (error) {
+                        if (error.response && error.response.status == 409) {
+                            let msg = error.response.data;
+                            that.$parent.$emit('sendToast', {'message': msg, 'type':'error'});
+                        } else {
+                            that.$parent.$emit('loadError');
+                        }
                         that.getUsersList();
-                        that.$parent.$emit('loadError');
                     });
             }
         }

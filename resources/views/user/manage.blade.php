@@ -24,6 +24,7 @@
             list-header-register-date="{{ trans('strings.view_manage_users_list_header_register_date') }}"
             list-header-vat-number="{{ trans('strings.view_manage_users_list_header_vat_number') }}"
             list-vat-verification-number-label="{{ trans('strings.view_manage_users_list_vat_verification_number_label') }}"
+            list-header-address="{{ trans('strings.view_manage_users_list_header_address') }}"
 
             page-label="{{ trans('strings.view_pagination_page_label') }}"
             page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"

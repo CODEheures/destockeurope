@@ -7,6 +7,7 @@ use App\Common\AdvertsManager;
 use App\Common\InvoiceUtils;
 use App\Common\PicturesManager;
 use App\Common\StatsManager;
+use App\Common\UserUtils;
 use App\Invoice;
 use App\Jobs\TransferMedias;
 use App\Parameters;
@@ -28,7 +29,8 @@ class AdminController extends Controller
     private $vimeoManager;
 
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
-        $this->middleware('isAdminUser');
+        $this->middleware('isAdminUser', ['except' => ['delegations', 'invoiceManage']]);
+        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'invoiceManage']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;
@@ -204,6 +206,9 @@ class AdminController extends Controller
             && $request->has('role')
             && in_array($request->role, User::ROLES))
         {
+            if($request->role == User::ROLES[User::ROLE_DELEGATION] && !UserUtils::haveCompleteAccount($user)){
+                return response(trans('strings.view_all_incomplete_account'), 409);
+            }
             $user->role = $request->role;
             $user->save();
             return response('ok',200);
@@ -419,7 +424,12 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function testGame() {
+    public function testGame($quantity=null) {
+        if(!is_null($quantity)){
+            config(['runtime.tempo.seeder.quantity' => $quantity]);
+        } else {
+            config(['runtime.tempo.seeder.quantity' => 1]);
+        }
         $testFiles = Storage::disk('local')->files('/testGame');
         foreach ($testFiles as $file){
             if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){

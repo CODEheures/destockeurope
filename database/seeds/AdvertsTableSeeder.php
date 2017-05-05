@@ -40,7 +40,7 @@ class AdvertsTableSeeder extends Seeder
             10,
             0,
             'Super sac à dos antivol à prix cassé !' . PHP_EOL . 'A l’extérieur, il a beaucoup de poches cachées pour le transport urbain.' . PHP_EOL . 'A l’intérieur, des compartiments rembourrés pour ordinateur portable.',
-            true,
+            false,
             35.00,
             false,
             null
@@ -61,7 +61,7 @@ class AdvertsTableSeeder extends Seeder
             50,
             1,
             'Super lot de 700 enceintes bluetooth avec motif géométrique',
-            true,
+            false,
             5.00,
             false,
             "BLT-125-FE3"
@@ -88,7 +88,7 @@ class AdvertsTableSeeder extends Seeder
             10,
             2,
             'Lot de 1000 montres "MOON" de la marque LEXON.' . PHP_EOL . 'Résistant à l\'eau.' . PHP_EOL . 'Mouvement SEIKO.',
-            true,
+            false,
             10.00,
             true,
             "LM2424"
@@ -105,7 +105,7 @@ class AdvertsTableSeeder extends Seeder
             100,
             0,
             'Superbe lot de 8000 mini radio "DOLMEN" de la marque LEXON' . PHP_EOL . 'Disponible en plusieurs couleurs.',
-            true,
+            false,
             8.00,
             false,
             null
@@ -149,7 +149,7 @@ class AdvertsTableSeeder extends Seeder
             30,
             3,
             'A saisir rapidement, 500 sacs à dos de marque EastPack.' . PHP_EOL . 'TOP QUALITY. Envoi rapide.',
-            true,
+            false,
             57.65,
             false,
             null
@@ -166,76 +166,79 @@ class AdvertsTableSeeder extends Seeder
 
 
         //J - 1
-        $this->advertCreate(
-            $user2->id,
-            $cat_loisirs_autres->id,
-            Carbon::now()->subDays(1),
-            4900,
-            '42 kilos de crayons tout venant',
-            ['99999999999999999999999999999999'],
-            42,
-            5,
-            4,
-            'Ces crayons neuf sont vendus au kilo sans possibilité de choisir.' . PHP_EOL . 'Prix imbattable',
-            true,
-            1527.50,
-            false,
-            null
-        );
+        for($i=1; $i<=config('runtime.tempo.seeder.quantity'); $i++) {
 
-        $this->advertCreate(
-            $user2->id,
-            $cat_info_composants->id,
-            Carbon::now()->subDays(1),
-            1234,
-            '200 clés USB3 suite à depot de bilan',
-            ['00000000000000000000000000000000'],
-            200,
-            50,
-            0,
-            'Exceptionnel: ' . PHP_EOL .'Clés très haute capacités de 128Gb USB3.0' . PHP_EOL . 'Matériel de qualité sui vous assurera une revente dans des délai courts',
-            true,
-            18.95,
-            false,
-            "HCU3-128"
-        );
+            $this->advertCreate(
+                $user2->id,
+                $cat_loisirs_autres->id,
+                Carbon::now()->subDays(1),
+                4900,
+                '42 kilos de crayons tout venant',
+                ['99999999999999999999999999999999'],
+                42,
+                5,
+                4,
+                'Ces crayons neuf sont vendus au kilo sans possibilité de choisir.' . PHP_EOL . 'Prix imbattable',
+                true,
+                1527.50,
+                false,
+                null
+            );
 
-        $this->advertCreate(
-            $user2->id,
-            $cat_image_sons->id,
-            Carbon::now()->subDays(1),
-            0,
-            'Lunettes Réalité Virtuelle pliables.',
-            ['e6274b78ea4710d8bc6c597997ab3466','d1bf34a836f0e09067b15d581659f771','9231afb06cb5197625602e181ff4a44d'],
-            1500,
-            50,
-            0,
-            'Lunettes Réalité Virtuelle pliables. '
-            . PHP_EOL . PHP_EOL .'Ces lunettes de réalité Virtuelle en silicone sont idéales quand vous êtes en déplacement. Elles sont légères, pliables et assez réduites pour être glissées dans une poche. Glissez votre téléphone dans la fente et lancez une application VR pour plonger dans le monde de la réalité virtuelle en quelques secondes.'
-            . PHP_EOL . PHP_EOL . 'Pour apprécier des vidéos 3D, des jeux VR et encore plus! Convient à la plupart des smartphones.'
-            . PHP_EOL . PHP_EOL . 'Fourni sous écrin cadeau. Plastique ABS et silicone. 116.',
-            true,
-            3.64,
-            false,
-            null
-        );
+            $this->advertCreate(
+                $user2->id,
+                $cat_info_composants->id,
+                Carbon::now()->subDays(1),
+                1234,
+                '200 clés USB3 suite à depot de bilan',
+                ['00000000000000000000000000000000'],
+                200,
+                50,
+                0,
+                'Exceptionnel: ' . PHP_EOL . 'Clés très haute capacités de 128Gb USB3.0' . PHP_EOL . 'Matériel de qualité sui vous assurera une revente dans des délai courts',
+                true,
+                18.95,
+                false,
+                "HCU3-128"
+            );
 
-        $this->advertCreate(
-            $user2->id,
-            $cat_bagagerie->id,
-            Carbon::now()->subDays(1),
-            0,
-            'Housse à vêtements Rollor®',
-            ['bca2c9301a0cebc344f7f5149a14c036','9c7d1bbc5aa4f85cfe2d6b4595b54b66','8da67b8454d9e01b562d0ba5d9882721'],
-            2420,
-            50,
-            0,
-            'Housse à vêtements Rollor® avec système anti-froissage. La technologie anti-froissage rollology® permet de compacter les vêtements sans risque de froissage.',
-            true,
-            59.00,
-            false,
-            null
-        );
+            $this->advertCreate(
+                $user2->id,
+                $cat_image_sons->id,
+                Carbon::now()->subDays(1),
+                0,
+                'Lunettes Réalité Virtuelle pliables.',
+                ['e6274b78ea4710d8bc6c597997ab3466', 'd1bf34a836f0e09067b15d581659f771', '9231afb06cb5197625602e181ff4a44d'],
+                1500,
+                50,
+                0,
+                'Lunettes Réalité Virtuelle pliables. '
+                . PHP_EOL . PHP_EOL . 'Ces lunettes de réalité Virtuelle en silicone sont idéales quand vous êtes en déplacement. Elles sont légères, pliables et assez réduites pour être glissées dans une poche. Glissez votre téléphone dans la fente et lancez une application VR pour plonger dans le monde de la réalité virtuelle en quelques secondes.'
+                . PHP_EOL . PHP_EOL . 'Pour apprécier des vidéos 3D, des jeux VR et encore plus! Convient à la plupart des smartphones.'
+                . PHP_EOL . PHP_EOL . 'Fourni sous écrin cadeau. Plastique ABS et silicone. 116.',
+                true,
+                3.64,
+                false,
+                null
+            );
+
+            $this->advertCreate(
+                $user2->id,
+                $cat_bagagerie->id,
+                Carbon::now()->subDays(1),
+                0,
+                'Housse à vêtements Rollor®',
+                ['bca2c9301a0cebc344f7f5149a14c036', '9c7d1bbc5aa4f85cfe2d6b4595b54b66', '8da67b8454d9e01b562d0ba5d9882721'],
+                2420,
+                50,
+                0,
+                'Housse à vêtements Rollor® avec système anti-froissage. La technologie anti-froissage rollology® permet de compacter les vêtements sans risque de froissage.',
+                true,
+                59.00,
+                false,
+                null
+            );
+        }
 
 
         $stat4 = $statsManager->getStats();
@@ -329,7 +332,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
                 $advert->isValid = true;
             }
         } else {
-            $advert->isValid = null;
+            $advert->isValid = $setNullValid;
         }
 
         if($advert->isValid) {

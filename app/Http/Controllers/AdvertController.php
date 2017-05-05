@@ -71,7 +71,8 @@ class AdvertController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report']]);
         $this->middleware('isEmailConfirmed', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report', 'bookmarks', 'unbookmarks']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
-        $this->middleware('isAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient']]);
+        $this->middleware('isNotValidator', ['only' => ['mines', 'bookmarks', 'create', 'store', 'backToTop']]);
+        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient']]);
         $this->pictureManager  = $picturesManager;
         $this->vimeoManager = $vimeoManager;
 

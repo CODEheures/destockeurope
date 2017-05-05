@@ -33,6 +33,7 @@
                             :list-header-register-date="listHeaderRegisterDate"
                             :list-header-vat-number="listHeaderVatNumber"
                             :list-vat-verification-number-label="listVatVerificationNumberLabel"
+                            :list-header-address="listHeaderAddress"
                     ></users-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -79,6 +80,7 @@
             'listHeaderRegisterDate',
             'listHeaderVatNumber',
             'listVatVerificationNumberLabel',
+            'listHeaderAddress',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',
@@ -105,6 +107,9 @@
             //On load Error
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
+            });
+            this.$on('sendToast', function (event) {
+                this.sendToast(event.message, event.type);
             });
 
             //on reconstruit le filtre

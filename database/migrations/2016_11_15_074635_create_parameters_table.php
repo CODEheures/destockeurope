@@ -28,7 +28,7 @@ class CreateParametersTable extends Migration
             $table->smallInteger('videoCost')->default(9);
             $table->tinyInteger('nbFreePictures')->default(3);
             $table->tinyInteger('nbMaxPictures')->default(6);
-            $table->enum('welcomeType', ['1', '2'])->default(2);
+            $table->enum('welcomeType', ['1', '2'])->default(1);
             $table->smallInteger('advertResumeLenght')->default(120);
             $table->tinyInteger('maxNumberOfSearchResults')->default(3);
             $table->tinyInteger('minLengthSearch')->default(3);
