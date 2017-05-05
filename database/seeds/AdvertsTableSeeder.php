@@ -61,7 +61,7 @@ class AdvertsTableSeeder extends Seeder
             50,
             1,
             'Super lot de 700 enceintes bluetooth avec motif géométrique',
-            false,
+            null,
             5.00,
             false,
             "BLT-125-FE3"
@@ -88,7 +88,7 @@ class AdvertsTableSeeder extends Seeder
             10,
             2,
             'Lot de 1000 montres "MOON" de la marque LEXON.' . PHP_EOL . 'Résistant à l\'eau.' . PHP_EOL . 'Mouvement SEIKO.',
-            false,
+            null,
             10.00,
             true,
             "LM2424"
@@ -105,7 +105,7 @@ class AdvertsTableSeeder extends Seeder
             100,
             0,
             'Superbe lot de 8000 mini radio "DOLMEN" de la marque LEXON' . PHP_EOL . 'Disponible en plusieurs couleurs.',
-            false,
+            null,
             8.00,
             false,
             null
@@ -122,7 +122,7 @@ class AdvertsTableSeeder extends Seeder
             50,
             0,
             'Destockage de 250 GEAR VR.'. PHP_EOL .'Très haute qualité, zero defaut et garanties 1 an.',
-            false,
+            null,
             119.95,
             false,
             "VR-A5632"
@@ -149,7 +149,7 @@ class AdvertsTableSeeder extends Seeder
             30,
             3,
             'A saisir rapidement, 500 sacs à dos de marque EastPack.' . PHP_EOL . 'TOP QUALITY. Envoi rapide.',
-            false,
+            null,
             57.65,
             false,
             null
@@ -326,15 +326,7 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
 
         $advert->isPublish = true;
 
-        if(is_null($setNullValid)) {
-            $loterie = rand(0,1);
-            if($loterie==1){
-                $advert->isValid = true;
-            }
-        } else {
-            $advert->isValid = $setNullValid;
-        }
-
+        $advert->isValid = $setNullValid;
         if($advert->isValid) {
             $advert->online_at = $created_at;
             $advert->setEndedAt();
