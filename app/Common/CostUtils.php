@@ -42,7 +42,7 @@ trait CostUtils
 
     public static function getCost($nbPictures, $isUrgent=false, $haveVideo=false, $isRenew=false, $isBackToTop=false){
         $cost = 0;
-        if(!auth()->user()->isDelegation) {
+        if(!auth()->user()->isSupplier) {
             $cost += self::getCostPictures($nbPictures);
             $cost += self::getCostIsUrgent($isUrgent);
             $cost += self::getCostVideo($haveVideo);

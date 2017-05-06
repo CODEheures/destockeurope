@@ -36,12 +36,6 @@
                             :is-disabled="true"
                     ></type-radio-button>
                 </div>
-                <!--<type-radio-button-->
-                        <!--:route-get-list-type="routeGetListType"-->
-                        <!--:first-menu-name="listTypeFirstMenuName"-->
-                        <!--:old-choice="isDelegation ? 'bid' : oldType"-->
-                        <!--:is-disabled="isDelegation==true"-->
-                <!--&gt;</type-radio-button>-->
                 <div class="field">
                     <categories-dropdown-menu
                             :route-category="routeCategory"

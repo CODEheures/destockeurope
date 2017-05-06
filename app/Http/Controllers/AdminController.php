@@ -206,7 +206,7 @@ class AdminController extends Controller
             && $request->has('role')
             && in_array($request->role, User::ROLES))
         {
-            if($request->role == User::ROLES[User::ROLE_DELEGATION] && !UserUtils::haveCompleteAccount($user)){
+            if($request->role == User::ROLES[User::ROLE_SUPPLIER] && !UserUtils::haveCompleteAccount($user)){
                 return response(trans('strings.view_all_incomplete_account'), 409);
             }
             $user->role = $request->role;

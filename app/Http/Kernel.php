@@ -70,7 +70,7 @@ class Kernel extends HttpKernel
         'isAdminUser' => \App\Http\Middleware\IsAdminUser::class,
         'isValidatorOrAdminUser' => \App\Http\Middleware\IsValidatorOrAdminUser::class,
         'isNotValidator' => \App\Http\Middleware\IsNotValidator::class,
-        'isNotDelegationUser' => \App\Http\Middleware\IsNotDelegationUser::class,
+        'isNotSupplierUser' => \App\Http\Middleware\IsNotSupplierUser::class,
         'appOnDevelMode' => \App\Http\Middleware\AppOnDevelMode::class,
         'haveCompleteAccount' => \App\Http\Middleware\HaveCompleteAccount::class,
         'captcha' => \App\Http\Middleware\Captcha::class,

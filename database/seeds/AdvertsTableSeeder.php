@@ -21,7 +21,7 @@ class AdvertsTableSeeder extends Seeder
         $statsManager = new StatsManager();
 
         $user2 = \App\User::where('email', '=', 'vendeur@destockeurope.com')->first();
-        $user4 = \App\User::where('email', '=', 'delegation@destockeurope.com')->first();
+        $user4 = \App\User::where('email', '=', 'fournisseur@destockeurope.com')->first();
 
         $cat_bagagerie = \App\Category::where('description', '=', '{"fr":"Bagagerie & sacs","en":"Luggage & Bags"}')->first();
         $cat_image_sons = \App\Category::where('description', '=', '{"fr":"Image & son","en":"Picture & sound"}')->first();

@@ -17,7 +17,7 @@ class AdvertObserver
      */
     public function creating(Advert $advert)
     {
-        if(auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_DELEGATION]){
+        if(auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_SUPPLIER]){
             $advert->is_delegation = true;
         }
         $advert->slug='';

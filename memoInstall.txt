@@ -27,6 +27,4 @@ client_max_body_size 10M;
 //      cd vendor/mpdf
 //      chmod 775 tmp
 //      chmod 775 ttfFontsdata
-//TODO creer administration compte de delegation
-//TODO bug validation compte apres maj tva
 //TODO indicateur de chargement images

@@ -279,6 +279,7 @@ class Advert extends Model {
     public function scopeDelegations($query) {
         if(auth()->check() && (auth()->user()->role == User::ROLES[User::ROLE_VALIDATOR] || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])){
             return $query->where('is_delegation', true)
+                ->where('isValid', '<>', false)
                 ->where('adverts.deleted_at', null)
                 ->orderBy('adverts.online_at', 'desc');
         }

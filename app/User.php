@@ -17,10 +17,12 @@ class User extends Authenticatable
     use CascadeSoftDeletes;
 
     const ROLE_USER = 0;
-    const ROLE_DELEGATION = 1;
+    const ROLE_SUPPLIER = 1;
     const ROLE_ADMIN = 2;
     const ROLE_VALIDATOR = 3;
-    const ROLES = ['user', 'delegation', 'admin', 'validator'];
+    const ROLE_ACCOUNTANT = 4;
+    const ROLE_INTERMEDIARY = 5;
+    const ROLES = ['user', 'supplier', 'admin', 'validator', 'accountant', 'intermediary'];
 
     /**
      * The attributes that are mass assignable.
@@ -55,7 +57,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $cascadeDeletes = ['adverts', 'bookmarks'];
-    protected $appends = array('isDelegation', 'rolesList', 'urlSetRole');
+    protected $appends = array('isSupplier', 'rolesList', 'urlSetRole');
     protected $casts = [
         'confirmed' => 'Boolean',
     ];
@@ -95,8 +97,8 @@ class User extends Authenticatable
         return $result;
     }
 
-    public function getIsDelegationAttribute() {
-        return $this->role==static::ROLES[static::ROLE_DELEGATION];
+    public function getIsSupplierAttribute() {
+        return $this->role==static::ROLES[static::ROLE_SUPPLIER];
     }
 
     public function getRolesListAttribute() {

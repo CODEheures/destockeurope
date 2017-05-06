@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use App\User;
 use Closure;
 
-class IsNotDelegationUser
+class IsNotSupplierUser
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class IsNotDelegationUser
     public function handle($request, Closure $next)
     {
 
-        if(auth()->check() && auth()->user()->role != User::ROLES[User::ROLE_DELEGATION]) {
+        if(auth()->check() && auth()->user()->role != User::ROLES[User::ROLE_SUPPLIER]) {
             return $next($request);
         }
 

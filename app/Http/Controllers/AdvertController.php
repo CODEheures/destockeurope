@@ -20,7 +20,7 @@ use App\Notifications\AdvertApprove;
 use App\Notifications\AdvertBackToTop;
 use App\Notifications\AdvertNotApprove;
 use App\Notifications\AdvertRenew;
-use App\Notifications\CustomerContactDelegation;
+use App\Notifications\CustomerContactIntermediary;
 use App\Notifications\CustomerContactSeller;
 use App\Notifications\InvoicePdf;
 use App\Notifications\ReportAdvert;
@@ -579,7 +579,7 @@ class AdvertController extends Controller
                 }
 
                 DB::commit();
-                if(auth()->user()->isDelegation){
+                if(auth()->user()->isSupplier){
                     return redirect(route('advert.publish', ['id' =>$advert->id]));
                 } else {
                     return redirect(route('user.completeAccount', ['id' =>$advert->id]));
@@ -909,8 +909,10 @@ class AdvertController extends Controller
             //ByPass if delegation
             if($advert->is_delegation){
                 $advert->load('user');
-                $recipient = User::where('email', env('DELEGATE_MAIL'))->first();
-                $recipient->notify(new CustomerContactDelegation($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
+                $recipients = User::whereRole(User::ROLES[User::ROLE_INTERMEDIARY])->get();
+                foreach ($recipients as $recipient){
+                    $recipient->notify(new CustomerContactIntermediary($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
+                }
             } else {
                 $recipient = $advert->user;
                 $recipient->notify(new CustomerContactSeller($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
@@ -1494,8 +1496,9 @@ class AdvertController extends Controller
      */
     private function notifyEvent(Advert $advert, Invoice $invoice = null, $disapproveReason = null) {
 
+        //Send Invoice to Accountant
         if(!is_null($invoice) && file_exists($invoice->filePath)){
-            $recipients = User::where('role', '=', User::ROLES[User::ROLE_ADMIN])->get();
+            $recipients = User::whereRole(User::ROLES[User::ROLE_ACCOUNTANT])->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
             foreach ($recipients as $recipient){
@@ -1528,7 +1531,7 @@ class AdvertController extends Controller
      * @param Advert $advert
      */
     private function notifyError(Advert $advert) {
-        $recipients = User::where('role', '=', User::ROLES[User::ROLE_ADMIN])->get();
+        $recipients = User::whereRole(User::ROLES[User::ROLE_ADMIN])->get();
         $senderMail = env('SERVICE_MAIL_FROM');
         $senderName = ucfirst(config('app.name'));
         $message = trans('strings.mail_apperror_renew_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);

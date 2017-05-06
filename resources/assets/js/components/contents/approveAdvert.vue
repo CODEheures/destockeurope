@@ -93,8 +93,8 @@
 
                         <div class="ui doubling three column grid">
                             <div class="column" v-for="(picture,index) in advert.pictures" v-if="picture.isThumb">
-                                    <div :class="!advert.user.isDelegation && index>=(advertNbFreePicture*2) ? 'ui pink segment' : 'ui segment'">
-                                        <a class="ui pink right ribbon label" v-if="!advert.user.isDelegation && index>=(advertNbFreePicture*2)">{{ advertPayPhotoSingular }}</a>
+                                    <div :class="!advert.user.isSupplier && index>=(advertNbFreePicture*2) ? 'ui pink segment' : 'ui segment'">
+                                        <a class="ui pink right ribbon label" v-if="!advert.user.isSupplier && index>=(advertNbFreePicture*2)">{{ advertPayPhotoSingular }}</a>
                                         <div class="ui stackable grid">
                                             <div class="sixteen wide column">
                                                 <img :src="routeGetThumb+'/'+picture.hashName+'/'+advert.id" class="ui rounded medium centered image" />
@@ -113,7 +113,7 @@
 
 
                         <div class="ui grid">
-                            <div class="right floated sixteen wide mobile eight wide tablet five wide computer column" v-if="!advert.user.isDelegation">
+                            <div class="right floated sixteen wide mobile eight wide tablet five wide computer column" v-if="!advert.user.isSupplier">
                                 <div class="ui form">
                                     <div class="grouped fields">
                                         <div class="field">
