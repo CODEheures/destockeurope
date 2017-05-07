@@ -86,5 +86,8 @@
     <script src="{{ mix("js/vendor.js") }}"></script>
     <script src="{{ mix("js/app.js") }}"></script>
     @yield('scripts')
+    @if(env('APP_URL')=='https://destockeurope.com')
+        @include('plugins.googleAnalytic.tracking')
+    @endif
 </body>
 </html>
