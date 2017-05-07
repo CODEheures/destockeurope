@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+    <url>
+        <loc>https://destockeurope.com/</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/home</loc>
+        <changefreq>daily</changefreq>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/whoAreWe</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/joinUs</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/environmentalImpact</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/ads</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/legalMentions</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/cgu</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/diffusionRules</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/cgv</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/help</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/contact</loc>
+    </url>
+    <url>
+        <loc>https://destockeurope.com/areInOtherCountry</loc>
+    </url>
+</urlset>
