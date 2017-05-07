@@ -68,7 +68,7 @@
                         <div class="ui banner test ad" data-text="banner"></div>
                     </div>
                     <div class="sixteen wide mobile only column">
-                        <div class="ui half banner test centered ad" data-text="Half Banner"></div>
+                        <horizontal-234x60></horizontal-234x60>
                     </div>
                 </div>
                 @yield('content')

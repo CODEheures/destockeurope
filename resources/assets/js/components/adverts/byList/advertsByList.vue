@@ -19,10 +19,10 @@
                 <div class="item ads">
                     <div class="ui grid">
                         <div class="tablet only computer only row">
-                            <div class=" ui centered banner test ad" data-text="banner 468x60"></div>
+                            <horizontal-468x60></horizontal-468x60>
                         </div>
                         <div class="mobile only row">
-                            <div class="ui centered half banner test ad" data-text="half banner 234x60"></div>
+                            <horizontal-234x60></horizontal-234x60>
                         </div>
                     </div>
                 </div>
@@ -59,10 +59,10 @@
                     <div class="item ads">
                         <div class="ui grid">
                             <div class="tablet only computer only row">
-                                <div class=" ui centered banner test ad" data-text="banner 468x60"></div>
+                                <horizontal-468x60></horizontal-468x60>
                             </div>
                             <div class="mobile only row">
-                                <div class="ui centered half banner test ad" data-text="half banner 234x60"></div>
+                                <horizontal-234x60></horizontal-234x60>
                             </div>
                         </div>
                     </div>

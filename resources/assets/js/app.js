@@ -44,6 +44,8 @@ Vue.component('masterads', require('./components/generics/ads/master.vue'));
 Vue.component('double-square', require('./components/generics/ads/doubleSquares.vue'));
 Vue.component('vertical-160x600', require('./components/generics/ads/vertical160x600.vue'));
 Vue.component('horizontal-728x90', require('./components/generics/ads/horizontal728x90.vue'));
+Vue.component('horizontal-468x60', require('./components/generics/ads/horizontal468x60.vue'));
+Vue.component('horizontal-234x60', require('./components/generics/ads/horizontal234x60.vue'));
 
 //Catégories
 Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));
