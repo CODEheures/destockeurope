@@ -225,6 +225,7 @@ return [
     'option_isBackToTop_name' => 'Remonter mon annonce en tête de liste',
     'option_haveVideo_name' => 'Vidéo',
 
+    'view_all_error_session_expired' => 'Pour votre sécurité votre session a expiré. Reconnectez-vous pour continuer',
     'view_all_error_load_message' => 'Ho non! Erreur de chargement :-( , essayez de rafraichir la page',
     'view_all_error_reload_message' => 'rafraichir (F5) la page SVP',
     'view_all_error_add_message' => 'Ho non! L\'ajout a échoué',

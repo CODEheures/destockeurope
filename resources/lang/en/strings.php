@@ -225,6 +225,7 @@ return [
     'option_isBackToTop_name' => 'Back my advert to top of the list',
     'option_haveVideo_name' => 'Vidéo',
 
+    'view_all_error_session_expired' => 'For your security your session has expired. You need to log in to continue',
     'view_all_error_load_message' => 'Ho no! Load error :-( , try to refresh the page',
     'view_all_error_reload_message' => 'refresh (F5) the page Please',
     'view_all_error_add_message' => 'Ho no! Adding Fails error :-(',
