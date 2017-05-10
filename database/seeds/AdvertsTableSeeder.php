@@ -40,7 +40,7 @@ class AdvertsTableSeeder extends Seeder
             10,
             0,
             'Super sac à dos antivol à prix cassé !' . PHP_EOL . 'A l’extérieur, il a beaucoup de poches cachées pour le transport urbain.' . PHP_EOL . 'A l’intérieur, des compartiments rembourrés pour ordinateur portable.',
-            false,
+            null,
             35.00,
             false,
             null
