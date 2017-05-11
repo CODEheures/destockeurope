@@ -265,7 +265,10 @@ class Advert extends Model {
         return $query->withTrashed()
             ->where('user_id', '=', auth()->id())
             ->where('isPublish', true)
-            ->where('isValid', '<>', false)
+            ->where(function ($query_in) {
+                $query_in->where('isValid', null)
+                    ->orWhere('isValid', true);
+            })
             ->where(function ($query_in) {
                 $query_in->where('online_at', '<', Carbon::now())
                     ->orWhere(function ($query_in2) {
