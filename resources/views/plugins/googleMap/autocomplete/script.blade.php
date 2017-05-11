@@ -1,7 +1,7 @@
 <script type="text/javascript">
     function initAutocomplete() {
-        var destockMap = new DestockMap();
-        destockMap.initAutocomplete('filter_location');
+        window.destockMap = new DestockMap();
+        window.destockMap.initAutocomplete('filter_location');
     }
 </script>
 <script async defer

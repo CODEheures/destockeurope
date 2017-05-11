@@ -65,6 +65,7 @@ Vue.component('advert-filter', require('./components/adverts/advertsFilter.vue')
 Vue.component('adverts-by-list', require('./components/adverts/byList/advertsByList.vue'));
 Vue.component('adverts-by-list-item', require('./components/adverts/byList/item.vue'));
 Vue.component('advert-by-id', require('./components/adverts/byId/advertById.vue'));
+Vue.component('advert-highlight', require('./components/adverts/highlight/advertHighlight.vue'));
 
 //invoices manager
 Vue.component('invoice-filter', require('./components/invoices/invoicesFilter.vue'));

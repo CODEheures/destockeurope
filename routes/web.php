@@ -157,6 +157,8 @@
         Route::get('/bookmarks', ['as' => 'advert.bookmarks', 'uses' => 'AdvertController@bookmarks']);
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
         Route::get('/backToTop/{id}', ['as' => 'advert.backToTop', 'uses' => 'AdvertController@backToTop']);
+        Route::get('/highlight/{id}', ['as' => 'advert.highlight', 'uses' => 'AdvertController@highlight']);
+        Route::get('/getHighlight/', ['as' => 'getHighlight', 'uses' => 'AdvertController@getHighlight']);
     });
     Route::resource('advert', 'AdvertController', ['except' => ['show']]);
     Route::get('/{slug}', ['as' => 'advert.show', 'uses' => 'AdvertController@show']);

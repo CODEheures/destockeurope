@@ -68,8 +68,8 @@ class AdvertController extends Controller
      * @param PicturesManager $picturesManager
      */
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
-        $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report']]);
-        $this->middleware('isEmailConfirmed', ['except' => ['index', 'show', 'getListType', 'sendMail', 'report', 'bookmarks', 'unbookmarks']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report']]);
+        $this->middleware('isEmailConfirmed', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report', 'bookmarks', 'unbookmarks']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isNotValidator', ['only' => ['mines', 'bookmarks', 'create', 'store', 'backToTop']]);
         $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient']]);
@@ -334,6 +334,19 @@ class AdvertController extends Controller
             $response[$advert->id] = $advert;
         }
         return response()->json($response);
+    }
+
+    /**
+     *
+     * return list of mines adverts
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getHighlight()
+    {
+        $adverts = Advert::highlight()->get();
+        $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
+        return response()->json(['adverts'=> $loadCompleteAdverts[0]]);
     }
 
 
@@ -716,16 +729,49 @@ class AdvertController extends Controller
     }
 
     /**
+ *
+ * Back To Top an Advert
+ *
+ * @param $id
+ * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+ */
+    public function backToTop($id)
+    {
+        $advert = Advert::find($id);
+        if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForBackToTop()){
+            try {
+                //Create Invoice
+                DB::beginTransaction();
+                $invoice = Invoice::create([
+                    'user_id' => $advert->user->id,
+                    'advert_id' => $advert->id,
+                    'state' => Invoice::STATE_BACKTOTOP,
+                    'cost' => CostUtils::getCost(null, null, false, false, true),
+                    'options' => $this->setOptions(0, false, false, false, true)
+                ]);
+                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
+                $advert->save();
+                DB::commit();
+                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name')]));
+            } catch (\Exception $e) {
+                return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
+            }
+        } else {
+            return redirect(route('mines'))->withErrors(trans('strings.view_all_ineligible_advert_action'));
+        }
+    }
+
+    /**
      *
      * Back To Top an Advert
      *
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function backToTop($id)
+    public function hightlight($id)
     {
         $advert = Advert::find($id);
-        if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForBackToTop()){
+        if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForHighlight()){
             try {
                 //Create Invoice
                 DB::beginTransaction();

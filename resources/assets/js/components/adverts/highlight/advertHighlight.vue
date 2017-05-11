@@ -1,0 +1,40 @@
+<template>
+    <div class="ui centered grid">
+        <div class="fourteen wide column">
+            <a :href="advert.url" class="ui card">
+                <div class="image">
+                    <img class="ui bordered rounded image" :src="advert.thumb">
+                </div>
+                <div class="extra">
+                    <div class="left floated author">
+                        {{ advert.title }}
+                    </div>
+                    <div class="right floated author">
+                        <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
+                        <span :class="advert.isNegociated ? 'ui tiny blue right floated left pointing label price negociated' : 'ui tiny yellow right floated left pointing label price'">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            advert: Object,
+            isNegociatedLabel: String,
+            totalQuantityLabel: String
+        },
+        data: () => {
+            return {
+
+            };
+        },
+        mounted () {
+
+        },
+        methods: {
+        }
+    }
+</script>

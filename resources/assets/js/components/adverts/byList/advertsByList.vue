@@ -44,6 +44,7 @@
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
                             :back-to-top-label="backToTopLabel"
+                            :highlight-label="highlightLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
@@ -83,6 +84,7 @@
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
                             :back-to-top-label="backToTopLabel"
+                            :highlight-label="highlightLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
@@ -142,6 +144,7 @@
             manageAdvertLabel: String,
             renewAdvertLabel: String,
             backToTopLabel: String,
+            highlightLabel: String,
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             validationOnProgressLabel: String,

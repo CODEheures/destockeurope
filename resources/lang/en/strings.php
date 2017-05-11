@@ -344,6 +344,7 @@ return [
     'view_advert_show_manage_label' => 'Manage',
     'view_advert_show_renew_label' => 'Renew it',
     'view_advert_show_backToTop_label' => 'Go back to the top of the list',
+    'view_advert_show_highlight_label' => 'Put in Front',
     'view_advert_show_delete2_label' => 'Delete it',
     'view_advert_show_see_label' => 'See it',
     'view_advert_show_update_label' => 'Update',

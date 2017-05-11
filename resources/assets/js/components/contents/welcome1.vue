@@ -113,12 +113,22 @@
                     </div>
                 </div>
             </div>
-            <div id="welcome-ads" class="computer only four wide column">
-                <div>
-                    <div class="sixteen right aligned column">
-                        <vertical-160x600></vertical-160x600>
+            <div class="computer only four wide column">
+                <div class="ui centered grid">
+                    <div class="sixteen wide column" v-for="highLightAdvert in dataHighlightAdverts">
+                        <advert-highlight
+                                :advert="highLightAdvert"
+                                :is-negociated-label="isNegociatedLabel"
+                                :total-quantity-label="totalQuantityLabel"
+                        ></advert-highlight>
+                    </div>
+                    <div class="sixteen wide column">
+                        <vertical-160x600
+                            :centered="true"
+                        ></vertical-160x600>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -183,7 +193,9 @@
             //paginate component
             'pageLabel',
             'pagePreviousLabel',
-            'pageNextLabel'
+            'pageNextLabel',
+            //advertHighLight component
+            'routeGetHighlight'
         ],
         data: () => {
             return {
@@ -203,7 +215,8 @@
                 dataRouteGetAdvertList: '',
                 dataFlagResetSearch: false,
                 oldChoice: {},
-                update: false
+                update: false,
+                dataHighlightAdverts: []
             }
         },
         mounted () {
@@ -259,6 +272,7 @@
                     }
                 }
             });
+            this.getHighLightAdvert();
             this.$on('paginate', function (result) {
                 this.paginate=result;
             });
@@ -517,6 +531,16 @@
                             });
                     }
                 }).modal('show');
+            },
+            getHighLightAdvert: function () {
+                let that = this;
+                axios.get(this.routeGetHighlight)
+                    .then(function (response) {
+                        that.dataHighlightAdverts = (response.data).adverts;
+                    })
+                    .catch(function (error) {
+                        //that.sendToast(that.loadErrorMessage, 'error');
+                    });
             }
         }
     }

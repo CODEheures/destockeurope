@@ -50,6 +50,7 @@
                             :manage-advert-label="manageAdvertLabel"
                             :renew-advert-label="renewAdvertLabel"
                             :back-to-top-label="backToTopAdvertLabel"
+                            :highlight-label="highlightAdvertLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
@@ -119,6 +120,7 @@
             'manageAdvertLabel',
             'renewAdvertLabel',
             'backToTopAdvertLabel',
+            'highlightAdvertLabel',
             'deleteAdvertLabel',
             'seeAdvertLabel',
             'validationOnProgressLabel',

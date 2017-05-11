@@ -344,6 +344,7 @@ return [
     'view_advert_show_manage_label' => 'Gerer',
     'view_advert_show_renew_label' => 'Renouveler',
     'view_advert_show_backToTop_label' => 'Remonter en tête de liste',
+    'view_advert_show_highlight_label' => 'Mettre à la Une',
     'view_advert_show_delete2_label' => 'Supprimer',
     'view_advert_show_see_label' => 'Voir',
     'view_advert_show_update_label' => 'Mettre à jour',

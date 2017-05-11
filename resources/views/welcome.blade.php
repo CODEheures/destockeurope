@@ -58,6 +58,8 @@
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
                 page-next-label="{{ trans('strings.view_pagination_next_label') }}"
+
+                route-get-highlight="{{ route('getHighlight') }}"
         ></welcome1>
     @elseif(config('runtime.welcomeType')=='2')
         <welcome2
@@ -116,6 +118,8 @@
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
                 page-next-label="{{ trans('strings.view_pagination_next_label') }}"
+
+                route-get-highlight="{{ route('getHighlight') }}"
         ></welcome2>
     @endif
 @endsection

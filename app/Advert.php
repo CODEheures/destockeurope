@@ -18,6 +18,7 @@ class Advert extends Model {
     protected $fillable = [
         'online_at',
         'ended_at',
+        'highlight_until',
         'user_id',
         'category_id',
         'type',
@@ -46,9 +47,9 @@ class Advert extends Model {
         'manu_ref',
         'nextUrl'
     ];
-    protected $dates = ['deleted_at', 'online_at', 'ended_at'];
+    protected $dates = ['deleted_at', 'online_at', 'ended_at', 'highlight_until'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
-    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'backToTopUrl', 'destroyUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
+    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'backToTopUrl', 'highlightUrl', 'destroyUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -111,6 +112,10 @@ class Advert extends Model {
         return route('advert.backToTop', ['id' => $this->id]);
     }
 
+    public function getHighlightUrlAttribute() {
+        return route('advert.highlight', ['id' => $this->id]);
+    }
+
     public function getDestroyUrlAttribute() {
         return route('advert.destroy', ['id' => $this->id]);
     }
@@ -119,6 +124,13 @@ class Advert extends Model {
         $ended = Carbon::parse($this->ended_at);
         $isPast = Carbon::create($ended->year, $ended->month, $ended->day, 0,0,0)->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now());
         return (!$this->is_delegation && $this->isValid && ($this->deleted_at || $isPast));
+    }
+
+    public function getIsEligibleForHighlightAttribute() {
+        $ended = Carbon::parse($this->ended_at);
+        $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isPast(Carbon::now());
+        $isNotHighlight = is_null($this->highlight_until) || Carbon::parse($this->highlight_until)->isPast(Carbon::now());
+        return (!$this->is_delegation && $this->isValid && $isNotHighlight && $isQuiteYoung);
     }
 
     public function getThumbAttribute() {
@@ -299,5 +311,9 @@ class Advert extends Model {
 
     public function scopeInBookmarks($query, $bookmarks){
         return $query->whereIn('id', $bookmarks)->validOnline()->orderBy('online_at', 'desc');
+    }
+
+    public function scopeHighlight($query){
+        return $query->validOnline()->where('highlight_until' ,'>=', Carbon::now())->inRandomOrder()->take(env('HIGHLIGHT_QUANTITY'));
     }
 }

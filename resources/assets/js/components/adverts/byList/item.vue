@@ -275,6 +275,7 @@
                                                 <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
                                                 <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
                                                 <div class="item" v-on:click="backToTopMe()">{{ backToTopLabel }}</div>
+                                                <div class="item" v-if="advert.isEligibleForHighlight" v-on:click="highlightMe()">{{ highlightLabel }}</div>
                                                 <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
                                             </div>
                                         </div>
@@ -342,6 +343,7 @@
                                         <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
                                         <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
                                         <div class="item" v-on:click="backToTopMe()">{{ backToTopLabel }}</div>
+                                        <div class="item" v-if="advert.isEligibleForHighlight" v-on:click="highlightMe()">{{ highlightLabel }}</div>
                                         <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
                                     </div>
                                 </div>
@@ -430,6 +432,7 @@
             manageAdvertLabel: String,
             renewAdvertLabel: String,
             backToTopLabel: String,
+            highlightLabel: String,
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             validationOnProgressLabel: String,
@@ -500,6 +503,9 @@
             },
             backToTopMe: function () {
                 window.location.assign(this.advert.backToTopUrl);
+            },
+            highlightMe: function () {
+                window.location.assign(this.advert.highlightUrl);
             },
             seeMe: function () {
                 window.location.assign(this.advert.url);

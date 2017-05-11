@@ -1,5 +1,5 @@
 <template>
-    <div class="ui wide skyscraper ad welcome-ads">
+    <div :class="centered==true ? 'ui centered wide skyscraper ad welcome-ads' : 'ui wide skyscraper ad welcome-ads'">
         <a :href="url1"><img :src="img1" width="100%"></a>
     </div>
 </template>
@@ -17,6 +17,11 @@
                 required: false,
                 type: String,
                 default: '#'
+            },
+            'centered': {
+                required: false,
+                type: Boolean,
+                default:false
             }
         },
         data: () => {
