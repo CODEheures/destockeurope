@@ -118,6 +118,11 @@ return [
     'mail_advertBackToTop_line' => 'Your advert ":title" has just been moved back to the top of the list',
     'mail_advertBackToTop_line2' => 'Thank you for using our application!',
 
+    'mail_advertHighlight_subject' => 'Your advert is put in front!',
+    'mail_advertHighlight_greeting' => 'Congratulations :username !',
+    'mail_advertHighlight_line' => 'Your advert ":title" is part of adverts in front',
+    'mail_advertHighlight_line2' => 'Thank you for using our application!',
+
     'mail_passwordRenew_subject' => 'Resetting your password on ',
     'mail_passwordRenew_line' => 'You will be able to reset your password by clicking on the button below',
     'mail_passwordRenew_action' => 'Reset',
@@ -223,6 +228,7 @@ return [
     'option_isUrgent_name' => 'Urgent advert',
     'option_isRenew_name' => 'Renewal of my advert',
     'option_isBackToTop_name' => 'Back my advert to top of the list',
+    'option_isHighlight_name' => 'Put my advert in front',
     'option_haveVideo_name' => 'Vidéo',
 
     'view_all_error_session_expired' => 'For your security your session has expired. You need to log in to continue',
@@ -371,6 +377,7 @@ return [
     'view_advert_approve_error' => 'Advert approve error',
     'view_advert_renew_error' => 'Error while advert renew process. Our services are warned and deal with your problem as soon as possible',
     'view_advert_backToTop_error' => 'Error while advert back to top of the list process. Our services are warned and deal with your problem as soon as possible',
+    'view_advert_highlight_error' => 'Error while advert put in front process. Our services are warned and deal with your problem as soon as possible',
     'view_advert_approve_success' => 'Advert approve send',
 
     'view_advert_by_link_label' => 'See Advert',
@@ -425,6 +432,7 @@ return [
     'payment_paypal_success' => 'Thank you for your payment. Note that this will only be executed if your ad is validated by our services. You will then receive your invoice by e-mail.',
     'payment_renew_success' => 'Thank you for your payment. Your advert is extended to :date. Your invoice is send by e-mail.',
     'payment_backToTop_success' => 'Thank you for your payment. Your advert has just been moved back to the top of the list. Your invoice is send by e-mail.',
+    'payment_highlight_success' => 'Thank you for your payment. Your Advert is put in Front During the next ' . env('HIGHLIGHT_HOURS_DURATION') . ' hours.  Your invoice is send by e-mail.',
 
     'footer_list_header_1' => 'HOUSE',
     'footer_list_1_1' => 'Furnishings',

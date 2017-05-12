@@ -122,14 +122,14 @@ class Advert extends Model {
 
     public function getIsEligibleForRenewAttribute() {
         $ended = Carbon::parse($this->ended_at);
-        $isPast = Carbon::create($ended->year, $ended->month, $ended->day, 0,0,0)->subDays(env('ALERT_BEFORE_END_1'))->isPast(Carbon::now());
+        $isPast = Carbon::create($ended->year, $ended->month, $ended->day, 0,0,0)->subDays(env('ALERT_BEFORE_END_1'))->isPast();
         return (!$this->is_delegation && $this->isValid && ($this->deleted_at || $isPast));
     }
 
     public function getIsEligibleForHighlightAttribute() {
         $ended = Carbon::parse($this->ended_at);
-        $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isPast(Carbon::now());
-        $isNotHighlight = is_null($this->highlight_until) || Carbon::parse($this->highlight_until)->isPast(Carbon::now());
+        $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isFuture();
+        $isNotHighlight = is_null($this->highlight_until) || Carbon::parse($this->highlight_until)->isPast();
         return (!$this->is_delegation && $this->isValid && $isNotHighlight && $isQuiteYoung);
     }
 

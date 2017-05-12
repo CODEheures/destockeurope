@@ -15,6 +15,7 @@ class Invoice extends Model {
     const STATE_CREATION = 0;
     const STATE_RENEW = 1;
     const STATE_BACKTOTOP = 2;
+    const STATE_HIGHLIGHT = 3;
 
     protected $fillable = [
         'user_id',

@@ -118,6 +118,11 @@ return [
     'mail_advertBackToTop_line' => 'Votre annonce ":title" vient d\'être remontée en tête de liste',
     'mail_advertBackToTop_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
+    'mail_advertHighlight_subject' => 'Votre annonce fait parti des annonces à la Une!',
+    'mail_advertHighlight_greeting' => 'Félicitation :username !',
+    'mail_advertHighlight_line' => 'Votre annonce ":title" vient d\'être placée dans la liste des annonces à la Une.',
+    'mail_advertHighlight_line2' => 'Merci d\'utiliser notre application! A tout de suite',
+
     'mail_passwordRenew_subject' => 'Réinitialisation de votre mot de passe sur ',
     'mail_passwordRenew_line' => 'Vous allez pouvoir réinitialiser votre mot de passe en cliquant sur le bouton ci-dessous',
     'mail_passwordRenew_action' => 'Réinitialiser',
@@ -223,6 +228,7 @@ return [
     'option_isUrgent_name' => 'Annonce urgente',
     'option_isRenew_name' => 'Renouvellement de mon annonce',
     'option_isBackToTop_name' => 'Remonter mon annonce en tête de liste',
+    'option_isHighlight_name' => 'Mettre mon annonce à la Une',
     'option_haveVideo_name' => 'Vidéo',
 
     'view_all_error_session_expired' => 'Pour votre sécurité votre session a expiré. Reconnectez-vous pour continuer',
@@ -370,7 +376,8 @@ return [
     'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',
     'view_advert_approve_error' => 'Une erreur est survenue pendant l\'approbation d\'une annonce',
     'view_advert_renew_error' => 'Une erreur est survenue pendant le renouvellement de votre annonce. Nos services sont avertis et traitent votre problème au plus vite',
-    'view_advert_backToTop_error' => 'Une erreur est survenue pendant pour remonter votre annonce en tête de liste. Nos services sont avertis et traitent votre problème au plus vite',
+    'view_advert_backToTop_error' => 'Une erreur est survenue pour remonter votre annonce en tête de liste. Nos services sont avertis et traitent votre problème au plus vite',
+    'view_advert_highlight_error' => 'Une erreur est survenue pour placer votre annonce à la Une. Nos services sont avertis et traitent votre problème au plus vite',
     'view_advert_approve_success' => 'Approbations des annonces envoyées',
 
     'view_advert_by_link_label' => 'Voir l\'annonce',
@@ -425,6 +432,7 @@ return [
     'payment_paypal_success' => 'Merci pour votre paiement. Notez que celui-ci ne sera éxécuté que si votre annonce est validée par nos services. Vous recevrez alors votre facture par mail.',
     'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est prolongée jusqu\'au :date.  Votre facture vous a été envoyée par mail.',
     'payment_backToTop_success' => 'Merci pour votre paiement. Votre annonce vient d\'être remontée en tête de liste.  Votre facture vous a été envoyée par mail.',
+    'payment_highlight_success' => 'Merci pour votre paiement. Votre annonce fait parti des annonces à la Une pendant les prochaines ' . env('HIGHLIGHT_HOURS_DURATION') . ' heures.  Votre facture vous a été envoyée par mail.',
 
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',

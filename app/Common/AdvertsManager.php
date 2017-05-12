@@ -73,7 +73,7 @@ class AdvertsManager
             //5 Purge Videos On Vimeo WithOut Advert
             $persistents = Persistent::where('key', '=', 'videoId')->get();
             foreach ($persistents as $persistent) {
-                if(Carbon::parse($persistent->updated_at)->isPast(Carbon::now()->subHours(env('TEMPO_HOURS_LIFE_TIME')))){
+                if(Carbon::parse($persistent->updated_at)->addHours(env('TEMPO_HOURS_LIFE_TIME'))->isPast()){
                     $response = $this->vimeoManager->request('/videos/'.$persistent->value,[],'DELETE');
                     if($response['status']<300){
                         $counterDelVideo++;
