@@ -1452,6 +1452,7 @@ class AdvertController extends Controller
                 $advert->online_at = Carbon::now();
                 $advert->setEndedAt();
                 $advert->deleted_at = null;
+                $advert->lastObsoleteMail = null;
                 $advert->save();
                 $advertPictures = Picture::findByAdvertIdWithTrashed($advert->id)->get();
                 foreach ($advertPictures as $picture){
