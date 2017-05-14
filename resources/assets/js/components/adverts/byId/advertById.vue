@@ -69,6 +69,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="ui hidden divider"></div>
                         <div class="sixteen wide column item-description">
                             <div class="description">
                                 <p>{{ advert.description }}</p>
