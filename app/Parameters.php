@@ -22,6 +22,7 @@ class Parameters extends Model
         'advertsPerPage',
         'urgentCost',
         'backToTopCost',
+        'highlightCost',
         'videoCost',
         'renewCost',
         'nbFreePictures',

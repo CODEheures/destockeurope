@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="ui small rectangle ad ">
+        <div :class="centered ? 'ui small rectangle centered ad' : 'ui small rectangle ad' ">
             <a :href="url1"><img :src="img1" width="100%"></a>
         </div>
-        <div class="ui small rectangle ad spaced-top-2">
+        <div :class="centered ? 'ui small rectangle centered ad spaced-top-2' : 'ui small rectangle ad spaced-top-2'">
             <a :href="url2"><img :src="img2" width="100%"></a>
         </div>
     </div>
@@ -32,6 +32,11 @@
                 required: false,
                 type: String,
                 default: '#'
+            },
+            'centered': {
+                required: false,
+                type: Boolean,
+                default: false
             }
         },
         data: () => {

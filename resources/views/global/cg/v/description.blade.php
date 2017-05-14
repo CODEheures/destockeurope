@@ -55,3 +55,6 @@
 
 <h4 class="ui header">Remontée en tête de liste d'une annonce</h4>
 @include('global.cg.v.options.backToTop')
+
+<h4 class="ui header">Placement d'une annonce à la Une</h4>
+@include('global.cg.v.options.highlight')

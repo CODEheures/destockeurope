@@ -52,10 +52,14 @@ trait CostUtils
         return 0;
     }
 
-    public static function getCostIsHighlight($isHightlight){
+    public static function getCostIsHighlight($isHightlight, $testFor=null){
         if($isHightlight){
-            $countHightlights = 1 + (int)(Advert::where('highlight_until', '>', Carbon::now())->count());
-            return (int)(9/(sqrt($countHightlights))*100);
+            if(is_null($testFor)){
+                $countHightlights = 1 + (int)(Advert::where('highlight_until', '>', Carbon::now())->count());
+            } else {
+                $countHightlights = $testFor+1;
+            }
+            return (int)(config('runtime.highlightCost')/(sqrt($countHightlights))*100);
         }
         return 0;
     }

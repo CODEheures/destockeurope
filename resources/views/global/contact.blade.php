@@ -13,7 +13,9 @@
     <!-- main page -->
     <div class="ui grid">
         <div class="four wide tablet only four wide computer only column">
-            <double-square></double-square>
+            <double-square
+                    :centered="true"
+            ></double-square>
         </div>
         <div class="sixteen wide mobile twelve wide tablet twelve wide computer column">
             <div class="ui segment">

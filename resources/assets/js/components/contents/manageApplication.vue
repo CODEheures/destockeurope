@@ -98,6 +98,16 @@
                                    v-on:focus="focused={'name': 'backToTopCost', 'value': parameters.backToTopCost}"
                                    v-on:blur="blured={'name': 'backToTopCost', 'value': parameters.backToTopCost}">
                         </div>
+                        <div class="field">
+                            <label>{{ advertHighlightCostLabel }}</label>
+                            <input type="number"
+                                   name="highlightCost"
+                                   min="0"
+                                   v-model="parameters.highlightCost"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'highlightCost', 'value': parameters.highlightCost}"
+                                   v-on:blur="blured={'name': 'highlightCost', 'value': parameters.highlightCost}">
+                        </div>
                     </div>
                 </div>
                 <h4 class="ui horizontal divider header"><i class="search icon"></i> {{ searchLabel }} </h4>
@@ -230,6 +240,7 @@
             advertVideoCostLabel: String,
             advertRenewCostLabel: String,
             advertBackToTopCostLabel: String,
+            advertHighlightCostLabel: String,
             advertPerPageLabel: String,
             advertResumeLenghtLabel: String,
             searchLabel: String,

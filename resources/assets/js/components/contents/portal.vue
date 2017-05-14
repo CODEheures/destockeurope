@@ -4,7 +4,9 @@
         <div class="row">
             <div class="ui grid">
                 <div class="four wide tablet only four wide computer only column">
-                    <double-square></double-square>
+                    <double-square
+                            :centered="true"
+                    ></double-square>
                 </div>
                 <div class="sixteen wide mobile twelve wide tablet twelve wide computer column">
                     <div class="ui segment">
@@ -12,7 +14,7 @@
                             <div class="sixteen wide mobile eight wide tablet ten wide computer column">
                                 <div class="ui centered grid flags">
                                     <a v-on:click.stop.prevent="goHome" href="#" data-country="it" :data-country-name="dataCountries.italy" class="five wide mobile five wide tablet three wide computer center aligned column">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973"  :class="browser=='edge' ? 'shadow' : ''">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" style="mix-blend-mode:multiply" :class="browser=='edge' ? 'shadow' : ''">
                                         <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
                                         <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
                                         <path fill="#00892E" d="M.132.1h29.886v59.772H.132z"/>

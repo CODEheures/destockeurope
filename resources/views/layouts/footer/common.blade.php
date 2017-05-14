@@ -88,7 +88,7 @@
     <div class="ui horizontal small divided link list">
         <a class="ui massive blue image label" href="{{ route('portal') }}">
             <img src="/images/logo.svg">
-            &copy; 2016
+            &copy; 2017
         </a>
     </div>
 </div>

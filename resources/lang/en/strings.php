@@ -267,6 +267,7 @@ return [
     'view_manage_adverts_video_cost_label' => 'Cost of Video option (€ excl. taxes)',
     'view_manage_adverts_renew_cost_label' => 'Price for renew (€ excl. taxes)',
     'view_manage_adverts_backToTop_cost_label' => 'Price for back To Top of list(€ excl. taxes)',
+    'view_manage_adverts_highlight_cost_label' => 'Price for highlight (€ excl. taxes)',
     'view_manage_adverts_per_page_label' => 'Number adverts per page',
     'view_manage_resume_length_label' => 'Advert resume length',
     'view_manage_search_label' => 'Search Filter',
