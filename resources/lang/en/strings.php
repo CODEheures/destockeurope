@@ -311,6 +311,8 @@ return [
     'view_portal_newsletter_unsubscribe_success' => 'Your unsubscription is save',
     'view_portal_newsletter_subscribe_error' => 'Ho no! your request fail \'-(',
 
+    'view_home_fake_advert_title' => 'Your Advert HERE on FRONT for :price',
+
     'view_contact_title' => 'Contact Us',
     'view_contact_description' => 'Contact us by filling in the form below',
     'view_contact_button_label' => 'Send',

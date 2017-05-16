@@ -242,7 +242,7 @@ class AdvertController extends Controller
 
         if($isSearchRequest){
             $action = [
-                'url' => '#',
+                'url' => '',
                 'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
             ];
             //choisir $loadCompleteAdverts[1] pour trier les resultats par categories

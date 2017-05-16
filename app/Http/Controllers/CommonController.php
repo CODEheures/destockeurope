@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Advert;
 use App\Anonymous;
+use App\Common\CostUtils;
+use App\Common\MoneyUtils;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
 use App\Http\Requests\UnsubscribeNewsLetterRequest;
@@ -12,6 +15,7 @@ use App\User;
 use Codeheures\LaravelUtils\Traits\Tools\Browser;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 
 class CommonController extends Controller
@@ -108,7 +112,24 @@ class CommonController extends Controller
      */
     public function home() {
         $masterAdsControllerFlag = true;
-        return view('welcome', compact('masterAdsControllerFlag'));
+        $fakeHighlightAdvert = new Advert();
+        $fakeHighlightAdvert->isNegociated = false;
+        $fakeHighlightAdvert->title = trans('strings.view_home_fake_advert_title', ['price' => MoneyUtils::getPriceWithDecimal(CostUtils::getCostIsHighlight(true), 'EUR',true)]);
+        $fakeHighlightAdvert->price = CostUtils::getCostIsHighlight(true);
+        $fakeHighlightAdvert->currency = 'EUR';
+        $fakeHighlightAdvert->totalQuantity = env('HIGHLIGHT_HOURS_DURATION');
+        $fakeHighlightAdvert->user_id = User::whereRole(User::ROLE_USER)->first()->id;
+        $fakeHighlightAdvert = $fakeHighlightAdvert->toArray();
+
+        $path = 'images/fake_advert_' . App::getLocale() . '.jpg';
+        if(file_exists(__DIR__ . '/../../../public/'. $path)){
+            $fakeHighlightAdvert['thumb'] = asset($path);
+        } else {
+            $fakeHighlightAdvert['thumb'] = asset('images/fake_advert_en.jpg');
+        }
+        $fakeHighlightAdvert['price_margin'] = $fakeHighlightAdvert['price'];
+        $fakeHighlightAdvert['url'] = route('mines');
+        return view('welcome', compact('masterAdsControllerFlag', 'fakeHighlightAdvert'));
     }
 
     /**

@@ -107,6 +107,8 @@
                 if(this.resultsFor != undefined){
                     elemSearch.search('set value',this.resultsFor);
                     this.wantSearch = false;
+                } else {
+                    this.resetSearch(false);
                 }
             },
             readCookie: function read(name) {

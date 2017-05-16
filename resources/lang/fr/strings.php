@@ -311,6 +311,8 @@ return [
     'view_portal_newsletter_unsubscribe_success' => 'Votre désincription est enregistrée',
     'view_portal_newsletter_subscribe_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
 
+    'view_home_fake_advert_title' => 'Votre annonce ICI en UNE pour :price',
+
     'view_contact_title' => 'Nous contacter',
     'view_contact_description' => 'Contactez nous en remplissant le formulaire ci-dessous',
     'view_contact_button_label' => 'Envoyer',

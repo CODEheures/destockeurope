@@ -75,8 +75,9 @@
                 if(previousVal && previousVal.length > 0){
                     $('#filter_location').val(previousVal);
                     this.wantSearch = false;
+                } else {
+                    this.resetSearch(false);
                 }
-
             }
         }
     }

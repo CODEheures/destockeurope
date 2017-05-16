@@ -84,7 +84,7 @@
                     ></advert-filter>
                 </div>
             </div>
-            <div class="sixteen wide tablet twelve wide computer column">
+            <div class="sixteen wide tablet thirteen wide computer column">
                 <div class="row">
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
@@ -113,15 +113,32 @@
                     </div>
                 </div>
             </div>
-            <div class="computer only four wide column">
+            <div class="computer only three wide column">
                 <div class="ui centered grid">
-                    <div class="sixteen wide column" v-for="highLightAdvert in dataHighlightAdverts">
-                        <advert-highlight
-                                :advert="highLightAdvert"
-                                :is-negociated-label="isNegociatedLabel"
-                                :total-quantity-label="totalQuantityLabel"
-                        ></advert-highlight>
-                    </div>
+                    <template v-if="dataHighlightAdverts.length > 1">
+                        <div class="sixteen wide column" v-for="highLightAdvert in dataHighlightAdverts">
+                            <advert-highlight
+                                    :advert="highLightAdvert"
+                                    :is-negociated-label="isNegociatedLabel"
+                                    :total-quantity-label="totalQuantityLabel"
+                            ></advert-highlight>
+                        </div>
+                    </template>
+
+                    <template v-else>
+                        <div class="sixteen wide column">
+                            <advert-highlight v-if="dataHighlightAdverts.length == 1"
+                                    :advert="dataHighlightAdverts[0]"
+                                    :is-negociated-label="isNegociatedLabel"
+                                    :total-quantity-label="totalQuantityLabel"
+                            ></advert-highlight>
+                            <advert-highlight
+                                    :advert="dataFakeHighlightAdvert"
+                                    :is-negociated-label="isNegociatedLabel"
+                                    :total-quantity-label="totalQuantityLabel"
+                            ></advert-highlight>
+                        </div>
+                    </template>
                     <div class="sixteen wide column">
                         <vertical-160x600
                             :centered="true"
@@ -195,7 +212,8 @@
             'pagePreviousLabel',
             'pageNextLabel',
             //advertHighLight component
-            'routeGetHighlight'
+            'routeGetHighlight',
+            'fakeHighlightAdvert'
         ],
         data: () => {
             return {
@@ -204,6 +222,7 @@
                 sendMessage: false,
                 breadcrumbItems: [],
                 dataFilterLocationAccurateList: [],
+                dataFakeHighlightAdvert: {},
                 dataFilterCurrenciesList: [],
                 dataFilterPricePrefix: '',
                 oldMinRangePrice: -1,
@@ -216,23 +235,26 @@
                 dataFlagResetSearch: false,
                 oldChoice: {},
                 update: false,
-                dataHighlightAdverts: []
+                dataHighlightAdverts: [],
+                hash: '',
+                isOnHashChange: false,
+                //List of boolean filter params when false=delete of filter
+                deleteOnFilterWhenFalse: ['isUrgent', 'isNegociated']
             }
         },
         mounted () {
             let that = this;
             this.dataFilterLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
+            this.dataFakeHighlightAdvert = JSON.parse(this.fakeHighlightAdvert);
             if(this.clearStorage){
-                console.log('clear');
                 //keep only country
-                this.initFilterBySessionStorage(true);
-                let inputLocationVal = JSON.parse(sessionStorage.getItem('filterLocationInputVal'));
+                let inputs = this.initFilterBySessionStorage(true);
                 //reset storage
                 sessionStorage.clear();
                 //recup country
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
-                if(inputLocationVal !== null){
-                    sessionStorage.setItem('filterLocationInputVal', JSON.stringify(inputLocationVal));
+                if(inputs.inputLocationVal !== null){
+                    sessionStorage.setItem('filterLocationInputVal', inputs.inputLocationVal);
                 }
             }
 
@@ -280,7 +302,7 @@
                 this.updateFilter(result);
             });
             this.$on('changePage', function (url) {
-                $('html, body').animate({
+                $('html body').animate({
                     scrollTop: 0
                 }, 600, function () {
                     let parsed = Parser.parse(url, true);
@@ -317,9 +339,9 @@
             this.$on('unbookmarkSuccess', function () {
                 this.sendToast(this.unbookmarkSuccess, 'success');
             });
-            this.$on('deleteAdvert', function (event) {
-                this.destroyMe(event.url);
-            });
+            if ("onhashchange" in window) {
+                this.onHashChange();
+            }
         },
         methods: {
             sendToast: function(message,type) {
@@ -476,12 +498,46 @@
                     }
                     that.update = !that.update;
                     that.dataRouteGetAdvertList = that.urlForFilter(false,true);
+                    if(!that.isOnHashChange){
+                        that.hashPage();
+                        that.setHashFilters();
+                    } else {
+                        that.isOnHashChange = false;
+                    }
                 });
+            },
+            hashPage() {
+                this.hash = '#' + new Date().getTime().toString(36);
+                history.pushState({navGuard: true}, '', this.hash)
+            },
+            setHashFilters() {
+                if(this.hash !== undefined && this.hash !== ''){
+                    sessionStorage.setItem('filter'+this.hash, JSON.stringify(this.filter));
+                    let inputLocationVal = sessionStorage.getItem('filterLocationInputVal');
+                    if(inputLocationVal !== null){
+                        sessionStorage.setItem('filterLocationInputVal'+this.hash, inputLocationVal);
+                    }
+                }
+            },
+            onHashChange() {
+                let that = this;
+                window.onhashchange = function () {
+                    that.isOnHashChange = true;
+                    let inputs = that.initFilterBySessionStorage();
+                    console.log('hash inputs', inputs);
+                    if(inputs.inputLocationVal !== null){
+                        sessionStorage.setItem('filterLocationInputVal', inputs.inputLocationVal);
+                    } else {
+                        sessionStorage.removeItem('filterLocationInputVal');
+                    }
+                    that.setBreadCrumbItems(that.filter.categoryId);
+                    that.updateResults(true);
+                };
             },
             updateFilter(result){
                 let oldFilter= _.cloneDeep(this.filter);
                 for(let elem in result){
-                    if(result[elem] == null){
+                    if(result[elem] == null || (_.indexOf(this.deleteOnFilterWhenFalse, elem)!==-1 && result[elem]==false)){
                         if(elem in this.filter){
                             delete this.filter[elem];
                         }
@@ -494,8 +550,12 @@
                 }
             },
             initFilterBySessionStorage: function (onlyLocation=false) {
-                if(sessionStorage.getItem('filter') != null){
-                    this.filter = JSON.parse(sessionStorage.getItem('filter'));
+                let hash = window.location.hash;
+                let hashFilter = sessionStorage.getItem('filter'+hash);
+                let hashInputLocationVal = sessionStorage.getItem('filterLocationInputVal'+hash);
+
+                if(hashFilter !== null){
+                    this.filter = JSON.parse(hashFilter);
                     if(onlyLocation===true){
                         for(let elem in this.filter){
                             let isIn = false;
@@ -509,28 +569,8 @@
                         }
                     }
                 }
-            },
-            destroyMe: function (url) {
-                let modalForm = $('#modal2-'+this._uid);
-                let that = this;
-                modalForm.modal({
-                    closable: true,
-                    blurring: true,
-                    onApprove: function () {
-                        axios.delete(url)
-                            .then(function (response) {
-                                that.updateResults();
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
-                                }
-                                that.isLoaded = false;
-                            });
-                    }
-                }).modal('show');
+
+                return {'inputLocationVal': hashInputLocationVal};
             },
             getHighLightAdvert: function () {
                 let that = this;
