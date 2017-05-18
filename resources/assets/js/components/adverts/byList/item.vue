@@ -268,17 +268,15 @@
                             <div class="sixteen wide column item-description">
                                 <div class="description" v-if="advert.isValid">
                                     <template v-if="!advert.deleted_at">
-                                        <div :id="'manage-btn-1-'+_uid" class="ui labeled icon top right pointing dropdown button">
-                                            <i class="wrench icon"></i>
-                                            <span class="text">{{ manageAdvertLabel }}</span>
-                                            <div class="menu">
-                                                <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
-                                                <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
-                                                <div class="item" v-on:click="backToTopMe()">{{ backToTopLabel }}</div>
-                                                <div class="item" v-if="advert.isEligibleForHighlight" v-on:click="highlightMe()">{{ highlightLabel }}</div>
-                                                <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
-                                            </div>
-                                        </div>
+                                        <advert-manage-button
+                                            :advert="advert"
+                                            :manage-advert-label="manageAdvertLabel"
+                                            :see-advert-label="seeAdvertLabel"
+                                            :delete-advert-label="deleteAdvertLabel"
+                                            :back-to-top-label="backToTopLabel"
+                                            :highlight-label="highlightLabel"
+                                            :renew-advert-label="renewAdvertLabel"
+                                        ></advert-manage-button>
                                     </template>
                                     <template v-else>
                                         <a :href="advert.renewUrl" class="ui primary button">
@@ -336,17 +334,15 @@
                         <div class="header"><h4>{{ advert.title }}</h4></div>
                         <div class="sixteen wide centered column" v-if="advert.isValid">
                             <template v-if="!advert.deleted_at">
-                                <div :id="'manage-btn-2-'+_uid" class="ui labeled icon top right pointing dropdown button">
-                                    <i class="wrench icon"></i>
-                                    <span class="text">{{ manageAdvertLabel }}</span>
-                                    <div class="menu">
-                                        <div class="item" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
-                                        <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
-                                        <div class="item" v-on:click="backToTopMe()">{{ backToTopLabel }}</div>
-                                        <div class="item" v-if="advert.isEligibleForHighlight" v-on:click="highlightMe()">{{ highlightLabel }}</div>
-                                        <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
-                                    </div>
-                                </div>
+                                <advert-manage-button
+                                        :advert="advert"
+                                        :manage-advert-label="manageAdvertLabel"
+                                        :see-advert-label="seeAdvertLabel"
+                                        :delete-advert-label="deleteAdvertLabel"
+                                        :back-to-top-label="backToTopLabel"
+                                        :highlight-label="highlightLabel"
+                                        :renew-advert-label="renewAdvertLabel"
+                                ></advert-manage-button>
                             </template>
                             <template v-else>
                                 <a :href="advert.renewUrl" class="ui primary button">
@@ -451,8 +447,9 @@
             };
         },
         mounted () {
-            $('#manage-btn-1-'+this._uid).dropdown();
-            $('#manage-btn-2-'+this._uid).dropdown();
+            this.$on('deleteAdvert', function (event) {
+                this.$parent.$emit('deleteAdvert', event);
+            })
         },
         methods: {
             getMoment: function (dateTime) {
@@ -497,18 +494,6 @@
             },
             destroyMe: function () {
                 this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
-            },
-            renewMe: function () {
-                window.location.assign(this.advert.renewUrl);
-            },
-            backToTopMe: function () {
-                window.location.assign(this.advert.backToTopUrl);
-            },
-            highlightMe: function () {
-                window.location.assign(this.advert.highlightUrl);
-            },
-            seeMe: function () {
-                window.location.assign(this.advert.url);
             },
             updateCoefficient: function () {
                 let that = this;

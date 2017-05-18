@@ -176,11 +176,16 @@
                                 </button>
                             </div>
                             <div class="field" v-if="isUserOwner">
-                                <button class="ui red icon button"
-                                        v-on:click="destroyMe()">
-                                    <i class="trash outline icon"></i>
-                                    {{ deleteLabel }}
-                                </button>
+                                <advert-manage-button
+                                        :advert="dataAdvert"
+                                        :with-see-action="false"
+                                        :manage-advert-label="manageAdvertLabel"
+                                        :see-advert-label="seeAdvertLabel"
+                                        :delete-advert-label="deleteAdvertLabel"
+                                        :back-to-top-label="backToTopAdvertLabel"
+                                        :highlight-label="highlightAdvertLabel"
+                                        :renew-advert-label="renewAdvertLabel"
+                                ></advert-manage-button>
                             </div>
                             <div class="fb-share-button"
                                  :data-href="advert.url"
@@ -216,11 +221,16 @@
                 </button>
             </div>
             <div class="mobile only tablet only sixteen wide center aligned column"  v-if="isUserOwner">
-                <button class="ui red icon button"
-                        v-on:click="destroyMe()">
-                    <i class="trash outline icon"></i>
-                    {{ deleteLabel }}
-                </button>
+                <advert-manage-button
+                        :advert="dataAdvert"
+                        :with-see-action="false"
+                        :manage-advert-label="manageAdvertLabel"
+                        :see-advert-label="seeAdvertLabel"
+                        :delete-advert-label="deleteAdvertLabel"
+                        :back-to-top-label="backToTopAdvertLabel"
+                        :highlight-label="highlightAdvertLabel"
+                        :renew-advert-label="renewAdvertLabel"
+                ></advert-manage-button>
             </div>
             <div class="sixteen wide right aligned column" v-if="!isUserOwner">
                 <div class="ui divider"></div>
@@ -264,7 +274,12 @@
             'bookmarkInfo',
             'bookmarkLabel',
             'unbookmarkLabel',
-            'deleteLabel',
+            'manageAdvertLabel',
+            'seeAdvertLabel',
+            'deleteAdvertLabel',
+            'backToTopAdvertLabel',
+            'highlightAdvertLabel',
+            'renewAdvertLabel',
             'formMessageLabel',
             'formMessageEmailLabel',
             'formMessageNameLabel',
@@ -437,6 +452,9 @@
             });
             this.$watch('dataReportMessage', function () {
                 this.testValidReportForm();
+            });
+            this.$on('deleteAdvert', function (event) {
+                this.destroyMe();
             })
         },
         methods: {
