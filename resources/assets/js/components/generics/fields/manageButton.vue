@@ -52,7 +52,7 @@
             }
         },
         mounted () {
-            $('#manage-btn-1-'+this._uid).dropdown();
+            $('#manage-btn-1-'+this._uid).dropdown({action: 'select'});
         },
         methods: {
             destroyMe: function () {
