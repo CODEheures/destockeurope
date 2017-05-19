@@ -111,6 +111,7 @@ class CommonController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function home() {
+        //dd(session()->all());
         $masterAdsControllerFlag = true;
         $fakeHighlightAdvert = new Advert();
         $fakeHighlightAdvert->isNegociated = false;

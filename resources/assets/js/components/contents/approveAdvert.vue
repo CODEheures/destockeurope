@@ -141,6 +141,7 @@
                                                     :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                                                     :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
                                                     :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                                                    :with-valid-button="false"
                                             ></margin-input-field>
                                             <div class="grouped fields">
                                                 <div class="field">

@@ -356,6 +356,7 @@ return [
     'view_advert_show_highlight_label' => 'Put in Front',
     'view_advert_show_delete2_label' => 'Delete it',
     'view_advert_show_see_label' => 'See it',
+    'view_advert_show_edit_label' => 'Edit it',
     'view_advert_show_update_label' => 'Update',
     'view_advert_show_is_renew_label' => 'Is Renewed',
     'view_advert_show_delete_success' => 'Your ad is deleted. Thank you for your confidence',

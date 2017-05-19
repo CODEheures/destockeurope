@@ -464,7 +464,15 @@ class AdvertController extends Controller
      */
     public function edit($id)
     {
-        //
+        return redirect(route('home'))->with('status',trans('strings.view_all_error_service_unavailable'));
+        $advert = Advert::find($id);
+        if($advert && $advert->user->id === auth()->user()->id){
+            $ip=config('runtime.ip');
+            $geolocType = 1;
+            $zoomMap = 11;
+            $user = auth()->user();
+            return view('advert.edit', compact('ip', 'geolocType', 'zoomMap', 'user'));
+        }
     }
 
     /**
@@ -638,12 +646,34 @@ class AdvertController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function updateCoefficient(Request $request) {
+    public function updateCoefficient($id, Request $request) {
         $coefficient = $request->coefficient;
         if((int)$coefficient >= 0){
-            $advert = Advert::find($request->id);
+            $advert = Advert::find($id);
             if($advert){
                 $advert->price_coefficient = $coefficient/100;
+                $advert->save();
+                return response('ok', 200);
+            }
+        }
+        return response('error', 500);
+    }
+
+    /**
+     *
+     * Update quantities
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function updateQuantities($id, Request $request) {
+        $totalQuantity = $request->totalQuantity;
+        $lotMiniQuantity = $request->lotMiniQuantity;
+        if((int)$lotMiniQuantity > 0 && (int)$totalQuantity > 0 && (int)$totalQuantity >= (int)$lotMiniQuantity){
+            $advert = Advert::find($id);
+            if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == User::ROLES[User::ROLE_VALIDATOR] || auth()->user()->role==User::ROLES[User::ROLE_ADMIN] )){
+                $advert->lotMiniQuantity = (int)$lotMiniQuantity;
+                $advert->totalQuantity = (int)$totalQuantity;
                 $advert->save();
                 return response('ok', 200);
             }

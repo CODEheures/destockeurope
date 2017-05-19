@@ -36,6 +36,8 @@ Vue.component('swiper-gallerie', require('./components/generics/swipers/gallerie
 Vue.component('swiper-top', require('./components/generics/swipers/swiperTop.vue'));
 Vue.component('swiper-thumbs', require('./components/generics/swipers/swiperThumbs.vue'));
 Vue.component('margin-input-field', require('./components/generics/fields/marginInput.vue'));
+Vue.component('quantities-input-field', require('./components/generics/fields/quantitiesInput.vue'));
+Vue.component('advert-manage-button', require('./components/generics/fields/manageButton.vue'));
 Vue.component('vimeo-uploader', require('./components/generics/uploaders/vimeo.vue'));
 Vue.component('photo-uploader', require('./components/generics/uploaders/photo.vue'));
 Vue.component('notifications-activer', require('./components/generics/notifications/activer.vue'));
@@ -66,7 +68,6 @@ Vue.component('adverts-by-list', require('./components/adverts/byList/advertsByL
 Vue.component('adverts-by-list-item', require('./components/adverts/byList/item.vue'));
 Vue.component('advert-by-id', require('./components/adverts/byId/advertById.vue'));
 Vue.component('advert-highlight', require('./components/adverts/highlight/advertHighlight.vue'));
-Vue.component('advert-manage-button', require('./components/adverts/shareComponents/manageButton.vue'));
 
 //invoices manager
 Vue.component('invoice-filter', require('./components/invoices/invoicesFilter.vue'));

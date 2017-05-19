@@ -30,7 +30,6 @@
             <template v-for="(advert, index) in advertsList">
                 <template v-if="(index+1)%adsFrequency==0">
                     <adverts-by-list-item
-                            :route-update-price-coefficient="routeUpdatePriceCoefficient"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
@@ -47,6 +46,7 @@
                             :highlight-label="highlightLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
+                            :edit-advert-label="editAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
@@ -70,7 +70,6 @@
                 </template>
                 <template v-else>
                     <adverts-by-list-item
-                            :route-update-price-coefficient="routeUpdatePriceCoefficient"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
@@ -87,6 +86,7 @@
                             :highlight-label="highlightLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
+                            :edit-advert-label="editAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
@@ -107,11 +107,6 @@
     export default {
         props: {
             routeGetAdvertsList: String,
-            routeUpdatePriceCoefficient: {
-                type: String,
-                default: '',
-                required: false
-            },
             routeBookmarkAdd: String,
             routeBookmarkRemove: String,
             reloadOnUnbookmarkSuccess: {
@@ -147,6 +142,7 @@
             highlightLabel: String,
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
+            editAdvertLabel: String,
             validationOnProgressLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,

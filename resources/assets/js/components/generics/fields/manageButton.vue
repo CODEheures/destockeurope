@@ -3,11 +3,12 @@
         <i class="wrench icon"></i>
         <span class="text">{{ manageAdvertLabel }}</span>
         <div class="menu">
-            <div class="item" v-if="withSeeAction" v-on:click="seeMe()">{{ seeAdvertLabel }}</div>
-            <div class="item" v-on:click="destroyMe()">{{ deleteAdvertLabel }}</div>
-            <div class="item" v-on:click="backToTopMe()">{{ backToTopLabel }}</div>
-            <div class="item" v-if="advert.isEligibleForHighlight" v-on:click="highlightMe()">{{ highlightLabel }}</div>
-            <div class="item" v-if="advert.isEligibleForRenew" v-on:click="renewMe()">{{ renewAdvertLabel }}</div>
+            <div class="item" v-if="withSeeAction" v-on:click="seeMe()"><i class="unhide blue icon"></i>{{ seeAdvertLabel }}</div>
+            <div class="item" v-if="advert.editUrl!==null" v-on:click="editMe()"><i class="write blue icon"></i>{{ editAdvertLabel }}</div>
+            <div class="item" v-if="advert.backToTopUrl!==null" v-on:click="backToTopMe()"><i class="arrow up blue icon"></i>{{ backToTopLabel }}</div>
+            <div class="item" v-if="advert.highlightUrl!==null && advert.isEligibleForHighlight" v-on:click="highlightMe()"><i class="announcement blue icon"></i>{{ highlightLabel }}</div>
+            <div class="item" v-if="advert.renewUrl!==null && advert.isEligibleForRenew" v-on:click="renewMe()"><i class="power blue icon"></i>{{ renewAdvertLabel }}</div>
+            <div class="item" v-if="advert.destroyUrl!==null" v-on:click="destroyMe()"><i class="delete red icon"></i>{{ deleteAdvertLabel }}</div>
         </div>
     </div>
 </template>
@@ -27,6 +28,9 @@
                 type: String
             },
             seeAdvertLabel: {
+                type: String
+            },
+            editAdvertLabel: {
                 type: String
             },
             deleteAdvertLabel: {
@@ -65,6 +69,9 @@
             },
             seeMe: function () {
                 window.location.assign(this.advert.url);
+            },
+            editMe: function () {
+                window.location.assign(this.advert.editUrl);
             },
         }
     }

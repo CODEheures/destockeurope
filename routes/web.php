@@ -144,7 +144,8 @@
         Route::get('/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
         Route::post('/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
         Route::get('/delegations', ['as' => 'advert.getDelegations', 'uses' => 'AdvertController@delegations']);
-        Route::patch('/updateCoefficient/{id?}/{coefficient?}', ['as' => 'advert.updateCoefficient', 'uses' => 'AdvertController@updateCoefficient']);
+        Route::patch('/updateCoefficient/{id}', ['as' => 'advert.updateCoefficient', 'uses' => 'AdvertController@updateCoefficient']);
+        Route::patch('/updateQuantites/{id}', ['as' => 'advert.updateQuantities', 'uses' => 'AdvertController@updateQuantities']);
         Route::get('/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
         Route::post('/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
         Route::post('/report', ['as' => 'advert.report', 'uses' => 'AdvertController@report']);
@@ -158,7 +159,7 @@
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
         Route::get('/backToTop/{id}', ['as' => 'advert.backToTop', 'uses' => 'AdvertController@backToTop']);
         Route::get('/highlight/{id}', ['as' => 'advert.highlight', 'uses' => 'AdvertController@highlight']);
-        Route::get('/getHighlight/', ['as' => 'getHighlight', 'uses' => 'AdvertController@getHighlight']);
+        Route::get('/getHighlight/', ['as' => 'advert.getHighlight', 'uses' => 'AdvertController@getHighlight']);
     });
     Route::resource('advert', 'AdvertController', ['except' => ['show']]);
     Route::get('/{slug}', ['as' => 'advert.show', 'uses' => 'AdvertController@show']);

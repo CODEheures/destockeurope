@@ -145,7 +145,18 @@
                                     <i class="icon">{{ advert.pictures.length/2 }}</i>
                                 </div>
                             </template>
-                            <a :href="advert.url" class="ui primary button">{{ seeAdvertLabel }}</a>
+                            <template v-if="!advert.deleted_at">
+                                <advert-manage-button
+                                        :advert="advert"
+                                        :manage-advert-label="manageAdvertLabel"
+                                        :see-advert-label="seeAdvertLabel"
+                                        :edit-advert-label="editAdvertLabel"
+                                        :delete-advert-label="deleteAdvertLabel"
+                                        :back-to-top-label="backToTopLabel"
+                                        :highlight-label="highlightLabel"
+                                        :renew-advert-label="renewAdvertLabel"
+                                ></advert-manage-button>
+                            </template>
                         </div>
                     </div>
                     <div class="twelve wide tablet only twelve wide computer only column">
@@ -171,22 +182,24 @@
                             </div>
                             <div class="sixteen wide column item-description">
                                 <div class="ui form">
-                                    <div class="two fields">
-                                        <margin-input-field
-                                                :advert="advert"
-                                                :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                                                :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                                                :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                                                :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                                        ></margin-input-field>
-                                        <div class="field">
-                                            <label style="opacity: 0">1</label>
-                                            <div v-on:click="updateCoefficient()" class="ui primary button">
-                                                <i class="percent icon"></i>
-                                                {{ formAdvertPriceCoefficientUpdateLabel }}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <margin-input-field
+                                            :advert="advert"
+                                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
+                                    ></margin-input-field>
+                                </div>
+                            </div>
+                            <div class="sixteen wide column item-description" v-if="!advert.deleted_at">
+                                <div class="ui form">
+                                    <quantities-input-field
+                                            :advert="advert"
+                                            :total-quantity-label="totalQuantityLabel"
+                                            :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                            :form-update-label="formAdvertPriceCoefficientUpdateLabel"
+                                    ></quantities-input-field>
                                 </div>
                             </div>
                         </div>
@@ -218,13 +231,18 @@
                                     :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                                     :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
                                     :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                                    :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                             ></margin-input-field>
-                            <div class="field">
-                                <div v-on:click="updateCoefficient()" class="ui primary button">
-                                    <i class="trash icon"></i>
-                                    {{ formAdvertPriceCoefficientUpdateLabel }}
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="sixteen wide mobile only column" v-if="!advert.deleted_at">
+                        <div class="ui form">
+                            <quantities-input-field
+                                    :advert="advert"
+                                    :total-quantity-label="totalQuantityLabel"
+                                    :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                    :form-update-label="formAdvertPriceCoefficientUpdateLabel"
+                            ></quantities-input-field>
                         </div>
                     </div>
                 </div>
@@ -272,6 +290,7 @@
                                             :advert="advert"
                                             :manage-advert-label="manageAdvertLabel"
                                             :see-advert-label="seeAdvertLabel"
+                                            :edit-advert-label="editAdvertLabel"
                                             :delete-advert-label="deleteAdvertLabel"
                                             :back-to-top-label="backToTopLabel"
                                             :highlight-label="highlightLabel"
@@ -316,6 +335,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="sixteen wide column item-description" v-if="!advert.deleted_at">
+                                <div class="ui form">
+                                    <quantities-input-field
+                                            :advert="advert"
+                                            :total-quantity-label="totalQuantityLabel"
+                                            :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                            :form-update-label="formAdvertPriceCoefficientUpdateLabel"
+                                    ></quantities-input-field>
+                                </div>
+                            </div>
                             <div class="sixteen wide right aligned column geodate-computer">
                                 <p v-if="advert.isValid">
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
@@ -338,6 +367,7 @@
                                         :advert="advert"
                                         :manage-advert-label="manageAdvertLabel"
                                         :see-advert-label="seeAdvertLabel"
+                                        :edit-advert-label="editAdvertLabel"
                                         :delete-advert-label="deleteAdvertLabel"
                                         :back-to-top-label="backToTopLabel"
                                         :highlight-label="highlightLabel"
@@ -386,6 +416,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="sixteen wide mobile only column" v-if="!advert.deleted_at">
+                        <div class="ui form">
+                            <quantities-input-field
+                                    :advert="advert"
+                                    :total-quantity-label="totalQuantityLabel"
+                                    :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                    :form-update-label="formAdvertPriceCoefficientUpdateLabel"
+                            ></quantities-input-field>
+                        </div>
+                    </div>
                     <div class="sixteen wide right aligned mobile only column geodate-mobile">
                         <p v-if="advert.isValid">
                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
@@ -401,11 +441,6 @@
 <script>
     export default {
         props: {
-            routeUpdatePriceCoefficient: {
-                type: String,
-                default: '',
-                required: false
-            },
             routeBookmarkAdd: String,
             routeBookmarkRemove: String,
             advert: Object,
@@ -431,6 +466,7 @@
             highlightLabel: String,
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
+            editAdvertLabel: String,
             validationOnProgressLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
@@ -449,7 +485,13 @@
         mounted () {
             this.$on('deleteAdvert', function (event) {
                 this.$parent.$emit('deleteAdvert', event);
-            })
+            });
+            this.$on('loadError', function (event) {
+                this.$parent.$emit('loadError')
+            });
+            this.$on('updateSuccess', function (event) {
+                this.$parent.$emit('updateSuccess')
+            });
         },
         methods: {
             getMoment: function (dateTime) {
@@ -494,16 +536,6 @@
             },
             destroyMe: function () {
                 this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
-            },
-            updateCoefficient: function () {
-                let that = this;
-                axios.patch(this.routeUpdatePriceCoefficient + '/' + this.advert.id + '/' + (this.advert.price_coefficient*100).toFixed(0))
-                    .then(function (response) {
-                        that.$parent.$emit('updateSuccess')
-                    })
-                    .catch(function (error) {
-                        that.$parent.$emit('loadError')
-                    });
             }
         }
     }

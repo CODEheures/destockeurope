@@ -180,6 +180,7 @@
                                         :advert="dataAdvert"
                                         :with-see-action="false"
                                         :manage-advert-label="manageAdvertLabel"
+                                        :edit-advert-label="editAdvertLabel"
                                         :see-advert-label="seeAdvertLabel"
                                         :delete-advert-label="deleteAdvertLabel"
                                         :back-to-top-label="backToTopAdvertLabel"
@@ -226,6 +227,7 @@
                         :with-see-action="false"
                         :manage-advert-label="manageAdvertLabel"
                         :see-advert-label="seeAdvertLabel"
+                        :edit-advert-label="editAdvertLabel"
                         :delete-advert-label="deleteAdvertLabel"
                         :back-to-top-label="backToTopAdvertLabel"
                         :highlight-label="highlightAdvertLabel"
@@ -276,6 +278,7 @@
             'unbookmarkLabel',
             'manageAdvertLabel',
             'seeAdvertLabel',
+            'editAdvertLabel',
             'deleteAdvertLabel',
             'backToTopAdvertLabel',
             'highlightAdvertLabel',

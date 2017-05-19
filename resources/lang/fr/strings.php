@@ -356,6 +356,7 @@ return [
     'view_advert_show_highlight_label' => 'Mettre à la Une',
     'view_advert_show_delete2_label' => 'Supprimer',
     'view_advert_show_see_label' => 'Voir',
+    'view_advert_show_edit_label' => 'Modifier',
     'view_advert_show_update_label' => 'Mettre à jour',
     'view_advert_show_is_renew_label' => 'Est renouvellée',
     'view_advert_show_delete_success' => 'Votre annonce est bien supprimée. Merci de votre confiance',

@@ -35,7 +35,6 @@
                 <div class="row">
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
-                            :route-update-price-coefficient="routeUpdatePriceCoefficient"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :flag-force-reload="flagForceReload"
@@ -53,6 +52,7 @@
                             :highlight-label="highlightAdvertLabel"
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
+                            :edit-advert-label="editAdvertLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
@@ -105,7 +105,6 @@
             'modalYes',
             //advertByList component
             'routeGetAdvertsList',
-            'routeUpdatePriceCoefficient',
             'routeBookmarkAdd',
             'routeBookmarkRemove',
             'reloadAdvertOnUnbookmarkSuccess',
@@ -123,6 +122,7 @@
             'highlightAdvertLabel',
             'deleteAdvertLabel',
             'seeAdvertLabel',
+            'editAdvertLabel',
             'validationOnProgressLabel',
             'bookmarkInfo',
             'viewsInfo',

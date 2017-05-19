@@ -49,6 +49,7 @@
             highlight-advert-label="{{ trans('strings.view_advert_show_highlight_label') }}"
             delete-advert-label="{{ trans('strings.view_advert_show_delete2_label') }}"
             see-advert-label="{{ trans('strings.view_advert_show_see_label') }}"
+            edit-advert-label="{{ trans('strings.view_advert_show_edit_label') }}"
             form-message-label="{{ trans('strings.form_label_message_input') }}"
             form-message-email-label="{{ trans('strings.form_label_email') }}"
             form-message-name-label="{{ trans('strings.form_label_name') }}"

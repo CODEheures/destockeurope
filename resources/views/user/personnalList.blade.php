@@ -11,7 +11,6 @@
                 modal-yes="{{ trans('strings.modal_yes') }}"
 
                 route-get-adverts-list="{{ $routeList }}"
-                route-update-price-coefficient="{{ auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR] || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN] ? route('advert.updateCoefficient'):'' }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
                 ads-frequency="{{ 0 }}"
                 is-admin-user="{{ auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR] || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN] }}"
@@ -31,6 +30,7 @@
                 highlight-advert-label="{{ trans('strings.view_advert_show_highlight_label') }}"
                 delete-advert-label="{{ trans('strings.view_advert_show_delete2_label') }}"
                 see-advert-label="{{ trans('strings.view_advert_show_see_label') }}"
+                edit-advert-label="{{ trans('strings.view_advert_show_edit_label') }}"
                 validation-on-progress-label="{{ trans('strings.view_advert_validation_on_progress') }}"
                 bookmark-info="{{ trans('strings.view_advert_show_bookmark_info') }}"
                 views-info="{{ trans('strings.view_advert_show_views_info') }}"

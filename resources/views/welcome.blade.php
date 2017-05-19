@@ -58,7 +58,7 @@
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
                 page-next-label="{{ trans('strings.view_pagination_next_label') }}"
 
-                route-get-highlight="{{ route('getHighlight') }}"
+                route-get-highlight="{{ route('advert.getHighlight') }}"
                 fake-highlight-advert="{{ json_encode($fakeHighlightAdvert) }}"
         ></welcome1>
 @endsection

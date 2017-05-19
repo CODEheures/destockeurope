@@ -49,7 +49,7 @@ class Advert extends Model {
     ];
     protected $dates = ['deleted_at', 'online_at', 'ended_at', 'highlight_until'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
-    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'backToTopUrl', 'highlightUrl', 'destroyUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
+    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'backToTopUrl', 'highlightUrl', 'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -105,19 +105,68 @@ class Advert extends Model {
     }
 
     public function getRenewUrlAttribute() {
-        return route('advert.renew', ['id' => $this->id]);
+        if (auth()->check() && auth()->user()->id===$this->user->id) {
+            return route('advert.renew', ['id' => $this->id]);
+        } else {
+            return null;
+        }
     }
 
     public function getBackToTopUrlAttribute() {
-        return route('advert.backToTop', ['id' => $this->id]);
+        if (auth()->check() && auth()->user()->id===$this->user->id) {
+            return route('advert.backToTop', ['id' => $this->id]);
+        } else {
+            return null;
+        }
     }
 
     public function getHighlightUrlAttribute() {
-        return route('advert.highlight', ['id' => $this->id]);
+        if (auth()->check() && auth()->user()->id===$this->user->id) {
+            return route('advert.highlight', ['id' => $this->id]);
+        } else {
+            return null;
+        }
     }
 
     public function getDestroyUrlAttribute() {
-        return route('advert.destroy', ['id' => $this->id]);
+        if (auth()->check() && (auth()->user()->id===$this->user->id || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
+        ) {
+            return route('advert.destroy', ['id' => $this->id]);
+        } else {
+            return null;
+        }
+    }
+
+    public function getUpdateCoefficientUrlAttribute() {
+        if (auth()->check() && (auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR]
+            || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
+        ) {
+            return route('advert.updateCoefficient', ['id' => $this->id]);
+        } else {
+            return null;
+        }
+    }
+
+    public function getUpdateQuantitiesUrlAttribute() {
+        if (auth()->check() &&
+            (auth()->user()->id===$this->user->id
+                || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR]
+                || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN]
+            )
+        ) {
+            return route('advert.updateQuantities', ['id' => $this->id]);
+        } else {
+            return null;
+        }
+    }
+
+    public function getEditUrlAttribute() {
+        if (auth()->check() && (auth()->user()->id===$this->user->id || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
+        ) {
+            return route('advert.edit', ['id' => $this->id]);
+        } else {
+            return null;
+        }
     }
 
     public function getIsEligibleForRenewAttribute() {
