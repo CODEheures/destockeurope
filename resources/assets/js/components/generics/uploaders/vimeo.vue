@@ -1,10 +1,14 @@
 <template>
     <div class="field">
-        <div :id="'progress-'+_uid" class="ui blue active progress" v-show="videoOnUpload">
-            <div class="bar">
-                <div class="progress"></div>
+        <div class="ui grid" v-show="videoOnUpload">
+            <div class="sixteen wide column">
+                <div :id="'progress-'+_uid" class="ui blue active progress">
+                    <div class="bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="label"><a class="ui orange button" v-on:click="cancelUploadVideo()">{{ advertFormVideoBtnCancel }}</a></div>
+                </div>
             </div>
-            <div class="label"><a class="ui orange button" v-on:click="cancelUploadVideo()">{{ advertFormVideoBtnCancel }}</a></div>
         </div>
         <div class="ui grid" v-show="videoOnUpload">
             <div class="sixteen wide center aligned column">

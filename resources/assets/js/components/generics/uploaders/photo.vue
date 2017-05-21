@@ -45,11 +45,15 @@
                                 </div>
                             </div>
                             <div class="sixteen wide column">
-                                <div :id="'progress-'+_uid" class="ui blue active progress" v-show="onUpload">
-                                    <div class="bar">
-                                        <div class="progress"></div>
+                                <div class="ui grid">
+                                    <div class="sixteen wide column">
+                                        <div :id="'progress-'+_uid" class="ui blue active progress" v-show="onUpload">
+                                            <div class="bar">
+                                                <div class="progress"></div>
+                                            </div>
+                                            <div class="label"><a class="ui orange button" v-on:click="cancelUploadPhoto()">{{ advertFormPhotoBtnCancel }}</a></div>
+                                        </div>
                                     </div>
-                                    <div class="label"><a class="ui orange button">{{ advertFormPhotoBtnCancel }}</a></div>
                                 </div>
                                 <div class="ui grid" v-show="onUpload">
                                     <div class="sixteen wide center aligned column">
@@ -132,6 +136,8 @@
                 mainPicture: '',
                 onUpload: false,
                 performUpload: 0,
+                cancelToken: null,
+                sourceCancelToken: null,
             };
         },
         mounted () {
@@ -173,7 +179,8 @@
                     this.filePhotoToPost.append(this.formPhotoFileInputName, event.target.files[0]);
                     let that = this;
                     this.onUpload = true;
-                    console.log(this.thumbs.length);
+                    this.cancelToken = axios.CancelToken;
+                    this.sourceCancelToken = this.cancelToken.source();
                     axios.post(this.routePostTempoPicture, this.filePhotoToPost, {
                         onUploadProgress: function (progressEvent) {
                             console.log('progressEvent', progressEvent);
@@ -182,7 +189,8 @@
                             $('#progress-'+that._uid).progress({
                                 percent: perform
                             });
-                        }
+                        },
+                        ccancelToken: that.sourceCancelToken.token,
                     })
                         .then(function (response) {
                             that.onUpload = false;
@@ -204,6 +212,11 @@
                             }
                         });
                 }
+            },
+            cancelUploadPhoto: function () {
+                let that = this;
+                this.sourceCancelToken.cancel();
+                that.onUpload = false;
             },
             getListThumbs: function (event) {
                 let that = this;

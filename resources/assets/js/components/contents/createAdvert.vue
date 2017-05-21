@@ -145,6 +145,7 @@
                     :max-files="parseInt(maxFiles)"
                     :isDelegation="isDelegation==1"
                     :advert-form-photo-btn-label="advertFormPhotoBtnLabel"
+                    :advert-form-photo-btn-cancel="advertFormPhotoBtnCancel"
                     :advert-form-photo-label="advertFormPhotoLabel"
                     :advert-form-free-photo-help-header-singular="advertFormFreePhotoHelpHeaderSingular"
                     :advert-form-free-photo-help-header-plural="advertFormFreePhotoHelpHeaderPlural"
@@ -245,6 +246,7 @@
             'advertFormPhotoNbFreePicture',
             'maxFiles',
             'advertFormPhotoBtnLabel',
+            'advertFormPhotoBtnCancel',
             'advertFormPhotoLabel',
             'advertFormFreePhotoHelpHeaderSingular',
             'advertFormFreePhotoHelpHeaderPlural',
