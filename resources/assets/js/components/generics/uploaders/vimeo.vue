@@ -46,7 +46,7 @@
 
         <div :id="'vimeodiv-'+_uid" class="sixteen wide column" v-show="videoId!=''">
             <div class="ui basic compact segment" v-if="videoId && !videoReady">
-                <div class="ui inverted active dimmer">
+                <div class="ui inverted active dimmer" style="background-color: white;">
                     <div class="ui massive text loader">{{ transcodeMessage }}</div>
                 </div>
                 <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
@@ -96,11 +96,11 @@
             };
         },
         mounted () {
+            let that = this;
             this.$watch('videoId', function () {
                 let hasVideo = this.videoId != undefined && this.videoId != null && this.videoId != '';
                 this.$parent.$emit('vimeoStateChange', hasVideo);
                 if(hasVideo){
-                    let that = this;
                     let counter = 0;
                     function timeout(seconds) {
                         setTimeout(function () {
@@ -126,6 +126,9 @@
                 }
             });
             this.videoId = this.sessionVideoId;
+            this.$watch('videoOnUpload', function () {
+                that.$parent.$emit('videoUploadStatusChange', that.videoOnUpload)
+            })
         },
         methods: {
             triggerClickInput: function () {
@@ -274,7 +277,7 @@
             },
             delVideo: function () {
                 let that = this;
-                axios.delete(this.routeDelTempoVideo, {'videoId': that.videoId})
+                axios.delete(this.routeDelTempoVideo, {data: {'videoId': that.videoId}})
                     .then(function (response) {
                         that.videoId = '';
                         that.videoReady = false;

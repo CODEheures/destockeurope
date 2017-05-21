@@ -27,6 +27,7 @@
             advert-form-googlemap-label="{{ trans('strings.form_googlemap_label') }}"
             advert-form-photo-separator="{{ trans('strings.form_file_add_photo_separator') }}"
             advert-form-photo-btn-label="{{ trans('strings.form_file_add_photo_btn_label') }}"
+            advert-form-photo-btn-cancel="{{ trans('strings.form_file_cancel_video_label') }}"
             advert-form-photo-label="{{ trans('strings.form_file_add_photo_label', ['minwidth' => env('MIN_WIDTH'), 'minheight' => env('MIN_HEIGHT'), 'maxsize' => env('PHOTO_MAX_SIZE_MB')]) }}"
             advert-form-free-photo-help-header-singular="{{ trans_choice('strings.form_file_add_free_photo_help_header',1) }}"
             advert-form-free-photo-help-header-plural="{{ trans_choice('strings.form_file_add_free_photo_help_header',2) }}"

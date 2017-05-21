@@ -31,4 +31,3 @@ client_max_body_size 10M;
 //      cd vendor/mpdf
 //      chmod 775 tmp
 //      chmod 775 ttfFontsdata
-//TODO indicateur de chargement images

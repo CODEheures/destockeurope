@@ -178,7 +178,7 @@
                     {{ formValidationButtonLabel }}
                 </h4>
                 <div class="field">
-                    <button type="submit" class="ui positive fluid button" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
+                    <button type="submit" :class="submitEnable ? 'ui positive fluid button' : 'ui disabled fluid button'" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
                 </div>
             </form>
         </div>
@@ -300,6 +300,7 @@
                 hasVideo: false,
                 cost: 0,
                 onSetSteps: false,
+                submitEnable: true,
             };
         },
         mounted () {
@@ -360,6 +361,9 @@
             });
             this.$on('fileSizeError', function () {
                 this.sendToast(this.filesizeErrorMessage, 'error');
+            });
+            this.$on('videoUploadStatusChange', function(onUpload){
+                this.submitEnable = !onUpload;
             });
             this.xCsrfToken = destockShareVar.csrfToken;
             this.$watch('isUrgent', function () {

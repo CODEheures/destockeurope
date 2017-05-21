@@ -55,7 +55,7 @@
                         });
                 },
                 onUnchecked: function() {
-                    axios.delete(that.routeRemove, {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id})
+                    axios.delete(that.routeRemove, {data: {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id}})
                         .then(function (response) {
                             //console.log('unsubscribe success', response)
                         })

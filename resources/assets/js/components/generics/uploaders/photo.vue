@@ -31,6 +31,42 @@
                         </div>
                     </div>
                 </div>
+                <div class="column" v-show="onUpload">
+                    <div :class="!isDelegation &&  thumbs.length+1>advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
+                        <a class="ui pink right ribbon label" v-if="!isDelegation && thumbs.length+1>advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
+                        <div class="ui stackable grid">
+                            <div class="four wide centered column">
+                                <a href="#"><i class="large grey remove circle outline icon"></i></a>
+                            </div>
+                            <div class="twelve wide right aligned column">
+                                <div :id="'fakeSlider1-'+_uid" class="ui slider checkbox">
+                                    <input type="radio">
+                                    <label>{{ advertFormMainPhotoLabel }}</label>
+                                </div>
+                            </div>
+                            <div class="sixteen wide column">
+                                <div :id="'progress-'+_uid" class="ui blue active progress" v-show="onUpload">
+                                    <div class="bar">
+                                        <div class="progress"></div>
+                                    </div>
+                                    <div class="label"><a class="ui orange button">{{ advertFormPhotoBtnCancel }}</a></div>
+                                </div>
+                                <div class="ui grid" v-show="onUpload">
+                                    <div class="sixteen wide center aligned column">
+                                        <div class="ui statistic">
+                                            <div class="value">
+                                                {{ performUpload }}
+                                            </div>
+                                            <div class="label">
+                                                Mb
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -74,6 +110,7 @@
             isDelegation: Boolean,
             //vue strings
             advertFormPhotoBtnLabel: String,
+            advertFormPhotoBtnCancel: String,
             advertFormPhotoLabel: String,
             advertFormFreePhotoHelpHeaderSingular: String,
             advertFormFreePhotoHelpHeaderPlural: String,
@@ -93,6 +130,8 @@
                 nbPicturesIndicator: '',
                 helpHeaderIndicator: '',
                 mainPicture: '',
+                onUpload: false,
+                performUpload: 0,
             };
         },
         mounted () {
@@ -117,6 +156,7 @@
                     }
                 });
             });
+            $('#fakeSlider1-'+that._uid).checkbox();
         },
         methods: {
             triggerClickInput: function () {
@@ -132,13 +172,26 @@
                 if(event.target.files[0] != undefined){
                     this.filePhotoToPost.append(this.formPhotoFileInputName, event.target.files[0]);
                     let that = this;
-                    axios.post(this.routePostTempoPicture, this.filePhotoToPost)
+                    this.onUpload = true;
+                    console.log(this.thumbs.length);
+                    axios.post(this.routePostTempoPicture, this.filePhotoToPost, {
+                        onUploadProgress: function (progressEvent) {
+                            console.log('progressEvent', progressEvent);
+                            let perform = 100*(progressEvent.loaded)/progressEvent.total;
+                            that.performUpload = ((progressEvent.loaded)/(1024*1024)).toFixed(2)+'Mb';
+                            $('#progress-'+that._uid).progress({
+                                percent: perform
+                            });
+                        }
+                    })
                         .then(function (response) {
+                            that.onUpload = false;
                             that.filePhotoToPost.delete(that.formPhotoFileInputName);
                             event.target.value="";
                             that.thumbs = response.data;
                         })
                         .catch(function (error) {
+                            that.onUpload = false;
                             that.filePhotoToPost.delete(that.formPhotoFileInputName);
                             event.target.value="";
                             if (error.response && error.response.status == 422) {
