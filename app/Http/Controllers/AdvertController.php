@@ -492,7 +492,8 @@ class AdvertController extends Controller
      * @param $invoiceId
      * @return AdvertController|\Illuminate\Http\RedirectResponse
      */
-    public function reviewForPayment($invoiceId) {
+    public function reviewForPayment($invoiceId, Request $request) {
+        $title = $request->has('title') ? $request->title : null;
         if(!UserUtils::haveCompleteAccount()){
             return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
         }
@@ -513,7 +514,7 @@ class AdvertController extends Controller
             }
             $invoice->save();
             $listCardTypes = config('paypal_cards.list');
-            return view('advert.reviewForPayment', compact('invoice', 'listCardTypes'));
+            return view('advert.reviewForPayment', compact('invoice', 'listCardTypes', 'title'));
         }
         return redirect(route('home'));
     }
@@ -616,7 +617,7 @@ class AdvertController extends Controller
                 if(auth()->user()->isSupplier){
                     return redirect(route('advert.publish', ['id' =>$advert->id]));
                 } else {
-                    return redirect(route('user.completeAccount', ['id' =>$advert->id]));
+                    return redirect(route('user.completeAccount', ['id' =>$advert->id, 'infoCost' => $cost]));
                 }
             } catch (\Exception $e) {
                 DB::rollback();
@@ -752,17 +753,18 @@ class AdvertController extends Controller
             try {
                 //Create Invoice
                 DB::beginTransaction();
+                $cost = CostUtils::getCost(['isRenew' => true]);
                 $invoice = Invoice::create([
                     'user_id' => $advert->user->id,
                     'advert_id' => $advert->id,
                     'state' => Invoice::STATE_RENEW,
-                    'cost' => CostUtils::getCost(['isRenew' => true]),
+                    'cost' => $cost,
                     'options' => CostUtils::setOptions(['isRenew' => true])
                 ]);
-                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
+                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isRenew_name')]);
                 $advert->save();
                 DB::commit();
-                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isRenew_name')]));
+                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isRenew_name'), 'infoCost' => $cost]));
             } catch (\Exception $e) {
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }
@@ -785,17 +787,18 @@ class AdvertController extends Controller
             try {
                 //Create Invoice
                 DB::beginTransaction();
+                $cost = CostUtils::getCost(['isBackToTop' => true]);
                 $invoice = Invoice::create([
                     'user_id' => $advert->user->id,
                     'advert_id' => $advert->id,
                     'state' => Invoice::STATE_BACKTOTOP,
-                    'cost' => CostUtils::getCost(['isBackToTop' => true]),
+                    'cost' => $cost,
                     'options' => CostUtils::setOptions(['isBackToTop' => true])
                 ]);
-                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
+                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isRenew_name')]);
                 $advert->save();
                 DB::commit();
-                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name')]));
+                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name'), 'infoCost' => $cost]));
             } catch (\Exception $e) {
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }
@@ -818,17 +821,18 @@ class AdvertController extends Controller
             try {
                 //Create Invoice
                 DB::beginTransaction();
+                $cost = CostUtils::getCost(['isHighlight' => true]);
                 $invoice = Invoice::create([
                     'user_id' => $advert->user->id,
                     'advert_id' => $advert->id,
                     'state' => Invoice::STATE_HIGHLIGHT,
-                    'cost' => CostUtils::getCost(['isHighlight' => true]),
+                    'cost' => $cost,
                     'options' => CostUtils::setOptions(['isHighlight' => true])
                 ]);
-                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
+                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isRenew_name')]);
                 $advert->save();
                 DB::commit();
-                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isHighlight_name')]));
+                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isHighlight_name'), 'infoCost' => $cost]));
             } catch (\Exception $e) {
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }

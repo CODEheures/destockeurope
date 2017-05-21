@@ -24,7 +24,7 @@
             registration-number="{{ $user->registrationNumber }}"
             vat-identifier="{{ $user->vatIdentifier }}"
             advert-account-verified-step="{{ isset($advertAccountVerifiedStep) ? $advertAccountVerifiedStep : false }}"
-            advert-cost="{{ isset($advert) && $advert->invoice ? $advert->invoice->cost : '0' }}"
+            advert-cost="{{ isset($cost) ? $cost : '0' }}"
             advert-id="{{ isset($advert) ? $advert->id : '' }}"
             form-phone-max-valid="{{ config('db_limits.users.maxPhone') }}"
             form-compagny-name-min-valid="{{ config('db_limits.users.minCompagnyName') }}"
@@ -51,11 +51,11 @@
             form-vat-on-check-progress-label="{{ trans('strings.view_user_account_compagny_number_check_progress') }}"
             form-vat-identifier-label="{{ trans('strings.view_user_account_compagny_number_identifier') }}"
 
-            step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
+            step-one-title="{{ isset($title) ?  $title : trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"
             step-three-title="{{ trans('strings.view_advert_steps_3_title') }}"
             step-three-title-post="{{ trans('strings.view_advert_steps_3_title_post') }}"
-            step-one-description="{{ trans('strings.view_advert_steps_1_description') }}"
+            step-one-description="{{ isset($title) ?  '' : trans('strings.view_advert_steps_1_description') }}"
             step-two-description="{{ trans('strings.view_advert_steps_2_description') }}"
             step-three-description="{{ trans('strings.view_advert_steps_3_description') }}"
 

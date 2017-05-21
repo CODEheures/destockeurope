@@ -65,7 +65,9 @@ class UserController extends Controller
      * @param $id
      * @return UserController|\Illuminate\Http\RedirectResponse
      */
-    public function completeAccount($id, $title=null){
+    public function completeAccount($id, Request $request){
+        $title = $request->has('title') ? $request->title : null;
+        $cost = $request->has('infoCost') ? $request->infoCost : 0;
         $user = $this->auth->user();
         if(!is_null($user->avatar) && filter_var($user->avatar, FILTER_VALIDATE_URL)) {
             $routeAvatar = $user->avatar;
@@ -78,7 +80,7 @@ class UserController extends Controller
         $advertAccountVerifiedStep = true;
         $advert = Advert::withTrashed()->find($id);
         if($advert && $advert->user->id === $user->id){
-            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title', 'routeAvatar'));
+            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title', 'cost', 'routeAvatar'));
         } else {
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
         }
