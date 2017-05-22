@@ -155,6 +155,12 @@
                                         :back-to-top-label="backToTopLabel"
                                         :highlight-label="highlightLabel"
                                         :renew-advert-label="renewAdvertLabel"
+                                        :see-advert-popup-label="seeAdvertPopupLabel"
+                                        :edit-advert-popup-label="editAdvertPopupLabel"
+                                        :delete-advert-popup-label="deleteAdvertPopupLabel"
+                                        :back-to-top-popup-label="backToTopPopupLabel"
+                                        :highlight-popup-label="highlightPopupLabel"
+                                        :renew-advert-popup-label="renewAdvertPopupLabel"
                                 ></advert-manage-button>
                             </template>
                         </div>
@@ -295,6 +301,12 @@
                                             :back-to-top-label="backToTopLabel"
                                             :highlight-label="highlightLabel"
                                             :renew-advert-label="renewAdvertLabel"
+                                            :see-advert-popup-label="seeAdvertPopupLabel"
+                                            :edit-advert-popup-label="editAdvertPopupLabel"
+                                            :delete-advert-popup-label="deleteAdvertPopupLabel"
+                                            :back-to-top-popup-label="backToTopPopupLabel"
+                                            :highlight-popup-label="highlightPopupLabel"
+                                            :renew-advert-popup-label="renewAdvertPopupLabel"
                                         ></advert-manage-button>
                                     </template>
                                     <template v-else>
@@ -372,6 +384,12 @@
                                         :back-to-top-label="backToTopLabel"
                                         :highlight-label="highlightLabel"
                                         :renew-advert-label="renewAdvertLabel"
+                                        :see-advert-popup-label="seeAdvertPopupLabel"
+                                        :edit-advert-popup-label="editAdvertPopupLabel"
+                                        :delete-advert-popup-label="deleteAdvertPopupLabel"
+                                        :back-to-top-popup-label="backToTopPopupLabel"
+                                        :highlight-popup-label="highlightPopupLabel"
+                                        :renew-advert-popup-label="renewAdvertPopupLabel"
                                 ></advert-manage-button>
                             </template>
                             <template v-else>
@@ -467,6 +485,12 @@
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             editAdvertLabel: String,
+            seeAdvertPopupLabel: String,
+            editAdvertPopupLabel: String,
+            deleteAdvertPopupLabel: String,
+            backToTopPopupLabel: String,
+            highlightPopupLabel: String,
+            renewAdvertPopupLabel: String,
             validationOnProgressLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,

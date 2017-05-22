@@ -186,6 +186,12 @@
                                         :back-to-top-label="backToTopAdvertLabel"
                                         :highlight-label="highlightAdvertLabel"
                                         :renew-advert-label="renewAdvertLabel"
+                                        :see-advert-popup-label="seeAdvertPopupLabel"
+                                        :edit-advert-popup-label="editAdvertPopupLabel"
+                                        :delete-advert-popup-label="deleteAdvertPopupLabel"
+                                        :back-to-top-popup-label="backToTopPopupLabel"
+                                        :highlight-popup-label="highlightPopupLabel"
+                                        :renew-advert-popup-label="renewAdvertPopupLabel"
                                 ></advert-manage-button>
                             </div>
                             <div class="fb-share-button"
@@ -232,6 +238,12 @@
                         :back-to-top-label="backToTopAdvertLabel"
                         :highlight-label="highlightAdvertLabel"
                         :renew-advert-label="renewAdvertLabel"
+                        :see-advert-popup-label="seeAdvertPopupLabel"
+                        :edit-advert-popup-label="editAdvertPopupLabel"
+                        :delete-advert-popup-label="deleteAdvertPopupLabel"
+                        :back-to-top-popup-label="backToTopPopupLabel"
+                        :highlight-popup-label="highlightPopupLabel"
+                        :renew-advert-popup-label="renewAdvertPopupLabel"
                 ></advert-manage-button>
             </div>
             <div class="sixteen wide right aligned column" v-if="!isUserOwner">
@@ -283,6 +295,12 @@
             'backToTopAdvertLabel',
             'highlightAdvertLabel',
             'renewAdvertLabel',
+            'seeAdvertPopupLabel',
+            'editAdvertPopupLabel',
+            'deleteAdvertPopupLabel',
+            'backToTopPopupLabel',
+            'highlightPopupLabel',
+            'renewAdvertPopupLabel',
             'formMessageLabel',
             'formMessageEmailLabel',
             'formMessageNameLabel',

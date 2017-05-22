@@ -47,6 +47,12 @@
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :edit-advert-label="editAdvertLabel"
+                            :see-advert-popup-label="seeAdvertPopupLabel"
+                            :edit-advert-popup-label="editAdvertPopupLabel"
+                            :delete-advert-popup-label="deleteAdvertPopupLabel"
+                            :back-to-top-popup-label="backToTopPopupLabel"
+                            :highlight-popup-label="highlightPopupLabel"
+                            :renew-advert-popup-label="renewAdvertPopupLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
@@ -87,6 +93,12 @@
                             :delete-advert-label="deleteAdvertLabel"
                             :see-advert-label="seeAdvertLabel"
                             :edit-advert-label="editAdvertLabel"
+                            :see-advert-popup-label="seeAdvertPopupLabel"
+                            :edit-advert-popup-label="editAdvertPopupLabel"
+                            :delete-advert-popup-label="deleteAdvertPopupLabel"
+                            :back-to-top-popup-label="backToTopPopupLabel"
+                            :highlight-popup-label="highlightPopupLabel"
+                            :renew-advert-popup-label="renewAdvertPopupLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
                             :bookmark-info="bookmarkInfo"
                             :views-info="viewsInfo"
@@ -143,6 +155,12 @@
             deleteAdvertLabel: String,
             seeAdvertLabel: String,
             editAdvertLabel: String,
+            seeAdvertPopupLabel: String,
+            editAdvertPopupLabel: String,
+            deleteAdvertPopupLabel: String,
+            backToTopPopupLabel: String,
+            highlightPopupLabel: String,
+            renewAdvertPopupLabel: String,
             validationOnProgressLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
