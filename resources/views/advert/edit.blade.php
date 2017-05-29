@@ -2,15 +2,15 @@
 
 @section('content')
 
-    <create-advert-form
-            route-advert-form-post="{{ route('advert.store') }}"
+    <edit-advert-form
+            route-advert-form-post="{{ route('advert.update', ['id' => $editAdvert->id]) }}"
             route-post-tempo-picture="{{ route('picture.post',['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
             route-get-list-tempo-thumbs="{{ route('picture.listThumbs', ['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
             route-get-tempo-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_TEMPO_LOCAL])}}"
             route-del-tempo-picture="{{ route('picture.destroyTempo')}}"
             route-get-cost="{{ route('advert.cost')}}"
 
-            @if(count(old())>0)old="{{ json_encode(old()) }}" @endif
+            old="{{ count(old())>0 ? 1 : 0 }}"
             advert-form-photo-nb-free-picture="{{ config('runtime.nbFreePictures') }}"
             max-files="{{ config('runtime.nbMaxPictures') }}"
             form-title-min-valid="{{ config('db_limits.adverts.minTitle') }}"
@@ -18,6 +18,7 @@
             form-description-min-valid="{{ config('db_limits.adverts.minDescription') }}"
             form-description-max-valid="{{ config('db_limits.adverts.maxDescription') }}"
             is-delegation="{{ isset($user) ? $user->isSupplier : false }}"
+            edit-advert="{{ isset($editAdvert) ? json_encode($editAdvert) : '' }}"
 
             content-header="{{ isset($user) && $user->isSupplier ? trans('strings.view_advert_create_header_delegation'):trans('strings.view_advert_create_header') }}"
             advert-form-title-label="{{ trans('strings.view_advert_form_title_label') }}"
@@ -78,7 +79,7 @@
             waiting-message="{{ trans('strings.form_waiting_for_process') }}"
             transcode-message="{{ trans('strings.form_waiting_for_transcode') }}"
 
-    ></create-advert-form>
+    ></edit-advert-form>
 
 @endsection
 

@@ -17,14 +17,16 @@ class AdvertApprove extends Notification
     private $invoice;
     private $senderName;
     private $senderMail;
+    private $state;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Advert $advert, Invoice $invoice=null, $senderName, $senderMail)
+    public function __construct(Advert $advert, $state, Invoice $invoice=null, $senderName, $senderMail)
     {
         $this->advert = $advert;
+        $this->state = $state;
         $this->invoice = $invoice;
         $this->senderName = $senderName;
         $this->senderMail = $senderMail;
@@ -49,10 +51,18 @@ class AdvertApprove extends Notification
      */
     public function toMail($notifiable)
     {
-        $message =  (new MailMessage)
+        $message =
+            $this->state ==  Invoice::STATE_CREATION ?
+                (new MailMessage)
                     ->subject(trans('strings.mail_advertApprove_subject'))
                     ->greeting(trans('strings.mail_advertApprove_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_advertApprove_line',['title' => $this->advert->title]))
+                    ->action(trans('strings.mail_advertApprove_action'), $this->advert->url)
+                    ->line(trans('strings.mail_advertApprove_line2'))
+                :(new MailMessage)
+                    ->subject(trans('strings.mail_advertApproveEdit_subject'))
+                    ->greeting(trans('strings.mail_advertApproveEdit_greeting',['username' => $notifiable->name]))
+                    ->line(trans('strings.mail_advertApproveEdit_line',['title' => $this->advert->title]))
                     ->action(trans('strings.mail_advertApprove_action'), $this->advert->url)
                     ->line(trans('strings.mail_advertApprove_line2'));
 

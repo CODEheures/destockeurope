@@ -92,11 +92,19 @@ return [
     'mail_advertApprove_action' => 'See my advert',
     'mail_advertApprove_line2' => 'Thank you for using our application!',
 
+    'mail_advertApproveEdit_subject' => 'Modifications of your advert is online!',
+    'mail_advertApproveEdit_greeting' => 'Congratulations :username !',
+    'mail_advertApproveEdit_line' => 'Yours modifications of advert ":title" are approved and are now online',
+
     'mail_advertNotApprove_subject' => 'Your advert is not approve',
     'mail_advertNotApprove_greeting' => 'Sorry dear user :username !',
     'mail_advertNotApprove_line' => 'Your advert ":title" does not respect the rules and is not approved by our team \':(.',
     'mail_advertNotApprove_line_voidPayment' => 'Your Payment for this Advert is Canceled.',
     'mail_advertNotApprove_line2' => 'We hope to see you quickly for post a new valid advert. Thank you for using our application!',
+
+    'mail_advertNotApproveEdit_subject' => 'Modifications of your advert is not approve',
+    'mail_advertNotApproveEdit_greeting' => 'Sorry dear user :username !',
+    'mail_advertNotApproveEdit_line' => 'Yours modifications of advert ":title" don\'t respect the rules and are not approved by our team \':(.',
 
     'mail_alertObsoleteAdvert_subject' => 'Your advert will soon expire. Renew it',
     'mail_alertObsoleteAdvert_subject_lastday' => 'Reminder: Your advert expires in less than 24h. Renew it there',
@@ -227,6 +235,7 @@ return [
     'option_payedPicture_name' => 'Extra Photos',
     'option_isUrgent_name' => 'Urgent advert',
     'option_isRenew_name' => 'Renewal of my advert',
+    'option_isEdit_name' => 'Edit of my advert',
     'option_isBackToTop_name' => 'Back my advert to top of the list',
     'option_isHighlight_name' => 'Put my advert in front',
     'option_haveVideo_name' => 'Vidéo',
@@ -266,6 +275,7 @@ return [
     'view_manage_adverts_urgent_cost_label' => 'Cost of URGENT option (€ excl. taxes)',
     'view_manage_adverts_video_cost_label' => 'Cost of Video option (€ excl. taxes)',
     'view_manage_adverts_renew_cost_label' => 'Price for renew (€ excl. taxes)',
+    'view_manage_adverts_edit_cost_label' => 'Price for edit (€ excl. taxes)',
     'view_manage_adverts_backToTop_cost_label' => 'Price for back To Top of list(€ excl. taxes)',
     'view_manage_adverts_highlight_cost_label' => 'Price for highlight (€ excl. taxes)',
     'view_manage_adverts_per_page_label' => 'Number adverts per page',
@@ -442,7 +452,9 @@ return [
     'payment_paypal_success' => 'Thank you for your payment. Note that this will only be executed if your ad is validated by our services. You will then receive your invoice by e-mail.',
     'payment_renew_success' => 'Thank you for your payment. Your advert is extended to :date. Your invoice is send by e-mail.',
     'payment_backToTop_success' => 'Thank you for your payment. Your advert has just been moved back to the top of the list. Your invoice is send by e-mail.',
+    'noPayment_backToTop_success' => 'Your advert has just been moved back to the top of the list.',
     'payment_highlight_success' => 'Thank you for your payment. Your Advert is put in Front During the next ' . env('HIGHLIGHT_HOURS_DURATION') . ' hours.  Your invoice is send by e-mail.',
+    'noPayment_highlight_success' => 'Your Advert is put in Front During the next ' . env('HIGHLIGHT_HOURS_DURATION') . ' hours.',
 
     'footer_list_header_1' => 'HOUSE',
     'footer_list_1_1' => 'Furnishings',

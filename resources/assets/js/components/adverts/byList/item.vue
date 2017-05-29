@@ -186,6 +186,16 @@
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
                                 </p>
                             </div>
+                            <div class="sixteen wide column item-description" v-if="!advert.deleted_at">
+                                <div class="ui form">
+                                    <quantities-input-field
+                                            :advert="advert"
+                                            :total-quantity-label="totalQuantityLabel"
+                                            :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                            :form-update-label="formAdvertPriceCoefficientUpdateLabel"
+                                    ></quantities-input-field>
+                                </div>
+                            </div>
                             <div class="sixteen wide column item-description">
                                 <div class="ui form">
                                     <margin-input-field
@@ -196,16 +206,6 @@
                                             :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                                             :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                                     ></margin-input-field>
-                                </div>
-                            </div>
-                            <div class="sixteen wide column item-description" v-if="!advert.deleted_at">
-                                <div class="ui form">
-                                    <quantities-input-field
-                                            :advert="advert"
-                                            :total-quantity-label="totalQuantityLabel"
-                                            :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                            :form-update-label="formAdvertPriceCoefficientUpdateLabel"
-                                    ></quantities-input-field>
                                 </div>
                             </div>
                         </div>
@@ -229,6 +229,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="sixteen wide mobile only column" v-if="!advert.deleted_at">
+                        <div class="ui form">
+                            <quantities-input-field
+                                    :advert="advert"
+                                    :total-quantity-label="totalQuantityLabel"
+                                    :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                    :form-update-label="formAdvertPriceCoefficientUpdateLabel"
+                            ></quantities-input-field>
+                        </div>
+                    </div>
                     <div class="sixteen wide mobile only column">
                         <div class="ui form">
                             <margin-input-field
@@ -239,16 +249,6 @@
                                     :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                                     :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                             ></margin-input-field>
-                        </div>
-                    </div>
-                    <div class="sixteen wide mobile only column" v-if="!advert.deleted_at">
-                        <div class="ui form">
-                            <quantities-input-field
-                                    :advert="advert"
-                                    :total-quantity-label="totalQuantityLabel"
-                                    :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                    :form-update-label="formAdvertPriceCoefficientUpdateLabel"
-                            ></quantities-input-field>
                         </div>
                     </div>
                 </div>

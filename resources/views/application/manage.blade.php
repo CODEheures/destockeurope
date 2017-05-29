@@ -18,6 +18,7 @@
             advert-urgent-cost-label="{{ trans('strings.view_manage_adverts_urgent_cost_label') }}"
             advert-video-cost-label="{{ trans('strings.view_manage_adverts_video_cost_label') }}"
             advert-renew-cost-label="{{ trans('strings.view_manage_adverts_renew_cost_label') }}"
+            advert-edit-cost-label="{{ trans('strings.view_manage_adverts_edit_cost_label') }}"
             advert-back-to-top-cost-label="{{ trans('strings.view_manage_adverts_backToTop_cost_label') }}"
             advert-highlight-cost-label="{{ trans('strings.view_manage_adverts_highlight_cost_label') }}"
             advert-per-page-label="{{ trans('strings.view_manage_adverts_per_page_label') }}"

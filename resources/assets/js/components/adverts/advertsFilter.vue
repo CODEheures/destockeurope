@@ -100,7 +100,7 @@
                                     :results-for="dataResultsFor"
                                     :update="dataUpdate"
                                     :flag-reset="flagResetSearch"
-                                    :fields="{title: 'titleWithManuRef', description : 'resume', image: 'thumb'}"
+                                    :fields="{title: 'titleWithManuRef', description : 'resume', image: 'thumb', price: 'price_margin'}"
                             ></search-filter>
                         </div>
                         <div class="column">

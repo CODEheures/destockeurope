@@ -1,13 +1,15 @@
 <template>
     <div class="two fields">
-        <div class="two fields">
-            <div class="field">
-                <label>{{ totalQuantityLabel }}</label>
-                <input type="number" name="totalQuantity" :min="Math.max(1,advert.lotMiniQuantity)" step="1" v-model="advert.totalQuantity">
-            </div>
-            <div class="field">
-                <label>{{ lotMiniQuantityLabel }}</label>
-                <input type="number" name="lotMiniQuantity" min="1" :max="advert.totalQuantity" step="1" v-model="advert.lotMiniQuantity">
+        <div class="field">
+            <div class="two fields">
+                <div class="field">
+                    <label>{{ totalQuantityLabel }}</label>
+                    <input type="number" name="totalQuantity" :min="Math.max(1,advert.lotMiniQuantity)" step="1" v-model="advert.totalQuantity">
+                </div>
+                <div class="field">
+                    <label>{{ lotMiniQuantityLabel }}</label>
+                    <input type="number" name="lotMiniQuantity" min="1" :max="advert.totalQuantity" step="1" v-model="advert.lotMiniQuantity">
+                </div>
             </div>
         </div>
         <div class="field">

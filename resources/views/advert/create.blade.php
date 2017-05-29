@@ -10,7 +10,7 @@
             route-del-tempo-picture="{{ route('picture.destroyTempo')}}"
             route-get-cost="{{ route('advert.cost')}}"
 
-            @if(count(old())>0)old="{{ json_encode(old()) }}" @endif
+            old="{{ count(old())>0 ? 1 : 0 }}"
             advert-form-photo-nb-free-picture="{{ config('runtime.nbFreePictures') }}"
             max-files="{{ config('runtime.nbMaxPictures') }}"
             form-title-min-valid="{{ config('db_limits.adverts.minTitle') }}"

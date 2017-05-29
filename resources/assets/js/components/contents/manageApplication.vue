@@ -89,6 +89,16 @@
                     </div>
                     <div class="three fields">
                         <div class="field">
+                            <label>{{ advertEditCostLabel }}</label>
+                            <input type="number"
+                                   name="editCost"
+                                   min="0"
+                                   v-model="parameters.editCost"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'editCost', 'value': parameters.editCost}"
+                                   v-on:blur="blured={'name': 'editCost', 'value': parameters.editCost}">
+                        </div>
+                        <div class="field">
                             <label>{{ advertBackToTopCostLabel }}</label>
                             <input type="number"
                                    name="backToTopCost"
@@ -240,6 +250,7 @@
             advertVideoCostLabel: String,
             advertRenewCostLabel: String,
             advertBackToTopCostLabel: String,
+            advertEditCostLabel: String,
             advertHighlightCostLabel: String,
             advertPerPageLabel: String,
             advertResumeLenghtLabel: String,

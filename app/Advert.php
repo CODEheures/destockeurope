@@ -49,11 +49,16 @@ class Advert extends Model {
     ];
     protected $dates = ['deleted_at', 'online_at', 'ended_at', 'highlight_until'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
-    protected $appends = array('breadCrumb', 'url', 'renewUrl', 'backToTopUrl', 'highlightUrl', 'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'resume', 'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight', 'isEligibleForRenewMailZero', 'isUserOwner', 'isUserBookmark', 'bookmarkCount', 'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol');
+    protected $appends = array('breadCrumb', 'isOnEdit', 'url', 'renewUrl', 'backToTopUrl', 'highlightUrl',
+        'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'resume',
+        'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight',
+        'isEligibleForRenewMailZero', 'isEligibleForEdit', 'isUserOwner', 'isUserBookmark', 'bookmarkCount',
+        'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol', 'isOnEdit');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
     private $bookmarkCount = 0;
+    private $isOnEdit = false;
 
     protected $casts = [
         'isPublish' => 'Boolean',
@@ -69,6 +74,7 @@ class Advert extends Model {
     public function category() { return $this->belongsTo('App\Category'); }
     public function pictures() { return $this->hasMany('App\Picture'); }
     public function picturesWithTrashed() { return $this->hasMany('App\Picture')->withTrashed(); }
+    public function picturesOnlyTrashed() { return $this->hasMany('App\Picture')->onlyTrashed(); }
     public function invoices() { return $this->hasMany('App\Invoice'); }
 
     //Attributs Getters
@@ -113,7 +119,7 @@ class Advert extends Model {
     }
 
     public function getBackToTopUrlAttribute() {
-        if (auth()->check() && auth()->user()->id===$this->user->id) {
+        if ((!$this->is_delegation && auth()->check() && auth()->user()->id===$this->user->id) || ($this->is_delegation && auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR])) {
             return route('advert.backToTop', ['id' => $this->id]);
         } else {
             return null;
@@ -121,7 +127,7 @@ class Advert extends Model {
     }
 
     public function getHighlightUrlAttribute() {
-        if (auth()->check() && auth()->user()->id===$this->user->id) {
+        if ((!$this->is_delegation && auth()->check() && auth()->user()->id===$this->user->id) || ($this->is_delegation && auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR])) {
             return route('advert.highlight', ['id' => $this->id]);
         } else {
             return null;
@@ -179,7 +185,13 @@ class Advert extends Model {
         $ended = Carbon::parse($this->ended_at);
         $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isFuture();
         $isNotHighlight = is_null($this->highlight_until) || Carbon::parse($this->highlight_until)->isPast();
-        return (!$this->is_delegation && $this->isValid && $isNotHighlight && $isQuiteYoung);
+        return ((!$this->is_delegation || (auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR]) )&& $this->isValid && $isNotHighlight && $isQuiteYoung);
+    }
+
+    public function getIsEligibleForEditAttribute() {
+        $ended = Carbon::parse($this->ended_at);
+        $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isFuture();
+        return ($this->isValid && !$this->isOnEdit && $isQuiteYoung);
     }
 
     public function getThumbAttribute() {
@@ -234,6 +246,10 @@ class Advert extends Model {
         return false;
     }
 
+    public function getIsOnEditAttribute() {
+        return $this->isOnEdit;
+    }
+
     //Setter Attribute
     public function setPriceCoefficientAttribute($value) {
         //Use this mutator to ensure Margin value
@@ -277,6 +293,10 @@ class Advert extends Model {
 
     public function setEndedAt() {
         $this->ended_at = Carbon::parse($this->online_at)->addDays(env('ADVERT_LIFE_TIME'));
+    }
+
+    public function setIsOnEdit() {
+        $this->isOnEdit = Advert::where('isEditOf', $this->id)->where('isPublish', true)->count()>0;
     }
 
     //Locals Scopes
@@ -326,6 +346,7 @@ class Advert extends Model {
         return $query->withTrashed()
             ->where('user_id', '=', auth()->id())
             ->where('isPublish', true)
+            ->whereNull('isEditOF')
             ->where(function ($query_in) {
                 $query_in->where('isValid', null)
                     ->orWhere('isValid', true);

@@ -17,6 +17,7 @@
         <div class="column">
             <form class="ui form" :action="routeAdvertFormPost" method="post">
                 <input type="hidden" name="_token" :value="xCsrfToken"/>
+                <input type="hidden" name="_method" value="PATCH">
                 <input type="hidden" name="category" :value="categoryId"/>
                 <input type="hidden" name="currency" :value="currency" />
                 <input type="hidden" name="lat" :value="lat" />
@@ -141,7 +142,7 @@
                     :route-get-list-tempo-thumbs="routeGetListTempoThumbs"
                     :route-get-tempo-thumb="routeGetTempoThumb"
                     :route-del-tempo-picture="routeDelTempoPicture"
-                    :advert-form-photo-nb-free-picture="parseInt(advertFormPhotoNbFreePicture)"
+                    :advert-form-photo-nb-free-picture="calcNbFreePictures()"
                     :max-files="parseInt(maxFiles)"
                     :isDelegation="isDelegation==1"
                     :advert-form-photo-btn-label="advertFormPhotoBtnLabel"
@@ -166,6 +167,7 @@
                     :route-get-status-video="routeGetStatusVideo"
                     :max-video-file-size="parseInt(maxVideoFileSize)"
                     :session-video-id="sessionVideoId"
+                    :is-edit-advert="true"
                     :advert-form-video-btn-label="advertFormVideoSeparator"
                     :advert-form-video-label="advertFormVideoLabel"
                     :advert-form-video-btn-delete="advertFormVideoBtnDelete"
@@ -199,6 +201,7 @@
             'formDescriptionMinValid',
             'formDescriptionMaxValid',
             'isDelegation',
+            'editAdvert',
             //vue strings
             'contentHeader',
             'advertFormTitleLabel',
@@ -303,6 +306,7 @@
                 cost: 0,
                 onSetSteps: false,
                 submitEnable: true,
+                dataAdvertEdit: {}
             };
         },
         mounted () {
@@ -390,9 +394,26 @@
                this.price = parseFloat(this.price).toFixed(this.subunit);
             });
 
-            if(this.old == '0'){
-                sessionStorage.clear();
+            if(this.editAdvert !== ''){
+                this.dataAdvertEdit = JSON.parse(this.editAdvert);
+                if(this.old == '0') {
+                    this.categoryId = this.dataAdvertEdit.category_id;
+                    this.title = this.dataAdvertEdit.title;
+                    this.manuRef = this.dataAdvertEdit.manu_ref != null ? this.dataAdvertEdit.manu_ref : '';
+                    this.description = this.dataAdvertEdit.description;
+                    this.price = this.dataAdvertEdit.originalPrice/(Math.pow(10,this.dataAdvertEdit.priceSubUnit));
+                    this.totalQuantity = this.dataAdvertEdit.totalQuantity;
+                    this.lotMiniQuantity = this.dataAdvertEdit.lotMiniQuantity;
+                    this.type = this.dataAdvertEdit.type;
+                    this.currency = this.dataAdvertEdit.currency;
+                    this.lat = this.dataAdvertEdit.latitude;
+                    this.lng = this.dataAdvertEdit.longitude;
+                    this.isUrgent = this.dataAdvertEdit.isUrgent;
+                    this.isNegociated = this.dataAdvertEdit.isNegociated;
+                    this.setStorage();
+                }
             }
+
             this.getStorage();
         },
         updated () {
@@ -438,12 +459,12 @@
                 } else {
                     resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
                 }
-                if(this.isDelegation!=1 && (resultIndicator<0 || this.isUrgent || this.hasVideo)) {
+                if(this.isDelegation!=1) {
                     if(this.isDelegation != 1) {
                         (this.steps[2]).isDisabled = false;
                     }
                     let that = this;
-                    axios.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent)
+                    axios.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent, {params: {'isEditOf': this.dataAdvertEdit.id}})
                         .then(function (response) {
                             that.cost = response.data;
                             (that.steps[2]).title = that.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.stepThreeTitlePost + ')';
@@ -456,6 +477,15 @@
                     this.cost = 0;
                     (this.steps[2]).title = this.stepThreeTitle;
                     (this.steps[2]).isDisabled = true;
+                }
+            },
+            calcNbFreePictures () {
+                let nbAlreadyPaid = 0;
+                let nbOriginalPictures = 'pictures' in this.dataAdvertEdit ? parseInt(this.dataAdvertEdit.pictures.length)/2 : 0;
+                if(nbOriginalPictures > parseInt(this.advertFormPhotoNbFreePicture)){
+                    return nbOriginalPictures;
+                } else {
+                    return parseInt(this.advertFormPhotoNbFreePicture);
                 }
             },
             submitForm (event) {

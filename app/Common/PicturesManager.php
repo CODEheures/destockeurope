@@ -133,7 +133,11 @@ class PicturesManager
         $type ? $this->setType($type) : null;
         //TODO prevoir mail pour prevenir de la surcharge
         if($this->type == self::TYPE_TEMPO_LOCAL) {
-            return '/tempo/' . csrf_token() . '/';
+            if(auth()->check()){
+                return '/tempo/' . auth()->user()->id . '/';
+            } else {
+                throw new \Exception('auth must check for storage');
+            }
         } elseif ($this->type == self::TYPE_ALL_TEMPO_LOCAL) {
             return '/tempo/' ;
         } elseif($this->type == self::TYPE_FINAL_LOCAL){
@@ -244,6 +248,16 @@ class PicturesManager
         } else {
             throw new \Exception('copy fails');
         }
+    }
+
+    public function copyFinalToTempoLocal(Picture $picture){
+        $thumbFile = $this->getThumbFinal($picture);
+        $this->setType(self::TYPE_TEMPO_LOCAL);
+        Storage::disk($this->disk)->put($this->personnalPath().$picture->hashName.static::THUMB_EXT.'.'.static::EXT, $thumbFile);
+
+        $normalFile = $this->getNormal($picture);
+        $this->setType(self::TYPE_TEMPO_LOCAL);
+        Storage::disk($this->disk)->put($this->personnalPath().$picture->hashName.'.'.static::EXT, $normalFile);
     }
 
     public function getSize(Picture $picture){

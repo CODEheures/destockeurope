@@ -4,6 +4,7 @@ namespace App\Common;
 
 
 use App\Advert;
+use App\User;
 use Carbon\Carbon;
 
 trait CostUtils
@@ -14,26 +15,68 @@ trait CostUtils
         'haveVideo' => false,
         'isRenew' => false,
         'isBackToTop' => false,
-        'isHighlight' => false
+        'isHighlight' => false,
+        'isEditOf' => null
     ];
 
-    public static function getCostPictures($nbPictures){
-        if($nbPictures > config('runtime.nbFreePictures')){
-            return ($nbPictures - config('runtime.nbFreePictures'))*10*100;
+    public static function countCostPictures($nbPictures, Advert $isEditOf=null) {
+        $nbAlreadyPaid = 0;
+        if(!is_null($isEditOf)){
+            $nbOriginalPictures = $isEditOf->pictures()->count()/2;
+            if($nbOriginalPictures > config('runtime.nbFreePictures')){
+                $nbAlreadyPaid = $nbOriginalPictures-config('runtime.nbFreePictures');
+            }
+        }
+        return ($nbPictures - config('runtime.nbFreePictures') - $nbAlreadyPaid);
+    }
+
+    public static function isSwitchToUrgent($isUrgent, Advert $isEditOf=null){
+        $isAlreadyUrgent = false;
+        if(!is_null($isEditOf)){
+            $isAlreadyUrgent = $isEditOf->isUrgent;
+        }
+        if($isUrgent && !$isAlreadyUrgent){
+            return true;
+        }
+        return false;
+    }
+
+    public static function hasAddVideo($haveVideo, Advert $isEditOf=null){
+        $haveAlreadyVideo = false;
+        if(!is_null($isEditOf)){
+            $haveAlreadyVideo = !is_null($isEditOf->video_id);
+        }
+        if($haveVideo && !$haveAlreadyVideo){
+            return true;
+        }
+        return false;
+    }
+
+    public static function getCostPictures($nbPictures, Advert $isEditOf=null){
+        $countCostPictures = self::countCostPictures($nbPictures, $isEditOf);
+        if($countCostPictures>0){
+            return $countCostPictures*10*100;
         }
         return 0;
     }
 
-    public static function getCostIsUrgent($isUrgent){
-        if($isUrgent){
+    public static function getCostIsUrgent($isUrgent, Advert $isEditOf=null){
+        if(self::isSwitchToUrgent($isUrgent, $isEditOf)){
             return config('runtime.urgentCost')*100;
         }
         return 0;
     }
 
-    public static function getCostVideo($haveVideo){
-        if($haveVideo){
+    public static function getCostVideo($haveVideo, Advert $isEditOf=null){
+        if(self::hasAddVideo($haveVideo, $isEditOf)){
             return config('runtime.videoCost')*100;
+        }
+        return 0;
+    }
+
+    public static function getCostIsEdit($isEdit){
+        if($isEdit){
+            return config('runtime.editCost')*100;
         }
         return 0;
     }
@@ -69,13 +112,14 @@ trait CostUtils
         $finalOptions = array_merge(self::$defaultOptions, $options);
 
         $cost = 0;
-        if(!auth()->user()->isSupplier) {
-            $cost += self::getCostPictures($finalOptions['nbPictures']);
-            $cost += self::getCostIsUrgent($finalOptions['isUrgent']);
-            $cost += self::getCostVideo($finalOptions['haveVideo']);
+        if(!auth()->user()->isSupplier && auth()->user()->role!==User::ROLES[User::ROLE_VALIDATOR]) {
+            $cost += self::getCostPictures($finalOptions['nbPictures'], $finalOptions['isEditOf']);
+            $cost += self::getCostIsUrgent($finalOptions['isUrgent'], $finalOptions['isEditOf']);
+            $cost += self::getCostVideo($finalOptions['haveVideo'], $finalOptions['isEditOf']);
             $cost += self::getCostIsRenew($finalOptions['isRenew']);
             $cost += self::getCostIsBackToTop($finalOptions['isBackToTop']);
             $cost += self::getCostIsHighlight($finalOptions['isHighlight']);
+            $cost += self::getCostIsEdit(!is_null($finalOptions['isEditOf']));
         }
         return $cost;
     }
@@ -95,27 +139,35 @@ trait CostUtils
         $finalOptions = array_merge(self::$defaultOptions, $options);
 
         $options = [];
-        if($finalOptions['nbPictures'] > config('runtime.nbFreePictures')){
-            $options['payedPictures'] = [
-                'name' => trans('strings.option_payedPicture_name'),
-                'quantity' => $finalOptions['nbPictures'] - config('runtime.nbFreePictures'),
-                'cost' => self::getCostPictures($finalOptions['nbPictures']),
+        if(!is_null($finalOptions['isEditOf'])){
+            $options['isEdit'] = [
+                'name' => trans('strings.option_isEdit_name'),
+                'quantity' => 1,
+                'cost' => self::getCostIsEdit(!is_null($finalOptions['isEditOf'])),
                 'tva' => env('TVA')
             ];
         }
-        if($finalOptions['isUrgent']){
+        if(self::countCostPictures($finalOptions['nbPictures'], $finalOptions['isEditOf'])>0){
+            $options['payedPictures'] = [
+                'name' => trans('strings.option_payedPicture_name'),
+                'quantity' => self::countCostPictures($finalOptions['nbPictures'], $finalOptions['isEditOf']),
+                'cost' => self::getCostPictures($finalOptions['nbPictures'], $finalOptions['isEditOf']),
+                'tva' => env('TVA')
+            ];
+        }
+        if(self::isSwitchToUrgent($finalOptions['isUrgent'], $finalOptions['isEditOf'])){
             $options['isUrgent'] = [
                 'name' => trans('strings.option_isUrgent_name'),
                 'quantity' => 1,
-                'cost' => self::getCostIsUrgent($finalOptions['isUrgent']),
+                'cost' => self::getCostIsUrgent($finalOptions['isUrgent'], $finalOptions['isEditOf']),
                 'tva' => env('TVA')
             ];
         }
-        if($finalOptions['haveVideo']){
+        if(self::hasAddVideo($finalOptions['haveVideo'], $finalOptions['isEditOf'])){
             $options['haveVideo'] = [
                 'name' => trans('strings.option_haveVideo_name'),
                 'quantity' => 1,
-                'cost' => self::getCostVideo($finalOptions['haveVideo']),
+                'cost' => self::getCostVideo($finalOptions['haveVideo'], $finalOptions['isEditOf']),
                 'tva' => env('TVA')
             ];
         }

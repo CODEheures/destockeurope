@@ -37,6 +37,7 @@ class GetConfig
             config(['runtime.highlightCost' => $parameters->highlightCost]);
             config(['runtime.videoCost' => $parameters->videoCost]);
             config(['runtime.renewCost' => $parameters->renewCost]);
+            config(['runtime.editCost' => $parameters->editCost]);
             config(['runtime.nbFreePictures' => $parameters->nbFreePictures]);
             config(['runtime.nbMaxPictures' => $parameters->nbMaxPictures]);
             config(['runtime.welcomeType' => $parameters->welcomeType]);

@@ -99,6 +99,8 @@ Vue.component('manage-invoices', require('./components/contents/manageInvoices.v
 Vue.component('manage-users', require('./components/contents/manageUsers.vue'));
 //createAdvert page
 Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
+//editAdvert page
+Vue.component('edit-advert-form', require('./components/contents/editAdvert.vue'));
 //approve advert page
 Vue.component('approve-advert-form', require('./components/contents/approveAdvert.vue'));
 //show advert page

@@ -4,7 +4,7 @@
         <span class="text">{{ manageAdvertLabel }}</span>
         <div class="menu">
             <div class="item" v-if="withSeeAction" v-on:click="seeMe()" :data-content="seeAdvertPopupLabel"><i class="unhide blue icon"></i>{{ seeAdvertLabel }}</div>
-            <div class="item" v-if="advert.editUrl!==null" v-on:click="editMe()" :data-content="editAdvertPopupLabel"><i class="write blue icon"></i>{{ editAdvertLabel }}</div>
+            <div class="item" v-if="advert.editUrl!==null && advert.isEligibleForEdit" v-on:click="editMe()" :data-content="editAdvertPopupLabel"><i class="write blue icon"></i>{{ editAdvertLabel }}</div>
             <div class="item" v-if="advert.backToTopUrl!==null" v-on:click="backToTopMe()" :data-content="backToTopPopupLabel"><i class="arrow up blue icon"></i>{{ backToTopLabel }}</div>
             <div class="item" v-if="advert.highlightUrl!==null && advert.isEligibleForHighlight" v-on:click="highlightMe()" :data-content="highlightPopupLabel"><i class="announcement blue icon"></i>{{ highlightLabel }}</div>
             <div class="item" v-if="advert.renewUrl!==null && advert.isEligibleForRenew" v-on:click="renewMe()" :data-content="renewAdvertPopupLabel"><i class="power blue icon"></i>{{ renewAdvertLabel }}</div>

@@ -25,6 +25,7 @@ class Parameters extends Model
         'highlightCost',
         'videoCost',
         'renewCost',
+        'editCost',
         'nbFreePictures',
         'nbMaxPictures',
         'welcomeType',

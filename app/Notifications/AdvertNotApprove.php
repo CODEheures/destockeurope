@@ -19,14 +19,16 @@ class AdvertNotApprove extends Notification
     private $senderName;
     private $senderMail;
     private $disapproveReason;
+    private $state;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Advert $advert, Invoice $invoice=null, $senderName, $senderMail, $disapproveReason)
+    public function __construct(Advert $advert, $state, Invoice $invoice=null, $senderName, $senderMail, $disapproveReason)
     {
         $this->advert = $advert;
+        $this->state = $state;
         $this->invoice = $invoice;
         $this->senderName = $senderName;
         $this->senderMail = $senderMail;
@@ -52,10 +54,17 @@ class AdvertNotApprove extends Notification
      */
     public function toMail($notifiable)
     {
-        $message = (new CustomMailMessage)
+        $message =
+            $this->state ==  Invoice::STATE_CREATION ?
+                (new CustomMailMessage)
                     ->subject(trans('strings.mail_advertNotApprove_subject'))
                     ->greeting(trans('strings.mail_advertNotApprove_greeting',['username' => $notifiable->name]))
                     ->line(trans('strings.mail_advertNotApprove_line',['title' => $this->advert->title]))
+                    ->customLines($this->disapproveReason)
+                :(new CustomMailMessage)
+                    ->subject(trans('strings.mail_advertNotApproveEdit_subject'))
+                    ->greeting(trans('strings.mail_advertNotApproveEdit_greeting',['username' => $notifiable->name]))
+                    ->line(trans('strings.mail_advertNotApproveEdit_line',['title' => $this->advert->title]))
                     ->customLines($this->disapproveReason);
 
         if($this->invoice && $this->invoice->voidId){

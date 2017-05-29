@@ -72,7 +72,8 @@ class AdvertController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report']]);
         $this->middleware('isEmailConfirmed', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report', 'bookmarks', 'unbookmarks']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
-        $this->middleware('isNotValidator', ['only' => ['mines', 'bookmarks', 'create', 'store', 'backToTop']]);
+        $this->middleware('isNotValidator', ['only' => ['mines', 'bookmarks', 'create', 'store']]);
+        $this->middleware('isNotSupplierUser', ['only' => ['backToTop', 'highlight']]);
         $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient']]);
         $this->pictureManager  = $picturesManager;
         $this->vimeoManager = $vimeoManager;
@@ -261,7 +262,7 @@ class AdvertController extends Controller
     public function mines()
     {
         $adverts = Advert::mines()->paginate(config('runtime.advertsPerPage'));
-        $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
+        $loadCompleteAdverts = $this->loadCompleteAdverts($adverts, true);
         return response()->json(['adverts'=> $loadCompleteAdverts[0]]);
 
     }
@@ -363,12 +364,19 @@ class AdvertController extends Controller
      * @param $isUrgent
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function cost($nbPictures, $isUrgent) {
+    public function cost($nbPictures, $isUrgent, Request $request) {
+
+        $originalAdvert = null;
+        if($request->has('isEditOf')){
+            $originalAdvert = Advert::find((int)$request->isEditOf);
+        }
+
         if(isset($nbPictures) && isset($isUrgent) && is_numeric($nbPictures)){
             return response()->json(CostUtils::getCost([
                 'nbPictures' => (int)$nbPictures,
                 'isUrgent' => filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN),
-                'haveVideo' => session()->has('videoId')
+                'haveVideo' => session()->has('videoId'),
+                'isEditOf' => $request->has('isEditOf') ? $originalAdvert : null
             ]));
         } else {
             return response('error', 500);
@@ -407,6 +415,12 @@ class AdvertController extends Controller
         $zoomMap = 11;
         $user = null;
         auth()->check() ? $user = auth()->user() : null;
+
+        if(count(old())==0){
+            $this->pictureManager->purgeSessionLocalTempo();
+            session()->forget('videoId');
+        }
+
         return view('advert.create', compact('ip', 'geolocType', 'zoomMap', 'user'));
     }
 
@@ -448,6 +462,7 @@ class AdvertController extends Controller
                 $ancestors->add($advert->category);
                 $advert->setBreadCrumb($ancestors);
                 $advert->setBookmarkCount();
+                auth()->check() ? $advert->setIsOnEdit() : null;
                 return view('advert.show', compact('advert'));
         } elseif ($advert && $request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])) {
             return response()->json(['advert' => $advert]);
@@ -462,16 +477,30 @@ class AdvertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-        return redirect(route('home'))->with('status',trans('strings.view_all_error_service_unavailable'));
-        $advert = Advert::find($id);
-        if($advert && $advert->user->id === auth()->user()->id){
+        $editAdvert = Advert::find($id);
+        $editAdvert->load('pictures');
+        if($editAdvert && $editAdvert->user->id === auth()->user()->id){
+
+            //1°) get pictures to tempo store
+            if(count(old())==0){
+                $this->pictureManager->purgeSessionLocalTempo();
+                foreach ($editAdvert->pictures as $picture) {
+                    $this->pictureManager->copyFinalToTempoLocal($picture);
+                }
+            }
+
+            //2°) set session videoId
+            !is_null($editAdvert->video_id) &&  count(old())==0 ?  session(['videoId' => $editAdvert->video_id]): null;
+
+            //3°)
             $ip=config('runtime.ip');
             $geolocType = 1;
             $zoomMap = 11;
             $user = auth()->user();
-            return view('advert.edit', compact('ip', 'geolocType', 'zoomMap', 'user'));
+
+            return view('advert.edit', compact('ip', 'geolocType', 'zoomMap', 'user', 'editAdvert'));
         }
     }
 
@@ -536,6 +565,8 @@ class AdvertController extends Controller
         $category = Category::find($request->category);
         $completeGeoLoc = json_decode($request->completegeoloc);
         $parsedAddressComponent = GeoManager::parseAddressComponent($completeGeoLoc[0]->address_components);
+        $editAdvert = null;
+        $isEditOf = $request->has('isEditOf') && (int)$request->isEditOf > 0 && ($editAdvert = Advert::find((int)$request->isEditOf)) ? (int)$request->isEditOf : null;
         if($category) {
             try {
                 $advert = new Advert();
@@ -557,6 +588,8 @@ class AdvertController extends Controller
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
                 $advert->isNegociated=filter_var($request->is_negociated, FILTER_VALIDATE_BOOLEAN);
+                $advert->isEditOf=$isEditOf;
+                $isEditOf && auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_SUPPLIER] ? $advert->price_coefficient = $editAdvert->price_coefficient : null;
                 $persistent=null;
                 if(session()->has('videoId')){
                     $advert->video_id = session('videoId');
@@ -573,9 +606,9 @@ class AdvertController extends Controller
                 $cost = CostUtils::getCost([
                     'nbPictures' => count($results)/2,
                     'isUrgent' => $advert->isUrgent,
-                    'haveVideo' => session()->has('videoId')
+                    'haveVideo' => session()->has('videoId'),
+                    'isEditOf' => $editAdvert
                 ]);
-
 
                 DB::beginTransaction();
                 $advert->save();
@@ -584,13 +617,14 @@ class AdvertController extends Controller
                 if($cost > 0){
                     $invoice = Invoice::create([
                         'user_id' => $advert->user->id,
-                        'advert_id' => $advert->id,
-                        'state' => Invoice::STATE_CREATION,
+                        'advert_id' => !is_null($isEditOf) ? $isEditOf : $advert->id,
+                        'state' => !is_null($isEditOf) ? Invoice::STATE_EDIT :  Invoice::STATE_CREATION,
                         'cost' => $cost,
                         'options' => CostUtils::setOptions([
                             'nbPictures' => count($results)/2,
                             'isUrgent' => $advert->isUrgent,
-                            'haveVideo' => session()->has('videoId')
+                            'haveVideo' => session()->has('videoId'),
+                            'isEditOf' => $editAdvert
                         ])
                     ]);
                     $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
@@ -633,11 +667,17 @@ class AdvertController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return AdvertController|\Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(StoreAdvertRequest $request, $id)
     {
-        //
+        $editAdvert = Advert::find($id);
+        if($editAdvert && $editAdvert->user->id===auth()->user()->id){
+            $request->request->add(['isEditOf'=> $id]);
+            return $this->store($request);
+        } else {
+            return redirect()->back()->withErrors(trans('strings.view_all_error_saving_message'));
+        }
     }
 
     /**
@@ -783,22 +823,30 @@ class AdvertController extends Controller
     public function backToTop($id)
     {
         $advert = Advert::find($id);
-        if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForBackToTop()){
+        if($advert
+            && ((!$advert->is_delegation && auth()->user()->id === $advert->user->id) || ($advert->is_delegation && auth()->user()->role === User::ROLES[User::ROLE_VALIDATOR]))
+            && $advert->isEligibleForBackToTop())
+        {
             try {
                 //Create Invoice
-                DB::beginTransaction();
                 $cost = CostUtils::getCost(['isBackToTop' => true]);
-                $invoice = Invoice::create([
-                    'user_id' => $advert->user->id,
-                    'advert_id' => $advert->id,
-                    'state' => Invoice::STATE_BACKTOTOP,
-                    'cost' => $cost,
-                    'options' => CostUtils::setOptions(['isBackToTop' => true])
-                ]);
-                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isRenew_name')]);
-                $advert->save();
-                DB::commit();
-                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name'), 'infoCost' => $cost]));
+                if($cost>0){
+                    DB::beginTransaction();
+                    $invoice = Invoice::create([
+                        'user_id' => $advert->user->id,
+                        'advert_id' => $advert->id,
+                        'state' => Invoice::STATE_BACKTOTOP,
+                        'cost' => $cost,
+                        'options' => CostUtils::setOptions(['isBackToTop' => true])
+                    ]);
+                    $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isBackToTop_name')]);
+                    $advert->save();
+                    DB::commit();
+                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name'), 'infoCost' => $cost]));
+                } else {
+                    $this->advertUpdate($advert, Invoice::STATE_BACKTOTOP, null);
+                    return redirect()->back()->with('success', trans('strings.noPayment_backToTop_success'));
+                }
             } catch (\Exception $e) {
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }
@@ -809,7 +857,7 @@ class AdvertController extends Controller
 
     /**
      *
-     * Back To Top an Advert
+     * Highlight an Advert
      *
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -817,22 +865,30 @@ class AdvertController extends Controller
     public function highlight($id)
     {
         $advert = Advert::find($id);
-        if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForHighlight){
+        if($advert
+            && ((!$advert->is_delegation && auth()->user()->id === $advert->user->id) || ($advert->is_delegation && auth()->user()->role === User::ROLES[User::ROLE_VALIDATOR]))
+            && $advert->isEligibleForHighlight)
+        {
             try {
                 //Create Invoice
-                DB::beginTransaction();
                 $cost = CostUtils::getCost(['isHighlight' => true]);
-                $invoice = Invoice::create([
-                    'user_id' => $advert->user->id,
-                    'advert_id' => $advert->id,
-                    'state' => Invoice::STATE_HIGHLIGHT,
-                    'cost' => $cost,
-                    'options' => CostUtils::setOptions(['isHighlight' => true])
-                ]);
-                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isRenew_name')]);
-                $advert->save();
-                DB::commit();
-                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isHighlight_name'), 'infoCost' => $cost]));
+                if($cost>0){
+                    DB::beginTransaction();
+                    $invoice = Invoice::create([
+                        'user_id' => $advert->user->id,
+                        'advert_id' => $advert->id,
+                        'state' => Invoice::STATE_HIGHLIGHT,
+                        'cost' => $cost,
+                        'options' => CostUtils::setOptions(['isHighlight' => true])
+                    ]);
+                    $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isHighlight_name')]);
+                    $advert->save();
+                    DB::commit();
+                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isHighlight_name'), 'infoCost' => $cost]));
+                } else {
+                    $this->advertUpdate($advert, Invoice::STATE_HIGHLIGHT, null);
+                    return redirect()->back()->with('success', trans('strings.noPayment_highlight_success'));
+                }
             } catch (\Exception $e) {
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }
@@ -1064,7 +1120,7 @@ class AdvertController extends Controller
      * @param $adverts
      * @return array
      */
-    private function loadCompleteAdverts($adverts) {
+    private function loadCompleteAdverts($adverts, $withTestIsOnEdit=false) {
         $adverts->load('pictures');
         $adverts->load('category');
         $tempoStore =[];
@@ -1083,6 +1139,7 @@ class AdvertController extends Controller
                 $ancestors = $tempoStore[$advert->category->id];
             }
             $advert->setBreadCrumb($ancestors);
+            $withTestIsOnEdit ? $advert->setIsOnEdit() : null;
             $resultsByCat[$advert->category->id]['results'][] = $advert;
             $resultsByCat[$advert->category->id]['name'] = $advert->getConstructBreadCrumb();
             if($advert->isUserOwner) {
@@ -1109,25 +1166,32 @@ class AdvertController extends Controller
         if($isApproved != null) {
             $advert = Advert::find($key);
             $invoice = null;
+            $state = is_null($advert->isEditOf) ? Invoice::STATE_CREATION : Invoice::STATE_EDIT;
             if($advert && is_null($advert->isValid)) {
                 $advert->price_coefficient = $priceCoefficient;
-                $invoiceFileName = null;
                 //Get latest invoice with create state
-                $invoice = $advert->invoices()
-                    ->where('state', Invoice::STATE_CREATION)
-                    ->latest()->first();
+                if($state == Invoice::STATE_CREATION){
+                    $invoice = $advert->invoices()
+                        ->where('state', Invoice::STATE_CREATION)
+                        ->latest()->first();
+                } else {
+                    $invoice = Advert::find($advert->isEditOf)->invoices()
+                        ->where('state', Invoice::STATE_EDIT)
+                        ->latest()->first();
+                }
+
                 //IF EXIST AUTHORIZATION PAYMENT
                 if(!is_null($invoice)
                     && $invoice->authorization
                     && $invoice->authorization != '')
                 {
-                    $this->autoProcess($advert,$invoice,(boolean)$isApproved,null,false);
+                    $this->autoProcess($advert, $state, $invoice,(boolean)$isApproved,$disapproveReason,false);
                 } else {
-                    $this->advertUpdate($advert, Invoice::STATE_CREATION,(boolean)$isApproved);
+                    $this->advertUpdate($advert, $state,(boolean)$isApproved);
                     if((boolean)$isApproved){
                         $this->updateStats(null);
                     }
-                    $this->notifyEvent($advert, $invoice, $disapproveReason);
+                    $this->notifyEvent($advert, $state, $invoice, $disapproveReason, (boolean)$isApproved);
                 }
             }
         }
@@ -1384,14 +1448,22 @@ class AdvertController extends Controller
             $this->advertPublish($advert, $request, $authorizationId, $invoice);
             //stop process here, admin approve is required
             return redirect(route('home'))->with('success', trans('strings.payment_paypal_success'));
+
         } elseif ($invoice->state == Invoice::STATE_RENEW) {
             $advert = Advert::withTrashed()->find($invoice->advert_id);
             $this->advertPublish($advert, $request, $authorizationId, $invoice);
-            return $this->autoProcess($advert, $invoice,null,null, true);
+            return $this->autoProcess($advert, $invoice->state,$invoice,null,null, true);
+
         } elseif ($invoice->state == Invoice::STATE_BACKTOTOP || $invoice->state == Invoice::STATE_HIGHLIGHT) {
             $advert = Advert::find($invoice->advert_id);
             $this->advertPublish($advert, $request, $authorizationId, $invoice);
-            return $this->autoProcess($advert, $invoice, null, null, true);
+            return $this->autoProcess($advert, $invoice->state, $invoice, null, null, true);
+
+        } elseif ($invoice->state == Invoice::STATE_EDIT) {
+            $advert = Advert::where('isEditOf', $invoice->advert->id)->latest()->first();
+            $this->advertPublish($advert, $request, $authorizationId, $invoice);
+            //stop process here, admin approve is required
+            return redirect(route('home'))->with('success', trans('strings.payment_paypal_success'));
         }
     }
 
@@ -1425,24 +1497,27 @@ class AdvertController extends Controller
      * @param Invoice $invoice
      * @return AdvertController|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    private function autoProcess(Advert $advert, Invoice $invoice, $isApproved=null, $disapproveReason=null, $withRedirect=true) {
-
+    private function autoProcess(Advert $advert, $state, Invoice $invoice=null, $isApproved=null, $disapproveReason=null, $withRedirect=true) {
         try {
             if(is_null($isApproved) || $isApproved==true){
                 $this->capturePayment($invoice);
-                $this->advertUpdate($advert, $invoice->state,$isApproved);
+                $this->advertUpdate($advert, $state,$isApproved);
                 $this->updateStats($invoice);
-                $this->notifyEvent($advert, $invoice, $disapproveReason);
+                $state==Invoice::STATE_EDIT ?
+                    $this->notifyEvent($invoice->advert, $state, $invoice, $disapproveReason, $isApproved) :
+                    $this->notifyEvent($advert, $state, $invoice, $disapproveReason, $isApproved);
             } else {
                 $this->voidPayment($invoice);
-                $this->advertUpdate($advert, $invoice->state,$isApproved);
-                $this->notifyEvent($advert, $invoice, $disapproveReason);
+                $this->advertUpdate($advert, $state,$isApproved);
+                $state==Invoice::STATE_EDIT ?
+                    $this->notifyEvent($invoice->advert, $state, $invoice, $disapproveReason, $isApproved) :
+                    $this->notifyEvent($advert, $state, $invoice, $disapproveReason, $isApproved);
             }
 
 
             $redirectSuccessMessage='';
             $redirectErrorMessage='';
-            switch ($invoice->state) {
+            switch ($state) {
                 case Invoice::STATE_RENEW:
                     $redirectSuccessMessage = trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]);
                     $redirectErrorMessage = trans('strings.view_advert_renew_error');
@@ -1472,15 +1547,15 @@ class AdvertController extends Controller
      * @param Advert $advert
      * @param $typeUpdate
      */
-    private function advertUpdate(Advert $advert, $typeUpdate, $isApproved=null) {
-        if($typeUpdate == Invoice::STATE_CREATION){
+    private function advertUpdate(Advert $advert, $state, $isApproved=null) {
+        if($state == Invoice::STATE_CREATION){
             $advert->isValid=(boolean)$isApproved;
             if($isApproved==true){
                 $advert->online_at = Carbon::now();
                 $advert->setEndedAt();
             }
             $advert->save();
-        } elseif ($typeUpdate == Invoice::STATE_RENEW){
+        } elseif ($state == Invoice::STATE_RENEW){
             if(!is_null($advert->deleted_at)){
                 DB::beginTransaction();
                 $advert->online_at = Carbon::now();
@@ -1499,12 +1574,76 @@ class AdvertController extends Controller
                 $advert->ended_at = Carbon::parse($advert->ended_at)->addDay(env('ADVERT_LIFE_TIME'));
                 $advert->save();
             }
-        }  elseif ($typeUpdate == Invoice::STATE_BACKTOTOP){
+        }  elseif ($state == Invoice::STATE_BACKTOTOP){
                 $advert->online_at = Carbon::now();
                 $advert->save();
-        } elseif ($typeUpdate == Invoice::STATE_HIGHLIGHT) {
+        } elseif ($state == Invoice::STATE_HIGHLIGHT) {
             $advert->highlight_until = Carbon::now()->addHours(env('HIGHLIGHT_HOURS_DURATION'));
             $advert->save();
+        } elseif ($state == Invoice::STATE_EDIT) {
+            $originalAdvert = Advert::find($advert->isEditOf);
+            if($isApproved==true){
+                //new attributes
+                $originalAdvert->category_id = $advert->category_id;
+                $originalAdvert->title = $advert->title;
+                $originalAdvert->slug = $advert->slug;
+                $originalAdvert->description = $advert->description;
+                $originalAdvert->price = $advert->originalPrice;
+                $originalAdvert->price_coefficient = $advert->price_coefficient;
+                $originalAdvert->currency = $advert->currency;
+                $originalAdvert->latitude = $advert->latitude;
+                $originalAdvert->longitude = $advert->longitude;
+                $originalAdvert->geoloc = $advert->geoloc;
+                $originalAdvert->totalQuantity = $advert->totalQuantity;
+                $originalAdvert->lotMiniQuantity = $advert->lotMiniQuantity;
+                $originalAdvert->isUrgent = $advert->isUrgent;
+                $originalAdvert->isNegociated = $advert->isNegociated;
+                $originalAdvert->manu_ref = $advert->manu_ref;
+                $originalAdvert->mainPicture = $advert->mainPicture;
+                $originalAdvert->online_at = Carbon::now();
+
+                !is_null($originalAdvert->video_id) && $originalAdvert->video_id != $advert->video_id ? $this->vimeoManager->request('/videos/'.$originalAdvert->video_id,[],'DELETE') : null;
+                $originalAdvert->video_id = $advert->video_id;
+
+                DB::beginTransaction();
+                $originalAdvert->save();
+
+                //delete old pictures
+                foreach ($originalAdvert->pictures as $picture){
+                    $countParentAdvert = $this->pictureManager->countParent($picture);
+                    if($countParentAdvert == 1) {
+                        //definitive destroy picture
+                        $this->pictureManager->destroy($picture);
+                    }
+                    $picture->forceDelete();
+                }
+
+                //add new pictures
+                foreach ($advert->pictures as $newPicture){
+                    $picture = new Picture();
+                    $picture->hashName = $newPicture->hashName;
+                    $picture->path = $newPicture->path;
+                    $picture->disk = $newPicture->disk;
+                    $picture->isThumb = $newPicture->isThumb;
+                    $originalAdvert->pictures()->save($picture);
+                    $picture->save();
+                }
+            } else {
+                //delete edit pictures and video
+                foreach ($advert->pictures as $picture){
+                    $countParentAdvert = $this->pictureManager->countParent($picture);
+                    if($countParentAdvert == 1) {
+                        //definitive destroy picture
+                        $this->pictureManager->destroy($picture);
+                    }
+                    $picture->forceDelete();
+                }
+                !is_null($advert->video_id) && $advert->video_id != $originalAdvert->video_id? $this->vimeoManager->request('/videos/'.$advert->video_id,[],'DELETE') : null;
+            }
+
+            //bye bye edit advert
+            $advert->forceDelete();
+            DB::commit();
         }
     }
 
@@ -1534,7 +1673,7 @@ class AdvertController extends Controller
      * @param null $disapproveReason
      * @return Advert|null
      */
-    private function notifyEvent(Advert $advert, Invoice $invoice = null, $disapproveReason = null) {
+    private function notifyEvent(Advert $advert, $state, Invoice $invoice = null, $disapproveReason = null, $isApproved = false) {
 
         //Send Invoice to Accountant
         if(!is_null($invoice) && file_exists($invoice->filePath)){
@@ -1549,20 +1688,20 @@ class AdvertController extends Controller
         $recipient = $advert->user;
         $senderMail = env('SERVICE_MAIL_FROM');
         $senderName = ucfirst(config('app.name'));
-        if($advert->isValid && (is_null($invoice) || $invoice->state==Invoice::STATE_CREATION)) {
-            $recipient->notify(new AdvertApprove($advert, $invoice, $senderName, $senderMail));
+        if(($state==Invoice::STATE_CREATION || $state==Invoice::STATE_EDIT) && $isApproved) {
+            $recipient->notify(new AdvertApprove($advert, $state, $invoice, $senderName, $senderMail));
             return null;
-        } elseif ($advert->isValid && $invoice->state==Invoice::STATE_RENEW) {
+        } elseif ($state==Invoice::STATE_RENEW) {
             $recipient->notify(new AdvertRenew($advert, $invoice));
             return $advert;
-        } elseif ($advert->isValid && $invoice->state==Invoice::STATE_BACKTOTOP) {
+        } elseif ($state==Invoice::STATE_BACKTOTOP) {
             $recipient->notify(new AdvertBackToTop($advert, $invoice));
             return $advert;
-        } elseif ($advert->isValid && $invoice->state==Invoice::STATE_HIGHLIGHT) {
+        } elseif ($state==Invoice::STATE_HIGHLIGHT) {
             $recipient->notify(new AdvertHighlight($advert, $invoice));
             return $advert;
         } else {
-            $recipient->notify(new AdvertNotApprove($advert, $invoice, $senderName, $senderMail, $disapproveReason));
+            $recipient->notify(new AdvertNotApprove($advert, $state, $invoice, $senderName, $senderMail, $disapproveReason));
             return null;
         }
     }

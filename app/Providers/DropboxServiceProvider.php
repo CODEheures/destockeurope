@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
-use Dropbox\Client as DropboxClient;
+use Spatie\Dropbox\Client as DropboxClient;
 use Illuminate\Support\ServiceProvider;
-use League\Flysystem\Dropbox\DropboxAdapter;
+use Spatie\FlysystemDropbox\DropboxAdapter;
 
 class DropboxServiceProvider extends ServiceProvider
 {
@@ -19,7 +19,7 @@ class DropboxServiceProvider extends ServiceProvider
     {
         Storage::extend('dropbox', function($app, $config) {
             $client = new DropboxClient(
-                $config['accessToken'], $config['clientIdentifier']
+                $config['authorizationToken']
             );
 
             return new Filesystem(new DropboxAdapter($client));

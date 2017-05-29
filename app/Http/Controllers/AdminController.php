@@ -29,8 +29,8 @@ class AdminController extends Controller
     private $vimeoManager;
 
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
-        $this->middleware('isAdminUser', ['except' => ['delegations', 'invoiceManage', 'listInvoices']]);
-        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'invoiceManage', 'listInvoices']]);
+        $this->middleware('isAdminUser', ['except' => ['delegations', 'invoiceManage', 'listInvoices', 'showInvoice']]);
+        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;

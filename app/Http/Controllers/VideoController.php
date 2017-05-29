@@ -88,7 +88,9 @@ class VideoController extends Controller
         if(!$request->has('videoId') || !session()->has('videoId') || $request->videoId != session('videoId')){
             return response('error',500);
         } else {
-            $this->vimeoManager->request('/videos/'.session('videoId'),[],'DELETE');
+            if(!$request->has('isEditAdvert')){
+                $this->vimeoManager->request('/videos/'.session('videoId'),[],'DELETE');
+            }
             session()->forget('videoId');
             return response('ok',200);
         }

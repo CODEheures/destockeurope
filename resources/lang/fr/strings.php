@@ -92,11 +92,19 @@ return [
     'mail_advertApprove_action' => 'Voir mon annonce',
     'mail_advertApprove_line2' => 'Merci d\'utiliser notre application! A tout de suite',
 
+    'mail_advertApproveEdit_subject' => 'Les modifications de votre annonce sont en ligne!',
+    'mail_advertApproveEdit_greeting' => 'Félicitation :username !',
+    'mail_advertApproveEdit_line' => 'Les modifications de Votre annonce ":title" sont approuvées et en ligne',
+
     'mail_advertNotApprove_subject' => 'Votre annonce n\'a pas pu être approuvée',
     'mail_advertNotApprove_greeting' => 'Désolé chère utilisateur :username !',
     'mail_advertNotApprove_line' => 'Votre annonce ":title" ne respecte pas les règles et par conséquent n\'a pas été approuvée par notre équipe \':(.',
     'mail_advertNotApprove_line_voidPayment' => 'Le paiement de celle-ci a été annulé.',
     'mail_advertNotApprove_line2' => 'Nous espérons vous revoir très vite pour poster une annonce valide. Merci d\'utiliser notre application! A tout de suite!',
+
+    'mail_advertNotApproveEdit_subject' => 'Les modifications de votre annonce n\'ont pas pu être approuvées',
+    'mail_advertNotApproveEdit_greeting' => 'Désolé chère utilisateur :username !',
+    'mail_advertNotApproveEdit_line' => 'Les modifications apportées à votre annonce ":title" ne respectent pas les règles et par conséquent n\'ont pas été approuvées par notre équipe \':(.',
 
     'mail_alertObsoleteAdvert_subject' => 'Votre annonce arrive a expiration. Renouvellez là',
     'mail_alertObsoleteAdvert_subject_lastday' => 'Rappel: votre annonce arrive a expiration dans moins de 24h. Renouvellez là',
@@ -227,6 +235,7 @@ return [
     'option_payedPicture_name' => 'Photos supplémentaires',
     'option_isUrgent_name' => 'Annonce urgente',
     'option_isRenew_name' => 'Renouvellement de mon annonce',
+    'option_isEdit_name' => 'Edition de mon annonce',
     'option_isBackToTop_name' => 'Remonter mon annonce en tête de liste',
     'option_isHighlight_name' => 'Mettre mon annonce à la Une',
     'option_haveVideo_name' => 'Vidéo',
@@ -266,6 +275,7 @@ return [
     'view_manage_adverts_urgent_cost_label' => 'Prix de l\'option URGENT (€ HT)',
     'view_manage_adverts_video_cost_label' => 'Prix de l\'option Video (€ HT)',
     'view_manage_adverts_renew_cost_label' => 'Prix de renouvellement (€ HT)',
+    'view_manage_adverts_edit_cost_label' => 'Prix de modification (€ HT)',
     'view_manage_adverts_backToTop_cost_label' => 'Prix de l\'option Remonter (€ HT)',
     'view_manage_adverts_highlight_cost_label' => 'Prix de l\'option A la Une (€ HT)',
     'view_manage_adverts_per_page_label' => 'Nombre d\'annonces par page',
@@ -442,7 +452,9 @@ return [
     'payment_paypal_success' => 'Merci pour votre paiement. Notez que celui-ci ne sera éxécuté que si votre annonce est validée par nos services. Vous recevrez alors votre facture par mail.',
     'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est prolongée jusqu\'au :date.  Votre facture vous a été envoyée par mail.',
     'payment_backToTop_success' => 'Merci pour votre paiement. Votre annonce vient d\'être remontée en tête de liste.  Votre facture vous a été envoyée par mail.',
+    'noPayment_backToTop_success' => 'Votre annonce vient d\'être remontée en tête de liste.',
     'payment_highlight_success' => 'Merci pour votre paiement. Votre annonce fait parti des annonces à la Une pendant les prochaines ' . env('HIGHLIGHT_HOURS_DURATION') . ' heures.  Votre facture vous a été envoyée par mail.',
+    'noPayment_highlight_success' => 'Votre annonce fait parti des annonces à la Une pendant les prochaines ' . env('HIGHLIGHT_HOURS_DURATION') . ' heures.',
 
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',
