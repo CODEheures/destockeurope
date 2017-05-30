@@ -197,7 +197,7 @@ class Advert extends Model {
         $ended = Carbon::parse($this->ended_at);
         $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isFuture();
         $isNotHighlight = is_null($this->highlight_until) || Carbon::parse($this->highlight_until)->isPast();
-        return ((!$this->is_delegation || (auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR]) )&& $this->isValid && $isNotHighlight && $isQuiteYoung);
+        return ((!$this->is_delegation || (auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR]) )&& $this->isValid && $isNotHighlight && ($isQuiteYoung || $this->is_delegation));
     }
 
     public function getIsEligibleForEditAttribute() {
@@ -289,7 +289,7 @@ class Advert extends Model {
 
     public function isEligibleForBackToTop() {
         $firstAdvert = Advert::orderBy('online_at', 'DESC')->first();
-        if($firstAdvert->id != $this->id && is_null($this->deleted_at) &&  Carbon::parse($this->ended_at)->subDay(1)->isFuture() ){
+        if($firstAdvert->id != $this->id && is_null($this->deleted_at) &&  (Carbon::parse($this->ended_at)->subDay(1)->isFuture() || $this->is_delegation) ){
             return true;
         }
         return false;
