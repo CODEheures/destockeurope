@@ -37,7 +37,7 @@
                 </div>
                 <form>
                     <div v-for="(advert,index) in advertsList" class="ui segment">
-                        <div class="ui orange right ribbon label" v-show="advert.listEditFields['field'].length>0 || advert.listEditFields.thumbs.length>0">{{ segmentEditLabel }}</div>
+                        <div class="ui orange right ribbon label" v-show="advert.listEditFields['field'].length>0 || advert.listEditFields['thumbs'].length>0">{{ segmentEditLabel }}</div>
                         <div class="ui cards" :title="advert.user.isSupplier ? trustedProviderLabel :''">
                             <div class="card">
                                 <div class="content">

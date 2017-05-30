@@ -59,7 +59,10 @@ class Advert extends Model {
     private $isUserBookmark = false;
     private $bookmarkCount = 0;
     private $isOnEdit = false;
-    private $listEditFields = [];
+    private $listEditFields = [
+        'field' => [],
+        'thumbs' => []
+    ];
     private $testEditFields = [
         'title',
         'manu_ref',
@@ -318,9 +321,6 @@ class Advert extends Model {
     public function setListEditFields() {
         if($this->isEditOf){
             $editAdvert = Advert::find($this->isEditOf);
-
-            $this->listEditFields['field'] = [];
-            $this->listEditFields['thumbs'] = [];
 
             foreach ($this->testEditFields as $test){
                 $this->$test != $editAdvert->$test ? $this->listEditFields['field'][] = $test : null;
