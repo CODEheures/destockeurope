@@ -203,7 +203,7 @@ class Advert extends Model {
     public function getIsEligibleForEditAttribute() {
         $ended = Carbon::parse($this->ended_at);
         $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isFuture();
-        return ($this->isValid && !$this->isOnEdit && $isQuiteYoung);
+        return ($this->isValid && !$this->isOnEdit && ($isQuiteYoung || $this->is_delegation));
     }
 
     public function getThumbAttribute() {
