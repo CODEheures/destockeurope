@@ -10,6 +10,9 @@
             advert-nb-free-picture="{{ config('runtime.nbFreePictures') }}"
 
             content-header="{{ trans('strings.view_advert_approve_header') }}"
+            segment-edit-label="{{ trans('strings.view_advert_approve_isEditSegment_label') }}"
+            field-edit-label="{{ trans('strings.view_advert_approve_isEditField_label') }}"
+            trusted-provider-label="{{ trans('strings.view_account_trusted_provider') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             toggle-approve-label="{{ trans('strings.view_advert_approve_toggle_label') }}"
             toggle-disapprove-label="{{ trans('strings.view_advert_disapprove_toggle_label') }}"

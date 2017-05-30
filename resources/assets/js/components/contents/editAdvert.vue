@@ -37,25 +37,30 @@
                             :is-disabled="true"
                     ></type-radio-button>
                 </div>
-                <div class="field">
-                    <categories-dropdown-menu
-                            :route-category="routeCategory"
-                            :first-menu-name="categoryFirstMenuName"
-                            :actual-locale="actualLocale"
-                            :old-choice="oldCategoryId"
-                            :with-all="false">
-                    </categories-dropdown-menu>
+                <div class="ui blue compact segment">
+                    <div class="required field">
+                        <label>{{ categoryFirstMenuName }}</label>
+                        <categories-dropdown-menu
+                                :route-category="routeCategory"
+                                :first-menu-name="categoryFirstMenuName"
+                                :actual-locale="actualLocale"
+                                :old-choice="oldCategoryId"
+                                :with-all="false">
+                        </categories-dropdown-menu>
+                    </div>
                 </div>
-                <div class="required field">
-                    <label>{{ advertFormTitleLabel }}</label>
-                    <input name="title" type="text" :placeholder="advertFormTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
-                    <transition name="p-fade">
-                        <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{formPointingMinimumChars }}</span>
-                    </transition>
-                </div>
-                <div class="field">
-                    <label>{{ advertFormRefLabel }}</label>
-                    <input name="manu_ref" type="text" :placeholder="advertFormRefLabel" v-model:value="manuRef">
+                <div class="two fields">
+                    <div class="required field">
+                        <label>{{ advertFormTitleLabel }}</label>
+                        <input name="title" type="text" :placeholder="advertFormTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
+                        <transition name="p-fade">
+                            <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{formPointingMinimumChars }}</span>
+                        </transition>
+                    </div>
+                    <div class="field">
+                        <label>{{ advertFormRefLabel }}</label>
+                        <input name="manu_ref" type="text" :placeholder="advertFormRefLabel" v-model:value="manuRef">
+                    </div>
                 </div>
                 <div class="required field">
                     <label>{{ advertFormDescriptionLabel }}</label>
@@ -65,53 +70,39 @@
                     </transition>
                 </div>
 
-                <div class="field">
-                    <div class="ui grid">
-                        <div class="doubling four column row">
-                            <div class="column">
-                                <div class="required field">
-                                    <label>{{ advertFormPriceLabel }}</label>
-                                    <div class="ui right labeled input">
-                                        <template v-if="isNegociated==0">
-                                            <input  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="price"/>
-                                        </template>
-                                        <template v-else>
-                                            <input  name="" type="number" value="0" disabled/>
-                                        </template>
-                                        <currencies-input-right-label
-                                                :route-list-currencies="routeListCurrencies"
-                                                :first-menu-name="currenciesFirstMenuName"
-                                                :old-currency="oldCurrency">
-                                        </currencies-input-right-label>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="three fields">
+                    <div class="required field">
+                        <label>{{ advertFormPriceLabel }}</label>
+                        <div class="ui right labeled input">
+                            <template v-if="isNegociated==0">
+                                <input  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="price"/>
+                            </template>
+                            <template v-else>
+                                <input  name="" type="number" value="0" disabled/>
+                            </template>
+                            <currencies-input-right-label
+                                    :route-list-currencies="routeListCurrencies"
+                                    :first-menu-name="currenciesFirstMenuName"
+                                    :old-currency="oldCurrency">
+                            </currencies-input-right-label>
                         </div>
-                        <div class="sixteen wide column" v-if="isDelegation!=1">
-                            <div class="field">
-                                <div :id="'isNegociated'+_uid" class="ui checkbox">
-                                    <input type="checkbox" name="isNegociated">
-                                    <label> <span class="ui blue horizontal label">{{ advertExampleIsNegociatedLabel }}</span>{{ advertFormIsNegociatedLabel }}</label>
-                                </div>
+                        <div class="field spaced-top-2" v-if="isDelegation!=1">
+                            <div :id="'isNegociated'+_uid" class="ui checkbox">
+                                <input type="checkbox" name="isNegociated">
+                                <label> <span class="ui blue horizontal label">{{ advertExampleIsNegociatedLabel }}</span>{{ advertFormIsNegociatedLabel }}</label>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="field">
-                    <div class="two fields">
-                        <div class="required field">
-                            <label>{{ advertFormTotalQuantityLabel }}</label>
-                            <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
-                        </div>
-                        <div class="required field">
-                            <label>{{ advertFormLotMiniQuantityLabel }}</label>
-                            <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
-                        </div>
+                    <div class="required field">
+                        <label>{{ advertFormTotalQuantityLabel }}</label>
+                        <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
+                    </div>
+                    <div class="required field">
+                        <label>{{ advertFormLotMiniQuantityLabel }}</label>
+                        <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
                     </div>
                 </div>
-
-                <div class="field">
+                <div class="field spaced-top-2">
                     <div :id="'isUrgent'+_uid" class="ui checkbox">
                         <input type="checkbox" name="isUrgent">
                         <label> <span class="ui red horizontal label">{{ advertExampleUrgentLabel }}</span>{{ advertFormUrgentLabel }}</label>
@@ -181,7 +172,7 @@
                     {{ formValidationButtonLabel }}
                 </h4>
                 <div class="field">
-                    <button type="submit" :class="submitEnable ? 'ui positive fluid button' : 'ui disabled fluid button'" v-on:click="submitForm">{{ formValidationButtonLabel }}</button>
+                    <button type="submit" :class="submitEnable ? 'ui blue labeled icon massive button' : 'ui disabled labeled icon massive button'" v-on:click="submitForm"><i class="save icon"></i>{{ formValidationButtonLabel }}</button>
                 </div>
             </form>
         </div>

@@ -53,12 +53,24 @@ class Advert extends Model {
         'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'resume',
         'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight',
         'isEligibleForRenewMailZero', 'isEligibleForEdit', 'isUserOwner', 'isUserBookmark', 'bookmarkCount',
-        'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol', 'isOnEdit');
+        'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol', 'listEditFields');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
     private $bookmarkCount = 0;
     private $isOnEdit = false;
+    private $listEditFields = [];
+    private $testEditFields = [
+        'title',
+        'manu_ref',
+        'description',
+        'price',
+        'currency',
+        'totalQuantity',
+        'lotMiniQuantity',
+        'geoloc',
+        'video_id'
+    ];
 
     protected $casts = [
         'isPublish' => 'Boolean',
@@ -250,6 +262,10 @@ class Advert extends Model {
         return $this->isOnEdit;
     }
 
+    public function getListEditFieldsAttribute() {
+        return $this->listEditFields;
+    }
+
     //Setter Attribute
     public function setPriceCoefficientAttribute($value) {
         //Use this mutator to ensure Margin value
@@ -297,6 +313,32 @@ class Advert extends Model {
 
     public function setIsOnEdit() {
         $this->isOnEdit = Advert::where('isEditOf', $this->id)->where('isPublish', true)->count()>0;
+    }
+
+    public function setListEditFields() {
+        if($this->isEditOf){
+            $editAdvert = Advert::find($this->isEditOf);
+
+            $this->listEditFields['field'] = [];
+            $this->listEditFields['thumbs'] = [];
+
+            foreach ($this->testEditFields as $test){
+                $this->$test != $editAdvert->$test ? $this->listEditFields['field'][] = $test : null;
+            }
+
+
+            $editAdvertPictures = [];
+            foreach ($editAdvert->pictures as $key => $editPicture) {
+                if(!$editPicture->isThumb) {
+                    unset($editAdvertPictures[$key]);
+                } else {
+                    $editAdvertPictures[] = $editPicture->hashName;
+                }
+            }
+            foreach ($this->pictures as $picture) {
+                $picture->isThumb && !in_array($picture->hashName, $editAdvertPictures) ? $this->listEditFields['thumbs'][] = $picture->hashName : null;
+            }
+        }
     }
 
     //Locals Scopes

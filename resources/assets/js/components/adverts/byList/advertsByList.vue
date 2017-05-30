@@ -55,6 +55,7 @@
                             :renew-advert-popup-label="renewAdvertPopupLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
                             :bookmark-info="bookmarkInfo"
+                            :trusted-provider-label="trustedProviderLabel"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
                             :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
@@ -101,6 +102,7 @@
                             :renew-advert-popup-label="renewAdvertPopupLabel"
                             :validation-on-progress-label="validationOnProgressLabel"
                             :bookmark-info="bookmarkInfo"
+                            :trusted-provider-label="trustedProviderLabel"
                             :views-info="viewsInfo"
                             :price-info-label="priceInfoLabel"
                             :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
@@ -163,6 +165,7 @@
             renewAdvertPopupLabel: String,
             validationOnProgressLabel: String,
             bookmarkInfo: String,
+            trustedProviderLabel: String,
             viewsInfo: String,
             noResultFoundHeader: String,
             noResultFoundMessage: String,

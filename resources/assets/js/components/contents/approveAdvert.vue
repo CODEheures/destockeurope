@@ -37,14 +37,17 @@
                 </div>
                 <form>
                     <div v-for="(advert,index) in advertsList" class="ui segment">
-
-                        <div class="ui cards">
+                        <div class="ui orange right ribbon label" v-show="advert.listEditFields['field'].length>0 || advert.listEditFields.thumbs.length>0">{{ segmentEditLabel }}</div>
+                        <div class="ui cards" :title="advert.user.isSupplier ? trustedProviderLabel :''">
                             <div class="card">
                                 <div class="content">
-                                    <!--<img class="right floated mini ui image" src="/images/avatar/large/elliot.jpg">-->
                                     <div class="header">
+                                        <i class="green big protect icon" v-if="advert.user.isSupplier"></i>
                                         {{ advert.user.compagnyName }}
                                     </div>
+                                </div>
+                                <div class="content">
+                                    <!--<img class="right floated mini ui image" src="/images/avatar/large/elliot.jpg">-->
                                     <div class="meta">
                                         {{ advert.user.name }} / {{ advert.user.email }}
                                     </div>
@@ -65,27 +68,45 @@
                             <tbody>
                             <tr>
                                 <td class="three wide column">{{ advertTitleLabel }}</td>
-                                <td>{{ advert.title }}</td>
+                                <td :class="isEditField(advert, 'title') ? 'warning' : ''">
+                                    {{ advert.title }}
+                                    <div v-if="isEditField(advert, 'title')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ advertRefLabel }}</td>
-                                <td>{{ advert.manu_ref }}</td>
+                                <td :class="isEditField(advert, 'manu_ref') ? 'warning' : ''">
+                                    {{ advert.manu_ref }}
+                                    <div v-if="isEditField(advert, 'manu_ref')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ advertDescriptionLabel }}</td>
-                                <td><p style="white-space: pre-wrap;">{{ advert.description }}</p></td>
+                                <td :class="isEditField(advert, 'description') ? 'warning' : ''">
+                                    <p style="white-space: pre-wrap;">{{ advert.description }}</p>
+                                    <div v-if="isEditField(advert, 'description')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ advertPriceLabel }}</td>
-                                <td>{{ advert.isNegociated ? advertIsNegociatedLabel : advert.price }}</td>
+                                <td :class="isEditField(advert, 'price') || isEditField(advert, 'currency') ? 'warning' : ''">
+                                    {{ advert.isNegociated ? advertIsNegociatedLabel : advert.price }}
+                                    <div v-if="isEditField(advert, 'price') || isEditField(advert, 'currency_id')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ totalQuantityLabel }} / {{ lotMiniQuantityLabel }}</td>
-                                <td>{{ advert.totalQuantity }} / {{ advert.lotMiniQuantity}}</td>
+                                <td :class="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity') ? 'warning' : ''">
+                                    {{ advert.totalQuantity }} / {{ advert.lotMiniQuantity}}
+                                    <div v-if="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="three wide column">{{ advertAddressLabel }}</td>
-                                <td>{{ advert.geoloc }}</td>
+                                <td :class="isEditField(advert, 'geoloc') ? 'warning' : ''">
+                                    {{ advert.geoloc }}
+                                    <div v-if="isEditField(advert, 'geoloc')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -93,8 +114,13 @@
 
                         <div class="ui doubling three column grid">
                             <div class="column" v-for="(picture,index) in advert.pictures" v-if="picture.isThumb">
-                                    <div :class="!advert.user.isSupplier && index>=(advertNbFreePicture*2) ? 'ui pink segment' : 'ui segment'">
-                                        <a class="ui pink right ribbon label" v-if="!advert.user.isSupplier && index>=(advertNbFreePicture*2)">{{ advertPayPhotoSingular }}</a>
+                                    <div :class="advert.listEditFields['thumbs'].indexOf(picture.hashName)!==-1 ? 'ui orange segment' : !advert.user.isSupplier && index>=(advertNbFreePicture*2) ? 'ui pink segment' : 'ui segment'">
+                                        <template v-if="advert.listEditFields['thumbs'].indexOf(picture.hashName)!==-1">
+                                            <div class="ui orange right ribbon label">{{ fieldEditLabel }}</div>
+                                        </template>
+                                        <template v-else>
+                                            <div class="ui pink right ribbon label" v-if="!advert.user.isSupplier && index>=(advertNbFreePicture*2)">{{ advertPayPhotoSingular }}</div>
+                                        </template>
                                         <div class="ui stackable grid">
                                             <div class="sixteen wide column">
                                                 <img :src="routeGetThumb+'/'+picture.hashName+'/'+advert.id" class="ui rounded medium centered image" />
@@ -107,7 +133,12 @@
 
                         <div class="ui grid" v-if="advert.video_id!=undefined && advert.video_id!=null">
                             <div class="sixteen wide column">
-                                <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                <div class="ui compact segment">
+                                    <div class="ui orange right ribbon label" v-show="isEditField(advert, 'video_id')">{{ fieldEditLabel }}</div>
+                                    <div>
+                                        <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -194,6 +225,9 @@
             'advertNbFreePicture',
             //vue strings
             'contentHeader',
+            'segmentEditLabel',
+            'fieldEditLabel',
+            'trustedProviderLabel',
             'loadErrorMessage',
             'toggleApproveLabel',
             'toggleDisapproveLabel',
@@ -309,6 +343,9 @@
                 if(parsed && parsed.length>0 && 'formatted_address' in parsed[0]) {
                     return (JSON.parse(geoloc)[0]['formatted_address']);
                 }
+            },
+            isEditField(advert, fieldName){
+                return advert.listEditFields['field'].indexOf(fieldName)!==-1;
             }
         }
     }

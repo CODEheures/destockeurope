@@ -54,6 +54,7 @@
                                     </div>
                                     <div class="twelve wide right aligned column geodate-computer">
                                         <p>
+                                            <i class="green big protect icon" :title="trustedProviderLabel" v-if="advert.user.isSupplier"></i>
                                             <i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                             <i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                             <i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
@@ -112,6 +113,7 @@
                             </div>
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
                                 <p>
+                                    <i class="green big protect icon" :title="trustedProviderLabel" v-if="advert.user.isSupplier"></i>
                                     <i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                     <i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                     <i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
@@ -494,6 +496,7 @@
             validationOnProgressLabel: String,
             bookmarkInfo: String,
             viewsInfo: String,
+            trustedProviderLabel: String,
             //margin input field
             formAdvertPriceCoefficientLabel: String,
             formAdvertPriceCoefficientNewPriceLabel: String,

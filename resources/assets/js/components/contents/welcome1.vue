@@ -99,6 +99,7 @@
                             :price-info-label="priceInfoLabel"
                             :no-result-found-header="noResultFoundHeader"
                             :no-result-found-message="noResultFoundMessage"
+                            :trusted-provider-label="trustedProviderLabel"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -207,6 +208,7 @@
             'routeNotificationsAdd',
             'routeNotificationsRemove',
             'notificationsCheckboxLabel',
+            'trustedProviderLabel',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',

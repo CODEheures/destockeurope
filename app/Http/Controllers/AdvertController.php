@@ -333,6 +333,7 @@ class AdvertController extends Controller
 
         $response = [];
         foreach ($adverts as $advert){
+            $advert->setListEditFields();
             $response[$advert->id] = $advert;
         }
         return response()->json($response);
@@ -597,7 +598,7 @@ class AdvertController extends Controller
                     $persistent = Persistent::where('key', '=', 'videoId')->where('value', '=', session('videoId'))->first();
                 }
 
-                $advert->price = MoneyUtils::setPriceWithoutDecimal($request->has('price') ? $request->price : '0',$request->currency);
+                $advert->price = MoneyUtils::setPriceWithoutDecimal($request->has('price') ? strval(filter_var($request->price, FILTER_VALIDATE_FLOAT)) : '0',$request->currency);
 
                 //pass picture from local tempo to final and count them
                 $results = $this->pictureManager->storeLocalFinal();

@@ -53,6 +53,7 @@
                 route-notifications-add="{{ route('notification.add') }}"
                 route-notifications-remove="{{ route('notification.remove') }}"
                 notifications-checkbox-label="{{ trans('strings.form_notification_activer_label') }}"
+                trusted-provider-label="{{ trans('strings.view_account_trusted_provider') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
