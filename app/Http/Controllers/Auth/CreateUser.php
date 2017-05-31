@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait CreateUser {
 
+    //***************************************************************//
+    // BE CAREFUL THIS TRAIT USE $this->request for flashing session //
+    //***************************************************************//
 
     public static function setNewToken($user) {
         //Chaine random du Token
@@ -96,6 +99,13 @@ trait CreateUser {
             $keyId = $provider.'_id';
             $authUser = User::where($keyId, $user->id)->first();
             if ($authUser){
+                //update infos
+                $existEmail = User::where('email', '=' , $user->email)->where($keyId, '<>', $user->id)->count();
+                $existEmail==0 ?
+                    $authUser->email = $user->email
+                    : $this->request->session()->flash('warning',trans('strings.auth_email_provider_evolution_fail', ['provider' => $provider, 'newmail' => $user->email])) ;
+                $authUser->avatar = $user->avatar;
+                $authUser->save();
                 return $authUser;
             }
 

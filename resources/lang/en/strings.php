@@ -35,6 +35,7 @@ return [
     'flash_header_success' => 'Success :)',
     'flash_header_info' => 'Information:',
     'flash_header_status' => 'Information:',
+    'flash_header_warning' => 'Warning:',
     'flash_header_error' => 'Error :(',
 
     'notification_action-text' => 'If you’re having trouble clicking the ":actiontext" button, copy and paste the URL below into your web browser:',
@@ -225,6 +226,7 @@ return [
     'auth_register_provider_error' => 'Connection problem with ',
     'auth_register_oauth_success' => 'Welcome on :appname :username. Thank you for your trust. You can henceforth enjoy your customer area',
     'auth_passwordReset_success' => 'Your password is reset',
+    'auth_email_provider_evolution_fail' => 'Warning! We can not update the new email on your account :provider (:newmail) because an account with an identical email already exists in our database. You should delete one of the 2 accounts',
 
     'divider_register' => 'or use',
     'divider_payment' => 'or use card',

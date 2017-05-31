@@ -28,6 +28,16 @@
     </div>
 @endif
 
+@if(session()->has('warning'))
+    <div class="ui warning small message destock-flash">
+        <i class="close icon"></i>
+        <div class="header">{{ trans('strings.flash_header_warning') }}</div>
+        <ul class="list">
+            {{ session('warning') }}
+        </ul>
+    </div>
+@endif
+
 @if(session()->has('sessionExpired'))
     <div class="ui info small message destock-flash">
         <i class="close icon"></i>

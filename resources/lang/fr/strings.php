@@ -35,6 +35,7 @@ return [
     'flash_header_success' => 'Bravo! :)',
     'flash_header_info' => 'Information:',
     'flash_header_status' => 'Information:',
+    'flash_header_warning' => 'Attention:',
     'flash_header_error' => 'Ho non, une erreur est survenue! :(',
 
     'notification_action-text' => 'Si vous rencontrez des problèmes en cliquant sur le button ":actiontext", copiez et collez l\'adresse URL ci-dessous dans la barre d\'adresse de votre navigateur:',
@@ -225,6 +226,7 @@ return [
     'auth_register_provider_error' => 'Probleme de connexion avec ',
     'auth_register_oauth_success' => 'Bienvenu sur :appname :username. Merci de votre confiance. Vous pouvez desormais profiter de votre espace client',
     'auth_passwordReset_success' => 'Votre mot de passe est réinitialisé',
+    'auth_email_provider_evolution_fail' => 'Attention! Nous ne pouvons pas mettre à jour le nouvel email déclaré sur votre compte :provider (:newmail) car un compte avec un email identique existe déjà dans notre base. Vous devriez supprimer l\'un des 2 comptes',
 
     'divider_register' => 'ou utiliser',
     'divider_payment' => 'ou payer par carte',
