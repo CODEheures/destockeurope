@@ -16,4 +16,6 @@
     de manière aléatoire durant la durée de vie de l'option.
     La durée de vie de cette option est fixée à {{ env('HIGHLIGHT_HOURS_DURATION') }} heures.
     Cette option ne garantie pas le nombre d'affichage à la Une.
+    Une annonce n'est éligible à cette option que si sa durée de publication restante est supérieure à
+    {{ env('HIGHLIGHT_HOURS_DURATION') }} heures
 </p>

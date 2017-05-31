@@ -205,7 +205,7 @@ class Advert extends Model {
 
     public function getIsEligibleForEditAttribute() {
         $ended = Carbon::parse($this->ended_at);
-        $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isFuture();
+        $isQuiteYoung = $ended->subHours(env('REMAINING_HOURS_FOR_EDIT_ELIGIBILITY'))->isFuture();
         return ($this->isValid && !$this->isOnEdit && ($isQuiteYoung || $this->is_delegation));
     }
 

@@ -22,7 +22,7 @@ class IsNotOauth
             if($user) {
                 $oAuth = $user->oAuthProvider(config('providers_login'));
                 if($oAuth && $oAuth != '') {
-                    return redirect(route('login'))->with('info', 'Compte ouvert grâce à ' . $oAuth . '. Le mot de passe de ce compte ne peut pas être réinitialiser');
+                    return redirect(route('login'))->with('info', trans('strings.auth_register_open_by_provider', ['provider' => $oAuth]));
                 }
             }
         }

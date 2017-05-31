@@ -220,6 +220,7 @@ return [
     'auth_register_invalid_link' => 'The confirmation link is invalid.',
     'auth_register_already_exist_account' => 'an identical email is registered to an account opened by ',
     'auth_register_register_error' => 'an error occurred during registration. Thank you to contact the site administrator',
+    'auth_register_open_by_provider' => 'Account open by :provider. The password for this account can not be reset on our site',
     'auth_register_global_error' => 'an error occurred during your login / registration. Thank you to contact the site administrator',
     'auth_register_provider_error' => 'Connection problem with ',
     'auth_register_oauth_success' => 'Welcome on :appname :username. Thank you for your trust. You can henceforth enjoy your customer area',

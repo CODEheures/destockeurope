@@ -219,6 +219,7 @@ return [
     'auth_register_account_already_confirm' => 'Votre compte est déjà validé.',
     'auth_register_invalid_link' => 'Le lien de confirmation est invalide.',
     'auth_register_already_exist_account' => 'un email identique est enregistré sur un compte ouvert par ',
+    'auth_register_open_by_provider' => 'Compte ouvert grâce à :provider. Le mot de passe de ce compte ne peut pas être réinitialiser sur notre site',
     'auth_register_register_error' => 'une erreur est survenue pendant votre inscription. Merci de contacter l\'administrateur du site',
     'auth_register_global_error' => 'une erreur est survenue pendant votre connexion/inscription. Merci de contacter l\'administrateur du site',
     'auth_register_provider_error' => 'Probleme de connexion avec ',

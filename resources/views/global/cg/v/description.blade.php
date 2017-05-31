@@ -50,6 +50,9 @@
 <h5 class="ui header">Ajouter l’option Photos supplémentaires</h5>
 @include('global.cg.v.options.photos')
 
+<h4 class="ui header">Edition d'une annonce</h4>
+@include('global.cg.v.options.edit')
+
 <h4 class="ui header">Renouvellement d'une annonce</h4>
 @include('global.cg.v.options.renew')
 
