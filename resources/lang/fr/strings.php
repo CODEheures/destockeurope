@@ -32,6 +32,8 @@ return [
     'title_reset_password' => 'Renouvellement du mot de passe',
     'title_new_password' => 'Nouveau mot de passe',
 
+    'title_change_email' => 'Changement de mon email',
+
     'flash_header_success' => 'Bravo! :)',
     'flash_header_info' => 'Information:',
     'flash_header_status' => 'Information:',
@@ -48,6 +50,11 @@ return [
     'mail_firstSendToken_line' => 'Votre compte :mail a bien été créé',
     'mail_firstSendToken_action' => 'Confirmez votre email',
     'mail_firstSendToken_line2' => 'Merci d\'utiliser notre application! A tout de suite',
+
+    'mail_sendTokenChangeEmail_subject' => 'Changement de votre Email sur DestockEurope',
+    'mail_sendTokenChangeEmail_greeting' => 'Bonjour :username !',
+    'mail_sendTokenChangeEmail_line' => 'Vous avez demandé un changement de votre email. Cliquez ci-dessous pour confirmer ce nouvel email',
+    'mail_sendTokenChangeEmail_action' => 'Confirmez votre nouvel email',
 
     'mail_customerToSeller_subject' => 'Votre annonce ":title" a une réponse',
     'mail_customerToSeller_greeting' => 'Bonjour :sellername',
@@ -142,6 +149,7 @@ return [
 
     'form_label_name' => 'Votre nom',
     'form_label_email' => 'Votre E-mail',
+    'form_label_new_email' => 'Nouvel E-mail',
     'form_label_phone' => 'Votre n° de téléphone',
     'form_validation_email' => 'Entrez un E-mail valide',
     'form_label_password' => 'Mot de passe',
@@ -195,6 +203,8 @@ return [
 
     'link_forgot_password' => 'Mot de passe oublié',
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',
+    'link_change_email_link' => 'Changer mon email',
+    'link_send_validation_link' => 'Envoyer un lien de validation',
 
     'request_main_picture_require' => 'Il faut au moins une image à votre annonce',
     'request_min_price' => 'Le prix de vente ne peux pas être null, ou bien cochez la case "à négocier"',
@@ -220,13 +230,19 @@ return [
     'auth_register_account_already_confirm' => 'Votre compte est déjà validé.',
     'auth_register_invalid_link' => 'Le lien de confirmation est invalide.',
     'auth_register_already_exist_account' => 'un email identique est enregistré sur un compte ouvert par ',
-    'auth_register_open_by_provider' => 'Compte ouvert grâce à :provider. Le mot de passe de ce compte ne peut pas être réinitialiser sur notre site',
+    'auth_register_open_by_provider' => 'Compte ouvert grâce à :provider. Le mot de passe et l\'email de ce compte ne peuvent pas être réinitialisés sur notre site',
     'auth_register_register_error' => 'une erreur est survenue pendant votre inscription. Merci de contacter l\'administrateur du site',
     'auth_register_global_error' => 'une erreur est survenue pendant votre connexion/inscription. Merci de contacter l\'administrateur du site',
     'auth_register_provider_error' => 'Probleme de connexion avec ',
     'auth_register_oauth_success' => 'Bienvenu sur :appname :username. Merci de votre confiance. Vous pouvez desormais profiter de votre espace client',
     'auth_passwordReset_success' => 'Votre mot de passe est réinitialisé',
     'auth_email_provider_evolution_fail' => 'Attention! Nous ne pouvons pas mettre à jour le nouvel email déclaré sur votre compte :provider (:newmail) car un compte avec un email identique existe déjà dans notre base. Vous devriez supprimer l\'un des 2 comptes',
+
+    'auth_email_change_is_same' => 'C\'est déjà votre email. Choississez-en un nouveau si vous souhaitez en changer',
+    'auth_email_change_already_exist' => 'Cet email existe déjà dans notre base.',
+    'auth_email_change_success' => 'Votre email est desormais changé.',
+    'auth_email_change_send_token' => 'Votre demande de changement d\'email est prise en compte. Merci de le valider en cliquant le lien reçu à votre adresse email.',
+
 
     'divider_register' => 'ou utiliser',
     'divider_payment' => 'ou payer par carte',

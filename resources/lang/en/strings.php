@@ -32,6 +32,8 @@ return [
     'title_reset_password' => 'Reset Password',
     'title_new_password' => 'New Password',
 
+    'title_change_email' => 'Change my email',
+
     'flash_header_success' => 'Success :)',
     'flash_header_info' => 'Information:',
     'flash_header_status' => 'Information:',
@@ -48,6 +50,11 @@ return [
     'mail_firstSendToken_line' => 'Your account :mail is being created',
     'mail_firstSendToken_action' => 'Confirm your email',
     'mail_firstSendToken_line2' => 'Thank you for using our application!',
+
+    'mail_sendTokenChangeEmail_subject' => 'Changing your Email on DestockEurope',
+    'mail_sendTokenChangeEmail_greeting' => 'Hello :username !',
+    'mail_sendTokenChangeEmail_line' => 'You have requested a change of your email. Click below to confirm this new email',
+    'mail_sendTokenChangeEmail_action' => 'Confirm your new email',
 
     'mail_customerToSeller_subject' => 'Your advert ":title" have a response',
     'mail_customerToSeller_greeting' => 'Hello :sellername',
@@ -142,6 +149,7 @@ return [
 
     'form_label_name' => 'Your name',
     'form_label_email' => 'Your E-mail',
+    'form_label_new_email' => 'New E-mail',
     'form_label_phone' => 'Your phone number',
     'form_validation_email' => 'Please enter a valid e-mail',
     'form_label_password' => 'Password',
@@ -195,6 +203,8 @@ return [
 
     'link_forgot_password' => 'Forgot your password',
     'link_send_reset_link' => 'Send reset link',
+    'link_change_email_link' => 'Change my email',
+    'link_send_validation_link' => 'Send validation link',
 
     'request_main_picture_require' => 'At least one picture is required',
     'request_min_price' => 'The sale price can not be null, or check the "to negociate" box',
@@ -221,12 +231,17 @@ return [
     'auth_register_invalid_link' => 'The confirmation link is invalid.',
     'auth_register_already_exist_account' => 'an identical email is registered to an account opened by ',
     'auth_register_register_error' => 'an error occurred during registration. Thank you to contact the site administrator',
-    'auth_register_open_by_provider' => 'Account open by :provider. The password for this account can not be reset on our site',
+    'auth_register_open_by_provider' => 'Account open by :provider. The password and e-mail for this account can not be reset on our site',
     'auth_register_global_error' => 'an error occurred during your login / registration. Thank you to contact the site administrator',
     'auth_register_provider_error' => 'Connection problem with ',
     'auth_register_oauth_success' => 'Welcome on :appname :username. Thank you for your trust. You can henceforth enjoy your customer area',
     'auth_passwordReset_success' => 'Your password is reset',
     'auth_email_provider_evolution_fail' => 'Warning! We can not update the new email on your account :provider (:newmail) because an account with an identical email already exists in our database. You should delete one of the 2 accounts',
+
+    'auth_email_change_is_same' => 'This is already your email. Choose a new one if you want to change it',
+    'auth_email_change_already_exist' => 'This email already exist in our database.',
+    'auth_email_change_success' => 'Your email is changed.',
+    'auth_email_change_send_token' => 'Your request to change email is taken into account. Thank you for validating it by clicking the link received at your email address.',
 
     'divider_register' => 'or use',
     'divider_payment' => 'or use card',

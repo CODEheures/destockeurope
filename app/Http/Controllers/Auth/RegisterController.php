@@ -38,7 +38,10 @@ class RegisterController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('guest', ['except' => ['resendToken', 'accountConfirm']]);
+        $this->middleware('guest', ['except' => ['resendToken', 'accountConfirm', 'changeEmail', 'changeEmailPost', 'validChangeEmail']]);
+        $this->middleware('auth', ['only' => ['changeEmail', 'changeEmailPost', 'validChangeEmail']]);
+        $this->middleware('isEmailConfirmed', ['only' => ['changeEmail', 'changeEmailPost', 'validChangeEmail']]);
+        $this->middleware('isNotOauth', ['only' => ['changeEmail', 'changeEmailPost', 'validChangeEmail']]);
         $this->middleware('captcha', ['only' => ['register']]);
         $this->request = $request;
     }

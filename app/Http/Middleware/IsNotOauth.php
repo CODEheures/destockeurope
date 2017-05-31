@@ -22,7 +22,11 @@ class IsNotOauth
             if($user) {
                 $oAuth = $user->oAuthProvider(config('providers_login'));
                 if($oAuth && $oAuth != '') {
-                    return redirect(route('login'))->with('info', trans('strings.auth_register_open_by_provider', ['provider' => $oAuth]));
+                    if(auth()->check()){
+                        return redirect()->back()->with('info', trans('strings.auth_register_open_by_provider', ['provider' => $oAuth]));
+                    } else {
+                        return redirect(route('login'))->with('info', trans('strings.auth_register_open_by_provider', ['provider' => $oAuth]));
+                    }
                 }
             }
         }

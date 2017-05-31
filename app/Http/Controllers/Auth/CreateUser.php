@@ -19,20 +19,20 @@ trait CreateUser {
     // BE CAREFUL THIS TRAIT USE $this->request for flashing session //
     //***************************************************************//
 
-    public static function setNewToken($user) {
+    public static function setNewToken($user, $isForNewEmail = false) {
         //Chaine random du Token
         $token = str_random(60);
 
-        $user->confirmed = false;
+        !$isForNewEmail ? $user->confirmed = false : null;
         $user->confirmationToken = $token;
         $user->save();
 
-        self::sendToken($user);
+        self::sendToken($user, $isForNewEmail);
     }
 
-    public static function sendToken($user) {
+    public static function sendToken($user, $isForNewMail) {
         //Envoi du mail de confirmation
-        $user->notify(new SendToken());
+        $user->notify(new SendToken($isForNewMail));
     }
 
     public function resendToken(){
@@ -47,7 +47,11 @@ trait CreateUser {
         try {
             $user = User::findOrFail($id);
             if ($user->confirmed == true) {
-                return redirect(route('home'))->with('info',trans('strings.auth_register_account_already_confirm'));
+                if(!is_null($user->new_email)){
+                    return redirect(route('validChangeEmail', ['id' => $id, 'token'=>$token]));
+                } else {
+                    return redirect(route('home'))->with('info',trans('strings.auth_register_account_already_confirm'));
+                }
             } elseif ($token == $user->confirmationToken) {
                 $user->confirmed = true;
                 $user->confirmationToken = '';
@@ -60,6 +64,44 @@ trait CreateUser {
         } catch(ModelNotFoundException $e) {
             return redirect(route('home'))->with('error', trans('strings.auth_register_invalid_link'));
         }
+    }
+
+    public function changeEmail(){
+        return view('auth.email.change');
+    }
+
+    public function changeEmailPost(){
+        $email = $this->request->has('email') ? filter_var($this->request->email, FILTER_VALIDATE_EMAIL) : null;
+
+        $user = auth()->user();
+        $originalMail = $user->email;
+        $alreadyExist = User::where('id', '<>', $user->id)->where('email', $email)->count();
+
+        if ($email == $originalMail) {
+            return redirect()->back()->withErrors(trans('strings.auth_email_change_is_same'));
+        } elseif($alreadyExist) {
+            return redirect()->back()->withErrors(trans('strings.auth_email_change_already_exist'));
+        } else {
+            $user->new_email = $email;
+            $user->save();
+            self::setNewToken(auth()->user(), true);
+            return redirect(route('home'))->with('status',trans('strings.auth_email_change_send_token'));
+        }
+
+    }
+
+    public function validChangeEmail() {
+        $user = auth()->user();
+        $id = $this->request->has('id') ? $this->request->id : null;
+        $token = $this->request->has('token') ? $this->request->token : null;
+
+        if(!is_null($id) && !is_null($token) && (int)$id==$user->id && $token = $user->confirmationToken){
+            $user->email = $user->new_email;
+            $user->confirmationToken = '';
+            $user->save();
+            return redirect(route('home'))->with('success', trans('strings.auth_email_change_success'));
+        }
+        return redirect(route('home'))->withErrors(trans('strings.auth_register_invalid_link'));
     }
 
     protected function create(array $data)

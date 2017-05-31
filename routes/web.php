@@ -83,6 +83,9 @@
     Route::group(['prefix' => 'register'], function() {
         Route::get('/', 'Auth\RegisterController@showRegistrationForm')->name('register');
         Route::post('/', 'Auth\RegisterController@register');
+        Route::get('/changeEmail', 'Auth\RegisterController@changeEmail')->name('changeEmail');
+        Route::post('/changeEmail', 'Auth\RegisterController@changeEmailPost')->name('changeEmailPost');
+        Route::get('/validChangeEmail', 'Auth\RegisterController@validChangeEmail')->name('validChangeEmail');
     });
 
     // Password Reset Routes...

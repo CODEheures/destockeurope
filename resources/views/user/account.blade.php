@@ -4,6 +4,7 @@
 
     <user-account
             route-user-get-me="{{ route('user.getMe') }}"
+            route-change-email="{{ route('changeEmail', ['email' => auth()->user()->email]) }}"
             route-user-set-pref-currency="{{ route('user.currency') }}"
             route-user-set-pref-locale="{{ route('user.locale') }}"
             route-user-set-pref-location="{{ route('user.location') }}"
@@ -36,6 +37,7 @@
             account-preferences-label="{{ trans('strings.view_user_account_preferences_label') }}"
             name-label="{{ trans('strings.form_label_name') }}"
             email-label="{{ trans('strings.form_label_email') }}"
+            email-change-label="{{ trans('strings.link_change_email_link') }}"
             phone-label="{{ trans('strings.form_label_phone') }}"
             compagny-divider="{{ trans('strings.view_user_account_compagny_divider_label') }}"
             compagny-name-label="{{ trans('strings.view_user_account_compagny_name_label') }}"

@@ -39,10 +39,16 @@
                                    v-on:focus="focused={'input': 'phone', 'value': dataUserPhone}"
                                    v-on:blur="blured={'input': 'phone', 'value': dataUserPhone}">
                         </div>
-                        <div class="disabled field">
-                            <label>{{ emailLabel }}</label>
-                            <input type="email" name="email" :placeholder="emailLabel" :value="userEmail">
+                        <div class="field">
+                            <div class="sixteen wide disabled field">
+                                <label>{{ emailLabel }}</label>
+                                <input type="email" name="email" :placeholder="emailLabel" :value="userEmail">
+                            </div>
+                            <div class="sixteen wide field">
+                                <p><a :href="routeChangeEmail">{{ emailChangeLabel }}</a></p>
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <template v-if="!advertAccountVerifiedStep">
@@ -131,6 +137,7 @@
         props: [
             //vue routes
             'routeUserGetMe',
+            'routeChangeEmail',
             'routeUserSetPrefCurrency',
             'routeUserSetPrefLocale',
             'routeUserSetPrefLocation',
@@ -164,6 +171,7 @@
             'accountPreferencesLabel',
             'nameLabel',
             'emailLabel',
+            'emailChangeLabel',
             'phoneLabel',
             'compagnyDivider',
             'compagnyNameLabel',
