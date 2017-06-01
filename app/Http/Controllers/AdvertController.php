@@ -1598,9 +1598,12 @@ class AdvertController extends Controller
 
             //3 Notify Event
             if($withNotification){
-                $state==Invoice::STATE_EDIT ?
-                    $this->notifyEvent($invoice->advert, $state, $invoice, $disapproveReason, $isApproved) :
+                if($state==Invoice::STATE_EDIT && !is_null($advert->isEditOf)) {
+                    $originalAdvert = Advert::find($advert->isEditOf);
+                    !is_null($originalAdvert) ? $this->notifyEvent($originalAdvert, $state, $invoice, $disapproveReason, $isApproved) : null;
+                } else {
                     $this->notifyEvent($advert, $state, $invoice, $disapproveReason, $isApproved);
+                }
             }
 
 
