@@ -314,6 +314,14 @@ class Advert extends Model {
         $this->ended_at = Carbon::parse($this->online_at)->addDays(env('ADVERT_LIFE_TIME'));
     }
 
+    public function calcRenewEndedAt() {
+        if(!is_null($this->deleted_at)) {
+            return Carbon::now()->addDays(env('ADVERT_LIFE_TIME'));
+        } else {
+            return Carbon::parse($this->ended_at)->addDays(env('ADVERT_LIFE_TIME'));
+        }
+    }
+
     public function setIsOnEdit() {
         $this->isOnEdit = Advert::where('isEditOf', $this->id)->where('isPublish', true)->count()>0;
     }

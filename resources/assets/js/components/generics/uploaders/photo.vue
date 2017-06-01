@@ -112,6 +112,11 @@
             advertFormPhotoNbFreePicture: Number,
             maxFiles: Number,
             isDelegation: Boolean,
+            oldMainPicture: {
+                type: String,
+                required: false,
+                default: ''
+            },
             //vue strings
             advertFormPhotoBtnLabel: String,
             advertFormPhotoBtnCancel: String,
@@ -155,6 +160,8 @@
         },
         updated () {
             let that = this;
+            this.mainPicture = this.oldMainPicture;
+            this.setMainPicture();
             (this.thumbs).forEach(function (elem,index) {
                 $('#slider1-'+that._uid+'-'+index).checkbox({
                     onChange: function () {
@@ -190,7 +197,7 @@
                                 percent: perform
                             });
                         },
-                        ccancelToken: that.sourceCancelToken.token,
+                        cancelToken: that.sourceCancelToken.token,
                     })
                         .then(function (response) {
                             that.onUpload = false;
@@ -263,12 +270,19 @@
                 }
             },
             setMainPicture() {
+                let that = this;
                 if(this.thumbs.length == 0){
                     this.mainPicture ='';
                 } else if(this.thumbs.length == 1 || this.thumbs.indexOf(this.mainPicture)==-1){
                     let firstElem = $('#slider1-'+this._uid+'-0');
                     this.mainPicture=firstElem.children('input').val();
                     firstElem.checkbox('check');
+                } else if(this.thumbs.indexOf(this.mainPicture)>=0) {
+                    (this.thumbs).forEach(function (elem,index) {
+                        if(elem==that.mainPicture){
+                            $('#slider1-'+that._uid+'-'+index).checkbox('check');
+                        }
+                    });
                 }
             },
         }

@@ -3,6 +3,7 @@
     Cette option permet aux annonceurs d'éditer leurs annonces pour les champs "titre", "description", "catégorie",
     "prix", "lieu", "photo", "vidéo".
     <br />L'édition des champs "quantitée totale" et "lot minimal de vente" sont GRATUITS.
+    <br />Votre annonce est automatiquement et GRATUITEMENT remise en tête de liste avec cette option.
 </p>
 <p>
     Une annonce n'est éligible à l'édition que si sa durée de publication restante est supérieure à

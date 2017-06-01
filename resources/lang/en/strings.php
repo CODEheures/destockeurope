@@ -472,6 +472,7 @@ return [
     'payment_all_error' => 'Ho no! Payment fails :-(',
     'payment_paypal_success' => 'Thank you for your payment. Note that this will only be executed if your ad is validated by our services. You will then receive your invoice by e-mail.',
     'payment_renew_success' => 'Thank you for your payment. Your advert is extended to :date. Your invoice is send by e-mail.',
+    'noPayment_renew_success' => 'Your advert is extended to :date.',
     'payment_backToTop_success' => 'Thank you for your payment. Your advert has just been moved back to the top of the list. Your invoice is send by e-mail.',
     'noPayment_backToTop_success' => 'Your advert has just been moved back to the top of the list.',
     'payment_highlight_success' => 'Thank you for your payment. Your Advert is put in Front During the next ' . env('HIGHLIGHT_HOURS_DURATION') . ' hours.  Your invoice is send by e-mail.',

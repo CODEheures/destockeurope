@@ -473,6 +473,7 @@ return [
     'payment_all_error' => 'Ho non! Le paiement a échoué :-(',
     'payment_paypal_success' => 'Merci pour votre paiement. Notez que celui-ci ne sera éxécuté que si votre annonce est validée par nos services. Vous recevrez alors votre facture par mail.',
     'payment_renew_success' => 'Merci pour votre paiement. Votre annonce est prolongée jusqu\'au :date.  Votre facture vous a été envoyée par mail.',
+    'noPayment_renew_success' => 'Votre annonce est prolongée jusqu\'au :date.',
     'payment_backToTop_success' => 'Merci pour votre paiement. Votre annonce vient d\'être remontée en tête de liste.  Votre facture vous a été envoyée par mail.',
     'noPayment_backToTop_success' => 'Votre annonce vient d\'être remontée en tête de liste.',
     'payment_highlight_success' => 'Merci pour votre paiement. Votre annonce fait parti des annonces à la Une pendant les prochaines ' . env('HIGHLIGHT_HOURS_DURATION') . ' heures.  Votre facture vous a été envoyée par mail.',

@@ -523,12 +523,12 @@ class AdvertController extends Controller
      * @return AdvertController|\Illuminate\Http\RedirectResponse
      */
     public function reviewForPayment($invoiceId, Request $request) {
-        $title = $request->has('title') ? $request->title : null;
+
         if(!UserUtils::haveCompleteAccount()){
             return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
         }
         $invoice = Invoice::find($invoiceId);
-        if($invoice->user->id == auth()->user()->id && !$invoice->authorization) {
+        if(!is_null($invoice) && $invoice->user->id == auth()->user()->id && !$invoice->authorization) {
             $invoice->tva_customer = $invoice->user->registrationNumber;
             $invoice->tva_requester = $invoice->user->requesterNumber;
             $invoice->vatIdentifier = $invoice->user->vatIdentifier;
@@ -544,6 +544,26 @@ class AdvertController extends Controller
             }
             $invoice->save();
             $listCardTypes = config('paypal_cards.list');
+
+            switch ($invoice->state) {
+                case Invoice::STATE_CREATION:
+                    $title = null;
+                    break;
+                case Invoice::STATE_EDIT:
+                    $title = trans('strings.option_isEdit_name');
+                    break;
+                case Invoice::STATE_RENEW:
+                    $title = trans('strings.option_isRenew_name');
+                    break;
+                case Invoice::STATE_BACKTOTOP:
+                    $title = trans('strings.option_isBackToTop_name');
+                    break;
+                case Invoice::STATE_HIGHLIGHT:
+                    $title = trans('strings.option_isHighlight_name');
+                    break;
+            }
+
+
             return view('advert.reviewForPayment', compact('invoice', 'listCardTypes', 'title'));
         }
         return redirect(route('home'));
@@ -733,6 +753,17 @@ class AdvertController extends Controller
     {
         $advert = Advert::find($id);
         if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])){
+
+            if (is_null($advert->isValid) && $advert->invoices()->count()==1) {
+                $invoice  = $advert->invoices()
+                    ->where('state', Invoice::STATE_CREATION)
+                    ->first();
+
+                if(!is_null($invoice) && !is_null($invoice->authorization) && is_null($invoice->voidId)){
+                    $this->voidPayment($invoice);
+                }
+            }
+
             if (auth()->user()->role == User::ROLES[User::ROLE_ADMIN]) {
                 $advert->isValid = false;
                 $advert->save();
@@ -793,19 +824,24 @@ class AdvertController extends Controller
         if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForRenew){
             try {
                 //Create Invoice
-                DB::beginTransaction();
                 $cost = CostUtils::getCost(['isRenew' => true]);
-                $invoice = Invoice::create([
-                    'user_id' => $advert->user->id,
-                    'advert_id' => $advert->id,
-                    'state' => Invoice::STATE_RENEW,
-                    'cost' => $cost,
-                    'options' => CostUtils::setOptions(['isRenew' => true])
-                ]);
-                $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isRenew_name')]);
-                $advert->save();
-                DB::commit();
-                return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isRenew_name'), 'infoCost' => $cost]));
+                if($cost>0){
+                    DB::beginTransaction();
+                    $invoice = Invoice::create([
+                        'user_id' => $advert->user->id,
+                        'advert_id' => $advert->id,
+                        'state' => Invoice::STATE_RENEW,
+                        'cost' => $cost,
+                        'options' => CostUtils::setOptions(['isRenew' => true])
+                    ]);
+                    $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
+                    $advert->save();
+                    DB::commit();
+                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isRenew_name'), 'infoCost' => $cost]));
+                } else {
+                    $this->advertUpdate($advert, Invoice::STATE_RENEW, null);
+                    return redirect()->back()->with('success', trans('strings.noPayment_renew_success'));
+                }
             } catch (\Exception $e) {
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
             }
@@ -840,7 +876,7 @@ class AdvertController extends Controller
                         'cost' => $cost,
                         'options' => CostUtils::setOptions(['isBackToTop' => true])
                     ]);
-                    $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isBackToTop_name')]);
+                    $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
                     $advert->save();
                     DB::commit();
                     return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name'), 'infoCost' => $cost]));
@@ -882,7 +918,7 @@ class AdvertController extends Controller
                         'cost' => $cost,
                         'options' => CostUtils::setOptions(['isHighlight' => true])
                     ]);
-                    $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id, 'title' => trans('strings.option_isHighlight_name')]);
+                    $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
                     $advert->save();
                     DB::commit();
                     return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isHighlight_name'), 'infoCost' => $cost]));
@@ -910,7 +946,7 @@ class AdvertController extends Controller
         $advert = Advert::find($id);
         $advert->load('user');
         if($advert && $advert->user->id == auth()->user()->id && $advert->invoices()->count()==0 && $advert->isPublish==false){
-            $this->advertPublish($advert, $request, null, null);
+            $this->advertPublish($advert, $request);
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } else {
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_patch_message'));
@@ -925,7 +961,7 @@ class AdvertController extends Controller
      * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function payByPaypal($invoiceId) {
-        return $this->advertPayment($invoiceId, self::PAYPAL);
+        return $this->createPayment($invoiceId, self::PAYPAL);
     }
 
     /**
@@ -937,7 +973,7 @@ class AdvertController extends Controller
      * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function payByCard($invoiceId, CreditCardRequest $request) {
-        return $this->advertPayment($invoiceId, self::CARD, $request);
+        return  $this->createPayment($invoiceId, self::CARD, $request);
     }
 
     /**
@@ -992,12 +1028,9 @@ class AdvertController extends Controller
                     ->withErrors('err4: ' . trans('strings.payment_all_error'));
             }
 
-            if ($result->getState() == 'approved') { // payment made
-                return $this->saveAuthorizationAndPublish($payment, $invoice, $request);
-            }
 
-            return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                ->withErrors('err2: ' . trans('strings.payment_all_error'));
+            return $this->processResultPayment($result->getState(), $payment, $invoice, $request);
+
         } else {
             return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
                 ->withErrors('err6: ' . trans('strings.payment_all_error'));
@@ -1181,19 +1214,8 @@ class AdvertController extends Controller
                         ->latest()->first();
                 }
 
-                //IF EXIST AUTHORIZATION PAYMENT
-                if(!is_null($invoice)
-                    && $invoice->authorization
-                    && $invoice->authorization != '')
-                {
-                    $this->autoProcess($advert, $state, $invoice,(boolean)$isApproved,$disapproveReason,false);
-                } else {
-                    $this->advertUpdate($advert, $state,(boolean)$isApproved);
-                    if((boolean)$isApproved){
-                        $this->updateStats(null);
-                    }
-                    $this->notifyEvent($advert, $state, $invoice, $disapproveReason, (boolean)$isApproved);
-                }
+                $redirectOptions = ['withRedirect'=>false];
+                $this->autoProcess($advert, $state, $invoice,(boolean)$isApproved,$disapproveReason,$redirectOptions,true);
             }
         }
     }
@@ -1205,9 +1227,9 @@ class AdvertController extends Controller
      * @param $invoiceId
      * @param $type
      * @param null $request
-     * @return AdvertController|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return array|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
      */
-    private function advertPayment($invoiceId, $type, $request=null) {
+    private function createPayment($invoiceId, $type, $request=null) {
         $invoice = Invoice::find($invoiceId);
 
         if($invoice
@@ -1372,13 +1394,37 @@ class AdvertController extends Controller
                     return redirect($redirect_url);
                 }
             } elseif ($type == self::CARD) {
-                if ($payment->getState() == 'approved') { // payment made
-                    return $this->saveAuthorizationAndPublish($payment, $invoice, $request);
-                }
+                $resultOfPayment = [
+                    'state' => $payment->getState(),
+                    'payment' => $payment,
+                    'invoice' => $invoice,
+                    'request' => $request
+                ];
+                return $this->processResultPayment($resultOfPayment['state'], $resultOfPayment['payment'], $resultOfPayment['invoice'], $resultOfPayment['request']);
             }
         }
         return redirect(route('home'))
             ->withErrors(trans('strings.payment_all_error'));
+    }
+
+    /**
+     *
+     * Process the result of the payment
+     *
+     * @param $result
+     * @param $payment
+     * @param $invoice
+     * @param $request
+     * @return AdvertController|\Illuminate\Http\RedirectResponse
+     */
+    private function processResultPayment($result, $payment, $invoice, $request) {
+        if ($result == 'approved') { // payment made
+            $this->saveAuthorization($payment, $invoice);
+            return $this->setAdvertState($invoice, $request);
+        }
+
+        return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoice->id]))
+            ->withErrors('err2: ' . trans('strings.payment_all_error'));
     }
 
     /**
@@ -1431,6 +1477,27 @@ class AdvertController extends Controller
 
     /**
      *
+     * Save Authorization number Of payment
+     *
+     * @param Payment $payment
+     * @param Advert $advert
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function saveAuthorization(Payment $payment, Invoice $invoice) {
+        $transactions = $payment->getTransactions();
+        $relatedResources = $transactions[0]->getRelatedResources();
+        $authorization = $relatedResources[0]->getAuthorization();
+        $authorizationId = $authorization->getId();
+
+        if(!is_null($authorizationId) && !is_null($invoice)){
+            $invoice->authorization = $authorizationId;
+            $invoice->save();
+        }
+    }
+
+    /**
+     *
      * Common Save Result Of payment and Process to publish Advert before validation
      *
      * @param Payment $payment
@@ -1438,31 +1505,44 @@ class AdvertController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function saveAuthorizationAndPublish(Payment $payment, Invoice $invoice, Request $request) {
-        $transactions = $payment->getTransactions();
-        $relatedResources = $transactions[0]->getRelatedResources();
-        $authorization = $relatedResources[0]->getAuthorization();
-        $authorizationId = $authorization->getId();
+    private function setAdvertState(Invoice $invoice, Request $request) {
 
         if($invoice->state == Invoice::STATE_CREATION){
             $advert = $invoice->advert;
-            $this->advertPublish($advert, $request, $authorizationId, $invoice);
+            $this->advertPublish($advert, $request);
             //stop process here, admin approve is required
             return redirect(route('home'))->with('success', trans('strings.payment_paypal_success'));
 
         } elseif ($invoice->state == Invoice::STATE_RENEW) {
             $advert = Advert::withTrashed()->find($invoice->advert_id);
-            $this->advertPublish($advert, $request, $authorizationId, $invoice);
-            return $this->autoProcess($advert, $invoice->state,$invoice,null,null, true);
+            $redirectOption = [
+                'withRedirect' => true,
+                'successMessage' => trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($advert->calcRenewEndedAt())]),
+                'errorMessage' => trans('strings.view_advert_renew_error')
+            ];
+            return $this->autoProcess($advert, $invoice->state,$invoice,null,null, $redirectOption,true);
 
-        } elseif ($invoice->state == Invoice::STATE_BACKTOTOP || $invoice->state == Invoice::STATE_HIGHLIGHT) {
+        } elseif ($invoice->state == Invoice::STATE_BACKTOTOP) {
             $advert = Advert::find($invoice->advert_id);
-            $this->advertPublish($advert, $request, $authorizationId, $invoice);
-            return $this->autoProcess($advert, $invoice->state, $invoice, null, null, true);
+            $redirectOption = [
+                'withRedirect' => true,
+                'successMessage' => trans('strings.payment_backToTop_success'),
+                'errorMessage' => trans('strings.view_advert_backToTop_error')
+            ];
+            return $this->autoProcess($advert, $invoice->state,$invoice,null,null, $redirectOption,true);
+
+        } elseif ($invoice->state == Invoice::STATE_HIGHLIGHT) {
+            $advert = Advert::find($invoice->advert_id);
+            $redirectOption = [
+                'withRedirect' => true,
+                'successMessage' => trans('strings.payment_highlight_success'),
+                'errorMessage' => trans('strings.payment_highlight_error')
+            ];
+            return $this->autoProcess($advert, $invoice->state,$invoice,null,null, $redirectOption,true);
 
         } elseif ($invoice->state == Invoice::STATE_EDIT) {
             $advert = Advert::where('isEditOf', $invoice->advert->id)->latest()->first();
-            $this->advertPublish($advert, $request, $authorizationId, $invoice);
+            $this->advertPublish($advert, $request);
             //stop process here, admin approve is required
             return redirect(route('home'))->with('success', trans('strings.payment_paypal_success'));
         }
@@ -1476,15 +1556,10 @@ class AdvertController extends Controller
      * @param Request $request
      * @param null $authorizationId
      */
-    private function advertPublish(Advert $advert, Request $request, $authorizationId=null, Invoice $invoice=null){
-        DB::beginTransaction();
+    private function advertPublish(Advert $advert, Request $request){
         $advert->isPublish = true;
-        if(!is_null($authorizationId) && !is_null($invoice)){
-            $invoice->authorization = $authorizationId;
-            $invoice->save();
-        }
         $advert->save();
-        DB::commit();
+
         $this->pictureManager->purgeSessionLocalTempo();
         session()->has('videoId') ? session()->forget('videoId'): null;
         $request->session()->flash('clear', true);
@@ -1495,49 +1570,46 @@ class AdvertController extends Controller
      *
      *
      * @param Advert $advert
+     * @param int $state
      * @param Invoice $invoice
+     * @param bool|null $isApproved
+     * @param null|string $disapproveReason
+     * @param array $redirectOptions
+     * @param bool $withNotification
      * @return AdvertController|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    private function autoProcess(Advert $advert, $state, Invoice $invoice=null, $isApproved=null, $disapproveReason=null, $withRedirect=true) {
+    private function autoProcess(Advert $advert, int $state, Invoice $invoice=null, bool $isApproved=null, string $disapproveReason=null, Array $redirectOptions, bool $withNotification=true) {
         try {
-            if(is_null($isApproved) || $isApproved==true){
-                $this->capturePayment($invoice);
-                $this->advertUpdate($advert, $state,$isApproved);
-                $this->updateStats($invoice);
-                $state==Invoice::STATE_EDIT ?
-                    $this->notifyEvent($invoice->advert, $state, $invoice, $disapproveReason, $isApproved) :
-                    $this->notifyEvent($advert, $state, $invoice, $disapproveReason, $isApproved);
+
+            //1 Capture + stats or Void
+            if(!is_null($invoice)){
+                if(is_null($isApproved) || $isApproved==true){
+                    $this->capturePayment($invoice);
+                    $this->updateStats($invoice);
+                } else {
+                    $this->voidPayment($invoice);
+                }
             } else {
-                $this->voidPayment($invoice);
-                $this->advertUpdate($advert, $state,$isApproved);
+                $isApproved==true ? $this->updateStats(null) : null;
+            }
+
+            //2 Update Advert
+            $this->advertUpdate($advert, $state, $isApproved);
+
+            //3 Notify Event
+            if($withNotification){
                 $state==Invoice::STATE_EDIT ?
                     $this->notifyEvent($invoice->advert, $state, $invoice, $disapproveReason, $isApproved) :
                     $this->notifyEvent($advert, $state, $invoice, $disapproveReason, $isApproved);
             }
 
 
-            $redirectSuccessMessage='';
-            $redirectErrorMessage='';
-            switch ($state) {
-                case Invoice::STATE_RENEW:
-                    $redirectSuccessMessage = trans('strings.payment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]);
-                    $redirectErrorMessage = trans('strings.view_advert_renew_error');
-                    break;
-                case Invoice::STATE_BACKTOTOP:
-                    $redirectSuccessMessage = trans('strings.payment_backToTop_success');
-                    $redirectErrorMessage = trans('strings.view_advert_backToTop_error');
-                    break;
-                case Invoice::STATE_HIGHLIGHT:
-                    $redirectSuccessMessage = trans('strings.payment_highlight_success');
-                    $redirectErrorMessage = trans('strings.view_advert_highlight_error');
-                    break;
-            }
+            //4 Redirect
+            return $redirectOptions['withRedirect'] == true ? redirect(route('home'))->with('success', $redirectOptions['successMessage']) : null;
 
-
-            return $withRedirect == true ? redirect(route('home'))->with('success', $redirectSuccessMessage) : null;
         } catch (\Exception $e) {
             $this->notifyError($advert);
-            return $withRedirect == true ? redirect(route('home'))->withErrors($redirectErrorMessage) : null;
+            return $redirectOptions['withRedirect'] == true ? redirect(route('home'))->withErrors($redirectOptions['errorMessage']) : null;
         }
     }
 
@@ -1656,6 +1728,7 @@ class AdvertController extends Controller
      */
     private function updateStats(Invoice $invoice = null){
         $stats = Stats::latest()->first();
+        is_null($stats) ? $stats = Stats::create([]) : null;
         if(!is_null($invoice) && $invoice->cost > 0){
             $stats->totalNewCostAdverts = $stats->totalNewCostAdverts + 1;
             $stats->totalCosts = $stats->totalCosts + $invoice->cost;
