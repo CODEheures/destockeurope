@@ -451,7 +451,7 @@ class AdvertController extends Controller
                 $advert->load('pictures');
                 $advert->load('category');
                 $advert->load(['user' => function ($query) {
-                    $query->select(['id','role','phone']);
+                    $query->select(['id','role','phone', 'compagnyName']);
                 }]);
 
                 //bypass user phone on delegation

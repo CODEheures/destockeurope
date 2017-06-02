@@ -8,6 +8,11 @@
     <meta property="og:image" content="{{ $advert->thumb }}">
     <meta property="og:url" content="{{ $advert->url }}">
     <meta property="og:type" content="product.item">
+    <meta property="product:retailer_item_id" content="{{ $advert->user->compagnyName }}">
+    <meta property="product:price:amount" content="{{ \App\Common\MoneyUtils::getPriceWithDecimal($advert->originalPriceWithMargin,$advert->currency,false) }}">
+    <meta property="product:price:currency"   content="{{ $advert->currency }}" />
+    <meta property="product:availability"     content="in stock" />
+    <meta property="product:condition"        content="new" />
 @endsection
 
 @section('content')

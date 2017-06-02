@@ -40,9 +40,9 @@
             </div>
             <div class="actions">
                 <div style="float: left" v-if="dataOwnerUser.phone && dataOwnerUser.phone!=null && dataOwnerUser.phone!=''">
-                    <div class="ui blue button" v-on:click="seePhone()" v-if="!phoneIsVisible">
+                    <button class="ui blue button" v-on:click="seePhone()" v-if="!phoneIsVisible" autofocus>
                         {{ formSeePhoneLabel }}
-                    </div>
+                    </button>
                     <div class="ui large label" style="float: left" v-else>
                         <i class="phone icon"></i> {{ dataOwnerUser.phone }}
                     </div>

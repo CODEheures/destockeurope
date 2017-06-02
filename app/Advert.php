@@ -53,7 +53,7 @@ class Advert extends Model {
         'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'resume',
         'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight',
         'isEligibleForRenewMailZero', 'isEligibleForEdit', 'isUserOwner', 'isUserBookmark', 'bookmarkCount',
-        'picturesWithTrashedCount', 'originalPrice', 'priceSubUnit', 'currencySymbol', 'listEditFields');
+        'picturesWithTrashedCount', 'originalPrice', 'originalPriceWithMargin', 'priceSubUnit', 'currencySymbol', 'listEditFields');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -99,6 +99,10 @@ class Advert extends Model {
 
     public function getOriginalPriceAttribute() {
         return $this->getOriginal('price');
+    }
+
+    public function getOriginalPriceWithMarginAttribute() {
+        return $this->getOriginal('price_margin');
     }
 
     public function getPriceSubUnitAttribute() {
