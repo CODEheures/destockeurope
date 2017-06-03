@@ -146,6 +146,7 @@
         Route::get('/toApprove', ['as' => 'advert.toApprove', 'uses' => 'AdvertController@toApprove']);
         Route::get('/listApprove', ['as' => 'advert.listApprove', 'uses' => 'AdvertController@listApprove']);
         Route::post('/approve', ['as' => 'advert.approve', 'uses' => 'AdvertController@approve']);
+        Route::get('/refund/{id}', ['as' => 'advert.refund', 'uses' => 'AdvertController@refund']);
         Route::get('/delegations', ['as' => 'advert.getDelegations', 'uses' => 'AdvertController@delegations']);
         Route::patch('/updateCoefficient/{id}', ['as' => 'advert.updateCoefficient', 'uses' => 'AdvertController@updateCoefficient']);
         Route::patch('/updateQuantites/{id}', ['as' => 'advert.updateQuantities', 'uses' => 'AdvertController@updateQuantities']);

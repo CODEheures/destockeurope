@@ -1,6 +1,32 @@
 <template>
     <div class="ui grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
+        <div :id="'modal-'+_uid" class="ui basic modal">
+            <i class="close icon"></i>
+            <div class="header">
+                {{ modalValidHeader }}
+            </div>
+            <div class="image content">
+                <div class="image">
+                    <i class="legal icon"></i>
+                </div>
+                <div class="description">
+                    <p>{{ modalValidDescriptionOne+refundAmount+modalValidDescriptionTwo }}</p>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="two fluid ui inverted buttons">
+                    <div class="ui cancel red basic inverted button">
+                        <i class="remove icon"></i>
+                        {{ modalNo }}
+                    </div>
+                    <div class="ui ok green basic inverted button">
+                        <i class="checkmark icon"></i>
+                        {{ modalYes }}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="sixteen wide column">
             <h2 class="ui header">{{ contentHeader }}</h2>
         </div>
@@ -21,14 +47,21 @@
             </div>
             <div class="sixteen wide column">
                 <div class="row">
+                    <div class="ui active inverted dimmer" v-if="!isLoaded">
+                        <div class="ui large text loader">Loading</div>
+                    </div>
                     <invoices-by-list
                             :route-get-invoices-list="dataRouteGetInvoicesList"
+                            :flag-force-reload="dataForceReload"
                             :no-result-found-header="noResultFoundHeader"
                             :no-result-found-message="noResultFoundMessage"
                             :actual-locale="actualLocale"
+                            :or-label="orLabel"
                             :see-invoice-label="seeInvoiceLabel"
+                            :refund-invoice-label="refundInvoiceLabel"
                             :list-header-paypal-capture="listHeaderPaypalCapture"
                             :list-header-paypal-void="listHeaderPaypalVoid"
+                            :list-header-paypal-refund="listHeaderPaypalRefund"
                             :list-header-usermail="listHeaderUsermail"
                             :list-header-date="listHeaderDate"
                     ></invoices-by-list>
@@ -60,6 +93,12 @@
             //vue strings
             'contentHeader',
             'loadErrorMessage',
+            'modalValidHeader',
+            'modalValidDescriptionOne',
+            'modalValidDescriptionTwo',
+            'modalNo',
+            'modalYes',
+            'invoiceRefundSuccess',
             //filter invoice component
             'filterMinLengthSearch',
             'filterRibbonOpen',
@@ -70,9 +109,12 @@
             'noResultFoundHeader',
             'noResultFoundMessage',
             'actualLocale',
+            'orLabel',
             'seeInvoiceLabel',
+            'refundInvoiceLabel',
             'listHeaderPaypalCapture',
             'listHeaderPaypalVoid',
+            'listHeaderPaypalRefund',
             'listHeaderUsermail',
             'listHeaderDate',
             //paginate component
@@ -90,7 +132,10 @@
                 dataRouteGetInvoicesList: '',
                 dataFlagResetSearch: false,
                 oldChoice: {},
-                update: false
+                update: false,
+                refundAmount: 0,
+                dataForceReload: false,
+                isLoaded: true
             };
         },
         mounted () {
@@ -132,6 +177,9 @@
                     this.updateResults(true);
                 }
             });
+            this.$on('refund', function (refund) {
+                this.refund(refund);
+            })
         },
         updated () {
 
@@ -192,6 +240,31 @@
                     this.filter = JSON.parse(sessionStorage.getItem('filter'));
                 }
             },
+            refund(refund) {
+                event.preventDefault();
+                this.refundAmount = refund.amount;
+                let that = this;
+                $('#modal-'+this._uid).modal({
+                    closable: false,
+                    onApprove: function () {
+                        that.isLoaded = false;
+                        axios.get(refund.refundUrl)
+                            .then(function (response) {
+                                that.isLoaded = true;
+                                that.dataForceReload=!that.dataForceReload;
+                                that.sendToast(that.invoiceRefundSuccess, 'success');
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
+                                }
+                                that.isLoaded = true;
+                            });
+                    }
+                }).modal('show');
+            }
         }
     }
 </script>

@@ -17,5 +17,14 @@
 <div class="invoice-title">
     <h2>
         {{ trans('strings.pdf_invoice_payed').' '. \App\Common\LocaleUtils::getTransDate($invoice->created_at) }}
+        <span class="detail">{{ trans('strings.pdf_invoice_paypal_captureId', ['captureid' => $invoice->captureId]) }}</span>
     </h2>
 </div>
+@if(!is_null($invoice->refundId))
+<div class="invoice-title">
+    <h2>
+        {{ trans('strings.pdf_invoice_refund').' '. \App\Common\LocaleUtils::getTransDate($invoice->updated_at) }}
+        <span class="detail">{{ trans('strings.pdf_invoice_paypal_refundId', ['refundid' => $invoice->refundId]) }}</span>
+    </h2>
+</div>
+@endif

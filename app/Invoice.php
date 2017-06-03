@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Common\MoneyUtils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,6 +27,7 @@ class Invoice extends Model {
         'authorization',
         'captureId',
         'voidId',
+        'refundId',
         'state',
         'options',
         'cost',
@@ -38,7 +40,7 @@ class Invoice extends Model {
         'options' => 'array'
     ];
 
-    protected $appends = array('url', 'storagePath', 'filePath');
+    protected $appends = array('url', 'refundUrl', 'storagePath', 'filePath', 'costWithDecimalAndCurrency');
 
     public function user() {
         return $this->belongsTo('App\User');
@@ -50,6 +52,21 @@ class Invoice extends Model {
 
     public function getUrlAttribute() {
         return route('admin.invoice.show', ['id' => $this->id]);
+    }
+
+    public function getRefundUrlAttribute() {
+        if (auth()->check()
+            && (auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR] || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
+            && is_null($this->refundId) && is_null($this->voidId) && !is_null($this->captureId)
+        ) {
+            return route('advert.refund', ['id' => $this->id]);
+        } else {
+            return null;
+        }
+    }
+
+    public function getCostWithDecimalAndCurrencyAttribute() {
+        return MoneyUtils::getPriceWithDecimal($this->cost, "EUR");
     }
 
     public function getStoragePathAttribute() {

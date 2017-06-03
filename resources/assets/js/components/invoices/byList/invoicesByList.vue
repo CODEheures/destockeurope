@@ -20,6 +20,7 @@
                         <th>{{ listHeaderUsermail }}</th>
                         <th>{{ listHeaderPaypalCapture }}</th>
                         <th>{{ listHeaderPaypalVoid }}</th>
+                        <th>{{ listHeaderPaypalRefund }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -29,6 +30,8 @@
                                 :invoice="invoice"
                                 :actual-locale="actualLocale"
                                 :see-invoice-label="seeInvoiceLabel"
+                                :refund-invoice-label="refundInvoiceLabel"
+                                :or-label="orLabel"
                         ></invoices-by-list-item>
                     </template>
                 </tbody>
@@ -47,11 +50,14 @@
                 required: false
             },
             actualLocale: String,
+            orLabel: String,
             seeInvoiceLabel: String,
+            refundInvoiceLabel: String,
             noResultFoundHeader: String,
             noResultFoundMessage: String,
             listHeaderPaypalCapture: String,
             listHeaderPaypalVoid: String,
+            listHeaderPaypalRefund: String,
             listHeaderUsermail: String,
             listHeaderDate: String
         },
@@ -75,6 +81,9 @@
             this.$on('loadError', function () {
                 that.$parent.$emit('loadError');
             });
+            this.$on('refund', function (refund) {
+                this.$parent.$emit('refund', refund);
+            })
         },
         methods: {
             getInvoicesList: function (withLoadIndicator) {

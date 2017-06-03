@@ -16,11 +16,27 @@
             {{ invoice.voidId }}
         </td>
         <td>
+            {{ invoice.refundId }}
+        </td>
+        <td>
             <template v-if="invoice.captureId">
-                <a class="ui blue labeled icon button" :href="invoice.url"><i class="download icon"></i>{{ seeInvoiceLabel }}</a>
+                <div class="ui buttons">
+                    <a class="ui blue icon button" :href="invoice.url">{{ seeInvoiceLabel }}</a>
+                    <div class="or" :data-text="orLabel"></div>
+                    <template v-if="invoice.refundUrl">
+                        <button class="ui red icon button" v-on:click="refundMe()">{{ refundInvoiceLabel }}</button>
+                    </template>
+                    <template v-else>
+                        <button class="ui disabled icon button">{{ refundInvoiceLabel }}</button>
+                    </template>
+                </div>
             </template>
             <template v-else>
-                <a class="ui labeled icon disabled button" href=""><i class="download icon"></i>{{ seeInvoiceLabel }}</a>
+                <div class="ui buttons">
+                    <a class="ui disabled icon button" href="">{{ seeInvoiceLabel }}</a>
+                    <div class="or" :data-text="orLabel"></div>
+                    <button class="ui disabled icon button">{{ refundInvoiceLabel }}</button>
+                </div>
             </template>
         </td>
     </tr>
@@ -31,7 +47,9 @@
         props: {
             invoice: Object,
             seeInvoiceLabel: String,
-            actualLocale: String
+            refundInvoiceLabel: String,
+            actualLocale: String,
+            orLabel: String
         },
         data: () => {
             return {
@@ -45,6 +63,9 @@
             getMoment: function (dateTime) {
                 moment.locale(this.actualLocale);
                 return moment(dateTime).format('L');
+            },
+            refundMe() {
+                this.$parent.$emit('refund', {'refundUrl': this.invoice.refundUrl, 'amount':this.invoice.costWithDecimalAndCurrency});
             }
         }
     }

@@ -24,6 +24,7 @@ use App\Notifications\AdvertRenew;
 use App\Notifications\CustomerContactIntermediary;
 use App\Notifications\CustomerContactSeller;
 use App\Notifications\InvoicePdf;
+use App\Notifications\InvoiceRefundPdf;
 use App\Notifications\ReportAdvert;
 use App\Notifications\ReportAppError;
 use App\Persistent;
@@ -49,6 +50,7 @@ use PayPal\Api\Payment;
 use PayPal\Api\PaymentCard;
 use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
+use PayPal\Api\RefundRequest;
 use PayPal\Api\ShippingAddress;
 use PayPal\Api\Transaction;
 use PayPal\Auth\OAuthTokenCredential;
@@ -74,7 +76,7 @@ class AdvertController extends Controller
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
         $this->middleware('isNotValidator', ['only' => ['mines', 'bookmarks', 'create', 'store']]);
         $this->middleware('isNotSupplierUser', ['only' => ['backToTop', 'highlight']]);
-        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient']]);
+        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient', 'refund']]);
         $this->pictureManager  = $picturesManager;
         $this->vimeoManager = $vimeoManager;
 
@@ -796,6 +798,33 @@ class AdvertController extends Controller
     }
 
     /**
+     * Refund user for invoice id.
+     *
+     * @param  int  $id
+     * @return AdvertController|\Illuminate\Http\RedirectResponse
+     */
+    public function refund($id)
+    {
+        $refundInvoice = Invoice::find($id);
+        if(!is_null($refundInvoice) && is_null($refundInvoice->refundId) && !is_null($refundInvoice->captureId) && is_null($refundInvoice->voidId)){
+            try {
+                $this->refundPayment($refundInvoice);
+            } catch (\Exception $e) {
+                return response(trans('strings.view_manage_invoice_refund_fail'), 409);
+            }
+            try {
+                InvoiceUtils::createInvoiceByInvoice($refundInvoice);
+                $this->notifyRefund($refundInvoice);
+            } catch (\Exception $e) {
+                return response(trans('strings.view_manage_invoice_sent_fail'), 409);
+            }
+            return response('ok',200);
+        } else {
+            return response(trans('strings.view_all_error_saving_message'), 500);
+        }
+    }
+
+    /**
      *
      * redirect to the next step
      *
@@ -851,12 +880,12 @@ class AdvertController extends Controller
     }
 
     /**
- *
- * Back To Top an Advert
- *
- * @param $id
- * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
- */
+     *
+     * Back To Top an Advert
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function backToTop($id)
     {
         $advert = Advert::find($id);
@@ -1463,6 +1492,31 @@ class AdvertController extends Controller
 
     /**
      *
+     * Refund a payment
+     *
+     * @param Invoice $invoice
+     */
+    private function refundPayment(Invoice $invoice) {
+        //CAPTURE PAYMENT
+        $captureId = $invoice->captureId;
+        $capture = Capture::get($captureId, $this->_api_context);
+
+        $amt = new Amount();
+        $amt->setCurrency($capture->getAmount()->getCurrency());
+        $amt->setTotal($capture->getAmount()->getTotal());
+
+        $refundRequest = new RefundRequest();
+        $refundRequest->setAmount($amt);
+
+        $captureRefund = $capture->refundCapturedPayment($refundRequest, $this->_api_context);
+
+        //SAVE INVOICE
+        $invoice->refundId = $captureRefund->getId();
+        $invoice->save();
+    }
+
+    /**
+     *
      * Void a payment
      *
      * @param Invoice $invoice
@@ -1781,6 +1835,34 @@ class AdvertController extends Controller
             $recipient->notify(new AdvertNotApprove($advert, $state, $invoice, $senderName, $senderMail, $disapproveReason));
             return null;
         }
+    }
+
+    /**
+     *
+     * Notify for a refund
+     *
+     * @param Advert $advert
+     * @param Invoice|null $invoice
+     * @param null $disapproveReason
+     * @return Advert|null
+     */
+    private function notifyRefund(Invoice $invoice) {
+
+        //Send Refund Invoice to Accountant
+        if(!is_null($invoice) && file_exists($invoice->filePath)){
+            $recipients = User::whereRole(User::ROLES[User::ROLE_ACCOUNTANT])->get();
+            $senderMail = env('SERVICE_MAIL_FROM');
+            $senderName = ucfirst(config('app.name'));
+            foreach ($recipients as $recipient){
+                $recipient->notify(new InvoiceRefundPdf($invoice, $senderName, $senderMail, User::ROLES[User::ROLE_ACCOUNTANT]));
+            }
+        }
+
+        $recipient = $invoice->user;
+        $senderMail = env('SERVICE_MAIL_FROM');
+        $senderName = ucfirst(config('app.name'));
+        $recipient->notify(new InvoiceRefundPdf($invoice, $senderName, $senderMail, $recipient->role));
+        return null;
     }
 
     /**
