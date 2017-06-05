@@ -134,7 +134,8 @@ class PicturesManager
         //TODO prevoir mail pour prevenir de la surcharge
         if($this->type == self::TYPE_TEMPO_LOCAL) {
             if(auth()->check()){
-                return '/tempo/' . auth()->user()->id . '/';
+                //use csrftoken for prevent collisions on multiple sessions case by same user
+                return '/tempo/' . csrf_token() . '/';
             } else {
                 throw new \Exception('auth must check for storage');
             }
