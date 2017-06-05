@@ -5,7 +5,7 @@ namespace App\Http\Middleware\Privileges;
 use App\Common\PrivilegesUtils;
 use Closure;
 
-class canManageMyAccount
+class CanManageMyAccount
 {
     /**
      * Handle an incoming request.
