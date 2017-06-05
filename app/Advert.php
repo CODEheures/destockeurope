@@ -4,6 +4,7 @@ namespace App;
 
 use App\Common\MoneyUtils;
 use App\Common\PicturesManager;
+use App\Common\PrivilegesUtils;
 use Carbon\Carbon;
 use Codeheures\LaravelUtils\Traits\Tools\Currencies;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -130,7 +131,7 @@ class Advert extends Model {
     }
 
     public function getRenewUrlAttribute() {
-        if (auth()->check() && auth()->user()->id===$this->user->id) {
+        if (PrivilegesUtils::canRenewAdvert($this)) {
             return route('advert.renew', ['id' => $this->id]);
         } else {
             return null;
@@ -138,7 +139,7 @@ class Advert extends Model {
     }
 
     public function getBackToTopUrlAttribute() {
-        if ((!$this->is_delegation && auth()->check() && auth()->user()->id===$this->user->id) || ($this->is_delegation && auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR])) {
+        if (PrivilegesUtils::canBackToTopAdvert($this)) {
             return route('advert.backToTop', ['id' => $this->id]);
         } else {
             return null;
@@ -146,7 +147,7 @@ class Advert extends Model {
     }
 
     public function getHighlightUrlAttribute() {
-        if ((!$this->is_delegation && auth()->check() && auth()->user()->id===$this->user->id) || ($this->is_delegation && auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR])) {
+        if (PrivilegesUtils::canHighlightAdvert($this)) {
             return route('advert.highlight', ['id' => $this->id]);
         } else {
             return null;
@@ -154,8 +155,7 @@ class Advert extends Model {
     }
 
     public function getDestroyUrlAttribute() {
-        if (auth()->check() && (auth()->user()->id===$this->user->id || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
-        ) {
+        if (PrivilegesUtils::canDestroyAdvert($this)) {
             return route('advert.destroy', ['id' => $this->id]);
         } else {
             return null;
@@ -163,9 +163,7 @@ class Advert extends Model {
     }
 
     public function getUpdateCoefficientUrlAttribute() {
-        if (auth()->check() && (auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR]
-            || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
-        ) {
+        if (PrivilegesUtils::canUpdateCoefficientAdvert($this)) {
             return route('advert.updateCoefficient', ['id' => $this->id]);
         } else {
             return null;
@@ -173,12 +171,7 @@ class Advert extends Model {
     }
 
     public function getUpdateQuantitiesUrlAttribute() {
-        if (auth()->check() &&
-            (auth()->user()->id===$this->user->id
-                || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR]
-                || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN]
-            )
-        ) {
+        if (PrivilegesUtils::canUpdateQuantitiesAdvert($this)) {
             return route('advert.updateQuantities', ['id' => $this->id]);
         } else {
             return null;
@@ -186,8 +179,7 @@ class Advert extends Model {
     }
 
     public function getEditUrlAttribute() {
-        if (auth()->check() && (auth()->user()->id===$this->user->id || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
-        ) {
+        if (PrivilegesUtils::canEditAdvert($this)) {
             return route('advert.edit', ['id' => $this->id]);
         } else {
             return null;
@@ -204,7 +196,7 @@ class Advert extends Model {
         $ended = Carbon::parse($this->ended_at);
         $isQuiteYoung = $ended->subHours(env('HIGHLIGHT_HOURS_DURATION'))->isFuture();
         $isNotHighlight = is_null($this->highlight_until) || Carbon::parse($this->highlight_until)->isPast();
-        return ((!$this->is_delegation || (auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR]) )&& $this->isValid && $isNotHighlight && ($isQuiteYoung || $this->is_delegation));
+        return ($this->isValid && $isNotHighlight && ($isQuiteYoung || $this->is_delegation));
     }
 
     public function getIsEligibleForEditAttribute() {
@@ -416,7 +408,7 @@ class Advert extends Model {
     }
 
     public function scopeDelegations($query) {
-        if(auth()->check() && (auth()->user()->role == User::ROLES[User::ROLE_VALIDATOR] || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])){
+        if(PrivilegesUtils::canGetDelegations()){
             return $query->where('is_delegation', true)
                 ->where('isValid', '<>', false)
                 ->where('adverts.deleted_at', null)

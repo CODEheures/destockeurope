@@ -13,7 +13,7 @@
                 route-get-adverts-list="{{ $routeList }}"
                 actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
                 ads-frequency="{{ 0 }}"
-                is-admin-user="{{ auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR] || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN] }}"
+                can-get-delegations="{{ \App\Common\PrivilegesUtils::canGetDelegations() }}"
                 is-personnal-list="{{ true }}"
                 advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
                 advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"

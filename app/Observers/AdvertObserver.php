@@ -4,7 +4,8 @@ namespace App\Observers;
 
 use App\Advert;
 use App\Common\MoneyUtils;
-use App\User;
+use App\Common\PaymentManager;
+use App\Common\PrivilegesUtils;
 use Illuminate\Support\Str;
 
 class AdvertObserver
@@ -17,7 +18,7 @@ class AdvertObserver
      */
     public function creating(Advert $advert)
     {
-        if(auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_SUPPLIER]){
+        if(PrivilegesUtils::canTransformAdvertToDelegation()){
             $advert->is_delegation = true;
         }
         $advert->slug='';
@@ -57,6 +58,30 @@ class AdvertObserver
 
         //Atttibut price_margin_decimal
         $advert->price_margin_decimal = MoneyUtils::getPriceWithDecimal($advert->getAttributes()['price_margin'], $advert->currency,false);
+    }
+
+    public function deleting (Advert $advert) {
+        if (PrivilegesUtils::canInvalidOnDeleting()) {
+            $advert->isValid = false;
+            $advert->save();
+        }
+
+        $editAdverts = Advert::where('isEditOf', $advert->id)->get();
+        foreach ($editAdverts as $editAdvert) {
+            $editAdvert->forceDelete();
+        }
+
+        $invoicesInStandBy = $advert->invoices()
+            ->where('authorization', '<>', null)
+            ->where('captureId', null)
+            ->where('voidId', null)
+            ->where('refundId', null)
+            ->get();
+
+        foreach ($invoicesInStandBy as $invoice) {
+            $paymentManager = new PaymentManager();
+            $paymentManager->voidPayment($invoice);
+        }
     }
 
 }

@@ -33,13 +33,16 @@
         <div class="row">
             <div class="sixteen wide tablet twelve wide computer column">
                 <div class="row">
+                    <div class="ui active inverted dimmer" v-if="!isLoaded">
+                        <div class="ui large text loader">Loading</div>
+                    </div>
                     <adverts-by-list
                             :route-get-adverts-list="dataRouteGetAdvertList"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :flag-force-reload="flagForceReload"
                             :ads-frequency="parseInt(adsFrequency)"
-                            :is-admin-user="isAdminUser==true"
+                            :can-get-delegations="canGetDelegations==true"
                             :is-personnal-list="isPersonnalList==true"
                             :actual-locale="actualLocale"
                             :total-quantity-label="totalQuantityLabel"
@@ -116,7 +119,7 @@
             'reloadAdvertOnUnbookmarkSuccess',
             'actualLocale',
             'adsFrequency',
-            'isAdminUser',
+            'canGetDelegations',
             'isPersonnalList',
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
@@ -161,7 +164,8 @@
                 dataFlagResetSearch: false,
                 oldChoice: {},
                 update: false,
-                flagForceReload: false
+                flagForceReload: false,
+                isLoaded: true,
             }
         },
         mounted () {
@@ -211,9 +215,11 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
+                        that.isLoaded = false;
                         axios.delete(url)
                             .then(function (response) {
                                 that.flagForceReload = !that.flagForceReload;
+                                that.isLoaded = true;
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {
@@ -221,7 +227,7 @@
                                 } else {
                                     that.sendToast(that.loadErrorMessage, 'error');
                                 }
-                                that.isLoaded = false;
+                                that.isLoaded = true;
                             });
                     }
                 }).modal('show');

@@ -29,7 +29,7 @@
             user-name="{{ auth()->check() ? auth()->user()->name : '' }}"
             user-phone="{{ auth()->check() ? auth()->user()->phone : '' }}"
             user-compagny-name="{{ auth()->check() ? auth()->user()->compagnyName : '' }}"
-            is-user-owner="{{ auth()->check() ? $advert->user->id == auth()->user()->id || auth()->user()->role == \App\User::ROLES[\App\User::ROLE_ADMIN] : false }}"
+            is-user-owner="{{ \App\Common\PrivilegesUtils::canEditAdvert($advert) ? true : false }}"
             is-user-bookmark="{{ auth()->check() ? auth()->user()->haveBookmark($advert->id) : false }}"
             form-name-min-valid="{{ config('db_limits.users.minName') }}"
             form-message-min-valid="{{ config('db_limits.messages.minLength') }}"

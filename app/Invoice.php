@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Common\MoneyUtils;
+use App\Common\PrivilegesUtils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,7 +41,7 @@ class Invoice extends Model {
         'options' => 'array'
     ];
 
-    protected $appends = array('url', 'refundUrl', 'storagePath', 'filePath', 'costWithDecimalAndCurrency');
+    protected $appends = array('url', 'refundUrl', 'storagePath', 'filePath', 'costWithDecimalAndCurrency', 'isUserOwner');
 
     public function user() {
         return $this->belongsTo('App\User');
@@ -54,9 +55,15 @@ class Invoice extends Model {
         return route('admin.invoice.show', ['id' => $this->id]);
     }
 
+    public function getIsUserOwnerAttribute() {
+        if(auth()->check()){
+            return auth()->user()->id === $this->user_id;
+        }
+        return false;
+    }
+
     public function getRefundUrlAttribute() {
-        if (auth()->check()
-            && (auth()->user()->role==\App\User::ROLES[\App\User::ROLE_VALIDATOR] || auth()->user()->role==\App\User::ROLES[\App\User::ROLE_ADMIN])
+        if (PrivilegesUtils::canRefund()
             && is_null($this->refundId) && is_null($this->voidId) && !is_null($this->captureId)
         ) {
             return route('advert.refund', ['id' => $this->id]);

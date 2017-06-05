@@ -127,7 +127,7 @@
                 </div>
             </a>
         </template>
-        <template  v-if="isPersonnalList && isAdminUser && advert.is_delegation">
+        <template  v-if="isPersonnalList && canGetDelegations && advert.is_delegation">
             <div>
                 <div class="ui grid">
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
@@ -464,7 +464,7 @@
             routeBookmarkAdd: String,
             routeBookmarkRemove: String,
             advert: Object,
-            isAdminUser: {
+            canGetDelegations: {
                 type: Boolean,
                 default: false,
                 required: false

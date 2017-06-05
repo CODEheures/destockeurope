@@ -12,7 +12,7 @@ class UtilsController extends Controller
     private $vimeoManager;
 
     public function __construct(VimeoManager $vimeoManager) {
-        $this->middleware('auth', ['only' => ['getListLocales', 'getListCardsType']]);
+        $this->middleware('auth', ['only' => ['isPicture', 'getListLocales']]);
         $this->middleware('isAdminUser', ['only' => ['isPicture']]);
         $this->vimeoManager = $vimeoManager;
     }

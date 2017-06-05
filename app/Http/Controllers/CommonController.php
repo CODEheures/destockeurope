@@ -7,6 +7,7 @@ use App\Advert;
 use App\Anonymous;
 use App\Common\CostUtils;
 use App\Common\MoneyUtils;
+use App\Common\PrivilegesUtils;
 use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
 use App\Http\Requests\UnsubscribeNewsLetterRequest;
@@ -43,7 +44,8 @@ class CommonController extends Controller
             'imageServer'
         ]]);
         $this->middleware('isEmailConfirmed', ['only' => ['mines']]);
-        $this->middleware('isNotValidator', ['only' => ['mines']]);
+        $this->middleware('canGetMines', ['only' => ['mines']]);
+        $this->middleware('canGetBookmarks', ['only' => ['bookmarks']]);
     }
 
     /**
@@ -249,7 +251,7 @@ class CommonController extends Controller
         $name = $request->name;
         $message = $request->message;
 
-        $recipients = User::whereRole(User::ROLES[User::ROLE_ADMIN])->get();
+        $recipients = User::whereIn('role', PrivilegesUtils::canReceiveContact())->get();
         foreach ($recipients as $recipient){
             $recipient->notify(new GlobalMessage($senderMail, $name, $message));
         }

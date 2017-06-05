@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\User;
+use App\Common\PrivilegesUtils;
 use Closure;
 
 class IsAdminUser
@@ -17,7 +17,7 @@ class IsAdminUser
     public function handle($request, Closure $next)
     {
 
-        if(auth()->check() && auth()->user()->role == User::ROLES[User::ROLE_ADMIN]) {
+        if(PrivilegesUtils::canAdmin()) {
             return $next($request);
         }
 

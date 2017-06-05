@@ -66,7 +66,7 @@ trait InvoiceUtils
             return true;
         } catch (\Exception $e) {
             //Mail to admin
-            $recipients = User::whereRole(User::ROLES[User::ROLE_ADMIN])->get();
+            $recipients = User::whereIn('role', PrivilegesUtils::canReceiveCreateInvoicePdfFail())->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
             $message = trans('strings.mail_apperror_pdfinvoice_line', ['advertNumber' => is_null($advert) ? '0' : $advert->id, 'mailClient' => $advert->user->email]);

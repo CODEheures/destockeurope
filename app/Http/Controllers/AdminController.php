@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Common\AdvertsManager;
 use App\Common\InvoiceUtils;
 use App\Common\PicturesManager;
+use App\Common\PrivilegesUtils;
 use App\Common\StatsManager;
 use App\Common\UserUtils;
 use App\Invoice;
@@ -29,8 +30,10 @@ class AdminController extends Controller
     private $vimeoManager;
 
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
+        $this->middleware('auth');
         $this->middleware('isAdminUser', ['except' => ['delegations', 'invoiceManage', 'listInvoices', 'showInvoice']]);
-        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'invoiceManage', 'listInvoices', 'showInvoice']]);
+        $this->middleware('canGetDelegations', ['only' => ['delegations']]);
+        $this->middleware('canManageInvoices', ['only' => ['invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;
@@ -202,11 +205,11 @@ class AdminController extends Controller
     public function patchRole($id, Request $request) {
         $user = User::find($id);
         if($user
-            && $user->id != auth()->user()->id
             && $request->has('role')
-            && in_array($request->role, User::ROLES))
+            && in_array($request->role, User::ROLES)
+            && PrivilegesUtils::canPatchRoleUser($user))
         {
-            if($request->role == User::ROLES[User::ROLE_SUPPLIER] && !UserUtils::haveCompleteAccount($user)){
+            if(in_array($request->role, PrivilegesUtils::mustBeCompleteToBePatched()) && !UserUtils::haveCompleteAccount($user)){
                 return response(trans('strings.view_all_incomplete_account'), 409);
             }
             $user->role = $request->role;
@@ -472,6 +475,8 @@ class AdminController extends Controller
             $invoices = $invoices->where(function ($query) use ($search) {
                 $query->where('invoices.invoice_number', 'LIKE', '%' .$search .'%')
                     ->orWhere('invoices.captureId', 'LIKE', '%' .$search .'%')
+                    ->orWhere('invoices.voidId', 'LIKE', '%' .$search .'%')
+                    ->orWhere('invoices.refundId', 'LIKE', '%' .$search .'%')
                     ->orWhere('users.email', 'LIKE', '%' .$search .'%')
                     ->orWhere(function ($query) use ($search) {
                         try {

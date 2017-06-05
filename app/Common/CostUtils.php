@@ -112,7 +112,7 @@ trait CostUtils
         $finalOptions = array_merge(self::$defaultOptions, $options);
 
         $cost = 0;
-        if(!auth()->user()->isSupplier && auth()->user()->role!==User::ROLES[User::ROLE_VALIDATOR]) {
+        if(!PrivilegesUtils::isCostFree()) {
             $cost += self::getCostPictures($finalOptions['nbPictures'], $finalOptions['isEditOf']);
             $cost += self::getCostIsUrgent($finalOptions['isUrgent'], $finalOptions['isEditOf']);
             $cost += self::getCostVideo($finalOptions['haveVideo'], $finalOptions['isEditOf']);

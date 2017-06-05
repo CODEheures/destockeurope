@@ -31,7 +31,7 @@ class UserController extends Controller
     public function __construct(Guard $auth, PicturesManager $picturesManager)
     {
         $this->middleware('auth');
-        $this->middleware('isNotSupplierUser');
+        $this->middleware('canManageMyAccount');
         $this->auth = $auth;
         $this->pictureManager = $picturesManager;
     }

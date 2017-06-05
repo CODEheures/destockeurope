@@ -11,8 +11,11 @@ use App\Common\GeoManager;
 use App\Common\InvoiceUtils;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
+use App\Common\PaymentManager;
 use App\Common\PicturesManager;
+use App\Common\PrivilegesUtils;
 use App\Common\UserUtils;
+use App\Exceptions\PaymentException;
 use App\Http\Requests\CreditCardRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Invoice;
@@ -37,34 +40,13 @@ use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use PayPal\Api\Amount;
-use PayPal\Api\Authorization;
-use PayPal\Api\Capture;
-use PayPal\Api\Details;
-use PayPal\Api\FundingInstrument;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\PayerInfo;
-use PayPal\Api\Payment;
-use PayPal\Api\PaymentCard;
-use PayPal\Api\PaymentExecution;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\RefundRequest;
-use PayPal\Api\ShippingAddress;
-use PayPal\Api\Transaction;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Exception\PayPalConnectionException;
-use PayPal\Rest\ApiContext;
 use Vinkla\Vimeo\VimeoManager;
 
 class AdvertController extends Controller
 {
     private $pictureManager;
     private $vimeoManager;
-    private $_api_context;
-    Const PAYPAL = 0;
-    Const CARD = 1;
+    private $paymentManager;
 
     /**
      * AdvertController constructor.
@@ -74,20 +56,22 @@ class AdvertController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report']]);
         $this->middleware('isEmailConfirmed', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report', 'bookmarks', 'unbookmarks']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
-        $this->middleware('isNotValidator', ['only' => ['mines', 'bookmarks', 'create', 'store']]);
-        $this->middleware('isNotSupplierUser', ['only' => ['backToTop', 'highlight']]);
-        $this->middleware('isValidatorOrAdminUser', ['only' => ['delegations', 'toApprove','listApprove', 'approve', 'updateCoefficient', 'refund']]);
+        $this->middleware('canGetMines', ['only' => ['mines']]);
+        $this->middleware('canGetDelegations', ['only' => ['delegations']]);
+        $this->middleware('canGetBookmarks', ['only' => ['bookmarks']]);
+        $this->middleware('canApprove', ['only' => ['listApprove','toApprove','approve']]);
+        $this->middleware('canCreate', ['only' => ['create']]);
+        $this->middleware('canEdit', ['only' => ['edit', 'store', 'update']]);
+        $this->middleware('canUpdateCoefficient', ['only' => ['updateCoefficient']]);
+        $this->middleware('canUpdateQuantities', ['only' => ['updateQuantities']]);
+        $this->middleware('canDestroy', ['only' => ['destroy']]);
+        $this->middleware('canRefund', ['only' => ['refund']]);
+        $this->middleware('canRenew', ['only' => ['renew']]);
+        $this->middleware('canBackToTop', ['only' => ['backToTop']]);
+        $this->middleware('canHighlight', ['only' => ['highlight']]);
         $this->pictureManager  = $picturesManager;
         $this->vimeoManager = $vimeoManager;
-
-        // setup PayPal api context
-        if(auth()->check() && !(env('PAYPAL_SANDBOX')=='true')){
-            $paypal_conf = config('paypal');
-        } else {
-            $paypal_conf = config('paypal_sandbox');
-        }
-        $this->_api_context = new ApiContext(new OAuthTokenCredential($paypal_conf['client_id'], $paypal_conf['secret']));
-        $this->_api_context->setConfig($paypal_conf['settings']);
+        $this->paymentManager = new PaymentManager();
     }
 
 
@@ -467,7 +451,7 @@ class AdvertController extends Controller
                 $advert->setBookmarkCount();
                 auth()->check() ? $advert->setIsOnEdit() : null;
                 return view('advert.show', compact('advert'));
-        } elseif ($advert && $request->isXmlHttpRequest() && auth()->check() && ($advert->user->id == auth()->user()->id || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])) {
+        } elseif ($advert && $request->isXmlHttpRequest() && PrivilegesUtils::canShowXmlAdvert($advert)) {
             return response()->json(['advert' => $advert]);
         } else {
             return redirect(route('home'));
@@ -480,11 +464,11 @@ class AdvertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, Request $request)
+    public function edit($id)
     {
         $editAdvert = Advert::find($id);
         $editAdvert->load('pictures');
-        if($editAdvert && $editAdvert->user->id === auth()->user()->id){
+        if($editAdvert && PrivilegesUtils::canEditAdvert($editAdvert)){
 
             //1°) get pictures to tempo store
             if(count(old())==0){
@@ -524,13 +508,13 @@ class AdvertController extends Controller
      * @param $invoiceId
      * @return AdvertController|\Illuminate\Http\RedirectResponse
      */
-    public function reviewForPayment($invoiceId, Request $request) {
+    public function reviewForPayment($invoiceId) {
 
         if(!UserUtils::haveCompleteAccount()){
             return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
         }
         $invoice = Invoice::find($invoiceId);
-        if(!is_null($invoice) && $invoice->user->id == auth()->user()->id && !$invoice->authorization) {
+        if(!is_null($invoice) && PrivilegesUtils::canReviewInvoice($invoice) && !$invoice->authorization) {
             $invoice->tva_customer = $invoice->user->registrationNumber;
             $invoice->tva_requester = $invoice->user->requesterNumber;
             $invoice->vatIdentifier = $invoice->user->vatIdentifier;
@@ -612,7 +596,7 @@ class AdvertController extends Controller
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
                 $advert->isNegociated=filter_var($request->is_negociated, FILTER_VALIDATE_BOOLEAN);
                 $advert->isEditOf=$isEditOf;
-                $isEditOf && auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_SUPPLIER] ? $advert->price_coefficient = $editAdvert->price_coefficient : null;
+                $isEditOf ? $advert->price_coefficient = $editAdvert->price_coefficient : null;
                 $persistent=null;
                 if(session()->has('videoId')){
                     $advert->video_id = session('videoId');
@@ -671,7 +655,7 @@ class AdvertController extends Controller
                 }
 
                 DB::commit();
-                if(auth()->user()->isSupplier){
+                if(PrivilegesUtils::isCostFree()){
                     return redirect(route('advert.publish', ['id' =>$advert->id]));
                 } else {
                     return redirect(route('user.completeAccount', ['id' =>$advert->id, 'infoCost' => $cost]));
@@ -695,7 +679,7 @@ class AdvertController extends Controller
     public function update(StoreAdvertRequest $request, $id)
     {
         $editAdvert = Advert::find($id);
-        if($editAdvert && $editAdvert->user->id===auth()->user()->id){
+        if($editAdvert && PrivilegesUtils::canEditAdvert($editAdvert)){
             $request->request->add(['isEditOf'=> $id]);
             return $this->store($request);
         } else {
@@ -714,7 +698,7 @@ class AdvertController extends Controller
         $coefficient = $request->coefficient;
         if((int)$coefficient >= 0){
             $advert = Advert::find($id);
-            if($advert){
+            if($advert && PrivilegesUtils::canUpdateCoefficientAdvert($advert)){
                 $advert->price_coefficient = $coefficient/100;
                 $advert->save();
                 return response('ok', 200);
@@ -735,7 +719,7 @@ class AdvertController extends Controller
         $lotMiniQuantity = $request->lotMiniQuantity;
         if((int)$lotMiniQuantity > 0 && (int)$totalQuantity > 0 && (int)$totalQuantity >= (int)$lotMiniQuantity){
             $advert = Advert::find($id);
-            if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == User::ROLES[User::ROLE_VALIDATOR] || auth()->user()->role==User::ROLES[User::ROLE_ADMIN] )){
+            if($advert && PrivilegesUtils::canUpdateQuantitiesAdvert($advert)){
                 $advert->lotMiniQuantity = (int)$lotMiniQuantity;
                 $advert->totalQuantity = (int)$totalQuantity;
                 $advert->save();
@@ -754,22 +738,7 @@ class AdvertController extends Controller
     public function destroy($id)
     {
         $advert = Advert::find($id);
-        if($advert && (auth()->user()->id === $advert->user->id || auth()->user()->role == User::ROLES[User::ROLE_ADMIN])){
-
-            if (is_null($advert->isValid) && $advert->invoices()->count()==1) {
-                $invoice  = $advert->invoices()
-                    ->where('state', Invoice::STATE_CREATION)
-                    ->first();
-
-                if(!is_null($invoice) && !is_null($invoice->authorization) && is_null($invoice->voidId)){
-                    $this->voidPayment($invoice);
-                }
-            }
-
-            if (auth()->user()->role == User::ROLES[User::ROLE_ADMIN]) {
-                $advert->isValid = false;
-                $advert->save();
-            }
+        if($advert && PrivilegesUtils::canDestroyAdvert($advert)) {
             $advert->delete();
             session()->flash('info', trans('strings.view_advert_show_delete_success'));
             return response(route('home'), 200);
@@ -808,7 +777,7 @@ class AdvertController extends Controller
         $refundInvoice = Invoice::find($id);
         if(!is_null($refundInvoice) && is_null($refundInvoice->refundId) && !is_null($refundInvoice->captureId) && is_null($refundInvoice->voidId)){
             try {
-                $this->refundPayment($refundInvoice);
+                $this->paymentManager->refundPayment($refundInvoice);
             } catch (\Exception $e) {
                 return response(trans('strings.view_manage_invoice_refund_fail'), 409);
             }
@@ -850,7 +819,7 @@ class AdvertController extends Controller
     public function renew($id)
     {
         $advert = Advert::withTrashed()->find($id);
-        if($advert && auth()->user()->id === $advert->user->id && $advert->isEligibleForRenew){
+        if($advert && $advert->isEligibleForRenew && PrivilegesUtils::canRenewAdvert($advert)){
             try {
                 //Create Invoice
                 $cost = CostUtils::getCost(['isRenew' => true]);
@@ -889,10 +858,7 @@ class AdvertController extends Controller
     public function backToTop($id)
     {
         $advert = Advert::find($id);
-        if($advert
-            && ((!$advert->is_delegation && auth()->user()->id === $advert->user->id) || ($advert->is_delegation && auth()->user()->role === User::ROLES[User::ROLE_VALIDATOR]))
-            && $advert->isEligibleForBackToTop())
-        {
+        if($advert && $advert->isEligibleForBackToTop() && PrivilegesUtils::canBackToTopAdvert($advert)) {
             try {
                 //Create Invoice
                 $cost = CostUtils::getCost(['isBackToTop' => true]);
@@ -931,10 +897,7 @@ class AdvertController extends Controller
     public function highlight($id)
     {
         $advert = Advert::find($id);
-        if($advert
-            && ((!$advert->is_delegation && auth()->user()->id === $advert->user->id) || ($advert->is_delegation && auth()->user()->role === User::ROLES[User::ROLE_VALIDATOR]))
-            && $advert->isEligibleForHighlight)
-        {
+        if($advert && $advert->isEligibleForHighlight && PrivilegesUtils::canHighlightAdvert($advert)) {
             try {
                 //Create Invoice
                 $cost = CostUtils::getCost(['isHighlight' => true]);
@@ -974,7 +937,7 @@ class AdvertController extends Controller
     public function publish(Request $request, $id){
         $advert = Advert::find($id);
         $advert->load('user');
-        if($advert && $advert->user->id == auth()->user()->id && $advert->invoices()->count()==0 && $advert->isPublish==false){
+        if($advert && PrivilegesUtils::canPublishAdvert($advert) && $advert->invoices()->count()==0 && $advert->isPublish==false){
             $this->advertPublish($advert, $request);
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } else {
@@ -990,7 +953,13 @@ class AdvertController extends Controller
      * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function payByPaypal($invoiceId) {
-        return $this->createPayment($invoiceId, self::PAYPAL);
+        try {
+            $redirect_url = $this->paymentManager->createPayment($invoiceId, PaymentManager::PAYPAL);
+        }  catch (PaymentException $e) {
+            return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
+                ->withErrors($e->getMessage());
+        }
+        return redirect($redirect_url);
     }
 
     /**
@@ -1002,7 +971,13 @@ class AdvertController extends Controller
      * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function payByCard($invoiceId, CreditCardRequest $request) {
-        return  $this->createPayment($invoiceId, self::CARD, $request);
+        try {
+            $resultOfPayment = $this->paymentManager->createPayment($invoiceId, PaymentManager::CARD, $request);
+        }  catch (PaymentException $e) {
+            return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
+                ->withErrors($e->getMessage());
+        }
+        return $this->processResultPayment($resultOfPayment['state'], $resultOfPayment['payment'], $resultOfPayment['invoice'], $resultOfPayment['request']);
     }
 
     /**
@@ -1015,55 +990,14 @@ class AdvertController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function paypalStatus($invoiceId, $success, Request $request) {
-        $invoice = Invoice::find($invoiceId);
-
-        if(is_null($invoice)){
-            return redirect(route('home'))
-                ->withErrors('err3: ' . trans('strings.payment_all_error'));
-        }
-        if($success == 'true') {
-            // Get the payment ID before session clear
-            $session_payment_id = session('paypal_payment_id');
-            $payment_id = $request->get('paymentId');
-
-            //test sessionId = Request return paymentId
-            if($session_payment_id != $payment_id) {
-                session()->forget('paypal_payment_id');
-                return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                    ->withErrors('err1: ' . trans('strings.payment_all_error'));
-            }
-
-            // clear the session payment ID
-            session()->forget('paypal_payment_id');
-
-            if (empty($request->input('PayerID')) || empty($request->input('token'))) {
-                return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                    ->withErrors('err2: ' . trans('strings.payment_all_error'));
-            }
-
-            try {
-                $payment = Payment::get($payment_id, $this->_api_context);
-
-                // PaymentExecution object includes information necessary
-                // to execute a PayPal account payment.
-                // The payer_id is added to the request query parameters
-                // when the user is redirected from paypal back to your site
-                $execution = new PaymentExecution();
-                $execution->setPayerId($request->input('PayerID'));
-                //Execute the payment
-                $result = $payment->execute($execution, $this->_api_context);
-            } catch (\Exception $e) {
-                return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                    ->withErrors('err4: ' . trans('strings.payment_all_error'));
-            }
-
-
-            return $this->processResultPayment($result->getState(), $payment, $invoice, $request);
-
-        } else {
+        try {
+            $result = $this->paymentManager->paypalStatus($invoiceId, $success, $request);
+        }  catch (PaymentException $e) {
             return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                ->withErrors('err6: ' . trans('strings.payment_all_error'));
+                ->withErrors($e->getMessage());
         }
+
+        return $this->processResultPayment($result['state'], $result['payment'], $result['invoice'], $result['request']);
     }
 
     /**
@@ -1121,7 +1055,7 @@ class AdvertController extends Controller
             //ByPass if delegation
             if($advert->is_delegation){
                 $advert->load('user');
-                $recipients = User::whereRole(User::ROLES[User::ROLE_INTERMEDIARY])->get();
+                $recipients = User::whereIn('role', PrivilegesUtils::canReceiveBypassAdvertMessage())->get();
                 foreach ($recipients as $recipient){
                     $recipient->notify(new CustomerContactIntermediary($advert, $senderName, $senderMail, $message, $senderPhone, $senderCompagnyName));
                 }
@@ -1159,7 +1093,7 @@ class AdvertController extends Controller
             $senderMail = $request->email;
             $message = $request->message;
 
-            $recipients = User::whereRole(User::ROLES[User::ROLE_ADMIN])->get();
+            $recipients = User::whereIn('role', PrivilegesUtils::canReceiveReport())->get();
             foreach ($recipients as $recipient){
                 $recipient->notify(new ReportAdvert($advert, $senderMail, $message));
             }
@@ -1251,193 +1185,6 @@ class AdvertController extends Controller
 
     /**
      *
-     * Process Payment: Set Invoice and Get Authorization number if Card or rediret To paypal
-     *
-     * @param $invoiceId
-     * @param $type
-     * @param null $request
-     * @return array|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
-     */
-    private function createPayment($invoiceId, $type, $request=null) {
-        $invoice = Invoice::find($invoiceId);
-
-        if($invoice
-            && $invoice->user->id == auth()->user()->id
-            && $invoice->cost > 0
-            && !$invoice->authorization
-        ){
-            $invoice->load('user');
-
-            //set invoice
-            $invoice->method = Invoice::PAYPAL;
-            $invoice->save();
-
-
-            //set $tva, $price, $productName
-            $tva = 0;
-            $productName = trans_choice('strings.payment_paypal_generic_product_name', count($invoice->options), ['nb' => count($invoice->options)]);
-            $i = 0;
-            foreach ($invoice->options as $option){
-                if($invoice->tvaSubject){
-                    $tva = $tva + $option['tvaVal'];
-                }
-                $productName .= ($i > 0 ? ' + #' : ' #') . $option['quantity'] . ' ' . $option['name'];
-                $i++;
-            }
-            $tva = round($tva/100,2);
-            $price = round($invoice->cost/100,2);
-
-            //Paypal ShippingAddress
-            $geoCodes = json_decode($invoice->user->geoloc);
-            $street_components = null;
-            $components = [];
-            if(is_array($geoCodes) && count($geoCodes)>0){
-                foreach ($geoCodes as $geoCode){
-                    if($geoCode->types[0]=='street_address'){
-                        $street_components = $geoCode->address_components;
-                        foreach ($street_components as $component){
-                            if($component->types[0] != 'country'){
-                                $components[$component->types[0]] = $component->long_name;
-                            } else {
-                                $components[$component->types[0]] = $component->short_name;
-                            }
-                        }
-                    }
-                }
-            }
-
-            $line1 = '';
-            $line1 .= key_exists('street_number', $components) ?  $components['street_number'] : null;
-            $line1 .= key_exists('route', $components) ?  ' ' . $components['route'] : null;
-
-            $paypalAdress = new ShippingAddress();
-            $paypalAdress->setLine1($line1);
-            $paypalAdress->setLine2('');
-            $paypalAdress->setPostalCode(key_exists('postal_code', $components) ?  $components['postal_code'] : '');
-            $paypalAdress->setCity(key_exists('locality', $components) ?  $components['locality'] : '');
-            $paypalAdress->setCountryCode(key_exists('country', $components) ?  $components['country'] : '');
-            $paypalAdress->setRecipientName($invoice->user->compagnyName);
-
-
-            //Payer Infos
-            $payer = new Payer();
-            if($type==self::PAYPAL){
-                $payer->setPaymentMethod('paypal');
-            } else {
-                $card = new PaymentCard();
-                $splitName = UserUtils::splitName($request->name);
-                foreach ($splitName as $item){
-                    if(!$item || $item=''){
-                        return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                            ->withErrors(trans('strings.request_input_generic_error', ['name' => trans('strings.payment_card_name_label')]));
-                    }
-                }
-                $card->setType(config('paypal_cards.list')[$request->card_type])
-                    ->setNumber($request->card_no)
-                    ->setExpireMonth($request->expiration_month)
-                    ->setExpireYear($request->expiration_year)
-                    ->setCvv2($request->cvc)
-                    ->setFirstName($splitName['firstName'])
-                    ->setBillingCountry($paypalAdress->getCountryCode())
-                    ->setLastName($splitName['lastName']);
-                $fi = new FundingInstrument();
-                $fi->setPaymentCard($card);
-                $payer->setPaymentMethod("credit_card")
-                    ->setFundingInstruments(array($fi));
-            }
-            $payer->setPayerInfo(new PayerInfo());
-
-            //ItemList
-            $item_1 = new Item();
-            $item_1->setName($productName) // item name
-            ->setCurrency('EUR')
-                ->setQuantity(1)
-                ->setTax($tva)
-                ->setPrice($price); // unit price
-
-            // add item to list
-            $item_list = new ItemList();
-            $item_list->setItems(array($item_1));
-            $item_list->setShippingAddress($paypalAdress);
-
-            //set details
-            $details = new Details();
-            $details->setShipping(0)
-                ->setTax($tva)
-                ->setSubtotal($price);
-
-            //Paypal Amount
-            $amount = new Amount();
-            $amount->setCurrency('EUR')->setTotal($price+$tva)->setDetails($details);
-
-            //Paypal Transaction
-            $transaction = new Transaction();
-            $transaction->setAmount($amount)
-                ->setItemList($item_list)
-                ->setDescription(trans('strings.payment_paypal_invoice_description', ['name' => config('app.name')]))
-                ->setInvoiceNumber($invoice->id);
-
-
-            //Paypal Payment
-            $payment = new Payment();
-            $payment->setIntent('authorize')
-                ->setPayer($payer)
-                ->setTransactions(array($transaction));
-            if($type==self::PAYPAL){
-                //Paypal Redirect URL
-                $redirect_urls = new RedirectUrls();
-                $redirect_urls->setReturnUrl(route('advert.paypalStatus', ['invoiceId' => $invoice->id, 'success'=>'true']))
-                    ->setCancelUrl(route('advert.paypalStatus', ['invoiceId' => $invoice->id, 'success'=>'false']));
-                $payment->setRedirectUrls($redirect_urls);
-            }
-
-
-            try {
-                $payment->create($this->_api_context);
-            } catch (PayPalConnectionException $ex) {
-                if (config('app.debug')) {
-//                    echo "Exception: " . $ex->getMessage() . PHP_EOL;
-//                    $err_data = json_decode($ex->getData(), true);
-                    echo $ex->getCode(); // Prints the Error Code
-                    echo $ex->getData(); // Prints the detailed error message
-                    die($ex);
-//                    exit;
-                } else {
-                    return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                        ->withErrors('err6: ' . trans('strings.payment_all_error'));
-                }
-            }
-
-
-            if($type==self::PAYPAL){
-                foreach($payment->getLinks() as $link) {
-                    if($link->getRel() == 'approval_url') {
-                        $redirect_url = $link->getHref();
-                        break;
-                    }
-                }
-                // add payment ID to session
-                session(['paypal_payment_id' => $payment->getId()]);
-                if(isset($redirect_url)) {
-                    // redirect to paypal
-                    return redirect($redirect_url);
-                }
-            } elseif ($type == self::CARD) {
-                $resultOfPayment = [
-                    'state' => $payment->getState(),
-                    'payment' => $payment,
-                    'invoice' => $invoice,
-                    'request' => $request
-                ];
-                return $this->processResultPayment($resultOfPayment['state'], $resultOfPayment['payment'], $resultOfPayment['invoice'], $resultOfPayment['request']);
-            }
-        }
-        return redirect(route('home'))
-            ->withErrors(trans('strings.payment_all_error'));
-    }
-
-    /**
-     *
      * Process the result of the payment
      *
      * @param $result
@@ -1448,7 +1195,7 @@ class AdvertController extends Controller
      */
     private function processResultPayment($result, $payment, $invoice, $request) {
         if ($result == 'approved') { // payment made
-            $this->saveAuthorization($payment, $invoice);
+            $this->paymentManager->saveAuthorization($payment, $invoice);
             return $this->setAdvertState($invoice, $request);
         }
 
@@ -1458,106 +1205,13 @@ class AdvertController extends Controller
 
     /**
      *
-     * Capture a payment
-     *
-     * @param Invoice $invoice
-     */
-    private function capturePayment(Invoice $invoice) {
-        //CAPTURE PAYMENT
-        $authorizationId = $invoice->authorization;
-        $authorization = Authorization::get($authorizationId, $this->_api_context);
-        $amt = new Amount();
-        $amt->setCurrency($authorization->getAmount()->getCurrency());
-        $amt->setTotal($authorization->getAmount()->getTotal());
-        $capture = new Capture();
-        $capture->setAmount($amt);
-        $getCapture = $authorization->capture($capture, $this->_api_context);
-        $invoice->captureId = $getCapture->getId();
-
-        //GET INVOICE NUMBER
-        $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
-        if($previousInvoice){
-            $next_invoice_number = $previousInvoice->invoice_number + 1;
-        } else {
-            $next_invoice_number = 1;
-        }
-        $invoice->invoice_number = $next_invoice_number;
-
-        //SAVE INVOICE
-        $invoice->save();
-
-        //CREATE INVOICE FILE
-        try { InvoiceUtils::createInvoiceByInvoice($invoice); } catch (\Exception $e) { }
-    }
-
-    /**
-     *
-     * Refund a payment
-     *
-     * @param Invoice $invoice
-     */
-    private function refundPayment(Invoice $invoice) {
-        //CAPTURE PAYMENT
-        $captureId = $invoice->captureId;
-        $capture = Capture::get($captureId, $this->_api_context);
-
-        $amt = new Amount();
-        $amt->setCurrency($capture->getAmount()->getCurrency());
-        $amt->setTotal($capture->getAmount()->getTotal());
-
-        $refundRequest = new RefundRequest();
-        $refundRequest->setAmount($amt);
-
-        $captureRefund = $capture->refundCapturedPayment($refundRequest, $this->_api_context);
-
-        //SAVE INVOICE
-        $invoice->refundId = $captureRefund->getId();
-        $invoice->save();
-    }
-
-    /**
-     *
-     * Void a payment
-     *
-     * @param Invoice $invoice
-     */
-    private function voidPayment(Invoice $invoice) {
-        $authorizationId = $invoice->authorization;
-        $authorization = Authorization::get($authorizationId, $this->_api_context);
-        $getVoid = $authorization->void($this->_api_context);
-        $invoice->voidId = $getVoid->getId();
-        $invoice->save();
-    }
-
-    /**
-     *
-     * Save Authorization number Of payment
-     *
-     * @param Payment $payment
-     * @param Advert $advert
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function saveAuthorization(Payment $payment, Invoice $invoice) {
-        $transactions = $payment->getTransactions();
-        $relatedResources = $transactions[0]->getRelatedResources();
-        $authorization = $relatedResources[0]->getAuthorization();
-        $authorizationId = $authorization->getId();
-
-        if(!is_null($authorizationId) && !is_null($invoice)){
-            $invoice->authorization = $authorizationId;
-            $invoice->save();
-        }
-    }
-
-    /**
-     *
      * Common Save Result Of payment and Process to publish Advert before validation
      *
-     * @param Payment $payment
-     * @param Advert $advert
+     * @param Invoice $invoice
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
+     * @internal param Payment $payment
+     * @internal param Advert $advert
      */
     private function setAdvertState(Invoice $invoice, Request $request) {
 
@@ -1638,10 +1292,10 @@ class AdvertController extends Controller
             //1 Capture + stats or Void
             if(!is_null($invoice)){
                 if(is_null($isApproved) || $isApproved==true){
-                    $this->capturePayment($invoice);
+                    $this->paymentManager->capturePayment($invoice);
                     $this->updateStats($invoice);
                 } else {
-                    $this->voidPayment($invoice);
+                    $this->paymentManager->voidPayment($invoice);
                 }
             } else {
                 $isApproved==true ? $this->updateStats(null) : null;
@@ -1651,7 +1305,7 @@ class AdvertController extends Controller
             $this->advertUpdate($advert, $state, $isApproved);
 
             //3 Notify Event
-            if($withNotification){
+            if($withNotification && PrivilegesUtils::canReceiveBypassAutoprocessNotify($advert)){
                 if($state==Invoice::STATE_EDIT && !is_null($advert->isEditOf)) {
                     $originalAdvert = Advert::find($advert->isEditOf);
                     !is_null($originalAdvert) ? $this->notifyEvent($originalAdvert, $state, $invoice, $disapproveReason, $isApproved) : null;
@@ -1808,7 +1462,7 @@ class AdvertController extends Controller
 
         //Send Invoice to Accountant
         if(!is_null($invoice) && file_exists($invoice->filePath)){
-            $recipients = User::whereRole(User::ROLES[User::ROLE_ACCOUNTANT])->get();
+            $recipients = User::whereIn('role', PrivilegesUtils::canReceiveInvoice())->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
             foreach ($recipients as $recipient){
@@ -1850,11 +1504,11 @@ class AdvertController extends Controller
 
         //Send Refund Invoice to Accountant
         if(!is_null($invoice) && file_exists($invoice->filePath)){
-            $recipients = User::whereRole(User::ROLES[User::ROLE_ACCOUNTANT])->get();
+            $recipients = User::whereIn('role', PrivilegesUtils::canReceiveInvoice())->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
             foreach ($recipients as $recipient){
-                $recipient->notify(new InvoiceRefundPdf($invoice, $senderName, $senderMail, User::ROLES[User::ROLE_ACCOUNTANT]));
+                $recipient->notify(new InvoiceRefundPdf($invoice, $senderName, $senderMail, $recipient->role));
             }
         }
 
@@ -1872,7 +1526,7 @@ class AdvertController extends Controller
      * @param Advert $advert
      */
     private function notifyError(Advert $advert) {
-        $recipients = User::whereRole(User::ROLES[User::ROLE_ADMIN])->get();
+        $recipients = User::whereIn('role', PrivilegesUtils::canReceiveError())->get();
         $senderMail = env('SERVICE_MAIL_FROM');
         $senderName = ucfirst(config('app.name'));
         $message = trans('strings.mail_apperror_renew_line', ['advertNumber' => $advert->id, 'mailClient' => $advert->user->email]);

@@ -10,17 +10,19 @@ trait UserUtils
 {
     public static function haveCompleteAccount($userparam=null) {
         if(auth()->check()) {
-            if(!is_null($userparam) && auth()->user()->role==User::ROLES[User::ROLE_ADMIN]){
+            if(!is_null($userparam) && PrivilegesUtils::canTestCompleteAccount()){
                 $user = $userparam;
             } else {
                 $user = auth()->user();
             }
+
             if(
-                $user->name != null
-                && $user->compagnyName != null
-                && strlen($user->name) >= config('db_limits.users.minName')
-                && strlen($user->compagnyName) >= config('db_limits.users.minCompagnyName')
-                && strlen($user->registrationNumber) >= config('db_limits.users.minRegistrationNumber')
+                ($user->name != null
+                    && $user->compagnyName != null
+                    && strlen($user->name) >= config('db_limits.users.minName')
+                    && strlen($user->compagnyName) >= config('db_limits.users.minCompagnyName')
+                    && strlen($user->registrationNumber) >= config('db_limits.users.minRegistrationNumber'))
+                || (is_null($userparam) && PrivilegesUtils::canBypassCompleteAccount())
             ) {
                 return true;
             }

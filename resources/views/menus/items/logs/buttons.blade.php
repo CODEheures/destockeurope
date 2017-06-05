@@ -7,7 +7,7 @@
             {{ Auth::user()->name }}
             <i class="dropdown icon"></i>
             <div class="menu">
-                @if(auth()->check() && auth()->user()->role != \App\User::ROLES[\App\User::ROLE_SUPPLIER])
+                @if(\App\Common\PrivilegesUtils::canManageMyAccount())
                     <a class="item" href="{{ route('user.account') }}" > {{ trans('strings.menu_account') }} </a>
                 @endif
                 <a class="item" href="{{ url('/logout') }}"

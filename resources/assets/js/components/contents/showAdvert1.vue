@@ -125,6 +125,9 @@
                 </div>
                 <div class="sixteen wide tablet ten wide computer column">
                     <div class="row">
+                        <div class="ui active inverted dimmer" v-if="!isLoaded">
+                            <div class="ui large text loader">Loading</div>
+                        </div>
                         <advert-by-id
                                 :advert="dataAdvert"
                                 :actual-locale="actualLocale"
@@ -345,7 +348,8 @@
                 dataEnabledMessage: false,
                 dataEnabledReportMessage: false,
                 dataIsUserBookmark: false,
-                phoneIsVisible: false
+                phoneIsVisible: false,
+                isLoaded: true
             }
         },
         mounted () {
@@ -592,6 +596,7 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
+                        that.isLoaded = false;
                         axios.delete(that.routeDeleteAdvert)
                             .then(function (response) {
                                 window.location.assign(response.data);
@@ -602,7 +607,7 @@
                                 } else {
                                     that.sendToast(that.loadErrorMessage, 'error');
                                 }
-                                that.isLoaded = false;
+                                that.isLoaded = true;
                             });
                     }
                 }).modal('show');

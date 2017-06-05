@@ -34,7 +34,7 @@
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
                             :actual-locale="actualLocale"
-                            :is-admin-user="isAdminUser"
+                            :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
@@ -81,7 +81,7 @@
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
                             :actual-locale="actualLocale"
-                            :is-admin-user="isAdminUser"
+                            :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
                             :total-quantity-label="totalQuantityLabel"
                             :lot-mini-quantity-label="lotMiniQuantityLabel"
@@ -134,7 +134,7 @@
                 required: false
             },
             adsFrequency: Number,
-            isAdminUser: {
+            canGetDelegations: {
                 type: Boolean,
                 default: false,
                 required: false
