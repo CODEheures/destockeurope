@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Anonymous;
 use App\Common\CostUtils;
+use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
 use App\Common\PrivilegesUtils;
 use App\Common\UserUtils;
@@ -112,7 +113,7 @@ class CommonController extends Controller
      * Return Home Adverts View
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function home() {
+    public function home(Request $request) {
         //dd(session()->all());
         $masterAdsControllerFlag = true;
         $fakeHighlightAdvert = new Advert();
@@ -132,7 +133,24 @@ class CommonController extends Controller
         }
         $fakeHighlightAdvert['price_margin'] = $fakeHighlightAdvert['price'];
         $fakeHighlightAdvert['url'] = route('mines');
-        return view('welcome', compact('masterAdsControllerFlag', 'fakeHighlightAdvert'));
+
+        $location = $request->has('location') ?  $request->location : null;
+
+        $countryName = null;
+        $countryCode = null;
+        if(!is_null($location)){
+            $countries = LocaleUtils::getListCountries();
+            foreach ($countries as $country){
+                if(in_array($location, $country)){
+                    $countryName = $country['name'];
+                    $countryCode = $country['code'];
+                    break;
+                }
+            }
+        }
+
+        $page = $request->has('page') ?  $request->page : null;
+        return view('welcome', compact('masterAdsControllerFlag', 'fakeHighlightAdvert', 'countryName', 'countryCode', 'page'));
     }
 
     /**

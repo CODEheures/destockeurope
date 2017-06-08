@@ -18,16 +18,21 @@
 
 <script>
     export default {
-        props: [
+        props: {
             //vue routes
             //vue vars
-            'pages',
-            'routeGetList',
+            pages: Object,
+            routeGetList: String,
+            fakePageRoute: {
+                type: String,
+                required: false,
+                default: null
+            },
             //vue strings
-            'pageLabel',
-            'pagePreviousLabel',
-            'pageNextLabel'
-        ],
+            pageLabel: String,
+            pagePreviousLabel: String,
+            pageNextLabel: String
+        },
         data: () => {
             return {
                 datapages: [],
@@ -41,8 +46,14 @@
         },
         methods: {
             urlForPageNumber(pageNumber) {
-                let parsed = Parser.parse(this.routeGetList, true);
+                let parsed = null;
+                if (this.fakePageRoute==null) {
+                    parsed = Parser.parse(this.routeGetList, true);
+                } else {
+                    parsed = Parser.parse(this.fakePageRoute, true);
+                }
                 parsed.search=undefined;
+                parsed.hash=undefined;
                 parsed.query.page=pageNumber.toString();
                 return Parser.format(parsed);
             },

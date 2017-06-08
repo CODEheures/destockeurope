@@ -107,6 +107,7 @@
                         <pagination
                             :pages="paginate"
                             :route-get-list="dataRouteGetAdvertList"
+                            :fake-page-route="getHref()"
                             :page-label="pageLabel"
                             :page-previous-label="pagePreviousLabel"
                             :page-next-label="pageNextLabel">
@@ -158,6 +159,9 @@
             //vue routes
             //vue vars
             'clearStorage',
+            'forCountryName',
+            'forCountryCode',
+            'forPage',
             //vue strings
             'loadErrorMessage',
             'bookmarkSuccess',
@@ -260,6 +264,16 @@
                 }
             }
 
+            if(this.forCountryName != "" && this.forCountryCode != "") {
+                this.filter['country']=this.forCountryCode;
+                sessionStorage.setItem('filterLocationInputVal', JSON.stringify(this.forCountryName.charAt(0).toUpperCase() + this.forCountryName.slice(1)));
+                sessionStorage.setItem('filter', JSON.stringify(this.filter));
+            }
+            if(this.forPage != "") {
+                this.filter['page']='2';
+                sessionStorage.setItem('filter', JSON.stringify(this.filter));
+            }
+
             //On load Error
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
@@ -341,8 +355,8 @@
             this.$on('unbookmarkSuccess', function () {
                 this.sendToast(this.unbookmarkSuccess, 'success');
             });
-            if ("onhashchange" in window) {
-                this.onHashChange();
+            if ("onpopstate" in window) {
+                this.onPopState();
             }
         },
         methods: {
@@ -509,8 +523,27 @@
                 });
             },
             hashPage() {
+
+                let url = document.location.href;
+                let parsed = Parser.parse(url, true);
+                parsed.search=undefined;
+                if("location" in parsed.query){
+                    delete parsed.query.location;
+                }
+                if("page" in parsed.query){
+                    delete parsed.query.page;
+                }
+
+                if(this.forCountryName != "" && this.forCountryCode != "" && sessionStorage.getItem('filterLocationInputVal')!=undefined){
+                    parsed.query['location'] = JSON.parse(sessionStorage.getItem('filterLocationInputVal')).toLowerCase();
+                }
+                if(this.forPage != "" && 'page' in this.filter){
+                    parsed.query['page'] = this.filter.page;
+                }
                 this.hash = '#' + new Date().getTime().toString(36);
-                history.pushState({navGuard: true}, '', this.hash)
+                parsed.hash = this.hash;
+
+                history.pushState({navGuard: true}, '', Parser.format(parsed));
             },
             setHashFilters() {
                 if(this.hash !== undefined && this.hash !== ''){
@@ -521,12 +554,12 @@
                     }
                 }
             },
-            onHashChange() {
+            onPopState() {
                 let that = this;
-                window.onhashchange = function () {
+                window.onpopstate = function (event) {
                     that.isOnHashChange = true;
                     let inputs = that.initFilterBySessionStorage();
-                    console.log('hash inputs', inputs);
+
                     if(inputs.inputLocationVal !== null){
                         sessionStorage.setItem('filterLocationInputVal', inputs.inputLocationVal);
                     } else {
@@ -534,7 +567,7 @@
                     }
                     that.setBreadCrumbItems(that.filter.categoryId);
                     that.updateResults(true);
-                };
+                }
             },
             updateFilter(result){
                 let oldFilter= _.cloneDeep(this.filter);
@@ -583,6 +616,9 @@
                     .catch(function (error) {
                         //that.sendToast(that.loadErrorMessage, 'error');
                     });
+            },
+            getHref: function () {
+                return window.location.href;
             }
         }
     }

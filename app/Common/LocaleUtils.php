@@ -38,7 +38,11 @@ trait LocaleUtils
         $countries = [];
         foreach (Lang::get('strings') as $key => $item){
             if (strpos($key, 'country_') !== false && strpos($key, 'country') === 0) {
-                $countries[str_replace('country_','',$key)]=$item;
+                $params = explode(';', $item);
+                $countries[str_replace('country_','',$key)]=[
+                    'name' => $params[0],
+                    'code' => $params[1]
+                ];
             }
         }
         return $countries;

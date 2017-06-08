@@ -3,6 +3,9 @@
 @section('content')
     <welcome1
                 clear-storage="{{ session()->has('clear') ? true : false }}"
+                for-country-name="{{ isset($countryName) ? $countryName : null }}"
+                for-country-code="{{ isset($countryCode) ? $countryCode : null }}"
+                for-page="{{ isset($page) ? $page : null }}"
 
                 load-error-message="{{ trans('strings.view_all_error_load_message') }}"
                 bookmark-success="{{ trans('strings.view_advert_show_bookmark_success') }}"
