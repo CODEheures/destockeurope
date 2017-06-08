@@ -144,6 +144,7 @@
                     <div class="sixteen wide column">
                         <vertical-160x600
                             :centered="true"
+                            :reload="update"
                         ></vertical-160x600>
                     </div>
                 </div>

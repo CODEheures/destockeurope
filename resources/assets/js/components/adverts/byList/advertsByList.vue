@@ -16,7 +16,7 @@
                         <p>{{ noResultFoundMessage }}</p>
                     </div>
                 </div>
-                <div class="item ads">
+                <div v-if="isLoaded"  class="item ads">
                     <div class="ui grid">
                         <div class="tablet only computer only row">
                             <horizontal-468x60></horizontal-468x60>

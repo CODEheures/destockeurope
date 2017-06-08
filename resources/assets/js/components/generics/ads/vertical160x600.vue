@@ -22,15 +22,26 @@
                 required: false,
                 type: Boolean,
                 default:false
+            },
+            'reload': {
+                required: false,
+                type: Boolean,
+                default:true
             }
         },
         data: () => {
             return {
-
+                isInitial: true
             }
         },
         mounted () {
-
+            this.$watch('reload', function () {
+                if (this.isInitial) {
+                    this.isInitial = false;
+                } else {
+                    console.log('reload ads vertical160x600');
+                }
+            })
         },
         updated () {
 
