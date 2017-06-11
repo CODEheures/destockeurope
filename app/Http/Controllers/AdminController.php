@@ -227,10 +227,20 @@ class AdminController extends Controller
     public function cleanApp() {
         try {
             $advertManager = new AdvertsManager($this->pictureManager, $this->vimeoManager);
-            $info = $advertManager->purge();
+            $purgeResults = $advertManager->purge();
             //update stats
             $statsManager = new StatsManager();
             $statsManager->getStats();
+
+            $info =  trans('strings.admin_purge_response', [
+                'nbInvalidsadvert' => $purgeResults['invalids']['adverts'],
+                'nbAbandonedAdvert' => $purgeResults['abandoned']['adverts'],
+                'nbObsoletesAdvert' => $purgeResults['obsoletes']['adverts'],
+                'nbimg' => $purgeResults['invalids']['pictures']+$purgeResults['abandoned']['pictures']+$purgeResults['obsoletes']['pictures'],
+                'nbLocalImg' => $purgeResults['obsoleteLocalTempo']['pictures'],
+                'nbvideos' => $purgeResults['persistent']['videos']
+            ]);
+
             return response($info,200);
         } catch (\Exception $e) {
             return response($e->getMessage(),500);

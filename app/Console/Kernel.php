@@ -65,10 +65,15 @@ class Kernel extends ConsoleKernel
 
 
         //Scheduler for STATS and Adverts Purges, Alerts
-        //NOTA: purge only OBSOLETES ADVERTS, purge ABANDONNED IS MANUAL To UNDERSTAND WHY
         $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
-            $result2=['',''];
+            $purgeResult = [
+                'invalids' => ['adverts' => 0, 'pictures' => 0],
+                'abandoned' => ['adverts' => 0, 'pictures' => 0],
+                'obsoletes' => ['adverts' => 0, 'pictures' => 0],
+                'obsoleteLocalTempo' => ['pictures' => 0],
+                'persistent' => ['videos' => 0]
+            ];
             $result3='';
             $result4='';
             try {
@@ -78,16 +83,31 @@ class Kernel extends ConsoleKernel
                 $pictureManager = new PicturesManager();
                 $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
                 $advertManager = new AdvertsManager($pictureManager, $vimeoManager);
-                $result2 = $advertManager->purgeObsoletesAdverts();
+                $purgeResult = $advertManager->purge();
                 $result3 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_1'));
                 $result4 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_2'));
 
-                $message = $message  . ';' . $result2[0] . ';' . $result2[1] .';' . $result3 . ';' . $result4  .';;';
+                $message = $message  . ';'
+                    . $purgeResult['invalids']['adverts'] . ';' . $purgeResult['invalids']['pictures'] . ';'
+                    . $purgeResult['abandoned']['adverts'] . ';' . $purgeResult['abandoned']['pictures'] . ';'
+                    . $purgeResult['obsoletes']['adverts'] . ';' . $purgeResult['obsoletes']['pictures'] . ';'
+                    . $purgeResult['obsoleteLocalTempo']['pictures'] . ';'
+                    . $purgeResult['persistent']['videos'] . ';'
+                    . $result3 . ';'
+                    . $result4  .';;';
             } catch (\Exception $e) {
-                $message = $message . ';' . $result2[0] . ';' . $result2[1] . ';' . $result3 . ';' . $result4  . ';' .  $e->getMessage().';';
+                $message = $message . ';'
+                    . $purgeResult['invalids']['adverts'] . ';' . $purgeResult['invalids']['pictures'] . ';'
+                    . $purgeResult['abandoned']['adverts'] . ';' . $purgeResult['abandoned']['pictures'] . ';'
+                    . $purgeResult['obsoletes']['adverts'] . ';' . $purgeResult['obsoletes']['pictures'] . ';'
+                    . $purgeResult['obsoleteLocalTempo']['pictures'] . ';'
+                    . $purgeResult['persistent']['videos'] . ';'
+                    . $result3 . ';'
+                    . $result4  . ';'
+                    .  $e->getMessage().';';
             }
             if(!Storage::disk('logs')->exists('schedule.log')){
-                Storage::disk('logs')->append('schedule.log' , 'DATE;PURGE ADVERTS;DELETE PICTURES;ALERT USER J-'. env('ALERT_BEFORE_END_1') . ';ALERT USER J-'. env('ALERT_BEFORE_END_2') .';FAILS;');
+                Storage::disk('logs')->append('schedule.log' , 'DATE;PURGE INVALIDS ADVERTS;PURGE INVALIDS PICTURES;PURGE ABANDONED ADVERTS;PURGE ABANDONED PICTURES;PURGE OBSOLETES ADVERTS;PURGE OBSOLETES PICTURES;PURGE OBSOLETE LOCAL TEMPO PICTURES;PURGE PERSISTENT VIDEOS;ALERT USER J-'. env('ALERT_BEFORE_END_1') . ';ALERT USER J-'. env('ALERT_BEFORE_END_2') .';FAILS;');
             }
             Storage::disk('logs')->append('schedule.log' , $message);
 

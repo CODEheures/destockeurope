@@ -45,44 +45,39 @@ class AdvertsManager
     //Manually Purge in Admin Panel
     public function purge() {
         try {
-            $counterDelPictures = 0;
-            $counterDelAdvert = 0;
-            $counterDelVideo = 0;
+
+            $results = [
+                'invalids' => ['adverts' => 0, 'pictures' => 0],
+                'abandoned' => ['adverts' => 0, 'pictures' => 0],
+                'obsoletes' => ['adverts' => 0, 'pictures' => 0],
+                'obsoleteLocalTempo' => ['pictures' => 0],
+                'persistent' => ['videos' => 0]
+            ];
+
             //1 get Adverts where is Valid = false
-            $invalidAdverts = Advert::invalid()->get();
-            foreach ($invalidAdverts as $advert){
-                $counterDelAdvert++;
-                $counterDelPictures += $this->definitiveDestroy($advert);
-            }
+            $invalidsResults = $this->purgeInvalidsAdverts();
+            $results['invalids']['adverts'] = $invalidsResults[0];
+            $results['invalids']['pictures'] = $invalidsResults[1];
 
             //2 get Adverts where is publish = false and created_at > 2 hours
-            $abandonedAdverts = Advert::abandonned()->get();
-            foreach ($abandonedAdverts as $advert){
-                $counterDelAdvert++;
-                $counterDelPictures += $this->definitiveDestroy($advert);
-            }
+            $abandonedResults = $this->purgeAbandonedAdverts();
+            $results['abandoned']['adverts'] = $abandonedResults[0];
+            $results['abandoned']['pictures'] = $abandonedResults[1];
 
             //3 get Adverts where deleted_at > env delay
             $obsoletesResults = $this->purgeObsoletesAdverts();
-            $counterDelAdvert += $obsoletesResults[0];
-            $counterDelPictures += $obsoletesResults[1];
+            $results['obsoletes']['adverts'] = $obsoletesResults[0];
+            $results['obsoletes']['pictures'] = $obsoletesResults[1];
 
             //4 deleted Tempo files with life time pass
-            $counterDelPictures += $this->pictureManager->purgeObsoleteLocalTempo(env('TEMPO_HOURS_LIFE_TIME'));
+            $obsoleteLocalTempoResults = $this->pictureManager->purgeObsoleteLocalTempo(env('TEMPO_HOURS_LIFE_TIME'));
+            $results['obsoleteLocalTempo']['pictures'] = $obsoleteLocalTempoResults;
 
             //5 Purge Videos On Vimeo WithOut Advert
-            $persistents = Persistent::where('key', '=', 'videoId')->get();
-            foreach ($persistents as $persistent) {
-                if(Carbon::parse($persistent->updated_at)->addHours(env('TEMPO_HOURS_LIFE_TIME'))->isPast()){
-                    $response = $this->vimeoManager->request('/videos/'.$persistent->value,[],'DELETE');
-                    if($response['status']<300){
-                        $counterDelVideo++;
-                    }
-                    $persistent->delete();
-                }
-            }
+            $persistentVideosResults = $this->purgePersistentVideos();
+            $results['persistent']['videos'] = $persistentVideosResults;
 
-            return trans('strings.admin_purge_response', ['nbadvert' => $counterDelAdvert, 'nbimg' => $counterDelPictures, 'nbvideos' => $counterDelVideo]);
+            return $results;
         } catch (\Exception $e) {
             throw  new \Exception(trans('strings.admin_purge_error') . ': ' . $e->getMessage());
         }
@@ -104,6 +99,55 @@ class AdvertsManager
         }
     }
 
+    public function purgeInvalidsAdverts() {
+        try {
+            $counterDelPictures = 0;
+            $counterDelAdvert = 0;
+            $invalidAdverts = Advert::invalid()->get();
+            foreach ($invalidAdverts as $advert){
+                $counterDelAdvert++;
+                $counterDelPictures += $this->definitiveDestroy($advert);
+            }
+            return [$counterDelAdvert, $counterDelPictures];
+        } catch (\Exception $e) {
+            throw new \Exception('purge invalid adverts fails');
+        }
+    }
+
+    public function purgeAbandonedAdverts() {
+        try {
+            $counterDelPictures = 0;
+            $counterDelAdvert = 0;
+            $abandonedAdverts = Advert::abandonned()->get();
+            foreach ($abandonedAdverts as $advert){
+                $counterDelAdvert++;
+                $counterDelPictures += $this->definitiveDestroy($advert);
+            }
+            return [$counterDelAdvert, $counterDelPictures];
+        } catch (\Exception $e) {
+            throw new \Exception('purge abandoned adverts fails');
+        }
+    }
+
+    public function purgePersistentVideos() {
+        try {
+            $counterDelVideo = 0;
+            $persistents = Persistent::where('key', '=', 'videoId')->get();
+            foreach ($persistents as $persistent) {
+                if(Carbon::parse($persistent->updated_at)->addHours(env('TEMPO_HOURS_LIFE_TIME'))->isPast()){
+                    $response = $this->vimeoManager->request('/videos/'.$persistent->value,[],'DELETE');
+                    if($response['status']<300){
+                        $counterDelVideo++;
+                    }
+                    $persistent->delete();
+                }
+            }
+            return $counterDelVideo;
+        } catch (\Exception $e) {
+            throw new \Exception('purge obsoletes adverts fails');
+        }
+    }
+
     public function stopAdverts() {
         try {
             //stop advert with online_at > lifeTime
@@ -112,8 +156,8 @@ class AdvertsManager
             foreach ($invalidAdverts as $advert){
                 if(!$advert->is_delegation) {
                     $counter++;
-                    $advert->delete();
                     $advert->isEligibleForRenewMailZero ? $this->alertEndOfAdverts(0,[$advert]) : null;
+                    $advert->delete();
                 } else {
                     //automatic renew for delegations
                     $advert->online_at = Carbon::now();

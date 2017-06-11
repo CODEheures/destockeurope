@@ -13,7 +13,7 @@ const { mix } = require('laravel-mix');
 
 mix//.js('resources/assets/js/sw.js', 'public')
     .js('resources/assets/js/app.js', 'public/js')
-    .extract(['vue'])
+    .extract(['vue', 'vue-focus', 'jquery', 'lodash', 'moment', 'url', 'axios', 'swiper', 'ion-rangeslider', '@vimeo/player'])
     .sass('resources/assets/sass/pdf.scss', 'public/css')
     .sass('resources/assets/sass/app.scss', 'public/css')
     .combine([

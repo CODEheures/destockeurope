@@ -576,7 +576,7 @@ return [
     'saturday' => 'saturday',
     'sunday' => 'sunday',
 
-    'admin_purge_response' => ':nbadvert adverts deleted, :nbimg pictures deleted, :nbvideos videos on vimeo deleted',
+    'admin_purge_response' => 'Deleted: :nbInvalidsadvert invalids, :nbAbandonedAdvert abandoned, :nbObsoletesAdvert obsoletes, :nbimg pictures, :nbLocalImg tempo pictures, :nbvideos videos',
     'admin_purge_error' => 'purge error',
     'admin_transfert_image_response' => ':nb Mb moving to disk :disk',
     'admin_transfert_image_exist' => 'Application indicates that a transfer is already in progress',

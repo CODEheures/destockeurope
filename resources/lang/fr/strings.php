@@ -576,7 +576,7 @@ return [
     'saturday' => 'samedi',
     'sunday' => 'dimanche',
 
-    'admin_purge_response' => ':nbadvert annonces supprimées, :nbimg images éffacées, :nbvideos videos vimeo éffacées',
+    'admin_purge_response' => 'Supression: :nbInvalidsadvert invalides, :nbAbandonedAdvert abandons, :nbObsoletesAdvert obsoletes, :nbimg images,  :nbLocalImg images tempo, :nbvideos videos',
     'admin_purge_error' => 'erreur pendant la purge',
     'admin_transfert_image_response' => ':nb Mb en cours de transfert vers le disque :disk',
     'admin_transfert_image_exist' => 'L\'application signale qu\'un transfert est déjà en cours',
