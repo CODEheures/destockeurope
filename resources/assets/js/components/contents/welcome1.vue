@@ -271,7 +271,7 @@
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
             }
             if(this.forPage != "") {
-                this.filter['page']='2';
+                this.filter['page']=this.forPage;
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
             }
 
