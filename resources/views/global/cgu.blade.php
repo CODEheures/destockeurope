@@ -14,44 +14,31 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1 class="ui header">Conditions Générales d'utilisation</h1>
-                            @include('global.tempo.inCreation')
+                            <h1 class="ui header">{!! trans('cg.u.title') !!}</h1>
+                            {!! trans('cg.tempo') !!}
 
-                            <h2  class="ui dividing header">Préambule: définitions</h2>
-                            @include('global.cg.common.definitions')
+                            {!! trans('cg.definitions') !!}
 
-                            <h2  class="ui dividing header">Article 1: Objet</h2>
-                            @include('global.cg.u.object')
+                            {!! trans('cg.u.object') !!}
 
-                            <h2  class="ui dividing header">Article 2: Acceptation</h2>
-                            @include('global.cg.u.accept')
+                            {!! trans('cg.u.accept') !!}
 
-                            <h2  class="ui dividing header">Article 3: Utilisation du service {{ env('LEGAL_COMPAGNY_PSEUDONAME') }}</h2>
-                            @include('global.cg.u.proAccount')
+                            {!! trans('cg.u.using') !!}
 
-                            <h2 class="ui dividing header">Article 4: Règles de diffusion et modération des annonces</h2>
-                            @include('global.cg.common.diffusionRules')
+                            {!! trans('cg.u.diffusionsRulesTitle') !!}
+                            {!! trans('cg.diffusionsRules') !!}
 
-                            <h2 class="ui dividing header">Article 5: Engagements de l'annonceur</h2>
-                            @include('global.cg.u.advertisserEngagment')
+                            {!! trans('cg.u.advertisserEngagment') !!}
 
-                            <h2  class="ui dividing header">Article 6: Propriété intellectuelle</h2>
-                            @include('global.cg.u.propertyIntellect')
+                            {!! trans('cg.u.propertyIntellect') !!}
 
-                            <h2 class="ui dividing header">Article 7: Responsabilité et garanties de {{ env('LEGAL_COMPAGNY_PSEUDONAME') }}</h2>
-                            @include('global.cg.u.responsabilityDestock')
-                            @include('global.cg.u.warrantyDestock')
-                            @include('global.cg.u.subcontractor')
+                            {!! trans('cg.u.responsabilityDestock') !!}
 
-                            <h2  class="ui dividing header">Article 8: Cookies</h2>
-                            @include('global.cg.u.cookies')
+                            {!! trans('cg.u.cookies') !!}
 
-                            <h2  class="ui dividing header">Article 9: Modification du service {{ env('LEGAL_COMPAGNY_PSEUDONAME') }}</h2>
-                            @include('global.cg.u.modification')
+                            {!! trans('cg.u.modification') !!}
 
-                            <h2  class="ui dividing header">Article 10: Attribution de Juridiction et disposition diverses</h2>
-                            @include('global.cg.common.juridicAttribution')
-                            @include('global.cg.u.illegale')
+                            {!! trans('cg.u.juridiction') !!}
                         </div>
                     </div>
                 </div>

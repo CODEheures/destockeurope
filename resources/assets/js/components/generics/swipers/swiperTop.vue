@@ -7,7 +7,7 @@
             </div>
             <div class="swiper-slide" v-for="picture in pictures" v-if="!picture.isThumb">
                 <img :data-src="picture.url" class="swiper-lazy" v-on:click="lightBoxMe(picture.url)">
-                <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
             </div>
         </div>
         <div class="swiper-button-next"><i class="huge chevron right icon"></i></div>

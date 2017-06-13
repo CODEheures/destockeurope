@@ -14,34 +14,41 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1 class="ui header">Conditions Générales de Vente</h1>
-                            @include('global.tempo.inCreation')
+                            <h1 class="ui header">{{ trans('cg.v.title') }}</h1>
+                            {!! trans('cg.tempo') !!}
 
-                            <h2  class="ui dividing header">Préambule: Définitions</h2>
-                            @include('global.cg.common.definitions')
+                            {!! trans('cg.definitions') !!}
 
-                            <h2  class="ui dividing header">Article 1: Objet</h2>
-                            @include('global.cg.v.object')
+                            {!! trans('cg.v.object') !!}
 
-                            <h2  class="ui dividing header">Article 2: Acceptation</h2>
-                            @include('global.cg.v.accept')
+                            {!! trans('cg.v.accept') !!}
 
-                            <h2  class="ui dividing header">Article 3: Passage d'une commande</h2>
-                            @include('global.cg.v.souscription')
+                            {!! trans('cg.v.ordering') !!}
 
-                            <h2 class="ui dividing header">Article 4: Descriptif et tarifs</h2>
-                            @include('global.cg.v.description')
+                            {!! trans('cg.v.description') !!}
+                            {!! trans('cg.v.options.urgent') !!}
+                            {!! trans('cg.v.options.toNegociate') !!}
+                            {!! trans('cg.v.options.video') !!}
+                            {!! trans('cg.v.options.photos1') !!}
+                            @for($i = config('runtime.nbFreePictures')+1 ; $i <= config('runtime.nbMaxPictures'); $i++)
+                                {!! trans('cg.v.options.photos2', ['compt' => $i, 'price' => \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostPictures($i),'EUR',true)]) !!}
+                            @endfor
+                            {!! trans('cg.v.options.photos3') !!}
+                            {!! trans('cg.v.options.edition') !!}
+                            {!! trans('cg.v.options.renew') !!}
+                            {!! trans('cg.v.options.backToTop') !!}
+                            {!! trans('cg.v.options.highlight1') !!}
+                            <?php $cases = [0,1,2,3,5,10,20] ?>
+                            @foreach($cases as $case)
+                                {!! trans('cg.v.options.highlight2', ['case' => $case, 'price' => \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsHighlight(true, $case),'EUR', true)]) !!}
+                            @endforeach
+                            {!! trans('cg.v.options.highlight3') !!}
 
-                            <h2  class="ui dividing header">Article 5: Cas de force majeure</h2>
-                            @include('global.cg.v.major')
+                            {!! trans('cg.v.major') !!}
 
-                            <h2  class="ui dividing header">Article 6: Modification des <a href="{{ route('cgv') }}">CGV</a> </h2>
-                            @include('global.cg.v.modification')
+                            {!! trans('cg.v.modifications') !!}
 
-                            <h2  class="ui dividing header">Article 7: Attribution de juridiction et dispositions diverses</h2>
-                            @include('global.cg.common.juridicAttribution')
-                            @include('global.cg.v.illegale')
-
+                            {!! trans('cg.v.juridiction') !!}
 
                         </div>
                     </div>

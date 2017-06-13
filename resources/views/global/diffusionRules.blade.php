@@ -14,9 +14,9 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1 class="ui header">Règles de diffusion des annonces</h1>
-                            @include('global.tempo.inCreation')
-                            @include('global.cg.common.diffusionRules')
+                            <h1 class="ui header">{!! trans('cg.diffusionRulesTitle') !!}</h1>
+                            {!! trans('cg.tempo') !!}
+                            {!! trans('cg.diffusionsRules') !!}
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,7 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1>Qui sommes nous?</h1>
+                            <h1>{!! trans('who.title') !!}</h1>
                         </div>
                     </div>
                 </div>

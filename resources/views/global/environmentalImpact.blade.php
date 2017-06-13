@@ -14,7 +14,7 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1>Impact environnemental</h1>
+                            <h1>{!! trans('environment.title') !!}</h1>
                         </div>
                     </div>
                 </div>

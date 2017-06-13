@@ -14,7 +14,7 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1>Nous rejoindre</h1>
+                            <h1>{!! trans('join.title') !!}</h1>
                         </div>
                     </div>
                 </div>

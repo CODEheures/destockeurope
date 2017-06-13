@@ -13,7 +13,7 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment">
-                            <h1>Aide</h1>
+                            <h1>{!! trans('help.title') !!}</h1>
                         </div>
                     </div>
                 </div>
