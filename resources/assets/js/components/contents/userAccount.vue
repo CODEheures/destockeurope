@@ -147,6 +147,7 @@
             'routeUserSetRegistrationNumber',
             'routeAvatar',
             'routeNextUrl',
+            'routePrices',
             //vue vars
             'userEmail',
             'userName',
@@ -186,6 +187,7 @@
             'formVatWarningLabel',
             'formVatOnCheckProgressLabel',
             'formVatIdentifierLabel',
+            'advertPrices',
             //steps component
             'stepOneTitle',
             'stepTwoTitle',
@@ -251,6 +253,7 @@
                     isCompleted: false,
                     title: this.stepThreeTitle,
                     description: this.stepThreeDescription,
+                    routeDescription: this.routePrices,
                     icon: 'payment'
                 }
             ];

@@ -183,6 +183,7 @@
             //vue routes
             'routeAdvertFormPost',
             'routeGetCost',
+            'routePrices',
             //vue vars
             'old',
             'formTitleMinValid',
@@ -208,6 +209,7 @@
             'advertExampleUrgentLabel',
             'advertFormIsNegociatedLabel',
             'advertExampleIsNegociatedLabel',
+            'advertPrices',
             //steps component
             'stepOneTitle',
             'stepTwoTitle',
@@ -320,6 +322,7 @@
                     isCompleted: this.isDelegation == 1,
                     title: this.stepThreeTitle,
                     description: this.stepThreeDescription,
+                    routeDescription: this.isDelegation == 1 ? undefined : this.routePrices,
                     icon: 'payment'
                 }
             ];

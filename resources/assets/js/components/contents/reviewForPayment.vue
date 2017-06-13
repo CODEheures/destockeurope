@@ -155,6 +155,7 @@
             //vue routes
             'routePaypalChoice',
             'routeCardChoice',
+            'routePrices',
             //vue vars
             'invoice',
             'cardsTypes',
@@ -198,6 +199,7 @@
             'october',
             'november',
             'december',
+            'advertPrices',
             //steps component
             'stepOneTitle',
             'stepTwoTitle',
@@ -255,6 +257,7 @@
                     isCompleted: false,
                     title: this.stepThreeTitle,
                     description: this.stepThreeDescription,
+                    routeDescription: this.routePrices,
                     icon: 'payment'
                 }
             ];

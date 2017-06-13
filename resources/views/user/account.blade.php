@@ -14,6 +14,7 @@
             route-user-set-registration-number="{{ route('user.registrationNumber') }}"
             route-avatar="{{ $routeAvatar }}"
             route-next-url="{{ isset($advert) ? route('advert.nextStep', ['id' => $advert->id]) : '' }}"
+            route-prices="{{ route('prices') }}"
 
             user-email="{{ $user->email }}"
             user-name="{{ $user->name }}"
@@ -52,6 +53,7 @@
             form-vat-warning-label="{{ trans('strings.view_user_account_compagny_number_warning_label') }}"
             form-vat-on-check-progress-label="{{ trans('strings.view_user_account_compagny_number_check_progress') }}"
             form-vat-identifier-label="{{ trans('strings.view_user_account_compagny_number_identifier') }}"
+            advert-price="{{ trans('strings.view_price_header') }}"
 
             step-one-title="{{ isset($title) ?  $title : trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"

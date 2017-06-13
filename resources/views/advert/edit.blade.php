@@ -9,6 +9,7 @@
             route-get-tempo-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_TEMPO_LOCAL])}}"
             route-del-tempo-picture="{{ route('picture.destroyTempo')}}"
             route-get-cost="{{ route('advert.cost')}}"
+            route-prices="{{ route('prices') }}"
 
             old="{{ count(old())>0 ? 1 : 0 }}"
             advert-form-photo-nb-free-picture="{{ config('runtime.nbFreePictures') }}"
@@ -45,6 +46,7 @@
             advert-example-urgent-label="{{ trans('strings.view_all_urgent') }}"
             advert-form-is-negociated-label="{{ trans('strings.form_isNegociated') }}"
             advert-example-is-negociated-label="{{ trans('strings.view_all_negociate') }}"
+            advert-price="{{ trans('strings.view_price_header') }}"
 
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"

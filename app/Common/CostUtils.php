@@ -55,7 +55,7 @@ trait CostUtils
     public static function getCostPictures($nbPictures, Advert $isEditOf=null){
         $countCostPictures = self::countCostPictures($nbPictures, $isEditOf);
         if($countCostPictures>0){
-            return $countCostPictures*10*100;
+            return $countCostPictures*6*100;
         }
         return 0;
     }

@@ -41,7 +41,7 @@ class CommonController extends Controller
             'help',
             'contact',
             'contactPost',
-            'areInOtherCountry',
+            'prices',
             'imageServer'
         ]]);
         $this->middleware('isEmailConfirmed', ['only' => ['mines']]);
@@ -281,8 +281,8 @@ class CommonController extends Controller
      * Return view of CGV
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function areInOtherCountry(){
-        return view('global.areInOtherCountry');
+    public function prices(){
+        return view('global.prices');
     }
 
     public function imageServer(Request $request) {

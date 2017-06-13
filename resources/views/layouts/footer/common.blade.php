@@ -80,7 +80,7 @@
             <div class="ui link list">
                 <a class="item" href="{{ route('help') }}">{{ trans('strings.footer_list_7_1') }}</a>
                 <a class="item" href="{{ route('contact') }}">{{ trans('strings.footer_list_7_2') }}</a>
-                <a class="item" href="{{ route('areInOtherCountry') }}">{{ trans('strings.footer_list_7_3') }}</a>
+                <a class="item" href="{{ route('prices') }}">{{ trans('strings.footer_list_7_3') }}</a>
             </div>
         </div>
     </div>

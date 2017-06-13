@@ -5,6 +5,7 @@
     <review-for-payment
             route-paypal-choice="{{ route('advert.payByPaypal', ['invoiceId' => $invoice->id]) }}"
             route-card-choice="{{ route('advert.payByCard', ['invoiceId' => $invoice->id]) }}"
+            route-prices="{{ route('prices') }}"
 
             invoice="{{ json_encode($invoice) }}"
             cards-types="{{ json_encode($listCardTypes) }}"
@@ -48,6 +49,7 @@
             october="{{ trans('strings.october') }}"
             november="{{ trans('strings.november') }}"
             december="{{ trans('strings.december') }}"
+            advert-price="{{ trans('strings.view_price_header') }}"
 
             step-one-title="{{ isset($title) ?  $title : trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"

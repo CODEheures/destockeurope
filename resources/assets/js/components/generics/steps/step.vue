@@ -4,7 +4,12 @@
             <i :class="step.icon + ' icon'"></i>
             <div class="content">
                 <div class="title">{{ step.title }}</div>
-                <div class="description">{{ step.description }}</div>
+                <template v-if="step.routeDescription != undefined">
+                    <a :href="step.routeDescription" target="_blank" style="pointer-events: initial">{{ step.description }}</a>
+                </template>
+                <template v-else>
+                    <div class="description">{{ step.description }}</div>
+                </template>
             </div>
         </div>
     </div>

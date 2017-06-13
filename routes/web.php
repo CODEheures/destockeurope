@@ -38,7 +38,7 @@
     Route::get('/help', 'CommonController@help')->name('help');
     Route::get('/contact', 'CommonController@contact')->name('contact');
     Route::post('/contact', 'CommonController@contactPost')->name('contactPost');
-    Route::get('/areInOtherCountry', 'CommonController@areInOtherCountry')->name('areInOtherCountry');
+    Route::get('/prices', 'CommonController@prices')->name('prices');
 
     // Admin Routes...
     Route::group(['prefix' => 'admin'], function() {
