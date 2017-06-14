@@ -758,7 +758,7 @@ class AdvertController extends Controller
         $approveList = $request->all();
         try {
             foreach ($approveList as $key=>$value) {
-                $this->approveAdvert($key, $value['isApprove'], $value['priceCoefficient'], $value['disapproveReason']);
+                $this->approveAdvert($key, $value['isApprove'], $value['lotMiniQuantity'], $value['priceCoefficient'], $value['disapproveReason']);
             }
         } catch (\Exception $e) {
             return response(trans('strings.view_advert_approve_error'), 500);
@@ -1159,13 +1159,14 @@ class AdvertController extends Controller
      * @return null
      * @throws \Exception
      */
-    private function approveAdvert($key, $isApproved, $priceCoefficient=null, $disapproveReason=null) {
+    private function approveAdvert($key, $isApproved, $lotMiniQuantity, $priceCoefficient=null, $disapproveReason=null) {
         if($isApproved != null) {
             $advert = Advert::find($key);
             $invoice = null;
             $state = is_null($advert->isEditOf) ? Invoice::STATE_CREATION : Invoice::STATE_EDIT;
             if($advert && is_null($advert->isValid)) {
                 $advert->price_coefficient = $priceCoefficient;
+                $advert->lotMiniQuantity = (int)$lotMiniQuantity;
                 //Get latest invoice with create state
                 if($state == Invoice::STATE_CREATION){
                     $invoice = $advert->invoices()

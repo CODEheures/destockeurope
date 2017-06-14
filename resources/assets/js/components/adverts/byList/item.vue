@@ -205,6 +205,7 @@
                                             :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
                                             :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                                             :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
                                             :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                                             :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                                     ></margin-input-field>
@@ -248,6 +249,7 @@
                                     :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
                                     :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                                     :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                    :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
                                     :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                                     :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                             ></margin-input-field>
@@ -502,6 +504,7 @@
             formAdvertPriceCoefficientNewPriceLabel: String,
             formAdvertPriceCoefficientUnitMarginLabel: String,
             formAdvertPriceCoefficientTotalMarginLabel: String,
+            formAdvertPriceCoefficientLotMarginLabel: String,
             formAdvertPriceCoefficientUpdateLabel: String
         },
         data: () => {

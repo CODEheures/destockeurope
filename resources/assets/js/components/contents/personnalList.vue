@@ -72,6 +72,7 @@
                             :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
                             :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                             :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
                             :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                             :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list>
@@ -147,6 +148,7 @@
             'formAdvertPriceCoefficientLabel',
             'formAdvertPriceCoefficientNewPriceLabel',
             'formAdvertPriceCoefficientUnitMarginLabel',
+            'formAdvertPriceCoefficientLotMarginLabel',
             'formAdvertPriceCoefficientTotalMarginLabel',
             'formAdvertPriceCoefficientUpdateLabel',
             //paginate component

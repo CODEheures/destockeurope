@@ -162,30 +162,36 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="right floated sixteen wide mobile sixteen wide tablet ten wide computer column" v-else>
+                            <div class="right floated sixteen wide mobile sixteen wide tablet fifteen wide computer column" v-else>
                                 <div class="ui form">
-                                    <div class="field">
-                                        <div class="two fields">
-                                            <margin-input-field
-                                                    :advert="advert"
-                                                    :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                                                    :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                                                    :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                                                    :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                                                    :with-valid-button="false"
-                                            ></margin-input-field>
-                                            <div class="grouped fields">
-                                                <div class="field">
-                                                    <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                        <input type="radio" :name="advert.id" value="1">
-                                                        <label>{{ toggleApproveLabel }}</label>
-                                                    </div>
+                                    <div class="three fields">
+                                        <quantities-input-field
+                                                :advert="advert"
+                                                :total-quantity-label="totalQuantityLabel"
+                                                :lot-mini-quantity-label="lotMiniQuantityLabel"
+                                                :with-valid-button="false"
+                                                :only-mini-lot="true"
+                                        ></quantities-input-field>
+                                        <margin-input-field
+                                                :advert="advert"
+                                                :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                                                :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                                                :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                                :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
+                                                :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                                                :with-valid-button="false"
+                                        ></margin-input-field>
+                                        <div class="grouped fields">
+                                            <div class="field">
+                                                <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
+                                                    <input type="radio" :name="advert.id" value="1">
+                                                    <label>{{ toggleApproveLabel }}</label>
                                                 </div>
-                                                <div class="field">
-                                                    <div :id="'slider2-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                        <input type="radio" :name="advert.id" value="0">
-                                                        <label>{{ toggleDisapproveLabel }}</label>
-                                                    </div>
+                                            </div>
+                                            <div class="field">
+                                                <div :id="'slider2-'+_uid+'-'+advert.id" class="ui slider checkbox">
+                                                    <input type="radio" :name="advert.id" value="0">
+                                                    <label>{{ toggleDisapproveLabel }}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -235,6 +241,7 @@
             'formAdvertPriceCoefficientLabel',
             'formAdvertPriceCoefficientNewPriceLabel',
             'formAdvertPriceCoefficientUnitMarginLabel',
+            'formAdvertPriceCoefficientLotMarginLabel',
             'formAdvertPriceCoefficientTotalMarginLabel',
             'formValidationButtonLabel',
             'modalValidHeader',
@@ -312,6 +319,7 @@
                 let that = this;
                 for(let index in this.approveList){
                     this.approveList[index]['priceCoefficient']= this.advertsList[index]['price_coefficient'];
+                    this.approveList[index]['lotMiniQuantity']= this.advertsList[index]['lotMiniQuantity'];
                 }
                 $('#modal-'+this._uid).modal({
                     closable: false,

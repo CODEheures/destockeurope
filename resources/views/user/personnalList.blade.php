@@ -45,6 +45,7 @@
                 form-advert-price-coefficient-label="{{ trans('strings.view_advert_priceCoefficient_label') }}"
                 form-advert-price-coefficient-new-price-label="{{ trans('strings.view_advert_priceCoefficient_new_price') }}"
                 form-advert-price-coefficient-unit-margin-label="{{ trans('strings.view_advert_priceCoefficient_unit_margin') }}"
+                form-advert-price-coefficient-lot-margin-label="{{ trans('strings.view_advert_priceCoefficient_lot_margin') }}"
                 form-advert-price-coefficient-total-margin-label="{{ trans('strings.view_advert_priceCoefficient_total_margin') }}"
                 form-advert-price-coefficient-update-label="{{ trans('strings.view_advert_show_update_label') }}"
 

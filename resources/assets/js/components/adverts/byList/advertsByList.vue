@@ -61,6 +61,7 @@
                             :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
                             :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                             :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
                             :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                             :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list-item>
@@ -108,6 +109,7 @@
                             :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
                             :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                             :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
                             :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                             :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list-item>
@@ -172,6 +174,7 @@
             formAdvertPriceCoefficientLabel: String,
             formAdvertPriceCoefficientNewPriceLabel: String,
             formAdvertPriceCoefficientUnitMarginLabel: String,
+            formAdvertPriceCoefficientLotMarginLabel: String,
             formAdvertPriceCoefficientTotalMarginLabel: String,
             formAdvertPriceCoefficientUpdateLabel: String
         },

@@ -426,6 +426,7 @@ return [
     'view_advert_priceCoefficient_label' => 'Coefficient de marge  en %',
     'view_advert_priceCoefficient_new_price' => 'Nouveau prix affiché',
     'view_advert_priceCoefficient_unit_margin' => 'Marge/unité',
+    'view_advert_priceCoefficient_lot_margin' => 'Marge/lot mini',
     'view_advert_priceCoefficient_total_margin' => 'Marge totale',
     'view_advert_approve_modal_valid_header' => 'Valider toutes les actions',
     'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',

@@ -426,6 +426,7 @@ return [
     'view_advert_priceCoefficient_label' => 'Margin % Coefficient',
     'view_advert_priceCoefficient_new_price' => 'New public price',
     'view_advert_priceCoefficient_unit_margin' => 'Unit Margin',
+    'view_advert_priceCoefficient_lot_margin' => 'Mini lot Margin',
     'view_advert_priceCoefficient_total_margin' => 'Total Margin',
     'view_advert_approve_modal_valid_header' => 'Approve all actions',
     'view_advert_approve_modal_valid_description' => 'WARNING!! The validation of all actions resulting sending mails approval or disapproval to customers.',
