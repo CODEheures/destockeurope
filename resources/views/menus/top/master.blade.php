@@ -5,6 +5,9 @@
         <div class="ui secondary  menu">
             @include('menus.items.logos.top')
             @include('menus.items.toc')
+            <div class="links langSelector">
+                @include('layouts.head.langSelector')
+            </div>
             <div class="links">
                 @include('menus.items.common.links')
             </div>

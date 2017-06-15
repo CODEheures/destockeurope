@@ -21,7 +21,7 @@
             ;
 
             //menu user dropdowns
-            $('.logs .ui.dropdown')
+            $('.logs .ui.dropdown:not(.langChoice)')
                 .dropdown()
             ;
 

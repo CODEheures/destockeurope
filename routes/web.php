@@ -14,9 +14,9 @@
 
 //Route::group(['middleware' => 'fw-allow-wl'], function () {
     //Common
-    Route::get('/', 'CommonController@portal')->name('portal');
-    Route::get('/main', 'CommonController@main')->name('main');
-    Route::get('/home', 'CommonController@home')->name('home');
+    Route::get('/{lang?}', 'CommonController@portal')->name('portal');
+    Route::get('/main/{lang?}', 'CommonController@main')->name('main');
+    Route::get('/home/{lang?}', 'CommonController@home')->name('home');
     Route::post('/subscribeNewsLetter', 'CommonController@subscribeNewsLetter')->name('subscribeNewsLetter');
     Route::get('/unsubscribeNewsLetter', 'CommonController@getUnsubscribeNewsLetter');
     Route::post('/unsubscribeNewsLetter', 'CommonController@postUnsubscribeNewsLetter')->name('postUnsubscribeNewsLetter');
@@ -25,20 +25,20 @@
     Route::get('/imageserver', 'CommonController@imageServer')->name('imageServer');
 
     //Footer
-    Route::get('/whoAreWe', 'CommonController@whoAreWe')->name('whoAreWe');
-    Route::get('/joinUs', 'CommonController@joinUs')->name('joinUs');
-    Route::get('/environmentalImpact', 'CommonController@environmentalImpact')->name('environmentalImpact');
-    Route::get('/ads', 'CommonController@ads')->name('ads');
+    Route::get('/whoAreWe/{lang?}', 'CommonController@whoAreWe')->name('whoAreWe');
+    Route::get('/joinUs/{lang?}', 'CommonController@joinUs')->name('joinUs');
+    Route::get('/environmentalImpact/{lang?}', 'CommonController@environmentalImpact')->name('environmentalImpact');
+    Route::get('/ads/{lang?}', 'CommonController@ads')->name('ads');
 
-    Route::get('/legalMentions', 'CommonController@legalMentions')->name('legalMentions');
-    Route::get('/cgu', 'CommonController@cgu')->name('cgu');
-    Route::get('/diffusionRules', 'CommonController@diffusionRules')->name('diffusionRules');
-    Route::get('/cgv', 'CommonController@cgv')->name('cgv');
+    Route::get('/legalMentions/{lang?}', 'CommonController@legalMentions')->name('legalMentions');
+    Route::get('/cgu/{lang?}', 'CommonController@cgu')->name('cgu');
+    Route::get('/diffusionRules/{lang?}', 'CommonController@diffusionRules')->name('diffusionRules');
+    Route::get('/cgv/{lang?}', 'CommonController@cgv')->name('cgv');
 
-    Route::get('/help', 'CommonController@help')->name('help');
-    Route::get('/contact', 'CommonController@contact')->name('contact');
+    Route::get('/help/{lang?}', 'CommonController@help')->name('help');
+    Route::get('/contact/{lang?}', 'CommonController@contact')->name('contact');
     Route::post('/contact', 'CommonController@contactPost')->name('contactPost');
-    Route::get('/prices', 'CommonController@prices')->name('prices');
+    Route::get('/prices/{lang?}', 'CommonController@prices')->name('prices');
 
     // Admin Routes...
     Route::group(['prefix' => 'admin'], function() {
@@ -81,9 +81,9 @@
 
     // Registration Routes...
     Route::group(['prefix' => 'register'], function() {
-        Route::get('/', 'Auth\RegisterController@showRegistrationForm')->name('register');
+        Route::get('/{lang?}', 'Auth\RegisterController@showRegistrationForm')->name('register');
         Route::post('/', 'Auth\RegisterController@register');
-        Route::get('/changeEmail', 'Auth\RegisterController@changeEmail')->name('changeEmail');
+        Route::get('/changeEmail/{lang?}', 'Auth\RegisterController@changeEmail')->name('changeEmail');
         Route::post('/changeEmail', 'Auth\RegisterController@changeEmailPost')->name('changeEmailPost');
         Route::get('/validChangeEmail', 'Auth\RegisterController@validChangeEmail')->name('validChangeEmail');
     });
@@ -166,7 +166,7 @@
         Route::get('/getHighlight/', ['as' => 'advert.getHighlight', 'uses' => 'AdvertController@getHighlight']);
     });
     Route::resource('advert', 'AdvertController', ['except' => ['show']]);
-    Route::get('/{slug}', ['as' => 'advert.show', 'uses' => 'AdvertController@show']);
+    Route::get('/{slug}/{lang?}', ['as' => 'advert.show', 'uses' => 'AdvertController@show']);
 
     Route::group(['prefix' => 'videos'] , function () {
         Route::put('/ticket', ['as' => 'videos.ticket', 'uses' => 'VideoController@ticket']);

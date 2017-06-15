@@ -2,6 +2,7 @@
     @if (Auth::guest())
         <a class="ui basic button" href="{{ url('/login') }}"><i class="icon sign in"></i>{{ trans('strings.menu_login') }}</a>
         <a class="ui basic button" href="{{ url('/register') }}"><i class="icon add user"></i>{{ trans('strings.menu_register') }}</a>
+        @include('layouts.head.langSelector')
     @else
         <div class="ui dropdown item">
             {{ Auth::user()->name }}

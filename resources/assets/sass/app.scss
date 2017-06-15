@@ -47,6 +47,11 @@ body.yellowbg.pushable {
         vertical-align: middle;
         color: #776B6C
       }
+
+      & .langChoice {
+        font-size: 1rem;
+        padding: 0.2rem;
+      }
     }
   }
 }
@@ -186,6 +191,11 @@ div.ui.vertical.segment.separator {
   }
   & .ui.container .links {
     display: none;
+    &.langSelector {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
   }
   & .rubalise {
     position: absolute;
@@ -575,12 +585,24 @@ img.lightbox {
   }
 }
 
+@media only screen and (min-width: 490px) {
+  .portal {
+    & div.ui.vertical.segment.header {
+      & .ui.container .item {
+        & h1 span {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}
+
 @media only screen and (min-width: 768px) {
   .portal {
     & div.ui.vertical.segment.header {
       & .ui.container .item {
         & h1 span {
-          font-size: 19px;
+          font-size: 15px;
         }
       }
     }
@@ -613,7 +635,7 @@ img.lightbox {
       }
       & .ui.container .item {
         & h1 span {
-          font-size: 23px;
+          font-size: 20px;
         }
       }
     }
@@ -634,9 +656,28 @@ img.lightbox {
   }
 }
 
-@media only screen and (min-width: 600px){
+@media only screen and (min-width: 1260px) {
+  .portal {
+    & div.ui.vertical.segment.header {
+      & .ui.container .item {
+        & h1 span {
+          font-size: 23px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 650px){
   .ui.secondary.menu .right.item {
     display: flex;
+  }
+  .masthead.segment {
+    & .ui.container .links {
+      &.langSelector {
+        display: none;
+      }
+    }
   }
 }
 
