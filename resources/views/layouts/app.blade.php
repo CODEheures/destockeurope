@@ -18,6 +18,7 @@
     @yield('css')
     @include('layouts.favicons.fav')
     <!-- Scripts -->
+    @include('plugins.googleAdsense.script')
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     <script>
          window.destockShareVar={

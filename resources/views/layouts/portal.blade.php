@@ -16,6 +16,7 @@
     @yield('css')
     @include('layouts.favicons.fav')
     <!-- Scripts -->
+    @include('plugins.googleAdsense.script')
     <script>
         window.destockShareVar={
             'serviceWorkerScope': '/sw.js',
