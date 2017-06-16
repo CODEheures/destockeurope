@@ -12,6 +12,8 @@
             route-get-stats="{{ route('application.getStats') }}"
             route-progress-transfert-medias="{{ route('application.progressTransfertMedias') }}"
 
+            actual-locale="{{ \Illuminate\Support\Facades\App::getLocale() }}"
+
             content-header="{{ trans('strings.menu_dashboard') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
             dashboard-label="{{ trans('strings.view_manage_dashboard_label') }}"
@@ -24,6 +26,7 @@
             count-distant-files-label="{{ trans('strings.dashboard_count_distant_files_label') }}"
             mega-bytes-label="{{ trans('strings.dashboard_megaBytes_label') }}"
             stats-label="{{ trans('strings.dashboard_stats_label') }}"
+            logs-label="{{ trans('strings.dashboard_logs_label') }}"
             graph-advert-title="{{ trans('strings.dashboard_graph_adverts_title') }}"
             graph-valid-adverts-label="{{ trans('strings.dashboard_graph_valid_adverts_label') }}"
             graph-invalid-adverts-label="{{ trans('strings.dashboard_graph_invalid_adverts_label') }}"

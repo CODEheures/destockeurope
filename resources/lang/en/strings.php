@@ -610,6 +610,7 @@ return [
     'dashboard_megaBytes_label' => 'Mb',
     'dashboard_stats_label' => 'Statistics',
     'dashboard_graph_adverts_title' => 'Advert Tracking',
+    'dashboard_logs_label' => 'Logs',
     'dashboard_graph_valid_adverts_label' => 'Valid adverts',
     'dashboard_graph_invalid_adverts_label' => 'Refused adverts',
     'dashboard_graph_waiting_adverts_label' => 'Pending adverts',

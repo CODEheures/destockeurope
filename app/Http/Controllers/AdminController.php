@@ -9,6 +9,7 @@ use App\Common\PicturesManager;
 use App\Common\PrivilegesUtils;
 use App\Common\StatsManager;
 use App\Common\UserUtils;
+use App\Console\Kernel;
 use App\Invoice;
 use App\Jobs\TransferMedias;
 use App\Parameters;
@@ -94,12 +95,43 @@ class AdminController extends Controller
         $costsByDay = Stats::costsByDay($date)->get();
         $filesInfo = Stats::latest()->first();
 
+        $csvLogs=[];
+
+        //schedule log
+        $csvLogs['schedule'] = $this->getLogs(Kernel::LOG_SCHEDULE);
+
+        //stops log
+        $csvLogs['stops'] = $this->getLogs(Kernel::LOG_STOPS);
+
+        //notifications log
+        $csvLogs['notifications'] = $this->getLogs(Kernel::LOG_NOTIFICATIONS);
+
+        //geoIpUpdate log
+        $csvLogs['geoIpUpdate'] = $this->getLogs(Kernel::LOG_GEOIPUPDATE);
+
         return response()->json([
             'viewsByDay' => $viewsByDay->toArray(),
             'advertsByDay' => $advertsByDay->toArray(),
             'costsByDay' => $costsByDay->toArray(),
-            'filesInfo' => $filesInfo
+            'filesInfo' => $filesInfo,
+            'logs' => $csvLogs
         ]);
+    }
+
+    private function getLogs($logName) {
+        $log = (storage_path('logs').'/'.$logName);
+        $handle = file_exists($log) ? fopen($log,'r') : null;
+        $csv=[];
+        if ($handle) {
+            while ($line = fgetcsv($handle,0,";")) {
+                $csv[] = $line;
+                if (count($csv) > 4) {
+                    array_splice($csv, 1,1);
+                }
+            }
+            fclose($handle);
+        }
+        return $csv;
     }
 
     /**
@@ -428,7 +460,9 @@ class AdminController extends Controller
      * Tempo tests
      */
     public function tempo(){
+        $csvLogs['stops'] = $this->getLogs(Kernel::LOG_STOPS);
 
+        dd($csvLogs);
     }
 
     /**

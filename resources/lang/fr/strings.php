@@ -609,6 +609,7 @@ return [
     'dashboard_count_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT,
     'dashboard_megaBytes_label' => 'Mb',
     'dashboard_stats_label' => 'Statistiques',
+    'dashboard_logs_label' => 'Logs',
     'dashboard_graph_adverts_title' => 'Suivi des annonces',
     'dashboard_graph_valid_adverts_label' => 'Annonces Valides',
     'dashboard_graph_invalid_adverts_label' => 'Annonces Refusées',

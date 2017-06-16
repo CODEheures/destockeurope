@@ -59,6 +59,27 @@
                         <div id="graphCosts" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
                     </div>
                 </div>
+                <h4 class="ui horizontal divider header"><i class="newspaper icon"></i> {{ logsLabel }} </h4>
+                <div class="ui grid">
+                    <template v-for="(log, index) in dataStats.logs">
+                        <p>{{ index }}</p>
+                        <div class="sixteen wide column">
+                            <table class="ui unstackable celled fixed table">
+                                <thead>
+                                <tr>
+                                    <th v-for="header in log[0]">{{ header }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(line,index) in log" v-if="index!=0">
+                                        <td v-for="(value,index) in line">{{ index == 0 ? getFormatDate(value) : value }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+
+                </div>
             </div>
         </div>
     </div>
@@ -75,6 +96,7 @@
             routeProgressTransfertMedias: String,
             routeGetStats: String,
             //vue vars
+            actualLocale: String,
             //vue strings
             contentHeader: String,
             loadErrorMessage: String,
@@ -88,6 +110,7 @@
             countDistantFilesLabel: String,
             megaBytesLabel: String,
             statsLabel: String,
+            logsLabel: String,
             graphAdvertTitle: String,
             graphValidAdvertsLabel: String,
             graphInvalidAdvertsLabel: String,
@@ -594,6 +617,10 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
+            },
+            getFormatDate($date) {
+                moment.locale(this.actualLocale);
+                return moment($date).format('L');
             }
         }
     }

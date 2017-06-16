@@ -18,6 +18,12 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class Kernel extends ConsoleKernel
 {
+
+    const LOG_STOPS = 'stopadvert.log';
+    const LOG_SCHEDULE = 'schedule.log';
+    const LOG_NOTIFICATIONS = 'notifications.log';
+    const LOG_GEOIPUPDATE = 'geoIpUpdate.log';
+
     /**
      * The Artisan commands provided by your application.
      *
@@ -51,14 +57,14 @@ class Kernel extends ConsoleKernel
                     $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';';
                 }
             } catch (\Exception $e) {
-                $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';' .  $e->getMessage().';';
+                $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';' .  $e->getMessage();
             }
-            if(!Storage::disk('logs')->exists('stopadvert.log')){
-                Storage::disk('logs')->append('stopadvert.log' , 'DATE;STOP ADVERTS;FAILS;');
+            if(!Storage::disk('logs')->exists(self::LOG_STOPS)){
+                Storage::disk('logs')->append(self::LOG_STOPS , 'DATE;STOP ADVERTS;FAILS');
             }
 
             if($message){
-                Storage::disk('logs')->append('stopadvert.log' , $message);
+                Storage::disk('logs')->append(self::LOG_STOPS , $message);
             }
 
         })->everyMinute();
@@ -94,7 +100,7 @@ class Kernel extends ConsoleKernel
                     . $purgeResult['obsoleteLocalTempo']['pictures'] . ';'
                     . $purgeResult['persistent']['videos'] . ';'
                     . $result3 . ';'
-                    . $result4  .';;';
+                    . $result4  .';';
             } catch (\Exception $e) {
                 $message = $message . ';'
                     . $purgeResult['invalids']['adverts'] . ';' . $purgeResult['invalids']['pictures'] . ';'
@@ -104,12 +110,12 @@ class Kernel extends ConsoleKernel
                     . $purgeResult['persistent']['videos'] . ';'
                     . $result3 . ';'
                     . $result4  . ';'
-                    .  $e->getMessage().';';
+                    .  $e->getMessage();
             }
-            if(!Storage::disk('logs')->exists('schedule.log')){
-                Storage::disk('logs')->append('schedule.log' , 'DATE;PURGE INVALIDS ADVERTS;PURGE INVALIDS PICTURES;PURGE ABANDONED ADVERTS;PURGE ABANDONED PICTURES;PURGE OBSOLETES ADVERTS;PURGE OBSOLETES PICTURES;PURGE OBSOLETE LOCAL TEMPO PICTURES;PURGE PERSISTENT VIDEOS;ALERT USER J-'. env('ALERT_BEFORE_END_1') . ';ALERT USER J-'. env('ALERT_BEFORE_END_2') .';FAILS;');
+            if(!Storage::disk('logs')->exists(self::LOG_SCHEDULE)){
+                Storage::disk('logs')->append(self::LOG_SCHEDULE , 'DATE PURGE;INVALIDS;INVALIDS PIC;ABANDONED;ABANDONED PIC;OBSOLETES;OBSOLETES PIC;OBSOLETE LOCAL PIC;PERSISTENT VIDS;ALERT J-2;ALERT J-1;FAILS');
             }
-            Storage::disk('logs')->append('schedule.log' , $message);
+            Storage::disk('logs')->append(self::LOG_SCHEDULE , $message);
 
         })->dailyAt('05:57');
 
@@ -145,10 +151,10 @@ class Kernel extends ConsoleKernel
                     $status = '500';
                     $msgTxt = $e->getMessage();
                 }
-                if(!Storage::disk('logs')->exists('notifications.log')){
-                    Storage::disk('logs')->append('notifications.log' , 'DATE;STATUS_CODE;MESSAGE');
+                if(!Storage::disk('logs')->exists(self::LOG_NOTIFICATIONS)){
+                    Storage::disk('logs')->append(self::LOG_NOTIFICATIONS , 'DATE;STATUS_CODE;MESSAGE');
                 }
-                Storage::disk('logs')->append('notifications.log' , Carbon::now()->toDateTimeString() . ';' . $status . ';' . $msgTxt );
+                Storage::disk('logs')->append(self::LOG_NOTIFICATIONS , Carbon::now()->toDateTimeString() . ';' . $status . ';' . $msgTxt );
             }
         })->dailyAt('6:48');
 
@@ -159,10 +165,10 @@ class Kernel extends ConsoleKernel
             } catch (\Exception $e) {
                 $geoIpResult = false;
             }
-            if(!Storage::disk('logs')->exists('geoIpUpdate.log')){
-                Storage::disk('logs')->append('geoIpUpdate.log' , 'DATE;RESULT;');
+            if(!Storage::disk('logs')->exists(self::LOG_GEOIPUPDATE)){
+                Storage::disk('logs')->append(self::LOG_GEOIPUPDATE , 'DATE;RESULT');
             }
-            Storage::disk('logs')->append('geoIpUpdate.log' , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
+            Storage::disk('logs')->append(self::LOG_GEOIPUPDATE , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
         })->monthlyOn(7,'3:57');
     }
 
