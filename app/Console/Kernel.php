@@ -45,7 +45,7 @@ class Kernel extends ConsoleKernel
         //Stop Adverts Every Minutes
         $schedule->call(function(){
             $message = null;
-            $result1=0;
+            $result1='';
 
             try {
                 $pictureManager = new PicturesManager();
@@ -53,8 +53,9 @@ class Kernel extends ConsoleKernel
                 $advertManager = new AdvertsManager($pictureManager, $vimeoManager);
                 $result1 = $advertManager->stopAdverts();
 
-                $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';';
-
+                if($result1>0 || (Carbon::now()->hour==5 && Carbon::now()->minute==7)){
+                    $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';';
+                }
             } catch (\Exception $e) {
                 $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';' .  $e->getMessage();
             }
