@@ -460,9 +460,7 @@ class AdminController extends Controller
      * Tempo tests
      */
     public function tempo(){
-        $csvLogs['stops'] = $this->getLogs(Kernel::LOG_STOPS);
 
-        dd($csvLogs);
     }
 
     /**

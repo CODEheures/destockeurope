@@ -70,7 +70,7 @@
         //DANGEROUS
         Route::group(['prefix' => 'dangerous'] , function () {
             //Route::get('/testGame/{quantity?}', 'AdminController@testGame');
-            Route::get('/tempo', 'AdminController@tempo');
+            //Route::get('/tempo', 'AdminController@tempo');
         });
     });
 
