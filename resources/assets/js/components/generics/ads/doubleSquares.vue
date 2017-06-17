@@ -54,6 +54,7 @@
         },
         mounted () {
             this.isProd = window.destockShareVar.isProd;
+            (adsbygoogle = window.adsbygoogle || []).push({});
         },
         updated () {
 

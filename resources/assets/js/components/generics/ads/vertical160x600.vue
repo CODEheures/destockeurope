@@ -48,6 +48,7 @@
                     console.log('reload ads vertical160x600');
                 }
             })
+            (adsbygoogle = window.adsbygoogle || []).push({});
         },
         updated () {
 
