@@ -16,7 +16,6 @@
     @yield('css')
     @include('layouts.favicons.fav')
     <!-- Scripts -->
-    @include('plugins.googleAdsense.script')
     <script>
         window.destockShareVar={
             'serviceWorkerScope': '/sw.js',
@@ -93,6 +92,7 @@
     @yield('scripts')
     @if(env('APP_URL')=='https://destockeurope.com')
         @include('plugins.googleAnalytic.tracking')
+        @include('plugins.googleAdsense.script')
     @endif
 </body>
 </html>

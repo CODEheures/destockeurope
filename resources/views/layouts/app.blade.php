@@ -18,7 +18,6 @@
     @yield('css')
     @include('layouts.favicons.fav')
     <!-- Scripts -->
-    @include('plugins.googleAdsense.script')
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     <script>
          window.destockShareVar={
@@ -90,6 +89,7 @@
     @yield('scripts')
     @if(env('APP_URL')=='https://destockeurope.com')
         @include('plugins.googleAnalytic.tracking')
+        @include('plugins.googleAdsense.script')
     @endif
 </body>
 </html>
