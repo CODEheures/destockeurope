@@ -1,6 +1,10 @@
 <template>
     <div class="ui leaderboard ad" :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
-        <a :href="url1"><img :src="img1" width="100%"></a>
+        <!-- horizontal728x90 -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-9425842434111721"
+             data-ad-slot="7361012294"></ins>
     </div>
 </template>
 

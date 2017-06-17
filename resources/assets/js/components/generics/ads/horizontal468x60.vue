@@ -1,6 +1,10 @@
 <template>
     <div class="ui centered banner ad" :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
-        <a :href="url1"><img :src="img1" width="100%"></a>
+        <!-- horizontal468x60 -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:468px;height:60px"
+             data-ad-client="ca-pub-9425842434111721"
+             data-ad-slot="5884279095"></ins>
     </div>
 </template>
 
