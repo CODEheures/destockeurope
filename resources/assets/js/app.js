@@ -44,6 +44,7 @@ Vue.component('photo-uploader', require('./components/generics/uploaders/photo.v
 Vue.component('notifications-activer', require('./components/generics/notifications/activer.vue'));
 //ADS
 Vue.component('masterads', require('./components/generics/ads/master.vue'));
+Vue.component('adsense', require('./components/generics/ads/adsense/adsense.vue'));
 Vue.component('double-square', require('./components/generics/ads/doubleSquares.vue'));
 Vue.component('vertical-160x600', require('./components/generics/ads/vertical160x600.vue'));
 Vue.component('horizontal-728x90', require('./components/generics/ads/horizontal728x90.vue'));

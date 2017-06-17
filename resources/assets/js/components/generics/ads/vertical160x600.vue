@@ -1,10 +1,11 @@
 <template>
     <div :class="centered==true ? 'ui centered wide skyscraper ad welcome-ads' : 'ui wide skyscraper ad welcome-ads'" :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
         <!-- vertical160x600 -->
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:160px;height:600px"
-             data-ad-client="ca-pub-9425842434111721"
-             data-ad-slot="9814951091"></ins>
+        <adsense
+                ad-client="ca-pub-9425842434111721"
+                ad-slot="9814951091"
+                style="display:inline-block;width:160px;height:600px"
+        ></adsense>
     </div>
 </template>
 
@@ -48,7 +49,6 @@
                     console.log('reload ads vertical160x600');
                 }
             })
-            (adsbygoogle = window.adsbygoogle || []).push({});
         },
         updated () {
 

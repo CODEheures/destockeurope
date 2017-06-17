@@ -1,10 +1,11 @@
 <template>
     <div class="ui leaderboard ad" :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
         <!-- horizontal728x90 -->
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:728px;height:90px"
-             data-ad-client="ca-pub-9425842434111721"
-             data-ad-slot="7361012294"></ins>
+        <adsense
+                ad-client="ca-pub-9425842434111721"
+                ad-slot="7361012294"
+                style="display:inline-block;width:728px;height:90px"
+        ></adsense>
     </div>
 </template>
 
@@ -30,7 +31,6 @@
         },
         mounted () {
             this.isProd = window.destockShareVar.isProd;
-            (adsbygoogle = window.adsbygoogle || []).push({});
         },
         updated () {
 
