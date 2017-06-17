@@ -1,5 +1,5 @@
 <template>
-    <div class="ui centered half banner ad">
+    <div class="ui centered half banner ad" :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
         <a :href="url1"><img :src="img1" width="100%"></a>
     </div>
 </template>
@@ -21,11 +21,11 @@
         },
         data: () => {
             return {
-
+                isProd: false
             }
         },
         mounted () {
-
+            this.isProd = window.destockShareVar.isProd;
         },
         updated () {
 

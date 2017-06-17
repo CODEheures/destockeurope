@@ -21,6 +21,7 @@
             'serviceWorkerScope': '/sw.js',
             'vueJsDevTool': <?php echo (bool)(env('APP_DEBUG')) ? 'true':'false' ?>,
             'csrfToken': '{{ csrf_token() }}',
+            'isProd': <?php echo (bool)(env('APP_URL')=='https://destockeurope.com') ? 'true':'false' ?>,
         };
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {

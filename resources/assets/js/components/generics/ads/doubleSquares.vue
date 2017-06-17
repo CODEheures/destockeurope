@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div :class="centered ? 'ui small rectangle centered ad' : 'ui small rectangle ad' ">
+        <div :class="centered ? 'ui small rectangle centered ad' : 'ui small rectangle ad' " :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
             <a :href="url1"><img :src="img1" width="100%"></a>
         </div>
-        <div :class="centered ? 'ui small rectangle centered ad spaced-top-2' : 'ui small rectangle ad spaced-top-2'">
+        <div :class="centered ? 'ui small rectangle centered ad spaced-top-2' : 'ui small rectangle ad spaced-top-2'" :style="!isProd ? 'background-image: url(\''+img2+'\'); background-size: contain;':'background: none;'">
             <a :href="url2"><img :src="img2" width="100%"></a>
         </div>
     </div>
@@ -41,11 +41,11 @@
         },
         data: () => {
             return {
-
+                isProd: false
             }
         },
         mounted () {
-
+            this.isProd = window.destockShareVar.isProd;
         },
         updated () {
 
