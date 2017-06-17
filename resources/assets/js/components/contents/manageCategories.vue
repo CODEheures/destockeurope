@@ -310,7 +310,7 @@
                 if (postValue[key] != undefined && postValue[key] != '') {
                     axios.patch(this.routeCategory + '/' + id, {description: postValue})
                         .then(function (response) {
-                            that.getCategories(false);
+                            //that.getCategories(false);
                             that.sendToast(that.patchSuccessMessage, 'success');
                         })
                         .catch(function (error) {

@@ -37,6 +37,12 @@ return [
 
     'ipTest' => '82.246.117.210',
 
+    /**************************************************************************/
+    //IMPORTANT: For DestockEurope: ADD available if resources/lang exist this
+    //COMPLETE ALL CATEGORIE TRANSLATION. IF NOT: BUGGGGGG
+    //NON REGIONNAL: en
+    //REGIONNAL EX: en_US
+    //*************************************************************************//
     'availableLocales' => [
         'fr',
         'en'

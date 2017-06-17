@@ -24,7 +24,13 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        Route::pattern('lang', '(fr|en)');
+        $pattern = '(';
+        foreach (config('codeheuresUtils.availableLocales') as $lang){
+          $pattern .=   $lang . '|';
+        }
+        $pattern .= ')';
+        $pattern = str_replace('|)',')',$pattern);
+        Route::pattern('lang', $pattern);
         parent::boot();
     }
 
