@@ -1,6 +1,13 @@
 <template>
-    <div :class="centered==true ? 'ui centered wide skyscraper ad welcome-ads' : 'ui wide skyscraper ad welcome-ads'">
-        <a :href="url1"><img :src="img1" width="100%"></a>
+    <div :class="centered==true ? 'ui centered wide skyscraper ad welcome-ads' : 'ui wide skyscraper ad welcome-ads'" :style="'background-image: url(\''+img1+'\'); background-size: contain;'">
+        <!-- vertical160x600 -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-9425842434111721"
+             data-ad-slot="9814951091"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
 </template>
 
