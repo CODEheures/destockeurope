@@ -275,6 +275,35 @@ trait PrivilegesUtils
         ];
     }
 
+    public static function mustBeRedirectToOnLogin(User $user = null) {
+        $redirectTo = route('main');
+        if (!is_null($user)){
+            switch ($user->role) {
+                case User::ROLES[User::ROLE_USER]:
+                    $redirectTo = route('main');
+                    break;
+                case User::ROLES[User::ROLE_ACCOUNTANT]:
+                    $redirectTo = route('main');
+                    break;
+                case User::ROLES[User::ROLE_INTERMEDIARY]:
+                    $redirectTo = route('main');
+                    break;
+                case User::ROLES[User::ROLE_SUPPLIER]:
+                    $redirectTo = route('main');
+                    break;
+                case User::ROLES[User::ROLE_VALIDATOR]:
+                    $redirectTo = route('advert.toApprove');
+                    break;
+                case User::ROLES[User::ROLE_ADMIN]:
+                    $redirectTo = route('application.dashboard');
+                    break;
+                default:
+                    $redirectTo = route('main');
+            }
+        }
+        return $redirectTo;
+    }
+
 
     //Cost privileges
     public static function isCostFree() {

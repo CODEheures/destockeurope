@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Common\PicturesManager;
+use App\Common\PrivilegesUtils;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -58,5 +59,10 @@ class LoginController extends Controller
         $request->session()->flash('clear', true);
 
         return redirect(route('home'));
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        $this->redirectTo = PrivilegesUtils::mustBeRedirectToOnLogin($user);
     }
 }
