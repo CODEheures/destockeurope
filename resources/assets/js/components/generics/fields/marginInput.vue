@@ -4,44 +4,13 @@
             <div class="field">
                 <label>{{ formAdvertPriceCoefficientLabel }}</label>
                 <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
-                <div class="ui pointing label">
-                    <table class="ui very basic collapsing celled table">
-                        <tbody>
-                        <tr>
-                            <td>
-                                {{ formAdvertPriceCoefficientNewPriceLabel }}
-                            </td>
-                            <td>
-                                {{ calcMargin(advert,3)  }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {{ formAdvertPriceCoefficientUnitMarginLabel }}
-                            </td>
-                            <td>
-                                {{ calcMargin(advert,1)  }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {{ formAdvertPriceCoefficientLotMarginLabel }}
-                            </td>
-                            <td>
-                                {{ calcMargin(advert,4)  }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {{ formAdvertPriceCoefficientTotalMarginLabel }}
-                            </td>
-                            <td>
-                                {{ calcMargin(advert,2)  }}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <margins-table
+                    :advert="advert"
+                    :formAdvertPriceCoefficientNewPriceLabel="formAdvertPriceCoefficientNewPriceLabel"
+                    :formAdvertPriceCoefficientUnitMarginLabel="formAdvertPriceCoefficientUnitMarginLabel"
+                    :formAdvertPriceCoefficientLotMarginLabel="formAdvertPriceCoefficientLotMarginLabel"
+                    :formAdvertPriceCoefficientTotalMarginLabel="formAdvertPriceCoefficientTotalMarginLabel"
+                ></margins-table>
             </div>
             <div class="field">
                 <label style="opacity: 0">1</label>
@@ -54,44 +23,13 @@
         <template v-else>
             <label>{{ formAdvertPriceCoefficientLabel }}</label>
             <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
-            <div class="ui pointing label">
-                <table class="ui very basic collapsing celled table">
-                    <tbody>
-                    <tr>
-                        <td>
-                            {{ formAdvertPriceCoefficientNewPriceLabel }}
-                        </td>
-                        <td>
-                            {{ calcMargin(advert,3)  }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ formAdvertPriceCoefficientUnitMarginLabel }}
-                        </td>
-                        <td>
-                            {{ calcMargin(advert,1)  }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ formAdvertPriceCoefficientLotMarginLabel }}
-                        </td>
-                        <td>
-                            {{ calcMargin(advert,4)  }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ formAdvertPriceCoefficientTotalMarginLabel }}
-                        </td>
-                        <td>
-                            {{ calcMargin(advert,2)  }}
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <margins-table
+                    :advert="advert"
+                    :formAdvertPriceCoefficientNewPriceLabel="formAdvertPriceCoefficientNewPriceLabel"
+                    :formAdvertPriceCoefficientUnitMarginLabel="formAdvertPriceCoefficientUnitMarginLabel"
+                    :formAdvertPriceCoefficientLotMarginLabel="formAdvertPriceCoefficientLotMarginLabel"
+                    :formAdvertPriceCoefficientTotalMarginLabel="formAdvertPriceCoefficientTotalMarginLabel"
+            ></margins-table>
         </template>
     </div>
 </template>

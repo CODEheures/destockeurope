@@ -25,6 +25,7 @@
             advert-form-ref-label="{{ trans('strings.view_advert_form_ref_label') }}"
             advert-form-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-form-price-label="{{ trans('strings.view_advert_form_price_label') }}"
+            advert-form-buying-price-label="{{ trans('strings.view_advert_form_buyingPrice_label') }}"
             advert-form-googlemap-label="{{ trans('strings.form_googlemap_label') }}"
             advert-form-photo-separator="{{ trans('strings.form_file_add_photo_separator') }}"
             advert-form-photo-btn-label="{{ trans('strings.form_file_add_photo_btn_label') }}"
@@ -47,6 +48,11 @@
             advert-form-is-negociated-label="{{ trans('strings.form_isNegociated') }}"
             advert-example-is-negociated-label="{{ trans('strings.view_all_negociate') }}"
             advert-price="{{ trans('strings.view_price_header') }}"
+
+            form-advert-price-coefficient-new-price-label="{{ trans('strings.view_advert_priceCoefficient_new_price') }}"
+            form-advert-price-coefficient-unit-margin-label="{{ trans('strings.view_advert_priceCoefficient_unit_margin') }}"
+            form-advert-price-coefficient-lot-margin-label="{{ trans('strings.view_advert_priceCoefficient_lot_margin') }}"
+            form-advert-price-coefficient-total-margin-label="{{ trans('strings.view_advert_priceCoefficient_total_margin') }}"
 
             step-one-title="{{ trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"

@@ -43,7 +43,8 @@
                         that.currencies = response.data;
                         that.isLoaded = true;
                         let userPrefCurrencySubUnit = that.currencies.listCurrencies[that.currencies.userPrefCurrency]['subunit'];
-                        that.$parent.$emit('currencyChoice', {cur: that.currencies.userPrefCurrency, subunit: userPrefCurrencySubUnit, initial:true});
+                        let userPrefCurrencySymbol = that.currencies.listCurrencies[that.currencies.userPrefCurrency]['symbol'];
+                        that.$parent.$emit('currencyChoice', {cur: that.currencies.userPrefCurrency, subunit: userPrefCurrencySubUnit, symbol: userPrefCurrencySymbol, initial:true});
                     })
                     .catch(function (error) {
                         that.$parent.$emit('loadError');
@@ -64,7 +65,9 @@
                         onChange: function (value, text, $selectedItem) {
                             if(value != that.currencies.userPrefCurrency){
                                 let subUnit = that.currencies.listCurrencies[value]['subunit'];
-                                that.$parent.$emit('currencyChoice', {cur: value, subunit: subUnit, initial:false});
+                                let symbol = that.currencies.listCurrencies[value]['symbol'];
+
+                                that.$parent.$emit('currencyChoice', {cur: value, subunit: subUnit, symbol: symbol, initial:false});
                                 that.currencies.userPrefCurrency = value;
                             }
                         }

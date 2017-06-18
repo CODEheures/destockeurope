@@ -368,6 +368,7 @@ return [
     'view_advert_form_ref_label' => 'Manufacture reference',
     'view_advert_form_description_label' => 'Advert description',
     'view_advert_form_price_label' => 'Unitary Sell Price',
+    'view_advert_form_buyingPrice_label' => 'Unitary buying price (not saved)',
     'view_advert_form_address_label' => 'Location selling',
     'view_advert_list_type_dropdown_label' => 'Advert type',
     'view_advert_list_type_bid' => 'bid',

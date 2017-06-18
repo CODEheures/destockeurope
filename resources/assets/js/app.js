@@ -36,6 +36,7 @@ Vue.component('pagination', require('./components/generics/paginations/paginatio
 Vue.component('swiper-gallerie', require('./components/generics/swipers/gallerie.vue'));
 Vue.component('swiper-top', require('./components/generics/swipers/swiperTop.vue'));
 Vue.component('swiper-thumbs', require('./components/generics/swipers/swiperThumbs.vue'));
+Vue.component('margins-table', require('./components/generics/fields/marginsTable.vue'));
 Vue.component('margin-input-field', require('./components/generics/fields/marginInput.vue'));
 Vue.component('quantities-input-field', require('./components/generics/fields/quantitiesInput.vue'));
 Vue.component('advert-manage-button', require('./components/generics/fields/manageButton.vue'));

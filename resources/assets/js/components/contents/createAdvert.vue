@@ -69,6 +69,16 @@
                     </transition>
                 </div>
 
+                <div class="two fields">
+                    <div class="required field">
+                        <label>{{ advertFormTotalQuantityLabel }}</label>
+                        <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
+                    </div>
+                    <div class="required field">
+                        <label>{{ advertFormLotMiniQuantityLabel }}</label>
+                        <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
+                    </div>
+                </div>
                 <div class="three fields">
                     <div class="required field">
                         <label>{{ advertFormPriceLabel }}</label>
@@ -92,13 +102,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="required field">
-                        <label>{{ advertFormTotalQuantityLabel }}</label>
-                        <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
-                    </div>
-                    <div class="required field">
-                        <label>{{ advertFormLotMiniQuantityLabel }}</label>
-                        <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
+                    <div class="field">
+                        <label>{{ advertFormBuyingPriceLabel }}</label>
+                        <div class="ui input">
+                            <template v-if="isNegociated==0">
+                                <input  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="buyingPrice"/>
+                            </template>
+                            <template v-else>
+                                <input  name="" type="number" value="0" disabled/>
+                            </template>
+                        </div>
+                        <margins-table v-if="isNegociated==0"
+                                :advert="fakeAdvert"
+                                :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
+                                :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
+                                :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
+                                :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
+                                :with-valid-button="false"
+                                :for-seller="true"
+                        ></margins-table>
                     </div>
                 </div>
                 <div class="field spaced-top-2">
@@ -197,6 +219,7 @@
             'advertFormRefLabel',
             'advertFormDescriptionLabel',
             'advertFormPriceLabel',
+            'advertFormBuyingPriceLabel',
             'advertFormGooglemapLabel',
             'advertFormPhotoSeparator',
             'loadErrorMessage',
@@ -210,6 +233,11 @@
             'advertFormIsNegociatedLabel',
             'advertExampleIsNegociatedLabel',
             'advertPrices',
+            //margins-table component
+            'formAdvertPriceCoefficientNewPriceLabel',
+            'formAdvertPriceCoefficientUnitMarginLabel',
+            'formAdvertPriceCoefficientLotMarginLabel',
+            'formAdvertPriceCoefficientTotalMarginLabel',
             //steps component
             'stepOneTitle',
             'stepTwoTitle',
@@ -269,6 +297,15 @@
                 manuRef: '',
                 description: '',
                 price: '0',
+                buyingPrice: '0',
+                fakeAdvert: {
+                    originalPrice: 0,
+                    buyingPrice: 0,
+                    priceSubUnit: 2,
+                    totalQuantity: 0,
+                    lotMiniQuantity:0,
+                    currencySymbol: ''
+                },
                 totalQuantity: 1,
                 lotMiniQuantity: 1,
                 xCsrfToken: '',
@@ -279,6 +316,7 @@
                 typeMessage: '',
                 message:'',
                 currency:'',
+                currencySymbol:'',
                 subunit: 2,
                 calcSubUnit: 0.01,
                 lat: '',
@@ -333,7 +371,7 @@
                 this.categoryChoice(event.id);
             });
             this.$on('currencyChoice', function (event) {
-                this.currencyChoice(event.cur, event.subunit, event.initial);
+                this.currencyChoice(event.cur, event.subunit, event.symbol, event.initial);
             });
             this.$on('locationChange', function (event) {
                 this.latLngChange(event);
@@ -382,6 +420,22 @@
             this.$watch('subunit', function () {
                this.calcSubUnit = Math.pow(10,-(this.subunit));
                this.price = parseFloat(this.price).toFixed(this.subunit);
+               this.fakeAdvert.priceSubUnit = parseInt(this.subunit);
+            });
+            this.$watch('currencySymbol', function () {
+                this.fakeAdvert.currencySymbol = this.currencySymbol;
+            });
+            this.$watch('price', function () {
+                this.fakeAdvert.originalPrice = parseFloat(this.price);
+            });
+            this.$watch('buyingPrice', function () {
+                this.fakeAdvert.buyingPrice = parseFloat(this.buyingPrice);
+            });
+            this.$watch('totalQuantity', function () {
+                this.fakeAdvert.totalQuantity = parseInt(this.totalQuantity);
+            });
+            this.$watch('lotMiniQuantity', function () {
+                this.fakeAdvert.lotMiniQuantity = parseInt(this.lotMiniQuantity);
             });
 
             if(this.old == '0'){
@@ -407,9 +461,10 @@
             categoryChoice: function (id) {
                 this.categoryId = parseInt(id);
             },
-            currencyChoice: function (currency, subunit, initial) {
+            currencyChoice: function (currency, subunit, symbol, initial) {
                 if(this.oldCurrency == '' || initial==false){
                     this.currency = currency;
+                    this.currencySymbol = symbol;
                     this.subunit = subunit;
                 }
             },

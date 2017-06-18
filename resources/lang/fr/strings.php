@@ -368,6 +368,7 @@ return [
     'view_advert_form_ref_label' => 'Référence fabriquant',
     'view_advert_form_description_label' => 'Description de l\'annonce',
     'view_advert_form_price_label' => 'Prix de vente à l\'unité',
+    'view_advert_form_buyingPrice_label' => 'Prix d\'achat à l\'unité (non enregistré)',
     'view_advert_form_address_label' => 'Lieu de vente',
     'view_advert_list_type_dropdown_label' => 'Type d\'annonce',
     'view_advert_list_type_bid' => 'offre',
