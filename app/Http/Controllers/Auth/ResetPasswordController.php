@@ -29,6 +29,7 @@ class ResetPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => ['changePasswordForm', 'change']]);
+        $this->middleware('auth', ['only' => ['changePasswordForm', 'change']]);
         $this->middleware('isNotOauth', ['only' => ['changePasswordForm', 'change']]);
     }
 
