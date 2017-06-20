@@ -211,6 +211,7 @@ return [
     'link_forgot_password' => 'Mot de passe oublié',
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',
     'link_change_email_link' => 'Changer mon email',
+    'link_change_password_link' => 'Changer mon mot de passe',
     'link_send_validation_link' => 'Envoyer un lien de validation',
 
     'request_main_picture_require' => 'Il faut au moins une image à votre annonce',
@@ -228,6 +229,10 @@ return [
     'request_vat_invalid_input' => 'Ce numéro de TVA est mal formé',
     'request_vat_service_unavailable' => 'Le service de vérification europeen des TVA n\'est pas disponible, réessayer plus tard svp',
     'request_vat_blocked' => 'Désolé, le service europeen de vérification des TVA nous indique que ce numéro de TVA est un numéro bloqué',
+
+    'request_password_required' => 'Mot de passe requis SVP',
+    'request_password_confirmed' => 'Votre mot de passe et sa confirmation ne correspondent pas',
+    'request_password_min' => 'Votre mot de passe est trop court (minimun :chars caracteres)',
 
     'auth_register_cgu_check' => 'J`accepte les <a href=":link">Conditions générales d\'utilisation</a>',
     'auth_register_newsletter_check' => 'Je souhaite recevoir tous les bons plan en m\'inscrivant à la newsletter',

@@ -3,15 +3,8 @@
 @section('content')
     <h2 class="ui center aligned icon header"><i class="circular refresh icon"></i> {{ trans('strings.title_new_password') }} </h2>
     <div class="ui centered grid">
-        <form class="ui ten wide column form login" method="POST" action="{{ route('passwordResetPost') }}">
+        <form class="ui ten wide column form login" method="POST" action="{{ route('passwordChangePost') }}">
             {{ csrf_field() }}
-            <input type="hidden" name="token" value="{{ $token }}">
-            <div class="fields">
-                <div class="eight wide field">
-                    <label>{{ trans('strings.form_label_email') }}</label>
-                    <input id="email" type="email" name="email" value="{{ $email or old('email') }}" autofocus>
-                </div>
-            </div>
             <div class="fields">
                 <div class="eight wide field">
                     <label>{{ trans('strings.form_label_password') }}</label>

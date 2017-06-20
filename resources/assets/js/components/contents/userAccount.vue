@@ -48,8 +48,10 @@
                                 <p><a :href="routeChangeEmail">{{ emailChangeLabel }}</a></p>
                             </div>
                         </div>
-
                     </div>
+                </div>
+                <div class="field">
+                    <a class="ui red button" :href="routeChangePassword">{{ passwordChangeLabel }}</a>
                 </div>
                 <template v-if="!advertAccountVerifiedStep">
                     <h4 class="ui horizontal divider header"><i class="options icon"></i> {{ accountPreferencesLabel }} </h4>
@@ -138,6 +140,7 @@
             //vue routes
             'routeUserGetMe',
             'routeChangeEmail',
+            'routeChangePassword',
             'routeUserSetPrefCurrency',
             'routeUserSetPrefLocale',
             'routeUserSetPrefLocation',
@@ -173,6 +176,7 @@
             'nameLabel',
             'emailLabel',
             'emailChangeLabel',
+            'passwordChangeLabel',
             'phoneLabel',
             'compagnyDivider',
             'compagnyNameLabel',

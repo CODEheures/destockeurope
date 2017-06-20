@@ -15,7 +15,8 @@ return [
         'minCompagnyName' => 3,
         'maxCompagnyName' => 100,
         'minRegistrationNumber' => 1,
-        'maxRegistrationNumber' => 30
+        'maxRegistrationNumber' => 30,
+        'minPasswordLength' => 6
     ],
 
     'messages' => [

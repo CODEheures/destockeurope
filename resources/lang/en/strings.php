@@ -211,6 +211,7 @@ return [
     'link_forgot_password' => 'Forgot your password',
     'link_send_reset_link' => 'Send reset link',
     'link_change_email_link' => 'Change my email',
+    'link_change_password_link' => 'Change my password',
     'link_send_validation_link' => 'Send validation link',
 
     'request_main_picture_require' => 'At least one picture is required',
@@ -228,6 +229,10 @@ return [
     'request_vat_invalid_input' => 'This VAT number is badly formed',
     'request_vat_service_unavailable' => 'The European VAT verification service is not available, please try again later',
     'request_vat_blocked' => 'Sorry, the European VAT verification service tells us that this VAT number is a blocked number',
+
+    'request_password_required' => 'Password required please',
+    'request_password_confirmed' => 'Your password don\'t match to confirmed password ',
+    'request_password_min' => 'Your password is to short (minimun :chars characters)',
 
     'auth_register_cgu_check' => 'I accept the <a href=":link">General terms of use</a>',
     'auth_register_newsletter_check' => 'I would like to receive all the good news by subscribing to the newsletter',
