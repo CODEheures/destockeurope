@@ -137,7 +137,7 @@ trait CreateUser {
     protected function findOrCreateUser($user, $provider)
     {
         $providers = config('providers_login');
-        if(in_array($provider, $providers)){
+        if(in_array($provider, $providers) && !is_null($user->email) && filter_var($user->email, FILTER_VALIDATE_EMAIL)){
             $keyId = $provider.'_id';
             $authUser = User::where($keyId, $user->id)->first();
             if ($authUser){

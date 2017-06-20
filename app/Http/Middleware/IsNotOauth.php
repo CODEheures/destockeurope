@@ -17,8 +17,13 @@ class IsNotOauth
      */
     public function handle($request, Closure $next)
     {
-        if($request->only('email') && $request->only('email') != '') {
+        $user = null;
+        if($request->email && $request->email != '') {
             $user = User::where('email', '=', $request->email)->first();
+        } elseif (auth()->check()) {
+            $user = auth()->user();
+        }
+        if($user) {
             if($user) {
                 $oAuth = $user->oAuthProvider(config('providers_login'));
                 if($oAuth && $oAuth != '') {

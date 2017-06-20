@@ -83,7 +83,7 @@
     Route::group(['prefix' => 'register'], function() {
         Route::get('/{lang?}', 'Auth\RegisterController@showRegistrationForm')->name('register');
         Route::post('/', 'Auth\RegisterController@register');
-        Route::get('/changeEmail/{lang?}', 'Auth\RegisterController@changeEmail')->name('changeEmail');
+        Route::get('/changeEmail/{email}/{lang?}', 'Auth\RegisterController@changeEmail')->name('changeEmail');
         Route::post('/changeEmail', 'Auth\RegisterController@changeEmailPost')->name('changeEmailPost');
         Route::get('/validChangeEmail', 'Auth\RegisterController@validChangeEmail')->name('validChangeEmail');
     });
