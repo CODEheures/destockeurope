@@ -107,7 +107,7 @@
                         <label>{{ advertFormBuyingPriceLabel }}</label>
                         <div class="ui input">
                             <template v-if="isNegociated==0">
-                                <input  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="buyingPrice"/>
+                                <input  name="buyingPrice" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="buyingPrice"/>
                             </template>
                             <template v-else>
                                 <input  name="" type="number" value="0" disabled/>
