@@ -402,7 +402,7 @@ class AdminController extends Controller
         <div class="pdfHeader">
         <div class="logo">
             <a href="http://destockeurope.progress/home" class="navbar-logo ">
-                <img src="http://destockeurope.progress/images/logopdf.svg"/>
+                <img src="'. asset('/images/logopdf.svg') .'"/>
             </a>
         </div>
         
