@@ -10,6 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- opengraph -->
+    <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
+    <meta property="og:image" content="{{ \Illuminate\Support\Facades\Request::getFacadeRoot()->url() }}/android-chrome-512x512.png">
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">

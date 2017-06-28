@@ -18,7 +18,7 @@
         "vinkla/vimeo": "^3.5",
         "pragmarx/firewall": "^1.0",
         "codeheures/laravel-utils": "^1.0",
-        "mpdf/mpdf": "dev-master#d495e4ca230297ea8ae044ea664f6bd5c8805a90",
+        "mpdf/mpdf": "dev-master#4b5f88f7b826d3a67bff6a1d7bf43806dac33bb4",
         "sngrl/php-firebase-cloud-messaging": "dev-master"
     },
     "require-dev": {
