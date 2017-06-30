@@ -31,13 +31,27 @@
             <h2 class="ui header">{{ contentHeader }}</h2>
         </div>
         <div class="row">
-            <div class="sixteen wide tablet twelve wide computer column">
+            <div v-if="isDelegation" class="sixteen wide column">
+                <div class="row filters">
+                    <advert-simple-search-filter
+                            :filter-ribbon-open="filterRibbonOpen"
+                            :filter-ribbon-close="filterRibbonClose"
+                            :update="update"
+                            :filter="filter"
+                            :route-search="dataRouteGetAdvertsList"
+                            :min-length-search="parseInt(filterMinLengthSearch)"
+                            :flag-reset-search="dataFlagResetSearch"
+                            :search-place-holder="filterSearchPlaceHolder"
+                    ></advert-simple-search-filter>
+                </div>
+            </div>
+            <div :class="isDelegation ? 'sixteen wide column' : 'sixteen wide tablet twelve wide computer column'">
                 <div class="row">
                     <div class="ui active inverted dimmer" v-if="!isLoaded">
                         <div class="ui large text loader">Loading</div>
                     </div>
                     <adverts-by-list
-                            :route-get-adverts-list="dataRouteGetAdvertList"
+                            :route-get-adverts-list="dataRouteGetAdvertsList"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :flag-force-reload="flagForceReload"
@@ -81,7 +95,7 @@
                     <div class="sixteen wide column pagination">
                         <pagination
                             :pages="paginate"
-                            :route-get-list="dataRouteGetAdvertList"
+                            :route-get-list="dataRouteGetAdvertsList"
                             :page-label="pageLabel"
                             :page-previous-label="pagePreviousLabel"
                             :page-next-label="pageNextLabel">
@@ -89,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div id="welcome-ads" class="computer only four wide column">
+            <div v-if="!isDelegation" id="welcome-ads" class="computer only four wide column">
                 <div>
                     <div class="sixteen right aligned column">
                         <vertical-160x600></vertical-160x600>
@@ -105,6 +119,7 @@
         props: [
             //vue routes
             //vue vars
+            'clearStorage',
             //vue strings
             'loadErrorMessage',
             'updateSuccessMessage',
@@ -122,6 +137,7 @@
             'adsFrequency',
             'canGetDelegations',
             'isPersonnalList',
+            'isDelegation',
             'totalQuantityLabel',
             'lotMiniQuantityLabel',
             'urgentLabel',
@@ -151,6 +167,11 @@
             'formAdvertPriceCoefficientLotMarginLabel',
             'formAdvertPriceCoefficientTotalMarginLabel',
             'formAdvertPriceCoefficientUpdateLabel',
+            //filter advert component
+            'filterMinLengthSearch',
+            'filterRibbonOpen',
+            'filterRibbonClose',
+            'filterSearchPlaceHolder',
             //paginate component
             'pageLabel',
             'pagePreviousLabel',
@@ -161,8 +182,9 @@
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
+                filter: {},
                 paginate: {},
-                dataRouteGetAdvertList: '',
+                dataRouteGetAdvertsList: '',
                 dataFlagResetSearch: false,
                 oldChoice: {},
                 update: false,
@@ -171,11 +193,10 @@
             }
         },
         mounted () {
-            //Visibility for ADS
-//            $('#welcome-ads').children('div').visibility({
-//                type   : 'fixed',
-//                offset : 112
-//            });
+            let that = this;
+            if(this.clearStorage){
+                sessionStorage.clear();
+            }
             //On load Error
             this.$on('loadError', function () {
                 this.sendToast(this.loadErrorMessage, 'error');
@@ -183,23 +204,40 @@
             this.$on('updateSuccess', function () {
                 this.sendToast(this.updateSuccessMessage, 'success');
             });
-            let that = this;
+
+            //on reconstruit le filtre
+            this.initFilterBySessionStorage();
+            this.updateResults();
 
             this.$on('paginate', function (result) {
                 this.paginate=result;
+            });
+            this.$on('updateFilter', function (result) {
+                this.updateFilter(result);
             });
             this.$on('changePage', function (url) {
                 $('html, body').animate({
                     scrollTop: 0
                 }, 600, function () {
-                    that.dataRouteGetAdvertList = url;
+                    that.dataRouteGetAdvertsList = url;
                 });
             });
-
+            this.$on('refreshResults', function (query) {
+                if(query != undefined && query.length >= this.filterMinLengthSearch){
+                    this.filter.resultsFor = query;
+                    this.updateResults(true);
+                }
+            });
+            this.$on('clearSearchResults', function () {
+                let haveClearAction = this.clearInputSearch();
+                if(haveClearAction){
+                    this.updateResults(true);
+                }
+            });
             this.$on('sendToast', function (event) {
                 this.sendToast(event.message, event.type);
             });
-            this.dataRouteGetAdvertList = this.routeGetAdvertsList;
+            this.dataRouteGetAdvertsList = this.routeGetAdvertsList;
             this.$on('deleteAdvert', function (event) {
                 this.destroyMe(event.url);
             })
@@ -233,7 +271,57 @@
                             });
                     }
                 }).modal('show');
-            }
+            },
+            urlForFilter(init=false) {
+                let urlBase = init ? this.routeGetAdvertsList : this.dataRouteGetAdvertsList;
+                let parsed = Parser.parse(urlBase, true);
+                parsed.search=undefined;
+                parsed.query={};
+
+                //reset sessionStorageFilter
+                sessionStorage.removeItem('filter');
+                sessionStorage.setItem('filter', JSON.stringify(this.filter));
+
+                for(let elem in this.filter){
+                    if(this.filter[elem] != null){
+                        parsed.query[elem]=(this.filter[elem]).toString();
+                    }
+                }
+                return Parser.format(parsed);
+            },
+            clearInputSearch() {
+                if('resultsFor' in this.filter) {
+                    delete this.filter.resultsFor;
+                    this.dataFlagResetSearch = !this.dataFlagResetSearch;
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            updateResults(){
+                this.update = !this.update;
+                this.dataRouteGetAdvertsList = this.urlForFilter(true);
+            },
+            updateFilter(result){
+                let oldFilter= _.cloneDeep(this.filter);
+                for(let elem in result){
+                    if(result[elem] == null){
+                        if(elem in this.filter){
+                            delete this.filter[elem];
+                        }
+                    } else {
+                        this.filter[elem] = result[elem];
+                    }
+                }
+                if(!_.isEqual(oldFilter, this.filter)){
+                    this.updateResults();
+                }
+            },
+            initFilterBySessionStorage: function () {
+                if(sessionStorage.getItem('filter') != null){
+                    this.filter = JSON.parse(sessionStorage.getItem('filter'));
+                }
+            },
         }
     }
 </script>

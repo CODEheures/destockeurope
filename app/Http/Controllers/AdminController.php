@@ -65,10 +65,12 @@ class AdminController extends Controller
      * Return view for List of Adverts type delegation
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function delegations() {
+    public function delegations(Request $request) {
+        $request->session()->flash('clear',true);
         $routeList = route('advert.getDelegations');
         $title = trans('strings.menu_advert_delegations');
-        return view('user.personnalList', compact('routeList', 'title'));
+        $isDelegation = true;
+        return view('user.personnalList', compact('routeList', 'title', 'isDelegation'));
     }
 
     /**

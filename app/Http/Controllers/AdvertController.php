@@ -260,11 +260,49 @@ class AdvertController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delegations()
+    public function delegations(Request $request)
     {
-        $adverts = Advert::delegations()->paginate(config('runtime.advertsPerPage'));
+        //Init vars
+        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
+        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
+
+        $adverts = Advert::delegations();
+
+        $search = null;
+        if($isSearchRequest){
+            $search = $request->search;
+        } elseif ($isSearchResults){
+            $search = $request->resultsFor;
+        }
+
+        //search results before range price
+        if(!is_null($search)){
+            $adverts = $adverts->where(function ($query) use ($search) {
+                $query->where('title', 'LIKE', '%' .$search .'%')
+                    ->orWhere('manu_ref', 'LIKE', '%' .$search .'%')
+                    ->orWhere('description', 'LIKE', '%' .$search .'%');
+            });
+        }
+
+        if($isSearchRequest) {
+            $countSearch = $adverts->count();
+            $adverts = $adverts->orderBy('created_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
+        } else {
+            $adverts = $adverts->orderBy('created_at', 'desc')->paginate(config('runtime.advertsPerPage'));
+        }
+
         $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
-        return response()->json(['adverts'=> $loadCompleteAdverts[0]]);
+
+        if($isSearchRequest){
+            $action = [
+                'url' => '',
+                'text' => trans_choice('strings.form_input_search_view_all', $countSearch, ['nb' => $countSearch])
+            ];
+            //choisir $loadCompleteAdverts[1] pour trier les resultats par categories
+            return response()->json(['results'=> $loadCompleteAdverts[0], 'action' => $action]);
+        } else {
+            return response()->json(['adverts'=> $loadCompleteAdverts[0]]);
+        }
 
     }
 

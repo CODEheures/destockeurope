@@ -2,6 +2,8 @@
 
 @section('content')
         <personnal-list
+                clear-storage="{{ session()->has('clear') ? true : false }}"
+
                 load-error-message="{{ trans('strings.view_all_error_load_message') }}"
                 update-success-message="{{ trans('strings.view_user_account_patch_success') }}"
                 content-header="{{ isset($title) ?  $title : trans('strings.menu_mines') }}"
@@ -15,6 +17,7 @@
                 ads-frequency="{{ 0 }}"
                 can-get-delegations="{{ \App\Common\PrivilegesUtils::canGetDelegations() }}"
                 is-personnal-list="{{ true }}"
+                is-delegation="{{ isset($isDelegation) ? $isDelegation : false }}"
                 advert-title-label="{{ trans('strings.view_advert_form_title_label') }}"
                 advert-description-label="{{ trans('strings.view_advert_form_description_label') }}"
                 advert-price-label="{{ trans('strings.view_advert_form_price_label') }}"
@@ -48,6 +51,11 @@
                 form-advert-price-coefficient-lot-margin-label="{{ trans('strings.view_advert_priceCoefficient_lot_margin') }}"
                 form-advert-price-coefficient-total-margin-label="{{ trans('strings.view_advert_priceCoefficient_total_margin') }}"
                 form-advert-price-coefficient-update-label="{{ trans('strings.view_advert_show_update_label') }}"
+
+                filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
+                filter-ribbon-open="{{ trans('strings.view_filter_ribbon_open') }}"
+                filter-ribbon-close="{{ trans('strings.view_filter_ribbon_close') }}"
+                filter-search-place-holder="{{ trans('strings.form_input_search_label2') }}"
 
                 page-label="{{ trans('strings.view_pagination_page_label') }}"
                 page-previous-label="{{ trans('strings.view_pagination_prev_label') }}"
