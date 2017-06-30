@@ -1,6 +1,32 @@
 <template>
     <div class="ui grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
+        <div :id="'modal-'+_uid" class="ui basic modal">
+            <i class="close icon"></i>
+            <div class="header">
+                {{ modalValidHeader }}
+            </div>
+            <div class="image content">
+                <div class="image">
+                    <i class="legal icon"></i>
+                </div>
+                <div class="description">
+                    <p>{{ modalValidDescription }}</p>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="two fluid ui inverted buttons">
+                    <div class="ui cancel red basic inverted button">
+                        <i class="remove icon"></i>
+                        {{ modalNo }}
+                    </div>
+                    <div class="ui ok green basic inverted button">
+                        <i class="checkmark icon"></i>
+                        {{ modalYes }}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="sixteen wide column">
             <h2 class="ui header">{{ contentHeader }}</h2>
         </div>
@@ -23,6 +49,7 @@
                 <div class="row">
                     <users-by-list
                             :route-get-users-list="dataRouteGetUsersList"
+                            :flag-force-reload="dataForceReload"
                             :no-result-found-header="noResultFoundHeader"
                             :no-result-found-message="noResultFoundMessage"
                             :actual-locale="actualLocale"
@@ -63,6 +90,11 @@
             //vue strings
             'contentHeader',
             'loadErrorMessage',
+            'modalValidHeader',
+            'modalValidDescription',
+            'modalNo',
+            'modalYes',
+            'deleteUserSuccess',
             //filter invoice component
             'filterMinLengthSearch',
             'filterRibbonOpen',
@@ -96,7 +128,8 @@
                 dataRouteGetUsersList: '',
                 dataFlagResetSearch: false,
                 oldChoice: {},
-                update: false
+                update: false,
+                dataForceReload: false
             };
         },
         mounted () {
@@ -141,6 +174,9 @@
                     this.updateResults(true);
                 }
             });
+            this.$on('deleteUser', function (event) {
+                this.deleteUser(event.route);
+            })
         },
         updated () {
 
@@ -201,6 +237,29 @@
                     this.filter = JSON.parse(sessionStorage.getItem('filter'));
                 }
             },
+            deleteUser(url) {
+                let that = this;
+                $('#modal-'+this._uid).modal({
+                    closable: false,
+                    onApprove: function () {
+                        that.isLoaded = false;
+                        axios.delete(url)
+                            .then(function (response) {
+                                that.isLoaded = true;
+                                that.dataForceReload=!that.dataForceReload;
+                                that.sendToast(that.deleteUserSuccess, 'success');
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.loadErrorMessage, 'error');
+                                }
+                                that.isLoaded = false;
+                            });
+                    }
+                }).modal('show');
+            }
         }
     }
 </script>

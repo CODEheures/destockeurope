@@ -21,6 +21,7 @@
                         <th>{{ listHeaderCompagny }} / {{ listHeaderVatNumber }}</th>
                         <th>{{ listHeaderAddress }}</th>
                         <th>{{ roleUserLabel }}</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,6 +82,9 @@
             });
             this.$on('changeRole', function (event) {
                 that.patchUserRole(event.url, event.role);
+            });
+            this.$on('deleteUser', function (event) {
+                that.$parent.$emit('deleteUser', event);
             })
         },
         methods: {

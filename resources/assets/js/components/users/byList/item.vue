@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr :class="!user.confirmed ? 'warning':''">
         <td>
             # {{ user.id }}
         </td>
@@ -28,6 +28,9 @@
                     </template>
                 </div>
             </div>
+        </td>
+        <td>
+            <button v-if="user.isRemovable" class="ui red inverted icon button" v-on:click="delMe"><i class="remove user icon"></i></button>
         </td>
     </tr>
 </template>
@@ -64,6 +67,10 @@
                 } else {
                     return '';
                 }
+            },
+            delMe(event) {
+                event.preventDefault();
+                this.$parent.$emit('deleteUser', {"route": this.user.urlDelete});
             }
         }
     }

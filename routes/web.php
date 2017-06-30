@@ -65,6 +65,7 @@
             Route::get('/manage', 'AdminController@userManage')->name('admin.user.manage');
             Route::get('/list', 'AdminController@listUsers')->name('admin.user.list');
             Route::patch('/role/{id}', 'AdminController@patchRole')->name('admin.user.role.patch');
+            Route::delete('/{id}', 'AdminController@deleteUser')->name('admin.user.delete');
         });
 
         //DANGEROUS

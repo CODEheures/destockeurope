@@ -344,6 +344,9 @@ return [
     'view_manage_users_list_header_vat_number' => '#VAT',
     'view_manage_users_list_header_address' => 'Address',
     'view_manage_users_list_vat_verification_number_label' => '#Verification',
+    'view_manage_users_modal_valid_header' => 'Remove this user',
+    'view_manage_users_modal_valid_description' => 'BE CAREFUL!! Do you want to delete this user?.',
+    'view_manage_users_delete_success' => 'The user has been removed.',
     'view_manage_invoices_list_role_button_label' => 'Role',
 
     'view_portal_list_header_1' => 'End of series',

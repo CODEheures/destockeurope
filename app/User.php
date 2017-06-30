@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Common\LocaleUtils;
+use App\Common\PrivilegesUtils;
 use App\Notifications\ResetPassword;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -57,13 +58,46 @@ class User extends Authenticatable
      * @var array
      */
     protected $cascadeDeletes = ['adverts', 'bookmarks'];
-    protected $appends = array('isSupplier', 'rolesList', 'urlSetRole');
+    protected $appends = array('isSupplier', 'rolesList', 'urlSetRole', 'urlDelete', 'isRemovable');
     protected $casts = [
         'confirmed' => 'Boolean',
     ];
     protected $hidden = [
         'password', 'remember_token', 'role', 'rolesList', 'urlSetRole'
     ];
+    private $isRemovable = false;
+    private $urlSetRole = '';
+    private $urlDelete = '';
+
+
+
+    //Relations
+    public function adverts() { return $this->hasMany('App\Advert'); }
+    public function bookmarks() { return $this->hasMany('App\Bookmark'); }
+    public function invoices() { return $this->hasMany('App\Invoice'); }
+
+    //Attributs Getters
+    public function getIsSupplierAttribute() {
+        return $this->role==static::ROLES[static::ROLE_SUPPLIER];
+    }
+
+    public function getRolesListAttribute() {
+        return static::ROLES;
+    }
+
+    public function getUrlSetRoleAttribute() {
+        return $this->urlSetRole;
+    }
+
+    public function getUrlDeleteAttribute() {
+        return $this->urlDelete;
+    }
+
+    public function getIsRemovableAttribute() {
+        return $this->isRemovable;
+    }
+
+    //public functions
     public function oAuthProvider($providers) {
         $refOauth = '';
         foreach ($providers as $testId) {
@@ -73,18 +107,6 @@ class User extends Authenticatable
             }
         }
         return $refOauth;
-    }
-
-    public function adverts() {
-        return $this->hasMany('App\Advert');
-    }
-
-    public function bookmarks() {
-        return $this->hasMany('App\Bookmark');
-    }
-
-    public function invoices() {
-        return $this->hasMany('App\Invoice');
     }
 
     public function haveBookmark($id) {
@@ -97,16 +119,16 @@ class User extends Authenticatable
         return $result;
     }
 
-    public function getIsSupplierAttribute() {
-        return $this->role==static::ROLES[static::ROLE_SUPPLIER];
+    public function setIsRemovable() {
+        $this->isRemovable = ($this->adverts()->withTrashed()->count() == 0) && (PrivilegesUtils::canDeleteUser($this));
     }
 
-    public function getRolesListAttribute() {
-        return static::ROLES;
+    public function setUrlSetRole() {
+        $this->urlSetRole = route('admin.user.role.patch', ['id' => $this->id]);
     }
 
-    public function getUrlSetRoleAttribute() {
-        return route('admin.user.role.patch', ['id' => $this->id]);
+    public function setUrlDelete() {
+        $this->urlDelete = route('admin.user.delete', ['id' => $this->id]);
     }
 
     //local scopes

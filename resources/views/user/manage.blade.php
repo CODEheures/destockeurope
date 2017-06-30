@@ -7,6 +7,11 @@
 
             content-header="{{ trans('strings.view_manage_users_header') }}"
             load-error-message="{{ trans('strings.view_all_error_load_message') }}"
+            modal-valid-header="{{ trans('strings.view_manage_users_modal_valid_header') }}"
+            modal-valid-description="{{ trans('strings.view_manage_users_modal_valid_description') }}"
+            modal-no="{{ trans('strings.modal_no') }}"
+            modal-yes="{{ trans('strings.modal_yes') }}"
+            delete-user-success="{{ trans('strings.view_manage_users_delete_success') }}"
 
             filter-min-length-search="{{ config('runtime.minLengthSearch') }}"
             filter-ribbon-open="{{ trans('strings.view_filter_ribbon_open') }}"

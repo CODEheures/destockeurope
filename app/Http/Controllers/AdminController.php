@@ -233,7 +233,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Patch App Parameters
+     * Patch Role User
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
@@ -249,6 +249,27 @@ class AdminController extends Controller
             }
             $user->role = $request->role;
             $user->save();
+            return response('ok',200);
+        } else {
+            return response('error', 500);
+        }
+    }
+
+    /**
+     * Delete User
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteUser($id, Request $request) {
+
+        $user = User::find($id);
+
+        if($user
+            && PrivilegesUtils::canDeleteUser($user))
+        {
+            $user->email = $user->email . '_old' . time();
+            $user->save();
+            $user->delete();
             return response('ok',200);
         } else {
             return response('error', 500);
@@ -599,6 +620,11 @@ class AdminController extends Controller
             ];
             return response()->json(['results'=> $users, 'action' => $action]);
         } else {
+            foreach ($users as $user){
+                $user->setIsRemovable();
+                $user->setUrlSetRole();
+                $user->isRemovable ? $user->setUrlDelete() : null;
+            }
             $users->makeVisible(['role', 'rolesList', 'urlSetRole'])->toArray();
             return response()->json(['users'=> $users]);
         }

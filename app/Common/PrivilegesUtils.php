@@ -39,6 +39,13 @@ trait PrivilegesUtils
             && $user->id != auth()->user()->id;
     }
 
+    public static function canDeleteUser(User $user) {
+        return
+            auth()->check()
+            && auth()->user()->role == User::ROLES[User::ROLE_ADMIN]
+            && $user->id != auth()->user()->id;
+    }
+
     public static function canCreate() {
         return
             auth()->check()
