@@ -55,6 +55,7 @@ class GetConfig
                 config(['runtime.widthUrlMasterAds' => 0]);
             }
         }
+        config(['runtime.stopAnalytics' => false]);
 
         return $next($request);
 

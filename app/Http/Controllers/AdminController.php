@@ -36,6 +36,7 @@ class AdminController extends Controller
         $this->middleware('canGetDelegations', ['only' => ['delegations']]);
         $this->middleware('canManageInvoices', ['only' => ['invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
+        $this->middleware('stopAnalytics');
         $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;
     }

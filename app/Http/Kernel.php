@@ -88,5 +88,6 @@ class Kernel extends HttpKernel
         'canHighlight' =>  \App\Http\Middleware\Privileges\CanHighlight::class,
         'canManageInvoices' =>  \App\Http\Middleware\Privileges\CanManageInvoices::class,
         'canManageMyAccount' =>  \App\Http\Middleware\Privileges\CanManageMyAccount::class,
+        'stopAnalytics' => \App\Http\Middleware\StopAnalytics::class,
     ];
 }
