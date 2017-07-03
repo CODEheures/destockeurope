@@ -259,6 +259,8 @@
             //geomap component
             'geolocHelpMsg',
             'geolocHelpMsgTwo',
+            'geolocInitLat',
+            'geolocInitLng',
             //Photo component
             'routePostTempoPicture',
             'routeGetListTempoThumbs',
@@ -440,6 +442,10 @@
 
             if(this.old == '0'){
                 sessionStorage.clear();
+                this.lat = this.geolocInitLat;
+                this.lng = this.geolocInitLng;
+                sessionStorage.setItem('lat', this.lat);
+                sessionStorage.setItem('lng', this.lng);
             }
             this.getStorage();
         },

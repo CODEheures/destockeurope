@@ -74,6 +74,8 @@
 
             geoloc-help-msg="{{ trans('strings.form_googlemap_help') }}"
             geoloc-help-msg-two="{{ trans('strings.form_googlemap_help2') }}"
+            geoloc-init-lat="{{ isset($lat) ? $lat : null }}"
+            geoloc-init-lng="{{ isset($lng) ? $lng : null }}"
 
             route-get-video-post-ticket="{{ route('videos.ticket') }}"
             route-del-tempo-video="{{ route('videos.delTempo') }}"

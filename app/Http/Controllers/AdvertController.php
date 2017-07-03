@@ -440,14 +440,19 @@ class AdvertController extends Controller
         $geolocType = 1;
         $zoomMap = 11;
         $user = null;
+        $lat = null;
+        $lng = null;
         auth()->check() ? $user = auth()->user() : null;
 
         if(count(old())==0){
             $this->pictureManager->purgeSessionLocalTempo();
             session()->forget('videoId');
+            if($user) {
+                $lat = $user->latitude;
+                $lng = $user->longitude;
+            }
         }
-
-        return view('advert.create', compact('ip', 'geolocType', 'zoomMap', 'user'));
+        return view('advert.create', compact('ip', 'geolocType', 'zoomMap', 'user', 'lat', 'lng'));
     }
 
     /**
