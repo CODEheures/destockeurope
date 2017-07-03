@@ -1418,6 +1418,9 @@ class AdvertController extends Controller
                 $originalAdvert->latitude = $advert->latitude;
                 $originalAdvert->longitude = $advert->longitude;
                 $originalAdvert->geoloc = $advert->geoloc;
+                foreach (GeoManager::$accurate as $key){
+                    isset($advert->$key) && isset($originalAdvert->$key) ? $originalAdvert->$key = $advert->$key : null;
+                }
                 $originalAdvert->totalQuantity = $advert->totalQuantity;
                 $originalAdvert->lotMiniQuantity = $advert->lotMiniQuantity;
                 $originalAdvert->isUrgent = $advert->isUrgent;

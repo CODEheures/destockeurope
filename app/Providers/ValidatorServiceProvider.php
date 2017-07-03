@@ -24,6 +24,7 @@ class ValidatorServiceProvider extends ServiceProvider
             //FR56749988721
             //DE811569869
             //BE0877241373
+            //ESN1081152I
             $saop = new \SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl");
             $request = App::make('request');
 
@@ -35,11 +36,13 @@ class ValidatorServiceProvider extends ServiceProvider
                     'requesterVatNumber' => env('TVA_REQUESTER_VAT_NUMBER')
                 )));
                 if ($saopResponse->valid) {
-                    $request->request->add([
-                        'compagny_name'=> $saopResponse->traderName,
-                        'compagny_address' => $saopResponse->traderAddress,
-                        'vat_number_identifier' => $saopResponse->requestIdentifier
-                    ]);
+                    $request->request->add(['vat_number_identifier' => $saopResponse->requestIdentifier]);
+                    isset($saopResponse->traderName) ?
+                        $request->request->add(['compagny_name' => $saopResponse->traderName]) :
+                        null;
+                    isset($saopResponse->traderAddress) ?
+                        $request->request->add(['compagny_address' => $saopResponse->traderAddress]) :
+                        null;
                     $validator->after(function ($validator) {
                         $request = App::make('request');
                         return $request;

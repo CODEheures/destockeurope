@@ -234,15 +234,17 @@ class UserController extends Controller
                 $user->registrationNumber = $request->value;
                 $user->requesterNumber = env('TVA_REQUESTER_COUNTRY_CODE').env('TVA_REQUESTER_VAT_NUMBER');
                 $user->vatIdentifier = $request->vat_number_identifier;
-                $user->compagnyName = $request->compagny_name;
+                $request->compagny_name ? $user->compagnyName = $request->compagny_name : null;
 
-                $geoCode_json = json_decode(GeoManager::getCodeAdress($request->compagny_address));
-                $geoCode_obj = (object)$geoCode_json;
+                if($request->compagny_address){
+                    $geoCode_json = json_decode(GeoManager::getCodeAdress($request->compagny_address));
+                    $geoCode_obj = (object)$geoCode_json;
 
-                if($geoCode_obj->status=="OK"){
-                    $user->geoloc = json_encode($geoCode_obj->results);
-                    $user->latitude=$geoCode_obj->results[0]->geometry->location->lat;
-                    $user->longitude=$geoCode_obj->results[0]->geometry->location->lng;
+                    if($geoCode_obj->status=="OK"){
+                        $user->geoloc = json_encode($geoCode_obj->results);
+                        $user->latitude=$geoCode_obj->results[0]->geometry->location->lat;
+                        $user->longitude=$geoCode_obj->results[0]->geometry->location->lng;
+                    }
                 }
             }
 
