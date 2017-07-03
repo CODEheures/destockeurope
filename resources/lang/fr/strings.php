@@ -482,6 +482,7 @@ return [
     'view_reviewForPayment_lock_info_header' => 'Cette page est entierement sécurisée',
     'view_reviewForPayment_lock_info_content' => 'Cette page utilise le protocol https:// et vous garantie une totale sécurité des échanges',
     'view_reviewForPayment_paypal_title' => 'PayPal, le réflexe sécurité pour payer en ligne',
+    'view_reviewForPayment_tempo' => 'Cette société est en cours de création et ce site web n\'est pas encore ouvert au public. Cet accès n\'est qu\'à but de test "live" pour les développeurs web. Aucun paiement ne peut aboutir pour le moment',
 
     'view_price_header' => 'Tarifs des annonces',
     'view_price_cgu' => 'Grille tarifaire selon les <a target="_blank" href=":link">conditions générales de vente</a> en vigueur',

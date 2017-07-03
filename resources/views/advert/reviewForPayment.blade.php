@@ -50,6 +50,7 @@
             november="{{ trans('strings.november') }}"
             december="{{ trans('strings.december') }}"
             advert-price="{{ trans('strings.view_price_header') }}"
+            payment-tempo-message="{{ trans('strings.view_reviewForPayment_tempo') }}"
 
             step-one-title="{{ isset($title) ?  $title : trans('strings.view_advert_steps_1_title') }}"
             step-two-title="{{ trans('strings.view_advert_steps_2_title') }}"
