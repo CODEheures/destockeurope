@@ -44,15 +44,17 @@
         data: () => {
             return {
                 dataRouteSearch: '',
-                wantSearch: true
+                wantSearch: true,
+                elemSearch: undefined
             }
         },
         mounted () {
             let that = this;
+            this.elemSearch = $('#'+that._uid);
+            this.observeElem(this.elemSearch[0]);
             this.$watch('routeSearch', function () {
                 this.urlForSearch(function (url) {
-                    let elemSearch = $('#'+that._uid);
-                    elemSearch
+                    that.elemSearch
                             .search({
                                 apiSettings: {
                                     url: url.replace('query', '{query}'),
@@ -65,16 +67,7 @@
                                 },
                                 //type: 'category',
                                 fields: that.fields,
-                                minCharacters : that.minLengthSearch,
-                                onResultsOpen: function () {
-                                    $(this).children('a.action').click(function (event) {
-                                        event.preventDefault();
-                                        elemSearch.search('hide results');
-                                        let query = elemSearch.search('get value');
-                                        that.$parent.$emit('refreshResults', query);
-                                        that.wantSearch = false;
-                                    })
-                                }
+                                minCharacters : that.minLengthSearch
                             })
                     ;
                 });
@@ -96,16 +89,15 @@
                 callback(this.dataRouteSearch);
             },
             resetSearch(withEmit) {
-                let elemSearch = $('#'+this._uid);
-                elemSearch.search('set value','');
-                elemSearch.search('clear cache');
+                this.elemSearch.search('set value','');
+                this.elemSearch.search('clear cache');
                 this.wantSearch = true;
                 withEmit ? this.$parent.$emit('clearSearchResults') : null;
             },
             updateSearch() {
-                let elemSearch = $('#'+this._uid);
+                this.elemSearch = $('#'+this._uid);
                 if(this.resultsFor != undefined){
-                    elemSearch.search('set value',this.resultsFor);
+                    this.elemSearch.search('set value',this.resultsFor);
                     this.wantSearch = false;
                 } else {
                     this.resetSearch(false);
@@ -115,6 +107,28 @@
                 let match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
                 return (match ? decodeURIComponent(match[3]) : null);
             },
+            observeElem: function (elem) {
+                let MutationObserver    = window.MutationObserver || window.WebKitMutationObserver;
+                let myObserver          = new MutationObserver (this.observeMutationHandler);
+                let obsConfig           = { childList: true, characterData: false, attributes: false, subtree: true };
+
+                myObserver.observe (elem, obsConfig);
+            },
+            observeMutationHandler: function (mutationRecords) {
+                let that = this;
+                mutationRecords.forEach ( function (mutation) {
+                    let btnAction = $(mutation.target).find('a.action');
+                    if(btnAction.length > 0){
+                        btnAction.click(function (event) {
+                            event.preventDefault();
+                            that.elemSearch.search('hide results');
+                            let query = that.elemSearch.search('get value');
+                            that.$parent.$emit('refreshResults', query);
+                            that.wantSearch = false;
+                        });
+                    }
+                });
+            }
         }
     }
 </script>
