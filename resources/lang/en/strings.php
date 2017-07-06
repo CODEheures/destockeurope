@@ -363,6 +363,7 @@ return [
     'view_portal_newsletter_subscribe_error' => 'Ho no! your request fail \'-(',
 
     'view_home_fake_advert_title' => 'Your Advert HERE on FRONT for :price',
+    'view_home_header' => 'Adverts for destocking',
 
     'view_contact_title' => 'Contact Us',
     'view_contact_description' => 'Contact us by filling in the form below',

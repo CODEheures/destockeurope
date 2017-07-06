@@ -15,6 +15,7 @@
                 modal-no="{{ trans('strings.modal_no') }}"
                 modal-yes="{{ trans('strings.modal_yes') }}"
                 all-label="{{ trans('strings.view_all_all') }}"
+                header="{{ trans('strings.view_home_header') }}"
 
                 route-category="{{ route('category.index') }}"
                 categories-dropdown-menu-first-menu-name="{{ trans('strings.menu_category') }}"

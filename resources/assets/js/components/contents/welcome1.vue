@@ -84,6 +84,9 @@
                     ></advert-filter>
                 </div>
             </div>
+            <div class="sixteen wide column">
+                <h1 class="ui tiny blue header">{{ dataHeader }}</h1>
+            </div>
             <div class="sixteen wide tablet thirteen wide computer column">
                 <div class="row">
                     <adverts-by-list
@@ -172,6 +175,7 @@
             'modalNo',
             'modalYes',
             'allLabel',
+            'header',
             //category dropdown menu component
             'routeCategory',
             'categoriesDropdownMenuFirstMenuName',
@@ -245,6 +249,7 @@
                 dataHighlightAdverts: [],
                 hash: '',
                 isOnHashChange: false,
+                dataHeader: '',
                 //List of boolean filter params when false=delete of filter
                 deleteOnFilterWhenFalse: ['isUrgent', 'isNegociated']
             }
@@ -383,6 +388,7 @@
                                     value: elem.id
                                 });
                             });
+                            that.setHeader();
                         })
                         .catch(function (error) {
                             that.breadcrumbItems.push({
@@ -543,7 +549,7 @@
                 }
                 this.hash = '#' + new Date().getTime().toString(36);
                 parsed.hash = this.hash;
-
+                this.setHeader();
                 history.pushState({navGuard: true}, '', Parser.format(parsed));
             },
             setHashFilters() {
@@ -620,6 +626,16 @@
             },
             getHref: function () {
                 return window.location.href;
+            },
+            setHeader: function () {
+                this.dataHeader = this.header;
+                console.log('seth');
+                if(this.breadcrumbItems.length > 0){
+                    this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length -1].name;
+                }
+                if(sessionStorage.getItem('filterLocationInputVal')!=undefined){
+                    this.dataHeader = this.dataHeader + ' - ' + JSON.parse(sessionStorage.getItem('filterLocationInputVal'));
+                }
             }
         }
     }

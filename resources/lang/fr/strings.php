@@ -363,6 +363,7 @@ return [
     'view_portal_newsletter_subscribe_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
 
     'view_home_fake_advert_title' => 'Votre annonce ICI en UNE pour :price',
+    'view_home_header' => 'Annonces de destockage',
 
     'view_contact_title' => 'Nous contacter',
     'view_contact_description' => 'Contactez nous en remplissant le formulaire ci-dessous',
