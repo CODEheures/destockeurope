@@ -75,7 +75,7 @@
         </div>
 
         <div class="field">
-            <template v-if="thumbs.length<maxFiles">
+            <template v-if="thumbs.length<maxFiles && !onUpload">
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="row">
