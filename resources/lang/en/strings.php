@@ -511,6 +511,8 @@ return [
     'view_price_table_row_highlight_3' => '/√nbU',
     'view_price_table_row_renew' => 'Renewal of an advert',
 
+    'view_help_how_create' => 'How to create an advert? Helping on video here:',
+
     'payment_card_type_label' => 'Card type',
     'payment_card_name_label' => 'Card owner name',
     'payment_card_number_label' => 'Card number',

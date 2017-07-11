@@ -511,6 +511,8 @@ return [
     'view_price_table_row_highlight_3' => '/√nbU',
     'view_price_table_row_renew' => 'Renouvellement d\'une annonce',
 
+    'view_help_how_create' => 'Comment créer une annonce? Explication en vidéo ici:',
+
     'payment_card_type_label' => 'Type de carte',
     'payment_card_name_label' => 'Nom sur la carte',
     'payment_card_number_label' => 'Numero de carte',

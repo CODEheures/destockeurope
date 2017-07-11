@@ -14,6 +14,9 @@
                     <div class="sixteen wide column">
                         <div class="ui segment">
                             <h1>{!! trans('help.title') !!}</h1>
+                            <ol>
+                                <li><p>{{ trans('strings.view_help_how_create') }} <a href="https://youtu.be/MaYCkj7vi-k" target="_blank">https://youtu.be/MaYCkj7vi-k</a></p></li>
+                            </ol>
                         </div>
                     </div>
                 </div>
