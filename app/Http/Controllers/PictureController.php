@@ -74,17 +74,26 @@ class PictureController extends Controller
      * @param $fileName
      * @return \Illuminate\Http\Response
      */
-    public function getNormal($hashName, $advertId) {
-        $picture = Picture::findNormal($hashName,$advertId)->first();
-        if($picture){
-            $file = $this->pictureManager->getNormal($picture);
+    public function getNormal($type, $hashName, $advertId=null) {
+        if($type != PicturesManager::TYPE_TEMPO_LOCAL) {
+            $picture = Picture::findNormal($hashName, $advertId)->first();
+            if ($picture) {
+                $file = $this->pictureManager->getNormal($picture);
+                if ($file) {
+                    return response($file, 200)->header("Content-Type", PicturesManager::MIME);
+                } else {
+                    return response(trans('strings.view_all_error_download_file'), 404);
+                }
+            } else {
+                return response(trans('strings.view_all_error_download_file'), 404);
+            }
+        } else {
+            $file = $this->pictureManager->getNormalTempo($hashName);
             if($file){
                 return response($file,200)->header("Content-Type", PicturesManager::MIME);
             } else {
                 return response(trans('strings.view_all_error_download_file'), 404);
             }
-        } else {
-            return response(trans('strings.view_all_error_download_file'), 404);
         }
     }
 

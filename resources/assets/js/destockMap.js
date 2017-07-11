@@ -11,6 +11,7 @@ let DestockMap = function ()  {
     let _position;
     let _marker;
     let _options;
+    let _map;
 
     this.constructMap = function(idMap, zoomMap, idGeoLoc, geolocType, idMapInput, markerMsg, errorGeoCodeMsg,routeGetGeoByIp) {
         _geocoder = new google.maps.Geocoder;
@@ -91,6 +92,7 @@ let DestockMap = function ()  {
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             let map = new google.maps.Map(_elemMap, mapOptions);
+            _map = map;
 
             _marker = new google.maps.Marker({
                 map: map,
@@ -182,6 +184,11 @@ let DestockMap = function ()  {
             }
         });
     };
+    this.resize=function () {
+        let center = _map.getCenter();
+        google.maps.event.trigger(_elemMap, 'resize');
+        _map.setCenter(center);
+    }
 };
 
 

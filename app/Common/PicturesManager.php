@@ -4,7 +4,6 @@ namespace App\Common;
 
 
 use App\Picture;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -369,6 +368,18 @@ class PicturesManager
 
         if(Storage::disk($this->disk)->exists($path.$this->fileName.static::THUMB_EXT.'.'.static::EXT)){
             $file =  Storage::disk($this->disk)->get($path.$this->fileName.static::THUMB_EXT.'.'.static::EXT);
+            return $file;
+        }
+        return null;
+    }
+
+    public function getNormalTempo($hashName){
+        $this->setType(self::TYPE_TEMPO_LOCAL);
+        $this->setFileName($hashName);
+        $path = $this->personnalPath();
+
+        if(Storage::disk($this->disk)->exists($path.$this->fileName.'.'.static::EXT)){
+            $file =  Storage::disk($this->disk)->get($path.$this->fileName.'.'.static::EXT);
             return $file;
         }
         return null;

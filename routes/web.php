@@ -184,7 +184,7 @@
         Route::delete('/{hashName?}', ['as' => 'picture.destroyTempo', 'uses' => 'PictureController@destroyTempo']);
         Route::get('/list-thumbs/{type}', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
         Route::get('/thumb/{type}/{hashName?}/{advertId?}', ['as' => 'picture.thumb', 'uses' => 'PictureController@getThumb']);
-        Route::get('/normal/{hashName}/{advertId}', ['as' => 'picture.normal', 'uses' => 'PictureController@getNormal']);
+        Route::get('/normal/{type}/{hashName?}/{advertId?}', ['as' => 'picture.normal', 'uses' => 'PictureController@getNormal']);
     });
 
 

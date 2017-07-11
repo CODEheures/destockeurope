@@ -7,7 +7,12 @@
                         <div class="section active" :data-value="item.value">{{ item.name }}</div>
                     </template>
                     <template v-else>
-                        <a class="section" :data-value="item.value" v-on:click="emitCategorieChoice(item.value)">{{ item.name }}</a>
+                        <template v-if="withAction">
+                            <a class="section" :data-value="item.value" v-on:click="emitCategorieChoice(item.value)">{{ item.name }}</a>
+                        </template>
+                        <template v-else>
+                            <a class="section" :data-value="item.value" v-on:click.preventdefault="">{{ item.name }}</a>
+                        </template>
                         <i class="right angle icon divider"></i>
                     </template>
                 </template>

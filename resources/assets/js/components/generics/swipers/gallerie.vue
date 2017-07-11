@@ -4,11 +4,16 @@
                 :options="swiperOptionTop"
                 :video-id="videoId"
                 :pictures="pictures"
+                :main-picture="mainPicture"
+                :first-header="firstHeader"
+                :first-description="firstDescription"
+                :lazy-load="lazyLoad"
         ></swiper-top>
         <swiper-thumbs class="gallery-thumbs" :style="'height: ' + dataHeightThumb + 'px;'"
                 :options="swiperOptionThumbs"
                 :video-id="videoId"
                 :pictures="pictures"
+                :main-picture="mainPicture"
         ></swiper-thumbs>
     </div>
 </template>
@@ -21,6 +26,11 @@
             pictures: {
                 type: Array
             },
+            mainPicture: {
+                type: String,
+                required: false,
+                default: ''
+            },
             videoId: {
                 type: Number,
                 required: false,
@@ -28,8 +38,23 @@
             },
             imageRatio: {
                 type: Number
-            }
+            },
             //vue strings
+            firstHeader: {
+                type: String,
+                required: false,
+                default: ''
+            },
+            firstDescription: {
+                type: String,
+                required: false,
+                default: ''
+            },
+            lazyLoad: {
+                type: Boolean,
+                required: false,
+                default: true
+            }
         },
         data: () => {
             return {

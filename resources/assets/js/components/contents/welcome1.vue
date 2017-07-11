@@ -629,7 +629,6 @@
             },
             setHeader: function () {
                 this.dataHeader = this.header;
-                console.log('seth');
                 if(this.breadcrumbItems.length > 0){
                     this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length -1].name;
                 }

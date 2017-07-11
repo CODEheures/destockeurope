@@ -3,7 +3,7 @@
 @section('content')
 
     <edit-advert-form
-            route-advert-form-post="{{ route('advert.update', ['id' => $editAdvert->id]) }}"
+            route-advert-form-post="{{ $route }}"
             route-post-tempo-picture="{{ route('picture.post',['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
             route-get-list-tempo-thumbs="{{ route('picture.listThumbs', ['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
             route-get-tempo-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_TEMPO_LOCAL])}}"

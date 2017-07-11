@@ -4,8 +4,9 @@
             <div class="active title">
                 <span class="ui blue ribbon label"><i class="dropdown icon"></i><span class="close">{{ filterRibbonClose }}</span><span class="open">{{ filterRibbonOpen }}</span></span>
                 <breadcrumb
-                        :items="breadcrumbItems">
-                </breadcrumb>
+                        :items="breadcrumbItems"
+                        :withAction="true"
+                ></breadcrumb>
             </div>
             <div class="active content">
                 <div class="ui grid">

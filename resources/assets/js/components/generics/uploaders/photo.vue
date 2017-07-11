@@ -11,7 +11,7 @@
         </div>
 
         <div class="field">
-            <div class="ui doubling three column grid">
+            <div :class="'ui doubling ' + nbColumns + ' column grid'">
                 <div class="column" v-for="(thumb,index) in thumbs">
                     <div :class="!isDelegation &&  index>=advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
                         <a class="ui pink right ribbon label" v-if="!isDelegation && index>=advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
@@ -117,6 +117,11 @@
                 required: false,
                 default: ''
             },
+            nbColumns: {
+                type: String,
+                required: false,
+                default: "three"
+            },
             //vue strings
             advertFormPhotoBtnLabel: String,
             advertFormPhotoBtnCancel: String,
@@ -190,7 +195,6 @@
                     this.sourceCancelToken = this.cancelToken.source();
                     axios.post(this.routePostTempoPicture, this.filePhotoToPost, {
                         onUploadProgress: function (progressEvent) {
-                            console.log('progressEvent', progressEvent);
                             let perform = 100*(progressEvent.loaded)/progressEvent.total;
                             that.performUpload = ((progressEvent.loaded)/(1024*1024)).toFixed(2)+'Mb';
                             $('#progress-'+that._uid).progress({

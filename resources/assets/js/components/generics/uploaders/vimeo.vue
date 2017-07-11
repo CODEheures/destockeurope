@@ -49,13 +49,13 @@
 
 
         <div :id="'vimeodiv-'+_uid" class="sixteen wide column" v-show="videoId!=''">
-            <div class="ui basic compact segment" v-if="videoId && !videoReady">
+            <div :class="format != undefined && format == 'auto' ? 'ui basic segment' : 'ui basic compact segment'" v-if="videoId && !videoReady">
                 <div class="ui inverted active dimmer" style="background-color: white;">
-                    <div class="ui massive text loader">{{ transcodeMessage }}</div>
+                    <div :class="format != undefined && format == 'auto' ? 'ui text loader': 'ui massive text loader'">{{ transcodeMessage }}</div>
                 </div>
-                <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" :width="iframeWidth" :height="iframeHeight" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             </div>
-            <iframe v-if="videoId && videoReady" :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <iframe v-if="videoId && videoReady" :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" :width="iframeWidth" :height="iframeHeight" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
         </div>
         <div class="sixteen wide column" v-if="videoId!=''">
             <a class="ui red button" v-on:click="delVideo()">{{ advertFormVideoBtnDelete }}</a>
@@ -80,6 +80,10 @@
                 required: false,
                 default: false
             },
+            format: {
+                type: String,
+                required: false,
+            },
             //vue strings
             advertFormVideoBtnLabel: String,
             advertFormVideoLabel: String,
@@ -101,14 +105,20 @@
                 videoId: '',
                 cancelToken: null,
                 sourceCancelToken: null,
-                videoReady: false
+                videoReady: false,
+                iframeWidth: 600,
+                iframeHeight: 360
             };
         },
         mounted () {
             let that = this;
+            if(this.format != undefined && this.format=="auto"){
+                this.iframeWidth= 'auto';
+                this.iframeHeight= 'auto';
+            }
             this.$watch('videoId', function () {
                 let hasVideo = this.videoId != undefined && this.videoId != null && this.videoId != '';
-                this.$parent.$emit('vimeoStateChange', hasVideo);
+                this.$parent.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': null});
                 if(hasVideo){
                     let counter = 0;
                     function timeout(seconds) {
@@ -119,6 +129,7 @@
                                     if(response.data.status=='available'){
                                         setTimeout(function () {
                                             that.videoReady = true;
+                                            that.$parent.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': that.videoId});
                                         },2000)
                                     } else {
                                         timeout(10+(Math.random()*10));

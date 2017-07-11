@@ -452,7 +452,8 @@ class AdvertController extends Controller
                 $lng = $user->longitude;
             }
         }
-        return view('advert.create', compact('ip', 'geolocType', 'zoomMap', 'user', 'lat', 'lng'));
+        $route = route('advert.store');
+        return view('advert.createOrEdit', compact('route', 'ip', 'geolocType', 'zoomMap', 'user', 'lat', 'lng'));
     }
 
     /**
@@ -531,7 +532,8 @@ class AdvertController extends Controller
             $zoomMap = 11;
             $user = auth()->user();
 
-            return view('advert.edit', compact('ip', 'geolocType', 'zoomMap', 'user', 'editAdvert'));
+            $route = route('advert.update', ['id' => $editAdvert->id]);
+            return view('advert.createOrEdit', compact('route', 'ip', 'geolocType', 'zoomMap', 'user', 'editAdvert'));
         }
     }
 

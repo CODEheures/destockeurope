@@ -1,23 +1,30 @@
 <template>
-        <div :id="_uid" class="ui floating labeled icon dropdown button">
-            <i class="money icon"></i>
-            <div class="ui active inverted dimmer" v-if="!isLoaded">
-                <div class="ui large text loader">Loading</div>
+    <div>
+        <div class="ui active inverted dimmer" v-if="!isLoaded">
+            <div class="ui large text loader">Loading</div>
+        </div>
+        <div class="ui mini labeled right action input">
+            <div class="ui blue label">
+                {{ firstMenuName }}
             </div>
-            <span class="text" >{{ firstMenuName }}</span>
-            <div class="menu">
-                <div class="ui left icon input">
-                    <i class="search icon"></i>
-                    <input type="text" :placeholder="inputSearchLabel">
-                </div>
-                <div class="divider"></div>
-                <div class="scrolling menu">
-                    <div v-for="(currency, key) in currencies.listCurrencies" class="item" :data-value="key">
-                        {{ currency.code }} <div class="ui horizontal label">{{ currency.symbol }}</div>
+            <div :id="_uid" class="ui mini floating dropdown button">
+                <div class="text" >{{ firstMenuName }}</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="ui left icon input">
+                        <i class="search icon"></i>
+                        <input type="text" :placeholder="inputSearchLabel">
+                    </div>
+                    <div class="divider"></div>
+                    <div class="scrolling menu">
+                        <div v-for="(currency, key) in currencies.listCurrencies" class="item" :data-value="key">
+                            <span class="text">{{ currency.code }} {{ currency.symbol }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </template>
 
 

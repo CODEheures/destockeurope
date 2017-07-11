@@ -9,6 +9,7 @@
         <div class="sixteen wide column">
             <swiper-gallerie
                     :pictures="advert.pictures"
+                    :main-picture="advert.mainPicture"
                     :video-id="advert.video_id"
                     :image-ratio="imageRatio"
             ></swiper-gallerie>
@@ -39,40 +40,72 @@
                 </div>
                 <div class="sixteen wide column">
                     <div class="ui segment">
-                        <div class="sixteen wide column">
-                            <table id="table-advert-infos" class="ui very basic celled table advert-infos">
-                                <tbody>
-                                <tr v-if="advert.manu_ref">
-                                    <td class="collapsing">
-                                        <i class="barcode icon"></i> {{ refLabel }}
-                                    </td>
-                                    <td>{{ advert.manu_ref }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="collapsing">
-                                        <i class="cubes icon"></i> {{ totalQuantityLabel }}
-                                    </td>
-                                    <td>{{ advert.totalQuantity }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="collapsing">
-                                        <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
-                                    </td>
-                                    <td>{{ advert.lotMiniQuantity }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="collapsing">
-                                        <i class="money icon"></i> {{ priceLabel }}
-                                    </td>
-                                    <td><span class="ui small blue tag label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="ui hidden divider"></div>
-                        <div class="sixteen wide column item-description">
-                            <div class="description">
-                                <p>{{ advert.description }}</p>
+                        <div class="ui grid">
+                            <div class="sixteen wide tablet only sixteen wide computer only column">
+                                <table id="table-advert-infos" class="ui very basic celled table advert-infos">
+                                    <tbody>
+                                    <tr v-if="advert.manu_ref">
+                                        <td class="collapsing">
+                                            <i class="barcode icon"></i> {{ refLabel }}
+                                        </td>
+                                        <td>{{ advert.manu_ref }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">
+                                            <i class="cubes icon"></i> {{ totalQuantityLabel }}
+                                        </td>
+                                        <td>{{ advert.totalQuantity }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">
+                                            <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
+                                        </td>
+                                        <td>{{ advert.lotMiniQuantity }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">
+                                            <i class="money icon"></i> {{ priceLabel }}
+                                        </td>
+                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="sixteen wide mobile only column">
+                                <table class="ui very basic unstackable table">
+                                    <tbody>
+                                    <tr v-if="advert.manu_ref">
+                                        <td class="collapsing">
+                                            <i class="barcode icon"></i> {{ refLabel }}
+                                        </td>
+                                        <td>{{ advert.manu_ref }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">
+                                            <i class="cubes icon"></i> {{ totalQuantityLabel }}
+                                        </td>
+                                        <td>{{ advert.totalQuantity }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">
+                                            <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
+                                        </td>
+                                        <td>{{ advert.lotMiniQuantity }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">
+                                            <i class="money icon"></i> {{ priceLabel }}
+                                        </td>
+                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="ui hidden divider"></div>
+                            <div class="sixteen wide column item-description">
+                                <div class="description">
+                                    <p>{{ advert.description }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>

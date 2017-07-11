@@ -115,8 +115,8 @@
                 <div class="row">
                     <breadcrumb
                             :items="breadcrumbItems"
-                            :withAction="true">
-                    </breadcrumb>
+                            :withAction="true"
+                    ></breadcrumb>
                 </div>
             </div>
             <div class="row">
@@ -362,12 +362,6 @@
             this.dataIsUserBookmark = this.isUserBookmark;
             //BreadCrumbs
             this.setBreadCrumbItems();
-            //Visibility for ADS
-//            let $elem = $('#welcome-ads').children('div');
-//            $elem.visibility({
-//                type   : 'fixed',
-//                offset : 112
-//            });
 
             //On load Error
             this.$on('loadError', function () {

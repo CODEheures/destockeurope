@@ -21,7 +21,16 @@
             lat: String,
             geoloc: String,
             geolocHelpMsg: String,
-            geolocHelpMsgTwo: String
+            geolocHelpMsgTwo: String,
+            square: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            resize: {
+                type: Boolean,
+                required: false,
+            }
         },
         data: () => {
             return {
@@ -34,10 +43,21 @@
             this.dataLng = this.lng;
             this.dataLat = this.lat;
             this.dataGeoloc = this.geoloc;
+            if(this.square){
+                //this.setSizeMap();
+            }
+            this.$watch('resize', function () {
+                this.setSizeMap();
+            })
         },
         methods: {
             latLngChange (event) {
                 this.$parent.$emit('locationChange', {'lat' : event.target.dataset.lat, 'lng':event.target.dataset.lng, 'geoloc': event.target.dataset.geoloc})
+            },
+            setSizeMap () {
+                let map = $('#map');
+                map.css({height: map.width()});
+                window.destockMap.resize();
             }
         }
     }

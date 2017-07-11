@@ -24,6 +24,12 @@ body.yellowbg.pushable {
   background-image: url("/images/rubalise.svg");
 }
 
+.glass-box {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 0.62rem;
+  box-shadow: 3px 5px 12px 0 rgba(0, 0, 0, 0.35)
+}
+
 .portal {
   //margin-top: 20px;
   & div.ui.vertical.segment.header {
@@ -691,12 +697,13 @@ img.lightbox {
   .ui.form .fields {
     margin-bottom: 1em;
   }
-  .ui.main.container #table-advert-infos {
+  .ui.main.container [id^='table-advert-infos-'] {
     & tr td {
       display: table-cell !important;
     }
   }
 }
+
 @media only screen and (min-width: 768px) {
   .ui.main.container {
     margin-top: 2rem;

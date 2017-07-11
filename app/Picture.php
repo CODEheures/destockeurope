@@ -31,7 +31,7 @@ class Picture extends Model
         if($this->isThumb){
             return route('picture.thumb', ['type' => PicturesManager::TYPE_FINAL_LOCAL, 'hashName' => $this->hashName, 'advertId' => $this->advert_id]);
         } else {
-            return route('picture.normal', ['hashName' => $this->hashName, 'advertId' => $this->advert_id]);
+            return route('picture.normal', ['type' => PicturesManager::TYPE_FINAL_LOCAL, 'hashName' => $this->hashName, 'advertId' => $this->advert_id]);
         }
     }
 

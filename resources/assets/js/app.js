@@ -23,6 +23,7 @@ Vue.component('location-filter', require('./components/generics/filters/location
 Vue.component('search-filter', require('./components/generics/filters/searchFilter.vue'));
 Vue.component('type-radio-button', require('./components/generics/filters/typeRadioButton.vue'));
 Vue.component('currencies-dropdown', require('./components/generics/currencies/currenciesDropdown.vue'));
+Vue.component('currencies-dropdown-2', require('./components/generics/currencies/currenciesDropdown2.vue'));
 Vue.component('currencies-button', require('./components/generics/currencies/currenciesButton.vue'));
 Vue.component('currencies-input-right-label', require('./components/generics/currencies/currenciesInputRightLabel.vue'));
 Vue.component('locales-dropdown', require('./components/generics/locales/localesDropdown.vue'));
@@ -102,9 +103,7 @@ Vue.component('manage-invoices', require('./components/contents/manageInvoices.v
 //mange users page
 Vue.component('manage-users', require('./components/contents/manageUsers.vue'));
 //createAdvert page
-Vue.component('create-advert-form', require('./components/contents/createAdvert.vue'));
-//editAdvert page
-Vue.component('edit-advert-form', require('./components/contents/editAdvert.vue'));
+Vue.component('create-or-edit-advert-form', require('./components/contents/createOrEditAdvert.vue'));
 //approve advert page
 Vue.component('approve-advert-form', require('./components/contents/approveAdvert.vue'));
 //show advert page

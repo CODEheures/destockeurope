@@ -5,10 +5,30 @@
             <div class="swiper-slide" v-if="videoId != null && videoId != ''">
                 <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             </div>
-            <div class="swiper-slide" v-for="picture in pictures" v-if="!picture.isThumb">
-                <img :data-src="picture.url" class="swiper-lazy" v-on:click="lightBoxMe(picture.url)">
-                <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
-            </div>
+            <template v-if="dataPictures.length > 0">
+                <div class="swiper-slide" v-for="picture in dataPictures">
+                    <template v-if="!lazyLoad">
+                        <img :src="picture" v-on:click="lightBoxMe(picture)">
+                    </template>
+                    <template v-else>
+                        <img :data-src="picture" class="swiper-lazy" v-on:click="lightBoxMe(picture)">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <div class="swiper-slide">
+                    <div style="height:100%;display: flex;justify-content: center;align-items: center">
+                        <h1 class="ui icon header">
+                            <i class="file image outline icon"></i>
+                            <div class="content">
+                                {{ firstHeader }}
+                                <div class="sub header">{{ firstDescription }}</div>
+                            </div>
+                        </h1>
+                    </div>
+                </div>
+            </template>
         </div>
         <div class="swiper-button-next"><i class="huge chevron right icon"></i></div>
         <div class="swiper-button-prev"><i class="huge chevron left icon"></i></div>
@@ -29,16 +49,36 @@
             pictures: {
                 type: Array
             },
+            mainPicture: String,
             videoId: {
                 type: Number,
                 required: false,
                 default: null
+            },
+            //vue strings
+            firstHeader: String,
+            firstDescription: String,
+            lazyLoad: {
+                type: Boolean,
+                required: false,
+                default: true
             }
+        },
+        data: () => {
+            return {
+                dataPictures: []
+            };
         },
         mounted: function() {
             if (!this.swiper && typeof global.window != 'undefined') {
                 this.swiper = new Swiper(this.$el, this.options)
             }
+            this.$watch('mainPictures', function () {
+                this.updateDataPictures();
+            });
+            this.$watch('pictures', function () {
+                this.updateDataPictures();
+            })
         },
         updated: function(){
             this.swiper.update()
@@ -52,6 +92,20 @@
         methods : {
             lightBoxMe (imgUrl) {
                 this.$parent.$emit('openLightBox', imgUrl)
+            },
+            updateDataPictures: function () {
+                let pictures=[];
+                let that = this;
+                this.pictures.forEach(function (picture) {
+                    if(!picture.isThumb){
+                        if(picture.hashName == that.mainPicture){
+                            pictures.unshift(picture.url);
+                        } else {
+                            pictures.push(picture.url);
+                        }
+                    }
+                });
+                this.dataPictures = pictures;
             }
         }
     }
