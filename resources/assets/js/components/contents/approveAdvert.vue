@@ -47,20 +47,13 @@
                                     </div>
                                 </div>
                                 <div class="content">
-                                    <!--<img class="right floated mini ui image" src="/images/avatar/large/elliot.jpg">-->
-                                    <div class="meta">
+                                     <div class="meta">
                                         {{ advert.user.name }} / {{ advert.user.email }}
                                     </div>
                                     <div class="description">
                                         {{ getFormattedAddress(advert.user.geoloc) }}
                                     </div>
                                 </div>
-                                <!--<div class="extra content">-->
-                                    <!--<div class="ui two buttons">-->
-                                        <!--<div class="ui basic green button">Approve</div>-->
-                                        <!--<div class="ui basic red button">Decline</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
                             </div>
                         </div>
 
@@ -88,17 +81,25 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="three wide column">{{ totalQuantityLabel }} / {{ lotMiniQuantityLabel }}</td>
+                                <td :class="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity') ? 'warning' : ''">
+                                    {{ advert.totalQuantity }} / {{ advert.lotMiniQuantity}}
+                                    <div v-if="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class="three wide column">{{ advertPriceLabel }}</td>
                                 <td :class="isEditField(advert, 'price') || isEditField(advert, 'currency') ? 'warning' : ''">
                                     {{ advert.isNegociated ? advertIsNegociatedLabel : advert.price }}
                                     <div v-if="isEditField(advert, 'price') || isEditField(advert, 'currency_id')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="three wide column">{{ totalQuantityLabel }} / {{ lotMiniQuantityLabel }}</td>
-                                <td :class="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity') ? 'warning' : ''">
-                                    {{ advert.totalQuantity }} / {{ advert.lotMiniQuantity}}
-                                    <div v-if="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
+                            <tr v-if="!advert.isNegociated">
+                                <td class="three wide column">{{ advertPriceTotalLabel }}</td>
+                                <td :class="isEditField(advert, 'discount_on_total') ? 'warning' : ''">
+                                    {{ advert.totalPrice }}
+                                    <template v-if="advert.discount_on_total > 0">{{' (' + advertPriceDiscountLabel + '=' + advert.discount_on_total +'%)'}}</template>
+                                    <div v-if="isEditField(advert, 'discount_on_total')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
                                 </td>
                             </tr>
                             <tr>
@@ -175,23 +176,26 @@
                                         <margin-input-field
                                                 :advert="advert"
                                                 :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
+                                                :form-advert-price-coefficient-total-label="formAdvertPriceCoefficientTotalLabel"
                                                 :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
                                                 :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
                                                 :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
                                                 :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                                                 :with-valid-button="false"
                                         ></margin-input-field>
-                                        <div class="grouped fields">
-                                            <div class="field">
-                                                <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                    <input type="radio" :name="advert.id" value="1">
-                                                    <label>{{ toggleApproveLabel }}</label>
+                                        <div class="field">
+                                            <div class="grouped fields">
+                                                <div class="field">
+                                                    <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
+                                                        <input type="radio" :name="advert.id" value="1">
+                                                        <label>{{ toggleApproveLabel }}</label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="field">
-                                                <div :id="'slider2-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                    <input type="radio" :name="advert.id" value="0">
-                                                    <label>{{ toggleDisapproveLabel }}</label>
+                                                <div class="field">
+                                                    <div :id="'slider2-'+_uid+'-'+advert.id" class="ui slider checkbox">
+                                                        <input type="radio" :name="advert.id" value="0">
+                                                        <label>{{ toggleDisapproveLabel }}</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,6 +243,7 @@
             'toggleDisapproveLabel',
             'textDisapproveReason',
             'formAdvertPriceCoefficientLabel',
+            'formAdvertPriceCoefficientTotalLabel',
             'formAdvertPriceCoefficientNewPriceLabel',
             'formAdvertPriceCoefficientUnitMarginLabel',
             'formAdvertPriceCoefficientLotMarginLabel',
@@ -253,6 +258,8 @@
             'advertRefLabel',
             'advertDescriptionLabel',
             'advertPriceLabel',
+            'advertPriceTotalLabel',
+            'advertPriceDiscountLabel',
             'advertIsNegociatedLabel',
             'advertAddressLabel',
             'advertApproveSuccess',

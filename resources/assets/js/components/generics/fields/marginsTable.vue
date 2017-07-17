@@ -71,7 +71,7 @@
                 let lotMiniMargin;
                 if(this.forSeller){
                     unitMargin =  advert.originalPrice-advert.buyingPrice;
-                    totalMargin = unitMargin*advert.totalQuantity;
+                    totalMargin = advert.totalQuantity*(advert.originalPrice*(1-(advert.discount_on_total/100))-advert.buyingPrice);
                     lotMiniMargin = unitMargin*advert.lotMiniQuantity;
                 } else {
                     unitMargin =  (((advert.originalPrice*advert.price_coefficient)/(100*Math.pow(10,advert.priceSubUnit))));

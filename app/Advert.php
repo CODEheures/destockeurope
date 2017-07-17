@@ -46,7 +46,8 @@ class Advert extends Model {
         'video_id',
         'isNegociated',
         'manu_ref',
-        'nextUrl'
+        'nextUrl',
+        'discount_on_total'
     ];
     protected $dates = ['deleted_at', 'online_at', 'ended_at', 'highlight_until'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
@@ -54,12 +55,14 @@ class Advert extends Model {
         'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'resume',
         'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight',
         'isEligibleForRenewMailZero', 'isEligibleForEdit', 'isUserOwner', 'isUserBookmark', 'bookmarkCount',
-        'picturesWithTrashedCount', 'originalPrice', 'originalPriceWithMargin', 'priceSubUnit', 'currencySymbol', 'listEditFields');
+        'picturesWithTrashedCount', 'originalPrice', 'originalPriceWithMargin', 'totalPrice', 'totalPriceMargin', 'globalDiscount', 'priceSubUnit', 'currencySymbol', 'listEditFields');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
     private $bookmarkCount = 0;
     private $isOnEdit = false;
+    private $totalPriceMargin = 0;
+    private $globalDiscount = 0;
     private $listEditFields = [
         'field' => [],
         'thumbs' => []
@@ -73,7 +76,8 @@ class Advert extends Model {
         'totalQuantity',
         'lotMiniQuantity',
         'geoloc',
-        'video_id'
+        'video_id',
+        'discount_on_total'
     ];
 
     protected $casts = [
@@ -114,12 +118,33 @@ class Advert extends Model {
         return MoneyUtils::getPriceWithDecimal($value, $this->currency);
     }
 
+    public function getTotalPriceAttribute() {
+        $discountPrice = (int)($this->originalPrice*$this->totalQuantity*(1-$this->discount_on_total/100));
+        return MoneyUtils::getPriceWithDecimal($discountPrice, $this->currency);
+    }
+
     public function getPriceMarginAttribute($value) {
         return MoneyUtils::getPriceWithDecimal($value, $this->currency);
     }
 
     public function getPriceCoefficientAttribute($value) {
         return $value/100;
+    }
+
+    public function getDiscountOnTotalAttribute($value) {
+        return $value/100;
+    }
+
+    public function getPriceCoefficientTotalAttribute($value) {
+        return $value/100;
+    }
+
+    public function getTotalPriceMarginAttribute() {
+        return $this->totalPriceMargin;
+    }
+
+    public function getGlobalDiscountAttribute() {
+        return $this->globalDiscount;
     }
 
     public function getBreadCrumbAttribute() {
@@ -322,6 +347,21 @@ class Advert extends Model {
         $this->isOnEdit = Advert::where('isEditOf', $this->id)->where('isPublish', true)->count()>0;
     }
 
+    public function setTotalPriceMargin() {
+        if(!$this->isNegociated){
+            $this->totalPriceMargin = MoneyUtils::getPriceWithDecimal($this->calcTotalFinalPrice(), $this->currency);
+        }
+    }
+
+    public function setGlobalDiscount() {
+        if(!$this->isNegociated && $this->OriginalPriceWithMargin>0){
+//            $finalTotalPrice = $this->calcTotalFinalPrice();
+//            $totalPriceByAddLot = $this->OriginalPriceWithMargin*$this->totalQuantity;
+//            $this->globalDiscount = ((int)((1 - ($finalTotalPrice/$totalPriceByAddLot))*10000))/100;
+            $this->globalDiscount = (1 - ((100+$this->price_coefficient_total)*(100-$this->discount_on_total)/((100+$this->price_coefficient)*100)))*100;
+        }
+    }
+
     public function setListEditFields() {
         if($this->isEditOf){
             $editAdvert = Advert::find($this->isEditOf);
@@ -431,5 +471,17 @@ class Advert extends Model {
 
     public function scopeHighlight($query){
         return $query->validOnline()->where('highlight_until' ,'>=', Carbon::now())->inRandomOrder()->take(env('HIGHLIGHT_QUANTITY'));
+    }
+
+    //privates parts
+    private function calcTotalFinalPrice() {
+        $priceCoefficientTotal=(int)$this->price_coefficient_total/100;
+
+        $totalDiscountPrice = (int)($this->originalPrice*$this->totalQuantity*(1-$this->discount_on_total/100));
+
+        $marginTotal = (int)($totalDiscountPrice*$priceCoefficientTotal);
+        $finalTotalPrice = $totalDiscountPrice + $marginTotal;
+
+        return $finalTotalPrice;
     }
 }

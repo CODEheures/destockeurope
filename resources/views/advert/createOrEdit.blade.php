@@ -29,6 +29,7 @@
             advert-form-ref-label="{{ trans('strings.view_advert_form_ref_label') }}"
             advert-form-description-label="{{ trans('strings.view_advert_form_description_label') }}"
             advert-form-price-label="{{ trans('strings.view_advert_form_price_label') }}"
+            advert-form-discount-label="{{ trans('strings.view_advert_form_discount_total_label') }}"
             advert-form-buying-price-label="{{ trans('strings.view_advert_form_buyingPrice_label') }}"
             advert-form-googlemap-label="{{ trans('strings.form_googlemap_label') }}"
             advert-form-photo-separator="{{ trans('strings.form_file_add_photo_separator') }}"

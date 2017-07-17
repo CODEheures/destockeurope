@@ -68,6 +68,19 @@
                                         </td>
                                         <td><span class="ui small blue tag label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
                                     </tr>
+                                    <tr v-if="advert.globalDiscount > 0">
+                                        <td class="collapsing">
+                                            <i class="gift icon"></i> {{ discountOnTotalLabel }}
+                                        </td>
+                                        <td>
+                                            <div class="ui mini horizontal statistic">
+                                                <div class="value"><i class="minus icon"></i>{{ advert.globalDiscount }}%</div>
+                                                <div class="label">
+                                                    ({{ advert.totalPriceMargin }})
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -97,6 +110,19 @@
                                             <i class="money icon"></i> {{ priceLabel }}
                                         </td>
                                         <td><span class="ui small blue tag label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                    </tr>
+                                    <tr v-if="!advert.isNegociated && advert.globalDiscount > 0">
+                                        <td class="collapsing">
+                                            <i class="gift icon"></i> {{ discountOnTotalLabel }}
+                                        </td>
+                                        <td>
+                                            <div class="ui mini statistic">
+                                                <div class="value"><i class="minus icon"></i>{{ advert.globalDiscount }}%</div>
+                                                <div class="label">
+                                                    ({{ advert.totalPriceMargin }})
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -140,7 +166,8 @@
             isNegociatedLabel: String,
             priceInfoLabel: String,
             priceLabel: String,
-            refLabel: String
+            refLabel: String,
+            discountOnTotalLabel: String
         },
         data: () => {
             return {
@@ -169,6 +196,9 @@
                     closable: true,
                     blurring: true
                 }).modal('show');
+            },
+            calcTotalPrice: function () {
+
             }
         }
     }

@@ -1,17 +1,23 @@
 <template>
     <div :class="withValidButton ? 'two fields':'field'">
         <template v-if="withValidButton">
-            <div class="field">
-                <label>{{ formAdvertPriceCoefficientLabel }}</label>
-                <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
-                <margins-table
+            <div class="grouped fields">
+                <div class="field" style="margin-top: 0">
+                    <label>{{ formAdvertPriceCoefficientLabel }}</label>
+                    <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
+                </div>
+                <div class="field">
+                    <label>{{ formAdvertPriceCoefficientTotalLabel }}</label>
+                    <input type="number" name="price_coefficient_total" min="0" step="0.01" v-model="advert.price_coefficient_total">
+                </div>
+            </div>
+            <margins-table
                     :advert="advert"
                     :formAdvertPriceCoefficientNewPriceLabel="formAdvertPriceCoefficientNewPriceLabel"
                     :formAdvertPriceCoefficientUnitMarginLabel="formAdvertPriceCoefficientUnitMarginLabel"
                     :formAdvertPriceCoefficientLotMarginLabel="formAdvertPriceCoefficientLotMarginLabel"
                     :formAdvertPriceCoefficientTotalMarginLabel="formAdvertPriceCoefficientTotalMarginLabel"
-                ></margins-table>
-            </div>
+            ></margins-table>
             <div class="field">
                 <label style="opacity: 0">1</label>
                 <div v-on:click="updateCoefficient()" class="ui primary button">
@@ -21,8 +27,16 @@
             </div>
         </template>
         <template v-else>
-            <label>{{ formAdvertPriceCoefficientLabel }}</label>
-            <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
+            <div class="grouped fields">
+                <div class="field" style="margin-top: 0">
+                    <label>{{ formAdvertPriceCoefficientLabel }}</label>
+                    <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
+                </div>
+                <div class="field">
+                    <label>{{ formAdvertPriceCoefficientTotalLabel }}</label>
+                    <input type="number" name="price_coefficient_total" min="0" step="0.01" v-model="advert.price_coefficient_total">
+                </div>
+            </div>
             <margins-table
                     :advert="advert"
                     :formAdvertPriceCoefficientNewPriceLabel="formAdvertPriceCoefficientNewPriceLabel"
@@ -46,6 +60,7 @@
                 default: true
             },
             formAdvertPriceCoefficientLabel: String,
+            formAdvertPriceCoefficientTotalLabel: String,
             formAdvertPriceCoefficientNewPriceLabel: String,
             formAdvertPriceCoefficientUnitMarginLabel: String,
             formAdvertPriceCoefficientLotMarginLabel: String,

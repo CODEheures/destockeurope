@@ -141,6 +141,7 @@
                                 :price-info-label="priceInfoLabel"
                                 :price-label="priceLabel"
                                 :ref-label="refLabel"
+                                :discount-on-total-label="discountOnTotalLabel"
                         ></advert-by-id>
                     </div>
                 </div>
@@ -329,7 +330,8 @@
             'isNegociatedLabel',
             'priceInfoLabel',
             'priceLabel',
-            'refLabel'
+            'refLabel',
+            'discountOnTotalLabel'
         ],
         data: () => {
             return {

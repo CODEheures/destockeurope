@@ -75,6 +75,7 @@ class StoreAdvertRequest extends FormRequest
             'manu_ref' => 'nullable|string',
             'description' => 'required|min:' . config('db_limits.adverts.minDescription') . '|max:' . config('db_limits.adverts.maxDescription'),
             'price' => 'required_if:is_negociated,false|numeric|min:0.001',
+            'discount_on_total' => 'required|numeric|min:0|max:100',
             'currency' => 'required|in:'.$line2,
             'lat' => 'required|numeric|min:-90|max:90',
             'lng' => 'required|numeric|min:-180|max:180',

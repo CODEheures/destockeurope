@@ -150,6 +150,19 @@
                                                                 <div v-if="isNegociated" class="ui small blue tag label">{{ advertExampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
+                                                        <tr v-if="!isNegociated && discountOnTotal > 0">
+                                                            <td class="collapsing">
+                                                                <i class="gift icon"></i> {{ advertFormDiscountLabel }}
+                                                            </td>
+                                                            <td>
+                                                                <div class="ui mini horizontal statistic">
+                                                                    <div class="value"><i class="minus icon"></i>{{ discountOnTotal }}%</div>
+                                                                    <div class="label">
+                                                                        ({{ calcTotalPrice() }}{{ currencySymbol }})
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -357,6 +370,15 @@
                                                 </div>
                                             </div>
                                             <div class="field">
+                                                <label>{{ advertFormDiscountLabel }}</label>
+                                                <div class="ui right labeled input">
+                                                    <input type="number" name="discount_on_total" min="0" max="100" step="0.01" v-model="discountOnTotal">
+                                                    <div class="ui basic label">
+                                                        %
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field">
                                                 <label>{{ advertFormBuyingPriceLabel }}</label>
                                                 <div class="ui input">
                                                     <template v-if="isNegociated==0">
@@ -503,6 +525,19 @@
                                                                 <div v-if="isNegociated" class="ui small blue tag label">{{ advertExampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
+                                                        <tr v-if="!isNegociated && discountOnTotal > 0">
+                                                            <td class="collapsing">
+                                                                <i class="gift icon"></i> {{ advertFormDiscountLabel }}
+                                                            </td>
+                                                            <td>
+                                                                <div class="ui mini statistic">
+                                                                    <div class="value"><i class="minus icon"></i>{{ discountOnTotal }}%</div>
+                                                                    <div class="label">
+                                                                        ({{ calcTotalPrice() }}{{ currencySymbol }})
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -563,6 +598,7 @@
             'advertFormRefLabel',
             'advertFormDescriptionLabel',
             'advertFormPriceLabel',
+            'advertFormDiscountLabel',
             'advertFormBuyingPriceLabel',
             'advertFormGooglemapLabel',
             'advertFormPhotoSeparator',
@@ -653,6 +689,7 @@
                 manuRef: '',
                 description: '',
                 price: '0',
+                discountOnTotal: '0',
                 buyingPrice: '0',
                 fakeAdvert: {
                     originalPrice: 0,
@@ -660,6 +697,7 @@
                     priceSubUnit: 2,
                     totalQuantity: 0,
                     lotMiniQuantity:0,
+                    discount_on_total: 0,
                     currencySymbol: ''
                 },
                 totalQuantity: 1,
@@ -801,6 +839,9 @@
             this.$watch('price', function () {
                 this.fakeAdvert.originalPrice = parseFloat(this.price);
             });
+            this.$watch('discountOnTotal', function () {
+                this.fakeAdvert.discount_on_total = this.discountOnTotal;
+            });
             this.$watch('buyingPrice', function () {
                 this.fakeAdvert.buyingPrice = parseFloat(this.buyingPrice);
             });
@@ -822,6 +863,7 @@
                     this.price = this.dataAdvertEdit.originalPrice/(Math.pow(10,this.dataAdvertEdit.priceSubUnit));
                     this.totalQuantity = this.dataAdvertEdit.totalQuantity;
                     this.lotMiniQuantity = this.dataAdvertEdit.lotMiniQuantity;
+                    this.discountOnTotal = (this.dataAdvertEdit.discount_on_total).toFixed(2);
                     this.type = this.dataAdvertEdit.type;
                     this.currency = this.dataAdvertEdit.currency;
                     this.currencySymbol = this.dataAdvertEdit.currencySymbol;
@@ -978,6 +1020,11 @@
                     return parseInt(this.advertFormPhotoNbFreePicture);
                 }
             },
+            calcTotalPrice: function () {
+                let price = parseFloat(this.price)*Math.pow(10, this.subunit)*this.totalQuantity;
+                let newPrice = price - (parseFloat(this.discountOnTotal)*price/100).toFixed(0);
+                return parseFloat(newPrice/(Math.pow(10,this.subunit))).toFixed(this.subunit);
+            },
             submitForm (event) {
                 event.preventDefault();
                 this.setStorage();
@@ -989,6 +1036,7 @@
                 sessionStorage.setItem('manuRef', this.manuRef);
                 sessionStorage.setItem('description', this.description);
                 sessionStorage.setItem('price', this.price);
+                sessionStorage.setItem('discountOnTotal', this.discountOnTotal);
                 sessionStorage.setItem('totalQuantity', this.totalQuantity);
                 sessionStorage.setItem('lotMiniQuantity', this.lotMiniQuantity);
                 sessionStorage.setItem('type', this.type);
@@ -1007,6 +1055,7 @@
                 sessionStorage.getItem('manuRef') != undefined ? this.manuRef = sessionStorage.getItem('manuRef') : null;
                 sessionStorage.getItem('description') != undefined ? this.description = sessionStorage.getItem('description') : null;
                 sessionStorage.getItem('price') != undefined ? this.price = sessionStorage.getItem('price') : null;
+                sessionStorage.getItem('discountOnTotal') != undefined ? this.discountOnTotal = sessionStorage.getItem('discountOnTotal') : null;
                 sessionStorage.getItem('totalQuantity') != undefined ? this.totalQuantity = sessionStorage.getItem('totalQuantity') : null;
                 sessionStorage.getItem('lotMiniQuantity') != undefined ? this.lotMiniQuantity = sessionStorage.getItem('lotMiniQuantity') : null;
                 sessionStorage.getItem('type') != undefined ? this.type = sessionStorage.getItem('type') : null;

@@ -359,6 +359,8 @@ class AdvertController extends Controller
         $response = [];
         foreach ($adverts as $advert){
             $advert->setListEditFields();
+            $advert->setGlobalDiscount();
+            $advert->setTotalPriceMargin();
             $response[$advert->id] = $advert;
         }
         return response()->json($response);
@@ -494,6 +496,8 @@ class AdvertController extends Controller
                 $ancestors->add($advert->category);
                 $advert->setBreadCrumb($ancestors);
                 $advert->setBookmarkCount();
+                $advert->setGlobalDiscount();
+                $advert->setTotalPriceMargin();
                 auth()->check() ? $advert->setIsOnEdit() : null;
                 return view('advert.show', compact('advert'));
         } elseif ($advert && $request->isXmlHttpRequest() && PrivilegesUtils::canShowXmlAdvert($advert)) {
@@ -638,6 +642,7 @@ class AdvertController extends Controller
                 $advert->mainPicture = $request->main_picture;
                 $advert->currency=$request->currency;
                 $advert->totalQuantity=$request->total_quantity;
+                $advert->discount_on_total=(int)(filter_var($request->discount_on_total, FILTER_VALIDATE_FLOAT)*100);
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
                 $advert->isNegociated=filter_var($request->is_negociated, FILTER_VALIDATE_BOOLEAN);
