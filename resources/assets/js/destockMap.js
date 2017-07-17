@@ -93,6 +93,7 @@ let DestockMap = function ()  {
             };
             let map = new google.maps.Map(_elemMap, mapOptions);
             _map = map;
+            _map.addListener('resize', function () { });
 
             _marker = new google.maps.Marker({
                 map: map,

@@ -205,13 +205,13 @@
                     })
                         .then(function (response) {
                             that.onUpload = false;
-                            that.filePhotoToPost.delete(that.formPhotoFileInputName);
+                            that.filePhotoToPost = new FormData();
                             event.target.value="";
                             that.thumbs = response.data;
                         })
                         .catch(function (error) {
                             that.onUpload = false;
-                            that.filePhotoToPost.delete(that.formPhotoFileInputName);
+                            that.filePhotoToPost = new FormData();
                             event.target.value="";
                             if (error.response && error.response.status == 422) {
                                 let msg = error.response.data.addpicture[0];
