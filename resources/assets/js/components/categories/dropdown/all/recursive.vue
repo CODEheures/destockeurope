@@ -3,14 +3,13 @@
         <div class="item" :data-value="parentId" :data-text="parentDescription + ' > ' + allItem" v-if="withAll">
             <span class="text">{{ allItem }}</span>
         </div>
-        <div v-for="category in categories" class="item" :data-value="category.id" :data-text="parentDescription + '<br /> > ' + category['description'][actualLocale]" >
+        <div v-for="category in categories" class="item" :data-value="category.id" :data-text="parentDescription + '<br /> > ' + category['description'][properties.actualLocale]" >
             <i :class="left ? 'right dropdown icon' : 'left dropdown icon'" v-if="category.children.length>0"></i>
-            <span class="text">{{ category['description'][actualLocale] }}</span>
+            <span class="text">{{ category['description'][properties.actualLocale] }}</span>
             <recursive-categories-dropdown-menu
                     v-if="category.children.length>0"
-                    :parent-description="parentDescription + '<br /> > ' + category['description'][actualLocale]"
+                    :parent-description="parentDescription + '<br /> > ' + category['description'][properties.actualLocale]"
                     :categories="category.children"
-                    :actual-locale="actualLocale"
                     :parent-id="category.id"
                     :with-all="withAll"
                     :all-item="allItem"
@@ -26,7 +25,6 @@
         props: {
             parentDescription: String,
             categories: Array,
-            actualLocale: String,
             parentId: Number,
             withAll: Boolean,
             allItem: {
@@ -38,11 +36,11 @@
         },
         data: () => {
             return {
-
+                properties: {}
             } ;
         },
         mounted () {
-
+            this.properties = this.$store.state.properties['global'];
         },
         methods: {
 

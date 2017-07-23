@@ -4,12 +4,12 @@
             <div class="menu">
                 <div class="ui right search icon input">
                     <i class="search icon"></i>
-                    <input type="text" :placeholder="inputSearchLabel">
+                    <input type="text" :placeholder="strings.inputSearchLabel">
                 </div>
                 <div class="divider"></div>
                 <div class="scrolling menu">
                     <div class="item" v-if="withAll" :data-value="0">
-                        {{ withAllLabel }}
+                        {{ strings.withAllLabel }}
                     </div>
                     <div class="divider" v-if="withAll"></div>
                     <div v-for="(currency, key) in currenciesList" class="item" :data-value="currency.code">
@@ -25,9 +25,6 @@
     export default {
         props: {
             currenciesList: Array,
-            firstMenuName: String,
-            inputSearchLabel: String,
-            withAllLabel: String,
             oldCurrency: {
                 type: String,
                 required: false,
@@ -41,10 +38,12 @@
         },
         data: () => {
             return {
+                strings: {},
                 dataCurrent: 0
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['currencies-button'];
             let that = this;
             $('#'+this._uid)
                 .dropdown('set selected', that.oldCurrency)

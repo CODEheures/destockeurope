@@ -6,8 +6,8 @@
         <template v-if="usersList.length==0">
             <div class="item ads">
                 <div class="ui info message">
-                    <div class="header">{{ noResultFoundHeader }}</div>
-                    <p>{{ noResultFoundMessage }}</p>
+                    <div class="header">{{ strings.noResultFoundHeader }}</div>
+                    <p>{{ strings.noResultFoundMessage }}</p>
                 </div>
             </div>
         </template>
@@ -16,11 +16,11 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{ listHeaderRegisterDate }}</th>
-                        <th>{{ listHeaderName }} / {{ listHeaderUsermail }}</th>
-                        <th>{{ listHeaderCompagny }} / {{ listHeaderVatNumber }}</th>
-                        <th>{{ listHeaderAddress }}</th>
-                        <th>{{ roleUserLabel }}</th>
+                        <th>{{ strings.listHeaderRegisterDate }}</th>
+                        <th>{{ strings.listHeaderName }} / {{ strings.listHeaderUsermail }}</th>
+                        <th>{{ strings.listHeaderCompagny }} / {{ strings.listHeaderVatNumber }}</th>
+                        <th>{{ strings.listHeaderAddress }}</th>
+                        <th>{{ strings.roleUserLabel }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -28,8 +28,6 @@
                     <template v-for="(user, index) in usersList">
                         <users-by-list-item
                                 :user="user"
-                                :actual-locale="actualLocale"
-                                :role-user-label="roleUserLabel"
                         ></users-by-list-item>
                     </template>
                 </tbody>
@@ -47,26 +45,19 @@
                 type: Boolean,
                 default: false,
                 required: false
-            },
-            actualLocale: String,
-            roleUserLabel: String,
-            noResultFoundHeader: String,
-            noResultFoundMessage: String,
-            listHeaderUsermail: String,
-            listHeaderName: String,
-            listHeaderCompagny: String,
-            listHeaderRegisterDate: String,
-            listHeaderVatNumber: String,
-            listVatVerificationNumberLabel: String,
-            listHeaderAddress: String
+            }
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 usersList: [],
                 isLoaded: false,
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['users-by-list'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             this.$watch('routeGetUsersList', function () {
                 this.getUsersList();

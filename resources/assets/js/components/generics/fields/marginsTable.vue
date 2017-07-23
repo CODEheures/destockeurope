@@ -2,38 +2,86 @@
     <div class="ui pointing label">
         <table class="ui very basic collapsing celled table">
             <tbody>
-            <tr v-if="!forSeller">
-                <td>
-                    {{ formAdvertPriceCoefficientNewPriceLabel }}
-                </td>
-                <td>
-                    {{ calcMargin(advert,3)  }}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ formAdvertPriceCoefficientUnitMarginLabel }}
-                </td>
-                <td>
-                    {{ calcMargin(advert,1)  }}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ formAdvertPriceCoefficientLotMarginLabel }}
-                </td>
-                <td>
-                    {{ calcMargin(advert,4)  }}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ formAdvertPriceCoefficientTotalMarginLabel }}
-                </td>
-                <td>
-                    {{ calcMargin(advert,2)  }}
-                </td>
-            </tr>
+            <template v-if="forSeller">
+                <tr>
+                    <td>
+                        {{ strings.unitMarginLabel }}
+                    </td>
+                    <td>
+                        {{ unitMargin + advert.currencySymbol }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ strings.lotMarginLabel }}
+                    </td>
+                    <td>
+                        {{ lotMiniMargin + advert.currencySymbol }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ strings.totalMarginLabel }}
+                    </td>
+                    <td>
+                        {{ totalMargin + advert.currencySymbol }}
+                    </td>
+                </tr>
+            </template>
+            <template v-else>
+                <template v-if="forLotMargin">
+                    <tr>
+                        <td>
+                            {{ strings.providerPrice }}
+                        </td>
+                        <td>
+                            {{ advert.price }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ strings.newPriceLabel }}
+                        </td>
+                        <td>
+                            {{ priceMargin + advert.currencySymbol }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ strings.lotMarginLabel }}
+                        </td>
+                        <td>
+                            {{ lotMiniMargin + advert.currencySymbol }}
+                        </td>
+                    </tr>
+                </template>
+                <template v-else>
+                    <tr>
+                        <td>
+                            {{ strings.totalProviderPrice }}
+                        </td>
+                        <td>
+                            {{ totalSellerPrice + advert.currencySymbol }}
+                        </td>
+                    </tr>
+                    <tr :id="'tr_total_price_'+_uid" :class="coefficientTotalIsOverMax ? 'error' : ''" :data-content="coefficientTotalIsOverMax ? strings.overPriceLabel : null" data-position="bottom center">
+                        <td>
+                            {{ strings.newPriceLabel }}
+                        </td>
+                        <td>
+                            {{ totalPriceMargin + advert.currencySymbol }} <i v-if="coefficientTotalIsOverMax" class="warning sign icon"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ strings.totalMarginLabel }}
+                        </td>
+                        <td>
+                            {{ totalMargin + advert.currencySymbol }}
+                        </td>
+                    </tr>
+                </template>
+            </template>
             </tbody>
         </table>
     </div>
@@ -50,44 +98,102 @@
                 required: false,
                 default: false
             },
-            formAdvertPriceCoefficientLabel: String,
-            formAdvertPriceCoefficientNewPriceLabel: String,
-            formAdvertPriceCoefficientUnitMarginLabel: String,
-            formAdvertPriceCoefficientLotMarginLabel: String,
-            formAdvertPriceCoefficientTotalMarginLabel: String,
+            forLotMargin: {
+                type: Boolean,
+                required: false,
+                default: true
+            }
         },
         data: () => {
             return {
-
+                strings: {},
+                coefficientTotalIsOverMax: false,
+                unitMargin: 0,
+                totalMargin: 0,
+                lotMiniMargin: 0,
+                priceMargin: 0,
+                unitSellerPrice: 0,
+                totalSellerPrice: 0,
+                totalPriceMargin: 0
             }
         },
         mounted () {
-
+            this.strings = this.$store.state.strings['margin-table'];
+            let that = this;
+            if(!this.forSeller){
+                this.$watch('advert.price_coefficient', function () {
+                    that.calcMargin();
+                });
+                this.$watch('advert.price_coefficient_total', function () {
+                    that.calcMargin();
+                });
+            }
+            if(this.forSeller){
+                this.$watch('advert.buyingPrice', function () {
+                    that.calcMargin();
+                });
+                this.$watch('advert.originalPrice', function () {
+                    that.calcMargin();
+                });
+                this.$watch('advert.discount_on_total', function () {
+                    that.calcMargin();
+                });
+            }
+            this.$watch('advert.lotMiniQuantity', function () {
+                that.calcMargin();
+            });
+            this.$watch('advert.totalQuantity', function () {
+                that.calcMargin();
+            });
+            $('#tr_total_price_'+this._uid).popup();
+            this.calcMargin();
         },
         methods: {
-            calcMargin: function (advert, type) {
-                let unitMargin;
-                let totalMargin;
-                let lotMiniMargin;
+            calcMargin: function () {
+                let originalUnitSellerPrice = this.advert.originalPrice;
+                let originalTotalSellerPrice = Math.floor(this.advert.totalQuantity*(this.advert.originalPrice*(1-(this.advert.discount_on_total/100))));
+
+                let unitSellerPrice = originalUnitSellerPrice/(Math.pow(10,this.advert.priceSubUnit));
+                let totalSellerPrice = originalTotalSellerPrice/(Math.pow(10,this.advert.priceSubUnit));
+
+                let unitMargin=0;
+                let totalMargin=0;
+                let lotMiniMargin=0;
+                let priceMargin=0;
+                let totalPriceMargin=0;
+
                 if(this.forSeller){
-                    unitMargin =  advert.originalPrice-advert.buyingPrice;
-                    totalMargin = advert.totalQuantity*(advert.originalPrice*(1-(advert.discount_on_total/100))-advert.buyingPrice);
-                    lotMiniMargin = unitMargin*advert.lotMiniQuantity;
+                    unitMargin =  this.advert.originalPrice-this.advert.buyingPrice;
+                    unitMargin = Math.floor(unitMargin)/Math.pow(10,this.advert.priceSubUnit);
+
+                    lotMiniMargin = unitMargin*this.advert.lotMiniQuantity;
+
+                    totalMargin = originalTotalSellerPrice-this.advert.buyingPrice*this.advert.totalQuantity;
+                    totalMargin = Math.floor(totalMargin)/Math.pow(10,this.advert.priceSubUnit);
                 } else {
-                    unitMargin =  (((advert.originalPrice*advert.price_coefficient)/(100*Math.pow(10,advert.priceSubUnit))));
-                    unitMargin = (Math.floor(unitMargin*Math.pow(10,advert.priceSubUnit))/Math.pow(10,advert.priceSubUnit));
-                    totalMargin = unitMargin*advert.totalQuantity;
-                    lotMiniMargin = unitMargin*advert.lotMiniQuantity;
+                    unitMargin =  this.advert.originalPrice*this.advert.price_coefficient/100;
+                    unitMargin = Math.floor(unitMargin)/Math.pow(10,this.advert.priceSubUnit);
+
+                    lotMiniMargin = unitMargin*this.advert.lotMiniQuantity;
+
+                    totalMargin = originalTotalSellerPrice*this.advert.price_coefficient_total/100;
+                    totalMargin = Math.floor(totalMargin)/Math.pow(10,this.advert.priceSubUnit);
+
+                    priceMargin = unitSellerPrice + unitMargin;
+                    totalPriceMargin = totalSellerPrice + totalMargin;
                 }
-                if(type == 1) {
-                    return (unitMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol
-                } else if(type == 2) {
-                    return (totalMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                } else if (type == 3) {
-                    return (((advert.originalPrice/(Math.pow(10,advert.priceSubUnit))) + unitMargin).toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                } else if (type == 4) {
-                    return (lotMiniMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                }
+
+                this.coefficientTotalIsOverMax = totalPriceMargin > priceMargin*this.advert.totalQuantity;
+
+
+                this.unitMargin = unitMargin.toFixed(this.advert.priceSubUnit);
+                this.totalMargin = totalMargin.toFixed(this.advert.priceSubUnit);
+                this.lotMiniMargin = lotMiniMargin.toFixed(this.advert.priceSubUnit);
+                this.unitSellerPrice = unitSellerPrice.toFixed(this.advert.priceSubUnit);
+                this.priceMargin = priceMargin.toFixed(this.advert.priceSubUnit);
+                this.totalSellerPrice = totalSellerPrice.toFixed(this.advert.priceSubUnit);
+                this.totalPriceMargin = totalPriceMargin.toFixed(this.advert.priceSubUnit);
+
             }
         }
     }

@@ -6,7 +6,7 @@
                     <div class="bar">
                         <div class="progress"></div>
                     </div>
-                    <div class="label"><a class="ui orange button" v-on:click="cancelUploadVideo()">{{ advertFormVideoBtnCancel }}</a></div>
+                    <div class="label"><a class="ui orange button" v-on:click="cancelUploadVideo()">{{ strings.videoBtnCancel }}</a></div>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
         </div>
         <div class="ui grid" v-show="onCloseTicket">
             <div class="sixteen wide center aligned column">
-                {{ waitingMessage }}
+                {{ strings.waitingMessage }}
                 <div class="ui massive active centered inline loader"></div>
             </div>
         </div>
@@ -35,12 +35,12 @@
                 <div class="row">
                     <div class="ui icon big primary button" v-on:click="triggerClickInput()">
                         <i class="plus icon"></i>
-                        {{ advertFormVideoBtnLabel }}
+                        {{ strings.videoBtnLabel }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="ui top blue pointing basic label">
-                        {{ advertFormVideoLabel }}
+                        {{ strings.videoLabel }}
                     </div>
                 </div>
                 <input :id="formVideoFileInputName" type="file" :name="formVideoFileInputName" v-on:change="uploadVideo" style="display: none">
@@ -51,14 +51,14 @@
         <div :id="'vimeodiv-'+_uid" class="sixteen wide column" v-show="videoId!=''">
             <div :class="format != undefined && format == 'auto' ? 'ui basic segment' : 'ui basic compact segment'" v-if="videoId && !videoReady">
                 <div class="ui inverted active dimmer" style="background-color: white;">
-                    <div :class="format != undefined && format == 'auto' ? 'ui text loader': 'ui massive text loader'">{{ transcodeMessage }}</div>
+                    <div :class="format != undefined && format == 'auto' ? 'ui text loader': 'ui massive text loader'">{{ strings.transcodeMessage }}</div>
                 </div>
                 <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" :width="iframeWidth" :height="iframeHeight" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             </div>
             <iframe v-if="videoId && videoReady" :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" :width="iframeWidth" :height="iframeHeight" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
         </div>
         <div class="sixteen wide column" v-if="videoId!=''">
-            <a class="ui red button" v-on:click="delVideo()">{{ advertFormVideoBtnDelete }}</a>
+            <a class="ui red button" v-on:click="delVideo()">{{ strings.videoBtnDelete }}</a>
         </div>
 
     </div>
@@ -83,17 +83,11 @@
             format: {
                 type: String,
                 required: false,
-            },
-            //vue strings
-            advertFormVideoBtnLabel: String,
-            advertFormVideoLabel: String,
-            advertFormVideoBtnDelete: String,
-            advertFormVideoBtnCancel: String,
-            waitingMessage: String,
-            transcodeMessage: String
+            }
         },
         data: () => {
             return {
+                strings: {},
                 formVideoFileInputName: 'addvideo',
                 videoInputEventTarget: null,
                 videoBlob: undefined,
@@ -111,6 +105,7 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['vimeo-uploader'];
             let that = this;
             if(this.format != undefined && this.format=="auto"){
                 this.iframeWidth= 'auto';

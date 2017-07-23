@@ -31,7 +31,7 @@
                                         <p>
                                             <span class="ui breadcrumb">
                                                 <template v-for="(item,index) in advert.breadCrumb">
-                                                    <div class="active section">{{ item.description[actualLocale] }}</div>
+                                                    <div class="active section">{{ item.description[properties.actualLocale] }}</div>
                                                     <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                                                 </template>
                                             </span>
@@ -39,9 +39,9 @@
                                     </div>
                                     <div class="five wide right aligned vertical top aligned column">
                                         <p class="infos">
-                                            <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
-                                            <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span><br />
-                                            <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                            <span :title="strings.totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
+                                            <span :title="strings.lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span><br />
+                                            <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
                                         </p>
                                     </div>
                                     <div class="sixteen wide column item-description">
@@ -50,11 +50,11 @@
                                         </div>
                                     </div>
                                     <div class="four wide column">
-                                        <span :class="advert.isNegociated ? 'ui big blue left floated left pointing label price negociated' : 'ui big yellow left floated left pointing label price'">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
+                                        <span :class="advert.isNegociated ? 'ui big blue left floated left pointing label price negociated' : 'ui big yellow left floated left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
                                     </div>
                                     <div class="twelve wide right aligned column geodate-computer">
                                         <p>
-                                            <i class="green big protect icon" :title="trustedProviderLabel" v-if="advert.is_delegation"></i>
+                                            <i class="green big protect icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>
                                             <i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                             <i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                             <i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
@@ -73,7 +73,7 @@
                                 <div class="header"><h4>{{ advert.title }}</h4></div>
                                 <span class="ui mini breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
-                                        <div class="active section">{{ item.description[actualLocale] }}</div>
+                                        <div class="active section">{{ item.description[properties.actualLocale] }}</div>
                                         <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                                     </template>
                                 </span>
@@ -99,21 +99,21 @@
                             </div>
                             <div class="six wide mobile only column">
                                 <p class="infos">
-                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
                                 </p>
                                 <p class="infos">
-                                    <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
+                                    <span><i class="cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                 </p>
                                 <p class="infos">
-                                    <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span><i class="cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                 </p>
                                 <p>
-                                    <span :class="advert.isNegociated ? 'ui blue left pointing label price negociated' : 'ui yellow left pointing label price'">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
+                                    <span :class="advert.isNegociated ? 'ui blue left pointing label price negociated' : 'ui yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
                                 </p>
                             </div>
                             <div class="sixteen wide right aligned mobile only column geodate-mobile">
                                 <p>
-                                    <i class="green big protect icon" :title="trustedProviderLabel" v-if="advert.is_delegation"></i>
+                                    <i class="green big protect icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>
                                     <i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
                                     <i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
                                     <i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
@@ -150,19 +150,6 @@
                             <template v-if="!advert.deleted_at">
                                 <advert-manage-button
                                         :advert="advert"
-                                        :manage-advert-label="manageAdvertLabel"
-                                        :see-advert-label="seeAdvertLabel"
-                                        :edit-advert-label="editAdvertLabel"
-                                        :delete-advert-label="deleteAdvertLabel"
-                                        :back-to-top-label="backToTopLabel"
-                                        :highlight-label="highlightLabel"
-                                        :renew-advert-label="renewAdvertLabel"
-                                        :see-advert-popup-label="seeAdvertPopupLabel"
-                                        :edit-advert-popup-label="editAdvertPopupLabel"
-                                        :delete-advert-popup-label="deleteAdvertPopupLabel"
-                                        :back-to-top-popup-label="backToTopPopupLabel"
-                                        :highlight-popup-label="highlightPopupLabel"
-                                        :renew-advert-popup-label="renewAdvertPopupLabel"
                                 ></advert-manage-button>
                             </template>
                         </div>
@@ -174,7 +161,7 @@
                                 <p>
                                 <span class="ui breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
-                                        <div class="active section"> {{ item.description[actualLocale] }}</div>
+                                        <div class="active section"> {{ item.description[properties.actualLocale] }}</div>
                                         <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                                     </template>
                                 </span>
@@ -182,19 +169,16 @@
                             </div>
                             <div class="six wide right aligned vertical middle aligned column">
                                 <p class="infos">
-                                    <span :class="advert.isNegociated ? 'ui big blue left pointing label price negociated' : 'ui big yellow left pointing label price'">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price }}</span><br/>
-                                    <span :title="totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
-                                    <span :title="lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
-                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                    <span :class="advert.isNegociated ? 'ui big blue left pointing label price negociated' : 'ui big yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price }}</span><br/>
+                                    <span :title="strings.totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
+                                    <span :title="strings.lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
                                 </p>
                             </div>
                             <div class="sixteen wide column item-description" v-if="!advert.deleted_at">
                                 <div class="ui form">
                                     <quantities-input-field
                                             :advert="advert"
-                                            :total-quantity-label="totalQuantityLabel"
-                                            :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                            :form-update-label="formAdvertPriceCoefficientUpdateLabel"
                                     ></quantities-input-field>
                                 </div>
                             </div>
@@ -202,12 +186,6 @@
                                 <div class="ui form">
                                     <margin-input-field
                                             :advert="advert"
-                                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
-                                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                                     ></margin-input-field>
                                 </div>
                             </div>
@@ -216,7 +194,7 @@
                     <div class="ten wide mobile only column">
                     <span class="ui mini breadcrumb">
                         <template v-for="(item,index) in advert.breadCrumb">
-                            <div class="active section">{{ item.description[actualLocale] }}</div>
+                            <div class="active section">{{ item.description[properties.actualLocale] }}</div>
                             <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                         </template>
                     </span>
@@ -224,10 +202,10 @@
                         <div class="ui grid">
                             <div class="sixteen wide mobile only right aligned column">
                                 <p class="infos">
-                                    <span class="ui big blue left pointing label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price }}</span><br/>
-                                    <span><i class="cubes icon" :title="totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                    <span><i class="cube icon" :title="lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
-                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>
+                                    <span class="ui big blue left pointing label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price }}</span><br/>
+                                    <span><i class="cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
+                                    <span><i class="cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
                                 </p>
                             </div>
                         </div>
@@ -236,9 +214,6 @@
                         <div class="ui form">
                             <quantities-input-field
                                     :advert="advert"
-                                    :total-quantity-label="totalQuantityLabel"
-                                    :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                    :form-update-label="formAdvertPriceCoefficientUpdateLabel"
                             ></quantities-input-field>
                         </div>
                     </div>
@@ -246,12 +221,6 @@
                         <div class="ui form">
                             <margin-input-field
                                     :advert="advert"
-                                    :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                                    :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                                    :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                                    :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
-                                    :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                                    :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                             ></margin-input-field>
                         </div>
                     </div>
@@ -287,7 +256,7 @@
                                 <p>
                                 <span class="ui breadcrumb">
                                     <template v-for="(item,index) in advert.breadCrumb">
-                                        <div class="active section">{{ item.description[actualLocale] }}</div>
+                                        <div class="active section">{{ item.description[properties.actualLocale] }}</div>
                                         <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                                     </template>
                                 </span>
@@ -298,30 +267,17 @@
                                     <template v-if="!advert.deleted_at">
                                         <advert-manage-button
                                             :advert="advert"
-                                            :manage-advert-label="manageAdvertLabel"
-                                            :see-advert-label="seeAdvertLabel"
-                                            :edit-advert-label="editAdvertLabel"
-                                            :delete-advert-label="deleteAdvertLabel"
-                                            :back-to-top-label="backToTopLabel"
-                                            :highlight-label="highlightLabel"
-                                            :renew-advert-label="renewAdvertLabel"
-                                            :see-advert-popup-label="seeAdvertPopupLabel"
-                                            :edit-advert-popup-label="editAdvertPopupLabel"
-                                            :delete-advert-popup-label="deleteAdvertPopupLabel"
-                                            :back-to-top-popup-label="backToTopPopupLabel"
-                                            :highlight-popup-label="highlightPopupLabel"
-                                            :renew-advert-popup-label="renewAdvertPopupLabel"
                                         ></advert-manage-button>
                                     </template>
                                     <template v-else>
                                         <a :href="advert.renewUrl" class="ui primary button">
                                             <i class="power icon"></i>
-                                            {{ renewAdvertLabel }}
+                                            {{ strings.renewAdvertLabel }}
                                         </a>
                                     </template>
                                     <div class="ui labeled button disabled-bookmark">
                                         <div class="ui yellow button">
-                                            <i class="heart icon"></i> {{ bookmarkInfo }}
+                                            <i class="heart icon"></i> {{ strings.bookmarkInfo }}
                                         </div>
                                         <a class="ui basic yellow left left pointing label">
                                             {{ advert.bookmarkCount }}
@@ -329,7 +285,7 @@
                                     </div>
                                     <div class="ui labeled button disabled-bookmark">
                                         <div class="ui olive button">
-                                            <i class="unhide icon"></i> {{ viewsInfo }}
+                                            <i class="unhide icon"></i> {{ strings.viewsInfo }}
                                         </div>
                                         <a class="ui basic olive left left pointing label">
                                             {{ advert.views }}
@@ -341,11 +297,11 @@
                                         <i class="notched circle loading icon"></i>
                                         <div class="content">
                                             <div class="header">
-                                                {{ validationOnProgressLabel }}
+                                                {{ strings.validationOnProgressLabel }}
                                             </div>
                                             <div v-on:click="destroyMe()" class="ui red button">
                                                 <i class="trash icon"></i>
-                                                {{ deleteAdvertLabel }}
+                                                {{ strings.deleteAdvertLabel }}
                                             </div>
                                         </div>
                                     </div>
@@ -355,9 +311,6 @@
                                 <div class="ui form">
                                     <quantities-input-field
                                             :advert="advert"
-                                            :total-quantity-label="totalQuantityLabel"
-                                            :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                            :form-update-label="formAdvertPriceCoefficientUpdateLabel"
                                     ></quantities-input-field>
                                 </div>
                             </div>
@@ -372,7 +325,7 @@
                     <div class="ten wide mobile only column">
                         <span class="ui mini breadcrumb">
                             <template v-for="(item,index) in advert.breadCrumb">
-                                <div class="active section">{{ item.description[actualLocale] }}</div>
+                                <div class="active section">{{ item.description[properties.actualLocale] }}</div>
                                 <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
                             </template>
                         </span>
@@ -381,25 +334,12 @@
                             <template v-if="!advert.deleted_at">
                                 <advert-manage-button
                                         :advert="advert"
-                                        :manage-advert-label="manageAdvertLabel"
-                                        :see-advert-label="seeAdvertLabel"
-                                        :edit-advert-label="editAdvertLabel"
-                                        :delete-advert-label="deleteAdvertLabel"
-                                        :back-to-top-label="backToTopLabel"
-                                        :highlight-label="highlightLabel"
-                                        :renew-advert-label="renewAdvertLabel"
-                                        :see-advert-popup-label="seeAdvertPopupLabel"
-                                        :edit-advert-popup-label="editAdvertPopupLabel"
-                                        :delete-advert-popup-label="deleteAdvertPopupLabel"
-                                        :back-to-top-popup-label="backToTopPopupLabel"
-                                        :highlight-popup-label="highlightPopupLabel"
-                                        :renew-advert-popup-label="renewAdvertPopupLabel"
                                 ></advert-manage-button>
                             </template>
                             <template v-else>
                                 <a :href="advert.renewUrl" class="ui primary button">
                                     <i class="power icon"></i>
-                                    {{ renewAdvertLabel }}
+                                    {{ strings.renewAdvertLabel }}
                                 </a>
                             </template>
                         </div>
@@ -408,7 +348,7 @@
                         <div class="description" v-if="advert.isValid">
                             <div class="ui labeled button disabled-bookmark">
                                 <div class="ui yellow button">
-                                    <i class="heart icon"></i> {{ bookmarkInfo }}
+                                    <i class="heart icon"></i> {{ strings.bookmarkInfo }}
                                 </div>
                                 <a class="ui basic yellow left left pointing label">
                                     {{ advert.bookmarkCount }}
@@ -416,7 +356,7 @@
                             </div>
                             <div class="ui labeled button disabled-bookmark">
                                 <div class="ui olive button">
-                                    <i class="unhide icon"></i> {{ viewsInfo }}
+                                    <i class="unhide icon"></i> {{ strings.viewsInfo }}
                                 </div>
                                 <a class="ui basic olive left left pointing label">
                                     {{ advert.views }}
@@ -428,11 +368,11 @@
                                 <i class="notched circle loading icon"></i>
                                 <div class="content">
                                     <div class="header">
-                                        {{ validationOnProgressLabel }}
+                                        {{ strings.validationOnProgressLabel }}
                                     </div>
                                     <div v-on:click="destroyMe()" class="ui red button">
                                         <i class="trash icon"></i>
-                                        {{ deleteAdvertLabel }}
+                                        {{ strings.deleteAdvertLabel }}
                                     </div>
                                 </div>
                             </div>
@@ -442,9 +382,6 @@
                         <div class="ui form">
                             <quantities-input-field
                                     :advert="advert"
-                                    :total-quantity-label="totalQuantityLabel"
-                                    :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                    :form-update-label="formAdvertPriceCoefficientUpdateLabel"
                             ></quantities-input-field>
                         </div>
                     </div>
@@ -475,44 +412,17 @@
                 type: Boolean,
                 default: false,
                 required: false
-            },
-            actualLocale: String,
-            totalQuantityLabel: String,
-            lotMiniQuantityLabel: String,
-            urgentLabel: String,
-            isNegociatedLabel: String,
-            priceInfoLabel: String,
-            manageAdvertLabel: String,
-            renewAdvertLabel: String,
-            backToTopLabel: String,
-            highlightLabel: String,
-            deleteAdvertLabel: String,
-            seeAdvertLabel: String,
-            editAdvertLabel: String,
-            seeAdvertPopupLabel: String,
-            editAdvertPopupLabel: String,
-            deleteAdvertPopupLabel: String,
-            backToTopPopupLabel: String,
-            highlightPopupLabel: String,
-            renewAdvertPopupLabel: String,
-            validationOnProgressLabel: String,
-            bookmarkInfo: String,
-            viewsInfo: String,
-            trustedProviderLabel: String,
-            //margin input field
-            formAdvertPriceCoefficientLabel: String,
-            formAdvertPriceCoefficientNewPriceLabel: String,
-            formAdvertPriceCoefficientUnitMarginLabel: String,
-            formAdvertPriceCoefficientTotalMarginLabel: String,
-            formAdvertPriceCoefficientLotMarginLabel: String,
-            formAdvertPriceCoefficientUpdateLabel: String
+            }
         },
         data: () => {
             return {
-
+                strings: {},
+                properties: {}
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['adverts-by-list-item'];
+            this.properties = this.$store.state.properties['global'];
             this.$on('deleteAdvert', function (event) {
                 this.$parent.$emit('deleteAdvert', event);
             });
@@ -525,7 +435,7 @@
         },
         methods: {
             getMoment: function (dateTime) {
-                moment.locale(this.actualLocale);
+                moment.locale(this.properties.actualLocale);
                 return moment(dateTime).fromNow();
             },
             bookmarkMe: function (event) {

@@ -6,8 +6,8 @@
         <template v-if="invoicesList.length==0">
             <div class="item ads">
                 <div class="ui info message">
-                    <div class="header">{{ noResultFoundHeader }}</div>
-                    <p>{{ noResultFoundMessage }}</p>
+                    <div class="header">{{ strings.noResultFoundHeader }}</div>
+                    <p>{{ strings.noResultFoundMessage }}</p>
                 </div>
             </div>
         </template>
@@ -16,11 +16,11 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{ listHeaderDate }}</th>
-                        <th>{{ listHeaderUsermail }}</th>
-                        <th>{{ listHeaderPaypalCapture }}</th>
-                        <th>{{ listHeaderPaypalVoid }}</th>
-                        <th>{{ listHeaderPaypalRefund }}</th>
+                        <th>{{ strings.listHeaderDate }}</th>
+                        <th>{{ strings.listHeaderUsermail }}</th>
+                        <th>{{ strings.listHeaderPaypalCapture }}</th>
+                        <th>{{ strings.listHeaderPaypalVoid }}</th>
+                        <th>{{ strings.listHeaderPaypalRefund }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -28,10 +28,6 @@
                     <template v-for="(invoice, index) in invoicesList">
                         <invoices-by-list-item
                                 :invoice="invoice"
-                                :actual-locale="actualLocale"
-                                :see-invoice-label="seeInvoiceLabel"
-                                :refund-invoice-label="refundInvoiceLabel"
-                                :or-label="orLabel"
                         ></invoices-by-list-item>
                     </template>
                 </tbody>
@@ -48,26 +44,17 @@
                 type: Boolean,
                 default: false,
                 required: false
-            },
-            actualLocale: String,
-            orLabel: String,
-            seeInvoiceLabel: String,
-            refundInvoiceLabel: String,
-            noResultFoundHeader: String,
-            noResultFoundMessage: String,
-            listHeaderPaypalCapture: String,
-            listHeaderPaypalVoid: String,
-            listHeaderPaypalRefund: String,
-            listHeaderUsermail: String,
-            listHeaderDate: String
+            }
         },
         data: () => {
             return {
+                strings: {},
                 invoicesList: [],
                 isLoaded: false,
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['invoice-by-list'];
             let that = this;
             this.$watch('routeGetInvoicesList', function () {
                 this.getInvoicesList();

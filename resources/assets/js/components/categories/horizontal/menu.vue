@@ -5,12 +5,12 @@
         </div>
         <div class="ui blue inverted category menu">
             <a class="browse item" v-on:click="emitCategoryChoice(0)">
-            {{ allItem }}
+            {{ strings.allItem }}
             </a>
             <template v-for="(category,index) in categories">
                 <a :id="'browse-'+index+'-'+_uid" class="browse item"
                    v-on:click="emitCategoryChoice(category.id)">
-                    {{ category['description'][actualLocale] }}
+                    {{ category['description'][properties.actualLocale] }}
                     <i class="dropdown icon"></i>
                 </a>
             </template>
@@ -18,11 +18,9 @@
         <div :id="'popup-'+index+'-'+_uid" v-for="(category,index) in categories">
             <recursive-categories-horizontal-menu
                     :categories="category.children"
-                    :actual-locale="actualLocale"
                     :parent-id="category.id"
-                    :parent-description="category.description[actualLocale]"
-                    :all-item="allItem"
-                    :old-choice="oldChoice"
+                    :parent-description="category.description[properties.actualLocale]"
+                    :all-item="strings.allItem"
                     :level="1"
                     :max-level="countLevel(category)"
             ></recursive-categories-horizontal-menu>
@@ -33,19 +31,20 @@
 
 <script>
     export default {
-        props: [
-            'routeCategory',
-            'actualLocale',
-            'allItem',
-            'oldChoice'
-        ],
+        props: {
+
+        },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 categories: [],
                 isLoaded: false
             } ;
         },
         mounted () {
+            this.strings = this.$store.state.strings['categories-horizontal-menu'];
+            this.properties = this.$store.state.properties['global'];
             this.getCategories();
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
@@ -64,7 +63,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.routeCategory)
+                axios.get(this.properties.routeCategory)
                     .then(function (response) {
                         that.categories = response.data;
                         that.isLoaded = true;

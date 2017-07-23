@@ -46,7 +46,8 @@
             });
             this.$watch('pictures', function () {
                 this.updateDataPictures();
-            })
+            });
+            this.updateDataPictures();
         },
         updated: function(){
             this.swiper.update();
@@ -65,15 +66,17 @@
             updateDataPictures: function () {
                 let pictures=[];
                 let that = this;
-                this.pictures.forEach(function (picture) {
-                    if(!picture.isThumb){
-                        if(picture.hashName == that.mainPicture){
-                            pictures.unshift(picture.url);
-                        } else {
-                            pictures.push(picture.url);
+                if(this.pictures){
+                    this.pictures.forEach(function (picture) {
+                        if(!picture.isThumb){
+                            if(picture.hashName == that.mainPicture){
+                                pictures.unshift(picture.url);
+                            } else {
+                                pictures.push(picture.url);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 this.dataPictures = pictures;
             }
         }

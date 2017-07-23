@@ -297,6 +297,18 @@ class Advert extends Model {
         $this->attributes['price_coefficient'] =  (int)round(($value*100),0);
     }
 
+    public function setPriceCoefficientTotalAttribute($value) {
+        //Use this mutator to ensure Margin value
+        //Example Value: 5.08 => 508 in BDD
+        $this->attributes['price_coefficient_total'] =  (int)round(($value*100),0);
+    }
+
+    public function setDiscountOnTotalAttribute($value) {
+        //Use this mutator to ensure Margin value
+        //Example Value: 5.08 => 508 in BDD
+        $this->attributes['discount_on_total'] =  (int)round(($value*100),0);
+    }
+
     //Public functions
     public function getConstructBreadCrumb() {
         $locale = App::getLocale();
@@ -355,10 +367,8 @@ class Advert extends Model {
 
     public function setGlobalDiscount() {
         if(!$this->isNegociated && $this->OriginalPriceWithMargin>0){
-//            $finalTotalPrice = $this->calcTotalFinalPrice();
-//            $totalPriceByAddLot = $this->OriginalPriceWithMargin*$this->totalQuantity;
-//            $this->globalDiscount = ((int)((1 - ($finalTotalPrice/$totalPriceByAddLot))*10000))/100;
-            $this->globalDiscount = (1 - ((100+$this->price_coefficient_total)*(100-$this->discount_on_total)/((100+$this->price_coefficient)*100)))*100;
+            $newCoef = (100 - ($this->calcTotalFinalPrice()*100/($this->originalPriceWithMargin*$this->totalQuantity)));
+            $this->globalDiscount = number_format($newCoef,2);
         }
     }
 
@@ -475,11 +485,11 @@ class Advert extends Model {
 
     //privates parts
     private function calcTotalFinalPrice() {
-        $priceCoefficientTotal=(int)$this->price_coefficient_total/100;
+        $priceCoefficientTotal=$this->price_coefficient_total;
 
-        $totalDiscountPrice = (int)($this->originalPrice*$this->totalQuantity*(1-$this->discount_on_total/100));
+        $totalDiscountPrice = (int)($this->originalPrice*$this->totalQuantity*(100-$this->discount_on_total)/100);
 
-        $marginTotal = (int)($totalDiscountPrice*$priceCoefficientTotal);
+        $marginTotal = (int)($totalDiscountPrice*$priceCoefficientTotal/100);
         $finalTotalPrice = $totalDiscountPrice + $marginTotal;
 
         return $finalTotalPrice;

@@ -80,6 +80,7 @@
                             <horizontal-234x60></horizontal-234x60>
                         </div>
                     </div>
+                    @include('storeSetter.props.global')
                     @yield('content')
                 </div>
             </div>

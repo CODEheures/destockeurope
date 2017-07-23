@@ -3,7 +3,7 @@
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div class="ui grid">
             <div class="sixteen wide column">
-                <h2 class="ui header">{{ contentHeader }}</h2>
+                <h2 class="ui header">{{ strings.contentHeader }}</h2>
             </div>
             <div class="sixteen wide mobile only sixteen wide tablet only column">
                 <steps-light
@@ -36,13 +36,13 @@
                         <div class="ten wide tablet only ten wide computer only column">
                             <h4 class="ui horizontal divider header">
                                 <i class="unhide icon"></i>
-                                {{ advertFormPreviewHeaderLabel }}
+                                {{ strings.formPreviewHeaderLabel }}
                             </h4>
                         </div>
                         <div class="sixteen wide mobile only six wide tablet only six wide computer only column">
                             <h4 class="ui horizontal divider header">
                                 <i class="settings icon"></i>
-                                {{ advertFormParamsHeaderLabel }}
+                                {{ strings.formParamsHeaderLabel }}
                             </h4>
                         </div>
                         <div class="ten wide tablet only ten wide computer only column">
@@ -60,14 +60,14 @@
                                 <div class="ui grid">
                                     <div v-if="isUrgent" class="two wide column">
                                             <span class="ui red horizontal label">
-                                                {{ advertExampleUrgentLabel }}
+                                                {{ strings.exampleUrgentLabel }}
                                             </span>
                                     </div>
                                     <div :class="!isUrgent ? 'sixteen wide column' : 'fourteen wide column'">
                                         <h4 class="field">
-                                            <input name="title" type="text" :placeholder="advertFormTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
+                                            <input name="title" type="text" :placeholder="strings.formTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
                                             <transition name="p-fade">
-                                                <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{formPointingMinimumChars }}</span>
+                                                <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{strings.formPointingMinimumChars }}</span>
                                             </transition>
                                         </h4>
                                     </div>
@@ -79,9 +79,6 @@
                                             :pictures="pictures"
                                             :main-picture="mainPicture"
                                             :video-id="videoId !== undefined && videoId !== null ? parseInt(videoId) : null"
-                                            :image-ratio="parseFloat(imageRatio)"
-                                            :first-header="photoSwiperFirstHeader"
-                                            :first-description="photoSwiperFirstDescription"
                                             :lazy-load="false"
                                     ></swiper-gallerie>
                                 </div>
@@ -101,43 +98,43 @@
                                                         <tbody>
                                                         <tr>
                                                             <td class="collapsing">
-                                                                <i class="barcode icon"></i> {{ advertFormRefLabel }}
+                                                                <i class="barcode icon"></i> {{ strings.formRefLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="ui fluid input">
-                                                                    <input name="manu_ref" type="text" :placeholder="advertFormRefLabel" v-model:value="manuRef">
+                                                                    <input name="manu_ref" type="text" :placeholder="strings.formRefLabel" v-model:value="manuRef">
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="collapsing">
-                                                                <i class="cubes icon"></i> {{ advertFormTotalQuantityLabel }}
+                                                                <i class="cubes icon"></i> {{ strings.formTotalQuantityLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="ui fluid input">
-                                                                    <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
+                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="collapsing">
-                                                                <i class="cube icon"></i> {{ advertFormLotMiniQuantityLabel }}
+                                                                <i class="cube icon"></i> {{ strings.formLotMiniQuantityLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="ui fluid input">
-                                                                    <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
+                                                                    <number-input name="lot_mini_quantity" :min="1" :max="maxLotMini" :decimal="0" v-model="lotMiniQuantity"></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="collapsing">
-                                                                <i class="money icon"></i> {{ advertFormPriceLabel }}
+                                                                <i class="money icon"></i> {{ strings.formPriceLabel }}
                                                             </td>
                                                             <td>
                                                                 <div v-show="!isNegociated" class="ui blue tag label">
                                                                     <div class="ui right labeled input">
                                                                         <template v-if="isNegociated==0">
-                                                                            <input style="width: 90%"  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="price"/>
+                                                                            <number-input style="width: 90%"  name="price" :min="calcSubUnit" :decimal="subunit" v-model="price"></number-input>
                                                                         </template>
                                                                         <template v-else>
                                                                             <input  name="" type="number" value="0" disabled/>
@@ -147,12 +144,12 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div v-if="isNegociated" class="ui small blue tag label">{{ advertExampleIsNegociatedLabel }}</div>
+                                                                <div v-if="isNegociated" class="ui small blue tag label">{{ strings.exampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
                                                         <tr v-if="!isNegociated && discountOnTotal > 0">
                                                             <td class="collapsing">
-                                                                <i class="gift icon"></i> {{ advertFormDiscountLabel }}
+                                                                <i class="gift icon"></i> {{ strings.formDiscountLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="ui mini horizontal statistic">
@@ -172,7 +169,7 @@
                                                         <div class="required field">
                                                             <textarea name="description" v-model="description" :maxlength="formDescriptionMaxValid"></textarea>
                                                             <transition name="p-fade">
-                                                                <span class="ui red pointing basic label notransition" v-show="description.length<formDescriptionMinValid">{{ formDescriptionMinValid }}{{formPointingMinimumChars }}</span>
+                                                                <span class="ui red pointing basic label notransition" v-show="description.length<formDescriptionMinValid">{{ formDescriptionMinValid }}{{strings.formPointingMinimumChars }}</span>
                                                             </transition>
                                                         </div>
                                                     </div>
@@ -189,7 +186,7 @@
                                     <div style="display:none">
                                         <type-radio-button
                                                 :route-get-list-type="routeGetListType"
-                                                :first-menu-name="listTypeFirstMenuName"
+                                                :first-menu-name="strings.listTypeFirstMenuName"
                                                 :old-choice="'bid'"
                                                 :is-disabled="true"
                                         ></type-radio-button>
@@ -199,11 +196,11 @@
                                             <i class="dropdown icon"></i>
                                             <span>
                                         <i class="sitemap icon"></i>
-                                        {{ categoryFirstMenuName }}
+                                        {{ strings.categoryHeader }}
                                     </span>
                                             <span>
                                         <template v-if="categoryId===undefined || categoryId===null || categoryId ==''">
-                                            <i class="red alarm outline large icon" :data-content="categoryFieldRequired"></i>
+                                            <i class="red alarm outline large icon" :data-content="strings.categoryFieldRequired"></i>
                                         </template>
                                         <template v-else>
                                             <i class="green checkmark large icon"></i>
@@ -213,9 +210,6 @@
                                         <div class="content">
                                             <div class="required field">
                                                 <categories-dropdown-menu
-                                                        :route-category="routeCategory"
-                                                        :first-menu-name="categoryFirstMenuName"
-                                                        :actual-locale="actualLocale"
                                                         :old-choice="oldCategoryId"
                                                         :with-all="false">
                                                 </categories-dropdown-menu>
@@ -225,11 +219,11 @@
                                             <i class="dropdown icon"></i>
                                             <span>
                                         <i class="camera retro icon"></i>
-                                        {{ advertFormPhotoSeparator }}
+                                        {{ strings.formPhotoSeparator }}
                                     </span>
                                             <span>
                                         <template v-if="thumbs.length===0">
-                                        <i class="red alarm outline large icon" :data-content="photoFieldRequired"></i>
+                                        <i class="red alarm outline large icon" :data-content="strings.photoFieldRequired"></i>
                                         </template>
                                         <template v-else>
                                             <i class="green checkmark large icon"></i>
@@ -247,22 +241,13 @@
                                                     :is-delegation="isDelegation==1"
                                                     :old-main-picture="isEditAdvert ? dataAdvertEdit.mainPicturePicture : null"
                                                     nb-columns="two"
-                                                    :advert-form-photo-btn-label="advertFormPhotoBtnLabel"
-                                                    :advert-form-photo-btn-cancel="advertFormPhotoBtnCancel"
-                                                    :advert-form-photo-label="advertFormPhotoLabel"
-                                                    :advert-form-free-photo-help-header-singular="advertFormFreePhotoHelpHeaderSingular"
-                                                    :advert-form-free-photo-help-header-plural="advertFormFreePhotoHelpHeaderPlural"
-                                                    :advert-form-pay-photo-help-header-singular="advertFormPayPhotoHelpHeaderSingular"
-                                                    :advert-form-pay-photo-help-header-plural="advertFormPayPhotoHelpHeaderPlural"
-                                                    :advert-form-photo-help-content="advertFormPhotoHelpContent"
-                                                    :advert-form-main-photo-label="advertFormMainPhotoLabel"
                                             ></photo-uploader>
                                         </div>
                                         <div class="title">
                                             <i class="dropdown icon"></i>
                                             <span>
                                         <i class="film icon"></i>
-                                        {{ advertFormVideoSeparator }}
+                                        {{ strings.videoHeader }}
                                     </span>
                                         </div>
                                         <div class="content">
@@ -274,12 +259,6 @@
                                                     :session-video-id="sessionVideoId"
                                                     :is-edit-advert="isEditAdvert"
                                                     :format="'auto'"
-                                                    :advert-form-video-btn-label="advertFormVideoSeparator"
-                                                    :advert-form-video-label="advertFormVideoLabel"
-                                                    :advert-form-video-btn-delete="advertFormVideoBtnDelete"
-                                                    :advert-form-video-btn-cancel="advertFormVideoBtnCancel"
-                                                    :waiting-message="waitingMessage"
-                                                    :transcode-message="transcodeMessage"
                                             ></vimeo-uploader>
                                         </div>
                                         <div class="title">
@@ -293,13 +272,13 @@
                                             <div class="field">
                                                 <div :id="'isUrgent'+_uid" class="ui checkbox">
                                                     <input type="checkbox" name="isUrgent">
-                                                    <label><span class="ui red horizontal label">{{ advertExampleUrgentLabel }}</span>{{ advertFormUrgentLabel }}</label>
+                                                    <label><span class="ui red horizontal label">{{ strings.exampleUrgentLabel }}</span>{{ strings.formUrgentLabel }}</label>
                                                 </div>
                                             </div>
                                             <div class="field" v-if="isDelegation!=1">
                                                 <div :id="'isNegociated'+_uid" class="ui checkbox">
                                                     <input type="checkbox" name="isNegociated">
-                                                    <label> <span class="ui blue horizontal label">{{ advertExampleIsNegociatedLabel }}</span>{{ advertFormIsNegociatedLabel }}</label>
+                                                    <label> <span class="ui blue horizontal label">{{ strings.exampleIsNegociatedLabel }}</span>{{ strings.formIsNegociatedLabel }}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -307,7 +286,7 @@
                                             <i class="dropdown icon"></i>
                                             <span>
                                         <i class="map signs icon"></i>
-                                        {{ advertFormGooglemapLabel }}
+                                        {{ strings.formGooglemapLabel }}
                                     </span>
                                         </div>
                                         <div class="content">
@@ -316,8 +295,6 @@
                                                         :lng="lng"
                                                         :lat="lat"
                                                         :geoloc="geoloc"
-                                                        :geoloc-help-msg="geolocHelpMsg"
-                                                        :geoloc-help-msg-two="geolocHelpMsgTwo"
                                                         :square="true"
                                                         :resize="flagMapResize"
                                                 ></googleMap>
@@ -327,14 +304,12 @@
                                             <i class="dropdown icon"></i>
                                             <span>
                                         <i class="money icon"></i>
-                                        {{ currenciesFirstMenuName }}
+                                        {{ strings.currenciesHeader }}
                                     </span>
                                         </div>
                                         <div class="content">
                                             <div class="field">
                                                 <currencies-dropdown-2
-                                                        :route-list-currencies="routeListCurrencies"
-                                                        :first-menu-name="currenciesFirstMenuName"
                                                         :old-currency="oldCurrency">
                                                 </currencies-dropdown-2>
                                             </div>
@@ -343,23 +318,23 @@
                                             <i class="dropdown icon"></i>
                                             <span>
                                         <i class="calculator icon"></i>
-                                        {{ advertMarginHeader }}
+                                        {{ strings.marginHeader }}
                                     </span>
                                         </div>
                                         <div v-show="!isNegociated" class="content">
                                             <div class="field">
-                                                <label>{{ advertFormTotalQuantityLabel }}</label>
-                                                <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
+                                                <label>{{ strings.formTotalQuantityLabel }}</label>
+                                               <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
                                             </div>
                                             <div class="field">
-                                                <label>{{ advertFormLotMiniQuantityLabel }}</label>
-                                                <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
+                                                <label>{{ strings.formLotMiniQuantityLabel }}</label>
+                                                <number-input name="lot_mini_quantity" :min="1" :max="maxLotMini" :decimal="0" v-model="lotMiniQuantity"></number-input>
                                             </div>
                                             <div class="field">
-                                                <label>{{ advertFormPriceLabel }}</label>
+                                                <label>{{ strings.formPriceLabel }}</label>
                                                 <div class="ui right labeled input">
                                                     <template v-if="isNegociated==0">
-                                                        <input style="width: 90%"  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="price"/>
+                                                        <number-input style="width: 90%"  name="price" v-model="price" :decimal="subunit" :min="calcSubUnit"></number-input>
                                                     </template>
                                                     <template v-else>
                                                         <input  name="" type="number" value="0" disabled/>
@@ -370,30 +345,29 @@
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label>{{ advertFormDiscountLabel }}</label>
+                                                <label>{{ strings.formDiscountLabel }}</label>
                                                 <div class="ui right labeled input">
-                                                    <input type="number" name="discount_on_total" min="0" max="100" step="0.01" v-model="discountOnTotal">
+                                                    <number-input name="discount_on_total" :min="0" :max="100" :decimal="2" v-model="discountOnTotal"></number-input>
                                                     <div class="ui basic label">
                                                         %
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label>{{ advertFormBuyingPriceLabel }}</label>
-                                                <div class="ui input">
+                                                <label>{{ strings.formBuyingPriceLabel }}</label>
+                                                <div class="ui right labeled input">
                                                     <template v-if="isNegociated==0">
-                                                        <input  name="buyingPrice" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="buyingPrice"/>
+                                                         <number-input name="buyingPrice" :min="0" :decimal="subunit" v-model="buyingPrice"></number-input>
                                                     </template>
                                                     <template v-else>
                                                         <input  name="" type="number" value="0" disabled/>
                                                     </template>
+                                                    <div class="ui basic label">
+                                                        {{ currencySymbol }}
+                                                    </div>
                                                 </div>
                                                 <margins-table v-if="isNegociated==0"
                                                                :advert="fakeAdvert"
-                                                               :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                                                               :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                                                               :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
-                                                               :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
                                                                :with-valid-button="false"
                                                                :for-seller="true"
                                                 ></margins-table>
@@ -406,10 +380,10 @@
                                 <div class="sixteen wide tablet only sixteen wide computer only column">
                                     <h4 class="ui horizontal divider header tablet only computer only">
                                         <i class="share icon"></i>
-                                        {{ formValidationButtonLabel }}
+                                        {{ strings.validationButtonLabel }}
                                     </h4>
                                     <div class="field">
-                                        <button type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ formValidationButtonLabel }}</button>
+                                        <button type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ strings.validationButtonLabel }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -417,7 +391,7 @@
                         <div class="sixteen wide mobile only column">
                             <h4 class="ui horizontal divider header">
                                 <i class="unhide icon"></i>
-                                {{ advertFormPreviewHeaderLabel }}
+                                {{ strings.formPreviewHeaderLabel }}
                             </h4>
                         </div>
                         <div class="sixteen wide mobile only column">
@@ -435,14 +409,14 @@
                                 <div class="ui grid">
                                     <div v-if="isUrgent" class="four wide column">
                                             <span class="ui red horizontal label">
-                                                {{ advertExampleUrgentLabel }}
+                                                {{ strings.exampleUrgentLabel }}
                                             </span>
                                     </div>
                                     <div :class="!isUrgent ? 'sixteen wide column' : 'twelve wide column'">
                                         <h4 class="field">
-                                            <input name="title" type="text" :placeholder="advertFormTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
+                                            <input name="title" type="text" :placeholder="strings.formTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
                                             <transition name="p-fade">
-                                                <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{formPointingMinimumChars }}</span>
+                                                <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{strings.formPointingMinimumChars }}</span>
                                             </transition>
                                         </h4>
                                     </div>
@@ -454,9 +428,6 @@
                                             :pictures="pictures"
                                             :main-picture="mainPicture"
                                             :video-id="videoId !== undefined && videoId !== null ? parseInt(videoId) : null"
-                                            :image-ratio="parseFloat(imageRatio)"
-                                            :first-header="photoSwiperFirstHeader"
-                                            :first-description="photoSwiperFirstDescription"
                                             :lazy-load="false"
                                     ></swiper-gallerie>
                                 </div>
@@ -476,43 +447,43 @@
                                                         <tbody>
                                                         <tr>
                                                             <td>
-                                                                <i class="barcode icon"></i> {{ advertFormRefLabel }}
+                                                                <i class="barcode icon"></i> {{ strings.formRefLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="field">
-                                                                    <input name="manu_ref" type="text" :placeholder="advertFormRefLabel" v-model:value="manuRef">
+                                                                    <input name="manu_ref" type="text" :placeholder="strings.formRefLabel" v-model:value="manuRef">
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <i class="cubes icon"></i> {{ advertFormTotalQuantityLabel }}
+                                                                <i class="cubes icon"></i> {{ strings.formTotalQuantityLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="field">
-                                                                    <input type="number" name="total_quantity" min="1" step="1" v-model="totalQuantity">
+                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <i class="cube icon"></i> {{ advertFormLotMiniQuantityLabel }}
+                                                                <i class="cube icon"></i> {{ strings.formLotMiniQuantityLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="field">
-                                                                    <input type="number" name="lot_mini_quantity" min="1" :max="totalQuantity" step="1" v-model="lotMiniQuantity">
+                                                                    <number-input name="lot_mini_quantity" :min="1" :max="maxLotMini" :decimal="0" v-model="lotMiniQuantity"></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <i class="money icon"></i> {{ advertFormPriceLabel }}
+                                                                <i class="money icon"></i> {{ strings.formPriceLabel }}
                                                             </td>
                                                             <td>
                                                                 <div v-show="!isNegociated" class="ui blue tag label">
                                                                     <div class="ui right labeled input">
                                                                         <template v-if="isNegociated==0">
-                                                                            <input style="width: 90%"  name="price" type="number" :min="calcSubUnit" :step="calcSubUnit" v-model="price"/>
+                                                                            <number-input style="width: 90%"  name="price" :min="calcSubUnit" :decimal="subunit" v-model="price"></number-input>
                                                                         </template>
                                                                         <template v-else>
                                                                             <input  name="" type="number" value="0" disabled/>
@@ -522,12 +493,12 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div v-if="isNegociated" class="ui small blue tag label">{{ advertExampleIsNegociatedLabel }}</div>
+                                                                <div v-if="isNegociated" class="ui small blue tag label">{{ strings.exampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
                                                         <tr v-if="!isNegociated && discountOnTotal > 0">
                                                             <td class="collapsing">
-                                                                <i class="gift icon"></i> {{ advertFormDiscountLabel }}
+                                                                <i class="gift icon"></i> {{ strings.formDiscountLabel }}
                                                             </td>
                                                             <td>
                                                                 <div class="ui mini statistic">
@@ -547,7 +518,7 @@
                                                         <div class="required field">
                                                             <textarea name="description" v-model="description" :maxlength="formDescriptionMaxValid"></textarea>
                                                             <transition name="p-fade">
-                                                                <span class="ui red pointing basic label notransition" v-show="description.length<formDescriptionMinValid">{{ formDescriptionMinValid }}{{formPointingMinimumChars }}</span>
+                                                                <span class="ui red pointing basic label notransition" v-show="description.length<formDescriptionMinValid">{{ formDescriptionMinValid }}{{strings.formPointingMinimumChars }}</span>
                                                             </transition>
                                                         </div>
                                                     </div>
@@ -562,10 +533,10 @@
                         <div class="sixteen wide mobile only column">
                             <h4 class="ui horizontal divider header tablet only computer only">
                                 <i class="share icon"></i>
-                                {{ formValidationButtonLabel }}
+                                {{ strings.validationButtonLabel }}
                             </h4>
                             <div class="field">
-                                <button type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ formValidationButtonLabel }}</button>
+                                <button type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ strings.validationButtonLabel }}</button>
                             </div>
                         </div>
                     </div>
@@ -582,6 +553,15 @@
             'routeAdvertFormPost',
             'routeGetCost',
             'routePrices',
+            'routeGetListType',
+            'routePostTempoPicture',
+            'routeGetListTempoThumbs',
+            'routeGetTempoThumb',
+            'routeGetTempoNormal',
+            'routeDelTempoPicture',
+            'routeGetVideoPostTicket',
+            'routeDelTempoVideo',
+            'routeGetStatusVideo',
             //vue vars
             'old',
             'formTitleMinValid',
@@ -590,107 +570,26 @@
             'formDescriptionMaxValid',
             'isDelegation',
             'editAdvert',
-            //vue strings
-            'contentHeader',
-            'advertFormPreviewHeaderLabel',
-            'advertFormParamsHeaderLabel',
-            'advertFormTitleLabel',
-            'advertFormRefLabel',
-            'advertFormDescriptionLabel',
-            'advertFormPriceLabel',
-            'advertFormDiscountLabel',
-            'advertFormBuyingPriceLabel',
-            'advertFormGooglemapLabel',
-            'advertFormPhotoSeparator',
-            'loadErrorMessage',
-            'filesizeErrorMessage',
-            'formValidationButtonLabel',
-            'formPointingMinimumChars',
-            'advertFormTotalQuantityLabel',
-            'advertFormLotMiniQuantityLabel',
-            'advertFormUrgentLabel',
-            'advertExampleUrgentLabel',
-            'advertFormIsNegociatedLabel',
-            'advertExampleIsNegociatedLabel',
-            'advertPrices',
-            'advertMarginHeader',
-            'categoryFieldRequired',
-            'photoFieldRequired',
-            //margins-table component
-            'formAdvertPriceCoefficientNewPriceLabel',
-            'formAdvertPriceCoefficientUnitMarginLabel',
-            'formAdvertPriceCoefficientLotMarginLabel',
-            'formAdvertPriceCoefficientTotalMarginLabel',
-            //steps component
-            'stepOneTitle',
-            'stepTwoTitle',
-            'stepThreeTitle',
-            'stepThreeTitlePost',
-            'stepOneDescription',
-            'stepTwoDescription',
-            'stepThreeDescription',
-            //type-advert component
-            'routeGetListType',
-            'listTypeFirstMenuName',
-            //category component
-            'routeCategory',
-            'categoryFirstMenuName',
-            'actualLocale',
-            'allLabel',
-            'defaultBreadcrumb',
-            //currencies-dropdown component
-            'routeListCurrencies',
-            'currenciesFirstMenuName',
-            //geomap component
-            'geolocHelpMsg',
-            'geolocHelpMsgTwo',
             'geolocInitLat',
             'geolocInitLng',
-            //Photo component
-            'routePostTempoPicture',
-            'routeGetListTempoThumbs',
-            'routeGetTempoThumb',
-            'routeGetTempoNormal',
-            'routeDelTempoPicture',
             'advertFormPhotoNbFreePicture',
             'maxFiles',
-            'advertFormPhotoBtnLabel',
-            'advertFormPhotoBtnCancel',
-            'advertFormPhotoLabel',
-            'advertFormFreePhotoHelpHeaderSingular',
-            'advertFormFreePhotoHelpHeaderPlural',
-            'advertFormPayPhotoHelpHeaderSingular',
-            'advertFormPayPhotoHelpHeaderPlural',
-            'advertFormPhotoHelpContent',
-            'advertFormMainPhotoLabel',
-            //vimeo component
-            'routeGetVideoPostTicket',
-            'routeDelTempoVideo',
-            'routeGetStatusVideo',
             'maxVideoFileSize',
             'sessionVideoId',
-            'advertFormVideoSeparator',
-            'advertFormVideoLabel',
-            'advertFormVideoBtnDelete',
-            'advertFormVideoBtnCancel',
-            'waitingMessage',
-            'transcodeMessage',
-            //swiper component
-            'imageRatio',
-            'photoSwiperFirstHeader',
-            'photoSwiperFirstDescription',
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 categoryId: '',
                 listType: [],
                 type: '',
                 title: '',
                 manuRef: '',
                 description: '',
-                price: '0',
-                discountOnTotal: '0',
-                buyingPrice: '0',
+                price: 0,
+                discountOnTotal: 0,
+                buyingPrice: 0,
                 fakeAdvert: {
                     originalPrice: 0,
                     buyingPrice: 0,
@@ -701,6 +600,7 @@
                     currencySymbol: ''
                 },
                 totalQuantity: 1,
+                maxLotMini: 1,
                 lotMiniQuantity: 1,
                 xCsrfToken: '',
                 oldCategoryId: 0,
@@ -737,36 +637,38 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['createOrEditAdvert'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             this.steps = [
                 {
                     isActive : true,
                     isDisabled : false,
                     isCompleted: false,
-                    title: this.stepOneTitle,
-                    description: this.stepOneDescription,
+                    title: this.strings.stepOneTitle,
+                    description: this.strings.stepOneDescription,
                     icon: 'write'
                 },
                 {
                     isActive : false,
                     isDisabled : this.isDelegation == 1,
                     isCompleted: this.isDelegation == 1,
-                    title: this.stepTwoTitle,
-                    description: this.stepTwoDescription,
+                    title: this.strings.stepTwoTitle,
+                    description: this.strings.stepTwoDescription,
                     icon: 'user'
                 },
                 {
                     isActive : false,
                     isDisabled : true,
                     isCompleted: this.isDelegation == 1,
-                    title: this.stepThreeTitle,
-                    description: this.stepThreeDescription,
+                    title: this.strings.stepThreeTitle,
+                    description: this.strings.stepThreeDescription,
                     routeDescription: this.isDelegation == 1 ? undefined : this.routePrices,
                     icon: 'payment'
                 }
             ];
-            this.setBreadCrumbItems(this.defaultBreadcrumb);
-            this.description = this.advertFormDescriptionLabel;
+            this.setBreadCrumbItems(this.strings.defaultBreadcrumb);
+            this.description = this.strings.formDescriptionLabel;
             this.$on('typeChoice', function (event) {
                 this.typeChoice(event.type);
             });
@@ -793,16 +695,19 @@
                 this.mainPicture = event;
             });
             this.$on('loadError', function () {
-                this.sendToast(this.loadErrorMessage, 'error');
+                this.sendToast(this.strings.loadErrorMessage, 'error');
             });
             this.$on('sendToast', function (event) {
                 this.sendToast(event.message, event.type);
             });
             this.$on('fileSizeError', function () {
-                this.sendToast(this.filesizeErrorMessage, 'error');
+                this.sendToast(this.strings.filesizeErrorMessage, 'error');
             });
             this.$on('videoUploadStatusChange', function(onUpload){
                 this.submitEnable = !onUpload;
+            });
+            this.$on('setMaxLotMini', function () {
+                this.maxLotMini = this.totalQuantity;
             });
             this.xCsrfToken = destockShareVar.csrfToken;
             this.$watch('categoryId', function () {
@@ -830,20 +735,19 @@
             });
             this.$watch('subunit', function () {
                this.calcSubUnit = Math.pow(10,-(this.subunit));
-               this.price = parseFloat(this.price).toFixed(this.subunit);
                this.fakeAdvert.priceSubUnit = parseInt(this.subunit);
             });
             this.$watch('currencySymbol', function () {
                 this.fakeAdvert.currencySymbol = this.currencySymbol;
             });
             this.$watch('price', function () {
-                this.fakeAdvert.originalPrice = parseFloat(this.price);
+                this.fakeAdvert.originalPrice = (parseFloat(this.price)/this.calcSubUnit).toFixed(0);
             });
             this.$watch('discountOnTotal', function () {
                 this.fakeAdvert.discount_on_total = this.discountOnTotal;
             });
             this.$watch('buyingPrice', function () {
-                this.fakeAdvert.buyingPrice = parseFloat(this.buyingPrice);
+                this.fakeAdvert.buyingPrice = (parseFloat(this.buyingPrice)/this.calcSubUnit).toFixed(0);
             });
             this.$watch('totalQuantity', function () {
                 this.fakeAdvert.totalQuantity = parseInt(this.totalQuantity);
@@ -946,15 +850,15 @@
                     axios.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent, {params: params})
                         .then(function (response) {
                             that.cost = response.data;
-                            (that.steps[2]).title = that.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.stepThreeTitlePost + ')';
+                            (that.steps[2]).title = that.strings.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.strings.stepThreeTitlePost + ')';
                         })
                         .catch(function (error) {
                             that.cost = 0;
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.sendToast(that.strings.loadErrorMessage, 'error');
                         });
                 } else {
                     this.cost = 0;
-                    (this.steps[2]).title = this.stepThreeTitle;
+                    (this.steps[2]).title = this.strings.stepThreeTitle;
                     (this.steps[2]).isDisabled = true;
                 }
             },
@@ -971,23 +875,23 @@
                     })
                 } else {
                     if(this.categoryId != undefined && this.categoryId>0 ) {
-                        axios.get(this.routeCategory+'/'+this.categoryId)
+                        axios.get(this.properties.routeCategory+'/'+this.categoryId)
                             .then(function (response) {
                                 let chainedCategories = response.data;
                                 that.breadcrumbItems.push({
-                                    name: that.allLabel,
+                                    name: that.strings.allLabel,
                                     value: 0
                                 });
                                 chainedCategories.forEach(function (elem,index) {
                                     that.breadcrumbItems.push({
-                                        name: elem['description'][that.actualLocale],
+                                        name: elem['description'][that.properties.actualLocale],
                                         value: elem.id
                                     });
                                 });
                             })
                             .catch(function (error) {
                                 that.breadcrumbItems.push({
-                                    name: this.loadErrorMessage,
+                                    name: this.strings.loadErrorMessage,
                                     value:''
                                 });
                             });
@@ -1009,7 +913,7 @@
                 });
             },
             getMoment: function (dateTime) {
-                moment.locale(this.actualLocale);
+                moment.locale(this.properties.actualLocale);
                 return moment(dateTime).fromNow()
             },
             calcNbFreePictures () {
@@ -1049,21 +953,20 @@
             },
             getStorage() {
                 sessionStorage.getItem('successFormSubmit') != undefined ? this.successFormSubmit = sessionStorage.getItem('successFormSubmit') : null;
-                sessionStorage.getItem('category') != undefined ? this.categoryId = sessionStorage.getItem('category') : null;
-                sessionStorage.getItem('category') != undefined? this.oldCategoryId = parseInt(sessionStorage.getItem('category')): null;
+                sessionStorage.getItem('category') != undefined ? this.categoryId = Number(sessionStorage.getItem('category')) : null;
+                sessionStorage.getItem('category') != undefined? this.oldCategoryId = Number(sessionStorage.getItem('category')): null;
                 sessionStorage.getItem('title') != undefined ? this.title = sessionStorage.getItem('title') : null;
                 sessionStorage.getItem('manuRef') != undefined ? this.manuRef = sessionStorage.getItem('manuRef') : null;
                 sessionStorage.getItem('description') != undefined ? this.description = sessionStorage.getItem('description') : null;
-                sessionStorage.getItem('price') != undefined ? this.price = sessionStorage.getItem('price') : null;
-                sessionStorage.getItem('discountOnTotal') != undefined ? this.discountOnTotal = sessionStorage.getItem('discountOnTotal') : null;
-                sessionStorage.getItem('totalQuantity') != undefined ? this.totalQuantity = sessionStorage.getItem('totalQuantity') : null;
-                sessionStorage.getItem('lotMiniQuantity') != undefined ? this.lotMiniQuantity = sessionStorage.getItem('lotMiniQuantity') : null;
+                sessionStorage.getItem('price') != undefined ? this.price = Number(sessionStorage.getItem('price')) : null;
+                sessionStorage.getItem('discountOnTotal') != undefined ? this.discountOnTotal = Number(sessionStorage.getItem('discountOnTotal')) : null;
+                sessionStorage.getItem('totalQuantity') != undefined ? this.totalQuantity = Number(sessionStorage.getItem('totalQuantity')) : null;
+                sessionStorage.getItem('lotMiniQuantity') != undefined ? this.lotMiniQuantity = Number(sessionStorage.getItem('lotMiniQuantity')) : null;
                 sessionStorage.getItem('type') != undefined ? this.type = sessionStorage.getItem('type') : null;
                 sessionStorage.getItem('type') != undefined ? this.oldType = sessionStorage.getItem('type') : null;
                 sessionStorage.getItem('currency') != undefined ? this.currency= sessionStorage.getItem('currency') : null;
                 sessionStorage.getItem('currency') != undefined ? this.oldCurrency= sessionStorage.getItem('currency') : null;
-                sessionStorage.getItem('subunit') != undefined ? this.subunit= sessionStorage.getItem('subunit') : null;
-                sessionStorage.getItem('subunit') != undefined ? this.oldSubunit= sessionStorage.getItem('subunit') : null;
+                sessionStorage.getItem('subunit') != undefined ? this.subunit= Number(sessionStorage.getItem('subunit')) : null;
                 sessionStorage.getItem('lat') != undefined ? this.lat =  sessionStorage.getItem('lat') : null;
                 sessionStorage.getItem('lng') != undefined ? this.lng =  sessionStorage.getItem('lng') : null;
                 sessionStorage.getItem('isUrgent') != undefined ? this.isUrgent =  sessionStorage.getItem('isUrgent') == 'true' : null;

@@ -2,15 +2,14 @@
     <div class="ui blue colored segment">
         <div :id="'filter-accordion-'+_uid" class="ui fluid accordion filter">
             <div class="active title">
-                <span class="ui blue ribbon label"><i class="dropdown icon"></i><span class="close">{{ filterRibbonClose }}</span><span class="open">{{ filterRibbonOpen }}</span></span>
+                <span class="ui blue ribbon label"><i class="dropdown icon"></i><span class="close">{{ strings.ribbonClose }}</span><span class="open">{{ strings.ribbonOpen }}</span></span>
             </div>
             <div class="active content">
                 <div class="ui grid">
                     <div class="column">
                         <search-filter
                                 :route-search="routeSearch"
-                                :min-length-search="minLengthSearch"
-                                :place-holder="searchPlaceHolder"
+                                :place-holder="strings.placeHolder"
                                 :results-for="dataResultsFor"
                                 :update="dataUpdate"
                                 :flag-reset="flagResetSearch"
@@ -36,34 +35,25 @@
             filter: {
                 type: Object
             },
-            //vue strings
-            filterRibbonClose: {
-                type: String
-            },
-            filterRibbonOpen: {
-                type: String
-            },
             //search component
             routeSearch: {
                 type: String
             },
-            minLengthSearch: {
-                type: Number
-            },
             flagResetSearch: {
                 type: Boolean
-            },
-            searchPlaceHolder: {
-                type: String
             }
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 dataResultsFor: '',
                 dataUpdate: false
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['advert-simple-search-filter'];
+            this.properties = this.$store.state.properties['global'];
             this.$watch('update', function () {
                 this.setSearchFilter();
                 this.dataUpdate = !this.dataUpdate;

@@ -5,25 +5,24 @@
         </div>
         <div class="ui mini labeled right action input">
             <div class="ui blue label">
-                {{ firstMenuName }}
+                {{ strings.firstMenuName }}
             </div>
             <div :id="_uid" class="ui mini floating dropdown" :class="isButton ? 'button' : ''">
-                <div class="text">{{ firstMenuName }}</div>
+                <div class="text">{{ strings.firstMenuName }}</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <div class="item" data-value="0" :data-text="allItem" v-if="withAll">
-                        <span class="text">{{ allItem }}</span>
+                    <div class="item" data-value="0" :data-text="strings.allItem" v-if="withAll">
+                        <span class="text">{{ strings.allItem }}</span>
                     </div>
                     <div v-for="category in categories" class="item" >
                         <i class="dropdown icon" v-if="category.children.length>0"></i>
-                        <span class="text">{{ category['description'][actualLocale] }}</span>
+                        <span class="text">{{ category['description'][properties.actualLocale] }}</span>
                         <recursive-categories-dropdown-menu
-                                :parent-description="category['description'][actualLocale]"
+                                :parent-description="category['description'][properties.actualLocale]"
                                 :categories="category.children"
-                                :actual-locale="actualLocale"
                                 :parent-id="category.id"
                                 :with-all="withAll"
-                                :all-item="allItem"
+                                :all-item="strings.allItem"
                                 :left="false">
                         </recursive-categories-dropdown-menu>
                     </div>
@@ -38,10 +37,7 @@
 <script>
     export default {
         props: {
-            routeCategory: String,
-            firstMenuName: String,
-            actualLocale: String,
-            oldChoice: {
+           oldChoice: {
                 type: Number,
                 required: false,
                 default: 0
@@ -50,11 +46,6 @@
                 type: Boolean,
                 required: false,
                 default: false
-            },
-            allItem: {
-                type: String,
-                required: false,
-                default: ''
             },
             allowCategorySelection: {
                 type: Boolean,
@@ -69,11 +60,15 @@
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 categories: [],
                 isLoaded: false,
             } ;
         },
         mounted () {
+            this.strings = this.$store.state.strings['categories-dropdown-menu'];
+            this.properties = this.$store.state.properties['global'];
             this.getCategories();
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
@@ -84,7 +79,7 @@
                 let that = this;
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                axios.get(this.routeCategory)
+                axios.get(this.properties.routeCategory)
                     .then(function (response) {
                         that.categories = response.data;
                         that.isLoaded = true;
@@ -107,6 +102,7 @@
                         }
                     })
             ;
+
             this.$watch('oldChoice', function (categorieId) {
                 dropdown.dropdown('set selected',  categorieId.toString())
             })

@@ -75,6 +75,7 @@
                 </div>
             </div>
             <div class="content row">
+                @include('storeSetter.props.global')
                 @yield('content')
             </div>
         </div>

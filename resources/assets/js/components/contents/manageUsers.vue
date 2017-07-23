@@ -4,44 +4,40 @@
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ modalValidHeader }}
+                {{ strings.modalValidHeader }}
             </div>
             <div class="image content">
                 <div class="image">
                     <i class="legal icon"></i>
                 </div>
                 <div class="description">
-                    <p>{{ modalValidDescription }}</p>
+                    <p>{{ strings.modalValidDescription }}</p>
                 </div>
             </div>
             <div class="actions">
                 <div class="two fluid ui inverted buttons">
                     <div class="ui cancel red basic inverted button">
                         <i class="remove icon"></i>
-                        {{ modalNo }}
+                        {{ strings.modalNo }}
                     </div>
                     <div class="ui ok green basic inverted button">
                         <i class="checkmark icon"></i>
-                        {{ modalYes }}
+                        {{ strings.modalYes }}
                     </div>
                 </div>
             </div>
         </div>
         <div class="sixteen wide column">
-            <h2 class="ui header">{{ contentHeader }}</h2>
+            <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
         <div class="row">
             <div class="sixteen wide column">
                 <div class="row filters">
                     <user-filter
-                            :filter-ribbon-open="filterRibbonOpen"
-                            :filter-ribbon-close="filterRibbonClose"
                             :update="update"
                             :filter="filter"
                             :route-search="dataRouteGetUsersList"
-                            :min-length-search="parseInt(filterMinLengthSearch)"
                             :flag-reset-search="dataFlagResetSearch"
-                            :search-place-holder="filterSearchPlaceHolder"
                     ></user-filter>
                 </div>
             </div>
@@ -50,17 +46,6 @@
                     <users-by-list
                             :route-get-users-list="dataRouteGetUsersList"
                             :flag-force-reload="dataForceReload"
-                            :no-result-found-header="noResultFoundHeader"
-                            :no-result-found-message="noResultFoundMessage"
-                            :actual-locale="actualLocale"
-                            :role-user-label="roleUserLabel"
-                            :list-header-usermail="listHeaderUsermail"
-                            :list-header-name="listHeaderName"
-                            :list-header-compagny="listHeaderCompagny"
-                            :list-header-register-date="listHeaderRegisterDate"
-                            :list-header-vat-number="listHeaderVatNumber"
-                            :list-vat-verification-number-label="listVatVerificationNumberLabel"
-                            :list-header-address="listHeaderAddress"
                     ></users-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -68,10 +53,7 @@
                         <pagination
                                 :pages="paginate"
                                 :route-get-list="dataRouteGetUsersList"
-                                :page-label="pageLabel"
-                                :page-previous-label="pagePreviousLabel"
-                                :page-next-label="pageNextLabel">
-                        </pagination>
+                        ></pagination>
                     </div>
                 </div>
             </div>
@@ -85,41 +67,14 @@
     export default {
         props: [
             //vue routes
+            'routeGetUsersList',
             //vue vars
             'clearStorage',
-            //vue strings
-            'contentHeader',
-            'loadErrorMessage',
-            'modalValidHeader',
-            'modalValidDescription',
-            'modalNo',
-            'modalYes',
-            'deleteUserSuccess',
-            //filter invoice component
-            'filterMinLengthSearch',
-            'filterRibbonOpen',
-            'filterRibbonClose',
-            'filterSearchPlaceHolder',
-            //invoiceByList component
-            'routeGetUsersList',
-            'noResultFoundHeader',
-            'noResultFoundMessage',
-            'actualLocale',
-            'roleUserLabel',
-            'listHeaderUsermail',
-            'listHeaderName',
-            'listHeaderCompagny',
-            'listHeaderRegisterDate',
-            'listHeaderVatNumber',
-            'listVatVerificationNumberLabel',
-            'listHeaderAddress',
-            //paginate component
-            'pageLabel',
-            'pagePreviousLabel',
-            'pageNextLabel'
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
@@ -133,13 +88,15 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['manage-users'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             if(this.clearStorage){
                 sessionStorage.clear();
             }
             //On load Error
             this.$on('loadError', function () {
-                this.sendToast(this.loadErrorMessage, 'error');
+                this.sendToast(this.strings.loadErrorMessage, 'error');
             });
             this.$on('sendToast', function (event) {
                 this.sendToast(event.message, event.type);
@@ -163,7 +120,7 @@
                 });
             });
             this.$on('refreshResults', function (query) {
-                if(query != undefined && query.length >= this.filterMinLengthSearch){
+                if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
                     this.filter.resultsFor = query;
                     this.updateResults(true);
                 }
@@ -247,13 +204,13 @@
                             .then(function (response) {
                                 that.isLoaded = true;
                                 that.dataForceReload=!that.dataForceReload;
-                                that.sendToast(that.deleteUserSuccess, 'success');
+                                that.sendToast(that.strings.deleteUserSuccess, 'success');
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {
                                     that.sendToast(error.response.data, 'error');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
                                 that.isLoaded = false;
                             });

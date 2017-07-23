@@ -21,7 +21,7 @@
             <div :id="'dropdown-'+_uid" class="ui selection dropdown">
                 <input :id="'role-'+_uid" type="hidden" :name="'role-'+_uid" :value="user.role">
                 <i class="dropdown icon"></i>
-                <div class="default text">{{ roleUserLabel }}</div>
+                <div class="default text">{{ strings.roleUserLabel }}</div>
                 <div class="menu">
                     <template v-for="(role, index) in user.rolesList">
                         <div class="item" :data-value="role">{{ role }}</div>
@@ -39,15 +39,16 @@
     export default {
         props: {
             user: Object,
-            roleUserLabel: String,
-            actualLocale: String
         },
         data: () => {
             return {
-
+                strings: {},
+                properties: {}
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['users-by-list-item'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             $('#dropdown-'+this._uid).dropdown({
                 onChange: function(value, text, $selectedItem) {
@@ -57,7 +58,7 @@
         },
         methods: {
             getMoment: function (dateTime) {
-                moment.locale(this.actualLocale);
+                moment.locale(this.properties.actualLocale);
                 return moment(dateTime).format('L');
             },
             getFormattedAddress() {

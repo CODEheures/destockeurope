@@ -4,31 +4,31 @@
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ modalValidHeader }}
+                {{ strings.modalValidHeader }}
             </div>
             <div class="image content">
                 <div class="image">
                     <i class="legal icon"></i>
                 </div>
                 <div class="description">
-                    <p>{{ modalValidDescription }}</p>
+                    <p>{{ strings.modalValidDescription }}</p>
                 </div>
             </div>
             <div class="actions">
                 <div class="two fluid ui inverted buttons">
                     <div class="ui cancel red basic inverted button">
                         <i class="remove icon"></i>
-                        {{ modalNo }}
+                        {{ strings.modalNo }}
                     </div>
                     <div class="ui ok green basic inverted button">
                         <i class="checkmark icon"></i>
-                        {{ modalYes }}
+                        {{ strings.modalYes }}
                     </div>
                 </div>
             </div>
         </div>
         <div class="column">
-            <h2 class="ui header">{{ contentHeader }}</h2>
+            <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
         <div class="column">
             <div class="ui divided list">
@@ -36,186 +36,101 @@
                     <div class="ui large text loader">Loading</div>
                 </div>
                 <form>
-                    <div v-for="(advert,index) in advertsList" class="ui segment">
-                        <div class="ui orange right ribbon label" v-show="advert.listEditFields['field'].length>0 || advert.listEditFields['thumbs'].length>0">{{ segmentEditLabel }}</div>
-                        <div class="ui cards" :title="advert.user.isSupplier ? trustedProviderLabel :''">
-                            <div class="card">
-                                <div class="content">
-                                    <div class="header">
-                                        <i class="green big protect icon" v-if="advert.user.isSupplier"></i>
-                                        {{ advert.user.compagnyName }}
-                                    </div>
-                                </div>
-                                <div class="content">
-                                     <div class="meta">
-                                        {{ advert.user.name }} / {{ advert.user.email }}
-                                    </div>
-                                    <div class="description">
-                                        {{ getFormattedAddress(advert.user.geoloc) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <table class="ui definition table">
-                            <tbody>
-                            <tr>
-                                <td class="three wide column">{{ advertTitleLabel }}</td>
-                                <td :class="isEditField(advert, 'title') ? 'warning' : ''">
-                                    {{ advert.title }}
-                                    <div v-if="isEditField(advert, 'title')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="three wide column">{{ advertRefLabel }}</td>
-                                <td :class="isEditField(advert, 'manu_ref') ? 'warning' : ''">
-                                    {{ advert.manu_ref }}
-                                    <div v-if="isEditField(advert, 'manu_ref')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="three wide column">{{ advertDescriptionLabel }}</td>
-                                <td :class="isEditField(advert, 'description') ? 'warning' : ''">
-                                    <p style="white-space: pre-wrap;">{{ advert.description }}</p>
-                                    <div v-if="isEditField(advert, 'description')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="three wide column">{{ totalQuantityLabel }} / {{ lotMiniQuantityLabel }}</td>
-                                <td :class="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity') ? 'warning' : ''">
-                                    {{ advert.totalQuantity }} / {{ advert.lotMiniQuantity}}
-                                    <div v-if="isEditField(advert, 'totalQuantity') || isEditField(advert, 'lotMiniQuantity')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="three wide column">{{ advertPriceLabel }}</td>
-                                <td :class="isEditField(advert, 'price') || isEditField(advert, 'currency') ? 'warning' : ''">
-                                    {{ advert.isNegociated ? advertIsNegociatedLabel : advert.price }}
-                                    <div v-if="isEditField(advert, 'price') || isEditField(advert, 'currency_id')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
-                                </td>
-                            </tr>
-                            <tr v-if="!advert.isNegociated">
-                                <td class="three wide column">{{ advertPriceTotalLabel }}</td>
-                                <td :class="isEditField(advert, 'discount_on_total') ? 'warning' : ''">
-                                    {{ advert.totalPrice }}
-                                    <template v-if="advert.discount_on_total > 0">{{' (' + advertPriceDiscountLabel + '=' + advert.discount_on_total +'%)'}}</template>
-                                    <div v-if="isEditField(advert, 'discount_on_total')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="three wide column">{{ advertAddressLabel }}</td>
-                                <td :class="isEditField(advert, 'geoloc') ? 'warning' : ''">
-                                    {{ advert.geoloc }}
-                                    <div v-if="isEditField(advert, 'geoloc')" class="ui right floated mini orange button">{{ fieldEditLabel }}</div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-
-                        <div class="ui doubling three column grid">
-                            <div class="column" v-for="(picture,index) in advert.pictures" v-if="picture.isThumb">
-                                    <div :class="advert.listEditFields['thumbs'].indexOf(picture.hashName)!==-1 ? 'ui orange segment' : !advert.user.isSupplier && index>=(advertNbFreePicture*2) ? 'ui pink segment' : 'ui segment'">
-                                        <template v-if="advert.listEditFields['thumbs'].indexOf(picture.hashName)!==-1">
-                                            <div class="ui orange right ribbon label">{{ fieldEditLabel }}</div>
-                                        </template>
-                                        <template v-else>
-                                            <div class="ui pink right ribbon label" v-if="!advert.user.isSupplier && index>=(advertNbFreePicture*2)">{{ advertPayPhotoSingular }}</div>
-                                        </template>
-                                        <div class="ui stackable grid">
-                                            <div class="sixteen wide column">
-                                                <img :src="routeGetThumb+'/'+picture.hashName+'/'+advert.id" class="ui rounded medium centered image" />
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-
-
-                        <div class="ui grid" v-if="advert.video_id!=undefined && advert.video_id!=null">
-                            <div class="sixteen wide column">
-                                <div class="ui compact segment">
-                                    <div class="ui orange right ribbon label" v-show="isEditField(advert, 'video_id')">{{ fieldEditLabel }}</div>
-                                    <div>
-                                        <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
+                    <div v-for="(advert,index) in advertsList" class="ui basic segment">
+                        <div class="ui orange right ribbon label" v-show="advert.listEditFields['field'].length>0 || advert.listEditFields['thumbs'].length>0">{{ strings.segmentEditLabel }}</div>
                         <div class="ui grid">
-                            <div class="right floated sixteen wide mobile eight wide tablet five wide computer column" v-if="!advert.user.isSupplier">
-                                <div class="ui form">
-                                    <div class="grouped fields">
-                                        <div class="field">
-                                            <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                <input type="radio" :name="advert.id" value="1">
-                                                <label>{{ toggleApproveLabel }}</label>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <div :id="'slider2-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                <input type="radio" :name="advert.id" value="0">
-                                                <label>{{ toggleDisapproveLabel }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="ten wide tablet only ten wide computer only column">
+                                <h4 class="ui horizontal divider header">
+                                    <i class="unhide icon"></i>
+                                    {{ strings.advertFormPreviewHeaderLabel }}
+                                </h4>
                             </div>
-                            <div class="right floated sixteen wide mobile sixteen wide tablet fifteen wide computer column" v-else>
-                                <div class="ui form">
-                                    <div class="three fields">
-                                        <quantities-input-field
-                                                :advert="advert"
-                                                :total-quantity-label="totalQuantityLabel"
-                                                :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                                :with-valid-button="false"
-                                                :only-mini-lot="true"
-                                        ></quantities-input-field>
-                                        <margin-input-field
-                                                :advert="advert"
-                                                :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                                                :form-advert-price-coefficient-total-label="formAdvertPriceCoefficientTotalLabel"
-                                                :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                                                :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                                                :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
-                                                :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                                                :with-valid-button="false"
-                                        ></margin-input-field>
-                                        <div class="field">
-                                            <div class="grouped fields">
-                                                <div class="field">
-                                                    <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                        <input type="radio" :name="advert.id" value="1">
-                                                        <label>{{ toggleApproveLabel }}</label>
+                            <div class="sixteen wide mobile only six wide tablet only six wide computer only column">
+                                <h4 class="ui horizontal divider header">
+                                    <i class="settings icon"></i>
+                                    {{ strings.advertFormParamsHeaderLabel }}
+                                </h4>
+                            </div>
+                            <div class="ten wide tablet only ten wide computer only column">
+                                <div class="row">
+                                    <breadcrumb
+                                            :items="setBreadCrumbItems(advert)"
+                                            :withAction="true"
+                                    ></breadcrumb>
+                                </div>
+                                <div class="sixteen wide column">
+                                    <div class="header"><h3><span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>{{ advert.title }}</h3></div>
+                                </div>
+                                <advert-by-id
+                                        :advert="advert"
+                                        user-name=""
+                                        :is-user-owner="true"
+                                        :is-static="false"
+                                ></advert-by-id>
+                            </div>
+                            <div class="sixteen wide mobile only six wide tablet only six wide computer only column glass-box">
+                                <div class="ui grid">
+                                    <div class="sixteen wide column">
+                                        <div class="ui cards" :title="advert.user.isSupplier ? strings.trustedProviderLabel :''">
+                                            <div class="card">
+                                                <div class="content">
+                                                    <div class="header">
+                                                        <i class="green big protect icon" v-if="advert.user.isSupplier"></i>
+                                                        {{ advert.user.compagnyName }}
                                                     </div>
                                                 </div>
-                                                <div class="field">
-                                                    <div :id="'slider2-'+_uid+'-'+advert.id" class="ui slider checkbox">
-                                                        <input type="radio" :name="advert.id" value="0">
-                                                        <label>{{ toggleDisapproveLabel }}</label>
+                                                <div class="content">
+                                                    <div class="meta">
+                                                        {{ advert.user.name }} / {{ advert.user.email }}
+                                                    </div>
+                                                    <div class="description">
+                                                        {{ getFormattedAddress(advert.user.geoloc) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui grid" v-if="((advert.id) in approveList) && ((approveList[advert.id]).isApprove=='0')">
-                            <div class="sixteen wide column">
-                                <div class="ui form">
-                                    <div class="field">
-                                        <label>{{ textDisapproveReason }}</label>
-                                        <textarea rows="2" v-model="(approveList[advert.id]).disapproveReason"></textarea>
+                                    <div class="sixteen wide column">
+                                        <div class="ui form">
+                                            <div class="field" v-if="advert.user.isSupplier">
+                                                <quantities-input-field
+                                                        :advert="advert"
+                                                        :with-valid-button="false"
+                                                        :only-mini-lot="true"
+                                                ></quantities-input-field>
+                                                <margin-input-field
+                                                        :advert="advert"
+                                                        :with-valid-button="false"
+                                                ></margin-input-field>
+                                            </div>
+                                            <div class="field">
+                                                <div class="grouped fields">
+                                                    <div class="field">
+                                                        <div :id="'slider1-'+_uid+'-'+advert.id" class="ui slider checkbox">
+                                                            <input type="radio" :name="advert.id" value="1">
+                                                            <label>{{ strings.toggleApproveLabel }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <div :id="'slider2-'+_uid+'-'+advert.id" class="ui slider checkbox">
+                                                            <input type="radio" :name="advert.id" value="0">
+                                                            <label>{{ strings.toggleDisapproveLabel }}</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field" v-if="((advert.id) in approveList) && ((approveList[advert.id]).isApprove=='0')">
+                                                <label>{{ strings.textDisapproveReason }}</label>
+                                                <textarea rows="2" v-model="(approveList[advert.id]).disapproveReason"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <button class="ui primary button" :class="action ? '': 'disabled'" v-on:click="approveAll">
-                        {{ formValidationButtonLabel }}
+                        {{ strings.formValidationButtonLabel }}
                     </button>
                 </form>
 
@@ -233,41 +148,11 @@
             'routeGetThumb',
             //vue vars
             'advertNbFreePicture',
-            //vue strings
-            'contentHeader',
-            'segmentEditLabel',
-            'fieldEditLabel',
-            'trustedProviderLabel',
-            'loadErrorMessage',
-            'toggleApproveLabel',
-            'toggleDisapproveLabel',
-            'textDisapproveReason',
-            'formAdvertPriceCoefficientLabel',
-            'formAdvertPriceCoefficientTotalLabel',
-            'formAdvertPriceCoefficientNewPriceLabel',
-            'formAdvertPriceCoefficientUnitMarginLabel',
-            'formAdvertPriceCoefficientLotMarginLabel',
-            'formAdvertPriceCoefficientTotalMarginLabel',
-            'formValidationButtonLabel',
-            'modalValidHeader',
-            'modalValidDescription',
-            'modalNo',
-            'modalYes',
-            'advertPayPhotoSingular',
-            'advertTitleLabel',
-            'advertRefLabel',
-            'advertDescriptionLabel',
-            'advertPriceLabel',
-            'advertPriceTotalLabel',
-            'advertPriceDiscountLabel',
-            'advertIsNegociatedLabel',
-            'advertAddressLabel',
-            'advertApproveSuccess',
-            'totalQuantityLabel',
-            'lotMiniQuantityLabel'
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 advertsList: [],
                 isLoaded: false,
                 action: false,
@@ -278,6 +163,8 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['approve-advert-form'];
+            this.properties = this.$store.state.properties['global'];
             this.getAdvertsList();
         },
         updated () {
@@ -318,7 +205,7 @@
                         that.isLoaded = true;
                     })
                     .catch(function (error)  {
-                        that.sendToast(that.loadErrorMessage, 'error');
+                        that.sendToast(that.strings.loadErrorMessage, 'error');
                     });
             },
             approveAll: function (event) {
@@ -326,6 +213,7 @@
                 let that = this;
                 for(let index in this.approveList){
                     this.approveList[index]['priceCoefficient']= this.advertsList[index]['price_coefficient'];
+                    this.approveList[index]['priceCoefficientTotal']= this.advertsList[index]['price_coefficient_total'];
                     this.approveList[index]['lotMiniQuantity']= this.advertsList[index]['lotMiniQuantity'];
                 }
                 $('#modal-'+this._uid).modal({
@@ -335,13 +223,13 @@
                         axios.post(that.routeAdvertApprove, that.approveList)
                             .then(function (response) {
                                 that.getAdvertsList();
-                                that.sendToast(that.advertApproveSuccess, 'success');
+                                that.sendToast(that.strings.advertApproveSuccess, 'success');
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {
                                     that.sendToast(error.response.data, 'error');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
                                 that.isLoaded = false;
                             });
@@ -361,6 +249,19 @@
             },
             isEditField(advert, fieldName){
                 return advert.listEditFields['field'].indexOf(fieldName)!==-1;
+            },
+            setBreadCrumbItems: function (advert) {
+                let that = this;
+
+                let breadcrumbItems = [];
+
+                advert.breadCrumb.forEach(function (element){
+                    breadcrumbItems.push({
+                        name: element['description'][that.properties.actualLocale],
+                        value: element.id
+                    });
+                });
+                return breadcrumbItems;
             }
         }
     }

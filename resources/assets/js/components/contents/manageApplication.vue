@@ -2,26 +2,26 @@
     <div class="ui one column grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div class="column">
-            <h2 class="ui header">{{ contentHeader }}</h2>
+            <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
         <div class="column">
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
             <div class="ui form">
-                <h4 class="ui horizontal divider header"><i class="paint brush icon"></i> {{ appearanceLabel }} </h4>
+                <h4 class="ui horizontal divider header"><i class="paint brush icon"></i> {{ strings.appearanceLabel }} </h4>
                 <div class="field">
                     <type-radio-button
                             :route-get-list-type="routeGetListType"
-                            :first-menu-name="listTypeFirstMenuName"
+                            :first-menu-name="strings.listTypeFirstMenuName"
                             :old-choice="oldType">
                     </type-radio-button>
                 </div>
-                <h4 class="ui horizontal divider header"><i class="browser icon"></i> {{ advertPreferencesLabel }} </h4>
+                <h4 class="ui horizontal divider header"><i class="browser icon"></i> {{ strings.advertPreferencesLabel }} </h4>
                 <div class="field">
                     <div class="three fields">
                         <div class="field">
-                            <label>{{ advertNbFreePicturesLabel }}</label>
+                            <label>{{ strings.advertNbFreePicturesLabel }}</label>
                             <input type="number"
                                    name="nbFreePictures"
                                    min="1"
@@ -32,7 +32,7 @@
                                    v-on:blur="blured={'name': 'nbFreePictures', 'value': parameters.nbFreePictures}">
                         </div>
                         <div class="field">
-                            <label>{{ advertNbMaxPicturesLabel }}</label>
+                            <label>{{ strings.advertNbMaxPicturesLabel }}</label>
                             <input type="number"
                                    name="nbMaxPictures"
                                    min="1"
@@ -42,7 +42,7 @@
                                    v-on:blur="blured={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}">
                         </div>
                         <div class="field">
-                            <label>{{ advertResumeLenghtLabel }}</label>
+                            <label>{{ strings.advertResumeLenghtLabel }}</label>
                             <input type="number"
                                    name="advertResumeLenght"
                                    min="20"
@@ -53,11 +53,11 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="ui horizontal divider header"><i class="euro icon"></i> {{ costLabel }} </h4>
+                <h4 class="ui horizontal divider header"><i class="euro icon"></i> {{ strings.costLabel }} </h4>
                 <div class="field">
                     <div class="three fields">
                         <div class="field">
-                            <label>{{ advertUrgentCostLabel }}</label>
+                            <label>{{ strings.advertUrgentCostLabel }}</label>
                             <input type="number"
                                    name="urgentCost"
                                    min="0"
@@ -67,7 +67,7 @@
                                    v-on:blur="blured={'name': 'urgentCost', 'value': parameters.urgentCost}">
                         </div>
                         <div class="field">
-                            <label>{{ advertVideoCostLabel }}</label>
+                            <label>{{ strings.advertVideoCostLabel }}</label>
                             <input type="number"
                                    name="videoCost"
                                    min="0"
@@ -77,7 +77,7 @@
                                    v-on:blur="blured={'name': 'videoCost', 'value': parameters.videoCost}">
                         </div>
                         <div class="field">
-                            <label>{{ advertRenewCostLabel }}</label>
+                            <label>{{ strings.advertRenewCostLabel }}</label>
                             <input type="number"
                                    name="renewCost"
                                    min="0"
@@ -89,7 +89,7 @@
                     </div>
                     <div class="three fields">
                         <div class="field">
-                            <label>{{ advertEditCostLabel }}</label>
+                            <label>{{ strings.advertEditCostLabel }}</label>
                             <input type="number"
                                    name="editCost"
                                    min="0"
@@ -99,7 +99,7 @@
                                    v-on:blur="blured={'name': 'editCost', 'value': parameters.editCost}">
                         </div>
                         <div class="field">
-                            <label>{{ advertBackToTopCostLabel }}</label>
+                            <label>{{ strings.advertBackToTopCostLabel }}</label>
                             <input type="number"
                                    name="backToTopCost"
                                    min="0"
@@ -109,7 +109,7 @@
                                    v-on:blur="blured={'name': 'backToTopCost', 'value': parameters.backToTopCost}">
                         </div>
                         <div class="field">
-                            <label>{{ advertHighlightCostLabel }}</label>
+                            <label>{{ strings.advertHighlightCostLabel }}</label>
                             <input type="number"
                                    name="highlightCost"
                                    min="0"
@@ -120,11 +120,11 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="ui horizontal divider header"><i class="search icon"></i> {{ searchLabel }} </h4>
+                <h4 class="ui horizontal divider header"><i class="search icon"></i> {{ strings.searchLabel }} </h4>
                 <div class="field">
                     <div class="three fields">
                         <div class="field">
-                            <label>{{ minLengthSearchLabel }}</label>
+                            <label>{{ strings.minLengthSearchLabel }}</label>
                             <input type="number"
                                    name="minLengthSearch"
                                    min="1"
@@ -134,7 +134,7 @@
                                    v-on:blur="blured={'name': 'minLengthSearch', 'value': parameters.minLengthSearch}">
                         </div>
                         <div class="field">
-                            <label>{{ maxNumberOfSearchResultsLabel }}</label>
+                            <label>{{ strings.maxNumberOfSearchResultsLabel }}</label>
                             <input type="number"
                                    name="maxNumberOfSearchResults"
                                    min="1"
@@ -145,11 +145,11 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="ui horizontal divider header"><i class="announcement icon"></i> {{ adsPreferencesLabel }} </h4>
+                <h4 class="ui horizontal divider header"><i class="announcement icon"></i> {{ strings.adsPreferencesLabel }} </h4>
                 <div class="field">
                     <div class="three fields">
                         <div class="field">
-                            <label>{{ advertPerPageLabel }}</label>
+                            <label>{{ strings.advertPerPageLabel }}</label>
                             <input type="number"
                                    name="advertsPerPage"
                                    min="4"
@@ -159,7 +159,7 @@
                                    v-on:blur="blured={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}">
                         </div>
                         <div class="field">
-                            <label>{{ adsFrequencyLabel }}</label>
+                            <label>{{ strings.adsFrequencyLabel }}</label>
                             <input type="number"
                                    name="adsFrequency"
                                    min="0"
@@ -176,7 +176,7 @@
                         <input type="checkbox"
                                name="masterAds"
                                v-model="parameters.masterAds">
-                        <label>{{ masterAdsActivationLabel }}</label>
+                        <label>{{ strings.masterAdsActivationLabel }}</label>
                     </div>
                 </div>
                 <div class="field">
@@ -184,7 +184,7 @@
                         <div class="field">
                             <transition name="p-fade">
                                 <div class="field" v-show="parameters.masterAds">
-                                    <label>{{ masterAdsUrlLabel }}</label>
+                                    <label>{{ strings.masterAdsUrlLabel }}</label>
                                     <input type="url" placeholder="http://ads.google.com/1d5f1d..."
                                            name="urlMasterAds"
                                            v-model="parameters.urlMasterAds"
@@ -197,7 +197,7 @@
                         <div class="field">
                             <transition name="p-fade">
                                 <div class="field" v-show="parameters.masterAds">
-                                    <label>{{ masterAdsUrlLinkLabel }}</label>
+                                    <label>{{ strings.masterAdsUrlLinkLabel }}</label>
                                     <input type="url" placeholder="http://ads.google.com/1d5f1d..."
                                            name="urlLinkMasterAds"
                                            v-model="parameters.urlLinkMasterAds"
@@ -210,7 +210,7 @@
                         <div class="field">
                             <transition name="p-fade">
                                 <div class="field" v-show="parameters.masterAds">
-                                    <label>{{ masterAdsOffsetYLabel }} (px)</label>
+                                    <label>{{ strings.masterAdsOffsetYLabel }} (px)</label>
                                     <input type="number"
                                            name="offsetYMasterAds"
                                            v-model="parameters.offsetYMasterAds"
@@ -235,43 +235,12 @@
             //vue routes
             routeParameters: String,
             routeTestIsPicture: String,
-            //vue vars
-            //vue strings
-            contentHeader: String,
-            loadErrorMessage: String,
-            patchErrorMessage: String,
-            patchSuccessMessage: String,
-            invalidImageMessage: String,
-            advertPreferencesLabel: String,
-            advertNbFreePicturesLabel: String,
-            advertNbMaxPicturesLabel: String,
-            costLabel: String,
-            advertUrgentCostLabel: String,
-            advertVideoCostLabel: String,
-            advertRenewCostLabel: String,
-            advertBackToTopCostLabel: String,
-            advertEditCostLabel: String,
-            advertHighlightCostLabel: String,
-            advertPerPageLabel: String,
-            advertResumeLenghtLabel: String,
-            searchLabel: String,
-            minLengthSearchLabel: String,
-            maxNumberOfSearchResultsLabel: String,
-            adsPreferencesLabel: String,
-            adsFrequencyLabel: String,
-            masterAdsActivationLabel: String,
-            masterAdsUrlLabel: String,
-            masterAdsUrlLinkLabel: String,
-            masterAdsOffsetYLabel: String,
-            appearanceLabel: String,
-            welcomeAppearanceLabel: String,
-
-            //type radio btn component
             routeGetListType: String,
-            listTypeFirstMenuName: String
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 isLoaded: false,
                 sendMessage: false,
                 typeMessage: '',
@@ -284,6 +253,8 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['manage-application'];
+            this.properties = this.$store.state.properties['global'];
             this.getParameters();
             this.$on('typeChoice', function (event) {
                 this.typeChoice(event.type);
@@ -317,7 +288,7 @@
                         that.isLoaded = true;
                     })
                     .catch(function (error) {
-                        that.sendToast(that.loadErrorMessage, 'error');
+                        that.sendToast(that.strings.loadErrorMessage, 'error');
                     });
             },
             typeChoice: function (type) {
@@ -352,7 +323,7 @@
                     }
                 } else {
                     this.getParameters(false);
-                    this.sendToast(this.patchErrorMessage, 'error');
+                    this.sendToast(this.strings.patchErrorMessage, 'error');
                 }
             },
             updateRequest(patchValue) {
@@ -360,14 +331,14 @@
                 axios.patch(this.routeParameters, patchValue)
                     .then(function (response) {
                         that.getParameters(false);
-                        that.sendToast(that.patchSuccessMessage, 'success');
+                        that.sendToast(that.strings.patchSuccessMessage, 'success');
                     })
                     .catch(function (error) {
                         that.getParameters(false);
                         if (error.response && error.response.status == 409) {
                             that.sendToast(error.response.data, 'error');
                         } else {
-                            that.sendToast(that.patchErrorMessage, 'error');
+                            that.sendToast(that.strings.patchErrorMessage, 'error');
                         }
                     });
             },
@@ -382,13 +353,13 @@
                             callback();
                         } else {
                             that.isValidImage = false;
-                            that.sendToast(this.invalidImageMessage, 'error');
+                            that.sendToast(this.strings.invalidImageMessage, 'error');
                         }
                     })
                     .catch(function (error) {
                         that.isLoaded = true;
                         that.isValidImage = false;
-                        that.sendToast(that.invalidImageMessage, 'error');
+                        that.sendToast(that.strings.invalidImageMessage, 'error');
                     });
             },
             sendToast: function (message, type) {

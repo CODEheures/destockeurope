@@ -1,19 +1,15 @@
 <template>
     <div>
-        <div class="ui active inverted dimmer" v-if="!isLoaded">
-            <div class="ui large text loader">Loading</div>
-        </div>
-        <div :id="_uid" class="ui floating dropdown" v-show="categories.length>0">
-            <div class="text">{{ firstMenuName }}</div>
+        <div :id="_uid" class="ui floating dropdown" v-show="category.availableMoveTo.length>0">
+            <div class="text">{{ strings.firstMenuName }}</div>
             <i class="dropdown icon"></i>
             <div class="menu">
-                <div v-for="category in categories" class="item" :data-value="category.id">
+                <div v-for="category in category.availableMoveTo" class="item" :data-value="category.id">
                     <i class="dropdown icon" v-if="category.children.length>0"></i>
-                    <span class="text">{{ category['description'][actualLocale] }}</span>
+                    <span class="text">{{ category['description'][properties.actualLocale] }}</span>
                     <recursive-categories-list-move-to
                             :categories="category.children"
-                            :actual-locale="actualLocale">
-                    </recursive-categories-list-move-to>
+                    ></recursive-categories-list-move-to>
                 </div>
             </div>
         </div>
@@ -24,40 +20,20 @@
 <script>
     export default {
         props: {
-            routeGetAvailableMoveToCategory: String,
-            routeParam: Number,
-            firstMenuName: String,
-            actualLocale: String,
-            flagRefresh: Boolean
+            category: Object,
         },
         data: () => {
             return {
-                categories: [],
-                isLoaded: false,
+                strings: {},
+                properties: {},
             } ;
         },
         mounted () {
-            this.getCategories();
-            this.$watch('flagRefresh', function () {
-                this.getCategories();
-            })
+            this.strings = this.$store.state.strings['categories-list-move-to'];
+            this.properties = this.$store.state.properties['global'];
         },
         methods: {
-            getCategories: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                let route = this.routeGetAvailableMoveToCategory + '/' + this.routeParam;
-                axios.get(route)
-                    .then(function (response) {
-                        that.categories = response.data;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.$parent.$emit('loadError');
-                        that.isLoaded = true;
-                    });
-            }
+
         },
         updated () {
             let that = this;
@@ -71,11 +47,7 @@
                         onChange: function(value, text, $selectedItem) {
                             if(value != undefined && value != ''){
                                 $(this).closest('.accordion').css({'z-index':''});
-                                if(!that.routeParam){
-                                    that.$parent.$emit('categoryChoice', {id: value});
-                                } else {
-                                    that.$parent.$emit('categoryChoice', {parentId: value, id: that.routeParam});
-                                }
+                                that.$parent.$emit('categoryChoice', {parentId: value, id: that.category.id});
                             }
                         }
                     })

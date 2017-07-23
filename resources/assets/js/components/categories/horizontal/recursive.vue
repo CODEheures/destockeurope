@@ -4,12 +4,12 @@
             <div :class="'ui ' + numberToWord(categories.length) +' column relaxed equal height divided grid'">
                 <template v-for="(category,index) in categories">
                     <div class="column">
-                        <h4 class="ui header">{{ category['description'][actualLocale] }}</h4>
+                        <h4 class="ui header">{{ category['description'][properties.actualLocale] }}</h4>
                         <recursive-categories-horizontal-menu
                                 :categories="category.children"
-                                :actual-locale="actualLocale"
+                                :actual-locale="properties.actualLocale"
                                 :parent-id="category.id"
-                                :parent-description="category.description[actualLocale]"
+                                :parent-description="category.description[properties.actualLocale]"
                                 :all-item="allItem"
                                 :level="level+1"
                                 :max-level="parseInt(0)"
@@ -24,7 +24,7 @@
                     <h4 class="ui header">{{ parentDescription }}</h4>
                     <div class="ui link list">
                         <template v-for="(category,index) in categories">
-                            <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)">{{ category['description'][actualLocale] }}</a>
+                            <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)">{{ category['description'][properties.actualLocale] }}</a>
                         </template>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
         <template v-if="level>1">
             <a class="item" :data-value="parentId" v-on:click="emitCategoryChoice(parentId)">{{ allItem }}</a>
             <template v-for="(category,index) in categories">
-                <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)" v-if="category.children.length==0">{{ category['description'][actualLocale] }}</a>
+                <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)" v-if="category.children.length==0">{{ category['description'][properties.actualLocale] }}</a>
             </template>
         </template>
     </div>
@@ -44,7 +44,6 @@
     export default {
         props: {
             categories: Array,
-            actualLocale: String,
             allItem: String,
             parentId: Number,
             parentDescription: String,
@@ -53,10 +52,11 @@
         },
         data: () => {
             return {
-
+                properties: {}
             } ;
         },
         mounted () {
+            this.properties = this.$store.state.properties['global'];
             let that=this;
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});

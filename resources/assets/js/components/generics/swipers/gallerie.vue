@@ -5,8 +5,6 @@
                 :video-id="videoId"
                 :pictures="pictures"
                 :main-picture="mainPicture"
-                :first-header="firstHeader"
-                :first-description="firstDescription"
                 :lazy-load="lazyLoad"
         ></swiper-top>
         <swiper-thumbs class="gallery-thumbs" :style="'height: ' + dataHeightThumb + 'px;'"
@@ -36,20 +34,6 @@
                 required: false,
                 default: null
             },
-            imageRatio: {
-                type: Number
-            },
-            //vue strings
-            firstHeader: {
-                type: String,
-                required: false,
-                default: ''
-            },
-            firstDescription: {
-                type: String,
-                required: false,
-                default: ''
-            },
             lazyLoad: {
                 type: Boolean,
                 required: false,
@@ -58,6 +42,7 @@
         },
         data: () => {
             return {
+                properties: {},
                 dataHeightTop: 500,
                 dataHeightThumb: 100,
                 swiperOptionTop: {
@@ -84,11 +69,12 @@
             };
         },
         mounted () {
+            this.properties = this.$store.state.properties['global'];
             const swiperTop = this.$children.find((children) => children.options.name == 'swiperTop').swiper;
             const swiperThumbs = this.$children.find((children) => children.options.name == 'swiperThumbs').swiper;
             swiperTop.params.control = swiperThumbs;
             swiperThumbs.params.control = swiperTop;
-            this.dataHeightTop = $('#'+this._uid).width()/this.imageRatio;
+            this.dataHeightTop = $('#'+this._uid).width()/this.properties.imageRatio;
             this.dataHeightThumb = this.dataHeightTop*20/80;
             this.$on('openLightBox', function (imgUrl) {
                 this.$parent.$emit('openLightBox', imgUrl)

@@ -8,6 +8,8 @@ server_name_hash_bucket_size 64;
 server_tokens off;
 client_max_body_size 10M;
 
+// check npm version: npm outdated
+// check composer: composer update --dry-run
 
 //
 //      php.ini: upload_max_filesize = 5M

@@ -14,7 +14,7 @@
             <div :class="'ui doubling ' + nbColumns + ' column grid'">
                 <div class="column" v-for="(thumb,index) in thumbs">
                     <div :class="!isDelegation &&  index>=advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
-                        <a class="ui pink right ribbon label" v-if="!isDelegation && index>=advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
+                        <a class="ui pink right ribbon label" v-if="!isDelegation && index>=advertFormPhotoNbFreePicture">{{ strings.payPhotoHelpHeaderSingular }}</a>
                         <div class="ui stackable grid">
                             <div class="four wide centered column">
                                 <a href="#"><i class="large grey remove circle outline icon" :data-file="thumb" v-on:click="delPhoto"></i></a>
@@ -22,7 +22,7 @@
                             <div class="twelve wide right aligned column">
                                 <div :id="'slider1-'+_uid+'-'+index" class="ui slider checkbox">
                                     <input type="radio" name="mainThumb" :value="thumb">
-                                    <label>{{ advertFormMainPhotoLabel }}</label>
+                                    <label>{{ strings.mainPhotoLabel }}</label>
                                 </div>
                             </div>
                             <div class="sixteen wide column">
@@ -33,7 +33,7 @@
                 </div>
                 <div class="column" v-show="onUpload">
                     <div :class="!isDelegation &&  thumbs.length+1>advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
-                        <a class="ui pink right ribbon label" v-if="!isDelegation && thumbs.length+1>advertFormPhotoNbFreePicture">{{ advertFormPayPhotoHelpHeaderSingular }}</a>
+                        <a class="ui pink right ribbon label" v-if="!isDelegation && thumbs.length+1>advertFormPhotoNbFreePicture">{{ strings.payPhotoHelpHeaderSingular }}</a>
                         <div class="ui stackable grid">
                             <div class="four wide centered column">
                                 <a href="#"><i class="large grey remove circle outline icon"></i></a>
@@ -41,7 +41,7 @@
                             <div class="twelve wide right aligned column">
                                 <div :id="'fakeSlider1-'+_uid" class="ui slider checkbox">
                                     <input type="radio">
-                                    <label>{{ advertFormMainPhotoLabel }}</label>
+                                    <label>{{ strings.mainPhotoLabel }}</label>
                                 </div>
                             </div>
                             <div class="sixteen wide column">
@@ -51,7 +51,7 @@
                                             <div class="bar">
                                                 <div class="progress"></div>
                                             </div>
-                                            <div class="label"><a class="ui orange button" v-on:click="cancelUploadPhoto()">{{ advertFormPhotoBtnCancel }}</a></div>
+                                            <div class="label"><a class="ui orange button" v-on:click="cancelUploadPhoto()">{{ strings.photoBtnCancel }}</a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -81,13 +81,13 @@
                         <div class="row">
                             <div class="ui icon big primary button" v-on:click="triggerClickInput()">
                                 <i class="plus icon"></i>
-                                {{ advertFormPhotoBtnLabel }}
+                                {{ strings.photoBtnLabel }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="sixteen wide column">
                                 <div class="ui top blue pointing basic label">
-                                    {{ advertFormPhotoLabel }}
+                                    {{ strings.photoLabel }}
                                 </div>
                             </div>
                         </div>
@@ -121,20 +121,11 @@
                 type: String,
                 required: false,
                 default: "three"
-            },
-            //vue strings
-            advertFormPhotoBtnLabel: String,
-            advertFormPhotoBtnCancel: String,
-            advertFormPhotoLabel: String,
-            advertFormFreePhotoHelpHeaderSingular: String,
-            advertFormFreePhotoHelpHeaderPlural: String,
-            advertFormPayPhotoHelpHeaderSingular: String,
-            advertFormPayPhotoHelpHeaderPlural: String,
-            advertFormPhotoHelpContent: String,
-            advertFormMainPhotoLabel: String
+            }
         },
         data: () => {
             return {
+                strings: {},
                 filePhotoToPost: new FormData(),
                 formPhotoFileInputName: 'addpicture',
                 helpUploadP: '',
@@ -151,6 +142,7 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['photo-uploader'];
             this.setPicturesIndicators();
             this.helpUpload();
             this.getListThumbs();
@@ -181,7 +173,7 @@
                 $('#'+this.formPhotoFileInputName).click()
             },
             helpUpload: function () {
-                let htmlObject = $('<p>'+this.advertFormPhotoHelpContent+'</p>');
+                let htmlObject = $('<p>'+this.strings.photoHelpContent+'</p>');
                 this.helpUploadP = htmlObject[0].firstChild.data;
                 this.helpUploadA = htmlObject[0].firstElementChild.innerHTML;
                 this.helpUploadAHref = htmlObject[0].firstElementChild.href;
@@ -260,16 +252,16 @@
                 if(resultIndicator>=0){
                     this.nbPicturesIndicator = resultIndicator;
                     if(resultIndicator>1){
-                        this.helpHeaderIndicator = this.advertFormFreePhotoHelpHeaderPlural;
+                        this.helpHeaderIndicator = this.strings.freePhotoHelpHeaderPlural;
                     } else {
-                        this.helpHeaderIndicator = this.advertFormFreePhotoHelpHeaderSingular;
+                        this.helpHeaderIndicator = this.strings.freePhotoHelpHeaderSingular;
                     }
                 } else {
                     this.nbPicturesIndicator = -resultIndicator;
                     if(this.nbPicturesIndicator>1){
-                        this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderPlural;
+                        this.helpHeaderIndicator = this.strings.payPhotoHelpHeaderPlural;
                     } else {
-                        this.helpHeaderIndicator = this.advertFormPayPhotoHelpHeaderSingular;
+                        this.helpHeaderIndicator = this.strings.payPhotoHelpHeaderSingular;
                     }
                 }
             },

@@ -4,11 +4,11 @@
             <i class="marker icon"></i>
             <div class="content">
                 <div class="header"></div>
-                <p>{{ geolocHelpMsg }}</p>
+                <p>{{ strings.geolocHelpMsg }}</p>
             </div>
         </div>
         <div class="field">
-            <input id="mapInput" class="controls" type="text" :placeholder="geolocHelpMsgTwo">
+            <input id="mapInput" class="controls" type="text" :placeholder="strings.geolocHelpMsgTwo">
         </div>
         <div id="map" style="height: 50vh;width: 100%;max-width: 600px;"></div>
     </div>
@@ -20,8 +20,6 @@
             lng: String,
             lat: String,
             geoloc: String,
-            geolocHelpMsg: String,
-            geolocHelpMsgTwo: String,
             square: {
                 type: Boolean,
                 required: false,
@@ -34,12 +32,14 @@
         },
         data: () => {
             return {
+                strings: {},
                 dataLng: '',
                 dataLat: '',
                 dataGeoloc: '',
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['googleMap'];
             this.dataLng = this.lng;
             this.dataLat = this.lat;
             this.dataGeoloc = this.geoloc;
