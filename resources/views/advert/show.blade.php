@@ -6,7 +6,7 @@
     <meta property="og:title" content="{{ $advert->title . ' ' . trans('strings.global_for') . ' ' . $advert->price_margin}}">
     <meta property="og:description" content="{{ $advert->resume }}">
     <meta property="og:image" content="{{ $advert->thumb }}">
-    <meta property="og:url" content="{{ $advert->url }}">
+    <meta property="og:url" content="{{ route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()]) }}">
     <meta property="og:type" content="product.item">
     <meta property="product:retailer_item_id" content="{{ $advert->user->compagnyName }}">
     <meta property="product:price:amount" content="{{ \App\Common\MoneyUtils::getPriceWithDecimal($advert->originalPriceWithMargin,$advert->currency,false) }}">
