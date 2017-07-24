@@ -1,7 +1,7 @@
 <template>
     <div class="ui centered grid">
         <div class="fourteen wide column">
-            <a :href="advert.url" class="ui card">
+            <a :href="advert.url" class="ui card" :id="'highlight-card-'+_uid">
                 <div class="image">
                     <img class="ui bordered rounded image" :src="advert.thumb">
                 </div>
