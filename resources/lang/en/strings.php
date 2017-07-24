@@ -207,6 +207,7 @@ return [
     'modal_cancel'=> 'Cancel',
 
     'global_or' => 'or',
+    'global_for' => 'for',
 
     'link_forgot_password' => 'Forgot your password',
     'link_send_reset_link' => 'Send reset link',

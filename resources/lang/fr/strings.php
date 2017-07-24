@@ -207,6 +207,7 @@ return [
     'modal_cancel'=> 'Annuler',
 
     'global_or' => 'ou',
+    'global_for' => 'à',
 
     'link_forgot_password' => 'Mot de passe oublié',
     'link_send_reset_link' => 'Envoyer un lien de renouvellement',

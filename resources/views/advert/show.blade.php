@@ -3,7 +3,7 @@
 @section('opengraph')
     <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
     <meta property="og:site_name" content="{{ config('app.name') }}">
-    <meta property="og:title" content="{{ $advert->title }}">
+    <meta property="og:title" content="{{ $advert->title . ' ' . trans('strings.global_for') . ' ' . $advert->price_margin}}">
     <meta property="og:description" content="{{ $advert->resume }}">
     <meta property="og:image" content="{{ $advert->thumb }}">
     <meta property="og:url" content="{{ $advert->url }}">
