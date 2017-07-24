@@ -22,5 +22,9 @@ mix//.js('resources/assets/js/sw.js', 'public')
         'resources/assets/css/ion.rangeSlider.css',
         'resources/assets/css/ion.rangeSlider.skinFlat.css',
         'resources/assets/css/swiper.css',
-    ], 'public/css/vendor.css')
-    .version();
+    ], 'public/css/vendor.css');
+
+if (mix.inProduction()) {
+    mix.version();
+}
+
