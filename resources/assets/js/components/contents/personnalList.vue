@@ -4,25 +4,25 @@
         <div :id="'modal2-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ modalValidHeader }}
+                {{ strings.modalValidHeader }}
             </div>
             <div class="image content">
                 <div class="image">
                     <i class="legal icon"></i>
                 </div>
                 <div class="description">
-                    <p>{{ modalValidDescription }}</p>
+                    <p>{{ strings.modalValidDescription }}</p>
                 </div>
             </div>
             <div class="actions">
                 <div class="two fluid ui inverted buttons">
                     <div class="ui cancel red basic inverted button">
                         <i class="remove icon"></i>
-                        {{ modalNo }}
+                        {{ strings.modalNo }}
                     </div>
                     <div class="ui ok green basic inverted button">
                         <i class="checkmark icon"></i>
-                        {{ modalYes }}
+                        {{ strings.modalYes }}
                     </div>
                 </div>
             </div>
@@ -34,14 +34,10 @@
             <div v-if="isDelegation" class="sixteen wide column">
                 <div class="row filters">
                     <advert-simple-search-filter
-                            :filter-ribbon-open="filterRibbonOpen"
-                            :filter-ribbon-close="filterRibbonClose"
                             :update="update"
                             :filter="filter"
                             :route-search="dataRouteGetAdvertsList"
-                            :min-length-search="parseInt(filterMinLengthSearch)"
                             :flag-reset-search="dataFlagResetSearch"
-                            :search-place-holder="filterSearchPlaceHolder"
                     ></advert-simple-search-filter>
                 </div>
             </div>
@@ -58,37 +54,7 @@
                             :ads-frequency="parseInt(adsFrequency)"
                             :can-get-delegations="canGetDelegations==true"
                             :is-personnal-list="isPersonnalList==true"
-                            :actual-locale="actualLocale"
-                            :total-quantity-label="totalQuantityLabel"
-                            :lot-mini-quantity-label="lotMiniQuantityLabel"
-                            :urgent-label="urgentLabel"
-                            :is-negociated-label="isNegociatedLabel"
-                            :manage-advert-label="manageAdvertLabel"
-                            :renew-advert-label="renewAdvertLabel"
-                            :back-to-top-label="backToTopAdvertLabel"
-                            :highlight-label="highlightAdvertLabel"
-                            :delete-advert-label="deleteAdvertLabel"
-                            :see-advert-label="seeAdvertLabel"
-                            :edit-advert-label="editAdvertLabel"
-                            :see-advert-popup-label="seeAdvertPopupLabel"
-                            :edit-advert-popup-label="editAdvertPopupLabel"
-                            :delete-advert-popup-label="deleteAdvertPopupLabel"
-                            :back-to-top-popup-label="backToTopPopupLabel"
-                            :highlight-popup-label="highlightPopupLabel"
-                            :renew-advert-popup-label="renewAdvertPopupLabel"
-                            :validation-on-progress-label="validationOnProgressLabel"
-                            :bookmark-info="bookmarkInfo"
-                            :views-info="viewsInfo"
-                            :price-info-label="priceInfoLabel"
-                            :no-result-found-header="noResultFoundHeader"
-                            :no-result-found-message="noResultFoundMessage"
                             :reload-on-unbookmark-success="reloadAdvertOnUnbookmarkSuccess==1"
-                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
-                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -96,10 +62,7 @@
                         <pagination
                             :pages="paginate"
                             :route-get-list="dataRouteGetAdvertsList"
-                            :page-label="pageLabel"
-                            :page-previous-label="pagePreviousLabel"
-                            :page-next-label="pageNextLabel">
-                        </pagination>
+                        ></pagination>
                     </div>
                 </div>
             </div>
@@ -118,67 +81,23 @@
     export default {
         props: [
             //vue routes
-            //vue vars
-            'clearStorage',
-            //vue strings
-            'loadErrorMessage',
-            'updateSuccessMessage',
-            'contentHeader',
-            'modalValidHeader',
-            'modalValidDescription',
-            'modalNo',
-            'modalYes',
-            //advertByList component
             'routeGetAdvertsList',
             'routeBookmarkAdd',
             'routeBookmarkRemove',
+            //vue vars
+            'clearStorage',
             'reloadAdvertOnUnbookmarkSuccess',
-            'actualLocale',
             'adsFrequency',
             'canGetDelegations',
             'isPersonnalList',
             'isDelegation',
-            'totalQuantityLabel',
-            'lotMiniQuantityLabel',
-            'urgentLabel',
-            'isNegociatedLabel',
-            'manageAdvertLabel',
-            'renewAdvertLabel',
-            'backToTopAdvertLabel',
-            'highlightAdvertLabel',
-            'deleteAdvertLabel',
-            'seeAdvertLabel',
-            'editAdvertLabel',
-            'seeAdvertPopupLabel',
-            'editAdvertPopupLabel',
-            'deleteAdvertPopupLabel',
-            'backToTopPopupLabel',
-            'highlightPopupLabel',
-            'renewAdvertPopupLabel',
-            'validationOnProgressLabel',
-            'bookmarkInfo',
-            'viewsInfo',
-            'priceInfoLabel',
-            'noResultFoundHeader',
-            'noResultFoundMessage',
-            'formAdvertPriceCoefficientLabel',
-            'formAdvertPriceCoefficientNewPriceLabel',
-            'formAdvertPriceCoefficientUnitMarginLabel',
-            'formAdvertPriceCoefficientLotMarginLabel',
-            'formAdvertPriceCoefficientTotalMarginLabel',
-            'formAdvertPriceCoefficientUpdateLabel',
-            //filter advert component
-            'filterMinLengthSearch',
-            'filterRibbonOpen',
-            'filterRibbonClose',
-            'filterSearchPlaceHolder',
-            //paginate component
-            'pageLabel',
-            'pagePreviousLabel',
-            'pageNextLabel'
+            //vue strings
+            'contentHeader',
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
@@ -193,16 +112,18 @@
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['personnal-list'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             if(this.clearStorage){
                 sessionStorage.clear();
             }
             //On load Error
             this.$on('loadError', function () {
-                this.sendToast(this.loadErrorMessage, 'error');
+                this.sendToast(this.strings.loadErrorMessage, 'error');
             });
             this.$on('updateSuccess', function () {
-                this.sendToast(this.updateSuccessMessage, 'success');
+                this.sendToast(this.strings.updateSuccessMessage, 'success');
             });
 
             //on reconstruit le filtre
@@ -223,7 +144,7 @@
                 });
             });
             this.$on('refreshResults', function (query) {
-                if(query != undefined && query.length >= this.filterMinLengthSearch){
+                if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
                     this.filter.resultsFor = query;
                     this.updateResults(true);
                 }
@@ -265,7 +186,7 @@
                                 if (error.response && error.response.status == 409) {
                                     that.sendToast(error.response.data, 'error');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
                                 that.isLoaded = true;
                             });

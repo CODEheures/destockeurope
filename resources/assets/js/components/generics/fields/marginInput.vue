@@ -1,35 +1,47 @@
 <template>
-    <div :class="withValidButton ? 'two fields':'field'">
+    <div :class="withValidButton ? 'three fields':'field'">
         <template v-if="withValidButton">
-            <div class="field">
-                <label>{{ formAdvertPriceCoefficientLabel }}</label>
-                <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
+            <div class="field" style="margin-top: 0">
+                <label>{{ strings.coefficientLabel }}</label>
+                <number-input name="price_coefficient" :min="0" :decimal="2" v-model="advert.price_coefficient"></number-input>
                 <margins-table
-                    :advert="advert"
-                    :formAdvertPriceCoefficientNewPriceLabel="formAdvertPriceCoefficientNewPriceLabel"
-                    :formAdvertPriceCoefficientUnitMarginLabel="formAdvertPriceCoefficientUnitMarginLabel"
-                    :formAdvertPriceCoefficientLotMarginLabel="formAdvertPriceCoefficientLotMarginLabel"
-                    :formAdvertPriceCoefficientTotalMarginLabel="formAdvertPriceCoefficientTotalMarginLabel"
+                        :advert="advert"
+                ></margins-table>
+            </div>
+            <div class="field">
+                <label>{{ strings.coefficientTotalLabel }}</label>
+                <number-input name="price_coefficient_total" :min="0" :decimal="2" v-model="advert.price_coefficient_total"></number-input>
+                <margins-table
+                        :advert="advert"
+                        :forLotMargin="false"
                 ></margins-table>
             </div>
             <div class="field">
                 <label style="opacity: 0">1</label>
                 <div v-on:click="updateCoefficient()" class="ui primary button">
                     <i class="percent icon"></i>
-                    {{ formAdvertPriceCoefficientUpdateLabel }}
+                    {{ strings.coefficientUpdateLabel }}
                 </div>
             </div>
         </template>
         <template v-else>
-            <label>{{ formAdvertPriceCoefficientLabel }}</label>
-            <input type="number" name="price_coefficient" min="0" step="0.01" v-model="advert.price_coefficient">
-            <margins-table
-                    :advert="advert"
-                    :formAdvertPriceCoefficientNewPriceLabel="formAdvertPriceCoefficientNewPriceLabel"
-                    :formAdvertPriceCoefficientUnitMarginLabel="formAdvertPriceCoefficientUnitMarginLabel"
-                    :formAdvertPriceCoefficientLotMarginLabel="formAdvertPriceCoefficientLotMarginLabel"
-                    :formAdvertPriceCoefficientTotalMarginLabel="formAdvertPriceCoefficientTotalMarginLabel"
-            ></margins-table>
+            <div class="grouped fields">
+                <div class="field" style="margin-top: 0">
+                    <label>{{ strings.coefficientLabel }}</label>
+                    <number-input name="price_coefficient" :min="0" :decimal="2" v-model="advert.price_coefficient"></number-input>
+                </div>
+                <margins-table
+                        :advert="advert"
+                ></margins-table>
+                <div class="field">
+                    <label>{{ strings.coefficientTotalLabel }}</label>
+                    <number-input name="price_coefficient_total" :min="0" :decimal="2" v-model="advert.price_coefficient_total"></number-input>
+                </div>
+                <margins-table
+                        :advert="advert"
+                        :forLotMargin="false"
+                ></margins-table>
+            </div>
         </template>
     </div>
 </template>
@@ -45,20 +57,14 @@
                 required: false,
                 default: true
             },
-            formAdvertPriceCoefficientLabel: String,
-            formAdvertPriceCoefficientNewPriceLabel: String,
-            formAdvertPriceCoefficientUnitMarginLabel: String,
-            formAdvertPriceCoefficientLotMarginLabel: String,
-            formAdvertPriceCoefficientTotalMarginLabel: String,
-            formAdvertPriceCoefficientUpdateLabel: String
         },
         data: () => {
             return {
-
+                strings: {},
             }
         },
         mounted () {
-
+            this.strings = this.$store.state.strings['margin-input-field'];
         },
         methods: {
             calcMargin: function (advert, type) {
@@ -78,7 +84,7 @@
             },
             updateCoefficient: function () {
                 let that = this;
-                axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient*100).toFixed(0)})
+                axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient*100).toFixed(0), 'coefficient_total': (that.advert.price_coefficient_total*100).toFixed(0)})
                     .then(function (response) {
                         that.$parent.$emit('updateSuccess')
                     })

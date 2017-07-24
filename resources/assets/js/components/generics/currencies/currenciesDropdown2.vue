@@ -5,15 +5,15 @@
         </div>
         <div class="ui mini labeled right action input">
             <div class="ui blue label">
-                {{ firstMenuName }}
+                {{ strings.firstMenuName }}
             </div>
             <div :id="_uid" class="ui mini floating dropdown button">
-                <div class="text" >{{ firstMenuName }}</div>
+                <div class="text" >{{ strings.firstMenuName }}</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
                     <div class="ui left icon input">
                         <i class="search icon"></i>
-                        <input type="text" :placeholder="inputSearchLabel">
+                        <input type="text" :placeholder="strings.inputSearchLabel">
                     </div>
                     <div class="divider"></div>
                     <div class="scrolling menu">
@@ -31,9 +31,6 @@
 <script>
     export default {
         props: {
-            routeListCurrencies: String,
-            firstMenuName: String,
-            inputSearchLabel: String,
             update: Boolean,
             oldCurrency: {
                 type: String,
@@ -42,11 +39,15 @@
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 currencies: [],
                 isLoaded: false,
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['currencies-dropdown-2'];
+            this.properties = this.$store.state.properties['global'];
             this.getListCurrencies();
             this.$watch('update', function() {this.getListCurrencies();});
         },
@@ -55,7 +56,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.routeListCurrencies)
+                axios.get(this.properties.routeListCurrencies)
                     .then(function (response) {
                         that.currencies = response.data;
                         that.isLoaded = true;
@@ -71,6 +72,11 @@
         updated () {
             if (this.oldCurrency != undefined && this.oldCurrency != '') {
                 this.currencies.userPrefCurrency = this.oldCurrency;
+                if('listCurrencies' in this.currencies){
+                    let userPrefCurrencySubUnit = this.currencies.listCurrencies[this.currencies.userPrefCurrency]['subunit'];
+                    let userPrefCurrencySymbol = this.currencies.listCurrencies[this.currencies.userPrefCurrency]['symbol'];
+                    this.$parent.$emit('currencyChoice', {cur: this.currencies.userPrefCurrency, subunit: userPrefCurrencySubUnit, symbol: userPrefCurrencySymbol, initial:false});
+                }
             }
 
             let that = this;

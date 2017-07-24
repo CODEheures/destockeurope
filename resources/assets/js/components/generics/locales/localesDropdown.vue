@@ -4,11 +4,11 @@
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
-            <span class="text">{{ firstMenuName }}</span>
+            <span class="text">{{ strings.firstMenuName }}</span>
             <div class="menu">
                 <div class="ui icon search input">
                     <i class="search icon"></i>
-                    <input type="text" :placeholder="inputSearchLabel">
+                    <input type="text" :placeholder="strings.inputSearchLabel">
                 </div>
                 <div class="divider"></div>
                 <div class="scrolling menu">
@@ -24,9 +24,6 @@
 <script>
     export default {
         props: {
-            routeListLocales: String,
-            firstMenuName: String,
-            inputSearchLabel: String,
             oldLocale: {
                 type: String,
                 required: false
@@ -34,11 +31,15 @@
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 locales: [],
                 isLoaded: false,
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['locales-dropdown'];
+            this.properties = this.$store.state.properties['global'];
             this.getListLocales();
         },
         methods: {
@@ -46,7 +47,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.routeListLocales)
+                axios.get(this.properties.routeListLocales)
                     .then(function (response) {
                         that.locales = response.data;
                         that.isLoaded = true;

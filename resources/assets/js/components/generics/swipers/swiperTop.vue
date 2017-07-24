@@ -22,8 +22,8 @@
                         <h1 class="ui icon header">
                             <i class="file image outline icon"></i>
                             <div class="content">
-                                {{ firstHeader }}
-                                <div class="sub header">{{ firstDescription }}</div>
+                                {{ strings.firstHeader }}
+                                <div class="sub header">{{ strings.firstDescription }}</div>
                             </div>
                         </h1>
                     </div>
@@ -55,9 +55,6 @@
                 required: false,
                 default: null
             },
-            //vue strings
-            firstHeader: String,
-            firstDescription: String,
             lazyLoad: {
                 type: Boolean,
                 required: false,
@@ -66,10 +63,12 @@
         },
         data: () => {
             return {
+                strings: {},
                 dataPictures: []
             };
         },
         mounted: function() {
+            this.strings = this.$store.state.strings['swiper-top'];
             if (!this.swiper && typeof global.window != 'undefined') {
                 this.swiper = new Swiper(this.$el, this.options)
             }
@@ -78,10 +77,11 @@
             });
             this.$watch('pictures', function () {
                 this.updateDataPictures();
-            })
+            });
+            this.updateDataPictures();
         },
         updated: function(){
-            this.swiper.update()
+            this.swiper.update();
         },
         beforeDestroy: function() {
             if (!!this.swiper) {
@@ -96,15 +96,17 @@
             updateDataPictures: function () {
                 let pictures=[];
                 let that = this;
-                this.pictures.forEach(function (picture) {
-                    if(!picture.isThumb){
-                        if(picture.hashName == that.mainPicture){
-                            pictures.unshift(picture.url);
-                        } else {
-                            pictures.push(picture.url);
+                if(this.pictures){
+                    this.pictures.forEach(function (picture) {
+                        if(!picture.isThumb){
+                            if(picture.hashName == that.mainPicture){
+                                pictures.unshift(picture.url);
+                            } else {
+                                pictures.push(picture.url);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 this.dataPictures = pictures;
             }
         }

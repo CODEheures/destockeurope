@@ -1,7 +1,7 @@
 <template>
     <div :id="'subscribe-'+_uid" class="ui toggle checkbox" v-show="destockShareVarData.firebase.token!=null && destockShareVarData.firebase.token!=undefined && destockShareVarData.firebase.token!=''">
         <input type="checkbox" name="public">
-        <label>{{ checkboxLabel }}</label>
+        <label>{{ strings.checkboxLabel }}</label>
     </div>
 </template>
 
@@ -13,17 +13,17 @@
             routeAdd: String,
             routeRemove: String,
             //Vue vars
-            topic_id: Number,
-            //vue strings
-            checkboxLabel: String
+            topic_id: Number
         },
         data: () => {
             return {
+                strings: {},
                 destockShareVarData: destockShareVar,
                 existIn: false,
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['notifications-activer'];
             //App Notifications
             let that = this;
             let subscribeCheckbox = $('#subscribe-'+this._uid);

@@ -144,6 +144,12 @@ div.ui.vertical.segment.separator {
       }
     }
   }
+
+  & [id^='highlight-card-'] {
+    & span.label.price:not(.negociated) {
+      color: $color-blue !important;
+    }
+  }
 }
 
 #app div.masterads {

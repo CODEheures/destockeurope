@@ -2,7 +2,7 @@
     <div :id="_uid" class="ui fluid search filter">
         <div :class="!wantSearch ? 'ui fluid action left icon input' : 'ui fluid left icon input'">
             <i class="marker icon"></i>
-            <input id="filter_location" :class="wantSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="placeHolder" v-on:autocompletechange="filterChange">
+            <input id="filter_location" :class="wantSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="strings.placeHolder" v-on:autocompletechange="filterChange">
             <button class="ui red icon button" v-if="!wantSearch">
                 <i class="remove icon"
                     v-on:click="resetSearch(true)">
@@ -23,17 +23,17 @@
             },
             update: {
                 type: Boolean
-            },
-            //vue strings
-            placeHolder: String
+            }
         },
         data: () => {
             return {
+                strings: {},
                 dataRouteSearch: '',
                 wantSearch: true
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['location-filter'];
             this.$watch('update', function () {
                 this.updateSearch();
             });

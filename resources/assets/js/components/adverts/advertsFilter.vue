@@ -2,7 +2,7 @@
     <div class="ui blue colored segment">
         <div :id="'filter-accordion-'+_uid" class="ui fluid accordion filter">
             <div class="active title">
-                <span class="ui blue ribbon label"><i class="dropdown icon"></i><span class="close">{{ filterRibbonClose }}</span><span class="open">{{ filterRibbonOpen }}</span></span>
+                <span class="ui blue ribbon label"><i class="dropdown icon"></i><span class="close">{{ strings.ribbonClose }}</span><span class="open">{{ strings.ribbonOpen }}</span></span>
                 <breadcrumb
                         :items="breadcrumbItems"
                         :withAction="true"
@@ -12,13 +12,9 @@
                 <div class="ui grid">
                     <div class="sixteen wide mobile only sixteen wide tablet only column">
                         <categories-dropdown-menu
-                                :route-category="routeCategory"
-                                :first-menu-name="categoriesDropdownMenuFirstMenuName"
-                                :actual-locale="actualLocale"
                                 :old-choice="categoryOldChoice"
                                 :with-all="true"
-                                :all-item="categoriesAllItem">
-                        </categories-dropdown-menu>
+                        ></categories-dropdown-menu>
                     </div>
                 </div>
                 <div class="ui middle aligned grid">
@@ -35,15 +31,12 @@
                                             :update="dataUpdate"
                                             name="price"
                                             :prefix="filterPricePrefix"
-                                            :title="filterPriceTitle"
+                                            :title="strings.priceTitle"
                                     ></range-filter>
                                 </div>
                                 <div class="two wide column">
                                     <currencies-button
                                             :currencies-list="currenciesList"
-                                            :first-menu-name="currenciesFirstMenuName"
-                                            :input-search-label="currenciesInputSearchLabel"
-                                            :with-all-label="currenciesWithAllLabel"
                                             :oldCurrency="filter.currency"
                                             :withAll="true">
                                     </currencies-button>
@@ -59,7 +52,7 @@
                                     :update="dataUpdate"
                                     name="quantity"
                                     prefix=""
-                                    :title="filterQuantityTitle"
+                                    :title="strings.quantityTitle"
                             ></range-filter>
                         </div>
                     </template>
@@ -74,7 +67,7 @@
                                     :update="dataUpdate"
                                     name="price"
                                     :prefix="filterPricePrefix"
-                                    :title="filterPriceTitle"
+                                    :title="strings.priceTitle"
                             ></range-filter>
                         </div>
                         <div class="sixteen wide mobile eight wide computer center aligned column price">
@@ -86,7 +79,7 @@
                                     :update="dataUpdate"
                                     name="quantity"
                                     prefix=""
-                                    :title="filterQuantityTitle"
+                                    :title="strings.quantityTitle"
                             ></range-filter>
                         </div>
                     </template>
@@ -96,8 +89,7 @@
                         <div class="column">
                             <search-filter
                                     :route-search="routeSearch"
-                                    :min-length-search="minLengthSearch"
-                                    :place-holder="searchPlaceHolder"
+                                    :place-holder="strings.searchPlaceHolder"
                                     :results-for="dataResultsFor"
                                     :update="dataUpdate"
                                     :flag-reset="flagResetSearch"
@@ -108,7 +100,6 @@
                             <location-filter
                                     :accurate-list="locationAccurateList"
                                     :update="dataUpdate"
-                                    :place-holder="locationPlaceHolder"
                             ></location-filter>
                         </div>
                     </div>
@@ -119,13 +110,13 @@
                             <div class="eight wide column">
                                 <div :id="'isUrgent'+_uid" class="ui checkbox filter">
                                     <input type="checkbox" name="isUrgent">
-                                    <label> <span class="ui red horizontal label">{{ urgentLabel }}</span></label>
+                                    <label> <span class="ui red horizontal label">{{ strings.urgentLabel }}</span></label>
                                 </div>
                             </div>
                             <div class="eight wide column">
                                 <div :id="'isNegociated'+_uid" class="ui checkbox filter">
                                     <input type="checkbox" name="isegociated">
-                                    <label> <span class="ui blue horizontal label">{{ isNegociatedLabel }}</span></label>
+                                    <label> <span class="ui blue horizontal label">{{ strings.isNegociatedLabel }}</span></label>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +127,6 @@
                                 :route-add="routeNotificationsAdd"
                                 :route-remove="routeNotificationsRemove"
                                 :topic_id="parseInt(1)"
-                                :checkbox-label="notificationsCheckboxLabel"
                         ></notifications-activer>
                     </div>
                 </div>
@@ -150,101 +140,46 @@
     export default {
         props: {
             //vue routes
+            routeNotificationsExistIn: String,
+            routeNotificationsAdd: String,
+            routeNotificationsRemove: String,
             //vue vars
+            breadcrumbItems: {
+                type: Array
+            },
             update: {
                 type: Boolean
             },
             filter: {
                 type: Object
             },
-            //vue strings
-            filterRibbonClose: {
-                type: String
-            },
-            filterRibbonOpen: {
-                type: String
-            },
-            urgentLabel: {
-                type: String
-            },
-            isNegociatedLabel: {
-                type: String
-            },
-            //range component
             filterPricePrefix: {
                 type: String
             },
-            filterPriceTitle: {
-                type: String
-            },
-            filterQuantityTitle: {
-                type: String
-            },
-            //search component
             routeSearch: {
                 type: String
             },
-            minLengthSearch: {
-                type: Number
+            locationAccurateList: {
+                type: Array
             },
             flagResetSearch: {
                 type: Boolean
             },
-            searchPlaceHolder: {
-                type: String
-            },
-            //location component
-            locationAccurateList: {
-                type: Array
-            },
-            locationPlaceHolder: {
-                type: String
-            },
-            breadcrumbItems: {
-                type: Array
-            },
-            //notification-activer component
-            routeNotificationsExistIn: String,
-            routeNotificationsAdd: String,
-            routeNotificationsRemove: String,
-            notificationsCheckboxLabel: {
-                type: String
-            },
-            //category dropdown
-            routeCategory: String,
-            categoriesDropdownMenuFirstMenuName: String,
-            actualLocale: String,
             categoryOldChoice: {
                 type: Number,
                 required: false,
                 default: 0
             },
-            categoriesAllItem: {
-                type: String,
-                required: false,
-                default: ''
-            },
-            //Currencies component
             currenciesList: {
                 type: Array,
                 required: false,
                 default: []
-            },
-            currenciesFirstMenuName: {
-                type: String
-            },
-            currenciesInputSearchLabel: {
-                type: String
-            },
-            currenciesWithAllLabel: {
-                type: String
-            },
-            oldCurrency: {
-                type: String
             }
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 isUrgent: false,
                 isNegociated: false,
                 dataMinPrice: 0,
@@ -260,6 +195,8 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['advert-filter'];
+            this.properties = this.$store.state.properties['global'];
             this.$watch('update', function () {
                 this.setIsUrgent();
                 this.setIsNegociated();

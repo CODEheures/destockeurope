@@ -2,7 +2,7 @@
     <div>
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <h2 class="ui center aligned icon header"><i
-                class="circular add user icon"></i> {{ contentHeader }} </h2>
+                class="circular add user icon"></i> {{ strings.contentHeader }} </h2>
         <div class="ui centered grid">
             <div class="row">
                 <form id="register-form" method="POST" :action="routeRegister" class="ui ten wide column form register">
@@ -16,27 +16,27 @@
                     <div class="field">
                         <div id="newsLetterCheckBox" class="ui checkbox">
                             <input type="checkbox" name="subscribeNewsLetter">
-                            <label>{{ formNewsletterCheckLabel }}</label>
+                            <label>{{ strings.formNewsletterCheckLabel }}</label>
                         </div>
                     </div>
                     <div :class="isCguApprove ? 'fields' : 'disabled fields'">
                         <div class="eight wide required field">
-                            <label>{{ formNameLabel }}</label>
+                            <label>{{ strings.formNameLabel }}</label>
                             <input id="name" type="text" name="name" :value="oldNameValue">
                         </div>
                         <div class="eight wide required field">
-                            <label>{{ formEmailLabel }}</label>
+                            <label>{{ strings.formEmailLabel }}</label>
                             <input id="email" type="email" name="email" :value="oldEmailValue">
                         </div>
                     </div>
                     <div :class="isCguApprove ? 'fields' : 'disabled fields'">
                         <div class="eight wide required field">
-                            <label>{{ formPasswordLabel }}</label>
+                            <label>{{ strings.formPasswordLabel }}</label>
                             <input id="password" type="password" name="password">
 
                         </div>
                         <div class="eight wide required field">
-                            <label>{{ formPasswordConfirmLabel }}</label>
+                            <label>{{ strings.formPasswordConfirmLabel }}</label>
                             <input id="password-confirm" type="password" name="password_confirmation">
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                                     :class="isCguApprove ? 'g-recaptcha ui primary button' : 'g-recaptcha ui primary disabled button'"
                                     :data-sitekey="captchaKey"
                                     data-callback="submitRegister">
-                                {{ formButtonLabel }}
+                                {{ strings.formButtonLabel }}
                             </button>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
             </div>
 
         </div>
-        <div class="ui horizontal divider">{{ dividerLabel }} </div>
+        <div class="ui horizontal divider">{{ strings.dividerLabel }} </div>
         <div class="ui centered grid">
             <div class="row social">
                 <a :href="isNewsLetterApprove ? routeFacebookRegister + '?subscribeNewsLetter=true' : routeFacebookRegister" :class="isCguApprove ? 'ui facebook button' : 'ui facebook disabled button'"><i class="facebook icon"></i> Facebook</a>
@@ -78,19 +78,11 @@
             'oldNameValue',
             'oldEmailValue',
             'captchaKey',
-            //vue strings
-            'contentHeader',
-            'formNameLabel',
-            'formEmailLabel',
-            'formPasswordLabel',
-            'formPasswordConfirmLabel',
-            'formCguCheckLabel',
-            'formNewsletterCheckLabel',
-            'formButtonLabel',
-            'dividerLabel'
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
@@ -103,6 +95,8 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['user-account-register'];
+            this.properties = this.$store.state.properties['global'];
             this.setDataCgu();
             this.xCsrfToken = destockShareVar.csrfToken;
         },
@@ -132,7 +126,7 @@
                 this.sendMessage = !this.sendMessage;
             },
             setDataCgu () {
-                let htmlObject = $('<p>'+this.formCguCheckLabel+'</p>');
+                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
                 this.dataCguText = htmlObject[0].firstChild.data;
                 this.dataCguA = htmlObject[0].firstElementChild.innerHTML;
                 this.dataCguHref = htmlObject[0].firstElementChild.href;

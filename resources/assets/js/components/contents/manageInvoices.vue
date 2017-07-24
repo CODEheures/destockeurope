@@ -4,44 +4,40 @@
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ modalValidHeader }}
+                {{ strings.modalValidHeader }}
             </div>
             <div class="image content">
                 <div class="image">
                     <i class="legal icon"></i>
                 </div>
                 <div class="description">
-                    <p>{{ modalValidDescriptionOne+refundAmount+modalValidDescriptionTwo }}</p>
+                    <p>{{ strings.modalValidDescriptionOne+refundAmount+strings.modalValidDescriptionTwo }}</p>
                 </div>
             </div>
             <div class="actions">
                 <div class="two fluid ui inverted buttons">
                     <div class="ui cancel red basic inverted button">
                         <i class="remove icon"></i>
-                        {{ modalNo }}
+                        {{ strings.modalNo }}
                     </div>
                     <div class="ui ok green basic inverted button">
                         <i class="checkmark icon"></i>
-                        {{ modalYes }}
+                        {{ strings.modalYes }}
                     </div>
                 </div>
             </div>
         </div>
         <div class="sixteen wide column">
-            <h2 class="ui header">{{ contentHeader }}</h2>
+            <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
         <div class="row">
             <div class="sixteen wide column">
                 <div class="row filters">
                     <invoice-filter
-                            :filter-ribbon-open="filterRibbonOpen"
-                            :filter-ribbon-close="filterRibbonClose"
                             :update="update"
                             :filter="filter"
                             :route-search="dataRouteGetInvoicesList"
-                            :min-length-search="parseInt(filterMinLengthSearch)"
                             :flag-reset-search="dataFlagResetSearch"
-                            :search-place-holder="filterSearchPlaceHolder"
                     ></invoice-filter>
                 </div>
             </div>
@@ -53,17 +49,6 @@
                     <invoices-by-list
                             :route-get-invoices-list="dataRouteGetInvoicesList"
                             :flag-force-reload="dataForceReload"
-                            :no-result-found-header="noResultFoundHeader"
-                            :no-result-found-message="noResultFoundMessage"
-                            :actual-locale="actualLocale"
-                            :or-label="orLabel"
-                            :see-invoice-label="seeInvoiceLabel"
-                            :refund-invoice-label="refundInvoiceLabel"
-                            :list-header-paypal-capture="listHeaderPaypalCapture"
-                            :list-header-paypal-void="listHeaderPaypalVoid"
-                            :list-header-paypal-refund="listHeaderPaypalRefund"
-                            :list-header-usermail="listHeaderUsermail"
-                            :list-header-date="listHeaderDate"
                     ></invoices-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -71,10 +56,7 @@
                         <pagination
                                 :pages="paginate"
                                 :route-get-list="dataRouteGetInvoicesList"
-                                :page-label="pageLabel"
-                                :page-previous-label="pagePreviousLabel"
-                                :page-next-label="pageNextLabel">
-                        </pagination>
+                        ></pagination>
                     </div>
                 </div>
             </div>
@@ -88,42 +70,14 @@
     export default {
         props: [
             //vue routes
+            'routeGetInvoicesList',
             //vue vars
             'clearStorage',
-            //vue strings
-            'contentHeader',
-            'loadErrorMessage',
-            'modalValidHeader',
-            'modalValidDescriptionOne',
-            'modalValidDescriptionTwo',
-            'modalNo',
-            'modalYes',
-            'invoiceRefundSuccess',
-            //filter invoice component
-            'filterMinLengthSearch',
-            'filterRibbonOpen',
-            'filterRibbonClose',
-            'filterSearchPlaceHolder',
-            //invoiceByList component
-            'routeGetInvoicesList',
-            'noResultFoundHeader',
-            'noResultFoundMessage',
-            'actualLocale',
-            'orLabel',
-            'seeInvoiceLabel',
-            'refundInvoiceLabel',
-            'listHeaderPaypalCapture',
-            'listHeaderPaypalVoid',
-            'listHeaderPaypalRefund',
-            'listHeaderUsermail',
-            'listHeaderDate',
-            //paginate component
-            'pageLabel',
-            'pagePreviousLabel',
-            'pageNextLabel'
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
@@ -139,13 +93,15 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['manage-invoices'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             if(this.clearStorage){
                 sessionStorage.clear();
             }
             //On load Error
             this.$on('loadError', function () {
-                this.sendToast(this.loadErrorMessage, 'error');
+                this.sendToast(this.strings.loadErrorMessage, 'error');
             });
 
             //on reconstruit le filtre
@@ -166,7 +122,7 @@
                 });
             });
             this.$on('refreshResults', function (query) {
-                if(query != undefined && query.length >= this.filterMinLengthSearch){
+                if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
                     this.filter.resultsFor = query;
                     this.updateResults(true);
                 }
@@ -252,13 +208,13 @@
                             .then(function (response) {
                                 that.isLoaded = true;
                                 that.dataForceReload=!that.dataForceReload;
-                                that.sendToast(that.invoiceRefundSuccess, 'success');
+                                that.sendToast(that.strings.invoiceRefundSuccess, 'success');
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {
                                     that.sendToast(error.response.data, 'error');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
                                 that.isLoaded = true;
                             });

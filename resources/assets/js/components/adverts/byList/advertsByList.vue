@@ -3,7 +3,7 @@
         <div class="ui celled list">
             <div class="ui grid" v-if="routeBookmarkAdd != ''">
                 <div class="sixteen wide right aligned column">
-                    <span class="ui mini label"><i class="info circle icon"></i>{{ priceInfoLabel }}</span>
+                    <span class="ui mini label"><i class="info circle icon"></i>{{ strings.priceInfoLabel }}</span>
                 </div>
             </div>
             <div class="ui active inverted dimmer" v-if="!isLoaded">
@@ -12,8 +12,8 @@
             <template v-if="advertsList.length==0">
                 <div class="item ads">
                     <div class="ui info message">
-                        <div class="header">{{ noResultFoundHeader }}</div>
-                        <p>{{ noResultFoundMessage }}</p>
+                        <div class="header">{{ strings.noResultFoundHeader }}</div>
+                        <p>{{ strings.noResultFoundMessage }}</p>
                     </div>
                 </div>
                 <div v-if="isLoaded"  class="item ads">
@@ -33,37 +33,8 @@
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
-                            :actual-locale="actualLocale"
                             :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
-                            :total-quantity-label="totalQuantityLabel"
-                            :lot-mini-quantity-label="lotMiniQuantityLabel"
-                            :urgent-label="urgentLabel"
-                            :is-negociated-label="isNegociatedLabel"
-                            :manage-advert-label="manageAdvertLabel"
-                            :renew-advert-label="renewAdvertLabel"
-                            :back-to-top-label="backToTopLabel"
-                            :highlight-label="highlightLabel"
-                            :delete-advert-label="deleteAdvertLabel"
-                            :see-advert-label="seeAdvertLabel"
-                            :edit-advert-label="editAdvertLabel"
-                            :see-advert-popup-label="seeAdvertPopupLabel"
-                            :edit-advert-popup-label="editAdvertPopupLabel"
-                            :delete-advert-popup-label="deleteAdvertPopupLabel"
-                            :back-to-top-popup-label="backToTopPopupLabel"
-                            :highlight-popup-label="highlightPopupLabel"
-                            :renew-advert-popup-label="renewAdvertPopupLabel"
-                            :validation-on-progress-label="validationOnProgressLabel"
-                            :bookmark-info="bookmarkInfo"
-                            :trusted-provider-label="trustedProviderLabel"
-                            :views-info="viewsInfo"
-                            :price-info-label="priceInfoLabel"
-                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
-                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list-item>
                     <div class="item ads">
                         <div class="ui grid">
@@ -81,37 +52,8 @@
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :advert="advert"
-                            :actual-locale="actualLocale"
                             :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
-                            :total-quantity-label="totalQuantityLabel"
-                            :lot-mini-quantity-label="lotMiniQuantityLabel"
-                            :urgent-label="urgentLabel"
-                            :is-negociated-label="isNegociatedLabel"
-                            :manage-advert-label="manageAdvertLabel"
-                            :renew-advert-label="renewAdvertLabel"
-                            :back-to-top-label="backToTopLabel"
-                            :highlight-label="highlightLabel"
-                            :delete-advert-label="deleteAdvertLabel"
-                            :see-advert-label="seeAdvertLabel"
-                            :edit-advert-label="editAdvertLabel"
-                            :see-advert-popup-label="seeAdvertPopupLabel"
-                            :edit-advert-popup-label="editAdvertPopupLabel"
-                            :delete-advert-popup-label="deleteAdvertPopupLabel"
-                            :back-to-top-popup-label="backToTopPopupLabel"
-                            :highlight-popup-label="highlightPopupLabel"
-                            :renew-advert-popup-label="renewAdvertPopupLabel"
-                            :validation-on-progress-label="validationOnProgressLabel"
-                            :bookmark-info="bookmarkInfo"
-                            :trusted-provider-label="trustedProviderLabel"
-                            :views-info="viewsInfo"
-                            :price-info-label="priceInfoLabel"
-                            :form-advert-price-coefficient-label="formAdvertPriceCoefficientLabel"
-                            :form-advert-price-coefficient-new-price-label="formAdvertPriceCoefficientNewPriceLabel"
-                            :form-advert-price-coefficient-unit-margin-label="formAdvertPriceCoefficientUnitMarginLabel"
-                            :form-advert-price-coefficient-lot-margin-label="formAdvertPriceCoefficientLotMarginLabel"
-                            :form-advert-price-coefficient-total-margin-label="formAdvertPriceCoefficientTotalMarginLabel"
-                            :form-advert-price-coefficient-update-label="formAdvertPriceCoefficientUpdateLabel"
                     ></adverts-by-list-item>
                 </template>
             </template>
@@ -145,41 +87,12 @@
                 type: Boolean,
                 default: false,
                 required: false
-            },
-            actualLocale: String,
-            totalQuantityLabel: String,
-            lotMiniQuantityLabel: String,
-            urgentLabel: String,
-            isNegociatedLabel: String,
-            priceInfoLabel: String,
-            manageAdvertLabel: String,
-            renewAdvertLabel: String,
-            backToTopLabel: String,
-            highlightLabel: String,
-            deleteAdvertLabel: String,
-            seeAdvertLabel: String,
-            editAdvertLabel: String,
-            seeAdvertPopupLabel: String,
-            editAdvertPopupLabel: String,
-            deleteAdvertPopupLabel: String,
-            backToTopPopupLabel: String,
-            highlightPopupLabel: String,
-            renewAdvertPopupLabel: String,
-            validationOnProgressLabel: String,
-            bookmarkInfo: String,
-            trustedProviderLabel: String,
-            viewsInfo: String,
-            noResultFoundHeader: String,
-            noResultFoundMessage: String,
-            formAdvertPriceCoefficientLabel: String,
-            formAdvertPriceCoefficientNewPriceLabel: String,
-            formAdvertPriceCoefficientUnitMarginLabel: String,
-            formAdvertPriceCoefficientLotMarginLabel: String,
-            formAdvertPriceCoefficientTotalMarginLabel: String,
-            formAdvertPriceCoefficientUpdateLabel: String
+            }
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 advertsList: [],
                 isLoaded: false,
                 minPrice: 0,
@@ -187,6 +100,8 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['adverts-by-list'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             this.$watch('routeGetAdvertsList', function () {
                 this.getAdvertsList();

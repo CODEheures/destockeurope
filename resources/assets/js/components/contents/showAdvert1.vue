@@ -4,22 +4,22 @@
         <div :id="'modal1-'+_uid" class="ui modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ contactLabel }}
+                {{ strings.contactLabel }}
             </div>
             <div class="content">
                 <div :id="'form-'+_uid" class="ui form">
                     <div class="required field">
-                        <label>{{ formMessageLabel }}</label>
+                        <label>{{ strings.formMessageLabel }}</label>
                         <textarea name="message" v-model="dataMessage" :maxlength="formMessageMaxValid"></textarea>
                     </div>
                     <div class="field">
                         <div class="two fields">
                             <div class="required field">
-                                <label>{{ formMessageNameLabel }}</label>
+                                <label>{{ strings.formMessageNameLabel }}</label>
                                 <input name="name" type="text" v-model="dataUserName">
                             </div>
                             <div class="required field">
-                                <label>{{ formMessageEmailLabel }}</label>
+                                <label>{{ strings.formMessageEmailLabel }}</label>
                                 <input name="email" type="text" v-model="dataUserMail">
                             </div>
                         </div>
@@ -27,11 +27,11 @@
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
-                                <label>{{ formMessagePhoneLabel }}</label>
+                                <label>{{ strings.formMessagePhoneLabel }}</label>
                                 <input name="phone" type="text" v-model="dataUserPhone">
                             </div>
                             <div class="field">
-                                <label>{{ formMessageCompagnyLabel }}</label>
+                                <label>{{ strings.formMessageCompagnyLabel }}</label>
                                 <input name="compagnyName" type="text" v-model="dataUserCompagnyName">
                             </div>
                         </div>
@@ -41,7 +41,7 @@
             <div class="actions">
                 <div style="float: left" v-if="dataOwnerUser.phone && dataOwnerUser.phone!=null && dataOwnerUser.phone!=''">
                     <button class="ui blue button" v-on:click="seePhone()" v-if="!phoneIsVisible" autofocus>
-                        {{ formSeePhoneLabel }}
+                        {{ strings.formSeePhoneLabel }}
                     </button>
                     <div class="ui large label" style="float: left" v-else>
                         <i class="phone icon"></i> {{ dataOwnerUser.phone }}
@@ -49,10 +49,10 @@
                 </div>
 
                 <div class="ui black deny button">
-                    {{ formMessageCancelLabel }}
+                    {{ strings.formMessageCancelLabel }}
                 </div>
                 <div :class="dataEnabledMessage == true ? 'ui positive right labeled icon button' : 'ui positive right labeled icon disabled button'">
-                    {{ formMessageSendLabel }}
+                    {{ strings.formMessageSendLabel }}
                     <i class="send outline icon"></i>
                 </div>
             </div>
@@ -60,25 +60,25 @@
         <div :id="'modal2-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ modalValidHeader }}
+                {{ strings.modalValidHeader }}
             </div>
             <div class="image content">
                 <div class="image">
                     <i class="legal icon"></i>
                 </div>
                 <div class="description">
-                    <p>{{ modalValidDescription }}</p>
+                    <p>{{ strings.modalValidDescription }}</p>
                 </div>
             </div>
             <div class="actions">
                 <div class="two fluid ui inverted buttons">
                     <div class="ui cancel red basic inverted button">
                         <i class="remove icon"></i>
-                        {{ modalNo }}
+                        {{ strings.modalNo }}
                     </div>
                     <div class="ui ok green basic inverted button">
                         <i class="checkmark icon"></i>
-                        {{ modalYes }}
+                        {{ strings.modalYes }}
                     </div>
                 </div>
             </div>
@@ -86,26 +86,26 @@
         <div :id="'modal3-'+_uid" class="ui modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ reportLabel }}
+                {{ strings.reportLabel }}
             </div>
             <div class="content">
                 <div :id="'reportform-'+_uid" class="ui form">
                     <div class="required field">
-                        <label>{{ formMessageLabel }}</label>
+                        <label>{{ strings.formMessageLabel }}</label>
                         <textarea name="reportmessage" v-model="dataReportMessage" :maxlength="formMessageMaxValid"></textarea>
                     </div>
                     <div class="required field">
-                        <label>{{ formMessageEmailLabel }}</label>
+                        <label>{{ strings.formMessageEmailLabel }}</label>
                         <input name="reportemail" type="text" v-model="dataUserMail">
                     </div>
                 </div>
             </div>
             <div class="actions">
                 <div class="ui black deny button">
-                    {{ formMessageCancelLabel }}
+                    {{ strings.formMessageCancelLabel }}
                 </div>
                 <div :class="dataEnabledReportMessage == true ? 'ui positive right labeled icon button' : 'ui positive right labeled icon disabled button'">
-                    {{ formMessageSendLabel }}
+                    {{ strings.formMessageSendLabel }}
                     <i class="send outline icon"></i>
                 </div>
             </div>
@@ -121,7 +121,7 @@
             </div>
             <div class="row">
                 <div class="sixteen wide column">
-                    <div class="header"><h3><span v-if="dataAdvert.isUrgent" class="ui red horizontal label">{{ urgentLabel }}</span>{{ dataAdvert.title }}</h3></div>
+                    <div class="header"><h3><span v-if="dataAdvert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>{{ dataAdvert.title }}</h3></div>
                 </div>
                 <div class="sixteen wide tablet ten wide computer column">
                     <div class="row">
@@ -130,17 +130,8 @@
                         </div>
                         <advert-by-id
                                 :advert="dataAdvert"
-                                :actual-locale="actualLocale"
-                                :image-ratio="parseFloat(imageRatio)"
                                 :user-name="userName"
                                 :is-user-owner="isUserOwner==1"
-                                :total-quantity-label="totalQuantityLabel"
-                                :lot-mini-quantity-label="lotMiniQuantityLabel"
-                                :urgent-label="urgentLabel"
-                                :is-negociated-label="isNegociatedLabel"
-                                :price-info-label="priceInfoLabel"
-                                :price-label="priceLabel"
-                                :ref-label="refLabel"
                         ></advert-by-id>
                     </div>
                 </div>
@@ -151,13 +142,13 @@
                                 <button class="ui basic teal icon fluid button"
                                         v-on:click="openMessageBox">
                                     <i class="mail outline icon"></i>
-                                    {{ contactLabel }}
+                                    {{ strings.contactLabel }}
                                 </button>
                             </div>
                             <div class="field" v-if="userName == '' || isUserOwner">
                                 <div class="ui labeled button disabled-bookmark">
                                     <div class="ui yellow button">
-                                        <i class="heart icon"></i> {{ bookmarkInfo }}
+                                        <i class="heart icon"></i> {{ strings.bookmarkInfo }}
                                     </div>
                                     <a class="ui basic yellow left pointing label">
                                         {{ dataAdvert.bookmarkCount }}
@@ -168,33 +159,20 @@
                                 <button class="ui basic yellow icon fluid button"
                                     v-on:click="bookmarkMe()">
                                     <i class="empty heart icon"></i>
-                                    {{ bookmarkLabel }}
+                                    {{ strings.bookmarkLabel }}
                                 </button>
                             </div>
                             <div class="field" v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
                                 <button class="ui basic yellow icon fluid button"
                                         v-on:click="unbookmarkMe()">
                                     <i class="heart icon"></i>
-                                    {{ unbookmarkLabel }}
+                                    {{ strings.unbookmarkLabel }}
                                 </button>
                             </div>
                             <div class="field" v-if="isUserOwner">
                                 <advert-manage-button
                                         :advert="dataAdvert"
                                         :with-see-action="false"
-                                        :manage-advert-label="manageAdvertLabel"
-                                        :edit-advert-label="editAdvertLabel"
-                                        :see-advert-label="seeAdvertLabel"
-                                        :delete-advert-label="deleteAdvertLabel"
-                                        :back-to-top-label="backToTopAdvertLabel"
-                                        :highlight-label="highlightAdvertLabel"
-                                        :renew-advert-label="renewAdvertLabel"
-                                        :see-advert-popup-label="seeAdvertPopupLabel"
-                                        :edit-advert-popup-label="editAdvertPopupLabel"
-                                        :delete-advert-popup-label="deleteAdvertPopupLabel"
-                                        :back-to-top-popup-label="backToTopPopupLabel"
-                                        :highlight-popup-label="highlightPopupLabel"
-                                        :renew-advert-popup-label="renewAdvertPopupLabel"
                                 ></advert-manage-button>
                             </div>
                             <div class="fb-share-button"
@@ -213,45 +191,32 @@
                 <button class="ui basic teal icon fluid button"
                         v-on:click="openMessageBox">
                     <i class="mail outline icon"></i>
-                    {{ contactLabel }}
+                    {{ strings.contactLabel }}
                 </button>
             </div>
             <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
                 <button class="ui basic yellow icon fluid button"
                         v-on:click="bookmarkMe()">
                     <i class="empty heart icon"></i>
-                    {{ bookmarkLabel }}
+                    {{ strings.bookmarkLabel }}
                 </button>
             </div>
             <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && dataIsUserBookmark">
                 <button class="ui basic yellow icon fluid button"
                         v-on:click="unbookmarkMe()">
                     <i class="heart icon"></i>
-                    {{ unbookmarkLabel }}
+                    {{ strings.unbookmarkLabel }}
                 </button>
             </div>
             <div class="mobile only tablet only sixteen wide center aligned column"  v-if="isUserOwner">
                 <advert-manage-button
                         :advert="dataAdvert"
                         :with-see-action="false"
-                        :manage-advert-label="manageAdvertLabel"
-                        :see-advert-label="seeAdvertLabel"
-                        :edit-advert-label="editAdvertLabel"
-                        :delete-advert-label="deleteAdvertLabel"
-                        :back-to-top-label="backToTopAdvertLabel"
-                        :highlight-label="highlightAdvertLabel"
-                        :renew-advert-label="renewAdvertLabel"
-                        :see-advert-popup-label="seeAdvertPopupLabel"
-                        :edit-advert-popup-label="editAdvertPopupLabel"
-                        :delete-advert-popup-label="deleteAdvertPopupLabel"
-                        :back-to-top-popup-label="backToTopPopupLabel"
-                        :highlight-popup-label="highlightPopupLabel"
-                        :renew-advert-popup-label="renewAdvertPopupLabel"
                 ></advert-manage-button>
             </div>
             <div class="sixteen wide right aligned column" v-if="!isUserOwner">
                 <div class="ui divider"></div>
-                <a href="#" v-on:click.prevent="report()"><i class="ban icon"></i>{{ reportLabel }}</a>
+                <a href="#" v-on:click.prevent="report()"><i class="ban icon"></i>{{ strings.reportLabel }}</a>
             </div>
         </div>
     </div>
@@ -279,60 +244,11 @@
             'formMessageMaxValid',
             'formPhoneMaxValid',
             'formCompagnyNameMaxValid',
-            //vue strings
-            'loadErrorMessage',
-            'sendSuccessMessage',
-            'sendSuccessReportMessage',
-            'formValidationEmail',
-            'formPointingMinimumChars',
-            'formPointingMaximumChars',
-            'contactLabel',
-            'reportLabel',
-            'bookmarkInfo',
-            'bookmarkLabel',
-            'unbookmarkLabel',
-            'manageAdvertLabel',
-            'seeAdvertLabel',
-            'editAdvertLabel',
-            'deleteAdvertLabel',
-            'backToTopAdvertLabel',
-            'highlightAdvertLabel',
-            'renewAdvertLabel',
-            'seeAdvertPopupLabel',
-            'editAdvertPopupLabel',
-            'deleteAdvertPopupLabel',
-            'backToTopPopupLabel',
-            'highlightPopupLabel',
-            'renewAdvertPopupLabel',
-            'formMessageLabel',
-            'formMessageEmailLabel',
-            'formMessageNameLabel',
-            'formMessagePhoneLabel',
-            'formMessageCompagnyLabel',
-            'formSeePhoneLabel',
-            'formMessageSendLabel',
-            'formMessageCancelLabel',
-            'bookmarkSuccess',
-            'unbookmarkSuccess',
-            'modalValidHeader',
-            'modalValidDescription',
-            'modalNo',
-            'modalYes',
-            'allLabel',
-            //advertById component
-            'routeHome',
-            'actualLocale',
-            'imageRatio',
-            'totalQuantityLabel',
-            'lotMiniQuantityLabel',
-            'urgentLabel',
-            'isNegociatedLabel',
-            'priceInfoLabel',
-            'priceLabel',
-            'refLabel'
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
@@ -353,6 +269,8 @@
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['showAdvert1'];
+            this.properties = this.$store.state.properties['global'];
             this.dataAdvert= JSON.parse(this.advert);
             this.dataOwnerUser = this.dataAdvert.user;
             this.dataUserMail = this.userMail;
@@ -365,11 +283,11 @@
 
             //On load Error
             this.$on('loadError', function () {
-                this.sendToast(this.loadErrorMessage, 'error');
+                this.sendToast(this.strings.loadErrorMessage, 'error');
             });
             this.$on('categoryChoice', function (category) {
                 sessionStorage.setItem('goToCategory', category.id);
-                window.location.assign(this.routeHome);
+                window.location.assign(this.properties.routeHome);
             });
             let that = this;
             let messageForm = $('#form-'+this._uid);
@@ -380,7 +298,7 @@
                             rules: [
                                 {
                                     type   : 'email',
-                                    prompt : that.formValidationEmail
+                                    prompt : that.strings.formValidationEmail
                                 }
                             ]
                         },
@@ -389,7 +307,7 @@
                             rules: [
                                 {
                                     type : 'minLength['+that.formNameMinValid+']',
-                                    prompt: '{ruleValue} ' + that.formPointingMinimumChars
+                                    prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
                                 }
                             ]
                         },
@@ -398,11 +316,11 @@
                             rules: [
                                 {
                                     type : 'minLength['+that.formMessageMinValid+']',
-                                    prompt: '{ruleValue} ' + that.formPointingMinimumChars
+                                    prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
                                 },
                                 {
                                     type : 'maxLength['+that.formMessageMaxValid+']',
-                                    prompt: '{ruleValue} ' + that.formPointingMaximumChars
+                                    prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
                                 }
                             ]
                         },
@@ -411,7 +329,7 @@
                             rules: [
                                 {
                                     type : 'maxLength['+that.formPhoneMaxValid+']',
-                                    prompt: '{ruleValue} ' + that.formPointingMaximumChars
+                                    prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
                                 }
                             ]
                         },
@@ -420,7 +338,7 @@
                             rules: [
                                 {
                                     type : 'maxLength['+that.formCompagnyNameMaxValid+']',
-                                    prompt: '{ruleValue} ' + that.formPointingMaximumChars
+                                    prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
                                 }
                             ]
                         }
@@ -437,7 +355,7 @@
                         rules: [
                             {
                                 type   : 'email',
-                                prompt : that.formValidationEmail
+                                prompt : that.strings.formValidationEmail
                             }
                         ]
                     },
@@ -446,11 +364,11 @@
                         rules: [
                             {
                                 type : 'minLength['+that.formMessageMinValid+']',
-                                prompt: '{ruleValue} ' + that.formPointingMinimumChars
+                                prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
                             },
                             {
                                 type : 'maxLength['+that.formMessageMaxValid+']',
-                                prompt: '{ruleValue} ' + that.formPointingMaximumChars
+                                prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
                             }
                         ]
                     }
@@ -489,16 +407,16 @@
                     description: [],
                     id: 0
                 };
-                lastBread.description[this.actualLocale] = this.dataAdvert.title;
+                lastBread.description[this.properties.actualLocale] = this.dataAdvert.title;
                 breadcrumb.push(lastBread);
                 this.breadcrumbItems = [];
                 this.breadcrumbItems.push({
-                    name: this.allLabel,
+                    name: this.strings.allLabel,
                     value: 0
                 });
                 breadcrumb.forEach(function (element){
                     that.breadcrumbItems.push({
-                        name: element['description'][that.actualLocale],
+                        name: element['description'][that.properties.actualLocale],
                         value: element.id
                     });
                 });
@@ -512,13 +430,13 @@
                     onApprove: function () {
                         axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
                             .then(function (response) {
-                                that.sendToast(that.sendSuccessMessage, 'success');
+                                that.sendToast(that.strings.sendSuccessMessage, 'success');
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {
                                     that.sendToast(error.response.data, 'error');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
                             });
                     }
@@ -533,13 +451,13 @@
                     onApprove: function () {
                         axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
                             .then(function (response) {
-                                that.sendToast(that.sendSuccessReportMessage, 'success');
+                                that.sendToast(that.strings.sendSuccessReportMessage, 'success');
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {
                                     that.sendToast(error.response.data, 'error');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
                             });
                     }
@@ -556,13 +474,13 @@
                 axios.get(this.routeBookmarkAdd)
                     .then(function (response)  {
                         that.dataIsUserBookmark = true;
-                        that.sendToast(that.bookmarkSuccess, 'success');
+                        that.sendToast(that.strings.bookmarkSuccess, 'success');
                     })
                     .catch(function (error)  {
                         if (error.response && error.response.status == 409) {
                             that.sendToast(error.response.data, 'error');
                         } else {
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.sendToast(that.strings.loadErrorMessage, 'error');
                         }
                         that.isLoaded = false;
                     });
@@ -572,13 +490,13 @@
                 axios.get(this.routeBookmarkRemove)
                     .then(function (response)  {
                         that.dataIsUserBookmark = false;
-                        that.sendToast(that.unbookmarkSuccess, 'success');
+                        that.sendToast(that.strings.unbookmarkSuccess, 'success');
                     })
                     .catch(function (error)  {
                         if (error.response && error.response.status == 409) {
                             that.sendToast(error.response.data, 'error');
                         } else {
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.sendToast(that.strings.loadErrorMessage, 'error');
                         }
                         that.isLoaded = false;
                     });
@@ -599,7 +517,7 @@
                                 if (error.response && error.response.status == 409) {
                                     that.sendToast(error.response.data, 'error');
                                 } else {
-                                    that.sendToast(that.loadErrorMessage, 'error');
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
                                 that.isLoaded = true;
                             });

@@ -3,7 +3,7 @@
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <template v-if="advertAccountVerifiedStep">
             <div class="column">
-                <h2 class="ui header">{{ contentHeader }}</h2>
+                <h2 class="ui header">{{ strings.contentHeader }}</h2>
             </div>
             <div class="mobile only tablet only column">
                 <steps-light
@@ -26,88 +26,81 @@
                 <div class="field">
                     <div class="three fields">
                         <div class="required field">
-                            <label>{{ nameLabel }}</label>
-                            <input type="text" name="name" :placeholder="nameLabel" v-model:value="dataUserName"
+                            <label>{{ strings.nameLabel }}</label>
+                            <input type="text" name="name" :placeholder="strings.nameLabel" v-model:value="dataUserName"
                                    v-on:keyup.enter="updateByEnter"
                                    v-on:focus="focused={'input': 'name', 'value': dataUserName}"
                                    v-on:blur="blured={'input': 'name', 'value': dataUserName}">
                         </div>
                         <div class="field">
-                            <label>{{ phoneLabel }}</label>
-                            <input type="text" name="phone" :placeholder="phoneLabel" v-model:value="dataUserPhone" :maxlength="formPhoneMaxValid"
+                            <label>{{ strings.phoneLabel }}</label>
+                            <input type="text" name="phone" :placeholder="strings.phoneLabel" v-model:value="dataUserPhone" :maxlength="formPhoneMaxValid"
                                    v-on:keyup.enter="updateByEnter"
                                    v-on:focus="focused={'input': 'phone', 'value': dataUserPhone}"
                                    v-on:blur="blured={'input': 'phone', 'value': dataUserPhone}">
                         </div>
                         <div class="field">
                             <div class="sixteen wide disabled field">
-                                <label>{{ emailLabel }}</label>
-                                <input type="email" name="email" :placeholder="emailLabel" :value="userEmail">
+                                <label>{{ strings.emailLabel }}</label>
+                                <input type="email" name="email" :placeholder="strings.emailLabel" :value="userEmail">
                             </div>
                             <div class="sixteen wide field">
-                                <p><a :href="routeChangeEmail">{{ emailChangeLabel }}</a></p>
+                                <p><a :href="routeChangeEmail">{{ strings.emailChangeLabel }}</a></p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="field">
-                    <a class="ui red button" :href="routeChangePassword">{{ passwordChangeLabel }}</a>
+                    <a class="ui red button" :href="routeChangePassword">{{ strings.passwordChangeLabel }}</a>
                 </div>
                 <template v-if="!advertAccountVerifiedStep">
-                    <h4 class="ui horizontal divider header"><i class="options icon"></i> {{ accountPreferencesLabel }} </h4>
+                    <h4 class="ui horizontal divider header"><i class="options icon"></i> {{ strings.accountPreferencesLabel }} </h4>
                     <div class="field">
                         <div class="two fields">
                             <div class="field">
-                                <h5>{{ localesFirstMenuName }}</h5>
-                                <locales-dropdown
-                                        :route-list-locales="routeListLocales"
-                                        :first-menu-name="localesFirstMenuName"
-                                        :input-search-label="inputSearchLabel">
-                                </locales-dropdown>
+                                <h5>{{ strings.localesFirstMenuName }}</h5>
+                                <locales-dropdown></locales-dropdown>
                             </div>
                             <div class="field">
-                                <h5>{{ currenciesFirstMenuName }}</h5>
+                                <h5>{{ strings.currenciesFirstMenuName }}</h5>
                                 <currencies-dropdown
-                                        :route-list-currencies="routeListCurrencies"
-                                        :first-menu-name="currenciesFirstMenuName"
-                                        :input-search-label="inputSearchLabel"
-                                        :update="currenciesDropDownUpdate">
-                                </currencies-dropdown>
+                                        :update="currenciesDropDownUpdate"
+                                ></currencies-dropdown>
                             </div>
                         </div>
                     </div>
                 </template>
                 <h4 class="ui horizontal divider header">
                     <i class="industry icon"></i>
-                    {{ compagnyDivider }}
+                    {{ strings.compagnyDivider }}
                 </h4>
                 <div class="field">
                     <div class="two fields">
                         <div class="required field">
-                            <label>{{ compagnyNumberLabel }}</label>
+                            <label>{{ strings.compagnyNumberLabel }}</label>
                             <div :class="vatOnCheckProgress ? 'ui icon input loading' : 'ui icon input'">
-                                <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="compagnyNumberLabel" v-model:value="dataRegistrationNumber"
+                                <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="strings.compagnyNumberLabel" v-model:value="dataRegistrationNumber"
                                        v-on:keyup.enter="updateByEnter"
                                        v-on:focus="focused={'input': 'registration-number', 'value': dataRegistrationNumber}"
                                        v-on:blur="blured={'input': 'registration-number', 'value': dataRegistrationNumber}"
-                                       :title="!hasValidVat ? formVatWarningLabel:''">
+                                       :title="!hasValidVat ? strings.formVatWarningLabel:''">
                                 <i :class="hasValidVat ? 'green checkmark icon': 'yellow warning sign icon'"></i>
                             </div>
-                            <span class="ui orange pointing label" v-show="!hasValidVat && !vatOnCheckProgress">{{ formVatWarningLabel }}</span>
-                            <span class="ui green pointing label" v-show="hasValidVat && !vatOnCheckProgress">{{ formVatIdentifierLabel }}{{ dataVatIdentifier }}</span>
-                            <span class="ui orange pointing label" v-show="vatOnCheckProgress">{{ formVatOnCheckProgressLabel }}</span>
+                            <span class="ui orange pointing label" v-show="!hasValidVat && !vatOnCheckProgress">{{ strings.formVatWarningLabel }}</span>
+                            <span class="ui green pointing label" v-show="hasValidVat && !vatOnCheckProgress">{{ strings.formVatIdentifierLabel }}{{ dataVatIdentifier }}</span>
+                            <span class="ui orange pointing label" v-show="vatOnCheckProgress">{{ strings.formVatOnCheckProgressLabel }}</span>
                         </div>
                         <div class="required field">
-                            <label>{{ compagnyNameLabel }}</label>
+                            <label>{{ strings.compagnyNameLabel }}</label>
                             <div :class="vatOnCheckProgress ? 'ui disabled icon input loading' : 'ui input'">
-                                <input type="text" name="compagny-name" :maxlength="formCompagnyNameMaxValid" :placeholder="compagnyNameLabel" v-model:value="dataCompagnyName"
+                                <input type="text" name="compagny-name" :maxlength="formCompagnyNameMaxValid" :placeholder="strings.compagnyNameLabel" v-model:value="dataCompagnyName"
                                        v-on:keyup.enter="updateByEnter"
                                        v-on:focus="focused={'input': 'compagny-name', 'value': dataCompagnyName}"
                                        v-on:blur="blured={'input': 'compagny-name', 'value': dataCompagnyName}">
                                 <i class="icon"></i>
                             </div>
                             <transition name="p-fade">
-                                <span class="ui red pointing basic label notransition" v-show="dataCompagnyName.length<formCompagnyNameMinValid">{{ formCompagnyNameMinValid }}{{formPointingMinimumChars }}</span>
+                                <span class="ui red pointing basic label notransition" v-show="dataCompagnyName.length<formCompagnyNameMinValid">{{ formCompagnyNameMinValid }}{{strings.formPointingMinimumChars }}</span>
                             </transition>
                         </div>
                     </div>
@@ -115,18 +108,16 @@
                 <div :class="vatOnCheckProgress? 'disabled field':'field'">
                     <h4 class="ui horizontal divider header">
                         <i class="map signs icon"></i>
-                        {{ googlemapDivider }}
+                        {{ strings.googlemapDivider }}
                     </h4>
                     <googleMap
                             :lng="lng"
                             :lat="lat"
                             :geoloc="geoloc"
-                            :geoloc-help-msg="geolocHelpMsg"
-                            :geoloc-help-msg-two="geolocHelpMsgTwo">
-                    </googleMap>
+                    ></googleMap>
                 </div>
                 <div class="field" v-if="advertAccountVerifiedStep">
-                    <button type="submit" :class="updateFails ? 'ui disabled button' : 'ui primary button'" v-on:click="submitForm">{{ updateFails ? formValidationFailsButtonLabel : formValidationButtonLabel }}</button>
+                    <button type="submit" :class="updateFails ? 'ui disabled button' : 'ui primary button'" v-on:click="submitForm">{{ updateFails ? strings.formValidationFailsButtonLabel : strings.formValidationButtonLabel }}</button>
                 </div>
             </div>
         </div>
@@ -163,53 +154,15 @@
             'vatIdentifier',
             'advertAccountVerifiedStep',
             'advertCost',
-            'advertId',
             'formPhoneMaxValid',
             'formCompagnyNameMinValid',
             'formCompagnyNameMaxValid',
-            'formRegistrationNumberMinValid',
             'formRegistrationNumberMaxValid',
-            //vue strings
-            'loadErrorMessage',
-            'accountPatchSuccess',
-            'accountPreferencesLabel',
-            'nameLabel',
-            'emailLabel',
-            'emailChangeLabel',
-            'passwordChangeLabel',
-            'phoneLabel',
-            'compagnyDivider',
-            'compagnyNameLabel',
-            'compagnyNumberLabel',
-            'contentHeader',
-            'geolocHelpMsg',
-            'geolocHelpMsgTwo',
-            'googlemapDivider',
-            'formValidationButtonLabel',
-            'formValidationFailsButtonLabel',
-            'formPointingMinimumChars',
-            'formVatWarningLabel',
-            'formVatOnCheckProgressLabel',
-            'formVatIdentifierLabel',
-            'advertPrices',
-            //steps component
-            'stepOneTitle',
-            'stepTwoTitle',
-            'stepThreeTitle',
-            'stepThreeTitlePost',
-            'stepOneDescription',
-            'stepTwoDescription',
-            'stepThreeDescription',
-            //locale dropdown component
-            'routeListLocales',
-            'localesFirstMenuName',
-            'inputSearchLabel',
-            //currencie dropdown component
-            'routeListCurrencies',
-            'currenciesFirstMenuName'
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 isLoaded: false,
                 sendMessage: false,
                 typeMessage: '',
@@ -234,29 +187,31 @@
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['user-account'];
+            this.properties = this.$store.state.properties['global'];
             this.steps = [
                 {
                     isActive : false,
                     isDisabled : false,
                     isCompleted: true,
-                    title: this.stepOneTitle,
-                    description: this.stepOneDescription,
+                    title: this.strings.stepOneTitle,
+                    description: this.strings.stepOneDescription,
                     icon: 'write'
                 },
                 {
                     isActive : true,
                     isDisabled : false,
                     isCompleted: false,
-                    title: this.stepTwoTitle,
-                    description: this.stepTwoDescription,
+                    title: this.strings.stepTwoTitle,
+                    description: this.strings.stepTwoDescription,
                     icon: 'user'
                 },
                 {
                     isActive : false,
                     isDisabled : true,
                     isCompleted: false,
-                    title: this.stepThreeTitle,
-                    description: this.stepThreeDescription,
+                    title: this.strings.stepThreeTitle,
+                    description: this.strings.stepThreeDescription,
                     routeDescription: this.routePrices,
                     icon: 'payment'
                 }
@@ -275,7 +230,7 @@
                 this.latLngChange(event);
             });
             this.$on('loadError', function () {
-                this.sendToast(this.loadErrorMessage, 'error');
+                this.sendToast(this.strings.loadErrorMessage, 'error');
             });
             this.setSteps();
             this.dataUserName = this.userName;
@@ -299,13 +254,13 @@
                 let that = this;
                 axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
                     .then(function (response) {
-                        that.sendToast(that.accountPatchSuccess, 'success');
+                        that.sendToast(that.strings.accountPatchSuccess, 'success');
                     })
                     .catch(function (error) {
                         if(error.response && error.response.status == 409) {
                             that.sendToast(error.response.data, 'error');
                         } else {
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.sendToast(that.strings.loadErrorMessage, 'error');
                         }
                     });
             },
@@ -313,14 +268,14 @@
                 let that = this;
                 axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
                     .then(function (response) {
-                        that.sendToast(that.accountPatchSuccess, 'success');
+                        that.sendToast(that.strings.accountPatchSuccess, 'success');
                         that.currenciesDropDownUpdate = !that.currenciesDropDownUpdate;
                     })
                     .catch(function (error) {
                         if(error.response && error.response.status == 409) {
                             that.sendToast(error.response.data, 'error');
                         } else {
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.sendToast(that.strings.loadErrorMessage, 'error');
                         }
                     });
             },
@@ -333,13 +288,13 @@
                     axios.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
                         .then(function (response) {
                             that.dataFirstGeoloc = false;
-                            that.sendToast(that.accountPatchSuccess, 'success');
+                            that.sendToast(that.strings.accountPatchSuccess, 'success');
                         })
                         .catch(function (error) {
                             if(error.response && error.response.status == 409) {
                                 that.sendToast(error.response.data, 'error');
                             } else {
-                                that.sendToast(that.loadErrorMessage, 'error');
+                                that.sendToast(that.strings.loadErrorMessage, 'error');
                             }
                         });
                 }
@@ -361,7 +316,7 @@
                 axios.patch(updateRoute, {'value': value})
                     .then(function (response) {
                         that.updateFails = false;
-                        that.sendToast(that.accountPatchSuccess, 'success');
+                        that.sendToast(that.strings.accountPatchSuccess, 'success');
                         that.updateInProgress--;
                         if(inputName == 'registration-number'){
                             that.userGetMe();
@@ -376,7 +331,7 @@
                         } else if(error.response && error.response.status == 422) {
                             that.sendToast(error.response.data.value[0], 'error');
                         } else {
-                            that.sendToast(that.loadErrorMessage, 'error');
+                            that.sendToast(that.strings.loadErrorMessage, 'error');
                         }
                         that.userGetMe();
                     });
@@ -401,7 +356,7 @@
                     })
                     .catch(function (error) {
                         that.vatOnCheckProgress=false;
-                        that.sendToast(that.loadErrorMessage, 'error');
+                        that.sendToast(that.strings.loadErrorMessage, 'error');
                     });
             },
             updateByEnter: function (event) {
@@ -411,7 +366,7 @@
             setSteps () {
                 if(parseFloat(this.advertCost)>0) {
                     (this.steps[2]).isDisabled = false;
-                    (this.steps[2]).title = this.stepThreeTitle + '(' + (this.advertCost/100).toFixed(2) + this.stepThreeTitlePost + ')';
+                    (this.steps[2]).title = this.strings.stepThreeTitle + '(' + (this.advertCost/100).toFixed(2) + this.strings.stepThreeTitlePost + ')';
                 } else {
                     (this.steps[2]).isDisabled = true;
                 }

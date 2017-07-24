@@ -19,7 +19,6 @@
             //vue routes
             routeSearch: String,
             //vue vars
-            minLengthSearch: Number,
             flagReset: {
                 type: Boolean,
                 default: false
@@ -43,12 +42,14 @@
         },
         data: () => {
             return {
+                properties: {},
                 dataRouteSearch: '',
                 wantSearch: true,
                 elemSearch: undefined
             }
         },
         mounted () {
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             this.elemSearch = $('#'+that._uid);
             this.observeElem(this.elemSearch[0]);
@@ -67,7 +68,7 @@
                                 },
                                 //type: 'category',
                                 fields: that.fields,
-                                minCharacters : that.minLengthSearch
+                                minCharacters : that.properties.filterMinLengthSearch
                             })
                     ;
                 });

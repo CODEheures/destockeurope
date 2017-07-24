@@ -15,9 +15,11 @@ require('./myjs');
  * the body of the page. From here, you may begin adding components to
  * the application, or feel free to tweak this setup for your needs.
  */
-
+//Special Store
+Vue.component('store-strings-setter', require('./components/generics/store/storeStringsSetter.vue'));
+Vue.component('store-properties-setter', require('./components/generics/store/storePropertiesSetter.vue'));
 //Generics
-// Vue.component('range-filter-old', require('./components/generics/filters/rangeFilterOld.vue'));
+Vue.component('number-input', require('./components/generics/fields/numberInput.vue'));
 Vue.component('range-filter', require('./components/generics/filters/rangeFilter.vue'));
 Vue.component('location-filter', require('./components/generics/filters/locationFilter.vue'));
 Vue.component('search-filter', require('./components/generics/filters/searchFilter.vue'));
@@ -25,7 +27,6 @@ Vue.component('type-radio-button', require('./components/generics/filters/typeRa
 Vue.component('currencies-dropdown', require('./components/generics/currencies/currenciesDropdown.vue'));
 Vue.component('currencies-dropdown-2', require('./components/generics/currencies/currenciesDropdown2.vue'));
 Vue.component('currencies-button', require('./components/generics/currencies/currenciesButton.vue'));
-Vue.component('currencies-input-right-label', require('./components/generics/currencies/currenciesInputRightLabel.vue'));
 Vue.component('locales-dropdown', require('./components/generics/locales/localesDropdown.vue'));
 Vue.component('langs-dropdown', require('./components/generics/locales/langsDropdown.vue'));
 Vue.component('toast', require('./components/generics/messages/toast.vue'));
@@ -44,6 +45,7 @@ Vue.component('advert-manage-button', require('./components/generics/fields/mana
 Vue.component('vimeo-uploader', require('./components/generics/uploaders/vimeo.vue'));
 Vue.component('photo-uploader', require('./components/generics/uploaders/photo.vue'));
 Vue.component('notifications-activer', require('./components/generics/notifications/activer.vue'));
+
 //ADS
 Vue.component('masterads', require('./components/generics/ads/master.vue'));
 Vue.component('adsense', require('./components/generics/ads/adsense/adsense.vue'));
@@ -54,12 +56,8 @@ Vue.component('horizontal-468x60', require('./components/generics/ads/horizontal
 Vue.component('horizontal-234x60', require('./components/generics/ads/horizontal234x60.vue'));
 
 //Catégories
-Vue.component('categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/menu.vue'));
-Vue.component('recursive-categories-lateral-vertical-menu', require('./components/categories/lateral/vertical/recursive.vue'));
 Vue.component('categories-horizontal-menu', require('./components/categories/horizontal/menu.vue'));
 Vue.component('recursive-categories-horizontal-menu', require('./components/categories/horizontal/recursive.vue'));
-Vue.component('categories-lateral-accordion-menu', require('./components/categories/lateral/accordion/menu.vue'));
-Vue.component('recursive-categories-lateral-accordion-menu', require('./components/categories/lateral/accordion/recursive.vue'));
 Vue.component('categories-dropdown-menu', require('./components/categories/dropdown/all/menu.vue'));
 Vue.component('recursive-categories-dropdown-menu', require('./components/categories/dropdown/all/recursive.vue'));
 Vue.component('categories-list-move-to', require('./components/categories/dropdown/listMoveTo/menu.vue'));
@@ -111,6 +109,9 @@ Vue.component('show-advert1', require('./components/contents/showAdvert1.vue'));
 //review payment page
 Vue.component('review-for-payment', require('./components/contents/reviewForPayment.vue'));
 
+
+import store from './vueStore';
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store
 });

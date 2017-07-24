@@ -358,7 +358,13 @@ class AdvertController extends Controller
 
         $response = [];
         foreach ($adverts as $advert){
+            $ancestors = $advert->category->getAncestors();
+            $ancestors->add($advert->category);
+            $advert->setBreadCrumb($ancestors);
             $advert->setListEditFields();
+            $advert->setGlobalDiscount();
+            $advert->setTotalPriceMargin();
+
             $response[$advert->id] = $advert;
         }
         return response()->json($response);
@@ -494,6 +500,8 @@ class AdvertController extends Controller
                 $ancestors->add($advert->category);
                 $advert->setBreadCrumb($ancestors);
                 $advert->setBookmarkCount();
+                $advert->setGlobalDiscount();
+                $advert->setTotalPriceMargin();
                 auth()->check() ? $advert->setIsOnEdit() : null;
                 return view('advert.show', compact('advert'));
         } elseif ($advert && $request->isXmlHttpRequest() && PrivilegesUtils::canShowXmlAdvert($advert)) {
@@ -638,11 +646,13 @@ class AdvertController extends Controller
                 $advert->mainPicture = $request->main_picture;
                 $advert->currency=$request->currency;
                 $advert->totalQuantity=$request->total_quantity;
+                $advert->discount_on_total=filter_var($request->discount_on_total, FILTER_VALIDATE_FLOAT);
                 $advert->lotMiniQuantity=$request->lot_mini_quantity;
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
                 $advert->isNegociated=filter_var($request->is_negociated, FILTER_VALIDATE_BOOLEAN);
                 $advert->isEditOf=$isEditOf;
                 $isEditOf ? $advert->price_coefficient = $editAdvert->price_coefficient : null;
+                $isEditOf ? $advert->price_coefficient_total = $editAdvert->price_coefficient_total : null;
                 $persistent=null;
                 if(session()->has('videoId')){
                     $advert->video_id = session('videoId');
@@ -742,10 +752,12 @@ class AdvertController extends Controller
      */
     public function updateCoefficient($id, Request $request) {
         $coefficient = $request->coefficient;
-        if((int)$coefficient >= 0){
+        $coefficient_total = $request->coefficient_total;
+        if((int)$coefficient >= 0 && (int)$coefficient_total >= 0){
             $advert = Advert::find($id);
             if($advert && PrivilegesUtils::canUpdateCoefficientAdvert($advert)){
                 $advert->price_coefficient = $coefficient/100;
+                $advert->price_coefficient_total = $coefficient_total/100;
                 $advert->save();
                 return response('ok', 200);
             }
@@ -804,7 +816,7 @@ class AdvertController extends Controller
         $approveList = $request->all();
         try {
             foreach ($approveList as $key=>$value) {
-                $this->approveAdvert($key, $value['isApprove'], $value['lotMiniQuantity'], $value['priceCoefficient'], $value['disapproveReason']);
+                $this->approveAdvert($key, $value['isApprove'], $value['lotMiniQuantity'], $value['priceCoefficient'], $value['priceCoefficientTotal'], $value['disapproveReason']);
             }
         } catch (\Exception $e) {
             return response(trans('strings.view_advert_approve_error'), 500);
@@ -1205,13 +1217,14 @@ class AdvertController extends Controller
      * @return null
      * @throws \Exception
      */
-    private function approveAdvert($key, $isApproved, $lotMiniQuantity, $priceCoefficient=null, $disapproveReason=null) {
+    private function approveAdvert($key, $isApproved, $lotMiniQuantity, $priceCoefficient=null, $priceCoefficientTotal=null, $disapproveReason=null) {
         if($isApproved != null) {
             $advert = Advert::find($key);
             $invoice = null;
             $state = is_null($advert->isEditOf) ? Invoice::STATE_CREATION : Invoice::STATE_EDIT;
             if($advert && is_null($advert->isValid)) {
                 $advert->price_coefficient = $priceCoefficient;
+                $advert->price_coefficient_total = $priceCoefficientTotal;
                 $advert->lotMiniQuantity = (int)$lotMiniQuantity;
                 //Get latest invoice with create state
                 if($state == Invoice::STATE_CREATION){
@@ -1421,6 +1434,8 @@ class AdvertController extends Controller
                 $originalAdvert->description = $advert->description;
                 $originalAdvert->price = $advert->originalPrice;
                 $originalAdvert->price_coefficient = $advert->price_coefficient;
+                $originalAdvert->price_coefficient_total = $advert->price_coefficient_total;
+                $originalAdvert->discount_on_total = $advert->discount_on_total;
                 $originalAdvert->currency = $advert->currency;
                 $originalAdvert->latitude = $advert->latitude;
                 $originalAdvert->longitude = $advert->longitude;

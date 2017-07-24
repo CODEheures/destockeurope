@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Category;
 use App\Common\CategoryUtils;
+use App\Common\PrivilegesUtils;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,9 +32,10 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = Category::defaultOrder()->get();
-        if($request->has('withInfos') && $request->get('withInfos')=='true'){
+        if($request->has('withInfos') && $request->get('withInfos')=='true' && PrivilegesUtils::canAdmin()){
             foreach ($categories as $category){
                 $category->setCanBeDeleted($this->availableToDelete($category->id));
+                $category->setAvailableMoveTo();
             }
         }
         $tree = $categories->toTree();

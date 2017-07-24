@@ -25,14 +25,16 @@
             }
         },
         mounted () {
+            let that = this;
             this.$watch('sendMessage', function () {
-                this.setVisible();
+                that.visible = false;
+                that.setVisible();
             })
         },
         methods: {
             setVisible: function () {
                 this.visible = true;
-                var that = this;
+                let that = this;
                 setTimeout(function () {
                     that.visible = false;
                 },that.timeOut);

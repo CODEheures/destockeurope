@@ -6,7 +6,7 @@
                     <i class="dropdown icon"></i>
                     <i :class="'large ' + colors[colorNumber%colors.length] + ' minus square icon'" v-on:click="delCategory" :data-id="category.id" v-if="category.canBeDeleted"></i>
                     <i class="big ban icon" v-else></i>
-                    <span v-for="locale in availablesDatasLocalesList">
+                    <span v-for="locale in properties.availableLocalesList">
                     <div class="ui mini labeled input">
                         <div class="ui label">{{ locale }}</div>
                         <input type="text"
@@ -24,12 +24,8 @@
                 <div class="change-category">
                     <span>
                         <categories-list-move-to
-                                :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
-                                :route-param="category.id"
-                                :first-menu-name="categoriesDropdownMenuFirstMenuName"
-                                :actual-locale="actualLocale"
-                                :flag-refresh="flagRefresh">
-                        </categories-list-move-to>
+                                :category="category"
+                        ></categories-list-move-to>
                     </span>
                     <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
                         <template v-if="index==0">
@@ -49,12 +45,7 @@
             <div class="content">
                 <categories-updatable
                         :categories="category.children"
-                        :availables-locales-list="availablesLocalesList"
                         :parent-id="category.id"
-                        :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
-                        :actual-locale="actualLocale"
-                        :categories-dropdown-menu-first-menu-name="categoriesDropdownMenuFirstMenuName"
-                        :flag-refresh="flagRefresh"
                         :color-number="colorNumber+1">
                 </categories-updatable>
             </div>
@@ -64,7 +55,7 @@
                :data-parent-id="parentId"
                v-on:click="addCategory">
             </i>
-            <span v-for="locale in availablesDatasLocalesList">
+            <span v-for="locale in properties.availableLocalesList">
                         <div class="ui mini labeled input">
                             <div class="ui label">{{ locale }}</div>
                             <input type="text" placeholder="Nouvelle sous-catégorie"
@@ -87,12 +78,7 @@
     export default {
         props: {
             categories: Array,
-            availablesLocalesList: String,
             parentId: Number,
-            routeGetAvailableMoveToCategory: String,
-            actualLocale: String,
-            categoriesDropdownMenuFirstMenuName: String,
-            flagRefresh: Boolean,
             colorNumber: {
                 type: Number,
                 required: false,
@@ -101,9 +87,9 @@
         },
         data: () => {
             return {
+                properties: {},
                 isLoaded: false,
                 categoryName: {},
-                availablesDatasLocalesList: {},
                 focused: {},
                 blured: {},
                 colors: [
@@ -124,8 +110,7 @@
             };
         },
         mounted () {
-            this.availablesDatasLocalesList = JSON.parse(this.availablesLocalesList);
-            this.isLoaded = true;
+            this.properties = this.$store.state.properties['global'];
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', event);
             });

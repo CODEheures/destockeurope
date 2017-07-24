@@ -14,7 +14,7 @@
                             <div class="sixteen wide mobile eight wide tablet ten wide computer column">
                                 <div class="ui centered grid flags">
                                     <template v-for="country, key in dataCountries">
-                                        <a v-on:click.stop.prevent="goHome" :href="routeHome+'?location='+country.name" :data-country="country.code" :data-country-name="country.name" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                        <a v-on:click.stop.prevent="goHome" :href="properties.routeHome+'?location='+country.name" :data-country="country.code" :data-country-name="country.name" class="five wide mobile five wide tablet three wide computer center aligned column">
                                             <svg v-if="key=='italy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" style="mix-blend-mode:multiply" :class="browser=='edge' ? 'shadow' : ''">
                                                 <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
                                                 <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
@@ -1123,11 +1123,10 @@
                                                 <location-filter
                                                         :accurate-list="locationAccurateList"
                                                         :update="dataUpdate"
-                                                        :place-holder="filterLocationPlaceHolder"
                                                 ></location-filter>
                                             </div>
                                             <div v-on:click.stop.prevent="goHome"  :class="isLocationReady ? 'ui vertical animated primary button' : 'ui vertical animated primary disabled button'">
-                                                <div class="visible content">{{ seeAdvertLabel }}</div>
+                                                <div class="visible content">{{ strings.seeAdvertLabel }}</div>
                                                 <div class="hidden content">
                                                     <i class="right arrow icon"></i>
                                                 </div>
@@ -1138,19 +1137,19 @@
                                 <div class="ui grid">
                                     <div class="sixteen wide column">
                                         <div class="ui blue inverted newsletter segment">
-                                            <div class="ui top right attached yellow label">{{newsLetterTitle}}</div>
-                                            <p>{{ newsLetterDescription }}</p>
+                                            <div class="ui top right attached yellow label">{{strings.newsLetterTitle}}</div>
+                                            <p>{{ strings.newsLetterDescription }}</p>
                                             <form class="ui inverted form">
                                                 <div class="required field">
-                                                    <input type="email" name="email" :placeholder="newsLetterEmailPlaceHolder" v-model="dataEmail">
+                                                    <input type="email" name="email" :placeholder="strings.newsLetterEmailPlaceHolder" v-model="dataEmail">
                                                 </div>
                                                 <div class="field">
-                                                    <input type="text" name="name" :placeholder="newsLetterNamePlaceHolder" v-model="dataName">
+                                                    <input type="text" name="name" :placeholder="strings.newsLetterNamePlaceHolder" v-model="dataName">
                                                 </div>
                                                 <div class="field">
-                                                    <input type="text" name="phone" :placeholder="newsLetterPhonePlaceHolder" v-model="dataPhone">
+                                                    <input type="text" name="phone" :placeholder="strings.newsLetterPhonePlaceHolder" v-model="dataPhone">
                                                 </div>
-                                                <button v-on:click.stop.prevent="subscribeNewsletter" class="ui button" type="submit">{{ newsLetterButtonLabel }}</button>
+                                                <button v-on:click.stop.prevent="subscribeNewsletter" class="ui button" type="submit">{{ strings.newsLetterButtonLabel }}</button>
                                             </form>
                                         </div>
                                     </div>
@@ -1169,25 +1168,16 @@
     export default {
         props: [
             //vue routes
-            'routeHome',
             'routeSubscribeNewsLetter',
             //vue vars
             'browser',
             'countries',
-            //vue strings
-            'seeAdvertLabel',
-            'newsLetterTitle',
-            'newsLetterDescription',
-            'newsLetterButtonLabel',
-            'newsLetterEmailPlaceHolder',
-            'newsLetterPhonePlaceHolder',
-            'newsLetterNamePlaceHolder',
-            //location filter component
             'filterLocationAccurateList',
-            'filterLocationPlaceHolder'
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 filter: {},
                 dataCountries: {},
                 dataUpdate: false,
@@ -1202,6 +1192,8 @@
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['portal'];
+            this.properties = this.$store.state.properties['global'];
             this.dataCountries = JSON.parse(this.countries);
             this.locationAccurateList = JSON.parse(this.filterLocationAccurateList);
             sessionStorage.clear();
@@ -1232,7 +1224,7 @@
                     }
                 }
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
-                window.location.assign(this.routeHome);
+                window.location.assign(this.properties.routeHome);
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;

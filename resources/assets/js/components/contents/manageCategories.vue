@@ -4,31 +4,31 @@
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ modalDelHeader }}
+                {{ strings.modalDelHeader }}
             </div>
             <div class="image content">
                 <div class="image">
                     <i class="trash icon"></i>
                 </div>
                 <div class="description">
-                    <p>{{ modalDelDescription }}</p>
+                    <p>{{ strings.modalDelDescription }}</p>
                 </div>
             </div>
             <div class="actions">
                 <div class="two fluid ui inverted buttons">
                     <div class="ui cancel red basic inverted button">
                         <i class="remove icon"></i>
-                        {{ modalNo }}
+                        {{ strings.modalNo }}
                     </div>
                     <div class="ui ok green basic inverted button">
                         <i class="checkmark icon"></i>
-                        {{ modalYes }}
+                        {{ strings.modalYes }}
                     </div>
                 </div>
             </div>
         </div>
         <div class="column">
-            <h2 class="ui header">{{ contentHeader }}</h2>
+            <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
         <div class="column">
             <div id="category-accordion" class="ui fluid styled accordion">
@@ -46,7 +46,7 @@
                                 <i class="big blue minus square icon" v-on:click="delCategory"
                                    :data-id="category.id" v-if="category.canBeDeleted"></i>
                                 <i class="big ban icon" v-else></i>
-                                <span v-for="locale in availablesDatasLocalesList">
+                                <span v-for="locale in properties.availableLocalesList">
                                     <div class="ui labeled input">
                                         <div class="ui label">{{ locale }}</div>
                                         <input type="text"
@@ -63,12 +63,8 @@
                             <div class="change-category">
                                 <span>
                                     <categories-list-move-to
-                                            :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
-                                            :route-param="category.id"
-                                            :first-menu-name="categoriesDropdownMenuFirstMenuName"
-                                            :actual-locale="actualLocale"
-                                            :flag-refresh="flagRefresh">
-                                    </categories-list-move-to>
+                                            :category="category"
+                                    ></categories-list-move-to>
                                 </span>
                                 <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
                                     <template v-if="index==0">
@@ -87,18 +83,13 @@
                         <div class="content">
                             <categories-updatable
                                     :categories="category.children"
-                                    :availables-locales-list="availablesLocalesList"
                                     :parent-id="category.id"
-                                    :route-get-available-move-to-category="routeGetAvailableMoveToCategory"
-                                    :actual-locale="actualLocale"
-                                    :categories-dropdown-menu-first-menu-name="categoriesDropdownMenuFirstMenuName"
-                                    :flag-refresh="flagRefresh">
-                            </categories-updatable>
+                            ></categories-updatable>
                         </div>
                     </div>
                     <div class="ui blue segment">
                         <i class="big blue add square icon" v-on:click="addCategory"></i>
-                        <span v-for="locale in availablesDatasLocalesList">
+                        <span v-for="locale in properties.availableLocalesList">
                             <div class="ui labeled input">
                                 <div class="ui mini label">{{ locale }}</div>
                                 <input type="text" placeholder="Nouvelle Catégorie"
@@ -124,46 +115,28 @@
         directives: {focus: focus},
         props: {
             //vue routes
-            routeCategory: String,
             routeShiftUpCategory: String,
             routeShiftDownCategory: String,
             routeAppendToCategory: String,
-            //vue vars
-            //vue strings
-            contentHeader: String,
-            loadErrorMessage: String,
-            addErrorMessage: String,
-            delErrorMessage: String,
-            patchErrorMessage: String,
-            patchSuccessMessage: String,
-            modalYes: String,
-            modalNo: String,
-            modalDelHeader: String,
-            modalDelDescription: String,
-            //categories list move to component
-            routeGetAvailableMoveToCategory: String,
-            categoriesDropdownMenuFirstMenuName: String,
-            actualLocale: String,
-            //category updatable component
-            availablesLocalesList: String
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 isLoaded: false,
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
-                availablesDatasLocalesList: {},
                 focused: {},
                 blured: {},
                 categories: {},
                 categoryName: {},
-                flagRefresh: false
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['manage-categories'];
+            this.properties = this.$store.state.properties['global'];
             this.getCategories();
-            this.availablesDatasLocalesList = JSON.parse(this.availablesLocalesList);
             this.$on('categoryChoice', function (event) {
                 this.appendToCategory(event.id, event.parentId);
             });
@@ -189,7 +162,7 @@
                 if ($message != undefined && $message != '') {
                     this.sendToast($message, 'error');
                 } else {
-                    this.sendToast(this.patchErrorMessage, 'error');
+                    this.sendToast(this.strings.patchErrorMessage, 'error');
                 }
             });
             this.$watch('blured', function () {
@@ -212,14 +185,13 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.routeCategory+'?withInfos=true')
+                axios.get(this.properties.routeCategory+'?withInfos=true')
                     .then(function (response) {
                         that.categories = response.data;
-                        that.flagRefresh=!that.flagRefresh;
                         that.isLoaded = true;
                     })
                     .catch(function (error) {
-                        that.sendToast(that.loadErrorMessage, 'error');
+                        that.sendToast(that.strings.loadErrorMessage, 'error');
                     });
             },
             addCategory: function (event, emitPostValue) {
@@ -242,7 +214,7 @@
                     this.isLoaded = false;
                     this.categoryName = {};
                     let that = this;
-                    axios.post(this.routeCategory, postValue)
+                    axios.post(this.properties.routeCategory, postValue)
                         .then(function (response) {
                             that.getCategories();
                         })
@@ -251,7 +223,7 @@
                             if (error.response && error.response.status == 409) {
                                 that.sendToast(error.response.data, 'error');
                             } else {
-                                that.sendToast(that.addErrorMessage, 'error');
+                                that.sendToast(that.strings.addErrorMessage, 'error');
                             }
                         });
                 }
@@ -270,7 +242,7 @@
                         closable: false,
                         onApprove: function () {
                             that.isLoaded = false;
-                            axios.delete(that.routeCategory + '/' + categoryId)
+                            axios.delete(that.properties.routeCategory + '/' + categoryId)
                                 .then(function (response) {
                                     that.getCategories();
                                 })
@@ -279,7 +251,7 @@
                                     if (error.response && error.response.status == 409) {
                                         that.sendToast(error.response.data, 'error');
                                     } else {
-                                        that.sendToast(that.delErrorMessage, 'error');
+                                        that.sendToast(that.strings.delErrorMessage, 'error');
                                     }
                                 });
                         }
@@ -308,22 +280,22 @@
                     }
                 }
                 if (postValue[key] != undefined && postValue[key] != '') {
-                    axios.patch(this.routeCategory + '/' + id, {description: postValue})
+                    axios.patch(this.properties.routeCategory + '/' + id, {description: postValue})
                         .then(function (response) {
                             //that.getCategories(false);
-                            that.sendToast(that.patchSuccessMessage, 'success');
+                            that.sendToast(that.strings.patchSuccessMessage, 'success');
                         })
                         .catch(function (error) {
                             that.getCategories(false);
                             if (error.response && error.response.status == 409) {
                                 that.sendToast(error.response.data, 'error');
                             } else {
-                                that.sendToast(that.patchErrorMessage, 'error');
+                                that.sendToast(that.strings.patchErrorMessage, 'error');
                             }
                         });
                 } else {
                     this.getCategories(false);
-                    this.sendToast(this.patchErrorMessage, 'error');
+                    this.sendToast(this.strings.patchErrorMessage, 'error');
                 }
             },
             sendToast: function (message, type) {
@@ -381,7 +353,7 @@
                                         that.getCategories(false);
                                         $(me).css('top', 0);
                                         $(sibling).css('top', 0);
-                                        that.sendToast(that.patchSuccessMessage, 'success');
+                                        that.sendToast(that.strings.patchSuccessMessage, 'success');
                                     })
                                     .catch(function (error) {
                                         that.getCategories(false);
@@ -390,7 +362,7 @@
                                         if (error.response && error.response.status == 409) {
                                             that.sendToast(error.response.data, 'error');
                                         } else {
-                                            that.sendToast(this.patchErrorMessage, 'error');
+                                            that.sendToast(this.strings.patchErrorMessage, 'error');
                                         }
                                     });
                             }
@@ -403,13 +375,13 @@
                 axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
                     .then(function (response) {
                         that.getCategories(false);
-                        that.sendToast(that.patchSuccessMessage, 'success');
+                        that.sendToast(that.strings.patchSuccessMessage, 'success');
                     })
                     .catch(function (error) {
                         if (error.response && error.response.status == 409) {
                             that.sendToast(error.response.data, 'error');
                         } else {
-                            that.sendToast(this.patchErrorMessage, 'error');
+                            that.sendToast(this.strings.patchErrorMessage, 'error');
                         }
                     });
             }

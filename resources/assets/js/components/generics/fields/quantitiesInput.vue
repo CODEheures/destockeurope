@@ -4,12 +4,12 @@
             <div class="field">
                 <div class="two fields">
                     <div class="field">
-                        <label>{{ totalQuantityLabel }}</label>
-                        <input type="number" name="totalQuantity" :min="Math.max(1,advert.lotMiniQuantity)" step="1" v-model="advert.totalQuantity">
+                        <label>{{ strings.totalQuantityLabel }}</label>
+                        <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
                     </div>
                     <div class="field">
-                        <label>{{ lotMiniQuantityLabel }}</label>
-                        <input type="number" name="lotMiniQuantity" min="1" :max="advert.totalQuantity" step="1" v-model="advert.lotMiniQuantity">
+                        <label>{{ strings.lotMiniQuantityLabel }}</label>
+                        <number-input  name="lotMiniQuantity" :min="1" :max="maxLotMini" :decimal="0" v-model="advert.lotMiniQuantity"></number-input>
                     </div>
                 </div>
             </div>
@@ -17,25 +17,25 @@
                 <label style="opacity: 0">1</label>
                 <div v-on:click="updateQuantities()" class="ui primary button">
                     <i class="cubes icon"></i>
-                    {{ formUpdateLabel }}
+                    {{ strings.formUpdateLabel }}
                 </div>
             </div>
         </template>
         <template v-if="!withValidButton && !onlyMiniLot">
             <div class="two fields">
                 <div class="field">
-                    <label>{{ totalQuantityLabel }}</label>
-                    <input type="number" name="totalQuantity" :min="Math.max(1,advert.lotMiniQuantity)" step="1" v-model="advert.totalQuantity">
+                    <label>{{ strings.totalQuantityLabel }}</label>
+                    <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
                 </div>
                 <div class="field">
-                    <label>{{ lotMiniQuantityLabel }}</label>
-                    <input type="number" name="lotMiniQuantity" min="1" :max="advert.totalQuantity" step="1" v-model="advert.lotMiniQuantity">
+                    <label>{{ strings.lotMiniQuantityLabel }}</label>
+                    <number-input  name="lotMiniQuantity" :min="1" :max="maxLotMini" :decimal="0" v-model="advert.lotMiniQuantity"></number-input>
                 </div>
             </div>
         </template>
         <template v-if="!withValidButton && onlyMiniLot">
-            <label>{{ lotMiniQuantityLabel }}</label>
-            <input type="number" name="lotMiniQuantity" min="1" :max="advert.totalQuantity" step="1" v-model="advert.lotMiniQuantity">
+            <label>{{ strings.lotMiniQuantityLabel }}</label>
+            <number-input  name="lotMiniQuantity" :min="1" :max="advert.totalQuantity" :decimal="0" v-model="advert.lotMiniQuantity"></number-input>
         </template>
     </div>
 </template>
@@ -46,9 +46,6 @@
             advert: {
                 type: Object
             },
-            totalQuantityLabel: String,
-            lotMiniQuantityLabel: String,
-            formUpdateLabel: String,
             withValidButton: {
                 type: Boolean,
                 required: false,
@@ -62,11 +59,16 @@
         },
         data: () => {
             return {
-
+                strings: {},
+                maxLotMini: null
             }
         },
         mounted () {
-
+            this.strings = this.$store.state.strings['quantities-input-field'];
+            this.$on('setMaxLotMini', function () {
+                this.maxLotMini = this.advert.totalQuantity;
+            });
+            this.maxLotMini = this.advert.totalQuantity;
         },
         methods: {
             updateQuantities: function () {

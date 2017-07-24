@@ -4,36 +4,32 @@
         <div :id="'modal2-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
-                {{ modalValidHeader }}
+                {{ strings.modalValidHeader }}
             </div>
             <div class="image content">
                 <div class="image">
                     <i class="legal icon"></i>
                 </div>
                 <div class="description">
-                    <p>{{ modalValidDescription }}</p>
+                    <p>{{ strings.modalValidDescription }}</p>
                 </div>
             </div>
             <div class="actions">
                 <div class="two fluid ui inverted buttons">
                     <div class="ui cancel red basic inverted button">
                         <i class="remove icon"></i>
-                        {{ modalNo }}
+                        {{ strings.modalNo }}
                     </div>
                     <div class="ui ok green basic inverted button">
                         <i class="checkmark icon"></i>
-                        {{ modalYes }}
+                        {{ strings.modalYes }}
                     </div>
                 </div>
             </div>
         </div>
         <div class="tablet only computer only sixteen wide column">
             <div class="row">
-                <categories-horizontal-menu
-                        :route-category="routeCategory"
-                        :actual-locale="actualLocale"
-                        :all-item="categoriesAllItem">
-                </categories-horizontal-menu>
+                <categories-horizontal-menu></categories-horizontal-menu>
             </div>
         </div>
         <div class="sixteen wide column" v-if="masteradsIsActive=='1'">
@@ -52,35 +48,18 @@
             <div class="sixteen wide column">
                 <div class="row filters">
                     <advert-filter
-                            :filter-ribbon-open="filterRibbonOpen"
-                            :filter-ribbon-close="filterRibbonClose"
-                            :breadcrumb-items="breadcrumbItems"
-                            :urgent-label="filterUrgentLabel"
-                            :is-negociated-label="isNegociatedLabel"
-                            :update="update"
-                            :filter="filter"
-                            :filter-price-prefix="dataFilterPricePrefix"
-                            :filter-price-title="filterPriceTitle"
-                            :filter-quantity-title="filterQuantityTitle"
-                            :route-search="dataRouteGetAdvertList"
-                            :min-length-search="parseInt(filterMinLengthSearch)"
-                            :location-accurate-list="dataFilterLocationAccurateList"
-                            :flag-reset-search="dataFlagResetSearch"
-                            :search-place-holder="filterSearchPlaceHolder"
-                            :location-place-holder="filterLocationPlaceHolder"
                             :route-notifications-exist-in="routeNotificationsExistIn"
                             :route-notifications-add="routeNotificationsAdd"
                             :route-notifications-remove="routeNotificationsRemove"
-                            :notifications-checkbox-label="notificationsCheckboxLabel"
-                            :route-category="routeCategory"
-                            :categories-dropdown-menu-first-menu-name="categoriesDropdownMenuFirstMenuName"
-                            :actual-locale="actualLocale"
+                            :breadcrumb-items="breadcrumbItems"
+                            :update="update"
+                            :filter="filter"
+                            :filter-price-prefix="dataFilterPricePrefix"
+                            :route-search="dataRouteGetAdvertList"
+                            :location-accurate-list="dataFilterLocationAccurateList"
+                            :flag-reset-search="dataFlagResetSearch"
                             :category-old-choice="parseInt(filter.categoryId)"
-                            :categories-all-item="categoriesAllItem"
                             :currencies-list="dataFilterCurrenciesList"
-                            :currencies-first-menu-name="filterCurrenciesFirstMenuName"
-                            :currencies-input-search-label="filterCurrenciesInputSearchLabel"
-                            :currencies-with-all-label="filterCurrenciesWithAllLabel"
                     ></advert-filter>
                 </div>
             </div>
@@ -94,15 +73,6 @@
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :ads-frequency="parseInt(adsFrenquency)"
-                            :actual-locale="actualLocale"
-                            :total-quantity-label="totalQuantityLabel"
-                            :lot-mini-quantity-label="lotMiniQuantityLabel"
-                            :urgent-label="urgentLabel"
-                            :is-negociated-label="isNegociatedLabel"
-                            :price-info-label="priceInfoLabel"
-                            :no-result-found-header="noResultFoundHeader"
-                            :no-result-found-message="noResultFoundMessage"
-                            :trusted-provider-label="trustedProviderLabel"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -111,10 +81,7 @@
                             :pages="paginate"
                             :route-get-list="dataRouteGetAdvertList"
                             :fake-page-route="getHref()"
-                            :page-label="pageLabel"
-                            :page-previous-label="pagePreviousLabel"
-                            :page-next-label="pageNextLabel">
-                        </pagination>
+                        ></pagination>
                     </div>
                 </div>
             </div>
@@ -124,8 +91,6 @@
                         <div class="sixteen wide column" v-for="highLightAdvert in dataHighlightAdverts">
                             <advert-highlight
                                     :advert="highLightAdvert"
-                                    :is-negociated-label="isNegociatedLabel"
-                                    :total-quantity-label="totalQuantityLabel"
                             ></advert-highlight>
                         </div>
                     </template>
@@ -134,13 +99,9 @@
                         <div class="sixteen wide column">
                             <advert-highlight v-if="dataHighlightAdverts.length == 1"
                                     :advert="dataHighlightAdverts[0]"
-                                    :is-negociated-label="isNegociatedLabel"
-                                    :total-quantity-label="totalQuantityLabel"
                             ></advert-highlight>
                             <advert-highlight
                                     :advert="dataFakeHighlightAdvert"
-                                    :is-negociated-label="isNegociatedLabel"
-                                    :total-quantity-label="totalQuantityLabel"
                             ></advert-highlight>
                         </div>
                     </template>
@@ -161,73 +122,32 @@
     export default {
         props: [
             //vue routes
+            'routeGetAdvertsList',
+            'routeBookmarkAdd',
+            'routeBookmarkRemove',
+            'routeNotificationsExistIn',
+            'routeNotificationsAdd',
+            'routeNotificationsRemove',
+            'routeGetHighlight',
             //vue vars
             'clearStorage',
             'forCountryName',
             'forCountryCode',
             'forPage',
-            //vue strings
-            'loadErrorMessage',
-            'bookmarkSuccess',
-            'unbookmarkSuccess',
-            'modalValidHeader',
-            'modalValidDescription',
-            'modalNo',
-            'modalYes',
-            'allLabel',
-            'header',
-            //category dropdown menu component
-            'routeCategory',
-            'categoriesDropdownMenuFirstMenuName',
-            'categoriesAllItem',
-            'actualLocale',
-            //master ads component
             'masteradsRouteImageServer',
             'masteradsIsActive',
             'masteradsUrlImg',
             'masteradsUrlRedirect',
             'masteradsOffsetYMainContainer',
             'masteradsWidth',
-            //filter advert component
-            'filterMinLengthSearch',
             'filterLocationAccurateList',
-            'filterRibbonOpen',
-            'filterRibbonClose',
-            'filterUrgentLabel',
-            'filterSearchPlaceHolder',
-            'filterLocationPlaceHolder',
-            'filterPriceTitle',
-            'filterQuantityTitle',
-            'filterCurrenciesFirstMenuName',
-            'filterCurrenciesInputSearchLabel',
-            'filterCurrenciesWithAllLabel',
-            //advertByList component
-            'routeGetAdvertsList',
-            'routeBookmarkAdd',
-            'routeBookmarkRemove',
             'adsFrenquency',
-            'totalQuantityLabel',
-            'lotMiniQuantityLabel',
-            'urgentLabel',
-            'isNegociatedLabel',
-            'priceInfoLabel',
-            'noResultFoundHeader',
-            'noResultFoundMessage',
-            'routeNotificationsExistIn',
-            'routeNotificationsAdd',
-            'routeNotificationsRemove',
-            'notificationsCheckboxLabel',
-            'trustedProviderLabel',
-            //paginate component
-            'pageLabel',
-            'pagePreviousLabel',
-            'pageNextLabel',
-            //advertHighLight component
-            'routeGetHighlight',
-            'fakeHighlightAdvert'
+            'fakeHighlightAdvert',
         ],
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
@@ -255,6 +175,8 @@
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['welcome1'];
+            this.properties = this.$store.state.properties['global'];
             let that = this;
             this.dataFilterLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
             this.dataFakeHighlightAdvert = JSON.parse(this.fakeHighlightAdvert);
@@ -282,7 +204,7 @@
 
             //On load Error
             this.$on('loadError', function () {
-                this.sendToast(this.loadErrorMessage, 'error');
+                this.sendToast(this.strings.loadErrorMessage, 'error');
             });
 
             //Init dataRoute
@@ -333,7 +255,7 @@
                 });
             });
             this.$on('refreshResults', function (query) {
-                if(query != undefined && query.length >= this.filterMinLengthSearch){
+                if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
                     this.filter.resultsFor = query;
                     this.updateResults();
                 }
@@ -356,10 +278,10 @@
                 this.sendToast(event.message, event.type);
             });
             this.$on('bookmarkSuccess', function () {
-                this.sendToast(this.bookmarkSuccess, 'success');
+                this.sendToast(this.strings.bookmarkSuccess, 'success');
             });
             this.$on('unbookmarkSuccess', function () {
-                this.sendToast(this.unbookmarkSuccess, 'success');
+                this.sendToast(this.strings.unbookmarkSuccess, 'success');
             });
             if ("onpopstate" in window) {
                 this.onPopState();
@@ -375,16 +297,16 @@
                 this.breadcrumbItems = [];
                 let that = this;
                 if(categoryId != undefined && categoryId>0 ) {
-                    axios.get(this.routeCategory+'/'+categoryId)
+                    axios.get(this.properties.routeCategory+'/'+categoryId)
                         .then(function (response) {
                             let chainedCategories = response.data;
                             that.breadcrumbItems.push({
-                                name: that.allLabel,
+                                name: that.strings.allLabel,
                                 value: 0
                             });
                             chainedCategories.forEach(function (elem,index) {
                                 that.breadcrumbItems.push({
-                                    name: elem['description'][that.actualLocale],
+                                    name: elem['description'][that.properties.actualLocale],
                                     value: elem.id
                                 });
                             });
@@ -392,7 +314,7 @@
                         })
                         .catch(function (error) {
                             that.breadcrumbItems.push({
-                                name: this.loadErrorMessage,
+                                name: this.strings.loadErrorMessage,
                                 value:''
                             });
                         });
@@ -448,7 +370,7 @@
                         callBack();
                     })
                     .catch(function (error) {
-                        that.sendToast(that.loadErrorMessage, 'error');
+                        that.sendToast(that.strings.loadErrorMessage, 'error');
                     });
             },
             clearInputSearch() {
@@ -621,14 +543,14 @@
                         that.dataHighlightAdverts = (response.data).adverts;
                     })
                     .catch(function (error) {
-                        //that.sendToast(that.loadErrorMessage, 'error');
+                        //that.sendToast(that.strings.loadErrorMessage, 'error');
                     });
             },
             getHref: function () {
                 return window.location.href;
             },
             setHeader: function () {
-                this.dataHeader = this.header;
+                this.dataHeader = this.strings.header;
                 if(this.breadcrumbItems.length > 0){
                     this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length -1].name;
                 }

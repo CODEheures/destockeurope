@@ -10,7 +10,7 @@
             </template>
         </div>
         <div v-if="datapages.length==0">
-            <p>{{ pageLabel }} 1/1</p>
+            <p>{{ strings.pageLabel }} 1/1</p>
         </div>
     </div>
 
@@ -27,19 +27,17 @@
                 type: String,
                 required: false,
                 default: null
-            },
-            //vue strings
-            pageLabel: String,
-            pagePreviousLabel: String,
-            pageNextLabel: String
+            }
         },
         data: () => {
             return {
+                strings: {},
                 datapages: [],
                 url: ''
             }
         },
         mounted () {
+            this.strings = this.$store.state.strings['pagination'];
             this.$watch('pages', function () {
                 this.constructPages();
             })
@@ -68,7 +66,7 @@
                             this.datapages.push({
                                 label: '<i class="chevron left icon" style="pointer-events: none"></i>',
                                 href : this.urlForPageNumber(this.pages.current_page-1),
-                                title: this.pagePreviousLabel
+                                title: this.strings.pagePreviousLabel
                             });
                         }
                         for(let i=1 ; i<= this.pages.last_page; i++){
@@ -76,7 +74,7 @@
                                 label: i.toString(),
                                 href : this.urlForPageNumber(i),
                                 isDisabled: i==this.pages.current_page,
-                                title: this.pageLabel + ' ' + (i)
+                                title: this.strings.pageLabel + ' ' + (i)
                             });
                         }
                         //next if current page < last page
@@ -84,7 +82,7 @@
                             this.datapages.push({
                                 label: '<i class="chevron right icon" style="pointer-events: none"></i>',
                                 href : this.urlForPageNumber(this.pages.current_page+1),
-                                title: this.pageNextLabel
+                                title: this.strings.pageNextLabel
                             });
                         }
                     } else {
@@ -94,7 +92,7 @@
                                     label: i.toString(),
                                     href : this.urlForPageNumber(i),
                                     isDisabled: i==this.pages.current_page,
-                                    title: this.pageLabel + ' ' + (i)
+                                    title: this.strings.pageLabel + ' ' + (i)
                                 });
                             }
                             this.datapages.push({
@@ -106,7 +104,7 @@
                             this.datapages.push({
                                 label: this.pages.last_page,
                                 href : this.urlForPageNumber(this.pages.last_page),
-                                title: this.pageNextLabel
+                                title: this.strings.pageNextLabel
                             });
                         }
                         if(this.pages.current_page>3){
@@ -115,7 +113,7 @@
                                 this.datapages.push({
                                     label: '1',
                                     href : this.urlForPageNumber(1),
-                                    title: this.pagePreviousLabel
+                                    title: this.strings.pagePreviousLabel
                                 });
                             }
                             this.datapages.push({
@@ -130,7 +128,7 @@
                                         label: i.toString(),
                                         href : this.urlForPageNumber(i),
                                         isDisabled: i==this.pages.current_page,
-                                        title: this.pageLabel + ' ' + (i)
+                                        title: this.strings.pageLabel + ' ' + (i)
                                     });
                                 }
                                 this.datapages.push({
@@ -144,7 +142,7 @@
                                     this.datapages.push({
                                         label: this.pages.last_page,
                                         href : this.urlForPageNumber(this.pages.last_page),
-                                        title: this.pageNextLabel
+                                        title: this.strings.pageNextLabel
                                     });
                                 }
                             } else {
@@ -153,7 +151,7 @@
                                         label: i.toString(),
                                         href : this.urlForPageNumber(i),
                                         isDisabled: i==this.pages.current_page,
-                                        title: this.pageLabel + ' ' + (i)
+                                        title: this.strings.pageLabel + ' ' + (i)
                                     });
                                 }
                             }

@@ -19,7 +19,6 @@
             };
         },
         mounted () {
-            let that = this;
             this.dataListAvailableLang = JSON.parse(this.listAvailableLang);
         },
         methods: {

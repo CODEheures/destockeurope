@@ -11,7 +11,6 @@
                     :pictures="advert.pictures"
                     :main-picture="advert.mainPicture"
                     :video-id="advert.video_id"
-                    :image-ratio="imageRatio"
             ></swiper-gallerie>
         </div>
         <div class="sixteen wide column">
@@ -46,27 +45,40 @@
                                     <tbody>
                                     <tr v-if="advert.manu_ref">
                                         <td class="collapsing">
-                                            <i class="barcode icon"></i> {{ refLabel }}
+                                            <i class="barcode icon"></i> {{ strings.refLabel }}
                                         </td>
                                         <td>{{ advert.manu_ref }}</td>
                                     </tr>
                                     <tr>
                                         <td class="collapsing">
-                                            <i class="cubes icon"></i> {{ totalQuantityLabel }}
+                                            <i class="cubes icon"></i> {{ strings.totalQuantityLabel }}
                                         </td>
                                         <td>{{ advert.totalQuantity }}</td>
                                     </tr>
                                     <tr>
                                         <td class="collapsing">
-                                            <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
+                                            <i class="cube icon"></i> {{ strings.lotMiniQuantityLabel }}
                                         </td>
                                         <td>{{ advert.lotMiniQuantity }}</td>
                                     </tr>
                                     <tr>
                                         <td class="collapsing">
-                                            <i class="money icon"></i> {{ priceLabel }}
+                                            <i class="money icon"></i> {{ strings.priceLabel }}
                                         </td>
-                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                    </tr>
+                                    <tr v-if="advert.globalDiscount > 0">
+                                        <td class="collapsing">
+                                            <i class="gift icon"></i> {{ strings.discountOnTotalLabel }}
+                                        </td>
+                                        <td>
+                                            <div class="ui mini horizontal statistic">
+                                                <div class="value"><i class="minus icon"></i>{{ advert.globalDiscount }}%</div>
+                                                <div class="label">
+                                                    ({{ advert.totalPriceMargin }})
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -76,27 +88,40 @@
                                     <tbody>
                                     <tr v-if="advert.manu_ref">
                                         <td class="collapsing">
-                                            <i class="barcode icon"></i> {{ refLabel }}
+                                            <i class="barcode icon"></i> {{ strings.refLabel }}
                                         </td>
                                         <td>{{ advert.manu_ref }}</td>
                                     </tr>
                                     <tr>
                                         <td class="collapsing">
-                                            <i class="cubes icon"></i> {{ totalQuantityLabel }}
+                                            <i class="cubes icon"></i> {{ strings.totalQuantityLabel }}
                                         </td>
                                         <td>{{ advert.totalQuantity }}</td>
                                     </tr>
                                     <tr>
                                         <td class="collapsing">
-                                            <i class="cube icon"></i> {{ lotMiniQuantityLabel }}
+                                            <i class="cube icon"></i> {{ strings.lotMiniQuantityLabel }}
                                         </td>
                                         <td>{{ advert.lotMiniQuantity }}</td>
                                     </tr>
                                     <tr>
                                         <td class="collapsing">
-                                            <i class="money icon"></i> {{ priceLabel }}
+                                            <i class="money icon"></i> {{ strings.priceLabel }}
                                         </td>
-                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                    </tr>
+                                    <tr v-if="!advert.isNegociated && advert.globalDiscount > 0">
+                                        <td class="collapsing">
+                                            <i class="gift icon"></i> {{ strings.discountOnTotalLabel }}
+                                        </td>
+                                        <td>
+                                            <div class="ui mini statistic">
+                                                <div class="value"><i class="minus icon"></i>{{ advert.globalDiscount }}%</div>
+                                                <div class="label">
+                                                    ({{ advert.totalPriceMargin }})
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -121,8 +146,6 @@
             //vue routes
             //vue vars
             advert: Object,
-            actualLocale: String,
-            imageRatio: Number,
             userName: {
                 type: String,
                 default: undefined,
@@ -133,42 +156,84 @@
                 default: false,
                 required: false
             },
-            //vue strings
-            totalQuantityLabel: String,
-            lotMiniQuantityLabel: String,
-            urgentLabel: String,
-            isNegociatedLabel: String,
-            priceInfoLabel: String,
-            priceLabel: String,
-            refLabel: String
+            isStatic: {
+                type: Boolean,
+                default: true,
+                required: false
+            }
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 isLoaded: false,
                 dataLightBoxUrl: '',
                 dataHeight: '',
-                dataPictures: [],
                 dataVideoId: '',
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['advert-by-id'];
+            this.properties = this.$store.state.properties['global'];
+            let that = this;
             this.$on('openLightBox', function (imgUrl) {
                 this.openLightBox(imgUrl);
             });
-            this.dataHeight = $('#modal-'+this._uid).width()/this.imageRatio;
+            this.dataHeight = $('#modal-'+this._uid).width()/this.properties.imageRatio;
+
+            if(!this.isStatic){
+                this.$watch('advert.price_coefficient', function () {
+                    that.advert.price_margin = that.calcUnitPrice() + this.advert.currencySymbol;
+                });
+                this.$watch('advert.price_coefficient_total', function () {
+                    that.advert.totalPriceMargin = that.calcTotalPrice() + this.advert.currencySymbol;
+                });
+                this.$watch('advert.price_margin', function () {
+                    that.advert.globalDiscount = that.calcGlobalDiscount();
+                });
+                this.$watch('advert.totalPriceMargin', function () {
+                    that.advert.globalDiscount = that.calcGlobalDiscount();
+                });
+                that.advert.globalDiscount = that.calcGlobalDiscount();
+            }
         },
         methods: {
             getMoment: function (dateTime) {
-                moment.locale(this.actualLocale);
+                moment.locale(this.properties.actualLocale);
                 return moment(dateTime).fromNow()
             },
             openLightBox: function (imgUrl) {
                 this.dataLightBoxUrl = imgUrl;
-                this.dataHeight = $('.lightBox').width/this.imageRatio;
+                this.dataHeight = $('.lightBox').width/this.properties.imageRatio;
                 $('#modal-'+this._uid).modal({
                     closable: true,
                     blurring: true
                 }).modal('show');
+            },
+            calcUnitPrice: function () {
+                let unitMargin =  this.advert.originalPrice*this.advert.price_coefficient/100;
+                unitMargin = Math.floor(unitMargin);
+
+                let price_margin = this.advert.originalPrice + unitMargin;
+                price_margin = (price_margin/(Math.pow(10,this.advert.priceSubUnit))).toFixed(this.advert.priceSubUnit);
+
+                return price_margin;
+            },
+            calcTotalPrice: function () {
+                let totalSellerPrice = Math.floor(this.advert.totalQuantity*(this.advert.originalPrice*(1-(this.advert.discount_on_total/100))));
+                let totalMargin = totalSellerPrice*this.advert.price_coefficient_total/100;
+                totalMargin = Math.floor(totalMargin);
+
+                let price_margin_total = totalSellerPrice + totalMargin;
+                price_margin_total = (price_margin_total/(Math.pow(10,this.advert.priceSubUnit))).toFixed(this.advert.priceSubUnit);
+
+                return price_margin_total;
+            },
+            calcGlobalDiscount: function () {
+//                let newCoef = (100+parseFloat(this.advert.price_coefficient_total))*(100-this.advert.discount_on_total);
+//                newCoef = newCoef/(100+parseFloat(this.advert.price_coefficient));
+//                return (100 - newCoef).toFixed(2);
+                return (100- (this.calcTotalPrice()*100/(this.calcUnitPrice()*this.advert.totalQuantity))).toFixed(2);
             }
         }
     }

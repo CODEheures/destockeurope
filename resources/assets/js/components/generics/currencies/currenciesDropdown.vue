@@ -4,11 +4,11 @@
             <div class="ui active inverted dimmer" v-if="!isLoaded">
                 <div class="ui large text loader">Loading</div>
             </div>
-            <span class="text" >{{ firstMenuName }}</span>
+            <span class="text" >{{ strings.firstMenuName }}</span>
             <div class="menu">
                 <div class="ui left icon input">
                     <i class="search icon"></i>
-                    <input type="text" :placeholder="inputSearchLabel">
+                    <input type="text" :placeholder="strings.inputSearchLabel">
                 </div>
                 <div class="divider"></div>
                 <div class="scrolling menu">
@@ -24,9 +24,6 @@
 <script>
     export default {
         props: {
-            routeListCurrencies: String,
-            firstMenuName: String,
-            inputSearchLabel: String,
             update: Boolean,
             oldCurrency: {
                 type: String,
@@ -35,11 +32,15 @@
         },
         data: () => {
             return {
+                strings: {},
+                properties: {},
                 currencies: [],
                 isLoaded: false,
             };
         },
         mounted () {
+            this.strings = this.$store.state.strings['currencies-dropdown'];
+            this.properties = this.$store.state.properties['global'];
             this.getListCurrencies();
             this.$watch('update', function() {this.getListCurrencies();});
         },
@@ -48,7 +49,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.routeListCurrencies)
+                axios.get(this.properties.routeListCurrencies)
                     .then(function (response) {
                         that.currencies = response.data;
                         that.isLoaded = true;
