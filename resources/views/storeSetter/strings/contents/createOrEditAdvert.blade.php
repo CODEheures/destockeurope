@@ -40,6 +40,7 @@
                                 'defaultBreadcrumb' => trans('strings.view_advert_form_default_breadcrumb'),
                                 'urgentLabel' => trans('strings.view_all_urgent'),
                                 'loadErrorMessage' => trans('strings.view_all_error_load_message'),
+                                'CompletePriceLabel' => trans('strings.view_advert_form_complete_package_price')
                         ]
                 ])}}"
 ></store-strings-setter>

@@ -9,6 +9,7 @@
                                 'priceLabel' => trans('strings.view_advert_form_price_label'),
                                 'refLabel' => trans('strings.view_advert_form_ref_label'),
                                 'discountOnTotalLabel' => trans('strings.view_advert_form_discount_total_label'),
+                                'CompletePriceLabel' => trans('strings.view_advert_form_complete_package_price')
                         ]
                 ])}}"
 ></store-strings-setter>

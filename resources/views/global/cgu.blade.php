@@ -1,5 +1,9 @@
 @extends('layouts.portal')
 
+@section('titlePagePlus')
+    {{ trans('strings.view_cgu_title') }}
+@endsection
+
 @section('content')
 
     <!-- main page -->
@@ -45,5 +49,4 @@
             </div>
         </div>
     </div>
-
 @endsection

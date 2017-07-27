@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('titlePagePlus')
+{{ isset($countryName) ? trans('strings.view_home_title_with_country', ['country' =>$countryName]) : trans('strings.view_home_title_without_country')  }}
+@endsection
+
 @section('content')
     @include('storeSetter.strings.contents.welcome1')
     <welcome1

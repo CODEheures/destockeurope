@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('titlePagePlus')
+{{ trans('strings.view_advert_create_title')  }}
+@endsection
+
 @section('content')
     @include('storeSetter.strings.contents.createOrEditAdvert')
     <create-or-edit-advert-form

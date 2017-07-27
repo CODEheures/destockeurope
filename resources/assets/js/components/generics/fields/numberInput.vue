@@ -1,7 +1,9 @@
 <template>
-        <input ref="input" v-bind:value="value" autocomplete="off"
-               v-on:input="updateValue($event.target.value)"
-               v-on:blur="formatValue">
+    <input ref="input" autocomplete="off" :id="_uid"
+           v-bind:value="dataValue"
+           v-on:input.stop="updateValue($event.target.value)"
+           @keydown.enter.prevent.stop
+           v-on:blur="formatValue(true)">
 </template>
 
 <script>
@@ -35,74 +37,96 @@
         data: () => {
             return {
                 strings: {},
+                dataValue: 0
             }
         },
         mounted () {
+            this.dataValue = this.value;
             this.formatValue();
-            this.$watch('decimal', function () {
-                this.formatValue();
-            });
-            this.$watch('min', function () {
-                this.formatValue();
-            });
-            this.$watch('max', function () {
-                console.log('max:'+this.max)
-                this.formatValue();
-            });
+            this.$watch('decimal', function () { this.updateAndFormat()  });
+            this.$watch('min', function () { this.updateAndFormat() });
+            this.$watch('max', function () { this.updateAndFormat() });
+            this.$watch('value', function () {this.updateAndFormat() })
         },
         methods: {
             updateValue: function (value) {
-                let result = this.parse(value, this.value);
+                let result = this.parse(value, this.dataValue, false);
                 if(result.isEmpty){
-                    this.$refs.input.value = null;
+                    this.dataValue = value;
+                } else if(result.isNotYetEvaluable){
+                    this.dataValue = value;
                 } else if (!result.isNumber) {
-                    this.$refs.input.value = result.number;
+                    this.$refs.input.value = result.fixedNumber;
+                    this.dataValue = result.fixedNumber;
                 } else if (result.isUnderMin) {
-                    this.$refs.input.value = this.min;
+                    this.$refs.input.value = this.fixed(this.min);
+                    this.dataValue = this.fixed(this.min);
                     this.$emit('input', this.min);
                 } else if (result.isOverMax) {
-                    this.$refs.input.value = this.max;
+                    this.$refs.input.value = this.fixed(this.max);
+                    this.dataValue = this.fixed(this.max);
                     this.$emit('input', this.max);
                 } else {
+                    this.dataValue = value;
                     this.$emit('input', result.number);
                 }
             },
-            formatValue: function () {
-                let result = this.parse(this.value, this.value);
+            formatValue: function (isOnBlur = false) {
+                let result = this.parse(this.dataValue, this.dataValue, true);
                 if (result.isUnderMin || result.isEmpty) {
+                    this.dataValue = this.fixed(this.min);
                     this.$emit('input', this.min);
                 } else if (result.isOverMax) {
+                    this.dataValue = this.fixed(this.max);
                     this.$emit('input', this.max);
                 } else if (!result.isNumber) {
-                    this.$refs.input.value = this.min ? this.min : 0;
+                    this.dataValue = this.min ? this.fixed(this.min) : this.fixed(0);
+                    this.dataValue = this.min ? this.fixed(this.min) : this.fixed(0);
+                    this.$emit('input', this.min ? this.min : 0);
                 } else {
-                    this.$refs.input.value = this.fixed(this.value)
+                    this.dataValue = this.fixed(this.value);
+                    this.$emit('input', Number(this.fixed(result.number)));
                 }
-                if(this.emitOnBlur!==null){
+                if(isOnBlur && this.emitOnBlur!==null){
                     this.$parent.$emit(this.emitOnBlur, null);
                 }
             },
             fixed: function (number) {
-                let cents = (number * Math.pow(10,this.decimal)).toFixed(0);
+                let cents = Number((number * Math.pow(10,this.decimal)).toFixed(0));
                 return (cents/ Math.pow(10,this.decimal)).toFixed(this.decimal);
             },
-            parse: function (number, oldNumber) {
-                let result= {isNumber: true, number: 0, isUnderMin: false, isOverMax: false, isEmpty: false};
+            parse: function (number, oldNumber, isForFormat = false) {
+                let result= {isNumber: true, number: 0, fixedNumber: this.fixed(0), isUnderMin: false, isOverMax: false, isEmpty: false, isNotYetEvaluable: false};
                 let newNumber =  Number(number);
-                if(number==''){
+                if(number==='' || number ==='.' || number ==='0.'){
                     result.isEmpty = true;
                 } else if(isNaN(newNumber)){
                     result.isNumber = false;
                     result.number = oldNumber;
+                    result.fixedNumber = this.fixed(oldNumber);
+                    if(isNaN(result.fixedNumber)){
+                        result.fixedNumber = oldNumber;
+                    }
                 } else {
-                    if(this.min!==null && number < this.min){
-                        result.isUnderMin = true;
-                    } else if(this.max!==null && number > this.max){
+                    if(this.min!==null && newNumber < this.min){
+                        if(this.min < 1 && !isForFormat && newNumber === 0 ) {
+                            result.isNotYetEvaluable = true;
+                        } else {
+                            result.isUnderMin = true;
+                        }
+                    } else if(this.max!==null && newNumber > this.max){
                         result.isOverMax = true;
                     }
                     result.number = newNumber;
+                    result.fixedNumber = this.fixed(number);
                 }
                 return result;
+            },
+            updateAndFormat () {
+                if(document.getElementById(this._uid) !== document.activeElement){
+                    this.dataValue = this.value;
+                    this.formatValue();
+                }
             }
         }
     }

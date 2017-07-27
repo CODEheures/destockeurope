@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('titlePagePlus')
+    {{ trans('strings.view_user_account_login_title')  }}
+@endsection
+
 @section('content')
     <h2 class="ui center aligned icon header"><i class="circular sign in icon"></i> {{ trans('strings.menu_login') }} </h2>
     <div class="ui centered grid">

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('titlePagePlus')
+    {{ trans('strings.view_user_account_register_title')  }}
+@endsection
+
 @section('headscripts')
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
     <script>

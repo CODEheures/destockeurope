@@ -1,5 +1,9 @@
 @extends('layouts.portal')
 
+@section('titlePagePlus')
+    {{ trans('strings.view_legalMentions_title') }}
+@endsection
+
 @section('content')
     <!-- main page -->
     <div class="ui grid">

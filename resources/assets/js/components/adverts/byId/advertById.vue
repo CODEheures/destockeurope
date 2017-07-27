@@ -65,17 +65,18 @@
                                         <td class="collapsing">
                                             <i class="money icon"></i> {{ strings.priceLabel }}
                                         </td>
-                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : margins.priceMargin + advert.currencySymbol }}</span><br/></td>
                                     </tr>
-                                    <tr v-if="advert.globalDiscount > 0">
+                                    <tr v-if="margins.globalDiscount > 0">
                                         <td class="collapsing">
-                                            <i class="gift icon"></i> {{ strings.discountOnTotalLabel }}
+                                            <i class="gift icon"></i> {{ strings.CompletePriceLabel }}
                                         </td>
                                         <td>
-                                            <div class="ui mini horizontal statistic">
-                                                <div class="value"><i class="minus icon"></i>{{ advert.globalDiscount }}%</div>
-                                                <div class="label">
-                                                    ({{ advert.totalPriceMargin }})
+                                            <div class="ui yellow inverted compact segment discount-on-total-advert">
+                                                <div class="without-discount"><div><div class="stroke"></div>{{ margins.totalPriceByLotMargin + advert.currencySymbol }}</div></div>
+                                                <div class="ui red header with-discount">
+                                                    <span class="whole-part">{{ margins.totalPriceMarginWholePart }}</span><span class="currency">{{ advert.currencySymbol }}</span><span class="decimal-part">.{{ margins.totalPriceMarginDecimalPart }}</span>
+                                                    <div class="discount-value">(-{{ margins.globalDiscount }}% )</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -108,17 +109,18 @@
                                         <td class="collapsing">
                                             <i class="money icon"></i> {{ strings.priceLabel }}
                                         </td>
-                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/></td>
+                                        <td><span class="ui small blue tag label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : margins.priceMargin +advert.currencySymbol }}</span><br/></td>
                                     </tr>
-                                    <tr v-if="!advert.isNegociated && advert.globalDiscount > 0">
+                                    <tr v-if="!advert.isNegociated && margins.globalDiscount > 0">
                                         <td class="collapsing">
-                                            <i class="gift icon"></i> {{ strings.discountOnTotalLabel }}
+                                            <i class="gift icon"></i> {{ strings.CompletePriceLabel }}
                                         </td>
                                         <td>
-                                            <div class="ui mini statistic">
-                                                <div class="value"><i class="minus icon"></i>{{ advert.globalDiscount }}%</div>
-                                                <div class="label">
-                                                    ({{ advert.totalPriceMargin }})
+                                            <div class="ui yellow inverted compact segment discount-on-total-advert">
+                                                <div class="without-discount"><div><div class="stroke"></div>{{ margins.totalPriceByLotMargin + advert.currencySymbol }}</div></div>
+                                                <div class="ui red header with-discount">
+                                                    <span class="whole-part">{{ margins.totalPriceMarginWholePart }}</span><span class="currency">{{ advert.currencySymbol }}</span><span class="decimal-part">.{{ margins.totalPriceMarginDecimalPart }}</span>
+                                                    <div class="discount-value">(-{{ margins.globalDiscount }}% )</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -170,6 +172,23 @@
                 dataLightBoxUrl: '',
                 dataHeight: '',
                 dataVideoId: '',
+                margins: {
+                    unitMargin: 0,
+                    totalMargin: 0,
+                    lotMiniMargin: 0,
+                    unitSellerPrice: 0,
+                    priceMargin: 0,
+                    totalSellerPrice: 0,
+                    totalSellerPriceWholePart: 0,
+                    totalSellerPriceDecimalPart: 0,
+                    totalPriceMargin: 0,
+                    totalPriceMarginWholePart: 0,
+                    totalPriceMarginDecimalPart: 0,
+                    totalPriceByLot: 0,
+                    totalPriceByLotMargin: 0,
+                    globalDiscount: 0,
+                    coefficientTotalIsOverMax: false
+                }
             };
         },
         mounted () {
@@ -183,19 +202,21 @@
 
             if(!this.isStatic){
                 this.$watch('advert.price_coefficient', function () {
-                    that.advert.price_margin = that.calcUnitPrice() + this.advert.currencySymbol;
+                    that.updateMargins();
                 });
                 this.$watch('advert.price_coefficient_total', function () {
-                    that.advert.totalPriceMargin = that.calcTotalPrice() + this.advert.currencySymbol;
+                    that.updateMargins();
                 });
                 this.$watch('advert.price_margin', function () {
-                    that.advert.globalDiscount = that.calcGlobalDiscount();
+                    that.updateMargins();
                 });
                 this.$watch('advert.totalPriceMargin', function () {
-                    that.advert.globalDiscount = that.calcGlobalDiscount();
+                    that.updateMargins();
                 });
-                that.advert.globalDiscount = that.calcGlobalDiscount();
             }
+        },
+        updated () {
+            this.updateMargins();
         },
         methods: {
             getMoment: function (dateTime) {
@@ -210,30 +231,9 @@
                     blurring: true
                 }).modal('show');
             },
-            calcUnitPrice: function () {
-                let unitMargin =  this.advert.originalPrice*this.advert.price_coefficient/100;
-                unitMargin = Math.floor(unitMargin);
-
-                let price_margin = this.advert.originalPrice + unitMargin;
-                price_margin = (price_margin/(Math.pow(10,this.advert.priceSubUnit))).toFixed(this.advert.priceSubUnit);
-
-                return price_margin;
-            },
-            calcTotalPrice: function () {
-                let totalSellerPrice = Math.floor(this.advert.totalQuantity*(this.advert.originalPrice*(1-(this.advert.discount_on_total/100))));
-                let totalMargin = totalSellerPrice*this.advert.price_coefficient_total/100;
-                totalMargin = Math.floor(totalMargin);
-
-                let price_margin_total = totalSellerPrice + totalMargin;
-                price_margin_total = (price_margin_total/(Math.pow(10,this.advert.priceSubUnit))).toFixed(this.advert.priceSubUnit);
-
-                return price_margin_total;
-            },
-            calcGlobalDiscount: function () {
-//                let newCoef = (100+parseFloat(this.advert.price_coefficient_total))*(100-this.advert.discount_on_total);
-//                newCoef = newCoef/(100+parseFloat(this.advert.price_coefficient));
-//                return (100 - newCoef).toFixed(2);
-                return (100- (this.calcTotalPrice()*100/(this.calcUnitPrice()*this.advert.totalQuantity))).toFixed(2);
+            updateMargins () {
+                let calcMargins = DestockTools.calcMargins(this.advert, false);
+                Object.assign(this.margins, calcMargins);
             }
         }
     }

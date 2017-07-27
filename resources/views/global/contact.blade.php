@@ -1,5 +1,9 @@
 @extends('layouts.portal')
 
+@section('titlePagePlus')
+    {{ trans('strings.view_contact_title') }}
+@endsection
+
 @section('headscripts')
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
     <script>
@@ -22,7 +26,7 @@
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui blue inverted newsletter segment">
-                            <div class="ui top right attached yellow label">{{trans('strings.view_contact_title')}}</div>
+                            <div class="ui top right attached yellow label">{{trans('strings.view_contact_header')}}</div>
                             <p>{{ trans('strings.view_contact_description') }}</p>
                             <form id="message-form" class="ui inverted form" accept-charset="UTF-8" action="{{ route('contactPost') }}"  method="post">
                                 {{ csrf_field() }}

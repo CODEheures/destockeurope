@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('titlePagePlus')
+{{ $advert->id % 2 == 0 ? trans('strings.view_advert_show_title_1', ['title'=> $advert->title]) :  trans('strings.view_advert_show_title_2', ['title'=> $advert->title]) }}
+@endsection
+
 @section('opengraph')
     <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
     <meta property="og:site_name" content="{{ config('app.name') }}">

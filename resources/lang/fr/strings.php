@@ -350,6 +350,7 @@ return [
     'view_manage_users_delete_success' => 'L\'utilisateur est bien supprimé.',
     'view_manage_invoices_list_role_button_label' => 'Rôle',
 
+    'view_portal_title' => 'Annonces de destockages, arrivages, fin de séries en Europe',
     'view_portal_list_header_1' => 'Fins de series',
     'view_portal_list_header_2' => 'Arrivages',
     'view_portal_list_header_3' => 'Destockages',
@@ -363,15 +364,18 @@ return [
     'view_portal_newsletter_unsubscribe_success' => 'Votre désincription est enregistrée',
     'view_portal_newsletter_subscribe_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
 
+    'view_home_title_with_country' => 'Annonces destockage, fin de série et arrivages en :country',
+    'view_home_title_without_country' => 'Annonces arrivages destockage et fin de stock en Europe',
     'view_home_fake_advert_title' => 'Votre annonce ICI en UNE pour :price',
     'view_home_header' => 'Annonces de destockage',
 
-    'view_contact_title' => 'Nous contacter',
+    'view_contact_header' => 'Nous contacter',
     'view_contact_description' => 'Contactez nous en remplissant le formulaire ci-dessous',
     'view_contact_button_label' => 'Envoyer',
     'view_contact_success' => 'Votre message est envoyé. Nous vous repondrons dans les plus brefs délais',
     'view_contact_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
 
+    'view_advert_create_title' => 'Créer une annonce de destockage/arrivage ou fin de série',
     'view_advert_create_header' => 'Créer une annonce',
     'view_advert_create_header_delegation' => 'Créer une annonce (délégation de vente à ' . env('DELEGATE_NAME') .')',
     'view_advert_preview_header_label' => 'Apparence de votre annonce',
@@ -379,6 +383,7 @@ return [
     'view_advert_form_title_label' => 'Titre de l\'annonce',
     'view_advert_form_ref_label' => 'Référence fabriquant',
     'view_advert_form_discount_total_label' => 'Remise lot complet',
+    'view_advert_form_complete_package_price' => 'Prix lot complet',
     'view_advert_form_description_label' => 'Description de l\'annonce',
     'view_advert_form_price_label' => 'Prix de vente à l\'unité',
     'view_advert_form_price_total_label' => 'Prix de vente lot complet',
@@ -405,6 +410,8 @@ return [
     'view_advert_steps_3_title_post' => '€ HT',
     'view_advert_steps_3_description' => 'voir les tarifs',
     'view_advert_steps_3_description_delegation' => '0€: inclus dans l\'offre "fournisseur de confiance"',
+    'view_advert_show_title_1' => 'Destockage de :title',
+    'view_advert_show_title_2' => 'Vente en gros de :title',
     'view_advert_show_contact_label' => 'Contacter le vendeur',
     'view_advert_show_bookmark_info' => 'Favoris',
     'view_advert_show_bookmark_label' => 'Mettre en favori',
@@ -453,6 +460,8 @@ return [
     'view_advert_priceCoefficient_unit_margin' => 'Marge/unité',
     'view_advert_priceCoefficient_lot_margin' => 'Marge/lot mini',
     'view_advert_priceCoefficient_total_margin' => 'Marge totale',
+    'view_advert_priceCoefficient_null_total_margin' => 'Votre marge est nulle',
+    'view_advert_priceCoefficient_null_or_negative_total_margin' => 'Votre marge est nulle ou négative!',
     'view_advert_approve_modal_valid_header' => 'Valider toutes les actions',
     'view_advert_approve_modal_valid_description' => 'ATTENTION!! La validation de toutes les actions entraîne l\'envoi des mails d\'approbation ou de desapprobation aux clients.',
     'view_advert_approve_error' => 'Une erreur est survenue pendant l\'approbation d\'une annonce',
@@ -467,6 +476,9 @@ return [
     'view_pagination_prev_label' => 'précédente',
     'view_pagination_next_label' => 'suivante',
 
+    'view_user_account_title' => 'Votre compte destockeur ou soldeur pour vente en gros',
+    'view_user_account_register_title' => 'S\'inscrire et vendre vos fins de stocks',
+    'view_user_account_login_title' => 'S\'identifier pour vendre ou acheter en gros',
     'view_user_account_preferences_label' => 'Préférences',
     'view_user_account_patch_success' => 'Mise à jour OK',
     'view_user_account_currency_dropdown_label' => 'Monnaie',
@@ -517,6 +529,19 @@ return [
     'view_price_table_row_highlight_2' => 'Formule de calcul selon le nombre d\'annonces concurrentes déjà à la une et notées "NbU":',
     'view_price_table_row_highlight_3' => '/√nbU',
     'view_price_table_row_renew' => 'Renouvellement d\'une annonce',
+
+    'view_ads_title' => 'Faire votre publicité sur notre site d\'annonces de destockage',
+    'view_who_title' => 'Qui sommes nous?',
+    'view_joinUs_title' => 'Rejoindre l\'équipe du site web de destockage en ligne',
+    'view_help_title' => 'Aide pour créer des annonces de fin de série ou destockage',
+    'view_cgu_title' => 'Condition Générales d\'Utilisation - Annonces pour soldeurs',
+    'view_cgv_title' => 'Condition Générales de Vente - Fin de série et destockages',
+    'view_contact_title' => 'Contacter nous - Annonce de Vente en gros pour soldeurs',
+    'view_diffusionRules_title' => 'Règle de diffusion des annonces d\'arrrivages et de destockage',
+    'view_environmentalImpact_title' => 'Impact environnemental',
+    'view_legalMentions_title' => 'Mentions légales - Destockages, fin de séries, arrivages',
+    'view_prices_title' => 'Prix des annonces de destockage, arrivages et fin de stock',
+
 
     'view_help_how_create' => 'Comment créer une annonce? Explication en vidéo ici:',
 

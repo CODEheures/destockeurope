@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('titlePagePlus')
+{{ trans('strings.view_user_account_title')  }}
+@endsection
+
 @section('content')
    @include('storeSetter.strings.contents.user-account')
     <user-account

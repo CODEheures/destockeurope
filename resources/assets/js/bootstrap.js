@@ -6,6 +6,7 @@ window.ionRangeSlider = require('ion-rangeslider');
 window.Parser = require('url');
 window.axios = require('axios');
 window.DestockMap = require('./destockMap');
+window.DestockTools = require('./destockTools');
 window.Vue = require('vue');
 window.Vuex = require('vuex');
 require('vue-focus');

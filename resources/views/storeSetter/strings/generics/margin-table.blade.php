@@ -8,7 +8,9 @@
                                 'unitMarginLabel' => trans('strings.view_advert_priceCoefficient_unit_margin'),
                                 'lotMarginLabel' => trans('strings.view_advert_priceCoefficient_lot_margin'),
                                 'totalMarginLabel' => trans('strings.view_advert_priceCoefficient_total_margin'),
-                                'overPriceLabel' => trans('strings.view_advert_priceCoefficient_overPrice_price')
+                                'overPriceLabel' => trans('strings.view_advert_priceCoefficient_overPrice_price'),
+                                'nullMarginLabel' => trans('strings.view_advert_priceCoefficient_null_total_margin'),
+                                'nullOrNegativeMarginLabel' => trans('strings.view_advert_priceCoefficient_null_or_negative_total_margin')
                         ]
                 ])}}"
 ></store-strings-setter>

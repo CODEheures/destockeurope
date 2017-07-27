@@ -116,10 +116,54 @@ div.ui.vertical.segment.separator {
     padding-top: 0;
     & div.description p {
       white-space: pre-wrap;
+      font-size: 1.3rem;
       &.resume {
         max-height: 3em;
         overflow: hidden;
       }
+    }
+  }
+  & .discount-on-total-advert {
+    padding-bottom: 0;
+    padding-top: 0;
+    & .without-discount {
+      color: black;
+      & > div {
+        display: inline-block;
+        position: relative;
+        & .stroke {
+          height: 0.1rem;
+          width: 100%;
+          background-color: black;
+          position: absolute;
+          top: 0.6rem;
+          transform: rotate3d(0,0,1,-6deg);
+          transform-origin: center;
+        }
+      }
+    }
+    & .with-discount {
+      margin-top: 0;
+      margin-bottom: 0;
+      position: relative;
+      & .whole-part {
+        font-size: 2.3rem;
+      }
+      & .decimal-part {
+        font-size: 0.8rem;
+        font-weight: 100;
+      }
+      & .currency {
+        position: absolute;
+        top: 0;
+        line-height: 1rem;
+      }
+    }
+    & .discount-value {
+      color: black;
+      font-size: 0.8rem;
+      text-align: right;
+      display: inline-block;
     }
   }
   & .pagination {

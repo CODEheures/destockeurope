@@ -1,5 +1,9 @@
 @extends('layouts.portal')
 
+@section('titlePagePlus')
+{{ trans('strings.view_joinUs_title') }}
+@endsection
+
 @section('content')
 
     <!-- main page -->

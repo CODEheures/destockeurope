@@ -1,5 +1,9 @@
 @extends('layouts.portal')
 
+@section('titlePagePlus')
+    {{ trans('strings.view_portal_title') }}
+@endsection
+
 @section('content')
     <!-- main page -->
     @include('storeSetter.strings.contents.portal')

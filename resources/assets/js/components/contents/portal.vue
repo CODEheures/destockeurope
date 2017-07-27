@@ -1224,7 +1224,7 @@
                     }
                 }
                 sessionStorage.setItem('filter', JSON.stringify(this.filter));
-                window.location.assign(this.properties.routeHome);
+                window.location.assign(countryChoice !== '' ? this.properties.routeHome+'?location='+countryChoice : this.properties.routeHome);
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;

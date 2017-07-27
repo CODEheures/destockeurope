@@ -17,7 +17,7 @@
             </div>
 
             <div class="sixteen wide column">
-                <form :id="'create_advert_form_'+_uid" class="ui form" :action="routeAdvertFormPost" method="post">
+                <form :id="'create_advert_form_'+_uid" class="ui form" :action="routeAdvertFormPost" method="post" @keyup.enter.prevent.stop>
                     <input type="hidden" name="_token" :value="xCsrfToken"/>
                     <input v-if="isEditAdvert" type="hidden" name="_method" value="PATCH">
                     <input type="hidden" name="category" :value="categoryId"/>
@@ -147,15 +147,16 @@
                                                                 <div v-if="isNegociated" class="ui small blue tag label">{{ strings.exampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
-                                                        <tr v-if="!isNegociated && discountOnTotal > 0">
+                                                        <tr v-if="!isNegociated && margins.globalDiscount > 0">
                                                             <td class="collapsing">
-                                                                <i class="gift icon"></i> {{ strings.formDiscountLabel }}
+                                                                <i class="gift icon"></i> {{ strings.CompletePriceLabel }}
                                                             </td>
                                                             <td>
-                                                                <div class="ui mini horizontal statistic">
-                                                                    <div class="value"><i class="minus icon"></i>{{ discountOnTotal }}%</div>
-                                                                    <div class="label">
-                                                                        ({{ calcTotalPrice() }}{{ currencySymbol }})
+                                                                <div class="ui yellow inverted compact segment discount-on-total-advert">
+                                                                    <div class="without-discount"><div><div class="stroke"></div>{{ margins.totalPriceByLot + currencySymbol }}</div></div>
+                                                                    <div class="ui red header with-discount">
+                                                                        <span class="whole-part">{{ margins.totalSellerPriceWholePart }}</span><span class="currency">{{ currencySymbol }}</span><span class="decimal-part">.{{ margins.totalSellerPriceDecimalPart }}</span>
+                                                                        <div class="discount-value">(-{{ margins.globalDiscount }}% )</div>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -328,7 +329,7 @@
                                             </div>
                                             <div class="field">
                                                 <label>{{ strings.formLotMiniQuantityLabel }}</label>
-                                                <number-input name="lot_mini_quantity" :min="1" :max="maxLotMini" :decimal="0" v-model="lotMiniQuantity"></number-input>
+                                                <number-input name="lot_mini_quantity1" :min="1" :max="maxLotMini" :decimal="0" v-model="lotMiniQuantity"></number-input>
                                             </div>
                                             <div class="field">
                                                 <label>{{ strings.formPriceLabel }}</label>
@@ -599,6 +600,23 @@
                     discount_on_total: 0,
                     currencySymbol: ''
                 },
+                margins: {
+                    unitMargin: 0,
+                    totalMargin: 0,
+                    lotMiniMargin: 0,
+                    unitSellerPrice: 0,
+                    priceMargin: 0,
+                    totalSellerPrice: 0,
+                    totalSellerPriceWholePart: 0,
+                    totalSellerPriceDecimalPart: 0,
+                    totalPriceMargin: 0,
+                    totalPriceMarginWholePart: 0,
+                    totalPriceMarginDecimalPart: 0,
+                    totalPriceByLot: 0,
+                    totalPriceByLotMargin: 0,
+                    globalDiscount: 0,
+                    coefficientTotalIsOverMax: false
+                },
                 totalQuantity: 1,
                 maxLotMini: 1,
                 lotMiniQuantity: 1,
@@ -734,26 +752,26 @@
                 }
             });
             this.$watch('subunit', function () {
-               this.calcSubUnit = Math.pow(10,-(this.subunit));
-               this.fakeAdvert.priceSubUnit = parseInt(this.subunit);
+                this.calcSubUnit = Math.pow(10,-(this.subunit));
+                this.setFakeAdvert();
             });
             this.$watch('currencySymbol', function () {
-                this.fakeAdvert.currencySymbol = this.currencySymbol;
+                this.setFakeAdvert();
             });
             this.$watch('price', function () {
-                this.fakeAdvert.originalPrice = (parseFloat(this.price)/this.calcSubUnit).toFixed(0);
+                this.setFakeAdvert();
             });
             this.$watch('discountOnTotal', function () {
-                this.fakeAdvert.discount_on_total = this.discountOnTotal;
+                this.setFakeAdvert();
             });
             this.$watch('buyingPrice', function () {
-                this.fakeAdvert.buyingPrice = (parseFloat(this.buyingPrice)/this.calcSubUnit).toFixed(0);
+                this.setFakeAdvert();
             });
             this.$watch('totalQuantity', function () {
-                this.fakeAdvert.totalQuantity = parseInt(this.totalQuantity);
+                this.setFakeAdvert();
             });
             this.$watch('lotMiniQuantity', function () {
-                this.fakeAdvert.lotMiniQuantity = parseInt(this.lotMiniQuantity);
+                this.setFakeAdvert();
             });
 
             if(this.editAdvert !== ''){
@@ -766,6 +784,7 @@
                     this.description = this.dataAdvertEdit.description;
                     this.price = this.dataAdvertEdit.originalPrice/(Math.pow(10,this.dataAdvertEdit.priceSubUnit));
                     this.totalQuantity = this.dataAdvertEdit.totalQuantity;
+                    this.maxLotMini = this.totalQuantity;
                     this.lotMiniQuantity = this.dataAdvertEdit.lotMiniQuantity;
                     this.discountOnTotal = (this.dataAdvertEdit.discount_on_total).toFixed(2);
                     this.type = this.dataAdvertEdit.type;
@@ -808,6 +827,7 @@
                 onChecked: function() {that.isNegociated = true;},
                 onUnchecked: function() {that.isNegociated = false;}
             });
+
         },
         methods: {
             typeChoice: function (type) {
@@ -929,6 +949,22 @@
                 let newPrice = price - (parseFloat(this.discountOnTotal)*price/100).toFixed(0);
                 return parseFloat(newPrice/(Math.pow(10,this.subunit))).toFixed(this.subunit);
             },
+            setFakeAdvert () {
+                Object.assign(this.fakeAdvert, {
+                    originalPrice: Number((this.price*Math.pow(10,this.subunit)).toFixed(0)),
+                    buyingPrice: Number((this.buyingPrice*Math.pow(10,this.subunit)).toFixed(0)),
+                    priceSubUnit: this.subunit,
+                    totalQuantity: this.totalQuantity,
+                    lotMiniQuantity: this.lotMiniQuantity,
+                    discount_on_total: this.discountOnTotal,
+                    currencySymbol: this.currencySymbol
+                });
+                this.updateMargins();
+            },
+            updateMargins () {
+                let calcMargins = DestockTools.calcMargins(this.fakeAdvert, true);
+                Object.assign(this.margins, calcMargins);
+            },
             submitForm (event) {
                 event.preventDefault();
                 this.setStorage();
@@ -961,6 +997,7 @@
                 sessionStorage.getItem('price') != undefined ? this.price = Number(sessionStorage.getItem('price')) : null;
                 sessionStorage.getItem('discountOnTotal') != undefined ? this.discountOnTotal = Number(sessionStorage.getItem('discountOnTotal')) : null;
                 sessionStorage.getItem('totalQuantity') != undefined ? this.totalQuantity = Number(sessionStorage.getItem('totalQuantity')) : null;
+                this.maxLotMini = this.totalQuantity;
                 sessionStorage.getItem('lotMiniQuantity') != undefined ? this.lotMiniQuantity = Number(sessionStorage.getItem('lotMiniQuantity')) : null;
                 sessionStorage.getItem('type') != undefined ? this.type = sessionStorage.getItem('type') : null;
                 sessionStorage.getItem('type') != undefined ? this.oldType = sessionStorage.getItem('type') : null;
