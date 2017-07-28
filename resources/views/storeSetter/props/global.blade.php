@@ -7,9 +7,11 @@
                                 'imageRatio' => floatval(env('IMAGE_RATIO')),
                                 'routeHome' => route('home'),
                                 'routeCategory' => route('category.index'),
+                                'routeCategoryWithCount' => route('category.index', ['count'=> 'true']),
                                 'routeListCurrencies' => route('utils.getListCurrencies'),
                                 'routeListLocales' => route('utils.getListLocales'),
-                                'filterMinLengthSearch' => config('runtime.minLengthSearch')
+                                'filterMinLengthSearch' => config('runtime.minLengthSearch'),
+                                'routeFacebookSharer' => $routeName == 'advert.show' ?  route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()])  : '',
                         ]
                 ])}}"
 ></store-properties-setter>

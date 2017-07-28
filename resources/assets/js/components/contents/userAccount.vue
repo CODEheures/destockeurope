@@ -59,13 +59,15 @@
                         <div class="two fields">
                             <div class="field">
                                 <h5>{{ strings.localesFirstMenuName }}</h5>
-                                <locales-dropdown></locales-dropdown>
+                                <locales-dropdown-2
+                                        :old-locale="''"
+                                ></locales-dropdown-2>
                             </div>
                             <div class="field">
                                 <h5>{{ strings.currenciesFirstMenuName }}</h5>
-                                <currencies-dropdown
-                                        :update="currenciesDropDownUpdate"
-                                ></currencies-dropdown>
+                                <currencies-dropdown-2
+                                        :old-currency="''">
+                                </currencies-dropdown-2>
                             </div>
                         </div>
                     </div>

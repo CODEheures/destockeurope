@@ -4,11 +4,11 @@
             <div class="ui large text loader">Loading</div>
         </div>
         <div class="ui mini labeled right action input">
-            <div class="ui blue label">
+            <div class="ui blue label" v-on:click="setOldChoice">
                 {{ strings.firstMenuName }}
             </div>
             <div :id="_uid" class="ui mini floating dropdown" :class="isButton ? 'button' : ''">
-                <div class="text">{{ strings.firstMenuName }}</div>
+                <div class="default text">{{ strings.firstMenuName }}</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
                     <div class="item" data-value="0" :data-text="strings.allItem" v-if="withAll">
@@ -63,7 +63,9 @@
                 strings: {},
                 properties: {},
                 categories: [],
+                countCategories: 0,
                 isLoaded: false,
+                isReady: false,
             } ;
         },
         mounted () {
@@ -73,39 +75,53 @@
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });
+            let that = this;
+
+            $('#'+this._uid).dropdown({
+                    allowCategorySelection: that.allowCategorySelection,
+                    onChange: function(value, text, $selectedItem) {
+                        if(value != undefined && value != ''){
+                            that.$parent.$emit('categoryChoice', {id: value});
+                        }
+                    }
+                })
+            ;
+
+            this.setReady();
+            this.$watch('isReady', function () { that.setOldChoice() });
+            this.$watch('oldChoice', function () { that.setOldChoice() });
         },
         methods: {
             getCategories: function (withLoadIndicator) {
                 let that = this;
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                axios.get(this.properties.routeCategory)
+                axios.get(this.properties.routeCategoryWithCount)
                     .then(function (response) {
-                        that.categories = response.data;
+                        that.categories = response.data.tree;
+                        that.countCategories = response.data.count;
                         that.isLoaded = true;
                     })
                     .catch(function (error) {
                         that.$parent.$emit('loadError');
                     });
-            }
-        },
-        updated () {
-            let that = this;
-            let dropdown = $('#'+this._uid);
-            dropdown.dropdown('set selected',  that.oldChoice.toString())
-                 .dropdown({
-                        allowCategorySelection: that.allowCategorySelection,
-                        onChange: function(value, text, $selectedItem) {
-                            if(value != undefined && value != '' && value != that.oldChoice){
-                                that.$parent.$emit('categoryChoice', {id: value});
-                            }
+            },
+            setReady () {
+                let that = this;
+                this.$watch('isLoaded', function () {
+                    let testLoadedInterval = setInterval(function () {
+                        if($('#'+that._uid).find('.item').length === that.countCategories) {
+                            that.isReady = true;
+                            clearInterval(testLoadedInterval);
                         }
-                    })
-            ;
-
-            this.$watch('oldChoice', function (categorieId) {
-                dropdown.dropdown('set selected',  categorieId.toString())
-            })
+                    }, 200);
+                });
+            },
+            setOldChoice () {
+                if(!isNaN(Number(this.oldChoice)) && Number(this.oldChoice)>0) {
+                    $('#'+this._uid).dropdown('set selected', this.oldChoice)
+                }
+            }
         }
     }
 </script>

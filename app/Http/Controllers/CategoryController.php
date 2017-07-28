@@ -32,6 +32,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = Category::defaultOrder()->get();
+        $request->count ? $count = $categories->count() : null;
         if($request->has('withInfos') && $request->get('withInfos')=='true' && PrivilegesUtils::canAdmin()){
             foreach ($categories as $category){
                 $category->setCanBeDeleted($this->availableToDelete($category->id));
@@ -39,7 +40,7 @@ class CategoryController extends Controller
             }
         }
         $tree = $categories->toTree();
-        return response()->json($tree);
+        return $request->count ? response()->json(['tree' => $tree, 'count' => $count]) : response()->json($tree);
     }
 
     /**

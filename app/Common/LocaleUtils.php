@@ -20,12 +20,22 @@ trait LocaleUtils
      * @return array
      */
     public static function listUserLocales() {
+        $tab = self::listLocales();
+        $tabIsSort = uasort($tab, array('self', 'compareNameLocale'));
+
         $response = [
-            'listLocales' => self::listLocales(),
+            'listLocales' => $tabIsSort ? $tab :  self::listLocales(),
             'userPrefLocale' => config('runtime.locale')
         ];
 
         return $response;
+    }
+
+    private static function compareNameLocale($loc1, $loc2) {
+        if ($loc1['name'] == $loc2['name']) {
+            return 0;
+        }
+        return ($loc1['name'] < $loc2['name']) ? -1 : 1;
     }
 
     /**

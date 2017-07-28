@@ -24,7 +24,7 @@
                 </div>
                 <div class="mobile only tablet only sixteen wide right aligned column"  v-if="userName == '' || isUserOwner">
                     <div class="fb-share-button"
-                         :data-href="advert.url"
+                         :data-href="properties.routeFacebookSharer"
                          data-layout="button"
                          data-size="large"
                     ></div>

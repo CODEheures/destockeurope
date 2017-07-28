@@ -35,8 +35,10 @@ trait MoneyUtils
     }
 
     public static function listUserCurrencies()  {
+        $tab  = self::listCurrencies(config('runtime.locale'));
+        $tabIsSort = ksort($tab);
         $response = [
-            'listCurrencies' => self::listCurrencies(config('runtime.locale')),
+            'listCurrencies' => $tabIsSort ? $tab : self::listCurrencies(config('runtime.locale')),
             'userPrefCurrency' => config('runtime.currency')
         ];
         return $response;

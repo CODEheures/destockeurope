@@ -17,8 +17,8 @@
                     <!--</div>-->
                     <!--<div class="divider"></div>-->
                     <div class="scrolling menu">
-                        <div v-for="(currency, key) in currencies.listCurrencies" class="item" :data-value="key">
-                            <span class="text">{{ currency.code }} {{ currency.symbol }}</span>
+                        <div v-for="(locale, key) in locales.listLocales" class="item" :data-value="key" :data-text="locale.name">
+                            {{ locale.name }}
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
 <script>
     export default {
         props: {
-            oldCurrency: {
+            oldLocale: {
                 type: String,
             }
         },
@@ -39,16 +39,16 @@
             return {
                 strings: {},
                 properties: {},
-                currencies: [],
-                countCurrencies: 0,
+                locales: [],
+                countLocales: 0,
                 isLoaded: false,
                 isReady: false,
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['currencies-dropdown-2'];
+            this.strings = this.$store.state.strings['locales-dropdown-2'];
             this.properties = this.$store.state.properties['global'];
-            this.getListCurrencies();
+            this.getListLocales();
 
             let that = this;
             $('#'+this._uid)
@@ -57,26 +57,24 @@
                     forceSelection: false,
                     onChange: function (value, text, $selectedItem) {
                         if(value != undefined && value != ''){
-                            let subUnit = that.currencies.listCurrencies[value]['subunit'];
-                            let symbol = that.currencies.listCurrencies[value]['symbol'];
-                            that.$parent.$emit('currencyChoice', {cur: value, subunit: subUnit, symbol: symbol});
+                            that.$parent.$emit('localeChoice', {locale: value});
                         }
                     }
                 });
 
             this.setReady();
             this.$watch('isReady', function () { that.setOldChoice() });
-            this.$watch('oldCurrency', function () { that.setOldChoice() });
+            this.$watch('oldLocale', function () { that.setOldChoice() });
         },
         methods: {
-            getListCurrencies: function (withLoadIndicator) {
+            getListLocales: function (withLoadIndicator) {
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.properties.routeListCurrencies)
+                axios.get(this.properties.routeListLocales)
                     .then(function (response) {
-                        that.currencies = response.data;
-                        that.countCurrencies = Object.keys(response.data.listCurrencies).length;
+                        that.locales = response.data;
+                        that.countLocales = Object.keys(response.data.listLocales).length;
                         that.isLoaded = true;
                     })
                     .catch(function (error) {
@@ -87,7 +85,7 @@
                 let that = this;
                 this.$watch('isLoaded', function () {
                     let testLoadedInterval = setInterval(function () {
-                        if($('#'+that._uid).find('.item').length === that.countCurrencies) {
+                        if($('#'+that._uid).find('.item').length === that.countLocales) {
                             that.isReady = true;
                             clearInterval(testLoadedInterval);
                         }
@@ -95,10 +93,10 @@
                 });
             },
             setOldChoice () {
-                if(this.oldCurrency !== '' && this.oldCurrency in this.currencies.listCurrencies){
-                    $('#'+this._uid).dropdown('set selected', this.oldCurrency)
+                if(this.oldLocale !== '' && this.oldLocale in this.locales.listLocales){
+                    $('#'+this._uid).dropdown('set selected', this.oldLocale)
                 } else {
-                    $('#'+this._uid).dropdown('set selected', this.currencies.userPrefCurrency)
+                    $('#'+this._uid).dropdown('set selected', this.locales.userPrefLocale)
                 }
             }
         }

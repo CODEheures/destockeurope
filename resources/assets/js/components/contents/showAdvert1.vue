@@ -176,7 +176,7 @@
                                 ></advert-manage-button>
                             </div>
                             <div class="fb-share-button"
-                                 :data-href="advert.url"
+                                 :data-href="properties.routeFacebookSharer"
                                  data-layout="button"
                                  data-size="large"
                             ></div>
@@ -231,6 +231,7 @@
             'routeBookmarkRemove',
             'routeDeleteAdvert',
             'routeReportAdvert',
+            'routeFacebookSharer',
             //vue vars
             'advert',
             'userMail',

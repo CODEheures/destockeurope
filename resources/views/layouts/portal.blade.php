@@ -35,7 +35,7 @@
     @yield('headscripts')
 </head>
 <body class="portal yellowbg">
-
+    <?php $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName() ?>
     <div id="app">
         <div class="ui vertical segment header" id="headApp">
             <div class="rubalise"></div>

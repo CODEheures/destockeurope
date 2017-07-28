@@ -837,11 +837,9 @@
                 this.categoryId = parseInt(id);
             },
             currencyChoice: function (currency, subunit, symbol, initial) {
-                if(this.oldCurrency == '' || initial==false){
-                    this.currency = currency;
-                    this.currencySymbol = symbol;
-                    this.subunit = subunit;
-                }
+                this.currency = currency;
+                this.currencySymbol = symbol;
+                this.subunit = subunit;
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;
