@@ -26,7 +26,6 @@ Vue.component('search-filter', require('./components/generics/filters/searchFilt
 Vue.component('type-radio-button', require('./components/generics/filters/typeRadioButton.vue'));
 Vue.component('currencies-dropdown-2', require('./components/generics/currencies/currenciesDropdown2.vue'));
 Vue.component('currencies-button', require('./components/generics/currencies/currenciesButton.vue'));
-Vue.component('locales-dropdown', require('./components/generics/locales/localesDropdown.vue'));
 Vue.component('locales-dropdown-2', require('./components/generics/locales/localesDropdown2.vue'));
 Vue.component('langs-dropdown', require('./components/generics/locales/langsDropdown.vue'));
 Vue.component('toast', require('./components/generics/messages/toast.vue'));
