@@ -382,6 +382,7 @@ return [
     'view_advert_params_header_label' => 'Parametres de votre annonce',
     'view_advert_form_title_label' => 'Titre de l\'annonce',
     'view_advert_form_ref_label' => 'Référence fabriquant',
+    'view_advert_form_provider_label' => 'Fournisseur',
     'view_advert_form_discount_total_label' => 'Remise lot complet',
     'view_advert_form_complete_package_price' => 'Prix lot complet',
     'view_advert_form_description_label' => 'Description de l\'annonce',

@@ -292,6 +292,9 @@ class AdvertController extends Controller
         }
 
         $loadCompleteAdverts = $this->loadCompleteAdverts($adverts);
+        $adverts->load(['user' => function ($query) {
+            $query->select(['id','email','phone', 'compagnyName']);
+        }]);
 
         if($isSearchRequest){
             $action = [

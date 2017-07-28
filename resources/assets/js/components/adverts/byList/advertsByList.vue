@@ -1,5 +1,5 @@
 <template>
-    <div class="ui segment">
+    <div :class="canGetDelegations && isPersonnalList && advertsList.length>0 && advertsList[0].is_delegation ? '':'ui segment'">
         <div class="ui celled list">
             <div class="ui grid" v-if="routeBookmarkAdd != ''">
                 <div class="sixteen wide right aligned column">

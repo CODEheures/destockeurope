@@ -107,6 +107,13 @@ div.ui.vertical.segment.separator {
       padding-top: 2rem;
       padding-bottom: 2rem;
     }
+
+    & div.segment.delegation {
+      margin-bottom: 2rem;
+      & div.column.refs > .ui.segment {
+        background-color: rgba(68,28,1,0.21);
+      }
+    }
   }
   & div.item.ads {
     padding-top: 2rem !important;

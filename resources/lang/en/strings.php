@@ -382,6 +382,7 @@ return [
     'view_advert_params_header_label' => 'Advert Parameters',
     'view_advert_form_title_label' => 'Advert Title',
     'view_advert_form_ref_label' => 'Manufacture reference',
+    'view_advert_form_provider_label' => 'Provider',
     'view_advert_form_discount_total_label' => 'Discount for complete package',
     'view_advert_form_complete_package_price' => 'Complete package price',
     'view_advert_form_description_label' => 'Advert description',

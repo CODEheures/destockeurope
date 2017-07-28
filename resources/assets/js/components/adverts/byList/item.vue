@@ -128,8 +128,20 @@
             </a>
         </template>
         <template  v-if="isPersonnalList && canGetDelegations && advert.is_delegation">
-            <div>
+            <div class="ui blue padded segment delegation">
                 <div class="ui grid">
+                    <div class="sixteen wide column refs">
+                        <div class="ui segment">
+                            <div class="ui grid">
+                                <div class="sixteen wide mobile six wide tablet six wide computer column">
+                                    <p>{{ strings.refLabel }}: {{ advert.manu_ref }}</p>
+                                </div>
+                                <div class="sixteen wide mobile ten wide tablet ten wide computer right aligned column">
+                                    <p>{{ strings.providerLabel }}: {{ advert.user.compagnyName}} ({{ advert.user.email}} - {{ advert.user.phone}})</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="six wide aligned mobile four wide tablet four wide computer column">
                         <div class="ui image">
                             <template v-if="advert.video_id">
