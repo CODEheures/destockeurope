@@ -35,5 +35,4 @@
 ></store-strings-setter>
 @include('storeSetter.strings.generics.currencies-dropdown-2')
 @include('storeSetter.strings.generics.locales-dropdown-2')
-@include('storeSetter.strings.generics.locales-dropdown')
 @include('storeSetter.strings.generics.googleMap')
