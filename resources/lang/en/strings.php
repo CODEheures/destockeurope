@@ -543,6 +543,12 @@ return [
     'view_legalMentions_title' => 'Legal Notice - Destocking, end of series, arrivals',
     'view_prices_title' => 'Price of the ads of destockage, arrivals and end of stock',
 
+    'view_503_title'=> 'Evolution in progess...',
+    'view_503_message'=> 'Nice business to do very soon!',
+
+    'view_404_title'=> 'This page doesn\'t exist',
+    'view_404_message'=> 'Look for it. Good business to do!',
+
     'view_help_how_create' => 'How to create an advert? Helping on video here:',
 
     'payment_card_type_label' => 'Card type',

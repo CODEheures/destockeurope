@@ -543,6 +543,12 @@ return [
     'view_legalMentions_title' => 'Mentions légales - Destockages, fin de séries, arrivages',
     'view_prices_title' => 'Prix des annonces de destockage, arrivages et fin de stock',
 
+    'view_503_title'=> 'En évolution',
+    'view_503_message'=> 'De belles affaires à faire très prochainement!',
+
+    'view_404_title'=> 'Cette page n\'existe pas',
+    'view_404_message'=> 'Cherchez bien, de belles affaires sont à faire!',
+
 
     'view_help_how_create' => 'Comment créer une annonce? Explication en vidéo ici:',
 

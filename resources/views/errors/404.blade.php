@@ -1,7 +1,8 @@
 @extends('layouts.errors')
 
+
 @section('icon')
-    heartbeat
+    help
 @endsection
 
 @section('titles')
@@ -9,11 +10,11 @@
         @php app()->setLocale($lang) @endphp
         @if($loop->first)
             <div class="side active">
-                {{ trans('strings.view_503_title') }}
+                {{ trans('strings.view_404_title') }}
             </div>
         @else
             <div class="side">
-                {{ trans('strings.view_503_title') }}
+                {{ trans('strings.view_404_title') }}
             </div>
         @endif
     @endforeach
@@ -24,11 +25,11 @@
         @php app()->setLocale($lang) @endphp
         @if($loop->first)
             <p class="side active">
-                {{ trans('strings.view_503_message') }}
+                {{ trans('strings.view_404_message') }}
             </p>
         @else
             <p class="side">
-                {{ trans('strings.view_503_message') }}
+                {{ trans('strings.view_404_message') }}
             </p>
         @endif
     @endforeach
