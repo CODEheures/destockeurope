@@ -67,18 +67,15 @@
                                         </td>
                                         <td><span class="ui small blue tag label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : margins.priceMargin + advert.currencySymbol }}</span><br/></td>
                                     </tr>
-                                    <tr v-if="margins.globalDiscount > 0">
+                                    <tr v-if="!margins.coefficientTotalIsOverMax">
                                         <td class="collapsing">
                                             <i class="gift icon"></i> {{ strings.CompletePriceLabel }}
                                         </td>
                                         <td>
-                                            <div class="ui yellow inverted compact segment discount-on-total-advert">
-                                                <div class="without-discount"><div><div class="stroke"></div>{{ margins.totalPriceByLotMargin + advert.currencySymbol }}</div></div>
-                                                <div class="ui red header with-discount">
-                                                    <span class="whole-part">{{ margins.totalPriceMarginWholePart }}</span><span class="currency">{{ advert.currencySymbol }}</span><span class="decimal-part">.{{ margins.totalPriceMarginDecimalPart }}</span>
-                                                    <div class="discount-value">(-{{ margins.globalDiscount }}% )</div>
-                                                </div>
-                                            </div>
+                                            <discount-tag
+                                                :advert="advert"
+                                                :margins="margins"
+                                            ></discount-tag>
                                         </td>
                                     </tr>
                                     </tbody>

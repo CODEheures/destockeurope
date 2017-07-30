@@ -61,15 +61,7 @@
                             {{ strings.totalProviderPrice }}
                         </td>
                         <td>
-                            {{ margins.totalSellerPrice + advert.currencySymbol }}
-                        </td>
-                    </tr>
-                    <tr :id="'tr_total_price_'+_uid" :class="margins.coefficientTotalIsOverMax ? 'error' : ''" :data-content="margins.coefficientTotalIsOverMax ? strings.overPriceLabel : null" data-position="bottom center">
-                        <td>
-                            {{ strings.newPriceLabel }}
-                        </td>
-                        <td>
-                            {{ margins.totalPriceMargin + advert.currencySymbol }} <i v-if="margins.coefficientTotalIsOverMax" class="warning sign icon"></i>
+                            {{ margins.totalSellerPrice + advert.currencySymbol }} <span v-if="advert.discount_on_total>0">(-{{ advert.discount_on_total }}%)</span>
                         </td>
                     </tr>
                     <tr :id="'tr_total_margin2_'+_uid" :class="margins.totalMargin <= 0 ? 'warning' : ''" :data-content="margins.totalMargin <= 0 ? strings.nullMarginLabel : null" data-position="bottom center">
@@ -78,6 +70,22 @@
                         </td>
                         <td>
                             {{ margins.totalMargin + advert.currencySymbol }} <i v-if="margins.totalMargin <= 0" class="info circle icon"></i>
+                        </td>
+                    </tr>
+                    <tr v-show="margins.coefficientTotalIsOverMax" :id="'tr_total_price_'+_uid" :class="margins.coefficientTotalIsOverMax ? 'error' : ''" :data-content="margins.coefficientTotalIsOverMax ? strings.overPriceLabel : null" data-position="bottom center">
+                        <td>
+                            {{ strings.newPriceLabel }}
+                        </td>
+                        <td>
+                            {{ margins.totalPriceMargin + advert.currencySymbol }} <i v-if="margins.coefficientTotalIsOverMax" class="warning sign icon"></i>
+                        </td>
+                    </tr>
+                    <tr v-if="!margins.coefficientTotalIsOverMax">
+                        <td colspan="2">
+                            <discount-tag
+                                    :advert="advert"
+                                    :margins="margins"
+                            ></discount-tag>
                         </td>
                     </tr>
                 </template>
@@ -164,6 +172,9 @@
             updateMargins () {
                 let calcMargins = DestockTools.calcMargins(this.advert, this.forSeller);
                 Object.assign(this.margins, calcMargins);
+                if(!this.forSeller && this.forLotMargin){
+                    this.advert.price_margin = this.margins.priceMargin + this.advert.currencySymbol;
+                }
             }
         }
     }

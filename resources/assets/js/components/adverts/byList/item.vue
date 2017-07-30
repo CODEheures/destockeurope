@@ -181,7 +181,7 @@
                             </div>
                             <div class="six wide right aligned vertical middle aligned column">
                                 <p class="infos">
-                                    <span :class="advert.isNegociated ? 'ui big blue left pointing label price negociated' : 'ui big yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price }}</span><br/>
+                                    <span :class="advert.isNegociated ? 'ui big blue left pointing label price negociated' : 'ui big yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/>
                                     <span :title="strings.totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
                                     <span :title="strings.lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
@@ -214,7 +214,7 @@
                         <div class="ui grid">
                             <div class="sixteen wide mobile only right aligned column">
                                 <p class="infos">
-                                    <span class="ui big blue left pointing label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price }}</span><br/>
+                                    <span class="ui big blue left pointing label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/>
                                     <span><i class="cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
                                     <span><i class="cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>

@@ -147,18 +147,16 @@
                                                                 <div v-if="isNegociated" class="ui small blue tag label">{{ strings.exampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
-                                                        <tr v-if="!isNegociated && margins.globalDiscount > 0">
+                                                        <tr v-if="!isNegociated && margins.discountOnTotal > 0">
                                                             <td class="collapsing">
                                                                 <i class="gift icon"></i> {{ strings.CompletePriceLabel }}
                                                             </td>
                                                             <td>
-                                                                <div class="ui yellow inverted compact segment discount-on-total-advert">
-                                                                    <div class="without-discount"><div><div class="stroke"></div>{{ margins.totalPriceByLot + currencySymbol }}</div></div>
-                                                                    <div class="ui red header with-discount">
-                                                                        <span class="whole-part">{{ margins.totalSellerPriceWholePart }}</span><span class="currency">{{ currencySymbol }}</span><span class="decimal-part">.{{ margins.totalSellerPriceDecimalPart }}</span>
-                                                                        <div class="discount-value">(-{{ margins.globalDiscount }}% )</div>
-                                                                    </div>
-                                                                </div>
+                                                                <discount-tag
+                                                                        :advert="fakeAdvert"
+                                                                        :margins="margins"
+                                                                        :forSeller="true"
+                                                                ></discount-tag>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -502,12 +500,11 @@
                                                                 <i class="gift icon"></i> {{ strings.formDiscountLabel }}
                                                             </td>
                                                             <td>
-                                                                <div class="ui mini statistic">
-                                                                    <div class="value"><i class="minus icon"></i>{{ discountOnTotal }}%</div>
-                                                                    <div class="label">
-                                                                        ({{ calcTotalPrice() }}{{ currencySymbol }})
-                                                                    </div>
-                                                                </div>
+                                                                <discount-tag
+                                                                        :advert="fakeAdvert"
+                                                                        :margins="margins"
+                                                                        :forSeller="true"
+                                                                ></discount-tag>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -941,11 +938,6 @@
                 } else {
                     return parseInt(this.advertFormPhotoNbFreePicture);
                 }
-            },
-            calcTotalPrice: function () {
-                let price = parseFloat(this.price)*Math.pow(10, this.subunit)*this.totalQuantity;
-                let newPrice = price - (parseFloat(this.discountOnTotal)*price/100).toFixed(0);
-                return parseFloat(newPrice/(Math.pow(10,this.subunit))).toFixed(this.subunit);
             },
             setFakeAdvert () {
                 Object.assign(this.fakeAdvert, {

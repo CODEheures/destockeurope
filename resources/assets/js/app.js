@@ -40,6 +40,7 @@ Vue.component('swiper-thumbs', require('./components/generics/swipers/swiperThum
 Vue.component('margins-table', require('./components/generics/fields/marginsTable.vue'));
 Vue.component('margin-input-field', require('./components/generics/fields/marginInput.vue'));
 Vue.component('quantities-input-field', require('./components/generics/fields/quantitiesInput.vue'));
+Vue.component('discount-tag', require('./components/generics/fields/discountTag.vue'));
 Vue.component('advert-manage-button', require('./components/generics/fields/manageButton.vue'));
 Vue.component('vimeo-uploader', require('./components/generics/uploaders/vimeo.vue'));
 Vue.component('photo-uploader', require('./components/generics/uploaders/photo.vue'));
