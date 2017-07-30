@@ -128,7 +128,7 @@
                             <div class="ui hidden divider"></div>
                             <div class="sixteen wide column item-description">
                                 <div class="description">
-                                    <p>{{ advert.description }}</p>
+                                    <p class="in-by-id">{{ advert.description }}</p>
                                 </div>
                             </div>
                         </div>

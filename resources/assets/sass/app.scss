@@ -123,7 +123,9 @@ div.ui.vertical.segment.separator {
     padding-top: 0;
     & div.description p {
       white-space: pre-wrap;
-      font-size: 1.3rem;
+      &:not(.resume) {
+        font-size: 1.3rem;
+      }
       &.resume {
         max-height: 3em;
         overflow: hidden;
