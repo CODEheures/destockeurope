@@ -65,23 +65,11 @@
         },
         mounted () {
             this.strings = this.$store.state.strings['margin-input-field'];
+            this.$watch('advert.price_coefficient', function () {
+               this.advert.price_coefficient_total = this.advert.price_coefficient
+            });
         },
         methods: {
-            calcMargin: function (advert, type) {
-                let unitMargin =  (((advert.originalPrice*advert.price_coefficient)/(100*Math.pow(10,advert.priceSubUnit))));
-                unitMargin = (Math.floor(unitMargin*Math.pow(10,advert.priceSubUnit))/Math.pow(10,advert.priceSubUnit));
-                let totalMargin = unitMargin*advert.totalQuantity;
-                let lotMiniMargin = unitMargin*advert.lotMiniQuantity;
-                if(type == 1) {
-                    return (unitMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol
-                } else if(type == 2) {
-                    return (totalMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                } else if (type == 3) {
-                    return (((advert.originalPrice/(Math.pow(10,advert.priceSubUnit))) + unitMargin).toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                } else if (type == 4) {
-                    return (lotMiniMargin.toFixed(advert.priceSubUnit))+advert.currencySymbol;
-                }
-            },
             updateCoefficient: function () {
                 let that = this;
                 axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient*100).toFixed(0), 'coefficient_total': (that.advert.price_coefficient_total*100).toFixed(0)})
