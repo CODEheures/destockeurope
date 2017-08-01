@@ -46,12 +46,12 @@
                             {{ margins.priceMargin + advert.currencySymbol }}
                         </td>
                     </tr>
-                    <tr :id="'tr_lot_margin_'+_uid" :class="margins.lotMiniMargin <= 0 ? 'warning' : ''" :data-content="margins.lotMiniMargin <= 0 ? strings.nullMarginLabel : null" data-position="bottom center">
+                    <tr :id="'tr_lot_margin_'+_uid" :class="margins.lotMiniMargin <= 0 ? 'error' : ''" :data-content="margins.lotMiniMargin <= 0 ? strings.nullMarginLabel : null" data-position="bottom center">
                         <td>
                             {{ strings.lotMarginLabel }}
                         </td>
                         <td>
-                            {{ margins.lotMiniMargin + advert.currencySymbol }} <i v-if="margins.lotMiniMargin <= 0" class="info circle icon"></i>
+                            {{ margins.lotMiniMargin + advert.currencySymbol }} <i v-if="margins.lotMiniMargin <= 0" class="warning sign icon"></i>
                         </td>
                     </tr>
                 </template>
@@ -64,20 +64,20 @@
                             {{ margins.totalSellerPrice + advert.currencySymbol }} <span v-if="advert.discount_on_total>0">(-{{ advert.discount_on_total }}%)</span>
                         </td>
                     </tr>
-                    <tr :id="'tr_total_margin2_'+_uid" :class="margins.totalMargin <= 0 ? 'warning' : ''" :data-content="margins.totalMargin <= 0 ? strings.nullMarginLabel : null" data-position="bottom center">
+                    <tr :id="'tr_total_margin2_'+_uid" :class="margins.totalMargin <= 0 ? 'error' : ''" :data-content="margins.totalMargin <= 0 ? strings.nullMarginLabel : null" data-position="bottom center">
                         <td>
                             {{ strings.totalMarginLabel }}
                         </td>
                         <td>
-                            {{ margins.totalMargin + advert.currencySymbol }} <i v-if="margins.totalMargin <= 0" class="info circle icon"></i>
+                            {{ margins.totalMargin + advert.currencySymbol }} <i v-if="margins.totalMargin <= 0" class="warning sign icon"></i>
                         </td>
                     </tr>
-                    <tr v-show="margins.coefficientTotalIsOverMax" :id="'tr_total_price_'+_uid" :class="margins.coefficientTotalIsOverMax ? 'error' : ''" :data-content="margins.coefficientTotalIsOverMax ? strings.overPriceLabel : null" data-position="bottom center">
+                    <tr v-show="margins.coefficientTotalIsOverMax" :id="'tr_total_price_'+_uid" :class="margins.coefficientTotalIsOverMax ? 'warning' : ''" :data-content="margins.coefficientTotalIsOverMax ? strings.overPriceLabel : null" data-position="bottom center">
                         <td>
                             {{ strings.newPriceLabel }}
                         </td>
                         <td>
-                            {{ margins.totalPriceMargin + advert.currencySymbol }} <i v-if="margins.coefficientTotalIsOverMax" class="warning sign icon"></i>
+                            {{ margins.totalPriceMargin + advert.currencySymbol }} <i v-if="margins.coefficientTotalIsOverMax" class="info circle icon"></i>
                         </td>
                     </tr>
                     <tr v-if="!margins.coefficientTotalIsOverMax">
