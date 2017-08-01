@@ -80,7 +80,7 @@ class AdminController extends Controller
      */
     public function delegation($id) {
         $advert = Advert::find($id);
-        if($advert){
+        if($advert && $advert->is_delegation){
             $advert->load('pictures');
             $advert->load('category');
             $advert->load(['user' => function ($query) {

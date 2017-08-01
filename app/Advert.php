@@ -212,7 +212,7 @@ class Advert extends Model {
     }
 
     public function getDelegationUrlAttribute() {
-        if (PrivilegesUtils::canGetDelegations()) {
+        if ($this->is_delegation && PrivilegesUtils::canGetDelegations()) {
             return route('advert.delegation', ['id' => $this->id]);
         } else {
             return null;
