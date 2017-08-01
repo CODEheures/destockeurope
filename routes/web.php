@@ -44,6 +44,7 @@
     Route::group(['prefix' => 'admin'], function() {
         Route::get('/manage', 'AdminController@manage')->name('application.manage');
         Route::get('/delegations', 'AdminController@delegations')->name('advert.delegations');
+        Route::get('/delegation/{id}', 'AdminController@delegation')->name('advert.delegation');
         Route::get('/dashboard', 'AdminController@dashboard')->name('application.dashboard');
         Route::get('/parameters', 'AdminController@appParameters')->name('application.parameters');
         Route::patch('/parameters', 'AdminController@patchParameters');

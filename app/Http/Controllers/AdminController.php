@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Advert;
 use App\Common\AdvertsManager;
 use App\Common\InvoiceUtils;
 use App\Common\PicturesManager;
@@ -32,8 +33,8 @@ class AdminController extends Controller
 
     public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
         $this->middleware('auth');
-        $this->middleware('isAdminUser', ['except' => ['delegations', 'invoiceManage', 'listInvoices', 'showInvoice']]);
-        $this->middleware('canGetDelegations', ['only' => ['delegations']]);
+        $this->middleware('isAdminUser', ['except' => ['delegations', 'delegation', 'invoiceManage', 'listInvoices', 'showInvoice']]);
+        $this->middleware('canGetDelegations', ['only' => ['delegations', 'delegation']]);
         $this->middleware('canManageInvoices', ['only' => ['invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->middleware('stopAnalytics');
@@ -71,6 +72,25 @@ class AdminController extends Controller
         $title = trans('strings.menu_advert_delegations');
         $isDelegation = true;
         return view('user.personnalList', compact('routeList', 'title', 'isDelegation'));
+    }
+
+    /**
+     * Return view for List of Adverts type delegation
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function delegation($id) {
+        $advert = Advert::find($id);
+        if($advert){
+            $advert->load('pictures');
+            $advert->load('category');
+            $advert->load(['user' => function ($query) {
+                $query->select(['id','email','phone', 'compagnyName']);
+            }]);
+            $title = trans('strings.view_delegation_header', ['advertTitle' => $advert->title]);
+            return view('advert.manageDelegation', compact('advert', 'title'));
+        } else {
+            return response('not found', 404);
+        }
     }
 
     /**

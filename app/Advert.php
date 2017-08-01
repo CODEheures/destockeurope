@@ -52,7 +52,7 @@ class Advert extends Model {
     protected $dates = ['deleted_at', 'online_at', 'ended_at', 'highlight_until'];
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
     protected $appends = array('breadCrumb', 'isOnEdit', 'url', 'renewUrl', 'backToTopUrl', 'highlightUrl',
-        'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'resume',
+        'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'delegationUrl', 'resume',
         'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight',
         'isEligibleForRenewMailZero', 'isEligibleForEdit', 'isUserOwner', 'isUserBookmark', 'bookmarkCount',
         'picturesWithTrashedCount', 'originalPrice', 'originalPriceWithMargin', 'totalPrice', 'totalPriceMargin', 'globalDiscount', 'priceSubUnit', 'currencySymbol', 'listEditFields');
@@ -206,6 +206,14 @@ class Advert extends Model {
     public function getEditUrlAttribute() {
         if (PrivilegesUtils::canEditAdvert($this)) {
             return route('advert.edit', ['id' => $this->id]);
+        } else {
+            return null;
+        }
+    }
+
+    public function getDelegationUrlAttribute() {
+        if (PrivilegesUtils::canGetDelegations()) {
+            return route('advert.delegation', ['id' => $this->id]);
         } else {
             return null;
         }

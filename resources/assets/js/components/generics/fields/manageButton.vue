@@ -4,6 +4,7 @@
         <span class="text">{{ strings.manageAdvertLabel }}</span>
         <div class="menu">
             <div class="item" v-if="withSeeAction" v-on:click="seeMe()" :data-content="strings.seeAdvertPopupLabel"><i class="unhide blue icon"></i>{{ strings.seeAdvertLabel }}</div>
+            <div class="item" v-if="withDelegationAction && advert.delegationUrl!==null" v-on:click="delegationMe()" :data-content="strings.delegationAdvertPopupLabel"><i class="pie chart blue icon"></i>{{ strings.delegationAdvertLabel }}</div>
             <div class="item" v-if="advert.editUrl!==null && advert.isEligibleForEdit" v-on:click="editMe()" :data-content="strings.editAdvertPopupLabel"><i class="write blue icon"></i>{{ strings.editAdvertLabel }}</div>
             <div class="item" v-if="advert.backToTopUrl!==null" v-on:click="backToTopMe()" :data-content="strings.backToTopPopupLabel"><i class="arrow up blue icon"></i>{{ strings.backToTopLabel }}</div>
             <div class="item" v-if="advert.highlightUrl!==null && advert.isEligibleForHighlight" v-on:click="highlightMe()" :data-content="strings.highlightPopupLabel"><i class="announcement blue icon"></i>{{ strings.highlightLabel }}</div>
@@ -20,6 +21,11 @@
                 type: Object
             },
             withSeeAction: {
+                type: Boolean,
+                required: false,
+                default: true
+            },
+            withDelegationAction: {
                 type: Boolean,
                 required: false,
                 default: true
@@ -61,6 +67,9 @@
             },
             seeMe: function () {
                 window.location.assign(this.advert.url);
+            },
+            delegationMe: function () {
+                window.location.assign(this.advert.delegationUrl);
             },
             editMe: function () {
                 window.location.assign(this.advert.editUrl);

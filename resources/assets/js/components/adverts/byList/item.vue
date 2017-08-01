@@ -162,6 +162,7 @@
                             <template v-if="!advert.deleted_at">
                                 <advert-manage-button
                                         :advert="advert"
+                                        :with-delegation-action="false"
                                 ></advert-manage-button>
                             </template>
                         </div>

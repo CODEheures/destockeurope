@@ -1,0 +1,133 @@
+<template>
+    <div  class="ui one column grid">
+        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
+        <div :id="'modal2-'+_uid" class="ui basic modal">
+            <i class="close icon"></i>
+            <div class="header">
+                {{ strings.modalValidHeader }}
+            </div>
+            <div class="image content">
+                <div class="image">
+                    <i class="legal icon"></i>
+                </div>
+                <div class="description">
+                    <p>{{ strings.modalValidDescription }}</p>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="two fluid ui inverted buttons">
+                    <div class="ui cancel red basic inverted button">
+                        <i class="remove icon"></i>
+                        {{ strings.modalNo }}
+                    </div>
+                    <div class="ui ok green basic inverted button">
+                        <i class="checkmark icon"></i>
+                        {{ strings.modalYes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <h2 class="ui header">{{ contentHeader }}</h2>
+        </div>
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="row">
+                    <div class="ui active inverted dimmer" v-if="!isLoaded">
+                        <div class="ui large text loader">Loading</div>
+                    </div>
+                    <div class="ui segment">
+                        <div class="ui celled list">
+                            <div class="ui active inverted dimmer" v-if="!isLoaded">
+                                <div class="ui large text loader">Loading</div>
+                            </div>
+                            <adverts-by-list-item v-if="dataAdvert"
+                                    :route-bookmark-add="''"
+                                    :route-bookmark-remove="''"
+                                    :advert="dataAdvert"
+                                    :can-get-delegations="canGetDelegations==1"
+                                    :is-personnal-list="isPersonnalList==1"
+                            ></adverts-by-list-item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: [
+            //vue routes
+            'advert',
+            //vue vars
+            'canGetDelegations',
+            'isPersonnalList',
+            'isDelegation',
+            //vue strings
+            'contentHeader',
+        ],
+        data: () => {
+            return {
+                strings: {},
+                properties: {},
+                typeMessage : '',
+                message : '',
+                sendMessage: false,
+                dataAdvert: null,
+                isLoaded: true,
+            }
+        },
+        mounted () {
+            this.strings = this.$store.state.strings['manage-delegation'];
+            this.properties = this.$store.state.properties['global'];
+            this.dataAdvert = JSON.parse(this.advert);
+            //On load Error
+            this.$on('loadError', function () {
+                this.sendToast(this.strings.loadErrorMessage, 'error');
+            });
+            this.$on('updateSuccess', function () {
+                this.sendToast(this.strings.updateSuccessMessage, 'success');
+            });
+
+            this.$on('sendToast', function (event) {
+                this.sendToast(event.message, event.type);
+            });
+            this.$on('deleteAdvert', function (event) {
+                this.destroyMe(event.url);
+            })
+        },
+        methods: {
+            sendToast: function(message,type) {
+                this.typeMessage = type;
+                this.message = message;
+                this.sendMessage = !this.sendMessage;
+            },
+            destroyMe: function (url) {
+                let modalForm = $('#modal2-' + this._uid);
+                let that = this;
+                modalForm.modal({
+                    closable: true,
+                    blurring: true,
+                    onApprove: function () {
+                        that.isLoaded = false;
+                        axios.delete(url)
+                            .then(function (response) {
+                                that.flagForceReload = !that.flagForceReload;
+                                that.isLoaded = true;
+                            })
+                            .catch(function (error) {
+                                if (error.response && error.response.status == 409) {
+                                    that.sendToast(error.response.data, 'error');
+                                } else {
+                                    that.sendToast(that.strings.loadErrorMessage, 'error');
+                                }
+                                that.isLoaded = true;
+                            });
+                    }
+                }).modal('show');
+            }
+        }
+    }
+</script>

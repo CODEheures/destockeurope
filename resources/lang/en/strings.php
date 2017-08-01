@@ -433,6 +433,8 @@ return [
     'view_advert_show_delete2_popup_label' => 'Remove your advert from our site. Be careful, all the options are deleted.',
     'view_advert_show_see_label' => 'See it',
     'view_advert_show_see_popup_label' => 'Open the advert page',
+    'view_advert_show_delegation_label' => 'Manage margins',
+    'view_advert_show_delegation_popup_label' => 'Open the manage margins page for this advert',
     'view_advert_show_edit_label' => 'Edit it',
     'view_advert_show_edit_popup_label' => 'To modify the quantities for FREE return in the menu to "My Adverts". Clic here for edit title, description, photos, videos.',
     'view_advert_show_update_label' => 'Update',
@@ -470,6 +472,8 @@ return [
     'view_advert_backToTop_error' => 'Error while advert back to top of the list process. Our services are warned and deal with your problem as soon as possible',
     'view_advert_highlight_error' => 'Error while advert put in front process. Our services are warned and deal with your problem as soon as possible',
     'view_advert_approve_success' => 'Advert approve send',
+
+    'view_delegation_header' => 'Delegation of: :advertTitle',
 
     'view_advert_by_link_label' => 'See Advert',
 

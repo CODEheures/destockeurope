@@ -433,6 +433,8 @@ return [
     'view_advert_show_delete2_popup_label' => 'Supprimer votre annonce de notre site. Attention toutes les options attenantes seront aussi supprimées.',
     'view_advert_show_see_label' => 'Voir',
     'view_advert_show_see_popup_label' => 'Ouvrez la page de l\'annonce',
+    'view_advert_show_delegation_label' => 'Gerer les marges',
+    'view_advert_show_delegation_popup_label' => 'Ouvrez la page de gestion des marges pour cette annonce',
     'view_advert_show_edit_label' => 'Modifier',
     'view_advert_show_edit_popup_label' => 'Pour modifier GRATUITEMENT les quantités rendez vous dans le menu à "mes annonces". Cliquez ici pour modifier le titre, la description, les photos, videos.',
     'view_advert_show_update_label' => 'Mettre à jour',
@@ -470,6 +472,8 @@ return [
     'view_advert_backToTop_error' => 'Une erreur est survenue pour remonter votre annonce en tête de liste. Nos services sont avertis et traitent votre problème au plus vite',
     'view_advert_highlight_error' => 'Une erreur est survenue pour placer votre annonce à la Une. Nos services sont avertis et traitent votre problème au plus vite',
     'view_advert_approve_success' => 'Approbations des annonces envoyées',
+
+    'view_delegation_header' => 'Délégation de: :advertTitle',
 
     'view_advert_by_link_label' => 'Voir l\'annonce',
 

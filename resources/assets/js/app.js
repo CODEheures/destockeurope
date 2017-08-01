@@ -106,6 +106,8 @@ Vue.component('create-or-edit-advert-form', require('./components/contents/creat
 Vue.component('approve-advert-form', require('./components/contents/approveAdvert.vue'));
 //show advert page
 Vue.component('show-advert1', require('./components/contents/showAdvert1.vue'));
+//manage delagtion advert
+Vue.component('manage-delegation', require('./components/contents/manageDelegation.vue'));
 //review payment page
 Vue.component('review-for-payment', require('./components/contents/reviewForPayment.vue'));
 
