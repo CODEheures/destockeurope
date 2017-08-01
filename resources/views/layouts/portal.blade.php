@@ -37,6 +37,7 @@
 <body class="portal yellowbg">
     <?php $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName() ?>
     <div id="app">
+        @include('storeSetter.props.global')
         <div class="ui vertical segment header" id="headApp">
             <div class="rubalise"></div>
             <div class="ui container">
@@ -80,7 +81,6 @@
                             <horizontal-234x60></horizontal-234x60>
                         </div>
                     </div>
-                    @include('storeSetter.props.global')
                     @yield('content')
                 </div>
             </div>

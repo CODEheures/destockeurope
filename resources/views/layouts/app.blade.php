@@ -61,6 +61,7 @@
     @include('menus.side.main')
 
     <div class="pusher stackable container" id="app">
+        @include('storeSetter.props.global')
         <!-- fixed menu bar -->
         @include('menus.top.fixed')
         <!-- Menu BAR -->
@@ -75,7 +76,6 @@
                 </div>
             </div>
             <div class="content row">
-                @include('storeSetter.props.global')
                 @yield('content')
             </div>
         </div>

@@ -1,6 +1,7 @@
 <template>
-    <div :id="'langChoice-'+_uid" class="ui icon top right pointing dropdown right floated basic button langChoice">
-        <i class="world icon"></i>
+    <div :id="'langChoice-'+_uid" class="ui top right pointing dropdown right floated basic button">
+        <div class="text">{{ properties.actualLocale }}</div>
+        <!--<i class="dropdown icon"></i>-->
         <div class="menu">
             <div v-for="lang in dataListAvailableLang" class="item" :data-value="lang">{{ lang }}</div>
         </div>
@@ -15,10 +16,12 @@
         },
         data: () => {
             return {
+                properties: {},
                 dataListAvailableLang: {}
             };
         },
         mounted () {
+            this.properties = this.$store.state.properties['global'];
             this.dataListAvailableLang = JSON.parse(this.listAvailableLang);
         },
         methods: {
