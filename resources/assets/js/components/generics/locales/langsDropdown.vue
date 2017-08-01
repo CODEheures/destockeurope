@@ -3,7 +3,7 @@
         <div class="text">{{ properties.actualLocale }}</div>
         <!--<i class="dropdown icon"></i>-->
         <div class="menu">
-            <div v-for="lang in dataListAvailableLang" class="item" :data-value="lang">{{ lang }}</div>
+            <div v-for="lang in dataListAvailableLang" class="item" :data-value="lang" v-on:click="goTo(lang)">{{ lang }}</div>
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@
         data: () => {
             return {
                 properties: {},
-                dataListAvailableLang: {}
+                dataListAvailableLang: null
             };
         },
         mounted () {
@@ -25,16 +25,13 @@
             this.dataListAvailableLang = JSON.parse(this.listAvailableLang);
         },
         methods: {
-
+            goTo(lang) {
+                let link_hreflang = $("link[hreflang|="+lang+"]");
+                window.location.assign((link_hreflang.attr('href')));
+            }
         },
         updated () {
-            $('#langChoice-'+this._uid)
-                .dropdown({
-                    onChange: function(value, text, $selectedItem) {
-                        let link_hreflang = $("link[hreflang|="+value+"]");
-                        window.location.assign((link_hreflang.attr('href')));
-                    }
-                })
+            $('#langChoice-'+this._uid).dropdown()
             ;
         }
     }
