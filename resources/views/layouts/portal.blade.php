@@ -47,14 +47,7 @@
                             <a href="{{ route('portal') }}"><img src="{{ asset('images/logo.svg') }}" class="ui big image"></a>
                         </div>
                         <div class="seven wide mobile ten wide tablet ten wide computer bottom aligned column keywords">
-                            <h1>
-                                <span>{{ trans('strings.view_portal_list_header_1') }}</span>
-                                <span>{{ trans('strings.view_portal_list_header_2') }}</span>
-                                <span>{{ trans('strings.view_portal_list_header_3') }}</span>
-                                <span>{{ trans('strings.view_portal_list_header_4') }}</span>
-                                <span>{{ trans('strings.view_portal_list_header_5') }}</span>
-                                <span>{{ trans('strings.view_portal_list_header_6') }}</span>
-                            </h1>
+                            @include('includes.rotaryKeywords.html')
                         </div>
                         <div class="three wide mobile two wide tablet two wide computer rigth floated column">
                             @include('layouts.head.langSelector')
@@ -95,6 +88,7 @@
     <script src="{{ mix("js/vendor.js") }}"></script>
     <script src="{{ mix("js/app.js") }}"></script>
     @yield('scripts')
+    @include('includes.rotaryKeywords.script')
     @if(env('APP_URL')=='https://destockeurope.com')
         @include('plugins.googleAnalytic.tracking')
         @include('plugins.googleAdsense.script')

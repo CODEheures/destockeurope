@@ -37,36 +37,7 @@
                         <a href="{{ route('portal') }}"><img src="{{ asset('images/logo.svg') }}" class="ui big image"></a>
                     </div>
                     <div class="seven wide mobile ten wide tablet ten wide computer bottom aligned column keywords">
-                        <div class="ui text shape shape2">
-                            <div class="sides">
-                                @foreach(config('codeheuresUtils.availableLocales') as $lang)
-                                    @php app()->setLocale($lang) @endphp
-                                    @if($loop->first)
-                                        <div class="side active">
-                                            <h1>
-                                                <span>{{ trans('strings.view_portal_list_header_1') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_2') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_3') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_4') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_5') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_6') }}</span>
-                                            </h1>
-                                        </div>
-                                    @else
-                                        <div class="side">
-                                            <h1>
-                                                <span>{{ trans('strings.view_portal_list_header_1') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_2') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_3') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_4') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_5') }}</span>
-                                                <span>{{ trans('strings.view_portal_list_header_6') }}</span>
-                                            </h1>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
+                        @include('includes.rotaryKeywords.html')
                     </div>
                 </div>
             </div>
@@ -82,15 +53,15 @@
                         <i class="@yield('icon') icon"></i>
                         <div class="content">
                             <div class="header">
-                                <div class="ui text shape">
+                                <div class="ui text shape error-title">
                                     <div class="sides">
-                                       @yield('titles')
+                                       @yield('titles', $initiallang_rotatry_keywords)
                                     </div>
                                 </div>
                             </div>
-                            <div class="ui text shape">
+                            <div class="ui text shape error-message">
                                 <div class="sides">
-                                    @yield('messages')
+                                    @yield('messages', $initiallang_rotatry_keywords)
                                 </div>
                             </div>
                         </div>
@@ -113,13 +84,8 @@
 <script src="{{ mix("js/manifest.js") }}"></script>
 <script src="{{ mix("js/vendor.js") }}"></script>
 <script src="{{ mix("js/app.js") }}"></script>
-<script>
-    $('.shape').shape();
-    setInterval(function() {
-        $('.shape:not(.shape2)').shape('flip over');
-        $('.shape.shape2').shape('flip up');
-    },3500)
-</script>
+@include('includes.rotaryKeywords.script')
+@include('errors.script')
 </body>
 </html>
 

@@ -6,9 +6,10 @@
 @endsection
 
 @section('titles')
+    @php $initiallang_rotatry_keywords = app()->getLocale() @endphp
     @foreach(config('codeheuresUtils.availableLocales') as $lang)
         @php app()->setLocale($lang) @endphp
-        @if($loop->first)
+        @if($lang == $initiallang_rotatry_keywords)
             <div class="side active">
                 {{ trans('strings.view_404_title') }}
             </div>
@@ -18,12 +19,14 @@
             </div>
         @endif
     @endforeach
+    @php app()->setLocale($initiallang_rotatry_keywords) @endphp
 @endsection
 
 @section('messages')
+    @php $initiallang_rotatry_keywords = app()->getLocale() @endphp
     @foreach(config('codeheuresUtils.availableLocales') as $lang)
         @php app()->setLocale($lang) @endphp
-        @if($loop->first)
+        @if($lang == $initiallang_rotatry_keywords)
             <p class="side active">
                 {{ trans('strings.view_404_message') }}
             </p>
@@ -33,4 +36,5 @@
             </p>
         @endif
     @endforeach
+    @php app()->setLocale($initiallang_rotatry_keywords) @endphp
 @endsection

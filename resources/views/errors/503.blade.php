@@ -5,6 +5,7 @@
 @endsection
 
 @section('titles')
+    @php $initiallang_rotatry_keywords = app()->getLocale() @endphp
     @foreach(config('codeheuresUtils.availableLocales') as $lang)
         @php app()->setLocale($lang) @endphp
         @if($loop->first)
@@ -17,9 +18,11 @@
             </div>
         @endif
     @endforeach
+    @php app()->setLocale($initiallang_rotatry_keywords) @endphp
 @endsection
 
 @section('messages')
+    @php $initiallang_rotatry_keywords = app()->getLocale() @endphp
     @foreach(config('codeheuresUtils.availableLocales') as $lang)
         @php app()->setLocale($lang) @endphp
         @if($loop->first)
@@ -32,4 +35,5 @@
             </p>
         @endif
     @endforeach
+    @php app()->setLocale($initiallang_rotatry_keywords) @endphp
 @endsection
