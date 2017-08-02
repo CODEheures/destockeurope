@@ -147,7 +147,7 @@
                                                                 <div v-if="isNegociated" class="ui small blue tag label">{{ strings.exampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
-                                                        <tr v-if="!isNegociated && margins.discountOnTotal > 0">
+                                                        <tr v-if="!isNegociated && margins.globalDiscount > 0">
                                                             <td class="collapsing">
                                                                 <i class="gift icon"></i> {{ strings.CompletePriceLabel }}
                                                             </td>
@@ -495,7 +495,7 @@
                                                                 <div v-if="isNegociated" class="ui small blue tag label">{{ strings.exampleIsNegociatedLabel }}</div>
                                                             </td>
                                                         </tr>
-                                                        <tr v-if="!isNegociated && discountOnTotal > 0">
+                                                        <tr v-if="!isNegociated && margins.globalDiscount > 0">
                                                             <td class="collapsing">
                                                                 <i class="gift icon"></i> {{ strings.formDiscountLabel }}
                                                             </td>
