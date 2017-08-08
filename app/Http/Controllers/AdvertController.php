@@ -456,6 +456,7 @@ class AdvertController extends Controller
         if(count(old())==0){
             $this->pictureManager->purgeSessionLocalTempo();
             session()->forget('videoId');
+
             if($user) {
                 $lat = $user->latitude;
                 $lng = $user->longitude;

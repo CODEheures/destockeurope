@@ -6,6 +6,7 @@ use App\Http\Requests\PictureAdvertRequest;
 use App\Common\PicturesManager;
 use App\Picture;
 use Illuminate\Http\Response;
+use GuzzleHttp\Client as GuzzleClient;
 
 class PictureController extends Controller
 {
@@ -24,8 +25,69 @@ class PictureController extends Controller
      */
     public function post(PictureAdvertRequest $request) {
         //save file and create thumb with watermark
-        $this->pictureManager->save($request);
-        return response()->json($this->pictureManager->listThumbs());
+        $url = 'http://statics.destockeurope.progress/'.env('PICTURE_MANAGER_POST_URL');
+        $client = new GuzzleClient();
+        $alreadyUploadPictures = session('uploadPictures', ['hashName' => ['normals' => [], 'thumbs' => []]]);
+
+        try {
+            $response = $client->request('POST',
+                $url,
+                [
+                    'multipart' => [
+                        [
+                            'name' => 'token',
+                            'contents' => config('pictures.token')],
+                        [
+                            'name' => 'csrf',
+                            'contents' => csrf_token()],
+                        [
+                            'name' => 'addpicture',
+                            'contents' => fopen($request->file('addpicture')->getRealPath(),'r')],
+                        [
+                            'name' => 'watermark',
+                            'contents' => fopen(config('pictures.watermark_path'),'r')],
+                        [
+                            'name' => 'max_width',
+                            'contents' => config('pictures.max_width'),
+                        ],
+                        [
+                            'name' => 'picture_ratio',
+                            'contents' => config('pictures.picture_ratio'),
+                        ],
+                        [
+                            'name'     => 'thumb_size',
+                            'contents' => config('pictures.thumb_size'),
+                        ],
+                        [
+                            'name' => 'thumb_ratio',
+                            'contents' => config('pictures.thumb_ratio'),
+                        ],
+                        [
+                            'name'     => 'picture_back_color',
+                            'contents' => config('pictures.picture_back_color'),
+                        ],
+                        [
+                            'name'     => 'thumb_back_color',
+                            'contents' => config('pictures.thumb_back_color'),
+                        ],
+                        [
+                            'name'     => 'format_encoding',
+                            'contents' => config('pictures.format_encoding'),
+                        ]
+
+                    ]
+                ]
+            );
+
+            $urls = json_decode($response->getBody()->getContents());
+            !in_array($urls->normal, $alreadyUploadPictures['normals']) ? $alreadyUploadPictures['normals'][] =  $urls->normal : null;
+            !in_array($urls->thumb, $alreadyUploadPictures['thumbs']) ? $alreadyUploadPictures['thumbs'][] =  $urls->thumb : null;
+
+            session(['uploadPictures' => $alreadyUploadPictures]);
+            return response()->json($alreadyUploadPictures);
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 500);
+        }
     }
 
     /**
@@ -36,7 +98,7 @@ class PictureController extends Controller
      */
     public function destroyTempo($hashName) {
         $this->pictureManager->destroyTempo($hashName);
-        return response()->json($this->pictureManager->listThumbs());
+        return response()->json(session('uploadPictures'));
     }
 
     /**
@@ -101,7 +163,7 @@ class PictureController extends Controller
      * Get list of Thumbs in personnal tempo Path
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getListThumbs($type) {
-        return response()->json($this->pictureManager->listThumbs($type));
+    public function getListThumbs() {
+        return response()->json(session('uploadPictures'));
     }
 }

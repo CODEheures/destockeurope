@@ -71,8 +71,8 @@
 
         //DANGEROUS
         Route::group(['prefix' => 'dangerous'] , function () {
-            Route::get('/testGame/{quantity?}', 'AdminController@testGame');
-            //Route::get('/tempo', 'AdminController@tempo');
+            //Route::get('/testGame/{quantity?}', 'AdminController@testGame');
+            Route::get('/tempo', 'AdminController@tempo');
         });
     });
 
@@ -182,8 +182,8 @@
     //Pictures
     Route::group(['prefix' => 'picture'] , function () {
         Route::post('/', ['as' => 'picture.post', 'uses' => 'PictureController@post']);
-        Route::delete('/{hashName?}', ['as' => 'picture.destroyTempo', 'uses' => 'PictureController@destroyTempo']);
-        Route::get('/list-thumbs/{type}', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
+        Route::delete('/', ['as' => 'picture.destroy', 'uses' => 'PictureController@destroy']);
+        Route::get('/list-thumbs', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
         Route::get('/thumb/{type}/{hashName?}/{advertId?}', ['as' => 'picture.thumb', 'uses' => 'PictureController@getThumb']);
         Route::get('/normal/{type}/{hashName?}/{advertId?}', ['as' => 'picture.normal', 'uses' => 'PictureController@getNormal']);
     });

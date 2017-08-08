@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                             <div class="sixteen wide column">
-                                <img :src="routeGetTempoThumb+'/'+thumb" class="ui rounded medium centered image" />
+                                <img :src="thumb" class="ui rounded medium centered image" />
                             </div>
                         </div>
                     </div>
@@ -104,10 +104,9 @@
     export default {
         props: {
             //vue routes
-            routePostTempoPicture: String,
-            routeGetListTempoThumbs: String,
-            routeGetTempoThumb: String,
-            routeDelTempoPicture: String,
+            routePostPicture: String,
+            routeGetListThumbs: String,
+            routeDelPicture: String,
             //vue vars
             advertFormPhotoNbFreePicture: Number,
             maxFiles: Number,
@@ -132,6 +131,7 @@
                 helpUploadA: '',
                 helpUploadAHref: '',
                 thumbs: [],
+                normals: [],
                 nbPicturesIndicator: '',
                 helpHeaderIndicator: '',
                 mainPicture: '',
@@ -149,10 +149,10 @@
             this.$watch('thumbs', function () {
                 this.setPicturesIndicators();
                 this.setMainPicture();
-                this.$parent.$emit('updateThumbs', this.thumbs);
+                this.$parent.$emit('updateThumbs', {'thumbs': this.thumbs, 'normals': this.normals});
             });
             this.$watch('mainPicture', function () {
-                this.$parent.$emit('updateMainPicture', this.mainPicture);
+                this.$parent.$emit('updateMainPicture', {'thumbs': this.thumbs, 'normals': this.normals});
             });
         },
         updated () {
@@ -185,7 +185,7 @@
                     this.onUpload = true;
                     this.cancelToken = axios.CancelToken;
                     this.sourceCancelToken = this.cancelToken.source();
-                    axios.post(this.routePostTempoPicture, this.filePhotoToPost, {
+                    axios.post(this.routePostPicture, this.filePhotoToPost, {
                         onUploadProgress: function (progressEvent) {
                             let perform = 100*(progressEvent.loaded)/progressEvent.total;
                             that.performUpload = ((progressEvent.loaded)/(1024*1024)).toFixed(2)+'Mb';
@@ -199,7 +199,8 @@
                             that.onUpload = false;
                             that.filePhotoToPost = new FormData();
                             event.target.value="";
-                            that.thumbs = response.data;
+                            that.thumbs = response.data['thumbs'];
+                            that.normals = response.data['normals'];
                         })
                         .catch(function (error) {
                             that.onUpload = false;
@@ -223,9 +224,10 @@
             },
             getListThumbs: function (event) {
                 let that = this;
-                axios.get(this.routeGetListTempoThumbs)
+                axios.get(this.routeGetListThumbs)
                     .then(function (response) {
-                        that.thumbs = response.data;
+                        that.thumbs = response.data['thumbs'];
+                        that.normals = response.data['normals'];
                     })
                     .catch(function (error) {
                         that.$parent.$emit('loadError');
@@ -234,9 +236,10 @@
             delPhoto: function (event) {
                 event.preventDefault();
                 let that=this;
-                axios.delete(this.routeDelTempoPicture+'/'+event.target.dataset.file)
+                axios.delete(this.routeDelPicture, {urlThumb: event.target.dataset.file})
                     .then(function (response) {
-                        that.thumbs = response.data;
+                        that.thumbs = response.data['thumbs'];
+                        that.normals = response.data['normals'];
                     })
                     .catch(function (error) {
                         that.$parent.$emit('loadError');

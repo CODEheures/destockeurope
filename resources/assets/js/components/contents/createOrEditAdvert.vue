@@ -231,10 +231,9 @@
                                         </div>
                                         <div class="content">
                                             <photo-uploader
-                                                    :route-post-tempo-picture="routePostTempoPicture"
-                                                    :route-get-list-tempo-thumbs="routeGetListTempoThumbs"
-                                                    :route-get-tempo-thumb="routeGetTempoThumb"
-                                                    :route-del-tempo-picture="routeDelTempoPicture"
+                                                    :route-post-picture="routePostPicture"
+                                                    :route-get-list-thumbs="routeGetListThumbs"
+                                                    :route-del-picture="routeDelPicture"
                                                     :advert-form-photo-nb-free-picture="calcNbFreePictures()"
                                                     :max-files="parseInt(maxFiles)"
                                                     :is-delegation="isDelegation==1"
@@ -552,11 +551,9 @@
             'routeGetCost',
             'routePrices',
             'routeGetListType',
-            'routePostTempoPicture',
-            'routeGetListTempoThumbs',
-            'routeGetTempoThumb',
-            'routeGetTempoNormal',
-            'routeDelTempoPicture',
+            'routePostPicture',
+            'routeGetListThumbs',
+            'routeDelPicture',
             'routeGetVideoPostTicket',
             'routeDelTempoVideo',
             'routeGetStatusVideo',
@@ -697,8 +694,8 @@
                 this.latLngChange(event);
             });
             this.$on('updateThumbs', function (event) {
-                this.thumbs = event;
-                this.setPictures();
+                this.thumbs = event.thumbs;
+                this.setPictures(event);
                 this.setSteps();
             });
             this.$on('vimeoStateChange', function (event) {
@@ -737,8 +734,8 @@
                     $('#isUrgent'+this._uid).checkbox('uncheck');
                 }
             });
-            this.$watch('mainPicture', function () {
-                this.setPictures();
+            this.$watch('mainPicture', function (event) {
+                this.setPictures(event);
             });
             this.$watch('isNegociated', function () {
                 if(this.isNegociated){
@@ -913,18 +910,14 @@
                     }
                 }
             },
-            setPictures: function () {
+            setPictures: function (event) {
                 this.pictures=[];
                 let that = this;
-                this.thumbs.forEach(function (hashName) {
-                    if(hashName == that.mainPicture){
-                        that.pictures.unshift({isThumb: false, url:that.routeGetTempoNormal+"/"+hashName});
-                        that.pictures.unshift({isThumb: true, url:that.routeGetTempoThumb+"/"+hashName});
-                    } else {
-                        that.pictures.push({isThumb: true, url:that.routeGetTempoThumb+"/"+hashName});
-                        that.pictures.push({isThumb: false, url:that.routeGetTempoNormal+"/"+hashName});
-                    }
-
+                event.thumbs.forEach(function (url) {
+                    that.pictures.push({isThumb: true, url:url});
+                });
+                event.normals.forEach(function (url) {
+                    that.pictures.push({isThumb: false, url:url});
                 });
             },
             getMoment: function (dateTime) {

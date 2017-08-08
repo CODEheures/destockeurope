@@ -81,32 +81,6 @@ class PicturesManager
         $this->ext = $ext;
     }
 
-    /**
-     * Create List of thumb in personnal tempo Path
-     * @param null $type
-     * @return array
-     */
-    public function listThumbs($type=null){
-        $type ? $this->setType($type) : null;
-        try {
-            $listFiles = Storage::disk($this->disk)->files($this->personnalPath());
-            $thumbListFiles = [];
-            foreach ($listFiles as $item){
-                if(strpos($item, self::THUMB_EXT.'.'.self::EXT)){
-                    $fileTime = Storage::disk($this->disk)->lastModified($item);
-                    $newItem  = str_replace(self::THUMB_EXT.'.'.self::EXT,'',$item);
-                    $newItem2 = substr($newItem,strlen($this->personnalPath())-1);
-                    $thumbListFiles[] = [
-                        'fileTime' => $fileTime,
-                        'fileName' => $newItem2
-                    ];
-                }
-            }
-            return $this->sortArrayFileTime($thumbListFiles);
-        } catch (\ErrorException $e) {
-            return [];
-        }
-    }
 
     private function sortArrayFileTime($array){
         foreach ($array as $key => $file){
