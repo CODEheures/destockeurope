@@ -9,6 +9,21 @@ window.DestockMap = require('./destockMap');
 window.DestockTools = require('./destockTools');
 window.Vue = require('vue');
 window.Vuex = require('vuex');
+
+require('amcharts3/amcharts/amcharts');
+require('amcharts3/amcharts/gauge');
+require('amcharts3/amcharts/serial');
+require('amcharts3/amcharts/themes/light');
+require('amcharts3/amcharts/images/dragIconRoundBig.svg');
+require('amcharts3/amcharts/images/dragIconRoundBigH.svg');
+// require('amcharts3/amcharts/plugins/export/export');
+//require('amcharts3/images/style.css');
+// require('amcharts3/amcharts/plugins/export/libs/fabric.js/fabric')
+// require('amcharts3/amcharts/plugins/export/libs/FileSaver.js/FileSaver')
+// require('amcharts3/amcharts/plugins/export/libs/jszip/jszip')
+// require('amcharts3/amcharts/plugins/export/libs/pdfmake/pdfmake')
+
+
 require('vue-focus');
 
 Vue.config.devtools = window.destockShareVar.vueJsDevTool;

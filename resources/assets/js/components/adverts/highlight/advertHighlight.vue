@@ -3,7 +3,7 @@
         <div class="fourteen wide column">
             <a :href="advert.url" class="ui card" :id="'highlight-card-'+_uid">
                 <div class="image">
-                    <img class="ui bordered rounded image" :src="advert.thumb">
+                    <img class="ui bordered rounded image" :src="getThumbUrl(advert)">
                 </div>
                 <div class="extra">
                     <div class="left floated author">
@@ -33,6 +33,16 @@
             this.strings = this.$store.state.strings['advert-highlight'];
         },
         methods: {
+            getThumbUrl(advert) {
+                let picture = [];
+                if('pictures' in advert) {
+                    picture = advert.pictures.filter(function (elem) {
+                        return elem.hashName === advert.mainPicture;
+                    });
+                }
+
+                return picture.length >= 1 ? picture[0].thumbUrl : '';
+            }
         }
     }
 </script>

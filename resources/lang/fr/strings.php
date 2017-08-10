@@ -666,11 +666,9 @@ return [
     'admin_transfert_size_null' => 'Taille du transfert trop petite',
     'admin_testGame_memo' => 'Aviez-vous penser à supprimer tout ce qui est sous storage/app/final et storage/app/invoices?',
 
-    'dashboard_size_local_files_label' => 'Charge disque local',
-    'dashboard_size_distant_files_label' => 'Charge disque ' . \App\Common\PicturesManager::DISK_DISTANT,
+    'dashboard_size_local_files_label' => 'Charge disque ',
     'dashboard_count_files_title' => 'Nombre de fichiers',
     'dashboard_count_local_files_label' => 'Local',
-    'dashboard_count_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT,
     'dashboard_megaBytes_label' => 'Mb',
     'dashboard_stats_label' => 'Statistiques',
     'dashboard_logs_label' => 'Logs',

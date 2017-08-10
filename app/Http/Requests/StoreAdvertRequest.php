@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Common\PicturesManager;
 use Codeheures\LaravelUtils\Traits\Tools\Database;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
@@ -56,17 +55,18 @@ class StoreAdvertRequest extends FormRequest
 
         }
 
-        $picturesManager = new PicturesManager();
-        $pictures = $picturesManager->listThumbs(PicturesManager::TYPE_TEMPO_LOCAL);
+
         $line3='';
-        foreach ($pictures as $picture) {
+        foreach (session('uploadPictures') as $picture) {
             if ($line3 == '') {
-                $line3 = $picture;
+                $line3 = $picture['hashName'];
             } else {
-                $line3 = $line3 . ',' . $picture;
+                $line3 = $line3 . ',' . $picture['hashName'];
             }
 
         }
+
+
 
         return [
             'type' => 'required|in:'.$line,

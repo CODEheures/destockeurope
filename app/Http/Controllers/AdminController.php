@@ -12,7 +12,6 @@ use App\Common\StatsManager;
 use App\Common\UserUtils;
 use App\Console\Kernel;
 use App\Invoice;
-use App\Jobs\TransferMedias;
 use App\Parameters;
 use App\Stats;
 use App\User;
@@ -25,6 +24,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Mpdf\Mpdf;
 use Vinkla\Vimeo\VimeoManager;
+use GuzzleHttp\Client as GuzzleClient;
 
 class AdminController extends Controller
 {
@@ -59,7 +59,20 @@ class AdminController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function dashboard(){
-        return view('application.dashboard');
+        //get load infos
+        $client = new GuzzleClient();
+        $loadInfos = [];
+
+        $infos = $client->request('GET',
+            config('pictures.routeGetInfos'),
+            [
+                'http_errors' => false,
+            ]
+        );
+        $loadInfos[] = json_decode($infos->getBody()->getContents());
+
+
+        return view('application.dashboard', compact('loadInfos'));
     }
 
     /**
@@ -325,29 +338,6 @@ class AdminController extends Controller
     }
 
     /**
-     * Create a Job for Transfert Medias from local disk to cloud
-     * @param $sizeInMb
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function transfertMedias($sizeInMb) {
-        if($sizeInMb <= 0) {
-            return response(trans('strings.admin_transfert_size_null'), 500);
-        }
-        $parameters = Parameters::latest()->first();
-        if($parameters && !$parameters->isOnTransfert) {
-            $parameters = Parameters::latest()->first();
-            $parameters->transfertTotal = 0;
-            $parameters->transfertPartial = 0;
-            $parameters->save();
-            $job = (new TransferMedias($sizeInMb))->delay(Carbon::now()->addSeconds(5))->onConnection('database');
-            $this->dispatch($job);
-            return response(trans('strings.admin_transfert_image_response', ['nb' => $sizeInMb, 'disk' => PicturesManager::DISK_DISTANT]), 202);
-        } else {
-            return response(trans('strings.admin_transfert_image_exist'), 500);
-        }
-    }
-
-    /**
      * Test if Lang Files have same keys
      * @return mixed
      */
@@ -504,7 +494,10 @@ class AdminController extends Controller
      * Tempo tests
      */
     public function tempo(){
-
+        $existHash = array_filter(session('uploadPictures'), function($elem) {
+            return $elem['hashName'] == 'addf8fec664012939baa6e0a1d788495';
+        });
+        dd(array_merge([], $existHash)[0]);
     }
 
     /**

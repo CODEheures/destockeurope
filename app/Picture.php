@@ -15,10 +15,11 @@ class Picture extends Model
         'hashName',
         'path',
         'disk',
-        'isThumb'
+        'isThumb',
+        'thumbUrl',
+        'normalUrl'
     ];
     protected $dates = ['deleted_at'];
-    protected $appends = array('url');
     protected $casts = [
         'isThumb' => 'Boolean',
     ];
@@ -27,13 +28,6 @@ class Picture extends Model
         return $this->belongsTo('App\Advert');
     }
 
-    public function getUrlAttribute() {
-        if($this->isThumb){
-            return route('picture.thumb', ['type' => PicturesManager::TYPE_FINAL_LOCAL, 'hashName' => $this->hashName, 'advertId' => $this->advert_id]);
-        } else {
-            return route('picture.normal', ['type' => PicturesManager::TYPE_FINAL_LOCAL, 'hashName' => $this->hashName, 'advertId' => $this->advert_id]);
-        }
-    }
 
     //local scopes
     public function scopeParents($query) {

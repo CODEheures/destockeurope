@@ -12,28 +12,28 @@
 
         <div class="field">
             <div :class="'ui doubling ' + nbColumns + ' column grid'">
-                <div class="column" v-for="(thumb,index) in thumbs">
+                <div class="column" v-for="(picture,index) in pictures">
                     <div :class="!isDelegation &&  index>=advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
                         <a class="ui pink right ribbon label" v-if="!isDelegation && index>=advertFormPhotoNbFreePicture">{{ strings.payPhotoHelpHeaderSingular }}</a>
                         <div class="ui stackable grid">
                             <div class="four wide centered column">
-                                <a href="#"><i class="large grey remove circle outline icon" :data-file="thumb" v-on:click="delPhoto"></i></a>
+                                <a href="#"><i class="large grey remove circle outline icon" :data-file="picture.hashName" v-on:click="delPhoto"></i></a>
                             </div>
                             <div class="twelve wide right aligned column">
                                 <div :id="'slider1-'+_uid+'-'+index" class="ui slider checkbox">
-                                    <input type="radio" name="mainThumb" :value="thumb">
+                                    <input type="radio" name="mainThumb" :value="picture.hashName">
                                     <label>{{ strings.mainPhotoLabel }}</label>
                                 </div>
                             </div>
                             <div class="sixteen wide column">
-                                <img :src="thumb" class="ui rounded medium centered image" />
+                                <img :src="picture.thumbUrl" class="ui rounded medium centered image" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="column" v-show="onUpload">
-                    <div :class="!isDelegation &&  thumbs.length+1>advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
-                        <a class="ui pink right ribbon label" v-if="!isDelegation && thumbs.length+1>advertFormPhotoNbFreePicture">{{ strings.payPhotoHelpHeaderSingular }}</a>
+                    <div :class="!isDelegation &&  pictures.length+1>advertFormPhotoNbFreePicture ? 'ui pink segment' : 'ui segment'">
+                        <a class="ui pink right ribbon label" v-if="!isDelegation && pictures.length+1>advertFormPhotoNbFreePicture">{{ strings.payPhotoHelpHeaderSingular }}</a>
                         <div class="ui stackable grid">
                             <div class="four wide centered column">
                                 <a href="#"><i class="large grey remove circle outline icon"></i></a>
@@ -75,7 +75,7 @@
         </div>
 
         <div class="field">
-            <template v-if="thumbs.length<maxFiles && !onUpload">
+            <template v-if="pictures.length<maxFiles && !onUpload">
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="row">
@@ -105,7 +105,7 @@
         props: {
             //vue routes
             routePostPicture: String,
-            routeGetListThumbs: String,
+            routeGetListPosts: String,
             routeDelPicture: String,
             //vue vars
             advertFormPhotoNbFreePicture: Number,
@@ -130,8 +130,7 @@
                 helpUploadP: '',
                 helpUploadA: '',
                 helpUploadAHref: '',
-                thumbs: [],
-                normals: [],
+                pictures: [],
                 nbPicturesIndicator: '',
                 helpHeaderIndicator: '',
                 mainPicture: '',
@@ -145,21 +144,21 @@
             this.strings = this.$store.state.strings['photo-uploader'];
             this.setPicturesIndicators();
             this.helpUpload();
-            this.getListThumbs();
-            this.$watch('thumbs', function () {
+            this.getListPosts();
+            this.$watch('pictures', function () {
                 this.setPicturesIndicators();
                 this.setMainPicture();
-                this.$parent.$emit('updateThumbs', {'thumbs': this.thumbs, 'normals': this.normals});
+                this.$parent.$emit('updatePictures', this.pictures);
             });
             this.$watch('mainPicture', function () {
-                this.$parent.$emit('updateMainPicture', {'thumbs': this.thumbs, 'normals': this.normals});
+                this.$parent.$emit('updateMainPicture', this.mainPicture);
             });
         },
         updated () {
             let that = this;
             this.mainPicture = this.oldMainPicture;
             this.setMainPicture();
-            (this.thumbs).forEach(function (elem,index) {
+            (this.pictures).forEach(function (elem,index) {
                 $('#slider1-'+that._uid+'-'+index).checkbox({
                     onChange: function () {
                         that.mainPicture = this.value;
@@ -199,8 +198,7 @@
                             that.onUpload = false;
                             that.filePhotoToPost = new FormData();
                             event.target.value="";
-                            that.thumbs = response.data['thumbs'];
-                            that.normals = response.data['normals'];
+                            that.pictures = response.data;
                         })
                         .catch(function (error) {
                             that.onUpload = false;
@@ -222,12 +220,11 @@
                 this.sourceCancelToken.cancel();
                 that.onUpload = false;
             },
-            getListThumbs: function (event) {
+            getListPosts: function (event) {
                 let that = this;
-                axios.get(this.routeGetListThumbs)
+                axios.get(this.routeGetListPosts)
                     .then(function (response) {
-                        that.thumbs = response.data['thumbs'];
-                        that.normals = response.data['normals'];
+                        that.pictures = response.data;
                     })
                     .catch(function (error) {
                         that.$parent.$emit('loadError');
@@ -236,10 +233,9 @@
             delPhoto: function (event) {
                 event.preventDefault();
                 let that=this;
-                axios.delete(this.routeDelPicture, {urlThumb: event.target.dataset.file})
+                axios.delete(this.routeDelPicture + '/' + event.target.dataset.file)
                     .then(function (response) {
-                        that.thumbs = response.data['thumbs'];
-                        that.normals = response.data['normals'];
+                        that.pictures = response.data;
                     })
                     .catch(function (error) {
                         that.$parent.$emit('loadError');
@@ -248,9 +244,9 @@
             setPicturesIndicators () {
                 let resultIndicator;
                 if(this.isDelegation==1){
-                    resultIndicator =  this.maxFiles - this.thumbs.length;
+                    resultIndicator =  this.maxFiles - this.pictures.length;
                 } else {
-                    resultIndicator =  this.advertFormPhotoNbFreePicture - this.thumbs.length;
+                    resultIndicator =  this.advertFormPhotoNbFreePicture - this.pictures.length;
                 }
                 if(resultIndicator>=0){
                     this.nbPicturesIndicator = resultIndicator;
@@ -270,14 +266,14 @@
             },
             setMainPicture() {
                 let that = this;
-                if(this.thumbs.length == 0){
+                if(this.pictures.length == 0){
                     this.mainPicture ='';
-                } else if(this.thumbs.length == 1 || this.thumbs.indexOf(this.mainPicture)==-1){
+                } else if(this.pictures.length == 1 || this.pictures.indexOf(this.mainPicture)==-1){
                     let firstElem = $('#slider1-'+this._uid+'-0');
                     this.mainPicture=firstElem.children('input').val();
                     firstElem.checkbox('check');
-                } else if(this.thumbs.indexOf(this.mainPicture)>=0) {
-                    (this.thumbs).forEach(function (elem,index) {
+                } else if(this.pictures.indexOf(this.mainPicture)>=0) {
+                    (this.pictures).forEach(function (elem,index) {
                         if(elem==that.mainPicture){
                             $('#slider1-'+that._uid+'-'+index).checkbox('check');
                         }

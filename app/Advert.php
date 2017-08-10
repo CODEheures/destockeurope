@@ -53,7 +53,7 @@ class Advert extends Model {
     protected $cascadeDeletes = ['pictures', 'bookmarks'];
     protected $appends = array('breadCrumb', 'isOnEdit', 'url', 'renewUrl', 'backToTopUrl', 'highlightUrl',
         'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'delegationUrl', 'resume',
-        'titleWithManuRef', 'thumb', 'isEligibleForRenew', 'isEligibleForHighlight',
+        'titleWithManuRef', 'isEligibleForRenew', 'isEligibleForHighlight',
         'isEligibleForRenewMailZero', 'isEligibleForEdit', 'isUserOwner', 'isUserBookmark', 'bookmarkCount',
         'picturesWithTrashedCount', 'originalPrice', 'originalPriceWithMargin', 'totalPrice', 'totalPriceMargin', 'globalDiscount', 'priceSubUnit', 'currencySymbol', 'listEditFields');
     private $breadcrumb;
@@ -236,10 +236,6 @@ class Advert extends Model {
         $ended = Carbon::parse($this->ended_at);
         $isQuiteYoung = $ended->subHours(env('REMAINING_HOURS_FOR_EDIT_ELIGIBILITY'))->isFuture();
         return ($this->isValid && !$this->isOnEdit && ($isQuiteYoung || $this->is_delegation));
-    }
-
-    public function getThumbAttribute() {
-        return route('picture.thumb', ['type' => PicturesManager::TYPE_FINAL_LOCAL, 'hashName' => $this->mainPicture, 'advertId' => $this->id]);
     }
 
     public function getResumeAttribute() {

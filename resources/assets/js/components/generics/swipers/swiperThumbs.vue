@@ -5,7 +5,7 @@
                 <div style="width:100%; height:100%; background-color: rgba(0,0,0,0.1); position: absolute"></div>
                 <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + videoId" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             </div>
-           <div class="swiper-slide" v-for="picture in dataPictures" :style="'background-image:url('+picture+')'"></div>
+           <div class="swiper-slide" v-for="picture in dataPictures" :style="'background-image:url('+picture.thumbUrl+')'"></div>
         </div>
     </div>
 </template>
@@ -41,7 +41,7 @@
             if (!this.swiper && typeof global.window != 'undefined') {
                 this.swiper = new Swiper(this.$el, this.options)
             }
-            this.$watch('mainPictures', function () {
+            this.$watch('mainPicture', function () {
                 this.updateDataPictures();
             });
             this.$watch('pictures', function () {
@@ -68,12 +68,10 @@
                 let that = this;
                 if(this.pictures){
                     this.pictures.forEach(function (picture) {
-                        if(!picture.isThumb){
-                            if(picture.hashName == that.mainPicture){
-                                pictures.unshift(picture.url);
-                            } else {
-                                pictures.push(picture.url);
-                            }
+                        if(picture.hashName == that.mainPicture){
+                            pictures.unshift(picture);
+                        } else {
+                            pictures.push(picture);
                         }
                     });
                 }

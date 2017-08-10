@@ -12,7 +12,6 @@ use App\Common\InvoiceUtils;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
 use App\Common\PaymentManager;
-use App\Common\PicturesManager;
 use App\Common\PrivilegesUtils;
 use App\Common\UserUtils;
 use App\Exceptions\PaymentException;
@@ -44,15 +43,14 @@ use Vinkla\Vimeo\VimeoManager;
 
 class AdvertController extends Controller
 {
-    private $pictureManager;
     private $vimeoManager;
     private $paymentManager;
 
     /**
      * AdvertController constructor.
-     * @param PicturesManager $picturesManager
+     * @param VimeoManager $vimeoManager
      */
-    public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
+    public function __construct(VimeoManager $vimeoManager) {
         $this->middleware('auth', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report']]);
         $this->middleware('isEmailConfirmed', ['except' => ['index', 'show', 'getListType', 'getHighlight', 'sendMail', 'report', 'bookmarks', 'unbookmarks']]);
         $this->middleware('haveCompleteAccount', ['only' => ['publish']]);
@@ -70,7 +68,6 @@ class AdvertController extends Controller
         $this->middleware('canBackToTop', ['only' => ['backToTop']]);
         $this->middleware('canHighlight', ['only' => ['highlight']]);
         $this->middleware('stopAnalytics', ['only' => ['toApprove']]);
-        $this->pictureManager  = $picturesManager;
         $this->vimeoManager = $vimeoManager;
         $this->paymentManager = new PaymentManager();
     }
@@ -454,7 +451,7 @@ class AdvertController extends Controller
         auth()->check() ? $user = auth()->user() : null;
 
         if(count(old())==0){
-            $this->pictureManager->purgeSessionLocalTempo();
+            session(['uploadPictures' => []]);
             session()->forget('videoId');
 
             if($user) {
@@ -527,12 +524,17 @@ class AdvertController extends Controller
         $editAdvert->load('pictures');
         if($editAdvert && PrivilegesUtils::canEditAdvert($editAdvert)){
 
-            //1°) get pictures to tempo store
+            //1°) set session upload pictures
             if(count(old())==0){
-                $this->pictureManager->purgeSessionLocalTempo();
-                foreach ($editAdvert->pictures as $picture) {
-                    $this->pictureManager->copyFinalToTempoLocal($picture);
+                $alreadyUploadPictures = [];
+                foreach ($editAdvert->pictures as $picture){
+                    $alreadyUploadPictures[] = [
+                        'hashName' => $picture->hashName,
+                        'thumbUrl' => $picture->thumbUrl,
+                        'normalUrl' => $picture->normalUrl,
+                    ];
                 }
+                session(['uploadPictures' => $alreadyUploadPictures]);
             }
 
             //2°) set session videoId
@@ -666,12 +668,9 @@ class AdvertController extends Controller
 
                 $advert->price = MoneyUtils::setPriceWithoutDecimal($request->has('price') ? strval(filter_var($request->price, FILTER_VALIDATE_FLOAT)) : '0',$request->currency);
 
-                //pass picture from local tempo to final and count them
-                $results = $this->pictureManager->storeLocalFinal();
-
                 //Cost for picture is based on final file number
                 $cost = CostUtils::getCost([
-                    'nbPictures' => count($results)/2,
+                    'nbPictures' => count(session('uploadPictures')),
                     'isUrgent' => $advert->isUrgent,
                     'haveVideo' => session()->has('videoId'),
                     'isEditOf' => $editAdvert
@@ -688,7 +687,7 @@ class AdvertController extends Controller
                         'state' => !is_null($isEditOf) ? Invoice::STATE_EDIT :  Invoice::STATE_CREATION,
                         'cost' => $cost,
                         'options' => CostUtils::setOptions([
-                            'nbPictures' => count($results)/2,
+                            'nbPictures' => count(session('uploadPictures')),
                             'isUrgent' => $advert->isUrgent,
                             'haveVideo' => session()->has('videoId'),
                             'isEditOf' => $editAdvert
@@ -704,14 +703,31 @@ class AdvertController extends Controller
                 if($persistent){
                     $persistent->delete();
                 }
-                foreach ($results as $result){
+                foreach (session('uploadPictures') as $uploadPicture){
                     $picture = new Picture();
-                    $picture->hashName = $result['hashName'];
-                    $picture->path = $result['path'];
-                    $picture->disk = $result['disk'];
-                    $picture->isThumb = $result['isThumb'];
+                    $picture->hashName = $uploadPicture['hashName'];
+                    $picture->thumbUrl = $uploadPicture['thumbUrl'];
+                    $picture->normalUrl = $uploadPicture['normalUrl'];
+
+                    //TODO SUPPRIMER CES CHAMPS
+                    $picture->path = '';
+                    $picture->disk = '';
+                    $picture->isThumb = false;
+
                     $advert->pictures()->save($picture);
                     $picture->save();
+
+                    $persistent = Persistent::where([
+                        'key' => 'picture',
+                        'value' => $uploadPicture['thumbUrl']
+                    ])->first();
+                    $persistent ? $persistent->delete() : null;
+
+                    $persistent = Persistent::where([
+                        'key' => 'picture',
+                        'value' => $uploadPicture['normalUrl']
+                    ])->first();
+                    $persistent ? $persistent->delete() : null;
                 }
 
                 DB::commit();
@@ -1332,7 +1348,7 @@ class AdvertController extends Controller
         $advert->isPublish = true;
         $advert->save();
 
-        $this->pictureManager->purgeSessionLocalTempo();
+        session(['uploadPictures' => []]);
         session()->has('videoId') ? session()->forget('videoId'): null;
         $request->session()->flash('clear', true);
     }
@@ -1463,11 +1479,17 @@ class AdvertController extends Controller
 
                 //delete old pictures
                 foreach ($originalAdvert->pictures as $picture){
-                    $countParentAdvert = $this->pictureManager->countParent($picture);
-                    if($countParentAdvert == 1) {
-                        //definitive destroy picture
-                        $this->pictureManager->destroy($picture);
-                    }
+                    //using persistent process for deleting pictures
+                    Persistent::create([
+                        'key' => 'picture',
+                        'value' => $picture->thumbUrl
+                    ]);
+
+                    Persistent::create([
+                        'key' => 'picture',
+                        'value' => $picture->normalUrl
+                    ]);
+
                     $picture->forceDelete();
                 }
 
@@ -1475,20 +1497,31 @@ class AdvertController extends Controller
                 foreach ($advert->pictures as $newPicture){
                     $picture = new Picture();
                     $picture->hashName = $newPicture->hashName;
+                    $picture->thumbUrl = $newPicture->thumbUrl;
+                    $picture->normalUrl = $newPicture->normalUrl;
+
+                    //TODO SUPPRIMER CES CHAMPS
                     $picture->path = $newPicture->path;
                     $picture->disk = $newPicture->disk;
                     $picture->isThumb = $newPicture->isThumb;
+
                     $originalAdvert->pictures()->save($picture);
                     $picture->save();
                 }
             } else {
                 //delete edit pictures and video
                 foreach ($advert->pictures as $picture){
-                    $countParentAdvert = $this->pictureManager->countParent($picture);
-                    if($countParentAdvert == 1) {
-                        //definitive destroy picture
-                        $this->pictureManager->destroy($picture);
-                    }
+                    //using persistent process for deleting pictures
+                    Persistent::create([
+                        'key' => 'picture',
+                        'value' => $picture->thumbUrl
+                    ]);
+
+                    Persistent::create([
+                        'key' => 'picture',
+                        'value' => $picture->normalUrl
+                    ]);
+
                     $picture->forceDelete();
                 }
                 !is_null($advert->video_id) && $advert->video_id != $originalAdvert->video_id? $this->vimeoManager->request('/videos/'.$advert->video_id,[],'DELETE') : null;

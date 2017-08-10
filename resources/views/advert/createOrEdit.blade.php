@@ -9,7 +9,7 @@
     <create-or-edit-advert-form
             route-advert-form-post="{{ $route }}"
             route-post-picture="{{ route('picture.post') }}"
-            route-get-list-thumbs="{{ route('picture.listThumbs') }}"
+            route-get-list-posts="{{ route('picture.listPosts') }}"
             route-del-picture="{{ route('picture.destroy')}}"
             route-get-cost="{{ route('advert.cost')}}"
             route-prices="{{ route('prices') }}"

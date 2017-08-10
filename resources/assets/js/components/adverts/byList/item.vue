@@ -13,13 +13,13 @@
                                             <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
                                         </div>
                                         <div class="ui right blue corner label">
-                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                            <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                        <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
                                         <div class="ui right blue corner label">
-                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                            <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
                                     </template>
                                 </div>
@@ -86,13 +86,13 @@
                                             <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
                                         </div>
                                         <div class="ui right blue corner label">
-                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                            <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                        <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
                                         <div class="ui right blue corner label">
-                                            <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                            <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
                                     </template>
                                 </div>
@@ -150,13 +150,13 @@
                                     <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
                                 </div>
                                 <div class="ui right blue corner label">
-                                    <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                    <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
                             </template>
                             <template v-else>
-                                <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
                                 <div class="ui right blue corner label">
-                                    <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                    <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
                             </template>
                             <template v-if="!advert.deleted_at">
@@ -251,13 +251,13 @@
                                     <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
                                 </div>
                                 <div class="ui right blue corner label">
-                                    <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                    <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
                             </template>
                             <template v-else>
-                                <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
                                 <div class="ui right blue corner label">
-                                    <i class="icon">{{ advert.pictures.length/2 }}</i>
+                                    <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
                             </template>
                         </div>
@@ -489,6 +489,16 @@
             },
             destroyMe: function () {
                 this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
+            },
+            getThumbUrl(advert) {
+                let picture = [];
+                if('pictures' in advert) {
+                    picture = advert.pictures.filter(function (elem) {
+                        return elem.hashName === advert.mainPicture;
+                    });
+                }
+
+                return picture.length >= 1 ? picture[0].thumbUrl : '';
             }
         }
     }

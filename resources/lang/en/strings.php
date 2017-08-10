@@ -665,11 +665,9 @@ return [
     'admin_transfert_size_null' => 'Transfert size too small',
     'admin_testGame_memo' => 'Were you thinking of deleting everything under storage/app/final et storage/app/invoices',
 
-    'dashboard_size_local_files_label' => 'local disk charge',
-    'dashboard_size_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT . 'disk charge',
+    'dashboard_size_local_files_label' => 'disk charge ',
     'dashboard_count_files_title' => 'File count',
     'dashboard_count_local_files_label' => 'Local',
-    'dashboard_count_distant_files_label' => \App\Common\PicturesManager::DISK_DISTANT,
     'dashboard_megaBytes_label' => 'Mb',
     'dashboard_stats_label' => 'Statistics',
     'dashboard_graph_adverts_title' => 'Advert Tracking',
