@@ -338,17 +338,8 @@ Donec iaculis tellus eget ante sodales, vestibulum efficitur odio faucibus. Susp
         foreach ($pictures as $item){
             $picture = new Picture();
             $picture->hashName = $item;
-            $picture->path = '/final/1/';
-            $picture->disk = 'local';
-            $picture->isThumb = false;
-            $advert->pictures()->save($picture);
-            $picture->save();
-
-            $picture = new Picture();
-            $picture->hashName = $item;
-            $picture->path = '/final/1/';
-            $picture->disk = 'local';
-            $picture->isThumb = true;
+            $picture->thumbUrl = config('pictures.service.domains')[0] . '/600x600/1/' . $picture->hashName . '/jpg';
+            $picture->normalUrl = config('pictures.service.domains')[0] . '/1200x675/1/' . $picture->hashName . '/jpg';
             $advert->pictures()->save($picture);
             $picture->save();
         }

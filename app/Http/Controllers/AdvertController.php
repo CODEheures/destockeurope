@@ -708,12 +708,6 @@ class AdvertController extends Controller
                     $picture->hashName = $uploadPicture['hashName'];
                     $picture->thumbUrl = $uploadPicture['thumbUrl'];
                     $picture->normalUrl = $uploadPicture['normalUrl'];
-
-                    //TODO SUPPRIMER CES CHAMPS
-                    $picture->path = '';
-                    $picture->disk = '';
-                    $picture->isThumb = false;
-
                     $advert->pictures()->save($picture);
                     $picture->save();
 
@@ -1499,12 +1493,6 @@ class AdvertController extends Controller
                     $picture->hashName = $newPicture->hashName;
                     $picture->thumbUrl = $newPicture->thumbUrl;
                     $picture->normalUrl = $newPicture->normalUrl;
-
-                    //TODO SUPPRIMER CES CHAMPS
-                    $picture->path = $newPicture->path;
-                    $picture->disk = $newPicture->disk;
-                    $picture->isThumb = $newPicture->isThumb;
-
                     $originalAdvert->pictures()->save($picture);
                     $picture->save();
                 }

@@ -3,7 +3,6 @@
 namespace App\Console;
 
 use App\Common\AdvertsManager;
-use App\Common\PicturesManager;
 use App\Common\StatsManager;
 use App\Stats;
 use Carbon\Carbon;
@@ -48,9 +47,8 @@ class Kernel extends ConsoleKernel
             $result1='';
 
             try {
-                $pictureManager = new PicturesManager();
                 $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
-                $advertManager = new AdvertsManager($pictureManager, $vimeoManager);
+                $advertManager = new AdvertsManager($vimeoManager);
                 $result1 = $advertManager->stopAdverts();
 
                 if($result1>0 || (Carbon::now()->hour==5 && Carbon::now()->minute==7)){
@@ -74,11 +72,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
             $purgeResult = [
-                'invalids' => ['adverts' => 0, 'pictures' => 0],
-                'abandoned' => ['adverts' => 0, 'pictures' => 0],
-                'obsoletes' => ['adverts' => 0, 'pictures' => 0],
-                'obsoleteLocalTempo' => ['pictures' => 0],
-                'persistent' => ['videos' => 0]
+                'invalids' => 0,
+                'abandoned' => 0,
+                'obsoletes' => 0,
+                'persistent' => ['pictures' => 0, 'videos' => 0]
             ];
             $result3='';
             $result4='';
@@ -86,34 +83,33 @@ class Kernel extends ConsoleKernel
                 $statManager = new StatsManager();
                 $statManager->getStats();
 
-                $pictureManager = new PicturesManager();
                 $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
-                $advertManager = new AdvertsManager($pictureManager, $vimeoManager);
+                $advertManager = new AdvertsManager($vimeoManager);
                 $purgeResult = $advertManager->purge();
                 $result3 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_1'));
                 $result4 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_2'));
 
                 $message = $message  . ';'
-                    . $purgeResult['invalids']['adverts'] . ';' . $purgeResult['invalids']['pictures'] . ';'
-                    . $purgeResult['abandoned']['adverts'] . ';' . $purgeResult['abandoned']['pictures'] . ';'
-                    . $purgeResult['obsoletes']['adverts'] . ';' . $purgeResult['obsoletes']['pictures'] . ';'
-                    . $purgeResult['obsoleteLocalTempo']['pictures'] . ';'
+                    . $purgeResult['invalids'] . ';'
+                    . $purgeResult['abandoned'] . ';'
+                    . $purgeResult['obsoletes'] . ';'
+                    . $purgeResult['persistent']['pictures'] . ';'
                     . $purgeResult['persistent']['videos'] . ';'
                     . $result3 . ';'
                     . $result4  .';';
             } catch (\Exception $e) {
                 $message = $message . ';'
-                    . $purgeResult['invalids']['adverts'] . ';' . $purgeResult['invalids']['pictures'] . ';'
-                    . $purgeResult['abandoned']['adverts'] . ';' . $purgeResult['abandoned']['pictures'] . ';'
-                    . $purgeResult['obsoletes']['adverts'] . ';' . $purgeResult['obsoletes']['pictures'] . ';'
-                    . $purgeResult['obsoleteLocalTempo']['pictures'] . ';'
+                    . $purgeResult['invalids'] . ';'
+                    . $purgeResult['abandoned'] . ';'
+                    . $purgeResult['obsoletes'] . ';'
+                    . $purgeResult['persistent']['pictures'] . ';'
                     . $purgeResult['persistent']['videos'] . ';'
                     . $result3 . ';'
-                    . $result4  . ';'
+                    . $result4  .';'
                     .  $e->getMessage();
             }
             if(!Storage::disk('logs')->exists(self::LOG_SCHEDULE)){
-                Storage::disk('logs')->append(self::LOG_SCHEDULE , 'DATE PURGE;INVALIDS;INVALIDS PIC;ABANDONED;ABANDONED PIC;OBSOLETES;OBSOLETES PIC;OBSOLETE LOCAL PIC;PERSISTENT VIDS;ALERT J-2;ALERT J-1;FAILS');
+                Storage::disk('logs')->append(self::LOG_SCHEDULE , 'DATE PURGE;INVALIDS;ABANDONED;OBSOLETES;PERSISTENT PICS;PERSISTENT VIDS;ALERT J-2;ALERT J-1;FAILS');
             }
             Storage::disk('logs')->append(self::LOG_SCHEDULE , $message);
 

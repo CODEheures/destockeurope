@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Common\MoneyUtils;
-use App\Common\PicturesManager;
 use App\Common\PrivilegesUtils;
 use Carbon\Carbon;
 use Codeheures\LaravelUtils\Traits\Tools\Currencies;

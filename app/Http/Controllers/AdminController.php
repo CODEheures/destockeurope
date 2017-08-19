@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Common\AdvertsManager;
 use App\Common\InvoiceUtils;
-use App\Common\PicturesManager;
 use App\Common\PrivilegesUtils;
 use App\Common\StatsManager;
 use App\Common\UserUtils;
@@ -28,17 +27,15 @@ use GuzzleHttp\Client as GuzzleClient;
 
 class AdminController extends Controller
 {
-    private $pictureManager;
     private $vimeoManager;
 
-    public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
+    public function __construct(VimeoManager $vimeoManager) {
         $this->middleware('auth');
         $this->middleware('isAdminUser', ['except' => ['delegations', 'delegation', 'invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('canGetDelegations', ['only' => ['delegations', 'delegation']]);
         $this->middleware('canManageInvoices', ['only' => ['invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->middleware('stopAnalytics');
-        $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;
     }
 
@@ -63,13 +60,15 @@ class AdminController extends Controller
         $client = new GuzzleClient();
         $loadInfos = [];
 
-        $infos = $client->request('GET',
-            config('pictures.routeGetInfos'),
-            [
-                'http_errors' => false,
-            ]
-        );
-        $loadInfos[] = json_decode($infos->getBody()->getContents());
+        foreach (config('pictures.service.domains') as $domain) {
+            $infos = $client->request('GET',
+                $domain . config('pictures.service.urls.routeGetInfos'),
+                [
+                    'http_errors' => false,
+                ]
+            );
+            $loadInfos[] = json_decode($infos->getBody()->getContents());
+        }
 
 
         return view('application.dashboard', compact('loadInfos'));
@@ -129,7 +128,6 @@ class AdminController extends Controller
         $viewsByDay = Stats::viewsByDay($date)->get();
         $advertsByDay = Stats::advertsByDay($date)->get();
         $costsByDay = Stats::costsByDay($date)->get();
-        $filesInfo = Stats::latest()->first();
 
         $csvLogs=[];
 
@@ -149,7 +147,6 @@ class AdminController extends Controller
             'viewsByDay' => $viewsByDay->toArray(),
             'advertsByDay' => $advertsByDay->toArray(),
             'costsByDay' => $costsByDay->toArray(),
-            'filesInfo' => $filesInfo,
             'logs' => $csvLogs
         ]);
     }
@@ -315,7 +312,7 @@ class AdminController extends Controller
      */
     public function cleanApp() {
         try {
-            $advertManager = new AdvertsManager($this->pictureManager, $this->vimeoManager);
+            $advertManager = new AdvertsManager( $this->vimeoManager);
             $purgeResults = $advertManager->purge();
             //update stats
             $statsManager = new StatsManager();
@@ -494,10 +491,11 @@ class AdminController extends Controller
      * Tempo tests
      */
     public function tempo(){
-        $existHash = array_filter(session('uploadPictures'), function($elem) {
-            return $elem['hashName'] == 'addf8fec664012939baa6e0a1d788495';
-        });
-        dd(array_merge([], $existHash)[0]);
+        $toto = 'http://statics.destockeurope.progress/600x600/1/2e913bc87151d291b0277b9786265ee3/jpg';
+
+        $delUrl = parse_url($toto)['scheme'] . '://' . parse_url($toto)['host'] . '/private' . parse_url($toto)['path'];
+
+        dd($delUrl);
     }
 
     /**
@@ -511,12 +509,6 @@ class AdminController extends Controller
             config(['runtime.tempo.seeder.quantity' => $quantity]);
         } else {
             config(['runtime.tempo.seeder.quantity' => 1]);
-        }
-        $testFiles = Storage::disk('local')->files('/testGame');
-        foreach ($testFiles as $file){
-            if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
-                Storage::disk('local')->copy($file, PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
-            }
         }
         $exitCode = Artisan::call('migrate:refresh', ['--seed' => true]);
         return redirect(route('home'))->with('info', $exitCode . ': ' . trans('strings.admin_testGame_memo'));

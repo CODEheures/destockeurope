@@ -5,30 +5,33 @@ namespace App\Common;
 use App\Advert;
 use App\Notifications\AlertObsoleteAdvert;
 use App\Persistent;
+use App\Picture;
 use Carbon\Carbon;
 use Vinkla\Vimeo\VimeoManager;
+use GuzzleHttp\Client as GuzzleClient;
 
 class AdvertsManager
 {
-    private $pictureManager;
     private $vimeoManager;
 
-    public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
-        $this->pictureManager = $picturesManager;
+    public function __construct(VimeoManager $vimeoManager) {
         $this->vimeoManager = $vimeoManager;
     }
 
     private function definitiveDestroy(Advert $advert) {
-        $counter = 0;
         $advert->load('picturesWithTrashed');
         //is last owner of pictures?
         foreach ($advert->picturesWithTrashed as $picture){
-            $countParentAdvert = $this->pictureManager->countParent($picture);
-            if($countParentAdvert == 1) {
-                //definitive destroy picture
-                $this->pictureManager->destroy($picture);
-                $counter++;
-            }
+            //using persistent process for deleting pictures
+            Persistent::create([
+                'key' => 'picture',
+                'value' => $picture->thumbUrl
+            ]);
+
+            Persistent::create([
+                'key' => 'picture',
+                'value' => $picture->normalUrl
+            ]);
         }
         $videoId = $advert->video_id;
         if($videoId && strlen($videoId)>0){
@@ -38,7 +41,7 @@ class AdvertsManager
             }
         }
         $advert->forceDelete();
-        return $counter;
+        return true;
     }
 
 
@@ -47,33 +50,26 @@ class AdvertsManager
         try {
 
             $results = [
-                'invalids' => ['adverts' => 0, 'pictures' => 0],
-                'abandoned' => ['adverts' => 0, 'pictures' => 0],
-                'obsoletes' => ['adverts' => 0, 'pictures' => 0],
-                'obsoleteLocalTempo' => ['pictures' => 0],
-                'persistent' => ['videos' => 0]
+                'invalids' => 0,
+                'abandoned' => 0,
+                'obsoletes' => 0,
+                'persistent' => ['pictures' => 0, 'videos' => 0]
             ];
 
             //1 get Adverts where is Valid = false
-            $invalidsResults = $this->purgeInvalidsAdverts();
-            $results['invalids']['adverts'] = $invalidsResults[0];
-            $results['invalids']['pictures'] = $invalidsResults[1];
+            $results['invalids'] = $this->purgeInvalidsAdverts();
 
             //2 get Adverts where is publish = false and created_at > 2 hours
-            $abandonedResults = $this->purgeAbandonedAdverts();
-            $results['abandoned']['adverts'] = $abandonedResults[0];
-            $results['abandoned']['pictures'] = $abandonedResults[1];
+            $results['abandoned'] = $this->purgeAbandonedAdverts();
 
             //3 get Adverts where deleted_at > env delay
-            $obsoletesResults = $this->purgeObsoletesAdverts();
-            $results['obsoletes']['adverts'] = $obsoletesResults[0];
-            $results['obsoletes']['pictures'] = $obsoletesResults[1];
+            $results['obsoletes'] = $this->purgeObsoletesAdverts();
 
-            //4 deleted Tempo files with life time pass
-            $obsoleteLocalTempoResults = $this->pictureManager->purgeObsoleteLocalTempo(env('TEMPO_HOURS_LIFE_TIME'));
-            $results['obsoleteLocalTempo']['pictures'] = $obsoleteLocalTempoResults;
+            //4 Purge Persistents Pictures
+            $persistentPicturesResults = $this->purgePersistentPictures();
+            $results['persistent']['pictures'] = $persistentPicturesResults;
 
-            //5 Purge Videos On Vimeo WithOut Advert
+            //5 Purge Persistents Videos On Vimeo
             $persistentVideosResults = $this->purgePersistentVideos();
             $results['persistent']['videos'] = $persistentVideosResults;
 
@@ -86,14 +82,13 @@ class AdvertsManager
 
     public function purgeObsoletesAdverts() {
         try {
-            $counterDelPictures = 0;
             $counterDelAdvert = 0;
             $obsoleteAdverts = Advert::obsoletes()->get();
             foreach ($obsoleteAdverts as $advert){
                 $counterDelAdvert++;
-                $counterDelPictures += $this->definitiveDestroy($advert);
+                $this->definitiveDestroy($advert);
             }
-            return [$counterDelAdvert, $counterDelPictures];
+            return $counterDelAdvert;
         } catch (\Exception $e) {
             throw new \Exception('purge obsoletes adverts fails');
         }
@@ -101,14 +96,13 @@ class AdvertsManager
 
     public function purgeInvalidsAdverts() {
         try {
-            $counterDelPictures = 0;
             $counterDelAdvert = 0;
             $invalidAdverts = Advert::invalid()->get();
             foreach ($invalidAdverts as $advert){
                 $counterDelAdvert++;
-                $counterDelPictures += $this->definitiveDestroy($advert);
+                $this->definitiveDestroy($advert);
             }
-            return [$counterDelAdvert, $counterDelPictures];
+            return $counterDelAdvert;
         } catch (\Exception $e) {
             throw new \Exception('purge invalid adverts fails');
         }
@@ -116,16 +110,44 @@ class AdvertsManager
 
     public function purgeAbandonedAdverts() {
         try {
-            $counterDelPictures = 0;
             $counterDelAdvert = 0;
             $abandonedAdverts = Advert::abandonned()->get();
             foreach ($abandonedAdverts as $advert){
                 $counterDelAdvert++;
-                $counterDelPictures += $this->definitiveDestroy($advert);
+                $this->definitiveDestroy($advert);
             }
-            return [$counterDelAdvert, $counterDelPictures];
+            return $counterDelAdvert;
         } catch (\Exception $e) {
             throw new \Exception('purge abandoned adverts fails');
+        }
+    }
+
+    public function purgePersistentPictures() {
+        try {
+            $client = new GuzzleClient;
+            $counterDelPictures = 0;
+            $persistents = Persistent::where('key', '=', 'picture')->get();
+            foreach ($persistents as $persistent) {
+                if(Carbon::parse($persistent->updated_at)->addHours(env('TEMPO_HOURS_LIFE_TIME'))->isPast()
+                    && Picture::withUrl($persistent->value)->count() == 0
+                ) {
+                    $delUrl = parse_url($persistent->value)['scheme'] . '://' . parse_url($persistent->value)['host'] . config('pictures.service.urls.routeDelete') . parse_url($persistent->value)['path'];
+                    $deleteResponse = $client->request('DELETE',
+                        $delUrl,
+                        [
+                            'http_errors' => false,
+                        ]
+                    );
+
+                    if($deleteResponse->getStatusCode() < 300){
+                        $counterDelPictures++;
+                    }
+                    $persistent->delete();
+                }
+            }
+            return $counterDelPictures;
+        } catch (\Exception $e) {
+            throw new \Exception('purge obsoletes adverts fails');
         }
     }
 

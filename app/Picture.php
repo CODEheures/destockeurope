@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Common\PicturesManager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,14 +29,6 @@ class Picture extends Model
 
 
     //local scopes
-    public function scopeParents($query) {
-        return $query->where('hashName' , '=', $this->hashName)
-            ->where('path', '=', $this->path)
-            ->where('disk', '=', $this->disk)
-            ->where('isThumb', '=', $this->isThumb)
-            ->withTrashed();
-    }
-
     public function scopeFindByHashAndAdvertId($query, $hashName, $advertId) {
         return $query->withTrashed()->where('hashName', '=', $hashName)
             ->where('advert_id','=',$advertId);
@@ -59,5 +50,9 @@ class Picture extends Model
 
     public function scopeFindByAdvertIdWithTrashed($query, $advertId) {
         return $query->withTrashed()->where('advert_id','=',$advertId);
+    }
+
+    public function scopeWithUrl($query, $url) {
+        return $query->withTrashed()->where('thumbUrl', $url)->orWhere('normalUrl', $url);
     }
 }

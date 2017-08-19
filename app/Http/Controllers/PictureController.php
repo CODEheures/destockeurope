@@ -20,13 +20,37 @@ class PictureController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function post(PictureAdvertRequest $request) {
-        //save file and create thumb with watermark
+
         $client = new GuzzleClient();
         $alreadyUploadPictures = session('uploadPictures', []);
 
-        //1°) POST PICTURE FOR GET MD5
+        //1°) GET LOAD INFOS FROM PICTURE SERVICES
+
+        //best load
+        foreach (config('pictures.service.domains') as $domain) {
+            $infos = $client->request('GET',
+                $domain . config('pictures.service.urls.routeGetInfos'),
+                [
+                    'http_errors' => false,
+                ]
+            );
+            $loadInfos[$domain] = json_decode($infos->getBody()->getContents(),true);
+        }
+
+        try {
+            $bestLoad = array_sort($loadInfos, function ($value, $key) {
+                return $value['load'];
+            });
+            $bestLoad = array_keys($bestLoad)[0];
+        } catch (\Exception $e) {
+            //default load
+            $bestLoad = config('pictures.service.domains')[0];
+        }
+
+
+        //2°) POST PICTURE FOR GET MD5
         $md5Response = $client->request('POST',
-            config('pictures.routeGetMd5'),
+            $bestLoad . config('pictures.service.urls.routeGetMd5'),
             [
                 'http_errors' => false,
                 'multipart' => [
@@ -44,17 +68,21 @@ class PictureController extends Controller
         $md5Infos = json_decode($md5Response->getBody()->getContents());
 
 
-        //2°) Process or delete
+        //3°) Process or delete
         $existHash = count(array_filter($alreadyUploadPictures, function($elem) use ($md5Infos){
             return $elem['hashName'] == $md5Infos->md5_name;
         })) == 1;
 
         if(!$existHash){
             $saveResponse = $client->request('POST',
-                config('pictures.routeSavePicture'),
+                $bestLoad . config('pictures.service.urls.routeSavePicture'),
                 [
                     'http_errors' => false,
                     'multipart' => [
+                        [
+                            'name' => 'watermark',
+                            'contents' => fopen(config('pictures.watermark_path'),'r')
+                        ],
                         [
                             'name' => 'csrf',
                             'contents' => csrf_token()
@@ -68,61 +96,34 @@ class PictureController extends Controller
                             'contents' => $md5Infos->guess_extension
                         ],
                         [
-                            'name' => 'watermark',
-                            'contents' => fopen(config('pictures.watermark_path'),'r')],
-                        [
-                            'name' => 'max_width',
-                            'contents' => config('pictures.max_width'),
-                        ],
-                        [
-                            'name' => 'picture_ratio',
-                            'contents' => config('pictures.picture_ratio'),
-                        ],
-                        [
-                            'name'     => 'thumb_size',
-                            'contents' => config('pictures.thumb_size'),
-                        ],
-                        [
-                            'name' => 'thumb_ratio',
-                            'contents' => config('pictures.thumb_ratio'),
-                        ],
-                        [
-                            'name'     => 'picture_back_color',
-                            'contents' => config('pictures.picture_back_color'),
-                        ],
-                        [
-                            'name'     => 'thumb_back_color',
-                            'contents' => config('pictures.thumb_back_color'),
-                        ],
-                        [
-                            'name'     => 'format_encoding',
-                            'contents' => config('pictures.format_encoding'),
+                            'name' => 'formats',
+                            'contents' => json_encode(config('pictures.formats'))
                         ]
-
                     ]
                 ]
             );
             if($saveResponse->getStatusCode() >= 400){ return response($saveResponse->getReasonPhrase(),500); }
-            $picture = json_decode($saveResponse->getBody()->getContents());
+
+            $picture = json_decode($saveResponse->getBody()->getContents(), true);
             $alreadyUploadPictures[] = [
-                'hashName' => $picture->hashName,
-                'thumbUrl' => $picture->thumbUrl,
-                'normalUrl' => $picture->normalUrl,
+                'hashName' => $picture['hashName'],
+                'thumbUrl' => $picture['thumb'],
+                'normalUrl' => $picture['normal'],
             ];
 
             Persistent::create([
                 'key' => 'picture',
-                'value' => $picture->thumbUrl
+                'value' => $picture['thumb']
             ]);
 
             Persistent::create([
                 'key' => 'picture',
-                'value' => $picture->normalUrl
+                'value' => $picture['normal']
             ]);
 
         } else {
             $md5CancelResponse = $client->request('DELETE',
-                config('pictures.routeCancelMd5').'/'.csrf_token()
+                $bestLoad . config('pictures.service.urls.routeCancelMd5').'/'.csrf_token()
             );
             if($md5CancelResponse->getStatusCode() >= 400){ return response($md5CancelResponse->getReasonPhrase(),500); }
         }
@@ -150,10 +151,12 @@ class PictureController extends Controller
             $client = new GuzzleClient();
 
             //1°) Test if thumb is not already employed
-            $thumbIsFree = Picture::withTrashed()->where('thumbUrl', $sessionHash['thumbUrl'])->count() == 0;
+            $thumbIsFree = Picture::withUrl($sessionHash['thumbUrl'])->count() == 0;
+            $delUrl = parse_url($sessionHash['thumbUrl'])['scheme'] . '://' . parse_url($sessionHash['thumbUrl'])['host'] . config('pictures.service.urls.routeDelete') . parse_url($sessionHash['thumbUrl'])['path'];
+
             if($thumbIsFree){
                 $deleteResponse = $client->request('DELETE',
-                    str_replace_first('/thumb','/private/thumb',$sessionHash['thumbUrl']),
+                    $delUrl,
                     [
                         'http_errors' => false,
                     ]
@@ -168,10 +171,12 @@ class PictureController extends Controller
             $persistent ? $persistent->delete() : null;
 
             //1°) Test if normal is not already employed
-            $normalIsFree = Picture::withTrashed()->where('normalUrl', $sessionHash['normalUrl'])->count() == 0;
+            $normalIsFree = Picture::withUrl($sessionHash['normalUrl'])->count() == 0;
+            $delUrl = parse_url($sessionHash['normalUrl'])['scheme'] . '://' . parse_url($sessionHash['normalUrl'])['host'] . config('pictures.service.urls.routeDelete') . parse_url($sessionHash['normalUrl'])['path'];
+
             if($normalIsFree) {
                 $deleteResponse = $client->request('DELETE',
-                    str_replace_first('/normal', '/private/normal', $sessionHash['normalUrl']),
+                    $delUrl,
                     [
                         'http_errors' => false,
                     ]
