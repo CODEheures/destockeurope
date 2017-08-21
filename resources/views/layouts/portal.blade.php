@@ -49,7 +49,10 @@
                         <div class="seven wide mobile ten wide tablet ten wide computer bottom aligned column keywords">
                             @include('includes.rotaryKeywords.html')
                         </div>
-                        <div class="three wide mobile two wide tablet two wide computer rigth floated column">
+                        <div class="three wide middle aligned mobile only column">
+                            @include('layouts.head.langSelectorMobile')
+                        </div>
+                        <div class="two wide tablet only two wide computer only column">
                             @include('layouts.head.langSelector')
                         </div>
                     </div>
@@ -88,7 +91,6 @@
     <script src="{{ mix("js/vendor.js") }}"></script>
     <script src="{{ mix("js/app.js") }}"></script>
     @yield('scripts')
-    @include('includes.rotaryKeywords.script')
     @if(env('APP_URL')=='https://destockeurope.com')
         @include('plugins.googleAnalytic.tracking')
         @include('plugins.googleAdsense.script')

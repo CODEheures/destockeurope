@@ -17,11 +17,29 @@ body.yellowbg.pushable {
 }
 
 .rubalise {
+  position: absolute;
   width: 100%;
-  //height: 19px;
-  height: 7px;
+  bottom: calc(50% - 1vw);
+  height: 2vw;
   background-size: contain;
   background-image: url("/images/rubalise.svg");
+}
+
+.rotary-keywords {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  table-layout: fixed;
+  width: 100%;
+  height: 1.6rem;
+
+  & h1 {
+    display:block;
+    animation:linear marqueelike 20s infinite ;
+    margin-left:-100%;
+    padding:0 5px;
+    text-align:left;
+  }
 }
 
 .glass-box {
@@ -34,17 +52,13 @@ body.yellowbg.pushable {
   //margin-top: 20px;
   & div.ui.vertical.segment.header {
     border-bottom: none;
-    & .rubalise {
-      //bottom: 54px;
-      bottom: 38px;
-      position: absolute;
-    }
     & .ui.container .item {
       & img, h1 {
         display: inline-block;
       }
       & h1 {
         line-height: 18px;
+        text-overflow: ellipsis;
       }
       & h1 span {
         //font-size: 1.5rem;
@@ -263,8 +277,7 @@ div.ui.vertical.segment.separator {
     }
   }
   & .rubalise {
-    position: absolute;
-    bottom: 8px;
+    bottom: 0;
   }
 }
 
@@ -508,46 +521,6 @@ form {
   padding: 0.55em;
 }
 
-@keyframes appear-right-in {
-  0% {
-    position: fixed;
-    top: 12em;
-    right: 0;
-    width: 20em;
-    transform: translate3d(100%,0,0);
-  }
-  80% {
-    position: fixed;
-    top: 12em;
-    right: 0;
-    width: 20em;
-    transform: translate3d(-13%,0,0);
-  }
-  100% {
-    position: fixed;
-    top: 12em;
-    right: 0;
-    width: 20em;
-    transform: translate3d(0,0,0);
-  }
-}
-@keyframes appear-right-out {
-  0% {
-    position: fixed;
-    top: 12em;
-    right: 0;
-    width: 20em;
-    transform: translate3d(0,0,0);
-  }
-  100% {
-    position: fixed;
-    top: 12em;
-    right: 0;
-    width: 20em;
-    transform: translate3d(100%,0,0);
-  }
-}
-
 .row.filters {
   margin-bottom: 2rem;
 
@@ -672,12 +645,6 @@ img.lightbox {
       }
     }
   }
-  div.ui.vertical.segment.header, div.ui.vertical.segment.separator, div.ui.masthead.segment {
-    & .rubalise {
-      height: 26px;
-      bottom: -14px;
-    }
-  }
 }
 
 @media only screen and (min-width: 990px){
@@ -686,7 +653,6 @@ img.lightbox {
       display: flex;
     }
   }
-
   .ui.top.fixed.menu{
     & .links {
       display: flex;
@@ -695,9 +661,6 @@ img.lightbox {
   .portal {
     margin-top: 20px;
     & div.ui.vertical.segment.header {
-      & .rubalise {
-        bottom: 54px;
-      }
       & .ui.container .item {
         & h1 span {
           font-size: 20px;
@@ -736,6 +699,9 @@ img.lightbox {
         }
       }
     }
+  }
+  .rubalise {
+    height: 1vw;
   }
 }
 
@@ -789,4 +755,51 @@ img.lightbox {
       }
     }
   }
+}
+
+//Animations
+@keyframes appear-right-in {
+  0% {
+    position: fixed;
+    top: 12em;
+    right: 0;
+    width: 20em;
+    transform: translate3d(100%,0,0);
+  }
+  80% {
+    position: fixed;
+    top: 12em;
+    right: 0;
+    width: 20em;
+    transform: translate3d(-13%,0,0);
+  }
+  100% {
+    position: fixed;
+    top: 12em;
+    right: 0;
+    width: 20em;
+    transform: translate3d(0,0,0);
+  }
+}
+
+@keyframes appear-right-out {
+  0% {
+    position: fixed;
+    top: 12em;
+    right: 0;
+    width: 20em;
+    transform: translate3d(0,0,0);
+  }
+  100% {
+    position: fixed;
+    top: 12em;
+    right: 0;
+    width: 20em;
+    transform: translate3d(100%,0,0);
+  }
+}
+
+@keyframes marqueelike {
+  0%, 10%, 100% {margin-left:0;}
+  99.99% {margin-left:-100%;}
 }

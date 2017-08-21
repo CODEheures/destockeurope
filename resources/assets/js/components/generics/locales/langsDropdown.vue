@@ -1,5 +1,5 @@
 <template>
-    <div :id="'langChoice-'+_uid" class="ui top right pointing dropdown right floated basic button">
+    <div :id="'langChoice-'+_uid" :class="'ui top right pointing dropdown right floated ' + color + ' ' + size + ' button'">
         <div class="text">{{ properties.actualLocale }}</div>
         <!--<i class="dropdown icon"></i>-->
         <div class="menu">
@@ -13,6 +13,16 @@
     export default {
         props: {
             listAvailableLang: String,
+            size: {
+                type: String,
+                default: '',
+                required: false,
+            },
+            color: {
+                type: String,
+                default: 'basic',
+                required: false,
+            }
         },
         data: () => {
             return {
