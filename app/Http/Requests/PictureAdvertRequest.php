@@ -28,7 +28,7 @@ class PictureAdvertRequest extends FormRequest
         $maxSize = env('PHOTO_MAX_SIZE_MB')*1024;
 
         return [
-            'addpicture' => 'required|image|min:2|max:'.$maxSize.'|dimensions:min_width='. env('MIN_WIDTH'). ',min_height=' . env('MIN_HEIGHT')
+            'addpicture' => 'required|mimes:jpeg,png,gif,webp|min:2|max:'.$maxSize.'|dimensions:min_width='. env('MIN_WIDTH'). ',min_height=' . env('MIN_HEIGHT')
         ];
     }
 }
