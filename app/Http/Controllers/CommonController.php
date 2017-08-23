@@ -13,6 +13,7 @@ use App\Common\UserUtils;
 use App\Http\Requests\SubscribeNewsLetterRequest;
 use App\Http\Requests\UnsubscribeNewsLetterRequest;
 use App\Notifications\GlobalMessage;
+use App\Picture;
 use App\User;
 use Codeheures\LaravelUtils\Traits\Tools\Browser;
 use GuzzleHttp\Client;
@@ -127,10 +128,17 @@ class CommonController extends Controller
 
         $path = 'images/fake_advert_' . App::getLocale() . '.jpg';
         if(file_exists(__DIR__ . '/../../../public/'. $path)){
-            $fakeHighlightAdvert['thumb'] = asset($path);
+            $pic_asset = asset($path);
         } else {
-            $fakeHighlightAdvert['thumb'] = asset('images/fake_advert_en.jpg');
+            $pic_asset = asset('images/fake_advert_en.jpg');
         }
+        $fakeHighlightAdvertPicture = new Picture();
+        $fakeHighlightAdvertPicture->thumbUrl = $pic_asset;
+        $fakeHighlightAdvertPicture->normalUrl = $pic_asset;
+
+        $fakeHighlightAdvertPicture = $fakeHighlightAdvertPicture->toArray();
+        $fakeHighlightAdvert['pictures'][] = $fakeHighlightAdvertPicture;
+
         $fakeHighlightAdvert['price_margin'] = $fakeHighlightAdvert['price'];
         $fakeHighlightAdvert['url'] = route('mines');
 
