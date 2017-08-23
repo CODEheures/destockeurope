@@ -6,6 +6,8 @@
                                 'countFilesTitle' => trans('strings.dashboard_count_files_title'),
                                 'countLocalFilesLabel' => trans('strings.dashboard_count_local_files_label'),
                                 'megaBytesLabel' => trans('strings.dashboard_megaBytes_label'),
+                                'countLoadLabel' => trans('strings.dashboard_countLoad_label'),
+                                'bytesLoadLabel' => trans('strings.dashboard_bytesLoad_label'),
                         ]
                 ])}}"
 ></store-strings-setter>

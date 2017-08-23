@@ -14,8 +14,6 @@ require('amcharts3/amcharts/amcharts');
 require('amcharts3/amcharts/gauge');
 require('amcharts3/amcharts/serial');
 require('amcharts3/amcharts/themes/light');
-require('amcharts3/amcharts/images/dragIconRoundBig.svg');
-require('amcharts3/amcharts/images/dragIconRoundBigH.svg');
 // require('amcharts3/amcharts/plugins/export/export');
 //require('amcharts3/images/style.css');
 // require('amcharts3/amcharts/plugins/export/libs/fabric.js/fabric')

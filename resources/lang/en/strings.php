@@ -666,9 +666,11 @@ return [
     'admin_testGame_memo' => 'Were you thinking of deleting everything under storage/app/final et storage/app/invoices',
 
     'dashboard_size_local_files_label' => 'disk charge ',
-    'dashboard_count_files_title' => 'File count',
+    'dashboard_count_files_title' => 'Files',
     'dashboard_count_local_files_label' => 'Local',
     'dashboard_megaBytes_label' => 'Mb',
+    'dashboard_countLoad_label' => 'Files load',
+    'dashboard_bytesLoad_label' => 'Disk load',
     'dashboard_stats_label' => 'Statistics',
     'dashboard_graph_adverts_title' => 'Advert Tracking',
     'dashboard_logs_label' => 'Logs',

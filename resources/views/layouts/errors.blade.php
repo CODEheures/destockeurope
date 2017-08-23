@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+@include('includes.tag')
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">

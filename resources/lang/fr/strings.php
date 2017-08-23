@@ -667,9 +667,11 @@ return [
     'admin_testGame_memo' => 'Aviez-vous penser à supprimer tout ce qui est sous storage/app/final et storage/app/invoices?',
 
     'dashboard_size_local_files_label' => 'Charge disque ',
-    'dashboard_count_files_title' => 'Nombre de fichiers',
+    'dashboard_count_files_title' => 'Fichiers',
     'dashboard_count_local_files_label' => 'Local',
     'dashboard_megaBytes_label' => 'Mb',
+    'dashboard_countLoad_label' => 'Charge fichiers',
+    'dashboard_bytesLoad_label' => 'Charge Disque',
     'dashboard_stats_label' => 'Statistiques',
     'dashboard_logs_label' => 'Logs',
     'dashboard_graph_adverts_title' => 'Suivi des annonces',

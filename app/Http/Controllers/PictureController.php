@@ -102,7 +102,7 @@ class PictureController extends Controller
                     ]
                 ]
             );
-            if($saveResponse->getStatusCode() >= 400){ return response($saveResponse->getReasonPhrase(),500); }
+            if($saveResponse->getStatusCode() >= 400){ return response($saveResponse->getBody(),500); }
 
             $picture = json_decode($saveResponse->getBody()->getContents(), true);
             $alreadyUploadPictures[] = [

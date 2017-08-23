@@ -12,9 +12,12 @@
                 <h4 class="ui horizontal divider header"><i class="dashboard icon"></i> {{ strings.dashboardLabel }} </h4>
                 <div class="ui grid">
                     <div class="sixteen wide column" v-for="loadInfos in dataLoadInfos">
-                        <chart-load-infos
-                            :load-infos="loadInfos"
-                        ></chart-load-infos>
+                        <div class="ui segment">
+                            <chart-load-infos
+                                    :load-infos="loadInfos"
+                            ></chart-load-infos>
+                        </div>
+
                     </div>
                 </div>
                 <div class="ui grid">
