@@ -69,59 +69,62 @@
                     </div>
                     <div class="sixteen wide mobile only ptpb2 column">
                         <div class="ui grid">
-                            <div class="sixteen wide mobile only column">
-                                <div class="header"><h4>{{ advert.title }}</h4></div>
-                                <span class="ui mini breadcrumb">
-                                    <template v-for="(item,index) in advert.breadCrumb">
-                                        <div class="active section">{{ item.description[properties.actualLocale] }}</div>
-                                        <i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>
-                                    </template>
-                                </span>
-                            </div>
-                            <div class="ten wide mobile only column">
+                            <div class="six wide mobile only column">
                                 <div class="ui image">
                                     <template v-if="advert.video_id">
-                                        <div class="ui top aligned medium bordered rounded image">
+                                        <div class="ui top aligned small bordered rounded image">
                                             <div style="width:100%; height:100%; background-color: rgba(0,0,0,0.1); position: absolute; z-index: 2"></div>
                                             <iframe :id="'vimeo-iframe-'+_uid" :src="'https://player.vimeo.com/video/' + advert.video_id" width="100%" height="100%" frameborder="0"></iframe>
                                         </div>
-                                        <div class="ui right blue corner label">
+                                        <div class="ui mini right blue corner label">
                                             <i class="icon">{{ advert.pictures.length/2 }}</i>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
-                                        <div class="ui right blue corner label">
+                                        <img class="ui top aligned small bordered rounded image" :src="advert.thumb">
+                                        <div class="ui mini right blue corner label">
                                             <i class="icon">{{ advert.pictures.length/2 }}</i>
                                         </div>
                                     </template>
                                 </div>
                             </div>
-                            <div class="six wide mobile only column">
-                                <p class="infos">
-                                    <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
-                                </p>
-                                <p class="infos">
-                                    <span><i class="cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                </p>
-                                <p class="infos">
-                                    <span><i class="cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
-                                </p>
-                                <p>
-                                    <span :class="advert.isNegociated ? 'ui blue left pointing label price negociated' : 'ui yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
-                                </p>
+                            <div class="ten wide mobile only column" style="padding-left : 0;">
+                                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%">
+                                    <div class="sixteen wide column">
+                                        <div class="header"><h4>{{ advert.title }}</h4></div>
+                                        <!--<span class="ui mini breadcrumb">-->
+                                        <!--<template v-for="(item,index) in advert.breadCrumb">-->
+                                        <!--<div class="active section">{{ item.description[properties.actualLocale] }}</div>-->
+                                        <!--<i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>-->
+                                        <!--</template>-->
+                                        <!--</span>-->
+                                        <p class="infos" style="text-align: right;">
+                                            <span v-if="advert.isUrgent" class="ui mini red horizontal label">{{ strings.urgentLabel }}</span>
+                                        </p>
+                                    </div>
+                                    <div class="sixteen wide bottom aligned column">
+                                        <p class="infos" style="text-align: right;">
+                                            <span><i class="small cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
+                                            <span><i class="small cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                            <span :class="advert.isNegociated ? 'ui tiny blue left pointing label price negociated' : 'ui small yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+
+
                             </div>
-                            <div class="sixteen wide right aligned mobile only column geodate-mobile">
-                                <p>
-                                    <i class="green big protect icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>
-                                    <i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
-                                    <i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
-                                    <i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
-                                    <br /><i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                    <br /><i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
-                                    <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
-                                </p>
-                            </div>
+                            <!--<div class="sixteen wide right aligned mobile only column geodate-mobile">-->
+                                <!--<p>-->
+                                    <!--<i class="green big protect icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>-->
+                                    <!--<i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>-->
+                                    <!--<i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>-->
+                                    <!--<i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>-->
+                                    <!--<br /><i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>-->
+                                    <!--<br /><i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>-->
+                                    <!--<i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>-->
+                                <!--</p>-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
