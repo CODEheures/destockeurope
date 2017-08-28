@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Common\GeoManager;
-use App\Common\PicturesManager;
 use App\Http\Requests\UpdateCompagnyNameRequest;
 use App\Http\Requests\UpdatePhoneRequest;
 use App\Http\Requests\UpdateRegistrationRequest;
@@ -20,20 +19,17 @@ class UserController extends Controller
 {
 
     private $auth;
-    private $pictureManager;
 
     /**
      * Create a new controller instance.
      *
      * @param Guard $auth
-     * @param PicturesManager $picturesManager
      */
-    public function __construct(Guard $auth, PicturesManager $picturesManager)
+    public function __construct(Guard $auth)
     {
         $this->middleware('auth');
         $this->middleware('canManageMyAccount');
         $this->auth = $auth;
-        $this->pictureManager = $picturesManager;
     }
 
     /**

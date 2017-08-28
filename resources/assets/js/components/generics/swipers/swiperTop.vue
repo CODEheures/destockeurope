@@ -8,10 +8,10 @@
             <template v-if="dataPictures.length > 0">
                 <div class="swiper-slide" v-for="picture in dataPictures">
                     <template v-if="!lazyLoad">
-                        <img :src="picture" v-on:click="lightBoxMe(picture)">
+                        <img :src="picture.normalUrl" v-on:click="lightBoxMe(picture)">
                     </template>
                     <template v-else>
-                        <img :data-src="picture" class="swiper-lazy" v-on:click="lightBoxMe(picture)">
+                        <img :data-src="picture.normalUrl" class="swiper-lazy" v-on:click="lightBoxMe(picture)">
                         <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
                     </template>
                 </div>
@@ -72,7 +72,7 @@
             if (!this.swiper && typeof global.window != 'undefined') {
                 this.swiper = new Swiper(this.$el, this.options)
             }
-            this.$watch('mainPictures', function () {
+            this.$watch('mainPicture', function () {
                 this.updateDataPictures();
             });
             this.$watch('pictures', function () {
@@ -90,20 +90,18 @@
             }
         },
         methods : {
-            lightBoxMe (imgUrl) {
-                this.$parent.$emit('openLightBox', imgUrl)
+            lightBoxMe (img) {
+                this.$parent.$emit('openLightBox', img.normalUrl)
             },
             updateDataPictures: function () {
                 let pictures=[];
                 let that = this;
                 if(this.pictures){
                     this.pictures.forEach(function (picture) {
-                        if(!picture.isThumb){
-                            if(picture.hashName == that.mainPicture){
-                                pictures.unshift(picture.url);
-                            } else {
-                                pictures.push(picture.url);
-                            }
+                        if(picture.hashName == that.mainPicture){
+                            pictures.unshift(picture);
+                        } else {
+                            pictures.push(picture);
                         }
                     });
                 }

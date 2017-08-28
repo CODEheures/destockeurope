@@ -3,29 +3,137 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PictureAdvertRequest;
-use App\Common\PicturesManager;
+use App\Persistent;
 use App\Picture;
-use Illuminate\Http\Response;
+use GuzzleHttp\Client as GuzzleClient;
 
 class PictureController extends Controller
 {
 
-    private $pictureManager;
-
-    public function __construct(PicturesManager $picturesManager) {
-        $this->middleware('auth', ['except' => ['getThumb', 'getNormal']]);
-        $this->pictureManager = $picturesManager;
+    public function __construct() {
+        $this->middleware('auth');
     }
 
     /**
-     * post a picture and thumb in temporary personal folder
+     * post a picture and thumb
      * @param PictureAdvertRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function post(PictureAdvertRequest $request) {
-        //save file and create thumb with watermark
-        $this->pictureManager->save($request);
-        return response()->json($this->pictureManager->listThumbs());
+
+        $client = new GuzzleClient();
+        $alreadyUploadPictures = session('uploadPictures', []);
+
+        //1°) GET LOAD INFOS FROM PICTURE SERVICES
+
+        //best load
+        foreach (config('pictures.service.domains') as $domain) {
+            $infos = $client->request('GET',
+                $domain . config('pictures.service.urls.routeGetInfos'),
+                [
+                    'http_errors' => false,
+                ]
+            );
+            if($infos->getStatusCode() == 200){
+                $loadInfos[$domain] = json_decode($infos->getBody()->getContents(),true);
+            }
+        }
+
+        try {
+            $bestLoad = array_sort($loadInfos, function ($value, $key) {
+                return $value['load'];
+            });
+            $bestLoad = array_keys($bestLoad)[0];
+        } catch (\Exception $e) {
+            //default load
+            return response(trans('strings.view_advert_create_image_servers_not_available'),503);
+            //$bestLoad = config('pictures.service.domains')[0];
+        }
+
+
+        //2°) POST PICTURE FOR GET MD5
+        $md5Response = $client->request('POST',
+            $bestLoad . config('pictures.service.urls.routeGetMd5'),
+            [
+                'http_errors' => false,
+                'multipart' => [
+                    [
+                        'name' => 'csrf',
+                        'contents' => csrf_token()],
+                    [
+                        'name' => 'addpicture',
+                        'contents' => fopen($request->file('addpicture')->getRealPath(),'r')
+                    ]
+                ]
+            ]
+        );
+        if($md5Response->getStatusCode() >= 400){ return response($md5Response->getBody(),500); }
+        $md5Infos = json_decode($md5Response->getBody()->getContents());
+
+
+        //3°) Process or delete
+        $existHash = count(array_filter($alreadyUploadPictures, function($elem) use ($md5Infos){
+            return $elem['hashName'] == $md5Infos->md5_name;
+        })) == 1;
+
+        if(!$existHash){
+            $saveResponse = $client->request('POST',
+                $bestLoad . config('pictures.service.urls.routeSavePicture'),
+                [
+                    'http_errors' => false,
+                    'multipart' => [
+                        [
+                            'name' => 'watermark',
+                            'contents' => fopen(config('pictures.watermark_path'),'r')
+                        ],
+                        [
+                            'name' => 'csrf',
+                            'contents' => csrf_token()
+                        ],
+                        [
+                            'name' => 'md5_name',
+                            'contents' => $md5Infos->md5_name
+                        ],
+                        [
+                            'name' => 'guess_extension',
+                            'contents' => $md5Infos->guess_extension
+                        ],
+                        [
+                            'name' => 'formats',
+                            'contents' => json_encode(config('pictures.formats'))
+                        ]
+                    ]
+                ]
+            );
+            if($saveResponse->getStatusCode() >= 400){ return response($saveResponse->getBody(),500); }
+
+            $picture = json_decode($saveResponse->getBody()->getContents(), true);
+            $alreadyUploadPictures[] = [
+                'hashName' => $picture['hashName'],
+                'thumbUrl' => $picture['thumb'],
+                'normalUrl' => $picture['normal'],
+            ];
+
+            Persistent::create([
+                'key' => 'picture',
+                'value' => $picture['thumb']
+            ]);
+
+            Persistent::create([
+                'key' => 'picture',
+                'value' => $picture['normal']
+            ]);
+
+        } else {
+            $md5CancelResponse = $client->request('DELETE',
+                $bestLoad . config('pictures.service.urls.routeCancelMd5').'/'.csrf_token()
+            );
+            if($md5CancelResponse->getStatusCode() >= 400){ return response($md5CancelResponse->getReasonPhrase(),500); }
+        }
+
+        session(['uploadPictures' => $alreadyUploadPictures]);
+        return response()->json($alreadyUploadPictures);
+
     }
 
     /**
@@ -34,74 +142,113 @@ class PictureController extends Controller
      * @param $fileName
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroyTempo($hashName) {
-        $this->pictureManager->destroyTempo($hashName);
-        return response()->json($this->pictureManager->listThumbs());
+    public static function destroy($hashName) {
+
+        $sessionHash = array_merge([], array_filter(session('uploadPictures'), function($elem) use ($hashName) {
+            return $elem['hashName'] == $hashName;
+        }));
+
+
+        if(count($sessionHash)==1){
+            $sessionHash = $sessionHash[0];
+            $client = new GuzzleClient();
+
+            //1°) Test if thumb is not already employed
+            $thumbIsFree = Picture::withUrl($sessionHash['thumbUrl'])->count() == 0;
+            $delUrl = parse_url($sessionHash['thumbUrl'])['scheme'] . '://' . parse_url($sessionHash['thumbUrl'])['host'] . config('pictures.service.urls.routeDelete') . parse_url($sessionHash['thumbUrl'])['path'];
+
+            if($thumbIsFree){
+                $deleteResponse = $client->request('DELETE',
+                    $delUrl,
+                    [
+                        'http_errors' => false,
+                    ]
+                );
+            }
+
+            $persistent = Persistent::where([
+                'key' => 'picture',
+                'value' => $sessionHash['thumbUrl']
+            ])->first();
+
+            $persistent ? $persistent->delete() : null;
+
+            //1°) Test if normal is not already employed
+            $normalIsFree = Picture::withUrl($sessionHash['normalUrl'])->count() == 0;
+            $delUrl = parse_url($sessionHash['normalUrl'])['scheme'] . '://' . parse_url($sessionHash['normalUrl'])['host'] . config('pictures.service.urls.routeDelete') . parse_url($sessionHash['normalUrl'])['path'];
+
+            if($normalIsFree) {
+                $deleteResponse = $client->request('DELETE',
+                    $delUrl,
+                    [
+                        'http_errors' => false,
+                    ]
+                );
+            }
+
+            $persistent = Persistent::where([
+                'key' => 'picture',
+                'value' => $sessionHash['normalUrl']
+            ])->first();
+
+            $persistent ? $persistent->delete() : null;
+
+            $sessionWithoutHash = array_filter(session('uploadPictures'), function($elem) use ($hashName) {
+                return $elem['hashName'] != $hashName;
+            });
+
+            session(['uploadPictures' => array_merge([], $sessionWithoutHash)]);
+        }
+
+        return response()->json(session('uploadPictures'));
     }
 
     /**
-     * Get a specific Thumb
-     * @param $type
-     * @param $fileName
-     * @return \Illuminate\Http\Response
+     *
+     * Delete a picture by her URL
+     *
+     * @param string $url
+     * @return bool
      */
-    public function getThumb($type, $hashName, $advertId=null) {
-        if($type != PicturesManager::TYPE_TEMPO_LOCAL){
-            $picture = Picture::findThumb($hashName,$advertId)->first();
-            if($picture){
-                $file = $this->pictureManager->getThumbFinal($picture);
-                if($file){
-                    return response($file,200)->header("Content-Type", PicturesManager::MIME);
-                } else {
-                    return response(trans('strings.view_all_error_download_file'), 404);
-                }
-            } else {
-                return response(trans('strings.view_all_error_download_file'), 404);
-            }
-        } else {
-            $file = $this->pictureManager->getThumbTempo($hashName);
-            if($file){
-                return response($file,200)->header("Content-Type", PicturesManager::MIME);
-            } else {
-                return response(trans('strings.view_all_error_download_file'), 404);
-            }
-        }
+    public static function deletePicture(string $url) {
+        $client = new GuzzleClient();
+        $delUrl = parse_url($url)['scheme'] . '://' . parse_url($url)['host'] . config('pictures.service.urls.routeDelete') . parse_url($url)['path'];
+        $deleteResponse = $client->request('DELETE',
+            $delUrl,
+            [
+                'http_errors' => false,
+            ]
+        );
+        return $deleteResponse;
+
     }
 
-    /**
-     * Get a specific Thumb
-     * @param $type
-     * @param $fileName
-     * @return \Illuminate\Http\Response
-     */
-    public function getNormal($type, $hashName, $advertId=null) {
-        if($type != PicturesManager::TYPE_TEMPO_LOCAL) {
-            $picture = Picture::findNormal($hashName, $advertId)->first();
-            if ($picture) {
-                $file = $this->pictureManager->getNormal($picture);
-                if ($file) {
-                    return response($file, 200)->header("Content-Type", PicturesManager::MIME);
-                } else {
-                    return response(trans('strings.view_all_error_download_file'), 404);
-                }
-            } else {
-                return response(trans('strings.view_all_error_download_file'), 404);
-            }
-        } else {
-            $file = $this->pictureManager->getNormalTempo($hashName);
-            if($file){
-                return response($file,200)->header("Content-Type", PicturesManager::MIME);
-            } else {
-                return response(trans('strings.view_all_error_download_file'), 404);
-            }
-        }
-    }
 
     /**
      * Get list of Thumbs in personnal tempo Path
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getListThumbs($type) {
-        return response()->json($this->pictureManager->listThumbs($type));
+    public function getListPosts() {
+        return response()->json(session('uploadPictures', []));
+    }
+
+    /**
+     *
+     * Test if an picture url is available
+     *
+     * @param string $url
+     * @return bool
+     */
+    public static function exist(string $url) {
+        $client = new GuzzleClient();
+        $exist = $client->request('GET',
+            $url . '?test_exist=true',
+            [
+                'http_errors' => false
+            ]
+        );
+
+        return $exist->getStatusCode()==200;
+
     }
 }

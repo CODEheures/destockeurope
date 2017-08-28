@@ -22,7 +22,7 @@ trait CostUtils
     public static function countCostPictures($nbPictures, Advert $isEditOf=null) {
         $nbAlreadyPaid = 0;
         if(!is_null($isEditOf)){
-            $nbOriginalPictures = $isEditOf->pictures()->count()/2;
+            $nbOriginalPictures = $isEditOf->pictures()->count();
             if($nbOriginalPictures > config('runtime.nbFreePictures')){
                 $nbAlreadyPaid = $nbOriginalPictures-config('runtime.nbFreePictures');
             }

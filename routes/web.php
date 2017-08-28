@@ -50,8 +50,6 @@
         Route::patch('/parameters', 'AdminController@patchParameters');
         Route::get('/get-welcome-list-type', 'AdminController@getWelcomeType')->name('advert.getWelcomeListType');
         Route::get('/cleanApp', 'AdminController@cleanApp')->name('application.cleanApp');
-        Route::get('/transfertMedias/{sizeInMb?}', 'AdminController@transfertMedias')->name('application.transfertMedias');
-        Route::get('/progressTransfertMedias', 'AdminController@progressTransfertMedias')->name('application.progressTransfertMedias');
         Route::get('/stats', 'AdminController@getStats')->name('application.getStats');
         Route::get('/testLangs', 'AdminController@testLangs');
         Route::get('/testPdf', 'AdminController@testPdf');
@@ -71,7 +69,7 @@
 
         //DANGEROUS
         Route::group(['prefix' => 'dangerous'] , function () {
-            Route::get('/testGame/{quantity?}', 'AdminController@testGame');
+            //Route::get('/testGame/{quantity?}', 'AdminController@testGame');
             //Route::get('/tempo', 'AdminController@tempo');
         });
     });
@@ -175,17 +173,15 @@
     Route::group(['prefix' => 'videos'] , function () {
         Route::put('/ticket', ['as' => 'videos.ticket', 'uses' => 'VideoController@ticket']);
         Route::patch('/ticket', ['as' => 'videos.closeTicket', 'uses' => 'VideoController@closeTicket']);
-        Route::delete('/tempo/', ['as' => 'videos.delTempo', 'uses' => 'VideoController@delTempoVideo']);
+        Route::delete('/tempo/{videoId?}', ['as' => 'videos.delTempo', 'uses' => 'VideoController@delTempoVideo']);
         Route::get('/status/', ['as' => 'videos.status', 'uses' => 'VideoController@status']);
     });
 
     //Pictures
     Route::group(['prefix' => 'picture'] , function () {
         Route::post('/', ['as' => 'picture.post', 'uses' => 'PictureController@post']);
-        Route::delete('/{hashName?}', ['as' => 'picture.destroyTempo', 'uses' => 'PictureController@destroyTempo']);
-        Route::get('/list-thumbs/{type}', ['as' => 'picture.listThumbs', 'uses' => 'PictureController@getListThumbs']);
-        Route::get('/thumb/{type}/{hashName?}/{advertId?}', ['as' => 'picture.thumb', 'uses' => 'PictureController@getThumb']);
-        Route::get('/normal/{type}/{hashName?}/{advertId?}', ['as' => 'picture.normal', 'uses' => 'PictureController@getNormal']);
+        Route::delete('/{hashName?}', ['as' => 'picture.destroy', 'uses' => 'PictureController@destroy']);
+        Route::get('/list-posts', ['as' => 'picture.listPosts', 'uses' => 'PictureController@getListPosts']);
     });
 
 

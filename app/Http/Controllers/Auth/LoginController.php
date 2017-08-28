@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Common\PicturesManager;
 use App\Common\PrivilegesUtils;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -48,7 +47,6 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        (new PicturesManager())->purgeSessionLocalTempo();
 
         $this->guard()->logout();
 

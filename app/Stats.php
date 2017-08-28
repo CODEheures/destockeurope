@@ -13,11 +13,7 @@ class Stats extends Model
         'totalWaitingAdverts',
         'totalCostAdverts',
         'totalAverageCost',
-        'totalNewView',
-        'countLocalFiles',
-        'sizeLocalFiles',
-        'countDistantFiles',
-        'sizeDistantFiles'
+        'totalNewView'
     ];
 
     //local scopes

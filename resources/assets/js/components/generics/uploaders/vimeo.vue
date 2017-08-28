@@ -75,11 +75,6 @@
             //vue vars
             maxVideoFileSize: Number,
             sessionVideoId: String,
-            isEditAdvert: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
             format: {
                 type: String,
                 required: false,
@@ -292,7 +287,7 @@
             },
             delVideo: function () {
                 let that = this;
-                axios.delete(this.routeDelTempoVideo, {data: {'videoId': that.videoId, 'isEditAdvert': that.isEditAdvert}})
+                axios.delete(this.routeDelTempoVideo + '/' + that.videoId)
                     .then(function (response) {
                         that.videoId = '';
                         that.videoReady = false;

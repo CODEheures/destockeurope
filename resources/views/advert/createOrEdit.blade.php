@@ -8,11 +8,9 @@
     @include('storeSetter.strings.contents.createOrEditAdvert')
     <create-or-edit-advert-form
             route-advert-form-post="{{ $route }}"
-            route-post-tempo-picture="{{ route('picture.post',['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
-            route-get-list-tempo-thumbs="{{ route('picture.listThumbs', ['type'=>\App\Common\PicturesManager::TYPE_TEMPO_LOCAL]) }}"
-            route-get-tempo-thumb="{{ route('picture.thumb', ['type' => \App\Common\PicturesManager::TYPE_TEMPO_LOCAL])}}"
-            route-get-tempo-normal="{{ route('picture.normal', ['type' => \App\Common\PicturesManager::TYPE_TEMPO_LOCAL])}}"
-            route-del-tempo-picture="{{ route('picture.destroyTempo')}}"
+            route-post-picture="{{ route('picture.post') }}"
+            route-get-list-posts="{{ route('picture.listPosts') }}"
+            route-del-picture="{{ route('picture.destroy')}}"
             route-get-cost="{{ route('advert.cost')}}"
             route-prices="{{ route('prices') }}"
             route-get-list-type="{{ route('advert.getListType') }}"

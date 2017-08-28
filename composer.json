@@ -12,7 +12,6 @@
         "caouecs/laravel-lang": "~3.0",
         "kalnoy/nestedset": "^4.2",
         "intervention/image": "^2.3",
-        "spatie/flysystem-dropbox": "^1.0",
         "iatstuti/laravel-cascade-soft-deletes": "1.*",
         "paypal/rest-api-sdk-php": "*",
         "vinkla/vimeo": "^3.5",

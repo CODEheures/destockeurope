@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Advert;
 use App\Persistent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -84,13 +85,22 @@ class VideoController extends Controller
         return response($response['body'], $response['status'], $response['headers']);
     }
 
-    public function delTempoVideo(Request $request) {
-        if(!$request->has('videoId') || !session()->has('videoId') || $request->videoId != session('videoId')){
+    public function delTempoVideo($videoId) {
+
+        if(!$videoId || !session()->has('videoId') || $videoId != session('videoId')){
             return response('error',500);
         } else {
-            if(!$request->has('isEditAdvert')){
+            $existInAdvert = Advert::withTrashed()->where('video_id', session('videoId'))->count();
+            if($existInAdvert==0){
                 $this->vimeoManager->request('/videos/'.session('videoId'),[],'DELETE');
             }
+
+            $persistent = Persistent::where([
+                'key' => 'videoId',
+                'value' => session('videoId')
+            ])->first();
+
+            $persistent ? $persistent->delete() : null;
             session()->forget('videoId');
             return response('ok',200);
         }

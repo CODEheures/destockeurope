@@ -6,13 +6,11 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Common\AdvertsManager;
 use App\Common\InvoiceUtils;
-use App\Common\PicturesManager;
 use App\Common\PrivilegesUtils;
 use App\Common\StatsManager;
 use App\Common\UserUtils;
 use App\Console\Kernel;
 use App\Invoice;
-use App\Jobs\TransferMedias;
 use App\Parameters;
 use App\Stats;
 use App\User;
@@ -25,20 +23,19 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Mpdf\Mpdf;
 use Vinkla\Vimeo\VimeoManager;
+use GuzzleHttp\Client as GuzzleClient;
 
 class AdminController extends Controller
 {
-    private $pictureManager;
     private $vimeoManager;
 
-    public function __construct(PicturesManager $picturesManager, VimeoManager $vimeoManager) {
+    public function __construct(VimeoManager $vimeoManager) {
         $this->middleware('auth');
         $this->middleware('isAdminUser', ['except' => ['delegations', 'delegation', 'invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('canGetDelegations', ['only' => ['delegations', 'delegation']]);
         $this->middleware('canManageInvoices', ['only' => ['invoiceManage', 'listInvoices', 'showInvoice']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->middleware('stopAnalytics');
-        $this->pictureManager = $picturesManager;
         $this->vimeoManager = $vimeoManager;
     }
 
@@ -59,7 +56,22 @@ class AdminController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function dashboard(){
-        return view('application.dashboard');
+        //get load infos
+        $client = new GuzzleClient();
+        $loadInfos = [];
+
+        foreach (config('pictures.service.domains') as $domain) {
+            $infos = $client->request('GET',
+                $domain . config('pictures.service.urls.routeGetInfos'),
+                [
+                    'http_errors' => false,
+                ]
+            );
+            $loadInfos[] = json_decode($infos->getBody()->getContents());
+        }
+
+
+        return view('application.dashboard', compact('loadInfos'));
     }
 
     /**
@@ -116,7 +128,6 @@ class AdminController extends Controller
         $viewsByDay = Stats::viewsByDay($date)->get();
         $advertsByDay = Stats::advertsByDay($date)->get();
         $costsByDay = Stats::costsByDay($date)->get();
-        $filesInfo = Stats::latest()->first();
 
         $csvLogs=[];
 
@@ -136,7 +147,6 @@ class AdminController extends Controller
             'viewsByDay' => $viewsByDay->toArray(),
             'advertsByDay' => $advertsByDay->toArray(),
             'costsByDay' => $costsByDay->toArray(),
-            'filesInfo' => $filesInfo,
             'logs' => $csvLogs
         ]);
     }
@@ -302,7 +312,7 @@ class AdminController extends Controller
      */
     public function cleanApp() {
         try {
-            $advertManager = new AdvertsManager($this->pictureManager, $this->vimeoManager);
+            $advertManager = new AdvertsManager( $this->vimeoManager);
             $purgeResults = $advertManager->purge();
             //update stats
             $statsManager = new StatsManager();
@@ -322,29 +332,6 @@ class AdminController extends Controller
             return response($e->getMessage(),500);
         }
 
-    }
-
-    /**
-     * Create a Job for Transfert Medias from local disk to cloud
-     * @param $sizeInMb
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function transfertMedias($sizeInMb) {
-        if($sizeInMb <= 0) {
-            return response(trans('strings.admin_transfert_size_null'), 500);
-        }
-        $parameters = Parameters::latest()->first();
-        if($parameters && !$parameters->isOnTransfert) {
-            $parameters = Parameters::latest()->first();
-            $parameters->transfertTotal = 0;
-            $parameters->transfertPartial = 0;
-            $parameters->save();
-            $job = (new TransferMedias($sizeInMb))->delay(Carbon::now()->addSeconds(5))->onConnection('database');
-            $this->dispatch($job);
-            return response(trans('strings.admin_transfert_image_response', ['nb' => $sizeInMb, 'disk' => PicturesManager::DISK_DISTANT]), 202);
-        } else {
-            return response(trans('strings.admin_transfert_image_exist'), 500);
-        }
     }
 
     /**
@@ -518,12 +505,6 @@ class AdminController extends Controller
             config(['runtime.tempo.seeder.quantity' => $quantity]);
         } else {
             config(['runtime.tempo.seeder.quantity' => 1]);
-        }
-        $testFiles = Storage::disk('local')->files('/testGame');
-        foreach ($testFiles as $file){
-            if(!Storage::disk('local')->exists(PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file))){
-                Storage::disk('local')->copy($file, PicturesManager::FINAL_LOCAL_PATH.'/1/'.basename($file));
-            }
         }
         $exitCode = Artisan::call('migrate:refresh', ['--seed' => true]);
         return redirect(route('home'))->with('info', $exitCode . ': ' . trans('strings.admin_testGame_memo'));

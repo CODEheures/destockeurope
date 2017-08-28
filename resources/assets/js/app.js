@@ -42,6 +42,7 @@ Vue.component('margin-input-field', require('./components/generics/fields/margin
 Vue.component('quantities-input-field', require('./components/generics/fields/quantitiesInput.vue'));
 Vue.component('discount-tag', require('./components/generics/fields/discountTag.vue'));
 Vue.component('advert-manage-button', require('./components/generics/fields/manageButton.vue'));
+Vue.component('chart-load-infos', require('./components/generics/fields/chartLoadInfos.vue'));
 Vue.component('vimeo-uploader', require('./components/generics/uploaders/vimeo.vue'));
 Vue.component('photo-uploader', require('./components/generics/uploaders/photo.vue'));
 Vue.component('notifications-activer', require('./components/generics/notifications/activer.vue'));

@@ -221,7 +221,7 @@
                                         {{ strings.formPhotoSeparator }}
                                     </span>
                                             <span>
-                                        <template v-if="thumbs.length===0">
+                                        <template v-if="pictures.length===0">
                                         <i class="red alarm outline large icon" :data-content="strings.photoFieldRequired"></i>
                                         </template>
                                         <template v-else>
@@ -231,14 +231,15 @@
                                         </div>
                                         <div class="content">
                                             <photo-uploader
-                                                    :route-post-tempo-picture="routePostTempoPicture"
-                                                    :route-get-list-tempo-thumbs="routeGetListTempoThumbs"
-                                                    :route-get-tempo-thumb="routeGetTempoThumb"
-                                                    :route-del-tempo-picture="routeDelTempoPicture"
+                                                    :route-post-picture="routePostPicture"
+                                                    :route-get-list-posts="routeGetListPosts"
+                                                    :route-del-picture="routeDelPicture"
                                                     :advert-form-photo-nb-free-picture="calcNbFreePictures()"
                                                     :max-files="parseInt(maxFiles)"
                                                     :is-delegation="isDelegation==1"
                                                     :old-main-picture="isEditAdvert ? dataAdvertEdit.mainPicturePicture : null"
+                                                    :is-edit-advert="isEditAdvert"
+                                                    :edit-advert-id="isEditAdvert ? dataAdvertEdit.id : 0"
                                                     nb-columns="two"
                                             ></photo-uploader>
                                         </div>
@@ -257,6 +258,7 @@
                                                     :max-video-file-size="parseInt(maxVideoFileSize)"
                                                     :session-video-id="sessionVideoId"
                                                     :is-edit-advert="isEditAdvert"
+                                                    :edit-advert-id="isEditAdvert ? dataAdvertEdit.id : 0"
                                                     :format="'auto'"
                                             ></vimeo-uploader>
                                         </div>
@@ -552,11 +554,9 @@
             'routeGetCost',
             'routePrices',
             'routeGetListType',
-            'routePostTempoPicture',
-            'routeGetListTempoThumbs',
-            'routeGetTempoThumb',
-            'routeGetTempoNormal',
-            'routeDelTempoPicture',
+            'routePostPicture',
+            'routeGetListPosts',
+            'routeDelPicture',
             'routeGetVideoPostTicket',
             'routeDelTempoVideo',
             'routeGetStatusVideo',
@@ -634,7 +634,6 @@
                 flagMapResize: false,
                 dataCompleteGeoloc: '',
                 searchPlace: '',
-                thumbs: [],
                 pictures: [],
                 mainPicture: '',
                 steps: [],
@@ -654,6 +653,7 @@
         mounted () {
             this.strings = this.$store.state.strings['createOrEditAdvert'];
             this.properties = this.$store.state.properties['global'];
+            this.xCsrfToken = destockShareVar.csrfToken;
             let that = this;
             this.steps = [
                 {
@@ -684,6 +684,8 @@
             ];
             this.setBreadCrumbItems(this.strings.defaultBreadcrumb);
             this.description = this.strings.formDescriptionLabel;
+
+            //Events
             this.$on('typeChoice', function (event) {
                 this.typeChoice(event.type);
             });
@@ -696,9 +698,8 @@
             this.$on('locationChange', function (event) {
                 this.latLngChange(event);
             });
-            this.$on('updateThumbs', function (event) {
-                this.thumbs = event;
-                this.setPictures();
+            this.$on('updatePictures', function (pictures) {
+                this.pictures = pictures;
                 this.setSteps();
             });
             this.$on('vimeoStateChange', function (event) {
@@ -724,7 +725,8 @@
             this.$on('setMaxLotMini', function () {
                 this.maxLotMini = this.totalQuantity;
             });
-            this.xCsrfToken = destockShareVar.csrfToken;
+
+            //Watchers
             this.$watch('categoryId', function () {
                 this.setBreadCrumbItems();
             });
@@ -736,9 +738,6 @@
 
                     $('#isUrgent'+this._uid).checkbox('uncheck');
                 }
-            });
-            this.$watch('mainPicture', function () {
-                this.setPictures();
             });
             this.$watch('isNegociated', function () {
                 if(this.isNegociated){
@@ -771,6 +770,8 @@
                 this.setFakeAdvert();
             });
 
+
+            //Inits
             if(this.editAdvert !== ''){
                 this.dataAdvertEdit = JSON.parse(this.editAdvert);
                 this.isEditAdvert = true;
@@ -862,7 +863,7 @@
                         params = {'isEditOf': this.dataAdvertEdit.id};
                     }
 
-                    axios.get(this.routeGetCost+'/'+this.thumbs.length + '/'+ this.isUrgent, {params: params})
+                    axios.get(this.routeGetCost+'/'+this.pictures.length + '/'+ this.isUrgent, {params: params})
                         .then(function (response) {
                             that.cost = response.data;
                             (that.steps[2]).title = that.strings.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.strings.stepThreeTitlePost + ')';
@@ -913,26 +914,12 @@
                     }
                 }
             },
-            setPictures: function () {
-                this.pictures=[];
-                let that = this;
-                this.thumbs.forEach(function (hashName) {
-                    if(hashName == that.mainPicture){
-                        that.pictures.unshift({isThumb: false, url:that.routeGetTempoNormal+"/"+hashName});
-                        that.pictures.unshift({isThumb: true, url:that.routeGetTempoThumb+"/"+hashName});
-                    } else {
-                        that.pictures.push({isThumb: true, url:that.routeGetTempoThumb+"/"+hashName});
-                        that.pictures.push({isThumb: false, url:that.routeGetTempoNormal+"/"+hashName});
-                    }
-
-                });
-            },
             getMoment: function (dateTime) {
                 moment.locale(this.properties.actualLocale);
                 return moment(dateTime).fromNow()
             },
             calcNbFreePictures () {
-                let nbOriginalPictures = 'pictures' in this.dataAdvertEdit ? parseInt(this.dataAdvertEdit.pictures.length)/2 : 0;
+                let nbOriginalPictures = 'pictures' in this.dataAdvertEdit ? parseInt(this.dataAdvertEdit.pictures.length) : 0;
                 if(nbOriginalPictures > parseInt(this.advertFormPhotoNbFreePicture)){
                     return nbOriginalPictures;
                 } else {
