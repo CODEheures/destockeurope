@@ -9,14 +9,14 @@ return [
             'width' => 1200,
             'ratio' => env('IMAGE_RATIO'),
             'back_color' => '#fafafa',
-            'format_encoding' => 'webp',
+            'format_encoding' => 'jpg',
         ],
         [
             'name' => 'thumb',
             'width' => 600,
             'ratio' => 1,
             'back_color' => '#ffffff',
-            'format_encoding' => 'webp',
+            'format_encoding' => 'jpg',
         ]
     ],
 

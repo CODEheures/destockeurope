@@ -17,7 +17,7 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                        <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
                                         <div class="ui right blue corner label">
                                             <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
@@ -81,38 +81,33 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <img class="ui top aligned small bordered rounded image" :src="advert.thumb">
+                                        <img class="ui top aligned small bordered rounded image" :src="getThumbUrl(advert)">
                                         <div class="ui mini right blue corner label">
                                             <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
                                     </template>
                                 </div>
                             </div>
-                            <div class="ten wide mobile only column" style="padding-left : 0;">
-                                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%">
-                                    <div class="sixteen wide column">
-                                        <div class="header"><h4>{{ advert.title }}</h4></div>
-                                        <!--<span class="ui mini breadcrumb">-->
-                                        <!--<template v-for="(item,index) in advert.breadCrumb">-->
-                                        <!--<div class="active section">{{ item.description[properties.actualLocale] }}</div>-->
-                                        <!--<i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>-->
-                                        <!--</template>-->
-                                        <!--</span>-->
-                                        <p class="infos" style="text-align: right;">
-                                            <span v-if="advert.isUrgent" class="ui mini red horizontal label">{{ strings.urgentLabel }}</span>
-                                        </p>
-                                    </div>
-                                    <div class="sixteen wide bottom aligned column">
-                                        <p class="infos" style="text-align: right;">
-                                            <span><i class="small cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                            <span><i class="small cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
-                                            <span :class="advert.isNegociated ? 'ui tiny blue left pointing label price negociated' : 'ui small yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
-                                        </p>
-                                    </div>
+                            <div class="ten wide mobile only column" style="padding-left : 0; display: flex; justify-content: space-between; flex-direction: column;">
+                                <div class="sixteen wide column">
+                                    <div class="header"><h4>{{ advert.title }}</h4></div>
+                                    <!--<span class="ui mini breadcrumb">-->
+                                    <!--<template v-for="(item,index) in advert.breadCrumb">-->
+                                    <!--<div class="active section">{{ item.description[properties.actualLocale] }}</div>-->
+                                    <!--<i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>-->
+                                    <!--</template>-->
+                                    <!--</span>-->
+                                    <p class="infos" style="text-align: right;">
+                                        <span v-if="advert.isUrgent" class="ui mini red horizontal label">{{ strings.urgentLabel }}</span>
+                                    </p>
                                 </div>
-
-
-
+                                <div class="sixteen wide bottom aligned column">
+                                    <p class="infos" style="text-align: right;">
+                                        <span><i class="small cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
+                                        <span><i class="small cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                        <span :class="advert.isNegociated ? 'ui tiny blue left pointing label price negociated' : 'ui small yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span>
+                                    </p>
+                                </div>
                             </div>
                             <!--<div class="sixteen wide right aligned mobile only column geodate-mobile">-->
                                 <!--<p>-->
@@ -157,7 +152,7 @@
                                 </div>
                             </template>
                             <template v-else>
-                                <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
                                 <div class="ui right blue corner label">
                                     <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
@@ -258,7 +253,7 @@
                                 </div>
                             </template>
                             <template v-else>
-                                <img class="ui top aligned medium bordered rounded image" :src="advert.thumb">
+                                <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
                                 <div class="ui right blue corner label">
                                     <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
@@ -492,6 +487,16 @@
             },
             destroyMe: function () {
                 this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
+            },
+            getThumbUrl(advert) {
+                let picture = [];
+                if('pictures' in advert) {
+                    picture = advert.pictures.filter(function (elem) {
+                        return elem.hashName === advert.mainPicture;
+                    });
+                }
+
+                return picture.length >= 1 ? picture[0].thumbUrl : '';
             }
         }
     }
