@@ -209,7 +209,9 @@
                                 that.$parent.$emit('sendToast', {'message': msg, 'type':'error'});
                             } else if(error.response && error.response.status == 413) {
                                 that.$parent.$emit('fileSizeError');
-                            } else {
+                            }  else if(error.response && error.response.status == 503) {
+                                that.$parent.$emit('sendToast', {'message': error.response.data, 'type':'error'});
+                            }else {
                                 that.$parent.$emit('loadError');
                             }
                         });

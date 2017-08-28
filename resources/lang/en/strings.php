@@ -378,6 +378,8 @@ return [
     'view_advert_create_title' => 'Create advert of destocking or end of de series',
     'view_advert_create_header' => 'Create new advert',
     'view_advert_create_header_delegation' => 'Create new advert (Delegation of sales to ' . env('DELEGATE_NAME') .')',
+    'view_advert_create_image_servers_not_available' => 'Image unavailable servers',
+    'view_advert_create_image_too_old' => 'All yours upload images are not availables. Thanks for checking and redoing advert',
     'view_advert_preview_header_label' => 'Advert preview',
     'view_advert_params_header_label' => 'Advert Parameters',
     'view_advert_form_title_label' => 'Advert Title',

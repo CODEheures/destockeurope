@@ -3,12 +3,12 @@
 namespace App\Common;
 
 use App\Advert;
+use App\Http\Controllers\PictureController;
 use App\Notifications\AlertObsoleteAdvert;
 use App\Persistent;
 use App\Picture;
 use Carbon\Carbon;
 use Vinkla\Vimeo\VimeoManager;
-use GuzzleHttp\Client as GuzzleClient;
 
 class AdvertsManager
 {
@@ -124,24 +124,21 @@ class AdvertsManager
 
     public function purgePersistentPictures() {
         try {
-            $client = new GuzzleClient;
             $counterDelPictures = 0;
             $persistents = Persistent::where('key', '=', 'picture')->get();
             foreach ($persistents as $persistent) {
                 if(Carbon::parse($persistent->updated_at)->addHours(env('TEMPO_HOURS_LIFE_TIME'))->isPast()
                     && Picture::withUrl($persistent->value)->count() == 0
                 ) {
-                    $delUrl = parse_url($persistent->value)['scheme'] . '://' . parse_url($persistent->value)['host'] . config('pictures.service.urls.routeDelete') . parse_url($persistent->value)['path'];
-                    $deleteResponse = $client->request('DELETE',
-                        $delUrl,
-                        [
-                            'http_errors' => false,
-                        ]
-                    );
+                    $deleteResponse = PictureController::deletePicture($persistent->value);
 
                     if($deleteResponse->getStatusCode() < 300){
                         $counterDelPictures++;
                     }
+                    $persistent->delete();
+                } elseif (Carbon::parse($persistent->updated_at)->addHours(env('TEMPO_HOURS_LIFE_TIME'))->isPast()
+                    && Picture::withUrl($persistent->value)->count() > 0
+                ){
                     $persistent->delete();
                 }
             }

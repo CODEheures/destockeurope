@@ -491,11 +491,7 @@ class AdminController extends Controller
      * Tempo tests
      */
     public function tempo(){
-        $toto = 'http://statics.destockeurope.progress/600x600/1/2e913bc87151d291b0277b9786265ee3/jpg';
 
-        $delUrl = parse_url($toto)['scheme'] . '://' . parse_url($toto)['host'] . '/private' . parse_url($toto)['path'];
-
-        dd($delUrl);
     }
 
     /**

@@ -68,6 +68,7 @@ class AdvertController extends Controller
         $this->middleware('canBackToTop', ['only' => ['backToTop']]);
         $this->middleware('canHighlight', ['only' => ['highlight']]);
         $this->middleware('stopAnalytics', ['only' => ['toApprove']]);
+        $this->middleware('picturesExists', ['only' => ['store']]);
         $this->vimeoManager = $vimeoManager;
         $this->paymentManager = new PaymentManager();
     }

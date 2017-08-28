@@ -184,8 +184,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\ValidatorServiceProvider::class,
-        App\Providers\DropboxServiceProvider::class,
+        App\Providers\ValidatorServiceProvider::class
     ],
 
     /*

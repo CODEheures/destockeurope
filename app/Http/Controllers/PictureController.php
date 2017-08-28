@@ -34,7 +34,9 @@ class PictureController extends Controller
                     'http_errors' => false,
                 ]
             );
-            $loadInfos[$domain] = json_decode($infos->getBody()->getContents(),true);
+            if($infos->getStatusCode() == 200){
+                $loadInfos[$domain] = json_decode($infos->getBody()->getContents(),true);
+            }
         }
 
         try {
@@ -44,7 +46,8 @@ class PictureController extends Controller
             $bestLoad = array_keys($bestLoad)[0];
         } catch (\Exception $e) {
             //default load
-            $bestLoad = config('pictures.service.domains')[0];
+            return response(trans('strings.view_advert_create_image_servers_not_available'),503);
+            //$bestLoad = config('pictures.service.domains')[0];
         }
 
 
@@ -139,7 +142,7 @@ class PictureController extends Controller
      * @param $fileName
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($hashName) {
+    public static function destroy($hashName) {
 
         $sessionHash = array_merge([], array_filter(session('uploadPictures'), function($elem) use ($hashName) {
             return $elem['hashName'] == $hashName;
@@ -201,10 +204,51 @@ class PictureController extends Controller
     }
 
     /**
+     *
+     * Delete a picture by her URL
+     *
+     * @param string $url
+     * @return bool
+     */
+    public static function deletePicture(string $url) {
+        $client = new GuzzleClient();
+        $delUrl = parse_url($url)['scheme'] . '://' . parse_url($url)['host'] . config('pictures.service.urls.routeDelete') . parse_url($url)['path'];
+        $deleteResponse = $client->request('DELETE',
+            $delUrl,
+            [
+                'http_errors' => false,
+            ]
+        );
+        return $deleteResponse;
+
+    }
+
+
+    /**
      * Get list of Thumbs in personnal tempo Path
      * @return \Illuminate\Http\JsonResponse
      */
     public function getListPosts() {
         return response()->json(session('uploadPictures', []));
+    }
+
+    /**
+     *
+     * Test if an picture url is available
+     *
+     * @param string $url
+     * @return bool
+     */
+    public static function exist(string $url) {
+        $client = new GuzzleClient();
+        $exist = $client->request('GET',
+            $url . '?test_exist=true',
+            [
+                'http_errors' => false
+            ]
+        );
+
+        return $exist->getStatusCode()==200;
+
     }
 }

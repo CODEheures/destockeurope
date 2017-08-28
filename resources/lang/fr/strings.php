@@ -378,6 +378,8 @@ return [
     'view_advert_create_title' => 'Créer une annonce de destockage/arrivage ou fin de série',
     'view_advert_create_header' => 'Créer une annonce',
     'view_advert_create_header_delegation' => 'Créer une annonce (délégation de vente à ' . env('DELEGATE_NAME') .')',
+    'view_advert_create_image_servers_not_available' => 'Serveurs de dépot d\'images indisponibles',
+    'view_advert_create_image_too_old' => 'Vvos images téléchargées ne sont plus toutes disponibles. Merci de vérifier et recommencer l\'annonce',
     'view_advert_preview_header_label' => 'Apparence de votre annonce',
     'view_advert_params_header_label' => 'Parametres de votre annonce',
     'view_advert_form_title_label' => 'Titre de l\'annonce',
