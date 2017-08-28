@@ -404,12 +404,12 @@
             setBreadCrumbItems: function () {
                 let that = this;
                 let breadcrumb = this.dataAdvert.breadCrumb;
-                let lastBread = {
-                    description: [],
-                    id: 0
-                };
-                lastBread.description[this.properties.actualLocale] = this.dataAdvert.title;
-                breadcrumb.push(lastBread);
+//                let lastBread = {
+//                    description: [],
+//                    id: 0
+//                };
+//                lastBread.description[this.properties.actualLocale] = this.dataAdvert.title;
+//                breadcrumb.push(lastBread);
                 this.breadcrumbItems = [];
                 this.breadcrumbItems.push({
                     name: this.strings.allLabel,

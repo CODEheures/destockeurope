@@ -515,7 +515,7 @@ return [
     'view_reviewForPayment_table_total_incl_vat' => 'Total incl VAT',
     'view_reviewForPayment_cgv' => 'I agree with <a href=":link">Terms of service</a>',
     'view_reviewForPayment_lock_info_header' => 'This page is fully secure',
-    'view_reviewForPayment_lock_info_content' => 'This page uses the https: // protocol and guarantees a total security of the exchanges',
+    'view_reviewForPayment_lock_info_content' => 'This page uses the https:// protocol and guarantees a total security of the exchanges. No bank details are kept by our services.',
     'view_reviewForPayment_paypal_title' => 'PayPal, the reflex security to pay online',
     'view_reviewForPayment_tempo' => 'This company is in the process of being created and this website is not yet open to the public. This access is only for "live" test purposes for web developers. No payment can be made for the moment.',
 

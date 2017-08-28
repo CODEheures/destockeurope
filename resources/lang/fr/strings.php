@@ -515,7 +515,7 @@ return [
     'view_reviewForPayment_table_total_incl_vat' => 'Total TTC',
     'view_reviewForPayment_cgv' => 'J\'accepte les <a href=":link">conditions générales de vente</a>',
     'view_reviewForPayment_lock_info_header' => 'Cette page est entierement sécurisée',
-    'view_reviewForPayment_lock_info_content' => 'Cette page utilise le protocol https:// et vous garantie une totale sécurité des échanges',
+    'view_reviewForPayment_lock_info_content' => 'Cette page utilise le protocol https:// et vous garantie une totale sécurité des échanges. Aucune donnée bancaire n\'est conservée par nos services',
     'view_reviewForPayment_paypal_title' => 'PayPal, le réflexe sécurité pour payer en ligne',
     'view_reviewForPayment_tempo' => 'Cette société est en cours de création et ce site web n\'est pas encore ouvert au public. Cet accès n\'est qu\'à but de test "live" pour les développeurs web. Aucun paiement ne peut aboutir pour le moment',
 
