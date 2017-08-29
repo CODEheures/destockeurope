@@ -69,7 +69,7 @@ class Kernel extends ConsoleKernel
 
 
         //Scheduler for STATS and Adverts Purges, Alerts
-        $schedule->call(function(){
+        $purgerScheduler = $schedule->call(function(){
             $message = Carbon::now()->toDateTimeString();
             $purgeResult = [
                 'invalids' => 0,
@@ -113,10 +113,11 @@ class Kernel extends ConsoleKernel
             }
             Storage::disk('logs')->append(self::LOG_SCHEDULE , $message);
 
-        })->dailyAt('05:57');
+        });
+        env('APP_SCHEDULE_FAST')==true ? $purgerScheduler->everyMinute() : $purgerScheduler->dailyAt('05:57');
 
         //Scheduler for Notifications
-        $schedule->call(function(){
+        $notificationsScheduler = $schedule->call(function(){
             if(env('NOTIFICATION_ACTIVE')==true){
                 $status = '0';
                 $msgTxt='';
@@ -152,10 +153,11 @@ class Kernel extends ConsoleKernel
                 }
                 Storage::disk('logs')->append(self::LOG_NOTIFICATIONS , Carbon::now()->toDateTimeString() . ';' . $status . ';' . $msgTxt );
             }
-        })->dailyAt('6:48');
+        });
+        env('APP_SCHEDULE_FAST')==true ? $notificationsScheduler->everyMinute() : $notificationsScheduler->dailyAt('6:48');
 
         //Scheduler for Update GEOIP
-        $schedule->call(function(){
+        $geoIpScheduler = $schedule->call(function(){
             try {
                 $geoIpResult = GeoIPUpdater::updateGeoIpFiles();
             } catch (\Exception $e) {
@@ -165,7 +167,8 @@ class Kernel extends ConsoleKernel
                 Storage::disk('logs')->append(self::LOG_GEOIPUPDATE , 'DATE;RESULT');
             }
             Storage::disk('logs')->append(self::LOG_GEOIPUPDATE , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
-        })->monthlyOn(7,'3:57');
+        });
+        env('APP_SCHEDULE_FAST')==true ? $geoIpScheduler->everyFiveMinutes() : $geoIpScheduler->monthlyOn(7,'3:57');
     }
 
     /**
