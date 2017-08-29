@@ -362,7 +362,6 @@ class AdvertController extends Controller
             $ancestors = $advert->category->getAncestors();
             $ancestors->add($advert->category);
             $advert->setBreadCrumb($ancestors);
-            $advert->setListEditFields();
             $advert->setGlobalDiscount();
             $advert->setTotalPriceMargin();
 

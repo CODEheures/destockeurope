@@ -69,7 +69,7 @@
                             </div>
                             <div class="sixteen wide mobile only six wide tablet only six wide computer only column glass-box">
                                 <div class="ui grid">
-                                    <div class="ui orange right ribbon label" v-show="advert.listEditFields['field'].length>0 || advert.listEditFields['thumbs'].length>0">{{ strings.segmentEditLabel }}</div>
+                                    <div class="ui orange right ribbon label" v-show="advert.isEditOf != null">{{ strings.segmentEditLabel }}</div>
                                     <div class="sixteen wide column">
                                         <div class="ui cards" :title="advert.user.isSupplier ? strings.trustedProviderLabel :''">
                                             <div class="card">
@@ -246,9 +246,6 @@
                 if(parsed && parsed.length>0 && 'formatted_address' in parsed[0]) {
                     return (JSON.parse(geoloc)[0]['formatted_address']);
                 }
-            },
-            isEditField(advert, fieldName){
-                return advert.listEditFields['field'].indexOf(fieldName)!==-1;
             },
             setBreadCrumbItems: function (advert) {
                 let that = this;
