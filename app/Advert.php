@@ -91,7 +91,13 @@ class Advert extends Model {
     public function user() { return $this->belongsTo('App\User'); }
     public function bookmarks() { return $this->hasMany('App\Bookmark'); }
     public function category() { return $this->belongsTo('App\Category'); }
-    public function pictures() { return $this->hasMany('App\Picture'); }
+    public function pictures() {
+        if(is_null($this->deleted_at)){
+            return $this->hasMany('App\Picture');
+        } else {
+            return $this->hasMany('App\Picture')->withTrashed();
+        }
+    }
     public function picturesWithTrashed() { return $this->hasMany('App\Picture')->withTrashed(); }
     public function picturesOnlyTrashed() { return $this->hasMany('App\Picture')->onlyTrashed(); }
     public function invoices() { return $this->hasMany('App\Invoice'); }
@@ -442,7 +448,12 @@ class Advert extends Model {
     }
 
     public function scopeMines($query) {
-        return $query->withTrashed()
+        if(PrivilegesUtils::canRenew()){
+            $returnQuery = $query->withTrashed();
+        } else {
+            $returnQuery = $query;
+        }
+        return $returnQuery
             ->where('user_id', '=', auth()->id())
             ->where('isPublish', true)
             ->whereNull('isEditOF')
