@@ -23,8 +23,8 @@ class AddUrlsToPictures extends Migration
         $pictures = Picture::withTrashed()->get();
         foreach ($pictures as $picture) {
             $picture->update([
-                $picture->thumbUrl = "http://statics.destockeurope.progress/thumb/1/" . $picture->hashName . "/jpg",
-                $picture->normalUrl = "http://statics.destockeurope.progress/normal/1/" . $picture->hashName . "/jpg"
+                $picture->thumbUrl = "https://static1.destockeurope.com/600x600/1/" . $picture->hashName . "/jpg",
+                $picture->normalUrl = "https://static1.destockeurope.com/1200x675/1/" . $picture->hashName . "/jpg"
             ]);
         }
 
