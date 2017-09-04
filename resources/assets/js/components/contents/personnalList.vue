@@ -40,9 +40,6 @@
             </div>
             <div :class="isDelegation ? 'sixteen wide column' : 'sixteen wide tablet twelve wide computer column'">
                 <div class="row">
-                    <div class="ui active inverted dimmer" v-if="!isLoaded">
-                        <div class="ui large text loader">Loading</div>
-                    </div>
                     <adverts-by-list
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
@@ -96,7 +93,6 @@
                 message : '',
                 sendMessage: false,
                 paginate: {},
-                isLoaded: true,
                 nextUrl: '',
             }
         },
@@ -178,11 +174,10 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        that.isLoaded = false;
+                        Pace.restart();
                         axios.delete(url)
                             .then(function (response) {
-                                that.gotoNextUrl();
-                                that.isLoaded = true;
+                                that.gotoNextUrl(true);
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {
@@ -190,7 +185,6 @@
                                 } else {
                                     that.sendToast(that.strings.loadErrorMessage, 'error');
                                 }
-                                that.isLoaded = true;
                             });
                     }
                 }).modal('show');
@@ -214,7 +208,7 @@
             },
             gotoNextUrl(forceLoad=false) {
                 if(this.nextUrl !== window.location.href || forceLoad===true){
-                    this.isLoaded=false;
+                    Pace.restart();
                     window.location.href = this.nextUrl;
                 }
             }
