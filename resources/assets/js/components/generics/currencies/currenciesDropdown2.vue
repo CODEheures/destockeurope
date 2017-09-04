@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div class="ui active inverted dimmer" v-if="!isLoaded">
-            <div class="ui large text loader">Loading</div>
-        </div>
         <div class="ui mini labeled right action input">
             <div class="ui blue label">
                 {{ strings.firstMenuName }}
@@ -39,17 +36,19 @@
             return {
                 strings: {},
                 properties: {},
-                currencies: [],
-                countCurrencies: 0,
-                isLoaded: false,
-                isReady: false,
+                currencies: []
             };
         },
         mounted () {
             this.strings = this.$store.state.strings['currencies-dropdown-2'];
             this.properties = this.$store.state.properties['global'];
-            this.getListCurrencies();
+            this.currencies = this.$store.state.properties['currencies-dropdown-menu-2']['datas'];
 
+            let that = this;
+
+            this.$watch('oldCurrency', function () { that.setOldChoice() });
+        },
+        updated () {
             let that = this;
             $('#'+this._uid)
                 .dropdown({
@@ -63,37 +62,9 @@
                         }
                     }
                 });
-
-            this.setReady();
-            this.$watch('isReady', function () { that.setOldChoice() });
-            this.$watch('oldCurrency', function () { that.setOldChoice() });
+            this.setOldChoice();
         },
         methods: {
-            getListCurrencies: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                axios.get(this.properties.routeListCurrencies)
-                    .then(function (response) {
-                        that.currencies = response.data;
-                        that.countCurrencies = Object.keys(response.data.listCurrencies).length;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.$parent.$emit('loadError');
-                    });
-            },
-            setReady () {
-                let that = this;
-                this.$watch('isLoaded', function () {
-                    let testLoadedInterval = setInterval(function () {
-                        if($('#'+that._uid).find('.item').length === that.countCurrencies) {
-                            that.isReady = true;
-                            clearInterval(testLoadedInterval);
-                        }
-                    }, 200);
-                });
-            },
             setOldChoice () {
                 if(this.oldCurrency !== '' && this.oldCurrency in this.currencies.listCurrencies){
                     $('#'+this._uid).dropdown('set selected', this.oldCurrency)

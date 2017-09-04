@@ -1,3 +1,8 @@
+<!--PROPS-->
+@include('storeSetter.props.categories.categories-horizontal-menu')
+@include('storeSetter.props.generics.categories-dropdown-menu')
+@include('storeSetter.props.adverts.advert-by-list')
+<!--STRINGS-->
 <store-strings-setter
         strings="{{ json_encode([
                         'key' => 'welcome1',

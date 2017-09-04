@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-        @include('storeSetter.strings.contents.manage-delegation')
+        @include('storeSetter.contents.manage-delegation')
         <manage-delegation
                 advert = "{{ json_encode($advert) }}"
 

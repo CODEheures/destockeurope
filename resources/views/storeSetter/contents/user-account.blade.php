@@ -1,3 +1,6 @@
+<!--PROPS-->
+@include('storeSetter.props.generics.currencies-dropdown-2')
+<!--STRINGS-->
 <store-strings-setter
         strings="{{ json_encode([
                         'key' => 'user-account',

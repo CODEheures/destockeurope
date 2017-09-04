@@ -1,3 +1,5 @@
+<!--PROPS-->
+<!--STRINGS-->
 <store-strings-setter
         strings="{{ json_encode([
                         'key' => 'portal',
@@ -9,6 +11,7 @@
                                 'newsLetterEmailPlaceHolder' => trans('strings.form_label_email'),
                                 'newsLetterPhonePlaceHolder' => trans('strings.form_label_phone'),
                                 'newsLetterNamePlaceHolder' => trans('strings.form_label_name'),
+                                'header' => trans('strings.view_home_header'),
                         ]
                 ])}}"
 ></store-strings-setter>

@@ -693,7 +693,7 @@
                 this.categoryChoice(event.id);
             });
             this.$on('currencyChoice', function (event) {
-                this.currencyChoice(event.cur, event.subunit, event.symbol, event.initial);
+                this.currencyChoice(event.cur, event.subunit, event.symbol);
             });
             this.$on('locationChange', function (event) {
                 this.latLngChange(event);
@@ -834,7 +834,7 @@
             categoryChoice: function (id) {
                 this.categoryId = parseInt(id);
             },
-            currencyChoice: function (currency, subunit, symbol, initial) {
+            currencyChoice: function (currency, subunit, symbol) {
                 this.currency = currency;
                 this.currencySymbol = symbol;
                 this.subunit = subunit;

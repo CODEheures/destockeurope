@@ -5,9 +5,8 @@
 @endsection
 
 @section('content')
-    @include('storeSetter.strings.contents.welcome1')
+    @include('storeSetter.contents.welcome1')
     <welcome1
-                route-get-adverts-list="{{ route('advert.index') }}"
                 route-bookmark-add="{{ route('bookmark.add') }}"
                 route-bookmark-remove="{{ route('bookmark.remove') }}"
                 route-notifications-exist-in="{{ route('notification.existIn') }}"
@@ -15,10 +14,6 @@
                 route-notifications-remove="{{ route('notification.remove') }}"
                 route-get-highlight="{{ route('advert.getHighlight') }}"
 
-                clear-storage="{{ session()->has('clear') ? true : false }}"
-                for-country-name="{{ isset($countryName) ? $countryName : null }}"
-                for-country-code="{{ isset($countryCode) ? $countryCode : null }}"
-                for-page="{{ isset($page) ? $page : null }}"
                 masterads-route-image-server = "{{ route('imageServer') }}"
                 masterads-is-active="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? $masterAdsControllerFlag : false }}"
                 masterads-url-img="{{config('runtime.urlMasterAds')}}"

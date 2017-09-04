@@ -8,7 +8,8 @@
                                 'urgentLabel' => trans('strings.view_all_urgent'),
                                 'isNegociatedLabel' => trans('strings.view_all_negociate'),
                                 'priceTitle' => trans('strings.view_filter_price_title'),
-                                'quantityTitle' => trans('strings.form_quantity_label')
+                                'quantityTitle' => trans('strings.form_quantity_label'),
+                                'allLabel' => trans('strings.view_all_all'),
                         ]
                 ])}}"
 ></store-strings-setter>

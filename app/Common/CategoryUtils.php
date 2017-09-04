@@ -20,4 +20,9 @@ trait CategoryUtils
             return false;
         }
     }
+
+    public static function getAllCategories() {
+        $categories = Category::defaultOrder()->get();
+        return $categories->toTree();
+    }
 }

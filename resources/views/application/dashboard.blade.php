@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('css')
-    {{--@include('plugins.amcharts.css')--}}
+
 @endsection
 
 @section('content')
-    @include('storeSetter.strings.contents.dashboard-admin')
+    @include('storeSetter.contents.dashboard-admin')
     <dashboard-admin
             route-clean-app = "{{ route('application.cleanApp') }}"
             route-get-stats="{{ route('application.getStats') }}"
@@ -15,5 +15,5 @@
 @endsection
 
 @section('scripts')
-    {{--@include('plugins.amcharts.scripts')--}}
+
 @endsection

@@ -1,8 +1,5 @@
 <template>
     <div class="horizontal-category-menu">
-        <div class="ui active inverted dimmer" v-if="!isLoaded">
-            <div class="ui large text loader">Loading</div>
-        </div>
         <div class="ui blue inverted category menu">
             <a class="browse item" v-on:click="emitCategoryChoice(0)">
             {{ strings.allItem }}
@@ -38,14 +35,13 @@
             return {
                 strings: {},
                 properties: {},
-                categories: [],
-                isLoaded: false
+                categories: []
             } ;
         },
         mounted () {
             this.strings = this.$store.state.strings['categories-horizontal-menu'];
             this.properties = this.$store.state.properties['global'];
-            this.getCategories();
+            this.categories = this.$store.state.properties['categories-horizontal-menu']['datas'];
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });
@@ -59,19 +55,6 @@
             });
         },
         methods: {
-            getCategories: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                axios.get(this.properties.routeCategory)
-                    .then(function (response) {
-                        that.categories = response.data;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.$parent.$emit('loadError');
-                    });
-            },
             emitCategoryChoice: function(value){
                 this.$parent.$emit('categoryChoice', {id: value});
             },

@@ -19,9 +19,9 @@ class AdvertsManager
     }
 
     private function definitiveDestroy(Advert $advert) {
-        $advert->load('picturesWithTrashed');
+        $advert->load('pictures');
         //is last owner of pictures?
-        foreach ($advert->picturesWithTrashed as $picture){
+        foreach ($advert->pictures as $picture){
             //using persistent process for deleting pictures
             Persistent::create([
                 'key' => 'picture',

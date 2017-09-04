@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Anonymous;
+use App\Common\AdvertUtils;
 use App\Common\CostUtils;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
@@ -105,8 +106,7 @@ class CommonController extends Controller
      * Return Home Adverts View
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function main(Request $request) {
-        $request->session()->flash('clear',true);
+    public function main() {
         return redirect(route('home'));
     }
 
@@ -115,7 +115,6 @@ class CommonController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function home(Request $request) {
-        //dd(session()->all());
         $masterAdsControllerFlag = true;
         $fakeHighlightAdvert = new Advert();
         $fakeHighlightAdvert->isNegociated = false;
@@ -142,7 +141,7 @@ class CommonController extends Controller
         $fakeHighlightAdvert['price_margin'] = $fakeHighlightAdvert['price'];
         $fakeHighlightAdvert['url'] = route('mines');
 
-        $location = $request->has('location') ?  $request->location : null;
+        $location = $request->has('forLocation') ?  $request->forLocation : null;
 
         $countryName = null;
         $countryCode = null;
@@ -150,15 +149,47 @@ class CommonController extends Controller
             $countries = LocaleUtils::getListCountries();
             foreach ($countries as $country){
                 if(in_array($location, $country)){
-                    $countryName = $country['name'];
                     $countryCode = $country['code'];
+                    $request->replace(array_merge($request->all(), ['country' => $countryCode]));
                     break;
                 }
             }
         }
 
-        $page = $request->has('page') ?  $request->page : null;
-        return view('welcome', compact('masterAdsControllerFlag', 'fakeHighlightAdvert', 'countryName', 'countryCode', 'page'));
+
+        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
+
+        if(!$isSearchRequest){
+            $ranges = AdvertUtils::getRangePriceOnly($request, $countryCode);
+
+            if(!$request->minPrice || $request->minPrice < $ranges['minPrice'] || $request->minPrice > $ranges['maxPrice']){
+                $request->replace(array_merge($request->all(), ['minPrice' => $ranges['minPrice']]));
+            }
+
+            if(!$request->maxPrice || $request->maxPrice < $ranges['minPrice'] || $request->maxPrice > $ranges['maxPrice']){
+                $request->replace(array_merge($request->all(), ['maxPrice' => $ranges['maxPrice']]));
+            }
+
+            if(!$request->minQuantity || $request->minQuantity < $ranges['minQuantity'] || $request->minQuantity > $ranges['maxQuantity']){
+                $request->replace(array_merge($request->all(), ['minQuantity' => $ranges['minQuantity']]));
+            }
+
+            if(!$request->maxQuantity || $request->maxQuantity < $ranges['minQuantity'] || $request->maxQuantity > $ranges['maxQuantity']){
+                $request->replace(array_merge($request->all(), ['maxQuantity' => $ranges['maxQuantity']]));
+            }
+        }
+
+
+
+        $advertsList = AdvertUtils::getList($request);
+
+        if(!$isSearchRequest){
+            $advertsList['adverts'] = $advertsList['adverts']->toArray();
+            return view('welcome', compact('masterAdsControllerFlag', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
+        } else {
+            return response()->json($advertsList);
+        }
+
     }
 
     /**
@@ -166,8 +197,8 @@ class CommonController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function mines() {
-        $routeList = route('advert.mines');
-        return view('user.personnalList', compact('routeList'));
+        $advertsList['adverts'] = AdvertUtils::getPersonnalList();
+        return view('user.personnalList', compact('advertsList'));
     }
 
     /**
@@ -175,7 +206,8 @@ class CommonController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function bookmarks() {
-        return view('user.bookmarksList');
+        $advertsList['adverts'] = AdvertUtils::getBookmarkList();
+        return view('user.bookmarksList', compact('advertsList'));
     }
 
     /**

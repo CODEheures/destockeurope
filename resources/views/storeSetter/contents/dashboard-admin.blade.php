@@ -1,3 +1,5 @@
+<!--PROPS-->
+<!--STRINGS-->
 <store-strings-setter
         strings="{{ json_encode([
                         'key' => 'dashboard-admin',

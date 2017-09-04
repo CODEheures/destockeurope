@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div class="ui active inverted dimmer" v-if="!isLoaded">
-            <div class="ui large text loader">Loading</div>
-        </div>
         <div class="ui mini labeled right action input">
             <div class="ui blue label" v-on:click="setOldChoice">
                 {{ strings.firstMenuName }}
@@ -63,60 +60,34 @@
                 strings: {},
                 properties: {},
                 categories: [],
-                countCategories: 0,
-                isLoaded: false,
-                isReady: false,
             } ;
         },
         mounted () {
             this.strings = this.$store.state.strings['categories-dropdown-menu'];
             this.properties = this.$store.state.properties['global'];
-            this.getCategories();
+            this.categories = this.$store.state.properties['categories-dropdown-menu']['datas'];
             this.$on('categoryChoice', function (event) {
                 this.$parent.$emit('categoryChoice', {id: event.id});
             });
+
+            let that = this;
+            this.$watch('oldChoice', function () { that.setOldChoice() });
+        },
+        updated () {
             let that = this;
 
             $('#'+this._uid).dropdown({
-                    allowCategorySelection: that.allowCategorySelection,
-                    onChange: function(value, text, $selectedItem) {
-                        if(value != undefined && value != ''){
-                            that.$parent.$emit('categoryChoice', {id: value});
-                        }
+                allowCategorySelection: that.allowCategorySelection,
+                onChange: function(value, text, $selectedItem) {
+                    if(value != undefined && value != ''){
+                        that.$parent.$emit('categoryChoice', {id: value});
                     }
-                })
+                }
+            })
             ;
-
-            this.setReady();
-            this.$watch('isReady', function () { that.setOldChoice() });
-            this.$watch('oldChoice', function () { that.setOldChoice() });
+            this.setOldChoice();
         },
         methods: {
-            getCategories: function (withLoadIndicator) {
-                let that = this;
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                axios.get(this.properties.routeCategoryWithCount)
-                    .then(function (response) {
-                        that.categories = response.data.tree;
-                        that.countCategories = response.data.count;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.$parent.$emit('loadError');
-                    });
-            },
-            setReady () {
-                let that = this;
-                this.$watch('isLoaded', function () {
-                    let testLoadedInterval = setInterval(function () {
-                        if($('#'+that._uid).find('.item').length === that.countCategories) {
-                            that.isReady = true;
-                            clearInterval(testLoadedInterval);
-                        }
-                    }, 200);
-                });
-            },
             setOldChoice () {
                 if(!isNaN(Number(this.oldChoice)) && Number(this.oldChoice)>0) {
                     $('#'+this._uid).dropdown('set selected', this.oldChoice)

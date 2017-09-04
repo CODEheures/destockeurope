@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Common\AdvertsManager;
+use App\Common\AdvertUtils;
 use App\Common\InvoiceUtils;
 use App\Common\PrivilegesUtils;
 use App\Common\StatsManager;
@@ -80,10 +81,17 @@ class AdminController extends Controller
      */
     public function delegations(Request $request) {
         $request->session()->flash('clear',true);
-        $routeList = route('advert.getDelegations');
+        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
         $title = trans('strings.menu_advert_delegations');
         $isDelegation = true;
-        return view('user.personnalList', compact('routeList', 'title', 'isDelegation'));
+        $advertsList = AdvertUtils::getDelegationList($request);
+
+        if(!$isSearchRequest){
+            $advertsList['adverts'] = $advertsList['adverts']->toArray();
+            return view('user.personnalList', compact('advertsList', 'title', 'isDelegation'));
+        } else {
+            return response()->json($advertsList);
+        }
     }
 
     /**

@@ -51,15 +51,8 @@
                             :route-notifications-exist-in="routeNotificationsExistIn"
                             :route-notifications-add="routeNotificationsAdd"
                             :route-notifications-remove="routeNotificationsRemove"
-                            :breadcrumb-items="breadcrumbItems"
-                            :update="update"
-                            :filter="filter"
-                            :filter-price-prefix="dataFilterPricePrefix"
-                            :route-search="dataRouteGetAdvertList"
-                            :location-accurate-list="dataFilterLocationAccurateList"
-                            :flag-reset-search="dataFlagResetSearch"
-                            :category-old-choice="parseInt(filter.categoryId)"
-                            :currencies-list="dataFilterCurrenciesList"
+                            :route-search="nextUrl"
+                            :location-accurate-list="dataLocationAccurateList"
                     ></advert-filter>
                 </div>
             </div>
@@ -69,7 +62,6 @@
             <div class="sixteen wide tablet thirteen wide computer column">
                 <div class="row">
                     <adverts-by-list
-                            :route-get-adverts-list="dataRouteGetAdvertList"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :ads-frequency="parseInt(adsFrenquency)"
@@ -79,8 +71,8 @@
                     <div class="sixteen wide column pagination">
                         <pagination
                             :pages="paginate"
-                            :route-get-list="dataRouteGetAdvertList"
-                            :fake-page-route="getHref()"
+                            :route-get-list="''"
+                            :fake-page-route="nextUrl"
                         ></pagination>
                     </div>
                 </div>
@@ -108,7 +100,6 @@
                     <div class="sixteen wide column">
                         <vertical-160x600
                             :centered="true"
-                            :reload="update"
                         ></vertical-160x600>
                     </div>
                 </div>
@@ -122,7 +113,6 @@
     export default {
         props: [
             //vue routes
-            'routeGetAdvertsList',
             'routeBookmarkAdd',
             'routeBookmarkRemove',
             'routeNotificationsExistIn',
@@ -130,10 +120,6 @@
             'routeNotificationsRemove',
             'routeGetHighlight',
             //vue vars
-            'clearStorage',
-            'forCountryName',
-            'forCountryCode',
-            'forPage',
             'masteradsRouteImageServer',
             'masteradsIsActive',
             'masteradsUrlImg',
@@ -151,129 +137,91 @@
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
+                isLoaded: true,
                 breadcrumbItems: [],
-                dataFilterLocationAccurateList: [],
+                dataLocationAccurateList: [],
                 dataFakeHighlightAdvert: {},
-                dataFilterCurrenciesList: [],
-                dataFilterPricePrefix: '',
-                oldMinRangePrice: -1,
-                oldMaxRangePrice: -1,
-                oldMinRangeQuantity: -1,
-                oldMaxRangeQuantity: -1,
-                filter: {categoryId: 0},
-                paginate: {},
-                dataRouteGetAdvertList: '',
-                dataFlagResetSearch: false,
-                oldChoice: {},
-                update: false,
                 dataHighlightAdverts: [],
-                hash: '',
-                isOnHashChange: false,
+                paginate: {},
                 dataHeader: '',
-                //List of boolean filter params when false=delete of filter
-                deleteOnFilterWhenFalse: ['isUrgent', 'isNegociated']
+                nextUrl: '',
             }
         },
         mounted () {
             this.strings = this.$store.state.strings['welcome1'];
             this.properties = this.$store.state.properties['global'];
-            let that = this;
-            this.dataFilterLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
+            this.nextUrl = this.getHref();
+            this.dataLocationAccurateList = JSON.parse(this.filterLocationAccurateList);
             this.dataFakeHighlightAdvert = JSON.parse(this.fakeHighlightAdvert);
-            if(this.clearStorage){
-                //keep only country
-                let inputs = this.initFilterBySessionStorage(true);
-                //reset storage
-                sessionStorage.clear();
-                //recup country
-                sessionStorage.setItem('filter', JSON.stringify(this.filter));
-                if(inputs.inputLocationVal !== null){
-                    sessionStorage.setItem('filterLocationInputVal', inputs.inputLocationVal);
-                }
-            }
+            this.getHighLightAdvert();
+            this.setHeader();
 
-            if(this.forCountryName != "" && this.forCountryCode != "") {
-                this.filter['country']=this.forCountryCode;
-                sessionStorage.setItem('filterLocationInputVal', JSON.stringify(this.forCountryName.charAt(0).toUpperCase() + this.forCountryName.slice(1)));
-                sessionStorage.setItem('filter', JSON.stringify(this.filter));
-            }
-            if(this.forPage != "") {
-                this.filter['page']=this.forPage;
-                sessionStorage.setItem('filter', JSON.stringify(this.filter));
-            }
+            let that = this;
+
+            //pagination
+            let paginate = this.$store.state.properties['adverts-by-list-item']['list']['adverts'];
+            delete paginate.data;
+            this.paginate = paginate;
+            this.$on('changePage', function (url) {
+                this.nextUrl = url;
+                this.gotoNextUrl();
+            });
+
 
             //On load Error
             this.$on('loadError', function () {
                 this.sendToast(this.strings.loadErrorMessage, 'error');
             });
 
-            //Init dataRoute
-            if(sessionStorage.getItem('goToCategory') != undefined){
-                //En cas de changement de categorie on reinit tout
-                this.initFilterBySessionStorage(true);
-                this.choiceCategory(sessionStorage.getItem('goToCategory'));
-                sessionStorage.removeItem('goToCategory');
-            } else {
-                //on reconstruit le filtre
-                this.initFilterBySessionStorage();
-                this.setBreadCrumbItems(this.filter.categoryId);
-                this.updateResults(true);
-            }
-            this.$on('categoryChoice', function (event) {
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600);
-                if(event.id != undefined && event.id > 0) {
-                    if(parseInt(event.id) != this.filter.categoryId) {
-                        this.choiceCategory(event.id)
-                    }
-                } else {
-                    if(this.filter.categoryId != 0){
-                        this.choiceCategory(0)
-                    } else {
-                        let haveClearAction = this.clearInputSearch();
-                        if(haveClearAction){
-                            this.updateResults();
-                        }
-                    }
+
+            //When choice a category
+            this.$on('categoryChoice', function (event) {10
+                if(event.id != undefined && event.id >= 0) {
+                    this.nextUrl = this.getNextUrl('minPrice', null);
+                    this.nextUrl = this.getNextUrl('maxPrice', null);
+                    this.nextUrl = this.getNextUrl('minQuantity', null);
+                    this.nextUrl = this.getNextUrl('maxQuantity', null);
+                    this.nextUrl = this.getNextUrl('categoryId', event.id);
+                    this.gotoNextUrl();
                 }
             });
-            this.getHighLightAdvert();
-            this.$on('paginate', function (result) {
-                this.paginate=result;
-            });
+
+
+            //When Update Filter
             this.$on('updateFilter', function (result) {
-                this.updateFilter(result);
-            });
-            this.$on('changePage', function (url) {
-                $('html body').animate({
-                    scrollTop: 0
-                }, 600, function () {
-                    let parsed = Parser.parse(url, true);
-                    that.filter['page']=parsed.query.page;
-                    that.updateResults(true);
+                Object.keys(result).forEach(function (key) {
+                    console.log('key', key);
+                    console.log('value', result[key]);
+                    that.nextUrl = that.getNextUrl(key, result[key]);
                 });
+                this.gotoNextUrl();
             });
+
+
+            //When clear Location
+            this.$on('clearLocationResults', function () {
+                this.dataLocationAccurateList.forEach(function(key){
+                    that.nextUrl = that.getNextUrl(key, null);
+                });
+                this.nextUrl = this.getNextUrl('forLocation', null);
+                this.gotoNextUrl();
+            });
+
+
+            //When search query results valid
             this.$on('refreshResults', function (query) {
                 if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
-                    this.filter.resultsFor = query;
-                    this.updateResults();
+                    that.nextUrl = that.getNextUrl('resultsFor', query);
+                    that.gotoNextUrl();
                 }
             });
             this.$on('clearSearchResults', function () {
-                let haveClearAction = this.clearInputSearch();
-                if(haveClearAction){
-                    this.filter.minPrice=0;
-                    this.filter.maxPrice=0;
-                    this.filter.minQuantity=0;
-                    this.filter.maxQuantity=0;
-                    this.updateResults();
-                }
+                this.nextUrl = this.getNextUrl('resultsFor', null);
+                this.gotoNextUrl();
             });
-            this.$on('clearLocationResults', function () {
-                this.clearInputLocation();
-                this.updateResults();
-            });
+
+
+
             this.$on('sendToast', function (event) {
                 this.sendToast(event.message, event.type);
             });
@@ -283,258 +231,12 @@
             this.$on('unbookmarkSuccess', function () {
                 this.sendToast(this.strings.unbookmarkSuccess, 'success');
             });
-            if ("onpopstate" in window) {
-                this.onPopState();
-            }
         },
         methods: {
             sendToast: function(message,type) {
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
-            },
-            setBreadCrumbItems: function (categoryId) {
-                this.breadcrumbItems = [];
-                let that = this;
-                if(categoryId != undefined && categoryId>0 ) {
-                    axios.get(this.properties.routeCategory+'/'+categoryId)
-                        .then(function (response) {
-                            let chainedCategories = response.data;
-                            that.breadcrumbItems.push({
-                                name: that.strings.allLabel,
-                                value: 0
-                            });
-                            chainedCategories.forEach(function (elem,index) {
-                                that.breadcrumbItems.push({
-                                    name: elem['description'][that.properties.actualLocale],
-                                    value: elem.id
-                                });
-                            });
-                            that.setHeader();
-                        })
-                        .catch(function (error) {
-                            that.breadcrumbItems.push({
-                                name: this.strings.loadErrorMessage,
-                                value:''
-                            });
-                        });
-                }
-            },
-            urlForFilter(priceOnly=false, init=false) {
-                let urlBase = init ? this.routeGetAdvertsList : this.dataRouteGetAdvertList;
-                let parsed = Parser.parse(urlBase, true);
-                parsed.search=undefined;
-                parsed.query={};
-
-                //reset sessionStorageFilter
-                sessionStorage.removeItem('filter');
-                sessionStorage.setItem('filter', JSON.stringify(this.filter));
-
-                for(let elem in this.filter){
-                    if(this.filter[elem] != null && elem != 'minRangePrice' && elem != 'maxRangePrice' && elem != 'minRangeQuantity' && elem != 'maxRangeQuantity'){
-                        parsed.query[elem]=(this.filter[elem]).toString();
-                    }
-                }
-                if(priceOnly){
-                    parsed.query.priceOnly=true.toString();
-                    if("minPrice" in parsed.query){
-                        delete parsed.query.minPrice;
-                    }
-                    if("maxPrice" in parsed.query){
-                        delete parsed.query.maxPrice;
-                    }
-                    if("minQuantity" in parsed.query){
-                        delete parsed.query.minQuantity;
-                    }
-                    if("maxQuantity" in parsed.query){
-                        delete parsed.query.maxQuantity;
-                    }
-                } else {
-                    if("priceOnly" in parsed.query){
-                        delete parsed.query.priceOnly;
-                    }
-                }
-                return Parser.format(parsed);
-            },
-            getMinMaxPrices: function (url, callBack) {
-                let that = this;
-                axios.get(url)
-                    .then(function (response) {
-                        that.filter.minRangePrice = parseFloat((response.data).minPrice);
-                        that.filter.maxRangePrice = parseFloat((response.data).maxPrice);
-                        that.filter.minRangeQuantity = parseInt((response.data).minQuantity);
-                        that.filter.maxRangeQuantity = parseInt((response.data).maxQuantity);
-                        that.dataFilterCurrenciesList = (response.data).currenciesList;
-                        that.filter.currency = (response.data).currency;
-                        that.dataFilterPricePrefix = (response.data).currencySymbol;
-                        callBack();
-                    })
-                    .catch(function (error) {
-                        that.sendToast(that.strings.loadErrorMessage, 'error');
-                    });
-            },
-            clearInputSearch() {
-                if('resultsFor' in this.filter) {
-                    delete this.filter.resultsFor;
-                    this.dataFlagResetSearch = !this.dataFlagResetSearch;
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            clearInputLocation() {
-                for(let index in this.dataFilterLocationAccurateList){
-                    let key  = this.dataFilterLocationAccurateList[index];
-                    if(key in this.filter){
-                        delete this.filter[key];
-                    }
-                }
-            },
-            choiceCategory(categoryId) {
-                this.setBreadCrumbItems(categoryId);
-                this.filter.categoryId = parseInt(categoryId);
-                this.filter.minPrice = 0;
-                this.filter.maxPrice = 0;
-                this.filter.minQuantity = 0;
-                this.filter.maxQuantity = 0;
-                this.clearInputSearch();
-                this.updateResults();
-            },
-            updateResults(withPage=false){
-                if(withPage==false && 'page' in this.filter){
-                    delete this.filter.page;
-                } else {
-                    if('minRangePrice' in this.filter && 'maxRangePrice' in this.filter && 'minRangeQuantity' in this.filter && 'maxRangeQuantity' in this.filter){
-                        this.oldMinRangePrice = this.filter.minRangePrice;
-                        this.oldMaxRangePrice = this.filter.maxRangePrice;
-                        this.oldMinRangeQuantity = this.filter.minRangeQuantity;
-                        this.oldMaxRangeQuantity = this.filter.maxRangeQuantity;
-                    }
-                }
-                let url = this.urlForFilter(true, true);
-                //s'assurer que les range min et max sont tjrs valables
-                let that = this;
-                this.getMinMaxPrices(url, function () {
-                    //on test si le filtre min-max est toujours valable
-                    if(that.filter.minRangePrice != that.oldMinRangePrice || that.filter.maxRangePrice != that.oldMaxRangePrice || that.filter.minPrice == undefined || that.filter.minPrice < that.filter.minRangePrice || that.filter.minPrice > that.filter.maxRangePrice) {
-                        that.filter.minPrice = that.filter.minRangePrice;
-                        that.filter.maxPrice = that.filter.maxRangePrice;
-                        that.oldMinRangePrice = that.filter.minRangePrice;
-                        that.oldMaxRangePrice = that.filter.maxRangePrice;
-                    }
-                    if(that.filter.minRangePrice != that.oldMinRangePrice || that.filter.maxRangePrice != that.oldMaxRangePrice || that.filter.maxPrice == undefined || that.filter.maxPrice > that.filter.maxRangePrice || that.filter.maxPrice <= that.filter.minPrice) {
-                        that.filter.minPrice = that.filter.minRangePrice;
-                        that.filter.maxPrice = that.filter.maxRangePrice;
-                        that.oldMinRangePrice = that.filter.minRangePrice;
-                        that.oldMaxRangePrice = that.filter.maxRangePrice;
-                    }
-                    //Idem filtre quantity
-                    if(that.filter.minRangeQuantity != that.oldMinRangeQuantity || that.filter.maxRangeQuantity != that.oldMaxRangeQuantity || that.filter.minQuantity == undefined || that.filter.minQuantity < that.filter.minRangeQuantity || that.filter.minQuantity > that.filter.maxRangeQuantity) {
-                        that.filter.minQuantity = that.filter.minRangeQuantity;
-                        that.filter.maxQuantity = that.filter.maxRangeQuantity;
-                        that.oldMinRangeQuantity = that.filter.minRangeQuantity;
-                        that.oldMaxRangeQuantity = that.filter.maxRangeQuantity;
-                    }
-                    if(that.filter.minRangeQuantity != that.oldMinRangeQuantity || that.filter.maxRangeQuantity != that.oldMaxRangeQuantity || that.filter.maxQuantity == undefined || that.filter.maxQuantity > that.filter.maxRangeQuantity || that.filter.maxQuantity <= that.filter.minQuantity) {
-                        that.filter.minQuantity = that.filter.minRangeQuantity;
-                        that.filter.maxQuantity = that.filter.maxRangeQuantity;
-                        that.oldMinRangeQuantity = that.filter.minRangeQuantity;
-                        that.oldMaxRangeQuantity = that.filter.maxRangeQuantity;
-                    }
-                    that.update = !that.update;
-                    that.dataRouteGetAdvertList = that.urlForFilter(false,true);
-                    if(!that.isOnHashChange){
-                        that.hashPage();
-                        that.setHashFilters();
-                    } else {
-                        that.isOnHashChange = false;
-                    }
-                });
-            },
-            hashPage() {
-
-                let url = document.location.href;
-                let parsed = Parser.parse(url, true);
-                parsed.search=undefined;
-                if("location" in parsed.query){
-                    delete parsed.query.location;
-                }
-                if("page" in parsed.query){
-                    delete parsed.query.page;
-                }
-
-                if(this.forCountryName != "" && this.forCountryCode != "" && sessionStorage.getItem('filterLocationInputVal')!=undefined){
-                    parsed.query['location'] = JSON.parse(sessionStorage.getItem('filterLocationInputVal')).toLowerCase();
-                }
-                if(this.forPage != "" && 'page' in this.filter){
-                    parsed.query['page'] = this.filter.page;
-                }
-                this.hash = '#' + new Date().getTime().toString(36);
-                parsed.hash = this.hash;
-                this.setHeader();
-                history.pushState({navGuard: true}, '', Parser.format(parsed));
-            },
-            setHashFilters() {
-                if(this.hash !== undefined && this.hash !== ''){
-                    sessionStorage.setItem('filter'+this.hash, JSON.stringify(this.filter));
-                    let inputLocationVal = sessionStorage.getItem('filterLocationInputVal');
-                    if(inputLocationVal !== null){
-                        sessionStorage.setItem('filterLocationInputVal'+this.hash, inputLocationVal);
-                    }
-                }
-            },
-            onPopState() {
-                let that = this;
-                window.onpopstate = function (event) {
-                    that.isOnHashChange = true;
-                    let inputs = that.initFilterBySessionStorage();
-
-                    if(inputs.inputLocationVal !== null){
-                        sessionStorage.setItem('filterLocationInputVal', inputs.inputLocationVal);
-                    } else {
-                        sessionStorage.removeItem('filterLocationInputVal');
-                    }
-                    that.setBreadCrumbItems(that.filter.categoryId);
-                    that.updateResults(true);
-                }
-            },
-            updateFilter(result){
-                let oldFilter= _.cloneDeep(this.filter);
-                for(let elem in result){
-                    if(result[elem] == null || (_.indexOf(this.deleteOnFilterWhenFalse, elem)!==-1 && result[elem]==false)){
-                        if(elem in this.filter){
-                            delete this.filter[elem];
-                        }
-                    } else {
-                        this.filter[elem] = result[elem];
-                    }
-                }
-                if(!_.isEqual(oldFilter, this.filter)){
-                    this.updateResults();
-                }
-            },
-            initFilterBySessionStorage: function (onlyLocation=false) {
-                let hash = window.location.hash;
-                let hashFilter = sessionStorage.getItem('filter'+hash);
-                let hashInputLocationVal = sessionStorage.getItem('filterLocationInputVal'+hash);
-
-                if(hashFilter !== null){
-                    this.filter = JSON.parse(hashFilter);
-                    if(onlyLocation===true){
-                        for(let elem in this.filter){
-                            let isIn = false;
-                            for(let index in this.dataFilterLocationAccurateList){
-                                let key  = this.dataFilterLocationAccurateList[index];
-                                if(elem == key){
-                                    isIn = true;
-                                }
-                            }
-                            !isIn ? delete this.filter[elem] : null;
-                        }
-                    }
-                }
-
-                return {'inputLocationVal': hashInputLocationVal};
             },
             getHighLightAdvert: function () {
                 let that = this;
@@ -546,16 +248,36 @@
                         //that.sendToast(that.strings.loadErrorMessage, 'error');
                     });
             },
-            getHref: function () {
-                return window.location.href;
-            },
             setHeader: function () {
                 this.dataHeader = this.strings.header;
                 if(this.breadcrumbItems.length > 0){
                     this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length -1].name;
                 }
-                if(sessionStorage.getItem('filterLocationInputVal')!=undefined){
-                    this.dataHeader = this.dataHeader + ' - ' + JSON.parse(sessionStorage.getItem('filterLocationInputVal'));
+                if(DestockTools.findInUrl('forLocation')){
+                    this.dataHeader = this.dataHeader + ' - ' + DestockTools.findInUrl('forLocation');
+                }
+            },
+            getHref: function () {
+                return window.location.href;
+            },
+            getNextUrl(paramName, paramValue) {
+                let urlBase = this.nextUrl;
+                let parsed = Parser.parse(urlBase, true);
+                parsed.search=undefined;
+
+                if(paramValue != null){
+                    parsed.query[paramName] = paramValue.toString();
+                } else if (paramName in parsed.query){
+                    delete parsed.query[paramName]
+                }
+
+                'page' in parsed.query ? delete parsed.query['page'] : null;
+                return Parser.format(parsed);
+            },
+            gotoNextUrl(forceLoad=false) {
+                if(this.nextUrl !== window.location.href || forceLoad===true){
+                    Pace.restart();
+                    window.location.href = this.nextUrl;
                 }
             }
         }

@@ -14,7 +14,7 @@
                             <div class="sixteen wide mobile eight wide tablet ten wide computer column">
                                 <div class="ui centered grid flags">
                                     <template v-for="country, key in dataCountries">
-                                        <a v-on:click.stop.prevent="goHome" :href="properties.routeHome+'?location='+country.name" :data-country="country.code" :data-country-name="country.name" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                        <a :title="strings.header + ' - ' +  country.name" :href="properties.routeHome+'?forLocation='+country.name" :data-country="country.code" :data-country-name="country.name" class="five wide mobile five wide tablet three wide computer center aligned column">
                                             <svg v-if="key=='italy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" style="mix-blend-mode:multiply" :class="browser=='edge' ? 'shadow' : ''">
                                                 <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
                                                 <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
@@ -1122,7 +1122,6 @@
                                             <div class="field">
                                                 <location-filter
                                                         :accurate-list="locationAccurateList"
-                                                        :update="dataUpdate"
                                                 ></location-filter>
                                             </div>
                                             <div v-on:click.stop.prevent="goHome"  :class="isLocationReady ? 'ui vertical animated primary button' : 'ui vertical animated primary disabled button'">
@@ -1189,6 +1188,7 @@
                 dataEmail: '',
                 dataName: '',
                 dataPhone: '',
+                nextUrl: '',
             }
         },
         mounted () {
@@ -1196,35 +1196,43 @@
             this.properties = this.$store.state.properties['global'];
             this.dataCountries = JSON.parse(this.countries);
             this.locationAccurateList = JSON.parse(this.filterLocationAccurateList);
-            sessionStorage.clear();
-            this.$on('locationUpdate', function (event) {
-                this.isLocationReady=false;
-                for(let item in event){
-                    if(event[item] != null){
-                        this.isLocationReady=true;
-                        this.filter[item] = event[item];
-                    }
-                }
+            this.nextUrl = this.properties.routeHome;
+            let that = this;
+            //When Update Filter
+            this.$on('locationUpdate', function (result) {
+                this.isLocationReady = true;
+                Object.keys(result).forEach(function (key) {
+                    that.nextUrl = that.getNextUrl(key, result[key]);
+                });
             });
+
+
+            //When clear Location
             this.$on('clearLocationResults', function () {
-                this.isLocationReady=false;
+                this.isLocationReady = false;
+                this.locationAccurateList.forEach(function(key){
+                    that.nextUrl = that.getNextUrl(key, null);
+                });
+                this.nextUrl = this.getNextUrl('forLocation', null);
             });
         },
         methods: {
-            goHome (event) {
-                let countryChoice ='';
-                if(event.currentTarget.nodeName == 'A'){
-                    this.filter = {};
-                    this.filter['country']=(event.currentTarget.dataset.country).toUpperCase();
-                    if(event.currentTarget.dataset.countryName != ''){
-                        countryChoice = event.currentTarget.dataset.countryName;
-                        sessionStorage.setItem('filterLocationInputVal', JSON.stringify(countryChoice.charAt(0).toUpperCase() + countryChoice.slice(1)));
-                    } else {
-                        sessionStorage.removeItem('filterLocationInputVal');
-                    }
+            getNextUrl(paramName, paramValue) {
+                let urlBase = this.nextUrl;
+                let parsed = Parser.parse(urlBase, true);
+                parsed.search=undefined;
+
+                if(paramValue != null){
+                    parsed.query[paramName] = paramValue.toString();
+                } else if (paramName in parsed.query){
+                    delete parsed.query[paramName]
                 }
-                sessionStorage.setItem('filter', JSON.stringify(this.filter));
-                window.location.assign(countryChoice !== '' ? this.properties.routeHome+'?location='+countryChoice : this.properties.routeHome);
+
+                'page' in parsed.query ? delete parsed.query['page'] : null;
+                return Parser.format(parsed);
+            },
+            goHome () {
+                window.location.assign(this.nextUrl);
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;

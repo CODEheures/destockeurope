@@ -20,23 +20,17 @@
             //vue vars
             accurateList: {
                 type: Array
-            },
-            update: {
-                type: Boolean
             }
         },
         data: () => {
             return {
                 strings: {},
-                dataRouteSearch: '',
                 wantSearch: true
             }
         },
         mounted () {
             this.strings = this.$store.state.strings['location-filter'];
-            this.$watch('update', function () {
-                this.updateSearch();
-            });
+            this.updateSearch();
         },
         methods: {
             filterChange () {
@@ -52,8 +46,8 @@
                         event[elem] = null;
                     }
                 });
+                event['forLocation']=$('#filter_location').val();
                 if(!this.wantSearch){
-                    sessionStorage.setItem('filterLocationInputVal', JSON.stringify($('#filter_location').val()));
                     this.$parent.$emit('locationUpdate', event);
                 }
             },
@@ -66,12 +60,11 @@
             },
             resetSearch(withEmit) {
                 $('#filter_location').val('');
-                sessionStorage.removeItem('filterLocationInputVal');
                 this.wantSearch = true;
                 withEmit ? this.$parent.$emit('clearLocationResults') : null;
             },
             updateSearch() {
-                let previousVal = JSON.parse(sessionStorage.getItem('filterLocationInputVal'));
+                let previousVal = DestockTools.findInUrl('forLocation');
                 if(previousVal && previousVal.length > 0){
                     $('#filter_location').val(previousVal);
                     this.wantSearch = false;

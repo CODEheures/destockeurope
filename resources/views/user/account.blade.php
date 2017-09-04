@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-   @include('storeSetter.strings.contents.user-account')
+   @include('storeSetter.contents.user-account')
     <user-account
             route-user-get-me="{{ route('user.getMe') }}"
             route-change-email="{{ route('changeEmail', ['email' => auth()->user()->email]) }}"

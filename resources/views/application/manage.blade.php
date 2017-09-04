@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('storeSetter.strings.contents.manage-application')
+    @include('storeSetter.contents.manage-application')
     <manage-application
             route-parameters="{{ route('application.parameters') }}"
             route-test-is-picture="{{ route('utils.isPicture') }}"

@@ -14,6 +14,9 @@
     <!-- opengraph -->
     <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
     <meta property="og:image" content="{{ \Illuminate\Support\Facades\Request::getFacadeRoot()->url() }}/android-chrome-512x512.png">
+    <!-- PACE LOADER -->
+    <script src="{{ mix("js/pace.min.js") }}"></script>
+    <link rel="stylesheet" href="{{ mix("css/pace-theme.css") }}">
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">

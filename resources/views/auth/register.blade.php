@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    @include('storeSetter.strings.contents.user-account-register')
+    @include('storeSetter.contents.user-account-register')
     <user-account-register
             route-register="{{ url('/register') }}"
             route-facebook-register="{{ route('social.login', ['provider' => 'facebook']) }}"

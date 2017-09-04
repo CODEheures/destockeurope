@@ -13,6 +13,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- opengraph -->
     @yield('opengraph')
+    <!-- PACE LOADER -->
+    <script src="{{ mix("js/pace.min.js") }}"></script>
+    <link rel="stylesheet" href="{{ mix("css/pace-theme.css") }}">
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">

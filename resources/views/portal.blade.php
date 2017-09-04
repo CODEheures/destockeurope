@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- main page -->
-    @include('storeSetter.strings.contents.portal')
+    @include('storeSetter.contents.portal')
     <portal
         route-subscribe-news-letter="{{ route('subscribeNewsLetter') }}"
         browser="{{ $browser }}"

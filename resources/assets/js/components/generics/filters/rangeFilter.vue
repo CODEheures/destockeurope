@@ -14,7 +14,6 @@
             maxi: Number,
             handleMin: Number,
             handleMax: Number,
-            update: Boolean,
             step: {
                 type: Number,
                 required: false,
@@ -70,17 +69,30 @@
                 });
             });
 //
-            this.$watch('update', function () {
-                slider.update({
-                    min: that.mini,
-                    max: that.maxi,
-                    prefix: that.prefix,
-                    from: that.handleMin,
-                    to: that.handleMax,
-                    onFinish: function (data) {
-                        that.$parent.$emit('rangeUpdate', {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]});
-                    }
-                });
+            slider.update({
+                min: that.mini,
+                max: that.maxi,
+                prefix: that.prefix,
+                from: that.handleMin,
+                to: that.handleMax,
+                onFinish: function (data) {
+                    that.$parent.$emit('rangeUpdate', {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]});
+                }
+            });
+        },
+        updated () {
+            let elemSlider = $('#'+this._uid);
+            let slider = elemSlider.data("ionRangeSlider");
+            let that = this;
+            slider.update({
+                min: that.mini,
+                max: that.maxi,
+                prefix: that.prefix,
+                from: that.handleMin,
+                to: that.handleMax,
+                onFinish: function (data) {
+                    that.$parent.$emit('rangeUpdate', {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]});
+                }
             });
         },
         methods: {

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('storeSetter.strings.contents.review-for-payment')
+    @include('storeSetter.contents.review-for-payment')
     <review-for-payment
             route-paypal-choice="{{ route('advert.payByPaypal', ['invoiceId' => $invoice->id]) }}"
             route-card-choice="{{ route('advert.payByCard', ['invoiceId' => $invoice->id]) }}"

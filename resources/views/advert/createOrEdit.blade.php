@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    @include('storeSetter.strings.contents.createOrEditAdvert')
+    @include('storeSetter.contents.createOrEditAdvert')
     <create-or-edit-advert-form
             route-advert-form-post="{{ $route }}"
             route-post-picture="{{ route('picture.post') }}"

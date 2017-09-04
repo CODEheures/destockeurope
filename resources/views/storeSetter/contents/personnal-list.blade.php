@@ -1,3 +1,6 @@
+<!--PROPS-->
+@include('storeSetter.props.adverts.advert-by-list')
+<!--STRINGS-->
 <store-strings-setter
         strings="{{ json_encode([
                         'key' => 'personnal-list',

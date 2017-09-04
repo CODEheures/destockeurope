@@ -6,9 +6,6 @@
                     <span class="ui mini label"><i class="info circle icon"></i>{{ strings.priceInfoLabel }}</span>
                 </div>
             </div>
-            <div class="ui active inverted dimmer" v-if="!isLoaded">
-                <div class="ui large text loader">Loading</div>
-            </div>
             <template v-if="advertsList.length==0">
                 <div class="item ads">
                     <div class="ui info message">
@@ -16,7 +13,7 @@
                         <p>{{ strings.noResultFoundMessage }}</p>
                     </div>
                 </div>
-                <div v-if="isLoaded"  class="item ads">
+                <div class="item ads">
                     <div class="ui grid">
                         <div class="tablet only computer only row">
                             <horizontal-468x60></horizontal-468x60>
@@ -64,14 +61,8 @@
 <script>
     export default {
         props: {
-            routeGetAdvertsList: String,
             routeBookmarkAdd: String,
             routeBookmarkRemove: String,
-            reloadOnUnbookmarkSuccess: {
-                type: Boolean,
-                default: false,
-                required: false
-            },
             flagForceReload: {
                 type: Boolean,
                 default: false,
@@ -94,7 +85,6 @@
                 strings: {},
                 properties: {},
                 advertsList: [],
-                isLoaded: false,
                 minPrice: 0,
                 maxPrice: 0
             };
@@ -102,13 +92,14 @@
         mounted () {
             this.strings = this.$store.state.strings['adverts-by-list'];
             this.properties = this.$store.state.properties['global'];
+            this.advertsList = this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data'];
+
+            if(this.$store.state.properties['adverts-by-list-item']['ranges'] !== null){
+                this.minPrice = parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice']);
+                this.maxPrice = parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice']);
+            }
+
             let that = this;
-            this.$watch('routeGetAdvertsList', function () {
-                this.getAdvertsList();
-            });
-            this.$watch('flagForceReload', function () {
-                this.getAdvertsList();
-            });
             this.$watch('minPrice', function () {
                 this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
             });
@@ -120,9 +111,6 @@
             });
             this.$on('unbookmarkSuccess', function () {
                 that.$parent.$emit('unbookmarkSuccess');
-                if(that.reloadOnUnbookmarkSuccess==true) {
-                    that.getAdvertsList(true);
-                }
             });
             this.$on('deleteAdvert', function (event) {
                that.$parent.$emit('deleteAdvert', event);
@@ -138,25 +126,7 @@
             });
         },
         methods: {
-            getAdvertsList: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                this.advertsList = [];
-                axios.get(this.routeGetAdvertsList)
-                    .then(function (response) {
-                        that.advertsList = (response.data).adverts.data;
-                        that.minPrice = parseFloat((response.data).minPrice);
-                        that.maxPrice = parseFloat((response.data).maxPrice);
-                        that.isLoaded = true;
-                        let paginate = response.data.adverts;
-                        delete paginate.data;
-                        that.$parent.$emit('paginate', paginate);
-                    })
-                    .catch(function (error) {
-                        that.$parent.$emit('loadError')
-                    });
-            }
+
         }
     }
 </script>

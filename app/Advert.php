@@ -54,7 +54,7 @@ class Advert extends Model {
         'destroyUrl', 'updateCoefficientUrl', 'updateQuantitiesUrl', 'editUrl', 'delegationUrl', 'resume',
         'titleWithManuRef', 'isEligibleForRenew', 'isEligibleForHighlight',
         'isEligibleForRenewMailZero', 'isEligibleForEdit', 'isUserOwner', 'isUserBookmark', 'bookmarkCount',
-        'picturesWithTrashedCount', 'originalPrice', 'originalPriceWithMargin', 'totalPrice', 'totalPriceMargin', 'globalDiscount', 'priceSubUnit', 'currencySymbol');
+        'originalPrice', 'originalPriceWithMargin', 'totalPrice', 'totalPriceMargin', 'globalDiscount', 'priceSubUnit', 'currencySymbol');
     private $breadcrumb;
     private $resumeLength;
     private $isUserBookmark = false;
@@ -88,14 +88,10 @@ class Advert extends Model {
     public function bookmarks() { return $this->hasMany('App\Bookmark'); }
     public function category() { return $this->belongsTo('App\Category'); }
     public function pictures() {
-        if(is_null($this->deleted_at)){
-            return $this->hasMany('App\Picture');
-        } else {
-            return $this->hasMany('App\Picture')->withTrashed();
-        }
+        //ATTENTION RETURN WITH TRASHED BECAUSE of multiple load with advert+deleted advert
+        //PICTURES IS ONLY TRASHED IF ADVERT IS TRASHED
+        return $this->hasMany('App\Picture')->withTrashed();
     }
-    public function picturesWithTrashed() { return $this->hasMany('App\Picture')->withTrashed(); }
-    public function picturesOnlyTrashed() { return $this->hasMany('App\Picture')->onlyTrashed(); }
     public function invoices() { return $this->hasMany('App\Invoice'); }
 
     //Attributs Getters
@@ -274,10 +270,6 @@ class Advert extends Model {
 
     public function getBookmarkCountAttribute() {
         return $this->bookmarkCount;
-    }
-
-    public function getPicturesWithTrashedCountAttribute() {
-        return $this->hasMany('App\Picture')->withTrashed()->count();
     }
 
     public function getIsEligibleForRenewMailZeroAttribute() {

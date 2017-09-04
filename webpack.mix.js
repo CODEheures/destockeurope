@@ -25,6 +25,8 @@ mix//.js('resources/assets/js/sw.js', 'public')
     ], 'public/css/vendor.css');
 
 if (mix.inProduction()) {
-    mix.version();
+    mix.version()
+        .copy('resources/assets/pace/pace.min.js', 'public/js/pace.min.js')
+        .copy('resources/assets/pace/pace-theme-flash.css', 'public/css/pace-theme.css');
 }
 

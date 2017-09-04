@@ -98,6 +98,18 @@ let destockTools = {
 
     truncFloat: function (value, decimal) {
         return parseFloat(value.toFixed(decimal));
+    },
+
+    findInUrl (param){
+        let urlBase = window.location.href;
+        let parsed = Parser.parse(urlBase, true);
+        parsed.search=undefined;
+
+        if(param in parsed.query){
+            return parsed.query[param];
+        } else {
+            return null;
+        }
     }
 };
 

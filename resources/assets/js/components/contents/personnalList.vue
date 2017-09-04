@@ -34,10 +34,7 @@
             <div v-if="isDelegation" class="sixteen wide column">
                 <div class="row filters">
                     <advert-simple-search-filter
-                            :update="update"
-                            :filter="filter"
-                            :route-search="dataRouteGetAdvertsList"
-                            :flag-reset-search="dataFlagResetSearch"
+                            :route-search="nextUrl"
                     ></advert-simple-search-filter>
                 </div>
             </div>
@@ -47,21 +44,19 @@
                         <div class="ui large text loader">Loading</div>
                     </div>
                     <adverts-by-list
-                            :route-get-adverts-list="dataRouteGetAdvertsList"
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
-                            :flag-force-reload="flagForceReload"
                             :ads-frequency="parseInt(adsFrequency)"
                             :can-get-delegations="canGetDelegations==true"
                             :is-personnal-list="isPersonnalList==true"
-                            :reload-on-unbookmark-success="reloadAdvertOnUnbookmarkSuccess==1"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
                     <div class="sixteen wide column pagination">
                         <pagination
                             :pages="paginate"
-                            :route-get-list="dataRouteGetAdvertsList"
+                            :route-get-list="''"
+                            :fake-page-route="nextUrl"
                         ></pagination>
                     </div>
                 </div>
@@ -81,7 +76,6 @@
     export default {
         props: [
             //vue routes
-            'routeGetAdvertsList',
             'routeBookmarkAdd',
             'routeBookmarkRemove',
             //vue vars
@@ -101,24 +95,22 @@
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
-                filter: {},
                 paginate: {},
-                dataRouteGetAdvertsList: '',
-                dataFlagResetSearch: false,
-                oldChoice: {},
-                update: false,
-                flagForceReload: false,
                 isLoaded: true,
+                nextUrl: '',
             }
         },
         mounted () {
             this.strings = this.$store.state.strings['personnal-list'];
             this.properties = this.$store.state.properties['global'];
+            this.nextUrl = this.getHref();
+
             let that = this;
             if(this.clearStorage){
                 sessionStorage.clear();
             }
-            //On load Error
+
+            //On load Error or Update success
             this.$on('loadError', function () {
                 this.sendToast(this.strings.loadErrorMessage, 'error');
             });
@@ -126,39 +118,49 @@
                 this.sendToast(this.strings.updateSuccessMessage, 'success');
             });
 
-            //on reconstruit le filtre
-            this.initFilterBySessionStorage();
-            this.updateResults();
 
-            this.$on('paginate', function (result) {
-                this.paginate=result;
-            });
-            this.$on('updateFilter', function (result) {
-                this.updateFilter(result);
-            });
+            //pagination
+            let paginate = this.$store.state.properties['adverts-by-list-item']['list']['adverts'];
+            delete paginate.data;
+            this.paginate = paginate;
             this.$on('changePage', function (url) {
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600, function () {
-                    that.dataRouteGetAdvertsList = url;
-                });
+                this.nextUrl = url;
+                this.gotoNextUrl();
             });
+
+
+
+            //When Update Filter
+            this.$on('updateFilter', function (result) {
+                Object.keys(result).forEach(function (key) {
+                    console.log('key', key);
+                    console.log('value', result[key]);
+                    that.nextUrl = that.getNextUrl(key, result[key]);
+                });
+                this.gotoNextUrl();
+            });
+
+            //When search query results valid
             this.$on('refreshResults', function (query) {
                 if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
-                    this.filter.resultsFor = query;
-                    this.updateResults(true);
+                    that.nextUrl = that.getNextUrl('resultsFor', query);
+                    that.gotoNextUrl();
                 }
             });
             this.$on('clearSearchResults', function () {
-                let haveClearAction = this.clearInputSearch();
-                if(haveClearAction){
-                    this.updateResults(true);
-                }
+                this.nextUrl = this.getNextUrl('resultsFor', null);
+                this.gotoNextUrl();
             });
+
+            //Bookmarks
+            this.$on('unbookmarkSuccess', function () {
+                this.nextUrl = this.getNextUrl('page', null);
+                this.gotoNextUrl(true);
+            });
+
             this.$on('sendToast', function (event) {
                 this.sendToast(event.message, event.type);
             });
-            this.dataRouteGetAdvertsList = this.routeGetAdvertsList;
             this.$on('deleteAdvert', function (event) {
                 this.destroyMe(event.url);
             })
@@ -179,7 +181,7 @@
                         that.isLoaded = false;
                         axios.delete(url)
                             .then(function (response) {
-                                that.flagForceReload = !that.flagForceReload;
+                                that.gotoNextUrl();
                                 that.isLoaded = true;
                             })
                             .catch(function (error) {
@@ -193,56 +195,29 @@
                     }
                 }).modal('show');
             },
-            urlForFilter(init=false) {
-                let urlBase = init ? this.routeGetAdvertsList : this.dataRouteGetAdvertsList;
+            getHref: function () {
+                return window.location.href;
+            },
+            getNextUrl(paramName, paramValue) {
+                let urlBase = this.nextUrl;
                 let parsed = Parser.parse(urlBase, true);
                 parsed.search=undefined;
-                parsed.query={};
 
-                //reset sessionStorageFilter
-                sessionStorage.removeItem('filter');
-                sessionStorage.setItem('filter', JSON.stringify(this.filter));
-
-                for(let elem in this.filter){
-                    if(this.filter[elem] != null){
-                        parsed.query[elem]=(this.filter[elem]).toString();
-                    }
+                if(paramValue != null){
+                    parsed.query[paramName] = paramValue.toString();
+                } else if (paramName in parsed.query){
+                    delete parsed.query[paramName]
                 }
+
+                'page' in parsed.query ? delete parsed.query['page'] : null;
                 return Parser.format(parsed);
             },
-            clearInputSearch() {
-                if('resultsFor' in this.filter) {
-                    delete this.filter.resultsFor;
-                    this.dataFlagResetSearch = !this.dataFlagResetSearch;
-                    return true;
-                } else {
-                    return false;
+            gotoNextUrl(forceLoad=false) {
+                if(this.nextUrl !== window.location.href || forceLoad===true){
+                    this.isLoaded=false;
+                    window.location.href = this.nextUrl;
                 }
-            },
-            updateResults(){
-                this.update = !this.update;
-                this.dataRouteGetAdvertsList = this.urlForFilter(true);
-            },
-            updateFilter(result){
-                let oldFilter= _.cloneDeep(this.filter);
-                for(let elem in result){
-                    if(result[elem] == null){
-                        if(elem in this.filter){
-                            delete this.filter[elem];
-                        }
-                    } else {
-                        this.filter[elem] = result[elem];
-                    }
-                }
-                if(!_.isEqual(oldFilter, this.filter)){
-                    this.updateResults();
-                }
-            },
-            initFilterBySessionStorage: function () {
-                if(sessionStorage.getItem('filter') != null){
-                    this.filter = JSON.parse(sessionStorage.getItem('filter'));
-                }
-            },
+            }
         }
     }
 </script>

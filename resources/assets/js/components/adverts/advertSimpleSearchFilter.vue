@@ -11,8 +11,8 @@
                                 :route-search="routeSearch"
                                 :place-holder="strings.placeHolder"
                                 :results-for="dataResultsFor"
-                                :update="dataUpdate"
-                                :flag-reset="flagResetSearch"
+                                :update="dataUpdateSearch"
+                                :flag-reset="false"
                                 :with-xsrf-token="true"
                                 :fields="{title: 'titleWithManuRef', description : 'resume', image: 'thumb', price: 'price_margin'}"
                         ></search-filter>
@@ -29,42 +29,35 @@
         props: {
             //vue routes
             //vue vars
-            update: {
-                type: Boolean
-            },
-            filter: {
-                type: Object
-            },
             //search component
             routeSearch: {
                 type: String
             },
-            flagResetSearch: {
-                type: Boolean
-            }
         },
         data: () => {
             return {
                 strings: {},
                 properties: {},
                 dataResultsFor: '',
-                dataUpdate: false
+                dataUpdateSearch: false
             };
         },
         mounted () {
             this.strings = this.$store.state.strings['advert-simple-search-filter'];
             this.properties = this.$store.state.properties['global'];
-            this.$watch('update', function () {
-                this.setSearchFilter();
-                this.dataUpdate = !this.dataUpdate;
-            });
+            let that = this;
+
+            //search filter
+            this.dataResultsFor = DestockTools.findInUrl('resultsFor');
+            this.dataUpdateSearch = !this.dataUpdateSearch;
             this.$on('refreshResults', function (query) {
                 this.$parent.$emit('refreshResults', query);
             });
             this.$on('clearSearchResults', function () {
                 this.$parent.$emit('clearSearchResults');
             });
-            let that = this;
+
+            //Accordion
             let accordionElement = $('#filter-accordion-'+this._uid);
             if($(window).width()<768){
                 accordionElement.accordion('close',0);
@@ -73,9 +66,7 @@
             }
         },
         methods: {
-            setSearchFilter: function () {
-                this.dataResultsFor = this.filter.resultsFor;
-            }
+
         }
     }
 </script>

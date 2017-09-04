@@ -20,7 +20,7 @@
 @endsection
 
 @section('content')
-    @include('storeSetter.strings.contents.showAdvert1')
+    @include('storeSetter.contents.showAdvert1')
     <show-advert1
             route-send-mail="{{ route('advert.sendMail') }}"
             route-bookmark-add="{{ route('bookmark.add', ['advertId'=>$advert->id]) }}"
