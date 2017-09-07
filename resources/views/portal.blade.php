@@ -1,20 +1,24 @@
 @extends('layouts.portal')
 
 @section('titlePagePlus')
-    {{ trans('strings.view_portal_title') }}
+{{ trans('strings.view_portal_title') }}
+@endsection
+
+@section('meta-description')
+{{ trans('strings.app_meta_description_portal') }}
 @endsection
 
 @section('content')
-    <!-- main page -->
-    @include('storeSetter.contents.portal')
-    <portal
-        route-subscribe-news-letter="{{ route('subscribeNewsLetter') }}"
-        browser="{{ $browser }}"
-        countries="{{ json_encode(\App\Common\LocaleUtils::getListCountries()) }}"
-        filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
-    ></portal>
+<!-- main page -->
+@include('storeSetter.contents.portal')
+<portal
+    route-subscribe-news-letter="{{ route('subscribeNewsLetter') }}"
+    browser="{{ $browser }}"
+    countries="{{ json_encode(\App\Common\LocaleUtils::getListCountries()) }}"
+    filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
+></portal>
 @endsection
 
 @section('scripts')
-    @include('plugins.googleMap.autocomplete.script')
+@include('plugins.googleMap.autocomplete.script')
 @endsection
