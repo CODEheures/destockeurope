@@ -24,7 +24,8 @@ mix//.js('resources/assets/js/sw.js', 'public')
         'resources/assets/css/swiper.css',
     ], 'public/css/vendor.css')
     .copy('resources/assets/pace/pace.min.js', 'public/js/pace.min.js')
-    .copy('resources/assets/pace/pace-theme-flash.css', 'public/css/pace-theme.css');
+    .copy('resources/assets/pace/pace-theme-flash.css', 'public/css/pace-theme.css')
+    .copy('resources/assets/mailingResources/', 'public/mailingResources', false);
 
 if (mix.inProduction()) {
     mix.version();
