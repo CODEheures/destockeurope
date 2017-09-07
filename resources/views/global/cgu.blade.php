@@ -4,6 +4,10 @@
     {{ trans('strings.view_cgu_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_cgu') }}
+@endsection
+
 @section('content')
 
     <!-- main page -->

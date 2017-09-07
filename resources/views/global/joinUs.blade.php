@@ -4,6 +4,10 @@
 {{ trans('strings.view_joinUs_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_joinUs') }}
+@endsection
+
 @section('content')
 
     <!-- main page -->

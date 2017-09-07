@@ -116,10 +116,13 @@ class CommonController extends Controller
      */
     public function home(Request $request) {
         $masterAdsControllerFlag = true;
+
+        $fakeCost = CostUtils::getCostIsHighlight(true);
+
         $fakeHighlightAdvert = new Advert();
         $fakeHighlightAdvert->isNegociated = false;
-        $fakeHighlightAdvert->title = trans('strings.view_home_fake_advert_title', ['price' => MoneyUtils::getPriceWithDecimal(CostUtils::getCostIsHighlight(true), 'EUR',true)]);
-        $fakeHighlightAdvert->price = CostUtils::getCostIsHighlight(true);
+        $fakeHighlightAdvert->title = trans('strings.view_home_fake_advert_title', ['price' => MoneyUtils::getPriceWithDecimal($fakeCost, 'EUR',true)]);
+        $fakeHighlightAdvert->price = $fakeCost;
         $fakeHighlightAdvert->currency = 'EUR';
         $fakeHighlightAdvert->totalQuantity = env('HIGHLIGHT_HOURS_DURATION');
         $fakeHighlightAdvert->user_id = User::whereRole(User::ROLE_USER)->first()->id;
@@ -150,6 +153,7 @@ class CommonController extends Controller
             foreach ($countries as $country){
                 if(in_array($location, $country)){
                     $countryCode = $country['code'];
+                    $countryName = $country['name'];
                     $request->replace(array_merge($request->all(), ['country' => $countryCode]));
                     break;
                 }
@@ -185,7 +189,7 @@ class CommonController extends Controller
 
         if(!$isSearchRequest){
             $advertsList['adverts'] = $advertsList['adverts']->toArray();
-            return view('welcome', compact('masterAdsControllerFlag', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
+            return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
         } else {
             return response()->json($advertsList);
         }

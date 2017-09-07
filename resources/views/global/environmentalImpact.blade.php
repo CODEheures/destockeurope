@@ -4,6 +4,10 @@
     {{ trans('strings.view_diffusionRules_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_environmentalImpact') }}
+@endsection
+
 @section('content')
 
     <!-- main page -->

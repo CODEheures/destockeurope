@@ -4,6 +4,10 @@
 {{ isset($countryName) ? trans('strings.view_home_title_with_country', ['country' =>$countryName]) : trans('strings.view_home_title_without_country')  }}
 @endsection
 
+@section('meta-description')
+{{ trans('strings.app_meta_description_home') }}
+@endsection
+
 @section('content')
     @include('storeSetter.contents.welcome1')
     <welcome1

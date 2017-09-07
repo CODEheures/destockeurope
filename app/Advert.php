@@ -333,7 +333,7 @@ class Advert extends Model {
     }
 
     public function setBookmarkCount() {
-        $this->bookmarkCount = $this->bookmarks()->count();
+        $this->bookmarkCount = $this->bookmarks->count();
     }
 
     public function setEndedAt() {

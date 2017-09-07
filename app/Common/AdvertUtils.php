@@ -96,7 +96,6 @@ trait AdvertUtils
         //Init vars
         $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
         $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
-        $isRangePricesOnly = ($request->has('priceOnly') && filter_var($request->priceOnly, FILTER_VALIDATE_BOOLEAN) == true);
         $isUrgentOnly = ($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true );
         $isNegociatedOnly = ($request->has('isNegociated') && filter_var($request->isNegociated, FILTER_VALIDATE_BOOLEAN) == true );
 
@@ -122,66 +121,9 @@ trait AdvertUtils
         }
 
         //Currencies
-        $cloneAdverts = clone($adverts);
-        $currenciesList = $cloneAdverts->select('currency')->groupBy('currency')->get();
-        $nbCurrencies = $currenciesList->count();
-
-        $finalCurrencyList = [];
-        if($nbCurrencies==1){
-            //$currency = $currenciesList->first()->currency;
-            $currencySymbol = Currencies::getSymbolByCurrencyCode($currenciesList->first()->currency, config('runtime.locale'));
-        } else {
-            $currenciesListArray = $currenciesList->pluck('currency');
-            foreach ($currenciesListArray as $currencyCode) {
-                $finalCurrencyList[] = [
-                    'code' => $currencyCode,
-                    'symbol' =>   Currencies::getSymbolByCurrencyCode($currencyCode, config('runtime.locale'))
-                ];
-            }
-        }
-
         if($request->has('currency') && Currencies::isAvailableCurrency($request->currency)) {
             $currency = $request->currency;
-            $currencySymbol = Currencies::getSymbolByCurrencyCode($currency, config('runtime.locale'));
             $adverts = $adverts->where('currency', $currency);
-        }
-
-        //Set min & max prices only if not $isSearchRequest
-        if(!$isSearchRequest) {
-            $minAllPrice = $adverts->min('price_margin_decimal');
-            $maxAllPrice = $adverts->max('price_margin_decimal');
-            $minAllQuantity = $adverts->min('totalQuantity');
-            $maxAllQuantity = $adverts->max('totalQuantity');
-
-            if (!$minAllPrice) {
-                $minAllPrice = 0;
-            }
-
-            if (!$maxAllPrice){
-                $maxAllPrice = 0;
-            }
-
-            if(!$minAllQuantity){
-                $minAllQuantity = 0;
-            }
-
-            if(!$maxAllQuantity){
-                $maxAllQuantity = 0;
-            }
-        }
-
-
-        //STOP REQUEST HERE IF only RANGE PRICES
-        if($isRangePricesOnly){
-            return [
-                'minPrice'=> $minAllPrice,
-                'maxPrice' => $maxAllPrice,
-                'currenciesList' => $finalCurrencyList,
-                'currency' => $currency,
-                'currencySymbol' => $currencySymbol,
-                'minQuantity'=> $minAllQuantity,
-                'maxQuantity' => $maxAllQuantity,
-            ];
         }
 
         //if urgent
@@ -241,7 +183,7 @@ trait AdvertUtils
             //choisir $loadCompleteAdverts[1] pour trier les resultats par categories
             return ['results'=> $loadCompleteAdverts[0], 'action' => $action];
         } else {
-            return ['adverts'=> $loadCompleteAdverts[0], 'minPrice'=> $minAllPrice, 'maxPrice' => $maxAllPrice];
+            return ['adverts'=> $loadCompleteAdverts[0]];
         }
     }
 

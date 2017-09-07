@@ -4,6 +4,10 @@
     {{ trans('strings.view_who_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_who') }}
+@endsection
+
 @section('content')
     <!-- main page -->
     <div class="ui grid">

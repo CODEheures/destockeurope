@@ -82,10 +82,10 @@ class AdvertController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
-    {
-        return response()->json(AdvertUtils::getList($request));
-    }
+//    public function index(Request $request)
+//    {
+//        return response()->json(AdvertUtils::getList($request));
+//    }
 
     /**
      *
@@ -93,10 +93,10 @@ class AdvertController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function mines()
-    {
-        return response()->json(AdvertUtils::getPersonnalList());
-    }
+//    public function mines()
+//    {
+//        return response()->json(AdvertUtils::getPersonnalList());
+//    }
 
     /**
      *

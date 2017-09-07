@@ -4,6 +4,10 @@
     {{ trans('strings.view_contact_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_contact') }}
+@endsection
+
 @section('headscripts')
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
     <script>

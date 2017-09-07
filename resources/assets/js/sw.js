@@ -15,7 +15,7 @@ cloudMessaging.setBackgroundMessageHandler(function(payload) {
     return self.registration.showNotification();
 });
 
-let version='v7::';
+let version='v8::';
 
 self.addEventListener('activate', function activator(event) {
     event.waitUntil(

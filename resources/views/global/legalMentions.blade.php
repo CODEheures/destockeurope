@@ -4,6 +4,10 @@
     {{ trans('strings.view_legalMentions_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_legalMentions') }}
+@endsection
+
 @section('content')
     <!-- main page -->
     <div class="ui grid">

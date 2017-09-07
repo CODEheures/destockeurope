@@ -4,6 +4,10 @@
     {{ trans('strings.view_prices_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_prices') }}
+@endsection
+
 @section('content')
     <!-- main page -->
     <div class="ui grid">

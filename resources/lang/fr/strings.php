@@ -1,8 +1,21 @@
 <?php
 
 return [
-    'app_meta_description_portal' => 'Annonces pour destockages, fins de séries, arrivages, faillites, redressements et fins de stocks',
-    'app_meta_description_home' => 'Cherher ou déposer une annonces de destockages, fins de séries, arrivages, faillites, redressements et fins de stocks',
+    'app_meta_description_portal' => 'Choisir un pays et voir les annonces de destockages, fins de séries, arrivages, faillites, redressements et fins de stocks des profesionnels',
+    'app_meta_description_home' => 'Chercher ou déposer une annonces de destockages, fins de séries, arrivages, faillites, redressements et fins de stocks',
+    'app_meta_description_advert' => 'Destockage :category: :title à vendre au prix de :price',
+    'app_meta_description_ads' => 'Faites votre publicité sur notre site d\'annonces de destockage.',
+    'app_meta_description_who' => 'Qui sommes nous?',
+    'app_meta_description_joinUs' => 'Rejoindre l\'équipe du site web de destockage en ligne',
+    'app_meta_description_help' => 'Aide pour créer des annonces de fin de série ou destockage',
+    'app_meta_description_cgu' => 'Condition Générales d\'Utilisation - Annonces pour soldeurs',
+    'app_meta_description_cgv' => 'Condition Générales de Vente - Fin de série et destockages',
+    'app_meta_description_contact' => 'Contacter nous - Annonce de Vente en gros pour soldeurs',
+    'app_meta_description_diffusionRules' => 'Règle de diffusion des annonces d\'arrrivages et de destockage',
+    'app_meta_description_environmentalImpact' => 'Impact environnemental',
+    'app_meta_description_legalMentions' => 'Mentions légales - Destockages, fin de séries, arrivages',
+    'app_meta_description_prices' => 'Prix des annonces de destockage, arrivages et fin de stock',
+
 
     'meta_menu_common' => 'Annonces',
     'meta_menu_admin' => 'Admin',

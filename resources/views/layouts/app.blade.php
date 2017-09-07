@@ -6,7 +6,7 @@
     <link rel="canonical" href="{{ \Illuminate\Support\Facades\Request::getFacadeRoot()->url() }}" >
     @include('layouts.head.hreflang')
     <title>@yield('titlePagePlus') - {{ config('app.name') }}</title>
-    <meta name="description" content="{{ trans('strings.app_meta_description_portal') }}">
+    <meta name="description" content="@yield('meta-description')">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!-- CSRF Token -->

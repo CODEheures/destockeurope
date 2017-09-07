@@ -1,8 +1,20 @@
 <?php
 
 return [
-    'app_meta_description_portal' => 'Ads for destocking, end of series, arrivals, bankruptcies, adjustments and end of stocks',
+    'app_meta_description_portal' => 'Choose a country to see Web classifieds for destocking, end of series, arrivals, bankruptcies, adjustments and end of stocks',
     'app_meta_description_home' => 'Find or place an ads of destocking, end of series, arrivals, bankruptcies, adjustments and ends of stocks',
+    'app_meta_description_advert' => 'Destocking of :category: :title to sell for :price',
+    'app_meta_description_ads' => 'Advertise on our site of destocking adverts',
+    'app_meta_description_who' => 'Who are whe?',
+    'app_meta_description_joinUs' => 'Join the online destocking website team',
+    'app_meta_description_help' => 'Help to create end-of-series or destocking ads',
+    'app_meta_description_cgu' => 'Terms of Use - Ads for discounters',
+    'app_meta_description_cgv' => 'Terms of sells - End of series and destocking',
+    'app_meta_description_contact' => 'Contact Us - Wholesale Advertisement For discounters',
+    'app_meta_description_diffusionRules' => 'Dissemination rules of destocking and arrivals advertisements',
+    'app_meta_description_environmentalImpact' => 'Environmental Impact',
+    'app_meta_description_legalMentions' => 'Legal Notice - Destocking, end of series, arrivals',
+    'app_meta_description_prices' => 'Price of the ads of destockage, arrivals and end of stock',
 
     'meta_menu_common' => 'Adverts',
     'meta_menu_admin' => 'Admin',

@@ -4,6 +4,10 @@
     {{ trans('strings.view_cgv_title') }}
 @endsection
 
+@section('meta-description')
+    {{ trans('strings.app_meta_description_cgv') }}
+@endsection
+
 @section('content')
 
     <!-- main page -->
