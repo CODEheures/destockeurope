@@ -175,7 +175,7 @@ class AdvertController extends Controller
     public function cost($nbPictures, $isUrgent, Request $request) {
 
         $originalAdvert = null;
-        if($request->has('isEditOf')){
+        if($request->filled('isEditOf') && filter_var($request->isEditOf, FILTER_VALIDATE_INT)){
             $originalAdvert = Advert::find((int)$request->isEditOf);
         }
 
@@ -184,7 +184,7 @@ class AdvertController extends Controller
                 'nbPictures' => (int)$nbPictures,
                 'isUrgent' => filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN),
                 'haveVideo' => session()->has('videoId'),
-                'isEditOf' => $request->has('isEditOf') ? $originalAdvert : null
+                'isEditOf' => !is_null($originalAdvert) ? $originalAdvert : null
             ]));
         } else {
             return response('error', 500);
@@ -409,7 +409,7 @@ class AdvertController extends Controller
         $completeGeoLoc = json_decode($request->completegeoloc);
         $parsedAddressComponent = GeoManager::parseAddressComponent($completeGeoLoc[0]->address_components);
         $editAdvert = null;
-        $isEditOf = $request->has('isEditOf') && (int)$request->isEditOf > 0 && ($editAdvert = Advert::find((int)$request->isEditOf)) ? (int)$request->isEditOf : null;
+        $isEditOf = $request->filled('isEditOf') && filter_var($request->isEditOf, FILTER_VALIDATE_INT) && (int)$request->isEditOf > 0 && ($editAdvert = Advert::find((int)$request->isEditOf)) ? (int)$request->isEditOf : null;
         if($category) {
             try {
                 $advert = new Advert();
@@ -442,7 +442,7 @@ class AdvertController extends Controller
                     $persistent = Persistent::where('key', '=', 'videoId')->where('value', '=', session('videoId'))->first();
                 }
 
-                $advert->price = MoneyUtils::setPriceWithoutDecimal($request->has('price') ? strval(filter_var($request->price, FILTER_VALIDATE_FLOAT)) : '0',$request->currency);
+                $advert->price = MoneyUtils::setPriceWithoutDecimal($request->filled('price') ? strval(filter_var($request->price, FILTER_VALIDATE_FLOAT)) : '0',$request->currency);
 
                 //Cost for picture is based on final file number
                 $cost = CostUtils::getCost([
@@ -880,10 +880,10 @@ class AdvertController extends Controller
 
         if($sender){
             $sender->name = $request->name;
-            if($request->has('phone') && $request->phone != ''){
+            if($request->filled('phone') && strlen($request->phone) > 0){
                 $sender->phone = $request->phone;
             }
-            if($request->has('compagnyName') && $request->compagnyName != '' && strlen($request->compagnyName) >= config('db_limits.users.minCompagnyName')){
+            if($request->filled('compagnyName') && strlen($request->compagnyName) >= config('db_limits.users.minCompagnyName')){
                 $sender->compagnyName = $request->compagnyName;
             }
             $sender->save();

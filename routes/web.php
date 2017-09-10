@@ -69,7 +69,7 @@
 
         //DANGEROUS
         Route::group(['prefix' => 'dangerous'] , function () {
-            Route::get('/testGame/{quantity?}', 'AdminController@testGame');
+            //Route::get('/testGame/{quantity?}', 'AdminController@testGame');
             //Route::get('/tempo', 'AdminController@tempo');
         });
     });
@@ -160,8 +160,6 @@
             ->where(['invoiceId' => '[0-9]+'])
             ->where(['success' => '\b(true|false)\b']);
         Route::post('/pay/card/{invoiceId}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
-//        Route::get('/mines', ['as' => 'advert.mines', 'uses' => 'AdvertController@mines']);
-//        Route::get('/bookmarks', ['as' => 'advert.bookmarks', 'uses' => 'AdvertController@bookmarks']);
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
         Route::get('/backToTop/{id}', ['as' => 'advert.backToTop', 'uses' => 'AdvertController@backToTop']);
         Route::get('/highlight/{id}', ['as' => 'advert.highlight', 'uses' => 'AdvertController@highlight']);

@@ -62,8 +62,8 @@ class UserController extends Controller
      * @return UserController|\Illuminate\Http\RedirectResponse
      */
     public function completeAccount($id, Request $request){
-        $title = $request->has('title') ? $request->title : null;
-        $cost = $request->has('infoCost') ? $request->infoCost : 0;
+        $title = $request->filled('title') ? $request->title : null;
+        $cost = $request->filled('infoCost') ? $request->infoCost : 0;
         $user = $this->auth->user();
         if(!is_null($user->avatar) && filter_var($user->avatar, FILTER_VALIDATE_URL)) {
             $routeAvatar = $user->avatar;
@@ -222,7 +222,7 @@ class UserController extends Controller
         try {
             $user = $this->auth->user();
 
-            if(!$request->has('value') || is_null($request->value) || $request->value==''){
+            if(!$request->filled('value')){
                 $user->registrationNumber = null;
                 $user->requesterNumber = null;
                 $user->vatIdentifier = null;

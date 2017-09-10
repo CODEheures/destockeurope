@@ -52,12 +52,12 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    public function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => array('required', 'regex:/^[A-Za-z0-9_[:space:]]{3,255}$/'),
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'name' => array('required', 'regex:/^[A-Za-zaàéêèëîïçù0-9_[:space:]]{3,255}$/'),
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
         ]);
     }
 
@@ -65,7 +65,8 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        $user = $this->create($request->all());
+        event(new Registered($user));
 
         return redirect(route('home'))->with('success', trans('strings.auth_register_success'));
     }

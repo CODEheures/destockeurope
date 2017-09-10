@@ -58,7 +58,7 @@ class ValidatorServiceProvider extends ServiceProvider
             } catch (\SoapFault $e) {
                 $request->request->add(['vatSaopFault'=>$e->getMessage()]);
                 $transVatError = trans('strings.request_vat_invalid');
-                if ($request->has('vatSaopFault')) {
+                if ($request->filled('vatSaopFault')) {
                     if($request->vatSaopFault == 'INVALID_INPUT') {
                         $transVatError = trans('strings.request_vat_invalid_input');
                     } elseif ($request->vatSaopFault == 'SERVICE_UNAVAILABLE'

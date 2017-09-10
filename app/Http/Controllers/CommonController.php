@@ -144,7 +144,7 @@ class CommonController extends Controller
         $fakeHighlightAdvert['price_margin'] = $fakeHighlightAdvert['price'];
         $fakeHighlightAdvert['url'] = route('mines');
 
-        $location = $request->has('forLocation') ?  $request->forLocation : null;
+        $location = $request->filled('forLocation') ?  $request->forLocation : null;
 
         $countryName = null;
         $countryCode = null;
@@ -161,7 +161,7 @@ class CommonController extends Controller
         }
 
 
-        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
+        $isSearchRequest = ($request->filled('search') && strlen($request->search) >= config('runtime.minLengthSearch'));
 
         if(!$isSearchRequest){
             $ranges = AdvertUtils::getRangePriceOnly($request, $countryCode);
@@ -332,13 +332,18 @@ class CommonController extends Controller
     public function imageServer(Request $request) {
         $clientResponse=null;
 
-        if($request->has('url')){
+        if($request->filled('url') && filter_var($request->url, FILTER_VALIDATE_URL)){
             $client = new Client();
-            $clientResponse = $client->get($request->url);
+            $clientResponse = $client->request('GET',
+                $request->url,
+                [
+                    'http_errors' => false,
+                ]
+            );
         }
 
 
-        if($clientResponse->getStatusCode()<300){
+        if(!is_null($clientResponse) && $clientResponse->getStatusCode()<300){
             return response($clientResponse->getBody()->getContents(),200)->header("Content-Type", $clientResponse->getHeader("Content-Type"));
         } else {
             return response('not found',404);

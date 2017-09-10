@@ -14,6 +14,6 @@ use Illuminate\Http\Request;
 */
 //probleme route cache with this
 
-//Route::get('/user', function (Request $request) {
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
-//})->middleware('auth:api');
+//});

@@ -175,7 +175,7 @@
 
 
             //When choice a category
-            this.$on('categoryChoice', function (event) {10
+            this.$on('categoryChoice', function (event) {
                 if(event.id != undefined && event.id >= 0) {
                     this.nextUrl = this.getNextUrl('minPrice', null);
                     this.nextUrl = this.getNextUrl('maxPrice', null);

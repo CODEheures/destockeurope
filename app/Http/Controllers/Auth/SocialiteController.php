@@ -37,7 +37,7 @@ class SocialiteController extends Controller
      */
     public function redirectToProvider($provider)
     {
-        if($this->request->has('subscribeNewsLetter') && $this->request->subscribeNewsLetter == true){
+        if($this->request->filled('subscribeNewsLetter') && $this->request->subscribeNewsLetter == true){
             session(['subscribeNewsLetter' => true]);
         }
         return Socialite::driver($provider)->redirect();

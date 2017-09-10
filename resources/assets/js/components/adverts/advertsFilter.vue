@@ -260,7 +260,12 @@
                 this.dataHandleMaxQuantity = parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity']);
             },
             getCurrentCategory () {
-                return parseInt(DestockTools.findInUrl('categoryId'));
+                let categoryId = DestockTools.findInUrl('categoryId');
+                if(categoryId !== null && categoryId==parseInt(categoryId) && categoryId > 0 ) {
+                    return parseInt(DestockTools.findInUrl('categoryId'));
+                } else {
+                    return 0
+                }
             },
             getCurrentCurrency () {
                 return DestockTools.findInUrl('currency');
@@ -268,8 +273,8 @@
             setBreadCrumbItems: function () {
                 this.dataBreadcrumbItems = [];
                 let that = this;
-                let categoryId = parseInt(DestockTools.findInUrl('categoryId'));
-                if(categoryId !== null && categoryId>0 ) {
+                let categoryId = DestockTools.findInUrl('categoryId');
+                if(categoryId !== null && categoryId==parseInt(categoryId) && categoryId > 0 ) {
                     axios.get(this.properties.routeCategory+'/'+categoryId)
                         .then(function (response) {
                             let chainedCategories = response.data;
@@ -287,7 +292,7 @@
                         })
                         .catch(function (error) {
                             that.dataBreadcrumbItems.push({
-                                name: this.strings.loadErrorMessage,
+                                name: that.strings.loadErrorMessage,
                                 value:''
                             });
                         });

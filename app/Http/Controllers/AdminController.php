@@ -81,7 +81,7 @@ class AdminController extends Controller
      */
     public function delegations(Request $request) {
         $request->session()->flash('clear',true);
-        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
+        $isSearchRequest = ($request->filled('search') && strlen($request->search) >= config('runtime.minLengthSearch'));
         $title = trans('strings.menu_advert_delegations');
         $isDelegation = true;
         $advertsList = AdvertUtils::getDelegationList($request);
@@ -278,7 +278,7 @@ class AdminController extends Controller
     public function patchRole($id, Request $request) {
         $user = User::find($id);
         if($user
-            && $request->has('role')
+            && $request->filled('role')
             && in_array($request->role, User::ROLES)
             && PrivilegesUtils::canPatchRoleUser($user))
         {
@@ -533,8 +533,8 @@ class AdminController extends Controller
     public function listInvoices(Request $request) {
 
         //Init vars
-        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
-        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
+        $isSearchRequest = ($request->filled('search') && strlen($request->search) >= config('runtime.minLengthSearch'));
+        $isSearchResults = ($request->filled('resultsFor') && strlen($request->resultsFor) >= config('runtime.minLengthSearch'));
 
         $invoices = Invoice::join('users', 'users.id', '=', 'invoices.user_id')
             ->select(array(DB::raw('users.email as usermail'),DB::raw('invoices.*')));
@@ -592,8 +592,8 @@ class AdminController extends Controller
     public function listUsers(Request $request) {
 
         //Init vars
-        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
-        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
+        $isSearchRequest = ($request->filled('search') && strlen($request->search) >= config('runtime.minLengthSearch'));
+        $isSearchResults = ($request->filled('resultsFor') && strlen($request->resultsFor) >= config('runtime.minLengthSearch'));
 
         $users = User::query();
 

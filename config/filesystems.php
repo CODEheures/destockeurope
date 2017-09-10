@@ -71,11 +71,6 @@ return [
             'secret' => env('AWS_SECRET'),
             'region' => env('AWS_REGION'),
             'bucket' => env('AWS_BUCKET'),
-        ],
-
-        'dropbox' => [
-            'driver' => 'dropbox',
-            'authorizationToken' => env('DROPBOX_TOKEN'),
         ]
 
     ],

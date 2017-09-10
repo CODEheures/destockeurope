@@ -24,7 +24,7 @@ class VideoController extends Controller
 
     public function ticket(Request $request) {
 
-        if(!$request->has('size') || !$request->has('type') || $request->size<=0 || substr($request->type,0,5)!='video'){
+        if(!$request->filled('size') || !$request->filled('type') ||  $request->size<=0 || substr($request->type,0,5)!='video'){
             return response('error',500);
         }
 
@@ -52,7 +52,7 @@ class VideoController extends Controller
     }
 
     public function closeTicket(Request $request) {
-        if(!$request->has('completeVideoUpload')){
+        if(!$request->filled('completeVideoUpload')){
             return response('error',500);
         }
 

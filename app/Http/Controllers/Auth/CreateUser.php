@@ -71,7 +71,7 @@ trait CreateUser {
     }
 
     public function changeEmailPost(){
-        $email = $this->request->has('email') ? filter_var($this->request->email, FILTER_VALIDATE_EMAIL) : null;
+        $email = $this->request->filled('email') ? filter_var($this->request->email, FILTER_VALIDATE_EMAIL) : null;
 
         $user = auth()->user();
         $originalMail = $user->email;
@@ -92,8 +92,8 @@ trait CreateUser {
 
     public function validChangeEmail() {
         $user = auth()->user();
-        $id = $this->request->has('id') ? $this->request->id : null;
-        $token = $this->request->has('token') ? $this->request->token : null;
+        $id = $this->request->filled('id') ? $this->request->id : null;
+        $token = $this->request->filled('token') ? $this->request->token : null;
 
         if(!is_null($id) && !is_null($token) && (int)$id==$user->id && $token = $user->confirmationToken){
             $user->email = $user->new_email;

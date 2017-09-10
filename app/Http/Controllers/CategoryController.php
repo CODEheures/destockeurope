@@ -33,7 +33,7 @@ class CategoryController extends Controller
     {
         $categories = Category::defaultOrder()->get();
         $request->count ? $count = $categories->count() : null;
-        if($request->has('withInfos') && $request->get('withInfos')=='true' && PrivilegesUtils::canAdmin()){
+        if($request->filled('withInfos') && $request->get('withInfos')=='true' && PrivilegesUtils::canAdmin()){
             foreach ($categories as $category){
                 $category->setCanBeDeleted($this->availableToDelete($category->id));
                 $category->setAvailableMoveTo();

@@ -19,8 +19,7 @@ trait AdvertUtils
         //where currency
         $currency = null;
         $currencySymbol = '';
-
-        if($request->has('categoryId') && $request->categoryId != 0){
+        if($request->filled('categoryId') && filter_var($request->categoryId, FILTER_VALIDATE_INT) && $request->categoryId > 0){
             $ids = CategoryUtils::getListSubTree($request->categoryId);
             if($ids){
                 $adverts = $adverts->whereIn('category_id', $ids);
@@ -29,7 +28,7 @@ trait AdvertUtils
 
         //if location
         foreach (GeoManager::$accurate as $item){
-            if($request->has($item) && $request->$item != null){
+            if($request->filled($item)){
                 $adverts = $adverts->where($item, '=', $request->$item);
             }
         }
@@ -53,7 +52,7 @@ trait AdvertUtils
             }
         }
 
-        if($request->has('currency') && Currencies::isAvailableCurrency($request->currency)) {
+        if($request->filled('currency') && Currencies::isAvailableCurrency($request->currency)) {
             $currency = $request->currency;
             $currencySymbol = Currencies::getSymbolByCurrencyCode($currency, config('runtime.locale'));
             $adverts = $adverts->where('currency', $currency);
@@ -94,10 +93,10 @@ trait AdvertUtils
 
     public static function getList(Request $request) {
         //Init vars
-        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
-        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
-        $isUrgentOnly = ($request->has('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true );
-        $isNegociatedOnly = ($request->has('isNegociated') && filter_var($request->isNegociated, FILTER_VALIDATE_BOOLEAN) == true );
+        $isSearchRequest = ($request->filled('search') && strlen($request->search) >= config('runtime.minLengthSearch'));
+        $isSearchResults = ($request->filled('resultsFor') && strlen($request->resultsFor) >= config('runtime.minLengthSearch'));
+        $isUrgentOnly = ($request->filled('isUrgent') && filter_var($request->isUrgent, FILTER_VALIDATE_BOOLEAN) == true );
+        $isNegociatedOnly = ($request->filled('isNegociated') && filter_var($request->isNegociated, FILTER_VALIDATE_BOOLEAN) == true );
 
         //only valid advert & online_at < now
         $adverts = Advert::where('isValid', true)->where('online_at', '<', Carbon::now());
@@ -106,7 +105,7 @@ trait AdvertUtils
         $currency = null;
         $currencySymbol = '';
 
-        if($request->has('categoryId') && $request->categoryId != 0){
+        if($request->filled('categoryId') && filter_var($request->categoryId, FILTER_VALIDATE_INT) && $request->categoryId > 0){
             $ids = CategoryUtils::getListSubTree($request->categoryId);
             if($ids){
                 $adverts = $adverts->whereIn('category_id', $ids);
@@ -115,13 +114,13 @@ trait AdvertUtils
 
         //if location
         foreach (GeoManager::$accurate as $item){
-            if($request->has($item) && $request->$item != null){
+            if($request->filled($item)){
                 $adverts = $adverts->where($item, '=', $request->$item);
             }
         }
 
         //Currencies
-        if($request->has('currency') && Currencies::isAvailableCurrency($request->currency)) {
+        if($request->filled('currency') && Currencies::isAvailableCurrency($request->currency)) {
             $currency = $request->currency;
             $adverts = $adverts->where('currency', $currency);
         }
@@ -137,14 +136,14 @@ trait AdvertUtils
         }
 
         //if range price
-        if($request->has('minPrice') && $request->has('maxPrice') ){
+        if($request->filled('minPrice') && $request->filled('maxPrice') && filter_var($request->minPrice, FILTER_VALIDATE_FLOAT) && filter_var($request->maxPrice, FILTER_VALIDATE_FLOAT)){
             $adverts = $adverts->where('price_margin_decimal', '>=', $request->minPrice)->where('price_margin_decimal', '<=', $request->maxPrice);
         }
 
         //if range quantity
-        if($request->has('minQuantity') && $request->has('maxQuantity') ){
-            $minQuantity = ($request->minQuantity);
-            $maxQuantity = ($request->maxQuantity);
+        if($request->filled('minQuantity') && $request->filled('maxQuantity') && filter_var($request->minQuantity, FILTER_VALIDATE_FLOAT) && filter_var($request->maxQuantity, FILTER_VALIDATE_FLOAT)){
+            $minQuantity = (int)($request->minQuantity);
+            $maxQuantity = (int)($request->maxQuantity);
             $adverts = $adverts->where('totalQuantity', '>=', $minQuantity)->where('totalQuantity', '<=', $maxQuantity);
         }
 
@@ -195,8 +194,8 @@ trait AdvertUtils
 
     public static function getDelegationList(Request $request) {
         //Init vars
-        $isSearchRequest = ($request->has('search') && strlen($request->search) >= 3);
-        $isSearchResults = ($request->has('resultsFor') && strlen($request->resultsFor) >= 3);
+        $isSearchRequest = ($request->filled('search') && strlen($request->search) >= config('runtime.minLengthSearch'));
+        $isSearchResults = ($request->filled('resultsFor') && strlen($request->resultsFor) >= config('runtime.minLengthSearch'));
 
         $adverts = Advert::delegations();
 
