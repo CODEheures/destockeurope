@@ -168,7 +168,7 @@ class Kernel extends ConsoleKernel
             }
             Storage::disk('logs')->append(self::LOG_GEOIPUPDATE , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
         });
-        env('APP_SCHEDULE_FAST')==true ? $geoIpScheduler->hourly() : $geoIpScheduler->monthlyOn(7,'3:57');
+        env('APP_SCHEDULE_FAST')==true ? $geoIpScheduler->daily() : $geoIpScheduler->monthlyOn(7,'3:57');
     }
 
     /**

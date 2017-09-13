@@ -2,11 +2,16 @@
     <div>
         <div class="ui mini pagination menu" v-if="datapages.length>0">
             <template v-for="datapage in datapages" >
-                <a :class="datapage.isDisabled ? 'disabled item' : 'active item'" :href="datapage.href"
-                    v-on:click="changePage"
-                    v-html="datapage.label"
-                    :title="datapage.title">
-                </a>
+                <template v-if="datapage.label == '...'">
+                    <div class="disabled item" v-html="datapage.label"></div>
+                </template>
+                <template v-else>
+                    <a :class="datapage.isDisabled ? 'disabled item' : 'active item'" :href="datapage.href"
+                       v-on:click="changePage"
+                       v-html="datapage.label"
+                       :title="datapage.title">
+                    </a>
+                </template>
             </template>
         </div>
         <div v-if="datapages.length==0">
