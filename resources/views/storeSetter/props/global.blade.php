@@ -5,7 +5,7 @@
                                 'actualLocale' => \Illuminate\Support\Facades\App::getLocale(),
                                 'availableLocalesList' => config('codeheuresUtils.availableLocales'),
                                 'imageRatio' => floatval(env('IMAGE_RATIO')),
-                                'routeHome' => route('home'),
+                                'routeHome' => route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale()]),
                                 'routeCategory' => route('category.index'),
                                 'routeCategoryWithCount' => route('category.index', ['count'=> 'true']),
                                 'routeListCurrencies' => route('utils.getListCurrencies'),

@@ -14,7 +14,7 @@
                             <div class="sixteen wide mobile eight wide tablet ten wide computer column">
                                 <div class="ui centered grid flags">
                                     <template v-for="country, key in dataCountries">
-                                        <a :title="strings.header + ' - ' +  country.name" :href="properties.routeHome+'?forLocation='+country.name" :data-country="country.code" :data-country-name="country.name" class="five wide mobile five wide tablet three wide computer center aligned column">
+                                        <a :title="strings.header + ' - ' +  country.name" :href="getNextUrl('forLocation', country.name)" :data-country="country.code" :data-country-name="country.name" class="five wide mobile five wide tablet three wide computer center aligned column">
                                             <svg v-if="key=='italy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" style="mix-blend-mode:multiply" :class="browser=='edge' ? 'shadow' : ''">
                                                 <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
                                                 <path fill="#1A171B" d="M89.79.1v59.772H.132V.1H89.79m.1-.1H.032v59.972H89.89V0z"/>
