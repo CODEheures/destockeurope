@@ -6,7 +6,7 @@
         <div class="ui centered grid">
             <div class="row">
                 <form id="register-form" method="POST" :action="routeRegister" class="ui ten wide column form register">
-                    <input type="hidden" name="_token" :value="xCsrfToken"/>
+                    <input type="hidden" name="_token" :value="properties.csrfToken"/>
                     <div class="required field">
                         <div id="cguCheckBox" class="ui checkbox">
                             <input type="checkbox" name="cgu" autofocus>
@@ -91,14 +91,12 @@
                 dataCguHref: '',
                 isCguApprove: false,
                 isNewsLetterApprove: false,
-                xCsrfToken: ''
             };
         },
         mounted () {
             this.strings = this.$store.state.strings['user-account-register'];
             this.properties = this.$store.state.properties['global'];
             this.setDataCgu();
-            this.xCsrfToken = destockShareVar.csrfToken;
         },
         updated () {
             let that = this;

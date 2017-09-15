@@ -23,39 +23,8 @@
     @include('layouts.favicons.fav')
     <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
-    <script>
-         window.destockShareVar={
-            'serviceWorkerScope': '/sw.js',
-             'vueJsDevTool': <?php echo (bool)(env('APP_DEBUG')) ? 'true':'false' ?>,
-            'csrfToken': '{{ csrf_token() }}',
-            'isProd': <?php echo (bool)(env('APP_URL')=='https://destockeurope.com') ? 'true':'false' ?>,
-            'firebase': {
-                'config': {
-                    messagingSenderId: '{{ env('GOOGLE_FIREBASE_MESSAGINGSENDERID') }}'
-                },
-                'token': undefined
-            }
-        };
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {
-                if(reg.installing) {} else if(reg.waiting) {} else if(reg.active) {}
-                firebase.initializeApp(destockShareVar.firebase.config);
-                window.cloudMessaging = firebase.messaging();
-                cloudMessaging.useServiceWorker(reg);
-                cloudMessaging.requestPermission().then(function () {
-                    //console.log('have permission');
-                    return cloudMessaging.getToken();
-                }).then(function (token) {
-                    destockShareVar.firebase.token=token;
-                }).catch(function (err) {
-                    //console.log('error messaging firebase', err);
-                });
-//                cloudMessaging.onMessage(function (payload) {
-//                    console.log('onMessage', payload);
-//                })
-            });
-        } else {}
-    </script>
+    @include('includes.destockShareVar.script')
+    @include('includes.serviceWorker.registerWithFirebase')
     @yield('headscripts')
 </head>
 <body class="yellowbg">
@@ -95,6 +64,8 @@
     @yield('scripts')
     @if(env('APP_URL')=='https://destockeurope.com')
         @include('plugins.googleAnalytic.tracking')
+    @endif
+    @if(env('APP_ADSENSE')=='true')
         @include('plugins.googleAdsense.script')
     @endif
 </body>

@@ -12,6 +12,8 @@
                                 'routeListLocales' => route('utils.getListLocales'),
                                 'filterMinLengthSearch' => config('runtime.minLengthSearch'),
                                 'routeFacebookSharer' => $routeName == 'advert.show' ?  route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()])  : '',
+                                'csrfToken' => csrf_token(),
+                                'withAdsense' => (bool)(env('APP_ADSENSE')),
                         ]
                 ])}}"
 ></store-properties-setter>

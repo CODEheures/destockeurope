@@ -95,7 +95,7 @@
                         </div>
                         <div class="sixteen wide mobile eight wide tablet six wide computer centered column">
                             <form accept-charset="UTF-8" autocomplete="off" :action="routeCardChoice"  id="payment-form" method="post" class="ui form" >
-                                <input type="hidden" name="_token" :value="xCsrfToken"/>
+                                <input type="hidden" name="_token" :value="properties.csrfToken"/>
                                 <div :class="isCgvApprove ? 'field' : 'disabled field'">
                                     <select class="ui fluid search dropdown" name="card_type">
                                         <option value="">{{ strings.paymentCardTypeLabel }}</option>
@@ -181,7 +181,6 @@
                 isCgvApprove: false,
                 dataRoutePaypalChoice: '',
                 dataUrlImgPaypal: null,
-                xCsrfToken: '',
                 dataInvoice: {},
                 dataCardsTypes: []
             };
@@ -191,7 +190,6 @@
             this.properties = this.$store.state.properties['global'];
             this.dataInvoice = JSON.parse(this.invoice);
             this.dataCardsTypes = JSON.parse(this.cardsTypes);
-            this.xCsrfToken = destockShareVar.csrfToken;
             this.dataUrlImgPaypal = this.urlImgPaypalDisabled;
             this.dataRoutePaypalChoice = null;
             this.steps = [

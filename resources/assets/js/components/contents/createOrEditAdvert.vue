@@ -18,7 +18,7 @@
 
             <div class="sixteen wide column">
                 <form :id="'create_advert_form_'+_uid" class="ui form" :action="routeAdvertFormPost" method="post" @keyup.enter.prevent.stop>
-                    <input type="hidden" name="_token" :value="xCsrfToken"/>
+                    <input type="hidden" name="_token" :value="properties.csrfToken"/>
                     <input v-if="isEditAdvert" type="hidden" name="_method" value="PATCH">
                     <input type="hidden" name="category" :value="categoryId"/>
                     <input type="hidden" name="currency" :value="currency" />
@@ -617,7 +617,6 @@
                 totalQuantity: 1,
                 maxLotMini: 1,
                 lotMiniQuantity: 1,
-                xCsrfToken: '',
                 oldCategoryId: 0,
                 oldType: '',
                 oldCurrency: '',
@@ -653,7 +652,6 @@
         mounted () {
             this.strings = this.$store.state.strings['createOrEditAdvert'];
             this.properties = this.$store.state.properties['global'];
-            this.xCsrfToken = destockShareVar.csrfToken;
             let that = this;
             this.steps = [
                 {

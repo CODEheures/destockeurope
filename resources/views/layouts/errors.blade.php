@@ -12,20 +12,9 @@
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">
     @yield('css')
     @include('layouts.favicons.fav')
-<!-- Scripts -->
-    <script>
-        window.destockShareVar={
-            'serviceWorkerScope': '/sw.js',
-            'vueJsDevTool': <?php echo (bool)(env('APP_DEBUG')) ? 'true':'false' ?>,
-            'csrfToken': '{{ csrf_token() }}',
-            'isProd': <?php echo (bool)(env('APP_URL')=='https://destockeurope.com') ? 'true':'false' ?>,
-        };
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(destockShareVar.serviceWorkerScope).then(function(reg) {
-                if(reg.installing) {} else if(reg.waiting) {} else if(reg.active) {}
-            });
-        } else {}
-    </script>
+    <!-- Scripts -->
+    @include('includes.destockShareVar.script')
+    @include('includes.serviceWorker.register')
 </head>
 <body class="portal yellowbg">
 <div id="app">

@@ -1,7 +1,7 @@
 <template>
-    <div class="ui leaderboard ad" :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
+    <div class="ui leaderboard ad" :style="!properties.withAdsense ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
         <!-- horizontal728x90 -->
-        <adsense
+        <adsense v-if="properties.withAdsense"
                 ad-client="ca-pub-9425842434111721"
                 ad-slot="7361012294"
                 style="display:inline-block;width:728px;height:90px"
@@ -26,17 +26,11 @@
         },
         data: () => {
             return {
-                isProd: false
+                properties: {}
             }
         },
         mounted () {
-            this.isProd = window.destockShareVar.isProd;
-        },
-        updated () {
-
-        },
-        methods: {
-
+            this.properties = this.$store.state.properties['global'];
         }
     }
 </script>

@@ -1,7 +1,7 @@
 <template>
-    <div :class="centered==true ? 'ui centered wide skyscraper ad welcome-ads' : 'ui wide skyscraper ad welcome-ads'" :style="!isProd ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
+    <div :class="centered==true ? 'ui centered wide skyscraper ad welcome-ads' : 'ui wide skyscraper ad welcome-ads'" :style="!properties.withAdsense ? 'background-image: url(\''+img1+'\'); background-size: contain;':'background: none;'">
         <!-- vertical160x600 -->
-        <adsense
+        <adsense v-if="properties.withAdsense"
                 ad-client="ca-pub-9425842434111721"
                 ad-slot="9814951091"
                 style="display:inline-block;width:160px;height:600px"
@@ -37,11 +37,11 @@
         data: () => {
             return {
                 isInitial: true,
-                isProd: false
+                properties: {}
             }
         },
         mounted () {
-            this.isProd = window.destockShareVar.isProd;
+            this.properties = this.$store.state.properties['global'];
             this.$watch('reload', function () {
                 if (this.isInitial) {
                     this.isInitial = false;
@@ -49,12 +49,6 @@
                     console.log('reload ads vertical160x600');
                 }
             })
-        },
-        updated () {
-
-        },
-        methods: {
-
         }
     }
 </script>
