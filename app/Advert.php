@@ -149,7 +149,7 @@ class Advert extends Model {
     }
 
     public function getUrlAttribute() {
-        return route('advert.show', ['slug' => $this->slug]);
+        return route('advert.show', ['slug' => $this->slug, 'lang' => App::getLocale()]);
     }
 
     public function getRenewUrlAttribute() {
