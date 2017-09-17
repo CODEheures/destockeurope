@@ -3,7 +3,6 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
-    <link rel="canonical" href="{{ \Illuminate\Support\Facades\Request::getFacadeRoot()->url() }}" >
     @include('layouts.head.hreflang')
     <title>@yield('titlePagePlus') - {{ config('app.name') }}</title>
     <meta name="description" content="@yield('meta-description')">
