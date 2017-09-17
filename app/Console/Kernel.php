@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Common\AdvertsManager;
+use App\Common\SiteMapUtils;
 use App\Common\StatsManager;
 use App\Stats;
 use Carbon\Carbon;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
     const LOG_STOPS = 'stopadvert.log';
     const LOG_SCHEDULE = 'schedule.log';
     const LOG_NOTIFICATIONS = 'notifications.log';
+    const LOG_SITEMAP = 'sitemap.log';
     const LOG_GEOIPUPDATE = 'geoIpUpdate.log';
 
     /**
@@ -66,7 +68,6 @@ class Kernel extends ConsoleKernel
             }
 
         })->everyMinute();
-
 
         //Scheduler for STATS and Adverts Purges, Alerts
         $purgerScheduler = $schedule->call(function(){
@@ -155,6 +156,16 @@ class Kernel extends ConsoleKernel
             }
         });
         env('APP_SCHEDULE_FAST')==true ? $notificationsScheduler->everyMinute() : $notificationsScheduler->dailyAt('6:48');
+
+        //Scheduler for Notifications
+        $sitemapScheduler = $schedule->call(function(){
+            $result = SiteMapUtils::sitemapUpdate();
+            if(!Storage::disk('logs')->exists(self::LOG_SITEMAP)){
+                Storage::disk('logs')->append(self::LOG_SITEMAP , 'DATE;COUNT SITEMAPS URLS');
+            }
+            Storage::disk('logs')->append(self::LOG_SITEMAP , Carbon::now()->toDateTimeString() . ';' . $result );
+        });
+        env('APP_SCHEDULE_FAST')==true ? $sitemapScheduler->everyMinute() : $sitemapScheduler->dailyAt('3:48');
 
         //Scheduler for Update GEOIP
         $geoIpScheduler = $schedule->call(function(){

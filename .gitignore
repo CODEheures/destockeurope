@@ -11,3 +11,4 @@ Homestead.yaml
 .env.prod
 .env.livetest
 /composer.lock
+/public/sitemap-products.xml

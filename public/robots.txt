@@ -1,2 +1,3 @@
 User-agent: *
-Disallow:
+Sitemap: https://destockeurope.com/sitemap.xml
+Sitemap: https://destockeurope.com/sitemap-products.xml

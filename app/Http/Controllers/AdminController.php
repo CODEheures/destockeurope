@@ -8,6 +8,7 @@ use App\Common\AdvertsManager;
 use App\Common\AdvertUtils;
 use App\Common\InvoiceUtils;
 use App\Common\PrivilegesUtils;
+use App\Common\SiteMapUtils;
 use App\Common\StatsManager;
 use App\Common\UserUtils;
 use App\Console\Kernel;
@@ -147,6 +148,9 @@ class AdminController extends Controller
 
         //notifications log
         $csvLogs['notifications'] = $this->getLogs(Kernel::LOG_NOTIFICATIONS);
+
+        //sitemaps log
+        $csvLogs['sitemaps'] = $this->getLogs(Kernel::LOG_SITEMAP);
 
         //geoIpUpdate log
         $csvLogs['geoIpUpdate'] = $this->getLogs(Kernel::LOG_GEOIPUPDATE);
@@ -637,5 +641,9 @@ class AdminController extends Controller
             $users->makeVisible(['role', 'rolesList', 'urlSetRole'])->toArray();
             return response()->json(['users'=> $users]);
         }
+    }
+
+    public function sitemapUpdate() {
+        dd(SiteMapUtils::sitemapUpdate());
     }
 }
