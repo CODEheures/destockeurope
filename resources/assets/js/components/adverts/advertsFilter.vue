@@ -172,11 +172,6 @@
             this.properties = this.$store.state.properties['global'];
             let that = this;
 
-            //Categories
-            this.$on('categoryChoice', function (event) {
-                this.$parent.$emit('categoryChoice', event);
-            });
-
             //breadcrumbItems
             this.setBreadCrumbItems();
 

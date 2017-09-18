@@ -286,10 +286,6 @@
             this.$on('loadError', function () {
                 this.sendToast(this.strings.loadErrorMessage, 'error');
             });
-            this.$on('categoryChoice', function (category) {
-                sessionStorage.setItem('goToCategory', category.id);
-                window.location.assign(this.properties.routeHome);
-            });
             let that = this;
             let messageForm = $('#form-'+this._uid);
             messageForm.form({

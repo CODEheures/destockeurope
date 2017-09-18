@@ -89,5 +89,7 @@
     @if(env('APP_ADSENSE')=='true')
         @include('plugins.googleAdsense.script')
     @endif
+    @include('includes.structuredDatas.logoLdScript')
+    @include('includes.structuredDatas.socialsLdScript')
 </body>
 </html>
