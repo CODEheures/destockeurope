@@ -52,4 +52,6 @@
 
 @section('scripts')
     @include('plugins.facebook.sharer')
+    @include('includes.structuredDatas.productLdScript')
+    @include('includes.structuredDatas.breadcrumbLdScript')
 @endsection
