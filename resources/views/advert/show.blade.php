@@ -17,6 +17,8 @@
     <meta property="og:url" content="{{ route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()]) }}">
     <meta property="og:type" content="product.item">
     <meta property="product:retailer_item_id" content="{{ $advert->user->compagnyName }}">
+    <meta property="product:category"     content="{{ $advert->category->description[\Illuminate\Support\Facades\App::getLocale()] }}" />
+    <meta property="product:mfr_part_no"     content="{{ $advert->manu_ref }}" />
     <meta property="product:price:amount" content="{{ \App\Common\MoneyUtils::getPriceWithDecimal($advert->originalPriceWithMargin,$advert->currency,false) }}">
     <meta property="product:price:currency"   content="{{ $advert->currency }}" />
     <meta property="product:availability"     content="in stock" />
