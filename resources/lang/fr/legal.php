@@ -17,7 +17,7 @@ return [
             numéro '. env('LEGAL_COMPAGNY_SIRET') .'.
             <br/>Siège social: '. env('LEGAL_COMPAGNY_ADDRESS') .'.
             <br/>Téléphone: '. env('LEGAL_COMPAGNY_PHONE').'.
-            <br/>Numéro de TVA intracommunautaire: '. env('TVA_REQUESTER_VAT_NUMBER').'.
+            <br/>Numéro de TVA intracommunautaire: '. env('TVA_REQUESTER_COUNTRY_CODE')  . env('TVA_REQUESTER_VAT_NUMBER').'.
         </p>
 
         <p>Le directeur de publication de '. env('LEGAL_COMPAGNY_PSEUDONAME').' est

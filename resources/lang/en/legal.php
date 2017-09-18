@@ -16,7 +16,7 @@ return [
             <br/>Siret: Registered with the Trade and Companies Register of Tours (France) under number '. env('LEGAL_COMPAGNY_SIRET') .'.
             <br/>The head office:'. env('LEGAL_COMPAGNY_ADDRESS') .'.
             <br/>Phone number: '. env('LEGAL_COMPAGNY_PHONE').'.
-            <br/>European Intracommunity VAT number: '. env('TVA_REQUESTER_VAT_NUMBER').'.
+            <br/>European Intracommunity VAT number: '. env('TVA_REQUESTER_COUNTRY_CODE') . env('TVA_REQUESTER_VAT_NUMBER').'.
         </p>
 
         <p>The editor of '. env('LEGAL_COMPAGNY_PSEUDONAME').' is

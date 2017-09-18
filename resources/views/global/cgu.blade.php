@@ -22,7 +22,6 @@
                 <div class="sixteen wide column">
                     <div class="ui segment">
                         <h1 class="ui header">{!! trans('cg.u.title') !!}</h1>
-                        {!! trans('cg.tempo') !!}
 
                         {!! trans('cg.definitions') !!}
 
