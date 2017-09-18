@@ -10,9 +10,9 @@ return [
     'definitions' => '
         <h2  class="ui dividing header">Preamble: Definitions</h2>
         <ul>
-            <li>Advertiser: Any natural or legal person submitting an Announcement via the service 
+            <li>Advertiser: Any natural or legal person submitting an Classified via the service 
                 '.env('LEGAL_COMPAGNY_PSEUDONAME'). '.</li>
-             <li>Announcement: Composition of the texts, images and videos published by the advertiser via the 
+             <li>Classified: Composition of the texts, images and videos published by the advertiser via the 
                 service '.env('LEGAL_COMPAGNY_PSEUDONAME'). '.</li>
              <li>Pro account: Free secured area of an advertiser allowing access to the data personal and free to 
                  advertise or pay for ads</li>
@@ -21,50 +21,50 @@ return [
              </li>
         </ul>',
 
-    'diffusionRulesTitle' => 'Adverts dissemination rules',
+    'diffusionRulesTitle' => 'Classifieds dissemination rules',
 
     'diffusionsRules' => '
-            <p>The advertiser undertakes to only distribute Announcements in its own name and on its own behalf. 
+            <p>The advertiser undertakes to only distribute Classifieds in its own name and on its own behalf. 
                 Thus, unless prior and express agreement of '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', Advertiser can not 
-                use the Service'. env('LEGAL_COMPAGNY_PSEUDONAME'). ' to broadcast advertisements on behalf of and / or 
+                use the Service'. env('LEGAL_COMPAGNY_PSEUDONAME'). ' to broadcast Classified on behalf of and / or 
                 on behalf of a third party.
             </p>
             <p>'. env('LEGAL_COMPAGNY_PSEUDONAME').' reserves the right to:</p>
             <ul>
-                <li>Delete any Advertisement issued by the Advertiser in the name and / or on behalf of a third party, without any refund and / or compensation being claimed by the Advertiser.</li>
-                <li>Remove without notice the "Pro Account" and any Advertisements in progress of a Advertiser that would contravene this prohibition and without any refund and / or compensation can be claimed to him by the Advertiser.</li>
-                <li>To prohibit the use of the Service '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' for the purpose of distributing the Announcement to the Advertiser which contravenes this prohibition and this without any refund and / or indemnification can not be claimed to him by the Advertiser.</li>
+                <li>Delete any Classified issued by the Advertiser in the name and / or on behalf of a third party, without any refund and / or compensation being claimed by the Advertiser.</li>
+                <li>Remove without notice the "Pro Account" and any Classified in progress of a Advertiser that would contravene this prohibition and without any refund and / or compensation can be claimed to him by the Advertiser.</li>
+                <li>To prohibit the use of the Service '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' for the purpose of distributing the Classified to the Advertiser which contravenes this prohibition and this without any refund and / or indemnification can not be claimed to him by the Advertiser.</li>
             </ul>
             <p>
                 Without this creating an obligation to verify the content, '. env ('LEGAL_COMPAGNY_PSEUDONAME'). ' 
                 reserves the right to accept, refuse or delete any ad filed or modified by the Advertiser.
             </p>
-            <p>'. env('LEGAL_COMPAGNY_PSEUDONAME').' reserves the right to refuse or remove any Advert that contravenes 
+            <p>'. env('LEGAL_COMPAGNY_PSEUDONAME').' reserves the right to refuse or remove any Classified that contravenes 
                 the provisions of these <a href="'. route('cgu').'">Terms & Conditions</a>, which does not comply with 
                 this paragraph and the rules of the Service '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', or whose content is 
                 clearly contrary to the legal and regulatory provisions in force, as detailed in the 
                 <a href="'. route('cgu').'">Terms & Conditions</a> To the article « Commitment of the advertiser ».
             </p>
             <p>
-                In the event that the Advert contains a photograph, '. env ('LEGAL_COMPAGNY_PSEUDONAME'). ' reserves 
-                the right not to broadcast the Announcement:
+                In the event that the Classified contains a photograph, '. env ('LEGAL_COMPAGNY_PSEUDONAME'). ' reserves 
+                the right not to broadcast the Classified:
             </p>
             <ul>
                 <li>If the quality of the picture is insufficient.</li>
                 <li>If the photo is contrary to the rules of diffusion of the Service '. env('LEGAL_COMPAGNY_PSEUDONAME').'.</li>
-                <li>If the photograph does not represent the object object of the Advert and is limited to a representation of the logo and / or commercial visual of the Advertiser.</li>
+                <li>If the photograph does not represent the object object of the Classified and is limited to a representation of the logo and / or commercial visual of the Advertiser.</li>
             </ul>
             <p>
                 In the event that the Ad contains a video, '. env ('LEGAL_COMPAGNY_PSEUDONAME'). ' reserves the right 
-                not to broadcast the Announcement:
+                not to broadcast the Classified:
             </p>
             <ul>
                 <li>If the quality of the video is insufficient.</li>
                 <li>If the video is contrary to the rules of diffusion of the Service '. env('LEGAL_COMPAGNY_PSEUDONAME').'.</li>
-                <li>If the video does not represent the object object of the Advert and is limited to a representation of the logo and / or commercial visual of the Advertiser.</li>
+                <li>If the video does not represent the object object of the Classified and is limited to a representation of the logo and / or commercial visual of the Advertiser.</li>
             </ul>
             <p>
-                In no case shall an Advert be used to broadcast any commercial message other than the presentation of 
+                In no case shall a Classified be used to broadcast any commercial message other than the presentation of 
                 any particular property. If an Ad is refused, before it is put online, by 
                 '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', the Advertiser will be notified by email sent to the address 
                 indicated when creating the Pro Account, no payment will be requested from the advertiser.
@@ -74,7 +74,7 @@ return [
                  because of illegal content.
             </p>
             <p>
-                Adverts are classified as'. env ('LEGAL_COMPAGNY_PSEUDONAME'). ' in chronological order, according to 
+                Classifieds are classified as'. env ('LEGAL_COMPAGNY_PSEUDONAME'). ' in chronological order, according to 
                 the date and time of their posting. Consequently, the Advertiser acknowledges and accepts that the 
                 presence at the top of his listing is only provisional.
             </p>',
@@ -116,7 +116,7 @@ return [
             </p>
             
             <h3 class="ui header">Time of order, payment and billing</h3>
-            <p>The payment is made by paypal or by credit card at the time of the deposit of the announcement</p>
+            <p>The payment is made by paypal or by credit card at the time of the deposit of the Classified</p>
             <p>The rates are quoted in euros and are expressed net of tax (excluding taxes)</p>
             <p>The rates are communicated to the Advertiser on simple request and are available in the present 
                 <a href="'.route('cgv').'">General Conditions of Sale</a>.
@@ -129,7 +129,7 @@ return [
                 non-compliance with the dissemination rules, the payment by credit card or paypal will be canceled and the 
                 Advertiser not debited. The Advertiser will be notified by email.
             </p>
-            <p>If the advertisement is published by the service moderation of '.env('LEGAL_COMPAGNY_PSEUDONAME').', the 
+            <p>If the Classified is published by the service moderation of '.env('LEGAL_COMPAGNY_PSEUDONAME').', the 
                 payment will be captured and the ad will be posted on the Website.</p>
             <p>
                 No reimbursement is possible after performance of the service or validation by the service moderation of 
@@ -140,7 +140,7 @@ return [
                  by the Advertiser, at the rate in force on the date of publication.
             </p>
             <p>
-                An invoice is automatically sent by email to the advertiser after validation of the announcement by the 
+                An invoice is automatically sent by email to the advertiser after validation of the Classified by the 
                 service moderation of '.env('LEGAL_COMPAGNY_PSEUDONAME').'.
             </p>',
 
@@ -148,7 +148,7 @@ return [
             <h2 class="ui dividing header">Article 4: Description and prices</h2>
             <h4 class="ui header">Pricing</h4>
             <p>
-                The prices applied to the posting of a new advertisement are composed of the sum:
+                The prices applied to the posting of a new Classified are composed of the sum:
             </p>
             <ul>
                 <li>Insertion fees: these are the fees applied to each ad when you put it online, regardless of the category
@@ -156,31 +156,31 @@ return [
                 <li>Paid options: these are options « Video », « extra photos », « Urgent », « to Negotiate »</li>
             </ul>
             <p>
-                The rate applied to the renewal of an Advert is fixed and does not depend on the options chosen when the 
-                Advert was first put online
+                The rate applied to the renewal of a Classified is fixed and does not depend on the options chosen when the 
+                Classified was first put online
             </p>
             
             <h4 class="ui header">Insertion fee</h4>
             <p>To date, insertion fees are offered.</p>
             
             <h4 class="ui header">Paying Options</h4>
-            <p>The paid options are subscribed at the time of the deposit of the Advert and for the duration of the 
-                Announcement of the Advert for a maximum duration of '. env('ADVERT_LIFE_TIME'). ' days
+            <p>The paid options are subscribed at the time of the deposit of the Classified and for the duration of the 
+                Classified for a maximum duration of '. env('ADVERT_LIFE_TIME'). ' days
             </p>
-            <p>A paid option is only available for one Advert. As a result, it is not possible to transfer the benefit of a 
-                paid option from one Advert to another.
+            <p>A paid option is only available for one Classified. As a result, it is not possible to transfer the benefit of a 
+                paid option from one Classified to another.
             </p>
-            <p>It is possible to subscribe to several paid options for the same Advert.</p>
+            <p>It is possible to subscribe to several paid options for the same Classified.</p>
             <p>The price of each paid option varies depending on the option.</p>
-            <p>Subscribing to a paid option does not extend the duration of the Advert.</p>
-            <p>In the case of early withdrawal of the Advertisement (either because of the Advertiser or because of 
+            <p>Subscribing to a paid option does not extend the duration of the Classified.</p>
+            <p>In the case of early withdrawal of the Classified (either because of the Advertiser or because of 
                 '. env('LEGAL_COMPAGNY_PSEUDONAME').', in particular in case of non-compliance with these GCU or the 
                 dissemination Service '.env(' LEGAL_COMPAGNY_PSEUDONAME').' or the expiration of its duration, the Paid 
                 Option ceases to have effect.
             </p>
-            <p>Renewing an Announcement extends the term of all its timely paid options.</p>
+            <p>Renewing an Classified extends the term of all its timely paid options.</p>
             <p>
-                Advertiser acknowledges and agrees that any Advertisement placed in a category not corresponding to the 
+                Advertiser acknowledges and agrees that any Classified placed in a category not corresponding to the 
                 proposed product or service may be deleted at any time by ' .env(' LEGAL_COMPAGNY_PSEUDONAME').' without 
                 any indemnity or right to reimbursement of the sums incurred for the purposes of subscription to Paying Options.
             </p>',
@@ -192,14 +192,14 @@ return [
                 <p>Option price: ' . \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsUrgent(true),'EUR',true) .' Excl. VAT</p>
                 <p>This option allows:</p>
                 <ul>
-                    <li>To display an « urgent » logo on the Advert</li>
+                    <li>To display an « urgent » logo on the Classified</li>
                     <li>To be part of the « urgent » global filter criterion in the result search</li>
                 </ul>
                 <p>In order to benefit from it, it is necessary to select it directly on the page of creation of the 
-                    Announcement by checking the option « URGENT ».
+                    Classified by checking the option « URGENT ».
                 </p>
                 <p>
-                    If the Advert is validated by the moderation service of '. Env ('LEGAL_COMPAGNY_PSEUDONAME'). ', it 
+                    If the Classified is validated by the moderation service of '. Env ('LEGAL_COMPAGNY_PSEUDONAME'). ', it 
                     will be posted on the Website and the Universal iPhone / iPad and Android Applications and will be 
                     marked with a logo in the results list.
                 </p>',
@@ -209,14 +209,14 @@ return [
                 <p>Price of the option: offered</p>
                 <p>This option allows:</p>
                 <ul>
-                    <li>To display a "to negociate" logo on the Advert instead of the sale price of the item</li>
+                    <li>To display a "to negociate" logo on the Classified instead of the sale price of the item</li>
                     <li>To be part of the global filter criterion "to negotiate" in the result search</li>
                 </ul>
                 <p>In order to benefit from it, it is necessary to select it directly on the page of creation of the 
-                    Advert by checking the option « to negociate ».
+                    Classified by checking the option « to negociate ».
                 </p>
                 <p>
-                    If the Advert is validated by the moderation service of '. Env ('LEGAL_COMPAGNY_PSEUDONAME'). ', it 
+                    If the Classified is validated by the moderation service of '. Env ('LEGAL_COMPAGNY_PSEUDONAME'). ', it 
                     will be posted on the Website and the Universal iPhone / iPad and Android Applications and will be 
                     marked with a logo in the results list.
                 </p>',
@@ -226,16 +226,16 @@ return [
                 <p>Price of the option: '.  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostVideo(true),'EUR',true).' Excl. VAT</p>
                 <p>This option allows:</p>
                 <ul>
-                    <li>To add a video to my Advert</li>
+                    <li>To add a video to my Classified</li>
                 </ul>
                 <p>
                     In order to benefit from it, it is necessary to select it directly on the page of creation of the 
-                    Advert by clicking the button « + Add a video ».
+                    Classified by clicking the button « + Add a video ».
                 </p>
                 <p>
-                    If the Advert is validated by the moderation service of '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', it 
+                    If the Classified is validated by the moderation service of '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', it 
                     will be uploaded to the website and the Universal iPhone / iPad and Android applications and the 
-                    video will be viewable on the dedicated page of the announcement.
+                    video will be viewable on the dedicated page of the Classified.
                 </p>
                 <p>
                     The Advertiser acknowledges and agrees that due to the ergonomics of the solutions'
@@ -255,25 +255,25 @@ return [
                 <ul>',
 
             'photos2' => '
-                <li>Advert with :compt photos: :price Excl. VAT</li>',
+                <li>Classified with :compt photos: :price Excl. VAT</li>',
 
             'photos3' => '
                 </ul>
                 <p>This option allows:</p>
                 <ul>
                     <li>To add '. (config('runtime.nbMaxPictures')-config('runtime.nbFreePictures')) . ' additional 
-                        photographs in an Advert in addition to '. config('runtime.nbFreePictures').' free photo(s) and 
-                        thus present to the maximum '. config('runtime.nbMaxPictures').' photographs in an Advert.
+                        photographs in an Classified in addition to '. config('runtime.nbFreePictures').' free photo(s) and 
+                        thus present to the maximum '. config('runtime.nbMaxPictures').' photographs in an Classified.
                     </li>
                 </ul>
                 <p>
                     In order to benefit from it, it is necessary to select it directly on the page of creation of the 
-                    Advert by clicking the button « + Add a photo ».
+                    Classified by clicking the button « + Add a photo ».
                 </p>
                 <p>
-                    If the Advert is validated by the moderation service of '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', it will 
+                    If the Classified is validated by the moderation service of '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', it will 
                     be uploaded to the website and the Universal Applications iPhone / iPad and Android and the photos 
-                    will be visible in the dedicated page of the announcement.
+                    will be visible in the dedicated page of the Classified.
                 </p>
                 <p>
                     The Advertiser acknowledges and agrees that due to the ergonomics of the solutions'
@@ -288,48 +288,48 @@ return [
                 </p>',
 
             'edition' => '
-                <h4 class="ui header">Edit an Advert</h4>
-                <p>Price to edit an Advert: '. \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsEdit(true),'EUR',true).' Excl. VAT</p>
+                <h4 class="ui header">Edit a Classified</h4>
+                <p>Price to edit an Classified: '. \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsEdit(true),'EUR',true).' Excl. VAT</p>
                 <p>
-                    This option allows advertisers to edit their Adverts for the "title", "description", "category", "price"
+                    This option allows advertisers to edit their Classifieds for the "title", "description", "category", "price"
                     , "place", "photo", "video" fields.
                     <br />The editing of the "total quantity" and "minimum sales lot" fields are FREE.
-                    <br />Your Advert is automatically and FREE put back to top of list with this option.
+                    <br />Your Classified is automatically and FREE put back to top of list with this option.
                 </p>
                 <p>
-                     An Advert is eligible for editing only if its remaining publication time is greater than
+                     A Classified is eligible for editing only if its remaining publication time is greater than
                     '. env('REMAINING_HOURS_FOR_EDIT_ELIGIBILITY').' hours.
                     <br />All the options already present remain vested.
-                    <br />For example, if the edited Advert contains
+                    <br />For example, if the edited Classified contains
                     '. (config('runtime.nbFreePictures')+1).' photos (thus 1 paying), then the advertiser can replace these
                     '. (config('runtime.nbFreePictures')+1).' photos without additional cost to this edition option.
-                    If he wishes to add 1 and make his announcement to '. (config('runtime.nbFreePictures')+2).' photos,
+                    If he wishes to add 1 and make his Classified to '. (config('runtime.nbFreePictures')+2).' photos,
                      Then the rate applicable to additional photos will be applied to the latter.
                     <br />Deleting an option during editing will make this deletion final after committing changes.
                 </p>',
 
             'renew' => '
-                <h4 class="ui header">Renew of an Advert</h4>
-                <p>Price to renew an Advert: '. \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsRenew(true),'EUR',true).' Excl. VAT</p>
+                <h4 class="ui header">Renew of an Classified</h4>
+                <p>Price to renew an Classified: '. \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsRenew(true),'EUR',true).' Excl. VAT</p>
                 <p>
-                    The renewal of an Advert extends the Advert for a period of '. env('ADVERT_LIFE_TIME').' days.
+                    The renewal of an Classified extends the Classified for a period of '. env('ADVERT_LIFE_TIME').' days.
                     All of its timeless options are renewed.
-                    Your Advert is automatically and FREE put back to top of list with this option.
+                    Your Classified is automatically and FREE put back to top of list with this option.
                 </p>',
 
             'backToTop' => '
-                <h4 class="ui header">Put Back an Advert to top of the list</h4>
-                <p>Price to put Back an Advert to top of the list: '.  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsBackToTop(true),'EUR',true).' Excl. VAT</p>
+                <h4 class="ui header">Put Back an Classified to top of the list</h4>
+                <p>Price to put Back an Classified to top of the list: '.  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsBackToTop(true),'EUR',true).' Excl. VAT</p>
                 <p>
-                    Puting back to the top of the list will place the Advert at the top of the list of Adverts. This
-                     option does not guarantee how long your Advert will stay at the top of the list.
+                    Puting back to the top of the list will place the Classified at the top of the list of Classifieds. This
+                     option does not guarantee how long your Classified will stay at the top of the list.
                 </p>',
 
             'highlight1' => '
-                <h4 class="ui header">Highlight an Advert</h4>
-                <p>Price to highlight an Advert:
+                <h4 class="ui header">Highlight an Classified</h4>
+                <p>Price to highlight an Classified:
                     <br />The price is variable. It is fixed at the time of application. It depends on the number of 
-                    announcements already in the news [rated \'nbU\'].
+                    Classifieds already in the news [rated \'nbU\'].
                     <br />The calculation formula is as follows: '. config('runtime.highlightCost').'/<span style="font-size: large">&Sqrt;</span>nbU.
                     <br />Examples:
                 </p>
@@ -340,13 +340,13 @@ return [
             'highlight3' => '
                 </ul>
                 <p>
-                    Highlighting lets you place the Advert in a second list next to the search results.
+                    Highlighting lets you place the Classified in a second list next to the search results.
                     This second list consists of '. env('HIGHLIGHT_QUANTITY').' locations.
-                    As the Advert is in competition with other highlight Advert already on the market, it will be 
+                    As the Classified is in competition with other highlight Classified already on the market, it will be 
                     chosen and placed randomly throughout the life of the option.
                     The lifetime of this option is set at '. env('HIGHLIGHT_HOURS_DURATION').' hours.
                     This option does not guarantee the number of views on the front page.
-                    An Advert is eligible for this option only if its remaining publication time is greater than
+                    An Classified is eligible for this option only if its remaining publication time is greater than
                     '. env('HIGHLIGHT_HOURS_DURATION').' hours
                 </p>'
         ],
@@ -454,16 +454,16 @@ return [
                 The Advertiser may from his Pro Account:
             </p>
             <ul>
-                <li>Submit Adverts</li>
-                <li>View his / her Current Adverts and their visit and favorite stats</li>
-                <li>Remove adverts</li>
+                <li>Submit Classifieds</li>
+                <li>View his / her Current Classifieds and their visit and favorite stats</li>
+                <li>Remove Classifieds</li>
             </ul>
-            <p>The deposit or renewal of the announcements may entail the subscription of paid options such as:</p>
+            <p>The deposit or renewal of the Classifieds may entail the subscription of paid options such as:</p>
             <ul>
                 <li>The affixing of the Urgent Logo</li>
-                <li>The publication of a Video in the announcement</li>
+                <li>The publication of a Video in the Classified</li>
                 <li>Additional Photos beyond '. config('runtime.nbFreePictures').' photo(s)</li>
-                <li>Renewal of an Advert</li>
+                <li>Renewal of an Classified</li>
             </ul>
             <h4 class="ui header">Pro account termination</h4>
             <p>
@@ -487,13 +487,13 @@ return [
             </p>',
 
         'diffusionsRulesTitle' => '
-            <h2 class="ui dividing header">Article 4: Rules for publishing and moderation of announcements</h2>',
+            <h2 class="ui dividing header">Article 4: Rules for publishing and moderation of Classifieds</h2>',
 
         'advertisserEngagment' => '
             <h2 class="ui dividing header">Article 5: Advertiser\'s commitments</h2>
             <ol>
                 <li>
-                    The Advertiser certifies that the Advertisement, whatever its distribution, complies with all legal 
+                    The Advertiser certifies that the Classified, whatever its distribution, complies with all legal 
                     and regulatory provisions in force (in particular relating to advertising, competition, promotion 
                     of sales, Use of the language of the country of sale, use of personal data, prohibition of the 
                     marketing of certain goods or services), complies with the provisions of the 
@@ -502,35 +502,35 @@ return [
                     <a href ="'. route('diffusionRules'). '">Dissemination Rules</a> 
                     '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' and does not affect the rights of third parties (including 
                     intellectual property rights and personality rights).
-                    <br/><br/>The Advertiser guarantees that the content of its Adverts is strictly in conformity with 
+                    <br/><br/>The Advertiser guarantees that the content of its Classifieds is strictly in conformity with 
                     the legal obligations imposed on its activity.
                     <br/><br/>Advertiser warrants to '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' be the sole and exclusive 
-                    author of the text, drawings, videos, photographs etc. Composing the Announcement. Failing this, he 
+                    author of the text, drawings, videos, photographs etc. Composing the Classified. Failing this, he 
                     declares to have all the rights, in particular the intellectual property rights and authorizations 
-                    necessary for the diffusion of the Announcement.
-                    <br/><br/>Consequently, any Advert filed and broadcast on the Service 
+                    necessary for the diffusion of the Classified.
+                    <br/><br/>Consequently, any Classified filed and broadcast on the Service 
                     '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' appears under the sole responsibility of the Advertiser
                     <br/><br/>As a result, the Advertiser reports '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', its 
                     subcontractors and suppliers, from all liabilities, warrants them against any claim or action in 
-                    connection with the Announcement which may be brought against them by any third party and shall 
+                    connection with the Classified which may be brought against them by any third party and shall 
                     defray all damages as well as the costs and expenses to which they may be liable or which may be 
                     imposed on them by a settlement agreement signed by them with such third party, notwithstanding 
                     all damages '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', its subcontractors and suppliers may claim 
                     damages caused by the Advertiser.
                     <br/><br/>Advertiser acknowledges and agrees that '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' is 
-                    entitled to remove without notice, indemnity or right to reimbursement any Advert in the course of 
+                    entitled to remove without notice, indemnity or right to reimbursement any Classified in the course of 
                     distribution which is not in conformity with the dessimination rules of the Service and / or which 
                     would be likely to infringe the rights of a third party or would contain Illegal content.
                     <br/><br/>
                 </li>
                 <li>
-                    The Announcer undertakes to propose in the Advert only available assets at its disposal. In case of 
+                    The Announcer undertakes to propose in the Classified only available assets at its disposal. In case of 
                     unavailability of the property, the Advertiser agrees to proceed with the withdrawal of the Service 
-                    Announcement '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' as soon as possible.
+                    Classified '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' as soon as possible.
                     <br/><br/>
                 </li>
                 <li>
-                    As such, the Advertiser acknowledges and agrees that for technical reasons, the posting of an Advert
+                    As such, the Advertiser acknowledges and agrees that for technical reasons, the posting of a Classified
                      on the Website and Universal iPhone / iPad and Android applications will not be instantaneous with 
                      its validation.
                     <br/><br/>
@@ -548,7 +548,7 @@ return [
                     <br/><br/>
                 </li>
                 <li>
-                    To be admissible, any complaint must indicate precisely the alleged defect(s) of the Advert and be 
+                    To be admissible, any complaint must indicate precisely the alleged defect(s) of the Classified and be 
                     transmitted in writing to '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' within eight (8) working days of 
                     the filing date.
                     <br/><br/>
@@ -608,7 +608,7 @@ return [
                     undertakes in particular not to:
                     <ul>
                         <li>Use the Service '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' on behalf of or for the benefit of others.</li>
-                        <li>Reproduce in number, for commercial or non-commercial purposes, information or Adverts on 
+                        <li>Reproduce in number, for commercial or non-commercial purposes, information or Classifieds on 
                             the Service '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' and on Web Site and Universal Applications 
                             iPhone / iPad and Android.
                         </li>
@@ -658,10 +658,10 @@ return [
                 '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' undertakes to use all means necessary to ensure the best possible
                  delivery of the Service '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' which it proposes to the Advertiser 
                  within the framework of an obligation of means. Unless otherwise expressly stated, the service 
-                 marketed by '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' is limited to the distribution of Announcement, 
+                 marketed by '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' is limited to the distribution of Classified, 
                  with subscription of options, on the Service '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', with the exclusion
                   of any other services. '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' does not guarantee the possible results 
-                  anticipated by the Advertiser following the diffusion of the Announcements.
+                  anticipated by the Advertiser following the diffusion of the Classifieds.
             </p>
             <p>
                 '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' can not be held responsible for the capture of the data that 
@@ -721,7 +721,7 @@ return [
                 Except for fraud or gross negligence, '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', its subcontractors and 
                 suppliers shall in no case be liable to compensation, pecuniary or in kind, due to errors or omissions 
                 in the composition of an Advertisement. In particular, such events shall not in any case justify a 
-                refusal of payment, even partial, or entitle to an Announcement at the expense of 
+                refusal of payment, even partial, or entitle to an Classified at the expense of 
                 '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', or to compensation.
             </p>
             <p>

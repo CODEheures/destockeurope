@@ -87,10 +87,10 @@ return [
         <p>A requisition service responds only to requests from public authorities (gendarmerie, police ...).
             <br/>For Judicial Requisitions and Communication Rights, please send us the right of communication (on 
             dated, signed and stamped letterhead) or the requisition (dated, signed and stamped) specifying the 
-            reference of the advertisement , The advertiser\'s email address and / or his phone number, attached as 
+            reference of the classified , The classified\'s email address and / or his phone number, attached as 
             an e-mail to <a href="#">'. env('SERVICE_MAIL_REQUISITION'). '</a> (response time is approximately 24 hours 
             on business day).
-            <br/>The Advert reference is the number in the internet address of the Advert presentation page.
+            <br/>The classified reference is the number in the internet address of the classified presentation page.
             <br/>Example : :randomAdvertUrl , reference is :randomAdvertId.
             <br/>We will send you the requested information as soon as possible. This research is done without charge.
             <br/>To simplify our procedures, please indicate in your requisition the email address to which you send our

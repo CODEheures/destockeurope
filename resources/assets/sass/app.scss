@@ -373,16 +373,24 @@ form {
   margin-bottom: 0.75rem;
 }
 
-.grid.flags a.column {
-  line-height: 0.72em;
-  & svg.shadow {
-    box-shadow: 0 0 8px 2px rgba(0,0,0,0.4);
+.grid.flags {
+  & h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 0.72rem;
+    & a {
+
+      & svg.shadow {
+        box-shadow: 0 0 8px 2px rgba(0,0,0,0.4);
+      }
+      & span {
+        font-size: 0.78rem;
+        text-transform: capitalize;
+        color: rgba($color-blue, 0.49)
+      }
+    }
   }
-  & span {
-    font-size: 0.78em;
-    text-transform: capitalize;
-    color: rgba($color-blue, 0.49)
-  }
+
 }
 
 #category-accordion {

@@ -364,7 +364,7 @@ return [
     'view_manage_invoices_list_role_button_label' => 'Rôle',
 
     'view_portal_title' => 'Annonces de destockages, arrivages, fin de séries en Europe',
-    'view_portal_list_header_1' => 'Fins de series',
+    'view_portal_list_header_1' => 'Annonces Fins de series',
     'view_portal_list_header_2' => 'Arrivages',
     'view_portal_list_header_3' => 'Destockages',
     'view_portal_list_header_4' => 'Faillites',

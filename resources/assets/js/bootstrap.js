@@ -24,7 +24,7 @@ require('amcharts3/amcharts/themes/light');
 
 require('vue-focus');
 
-Vue.config.devtools = window.destockShareVar.vueJsDevTool;
+Vue.config.devtools = (window.destockShareVar.vueJsDevTool==='1');
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by . Echo and event broadcasting
