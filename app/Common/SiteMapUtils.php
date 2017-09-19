@@ -10,7 +10,7 @@ trait SiteMapUtils
 
     public static function sitemapUpdate() {
         try {
-            $countAdverts = Advert::count();
+            $countAdverts = Advert::validOnline()->count();
             $limit = 3;
 
             $sitemapFileName = public_path('sitemap-products.xml');
