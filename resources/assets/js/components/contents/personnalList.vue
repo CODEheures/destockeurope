@@ -129,8 +129,6 @@
             //When Update Filter
             this.$on('updateFilter', function (result) {
                 Object.keys(result).forEach(function (key) {
-                    console.log('key', key);
-                    console.log('value', result[key]);
                     that.nextUrl = that.getNextUrl(key, result[key]);
                 });
                 this.gotoNextUrl();
@@ -193,18 +191,7 @@
                 return window.location.href;
             },
             getNextUrl(paramName, paramValue) {
-                let urlBase = this.nextUrl;
-                let parsed = Parser.parse(urlBase, true);
-                parsed.search=undefined;
-
-                if(paramValue != null){
-                    parsed.query[paramName] = paramValue.toString();
-                } else if (paramName in parsed.query){
-                    delete parsed.query[paramName]
-                }
-
-                'page' in parsed.query ? delete parsed.query['page'] : null;
-                return Parser.format(parsed);
+                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
             },
             gotoNextUrl(forceLoad=false) {
                 if(this.nextUrl !== window.location.href || forceLoad===true){

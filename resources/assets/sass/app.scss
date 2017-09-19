@@ -88,7 +88,14 @@ div.ui.vertical.segment.separator {
   & .ui.message.destock-flash {
     margin-bottom: 2rem;
   }
-
+  & .ui.grid .sixteen.column.categories-horizontal-menu {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  & .row.filters > .segment{
+    padding-top: 0;
+    padding-bottom: 0;
+  }
   & div.item.advert {
     & .ui.image > .corner i {
       color: white;
@@ -197,20 +204,40 @@ div.ui.vertical.segment.separator {
   }
 
   & .ui.fluid.accordion.filter {
-    & div:not(.active).title > span.ribbon {
-      & > span.open {
-        display: none;
+    & div.title {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    & span.ribbon {
+      margin-top: 0.7rem;
+    }
+    & div:not(.active).title {
+      + div.content {
+        padding-bottom: 0;
       }
-      & > span.close {
-        display: inline-block;
+      > span.ribbon {
+        & > span.open {
+          display: none;
+        }
+        & > span.close {
+          display: inline-block;
+        }
+      }
+      & .ui.grid.breadcrumb {
+        margin-bottom: 0;
       }
     }
-    & div.active.title > span.ribbon {
-      & > span.open {
-        display: inline-block;
+    & div.active.title {
+      + div.content {
+        padding-bottom: 1rem;
       }
-      & > span.close {
-        display: none;
+      > span.ribbon {
+        & > span.open {
+          display: inline-block;
+        }
+        & > span.close {
+          display: none;
+        }
       }
     }
   }

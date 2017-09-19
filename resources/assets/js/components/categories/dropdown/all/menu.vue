@@ -53,6 +53,11 @@
                 type: Boolean,
                 required: false,
                 default: true
+            },
+            withRedirectionOnClick: {
+               type: Boolean,
+               required: false,
+               default: false
             }
         },
         data: () => {
@@ -60,15 +65,14 @@
                 strings: {},
                 properties: {},
                 categories: [],
+                nextUrl: ""
             } ;
         },
         mounted () {
             this.strings = this.$store.state.strings['categories-dropdown-menu'];
             this.properties = this.$store.state.properties['global'];
             this.categories = this.$store.state.properties['categories-dropdown-menu']['datas'];
-            this.$on('categoryChoice', function (event) {
-                this.$parent.$emit('categoryChoice', {id: event.id});
-            });
+            this.nextUrl = this.$store.state.properties['global']['routeHome'];
 
             let that = this;
             this.$watch('oldChoice', function () { that.setOldChoice() });
@@ -80,7 +84,12 @@
                 allowCategorySelection: that.allowCategorySelection,
                 onChange: function(value, text, $selectedItem) {
                     if(value != undefined && value != ''){
-                        that.$parent.$emit('categoryChoice', {id: value});
+                        if(!that.withRedirectionOnClick){
+                            that.$parent.$emit('categoryChoice', {id: value});
+                        } else {
+                            console.log([that.oldChoice, value]);
+                            value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId',value) : null;
+                        }
                     }
                 }
             })
@@ -92,7 +101,10 @@
                 if(!isNaN(Number(this.oldChoice)) && Number(this.oldChoice)>0) {
                     $('#'+this._uid).dropdown('set selected', this.oldChoice)
                 }
-            }
+            },
+            getNextUrl(paramName, paramValue) {
+                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
+            },
         }
     }
 </script>

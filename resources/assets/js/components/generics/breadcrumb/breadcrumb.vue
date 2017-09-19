@@ -54,22 +54,8 @@
             this.nextUrl = this.$store.state.properties['global']['routeHome'];
         },
         methods: {
-            emitCategorieChoice: function (categoryId) {
-                this.$parent.$emit('categoryChoice', {id: categoryId});
-            },
             getNextUrl(paramName, paramValue) {
-                let urlBase = this.nextUrl;
-                let parsed = Parser.parse(urlBase, true);
-                parsed.search=undefined;
-
-                if(paramValue != null){
-                    parsed.query[paramName] = paramValue.toString();
-                } else if (paramName in parsed.query){
-                    delete parsed.query[paramName]
-                }
-
-                'page' in parsed.query ? delete parsed.query['page'] : null;
-                return Parser.format(parsed);
+                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
             },
         },
     }

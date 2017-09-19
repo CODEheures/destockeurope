@@ -110,7 +110,21 @@ let destockTools = {
         } else {
             return null;
         }
-    }
+    },
+
+    getNextUrl(urlBase, paramName, paramValue, reinitPage=false) {
+        let parsed = Parser.parse(urlBase, true);
+        parsed.search=undefined;
+
+        if(paramValue != null){
+            parsed.query[paramName] = paramValue.toString();
+        } else if (paramName in parsed.query){
+            delete parsed.query[paramName]
+        }
+
+        'page' in parsed.query && reinitPage ? delete parsed.query['page'] : null;
+        return Parser.format(parsed);
+    },
 };
 
 module.exports = destockTools;

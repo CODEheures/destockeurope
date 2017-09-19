@@ -14,6 +14,7 @@
                         <categories-dropdown-menu
                                 :old-choice="getCurrentCategory()"
                                 :with-all="true"
+                                :with-redirection-on-click="true"
                         ></categories-dropdown-menu>
                     </div>
                 </div>
