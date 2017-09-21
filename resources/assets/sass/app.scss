@@ -401,7 +401,7 @@ form {
 }
 
 .grid.flags {
-  & h2 {
+  & h3 {
     margin-top: 0;
     margin-bottom: 0;
     line-height: 0.72rem;
@@ -467,6 +467,9 @@ form {
 .ui.header.categories-list {
   margin-top: 0;
   margin-bottom: 0;
+  & a {
+    color: $color-blue;
+  }
 }
 
 .content.row .ui.small.rectangle.welcome-ads{

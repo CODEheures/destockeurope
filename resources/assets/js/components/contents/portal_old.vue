@@ -12,30 +12,9 @@
                     <div class="ui segment">
                         <div class="ui grid">
                             <div class="sixteen wide mobile eight wide tablet ten wide computer column">
-                                <div class="ui grid">
-                                    <div class="sixteen wide column">
-                                        <div class="ui form">
-                                            <div class="ui grid">
-                                                <div class="sixteen wide column">
-                                                    <location-filter
-                                                            :accurate-list="locationAccurateList"
-                                                            :with-null-border-radius-bottom="true"
-                                                    ></location-filter>
-                                                </div>
-                                            </div>
-                                            <div v-on:click.stop.prevent="isLocationReady ? goHome : null"  class="ui vertical animated primary bottom attached button">
-                                                <div class="visible content">{{ strings.seeAdvertLabel }}</div>
-                                                <div class="hidden content">
-                                                    <i class="right arrow icon"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui horizontal divider"><h2 class="ui blue disabled sub header" style="font-size: 0.75rem;">{{ strings.divider }}</h2></div>
                                 <div class="ui centered grid flags">
                                     <template v-for="country, key in dataCountries">
-                                        <h3 class="five wide mobile five wide tablet three wide computer center aligned column" style="margin-bottom: 0; margin-top: 0">
+                                        <h2 class="five wide mobile five wide tablet three wide computer center aligned column" style="margin-bottom: 0; margin-top: 0">
                                             <a :title="strings.header + ' - ' +  country.name" :href="getNextUrlForCountry('forLocation', country.name)" :data-country="country.code" :data-country-name="country.name" >
                                             <svg v-if="key=='italy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" style="mix-blend-mode:multiply" :class="browser=='edge' ? 'shadow' : ''">
                                                 <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
@@ -1134,12 +1113,29 @@
                                             </svg>
                                             <span>{{ country.name }}</span>
                                         </a>
-                                        </h3>
+                                        </h2>
                                     </template>
                                 </div>
                             </div>
                             <div class="sixteen wide mobile eight wide tablet six wide computer column">
-                                <div class="ui grid" style="margin-top: 0">
+                                <div class="ui grid">
+                                    <div class="sixteen wide column">
+                                        <div class="ui form">
+                                            <div class="field">
+                                                <location-filter
+                                                        :accurate-list="locationAccurateList"
+                                                ></location-filter>
+                                            </div>
+                                            <div v-on:click.stop.prevent="goHome"  :class="isLocationReady ? 'ui vertical animated primary button' : 'ui vertical animated primary disabled button'">
+                                                <div class="visible content">{{ strings.seeAdvertLabel }}</div>
+                                                <div class="hidden content">
+                                                    <i class="right arrow icon"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui grid">
                                     <div class="sixteen wide column">
                                         <div class="ui blue inverted newsletter segment">
                                             <div class="ui top right attached yellow label">{{strings.newsLetterTitle}}</div>

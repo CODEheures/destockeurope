@@ -12,6 +12,8 @@
                                 'newsLetterPhonePlaceHolder' => trans('strings.form_label_phone'),
                                 'newsLetterNamePlaceHolder' => trans('strings.form_label_name'),
                                 'header' => trans('strings.view_home_header'),
+                                'divider' => trans('strings.view_portal_divider'),
+                                'concept' => trans('strings.view_portal_concept')
                         ]
                 ])}}"
 ></store-strings-setter>

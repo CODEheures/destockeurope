@@ -36,7 +36,11 @@
                 <div class="item">
                     <div class="ui grid">
                         <div class="six wide mobile four wide tablet four wide computer column">
+                            @if(file_exists(public_path('images/logo-'. \Illuminate\Support\Facades\App::getLocale() . '.svg')))
+                            <a href="{{ route('portal') }}"><img src="{{ asset('images/logo-'. \Illuminate\Support\Facades\App::getLocale() . '.svg') }}" class="ui big image"></a>
+                            @else
                             <a href="{{ route('portal') }}"><img src="{{ asset('images/logo.svg') }}" class="ui big image"></a>
+                            @endif
                         </div>
                         <div class="seven wide mobile ten wide tablet ten wide computer bottom aligned column keywords">
                             @include('includes.rotaryKeywords.html')

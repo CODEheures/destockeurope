@@ -6,50 +6,50 @@
     <div class="ui stackable grid spaced-top-2">
         <div class="four wide column">
             <h4 class="ui blue dividing header categories-list">{{ trans('strings.footer_list_header_1') }}</h4>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_1') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_2') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_3') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_4') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_5') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_6') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_7') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_8') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_9') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_10') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_11') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_12') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_1_13') }}</h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 71]) }}">{{ trans('strings.footer_list_1_1') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 67]) }}">{{ trans('strings.footer_list_1_2') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 68]) }}">{{ trans('strings.footer_list_1_3') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 88]) }}">{{ trans('strings.footer_list_1_4') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 72]) }}">{{ trans('strings.footer_list_1_5') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 69]) }}">{{ trans('strings.footer_list_1_6') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 70]) }}">{{ trans('strings.footer_list_1_7') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 34]) }}">{{ trans('strings.footer_list_1_8') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 42]) }}">{{ trans('strings.footer_list_1_9') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 66]) }}">{{ trans('strings.footer_list_1_10') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 81]) }}">{{ trans('strings.footer_list_1_11') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 102]) }}">{{ trans('strings.footer_list_1_12') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 102]) }}">{{ trans('strings.footer_list_1_13') }}</a></h5>
         </div>
         <div class="four wide column">
             <h4 class="ui blue dividing header categories-list">{{ trans('strings.footer_list_header_2') }}</h4>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_2_1') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_2_2') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_2_3') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_2_4') }}</h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 58]) }}">{{ trans('strings.footer_list_2_1') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 75]) }}">{{ trans('strings.footer_list_2_2') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 57]) }}">{{ trans('strings.footer_list_2_3') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 60]) }}">{{ trans('strings.footer_list_2_4') }}</a></h5>
         </div>
         <div class="four wide column">
             <h4 class="ui blue dividing header categories-list">{{ trans('strings.footer_list_header_3') }}</h4>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_1') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_2') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_3') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_4') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_5') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_6') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_7') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_8') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_3_9') }}</h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 87]) }}">{{ trans('strings.footer_list_3_1') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 93]) }}">{{ trans('strings.footer_list_3_2') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 90]) }}">{{ trans('strings.footer_list_3_3') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 92]) }}">{{ trans('strings.footer_list_3_4') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 92]) }}">{{ trans('strings.footer_list_3_5') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 89]) }}">{{ trans('strings.footer_list_3_6') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 93]) }}">{{ trans('strings.footer_list_3_7') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 74]) }}">{{ trans('strings.footer_list_3_8') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 54]) }}">{{ trans('strings.footer_list_3_9') }}</a></h5>
         </div>
         <div class="four wide column">
             <h4 class="ui blue dividing header categories-list">{{ trans('strings.footer_list_header_4') }}</h4>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_1') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_2') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_3') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_4') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_5') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_6') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_7') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_8') }}</h5>
-            <h5 class="ui blue header categories-list">{{ trans('strings.footer_list_4_9') }}</h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 3]) }}">{{ trans('strings.footer_list_4_1') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 3]) }}">{{ trans('strings.footer_list_4_2') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 4]) }}">{{ trans('strings.footer_list_4_3') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 10]) }}">{{ trans('strings.footer_list_4_4') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 5]) }}">{{ trans('strings.footer_list_4_5') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 8]) }}">{{ trans('strings.footer_list_4_6') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 23]) }}">{{ trans('strings.footer_list_4_7') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 11]) }}">{{ trans('strings.footer_list_4_8') }}</a></h5>
+            <h5 class="ui blue header categories-list"><a href="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale(), 'categoryId' => 19]) }}">{{ trans('strings.footer_list_4_9') }}</a></h5>
         </div>
     </div>
 </div>
