@@ -5,7 +5,7 @@
                 <div class="ui big breadcrumb">
                     <template v-for="(item, index) in items">
                         <template v-if="withAction">
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop="">{{ item.name }}</a>
                         </template>
                         <template v-else>
                             <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop.prevent="">{{ item.name }}</a>
@@ -20,7 +20,7 @@
                 <div class="ui breadcrumb">
                     <template v-for="(item, index) in items">
                         <template v-if="withAction">
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop="">{{ item.name }}</a>
                         </template>
                         <template v-else>
                             <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop.prevent="">{{ item.name }}</a>

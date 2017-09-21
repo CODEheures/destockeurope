@@ -23,7 +23,7 @@
                                                     ></location-filter>
                                                 </div>
                                             </div>
-                                            <div v-on:click.stop.prevent="isLocationReady ? goHome : null"  class="ui vertical animated primary bottom attached button">
+                                            <div v-on:click.stop.prevent="isLocationReady ? goHome() : null"  class="ui vertical animated primary bottom attached button">
                                                 <div class="visible content">{{ strings.seeAdvertLabel }}</div>
                                                 <div class="hidden content">
                                                     <i class="right arrow icon"></i>
