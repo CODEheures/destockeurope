@@ -35,7 +35,7 @@ class PaymentManager
 
     public function __construct() {
         // setup PayPal api context
-        if(auth()->check() && !(env('PAYPAL_SANDBOX')=='true')){
+        if(!(env('PAYPAL_SANDBOX')=='true')){
             $paypal_conf = config('paypal');
         } else {
             $paypal_conf = config('paypal_sandbox');
