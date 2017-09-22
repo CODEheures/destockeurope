@@ -20,6 +20,7 @@ class ValidatorServiceProvider extends ServiceProvider
             $vatNumber = strtoupper(substr($value, -strlen($value)+2));
 
             //$saop = new SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatTestService.wsdl");
+            //FR86443790480 MEDIATOURS
             //FR95481749687
             //FR56749988721
             //DE811569869

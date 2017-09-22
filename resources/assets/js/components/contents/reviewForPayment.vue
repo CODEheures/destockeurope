@@ -80,9 +80,6 @@
                 </div>
                 <div :class="isCgvApprove ? 'ui attached fluid segment':'ui disabled attached fluid segment'">
                     <div class="ui grid">
-                        <div v-if="isCgvApprove" class="sixteen wide column">
-                            <p class="ui orange big label">{{ strings.paymentTempoMessage }}</p>
-                        </div>
                         <div class="sixteen wide column">
                             <a :href="dataRoutePaypalChoice" data-paypal-button="true" :title="strings.paypalBtnTitle">
                                 <img class="ui medium centered image spaced-top-2" :src="dataUrlImgPaypal" :alt="strings.paypalBtnTitle" />
