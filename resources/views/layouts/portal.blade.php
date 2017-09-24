@@ -14,8 +14,7 @@
     <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
     <meta property="og:image" content="{{ \Illuminate\Support\Facades\Request::getFacadeRoot()->url() }}/android-chrome-512x512.png">
     <!-- PACE LOADER -->
-    <script src="{{ mix("js/pace.min.js") }}"></script>
-    <link rel="stylesheet" href="{{ mix("css/pace-theme.css") }}">
+    @include('includes.paceLoader.headers')
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">
@@ -27,7 +26,12 @@
     @yield('headscripts')
 </head>
 <body class="portal yellowbg">
-    <?php $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName() ?>
+    @php
+        $routeName = 'home';
+        if(\Illuminate\Support\Facades\Route::getFacadeRoot()->current() && \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName()){
+            $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName();
+        }
+    @endphp
     <div id="app">
         @include('storeSetter.props.global')
         <div class="ui vertical segment header" id="headApp">

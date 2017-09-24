@@ -18,7 +18,7 @@
     Route::get('/main/{lang?}', 'CommonController@main')->name('main');
     Route::get('/home/{lang?}', 'CommonController@home')->name('home');
     Route::post('/subscribeNewsLetter', 'CommonController@subscribeNewsLetter')->name('subscribeNewsLetter');
-    Route::get('/unsubscribeNewsLetter', 'CommonController@getUnsubscribeNewsLetter');
+    Route::get('/unsubscribeNewsLetter', 'CommonController@getUnsubscribeNewsLetter')->name('unsubscribeNewsLetter');
     Route::post('/unsubscribeNewsLetter', 'CommonController@postUnsubscribeNewsLetter')->name('postUnsubscribeNewsLetter');
     Route::get('/mines', ['as' => 'mines', 'uses' => 'CommonController@mines']);
     Route::get('/bookmarks', ['as' => 'bookmarks', 'uses' => 'CommonController@bookmarks']);

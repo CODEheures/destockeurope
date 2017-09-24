@@ -25,4 +25,19 @@ trait CategoryUtils
         $categories = Category::defaultOrder()->get();
         return $categories->toTree();
     }
+
+    public static function getNativeSelectCategories() {
+        $optgroup = Category::whereIsRoot()->get();
+        $lastChilds = [];
+        foreach ($optgroup as $group){
+            $categories = Category::whereDescendantOf($group)->get();
+            foreach ($categories as $childOfGroup) {
+                if($childOfGroup->children()->count()==0){
+                    $lastChilds[] = $childOfGroup;
+                }
+            }
+        }
+        dd($lastChilds);
+        return $optgroup->toTree();
+    }
 }

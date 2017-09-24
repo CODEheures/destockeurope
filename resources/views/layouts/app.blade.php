@@ -13,8 +13,7 @@
     <!-- opengraph -->
     @yield('opengraph')
     <!-- PACE LOADER -->
-    <script src="{{ mix("js/pace.min.js") }}"></script>
-    <link rel="stylesheet" href="{{ mix("css/pace-theme.css") }}">
+    @include('includes.paceLoader.headers')
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">
@@ -27,8 +26,13 @@
     @yield('headscripts')
 </head>
 <body class="yellowbg">
-    <?php $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName() ?>
-    <?php $colorHeader = 'inverted' ?>
+    @php
+        $routeName = 'home';
+        if(\Illuminate\Support\Facades\Route::getFacadeRoot()->current() && \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName()){
+            $routeName =  \Illuminate\Support\Facades\Route::getFacadeRoot()->current()->getName();
+        }
+        $colorHeader = 'inverted'
+    @endphp
     <!-- Side menu -->
     @include('menus.side.main')
 

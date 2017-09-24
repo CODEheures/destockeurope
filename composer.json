@@ -11,7 +11,7 @@
         "laravel/tinker": "~1.0",
         "laravel/socialite": "^3.0",
         "caouecs/laravel-lang": "~3.0",
-        "kalnoy/nestedset": "^4.2",
+        "kalnoy/nestedset": "^4.3",
         "intervention/image": "^2.3",
         "iatstuti/laravel-cascade-soft-deletes": "1.*",
         "paypal/rest-api-sdk-php": "*",

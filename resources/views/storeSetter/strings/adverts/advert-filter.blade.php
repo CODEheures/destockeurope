@@ -15,5 +15,5 @@
 ></store-strings-setter>
 @include('storeSetter.strings.generics.notifications-activer')
 @include('storeSetter.strings.generics.currencies-button')
-@include('storeSetter.strings.generics.categories-dropdown-menu')
+@include('storeSetter.strings.generics.categories-select-menu')
 @include('storeSetter.strings.generics.location-filter')

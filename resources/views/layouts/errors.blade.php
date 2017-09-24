@@ -3,7 +3,6 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
-    @include('layouts.head.hreflang')
     <title>{{ trans('strings.view_503_title') }} - {{ config('app.name') }}</title>
     <meta name="description" content="{{ trans('strings.app_meta_description_portal') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
