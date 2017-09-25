@@ -592,6 +592,7 @@ return [
     'payment_highlight_success' => 'Thank you for your payment. Your classified is put in Front During the next ' . env('HIGHLIGHT_HOURS_DURATION') . ' hours.  Your invoice is send by e-mail.',
     'noPayment_highlight_success' => 'Your classified is put in Front During the next ' . env('HIGHLIGHT_HOURS_DURATION') . ' hours.',
 
+    'footer_title_prefix' => 'destocking ',
     'footer_list_header_1' => 'HOUSE',
     'footer_list_1_1' => 'Furnishings',
     'footer_list_1_2' => 'Home appliance',

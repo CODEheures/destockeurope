@@ -594,6 +594,7 @@ return [
     'payment_highlight_success' => 'Merci pour votre paiement. Votre annonce fait parti des annonces à la Une pendant les prochaines ' . env('HIGHLIGHT_HOURS_DURATION') . ' heures.  Votre facture vous a été envoyée par mail.',
     'noPayment_highlight_success' => 'Votre annonce fait parti des annonces à la Une pendant les prochaines ' . env('HIGHLIGHT_HOURS_DURATION') . ' heures.',
 
+    'footer_title_prefix' => 'déstockage ',
     'footer_list_header_1' => 'MAISON',
     'footer_list_1_1' => 'Ameublement',
     'footer_list_1_2' => 'Electroménager',
