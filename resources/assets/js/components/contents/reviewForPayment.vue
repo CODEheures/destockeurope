@@ -82,7 +82,7 @@
                     <div class="ui grid">
                         <div class="sixteen wide column">
                             <div class="ui center aligned basic segment">
-                                {{ strings.infoPaymentType }} <i :id="'help-'+_uid" class="circular help icon link" data-content="Hello. This is a mini popup" data-variation="mini"></i>
+                                {{ strings.infoPaymentType }} <i :id="'help-'+_uid" class="circular help icon link"></i>
                                 <div class="ui flowing special popup">
                                     <img class="ui huge centered image" :src="urlImgPaypalInfo" />
                                 </div>
@@ -285,7 +285,7 @@
                     }
                 })
             ;
-            $('#help-'+this._uid).popup({popup: '.special.popup'});
+            $('#help-'+this._uid).popup({popup: '.special.popup', position   : 'left center'});
         },
         methods: {
             sendToast: function(message,type) {
