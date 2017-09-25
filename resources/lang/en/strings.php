@@ -532,6 +532,7 @@ return [
     'view_reviewForPayment_lock_info_content' => 'This page uses the https:// protocol and guarantees a total security of the exchanges. No bank details are kept by our services.',
     'view_reviewForPayment_paypal_title' => 'PayPal, the reflex security to pay online',
     'view_reviewForPayment_tempo' => 'No payment can be made for the moment. Paying options will be available soon',
+    'view_reviewForPayment_info' => 'Pay with your credit card or Paypal account with using directly paypal services',
 
     'view_price_header' => 'Classified Rates',
     'view_price_cgu' => 'Price list according to <a target="_blank" href=":link">general conditions of sale</a>',

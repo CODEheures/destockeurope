@@ -40,7 +40,6 @@
                                 'october' => trans('strings.october'),
                                 'november' => trans('strings.november'),
                                 'december' => trans('strings.december'),
-                                'paymentTempoMessage' => trans('strings.view_reviewForPayment_tempo'),
                                 'stepOneTitle' => isset($title) ?  $title : trans('strings.view_advert_steps_1_title'),
                                 'stepTwoTitle' => trans('strings.view_advert_steps_2_title'),
                                 'stepThreeTitle' => trans('strings.view_advert_steps_3_title'),
@@ -48,6 +47,7 @@
                                 'stepOneDescription' => isset($title) ?  '' : trans('strings.view_advert_steps_1_description'),
                                 'stepTwoDescription' => trans('strings.view_advert_steps_2_description'),
                                 'stepThreeDescription' => trans('strings.view_advert_steps_3_description'),
+                                'infoPaymentType' => trans('strings.view_reviewForPayment_info')
                         ]
                 ])}}"
 ></store-strings-setter>

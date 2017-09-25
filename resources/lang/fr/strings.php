@@ -533,6 +533,7 @@ return [
     'view_reviewForPayment_lock_info_content' => 'Cette page utilise le protocol https:// et vous garantie une totale sécurité des échanges. Aucune donnée bancaire n\'est conservée par nos services',
     'view_reviewForPayment_paypal_title' => 'PayPal, le réflexe sécurité pour payer en ligne',
     'view_reviewForPayment_tempo' => 'Aucun paiement ne peut aboutir pour le moment. Les options payantes seront disponibles très prochainement',
+    'view_reviewForPayment_info' => 'Payer directement par carte bancaire ou avec votre compte paypal en utilisant le service de paiement Paypal',
 
     'view_price_header' => 'Tarifs des annonces',
     'view_price_cgu' => 'Grille tarifaire selon les <a target="_blank" href=":link">conditions générales de vente</a> en vigueur',

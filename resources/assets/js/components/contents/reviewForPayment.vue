@@ -81,67 +81,73 @@
                 <div :class="isCgvApprove ? 'ui attached fluid segment':'ui disabled attached fluid segment'">
                     <div class="ui grid">
                         <div class="sixteen wide column">
+                            <div class="ui center aligned basic segment">
+                                {{ strings.infoPaymentType }} <i :id="'help-'+_uid" class="circular help icon link" data-content="Hello. This is a mini popup" data-variation="mini"></i>
+                                <div class="ui flowing special popup">
+                                    <img class="ui huge centered image" :src="urlImgPaypalInfo" />
+                                </div>
+                            </div>
                             <a :href="dataRoutePaypalChoice" data-paypal-button="true" :title="strings.paypalBtnTitle">
                                 <img class="ui medium centered image spaced-top-2" :src="dataUrlImgPaypal" :alt="strings.paypalBtnTitle" />
                             </a>
-                            <div class="spaced-top-2">
-                                <div class="ui horizontal divider">
-                                    {{ strings.dividerChoiceLabel }}
-                                </div>
-                            </div>
+                            <!--<div class="spaced-top-2">-->
+                                <!--<div class="ui horizontal divider">-->
+                                    <!--{{ strings.dividerChoiceLabel }}-->
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
-                        <div class="sixteen wide mobile eight wide tablet six wide computer centered column">
-                            <form accept-charset="UTF-8" autocomplete="off" :action="routeCardChoice"  id="payment-form" method="post" class="ui form" >
-                                <input type="hidden" name="_token" :value="properties.csrfToken"/>
-                                <div :class="isCgvApprove ? 'field' : 'disabled field'">
-                                    <select class="ui fluid search dropdown" name="card_type">
-                                        <option value="">{{ strings.paymentCardTypeLabel }}</option>
-                                        <option :value="index" v-for="(card, index) in dataCardsTypes">{{ card }}</option>
-                                    </select>
-                                </div>
-                                <div :class="isCgvApprove ? 'field' : 'disabled field'">
-                                    <label>{{ strings.paymentCardNameLabel }}</label>
-                                    <input type='text' name="name">
-                                </div>
-                                <div class="two fields">
-                                    <div :class="isCgvApprove ? 'twelve wide field' : 'twelve wide disabled field'">
-                                        <label>{{ strings.paymentCardNumberLabel }}</label>
-                                        <input type="text" name="card_no" maxlength="25" :placeholder="strings.paymentCardNumberPlaceholder">
-                                    </div>
-                                    <div :class="isCgvApprove ? 'four wide field' : 'four wide disabled field'">
-                                        <label>{{ strings.paymentCardCvcLabel }}</label>
-                                        <input type="text" name="cvc" maxlength="3" :placeholder="strings.paymentCardCvcLabel">
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label>{{ strings.paymentCardExpirationLabel }}</label>
-                                    <div class="two fields">
-                                        <div :class="isCgvApprove ? 'field' : 'disabled field'">
-                                            <select class="ui fluid search dropdown" name="expiration_month">
-                                                <option value="">{{ strings.paymentCardExpirationMonthPlaceholder }}</option>
-                                                <option value="1">{{ strings.january }}</option>
-                                                <option value="2">{{ strings.february }}</option>
-                                                <option value="3">{{ strings.march }}</option>
-                                                <option value="4">{{ strings.april }}</option>
-                                                <option value="5">{{ strings.may }}</option>
-                                                <option value="6">{{ strings.june }}</option>
-                                                <option value="7">{{ strings.july }}</option>
-                                                <option value="8">{{ strings.august }}</option>
-                                                <option value="9">{{ strings.september }}</option>
-                                                <option value="10">{{ strings.october }}</option>
-                                                <option value="11">{{ strings.november }}</option>
-                                                <option value="12">{{ strings.december }}</option>
-                                            </select>
-                                        </div>
-                                        <div :class="isCgvApprove ? 'field' : 'disabled field'">
-                                            <input type="text" name="expiration_year" maxlength="4" :placeholder="strings.paymentCardExpirationYearPlaceholder">
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="submit" :class="isCgvApprove ? 'ui primary right labeled icon button':'ui disabled primary right labeled icon button'">
-                                    <i class="right arrow icon"></i>Payer</button>
-                            </form>
-                        </div>
+                        <!--<div class="sixteen wide mobile eight wide tablet six wide computer centered column">-->
+                            <!--<form accept-charset="UTF-8" autocomplete="off" :action="routeCardChoice"  id="payment-form" method="post" class="ui form" >-->
+                                <!--<input type="hidden" name="_token" :value="properties.csrfToken"/>-->
+                                <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
+                                    <!--<select class="ui fluid search dropdown" name="card_type">-->
+                                        <!--<option value="">{{ strings.paymentCardTypeLabel }}</option>-->
+                                        <!--<option :value="index" v-for="(card, index) in dataCardsTypes">{{ card }}</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                                <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
+                                    <!--<label>{{ strings.paymentCardNameLabel }}</label>-->
+                                    <!--<input type='text' name="name">-->
+                                <!--</div>-->
+                                <!--<div class="two fields">-->
+                                    <!--<div :class="isCgvApprove ? 'twelve wide field' : 'twelve wide disabled field'">-->
+                                        <!--<label>{{ strings.paymentCardNumberLabel }}</label>-->
+                                        <!--<input type="text" name="card_no" maxlength="25" :placeholder="strings.paymentCardNumberPlaceholder">-->
+                                    <!--</div>-->
+                                    <!--<div :class="isCgvApprove ? 'four wide field' : 'four wide disabled field'">-->
+                                        <!--<label>{{ strings.paymentCardCvcLabel }}</label>-->
+                                        <!--<input type="text" name="cvc" maxlength="3" :placeholder="strings.paymentCardCvcLabel">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="field">-->
+                                    <!--<label>{{ strings.paymentCardExpirationLabel }}</label>-->
+                                    <!--<div class="two fields">-->
+                                        <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
+                                            <!--<select class="ui fluid search dropdown" name="expiration_month">-->
+                                                <!--<option value="">{{ strings.paymentCardExpirationMonthPlaceholder }}</option>-->
+                                                <!--<option value="1">{{ strings.january }}</option>-->
+                                                <!--<option value="2">{{ strings.february }}</option>-->
+                                                <!--<option value="3">{{ strings.march }}</option>-->
+                                                <!--<option value="4">{{ strings.april }}</option>-->
+                                                <!--<option value="5">{{ strings.may }}</option>-->
+                                                <!--<option value="6">{{ strings.june }}</option>-->
+                                                <!--<option value="7">{{ strings.july }}</option>-->
+                                                <!--<option value="8">{{ strings.august }}</option>-->
+                                                <!--<option value="9">{{ strings.september }}</option>-->
+                                                <!--<option value="10">{{ strings.october }}</option>-->
+                                                <!--<option value="11">{{ strings.november }}</option>-->
+                                                <!--<option value="12">{{ strings.december }}</option>-->
+                                            <!--</select>-->
+                                        <!--</div>-->
+                                        <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
+                                            <!--<input type="text" name="expiration_year" maxlength="4" :placeholder="strings.paymentCardExpirationYearPlaceholder">-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<button type="submit" :class="isCgvApprove ? 'ui primary right labeled icon button':'ui disabled primary right labeled icon button'">-->
+                                    <!--<i class="right arrow icon"></i>Payer</button>-->
+                            <!--</form>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </template>
@@ -161,6 +167,7 @@
             'cardsTypes',
             'urlImgPaypalDisabled',
             'urlImgPaypalEnabled',
+            'urlImgPaypalInfo'
         ],
         data: () => {
             return {
@@ -278,6 +285,7 @@
                     }
                 })
             ;
+            $('#help-'+this._uid).popup({popup: '.special.popup'});
         },
         methods: {
             sendToast: function(message,type) {

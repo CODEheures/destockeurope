@@ -11,6 +11,7 @@
             cards-types="{{ json_encode($listCardTypes) }}"
             url-img-paypal-disabled="{{ asset('/images/frenchPayButton2_disable.png') }}"
             url-img-paypal-enabled="{{ asset('/images/frenchPayButton2.png') }}"
+            url-img-paypal-info="{{ asset('/images/paypalInfo.jpg') }}"
     ></review-for-payment>
 
 @endsection
