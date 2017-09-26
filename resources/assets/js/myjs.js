@@ -39,6 +39,13 @@
                     ;
                 })
             ;
+
+            //Add paceforcing for PACE JS forcing restart when window beforeunload
+            //Improve loader for mobiles devices without browser indicators
+            let paceForcingDiv = document.createElement('div');
+            paceForcingDiv.id="paceforcing";
+            document.body.appendChild(paceForcingDiv);
+
         })
     ;
 })();

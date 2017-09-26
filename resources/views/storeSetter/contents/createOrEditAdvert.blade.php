@@ -1,6 +1,7 @@
 <!--PROPS-->
 @include('storeSetter.props.generics.categories-dropdown-menu')
 @include('storeSetter.props.generics.currencies-dropdown-2')
+@include('storeSetter.props.generics.categories-select-menu')
 <!--STRINGS-->
 <store-strings-setter
         strings="{{ json_encode([
@@ -55,3 +56,4 @@
 @include('storeSetter.strings.generics.vimeo-uploader')
 @include('storeSetter.strings.generics.swiper-top')
 @include('storeSetter.strings.generics.categories-dropdown-menu')
+@include('storeSetter.strings.generics.categories-select-menu')

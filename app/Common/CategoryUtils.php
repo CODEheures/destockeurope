@@ -25,4 +25,5 @@ trait CategoryUtils
         $categories = Category::defaultOrder()->get();
         return $categories->toTree();
     }
+
 }

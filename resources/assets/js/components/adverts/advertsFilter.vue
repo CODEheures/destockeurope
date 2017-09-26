@@ -11,11 +11,11 @@
             <div class="active content">
                 <div class="ui grid">
                     <div class="sixteen wide mobile only sixteen wide tablet only column">
-                        <categories-dropdown-menu
+                        <categories-select-menu
                                 :old-choice="getCurrentCategory()"
                                 :with-all="true"
                                 :with-redirection-on-click="true"
-                        ></categories-dropdown-menu>
+                        ></categories-select-menu>
                     </div>
                 </div>
                 <div class="ui middle aligned grid">

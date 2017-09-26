@@ -84,7 +84,9 @@ div.ui.vertical.segment.separator {
   margin-top: 1rem;
   margin-bottom: 4rem;
   //background-color: white;
-
+  & select {
+    max-width: 100%;
+  }
   & .ui.message.destock-flash {
     margin-bottom: 2rem;
   }

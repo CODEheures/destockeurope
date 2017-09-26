@@ -194,24 +194,34 @@
                                         <div class="title">
                                             <i class="dropdown icon"></i>
                                             <span>
-                                        <i class="sitemap icon"></i>
-                                        {{ strings.categoryHeader }}
-                                    </span>
+                                                <i class="sitemap icon"></i>
+                                                {{ strings.categoryHeader }}
+                                            </span>
                                             <span>
-                                        <template v-if="categoryId===undefined || categoryId===null || categoryId ==''">
-                                            <i class="red alarm outline large icon" :data-content="strings.categoryFieldRequired"></i>
-                                        </template>
-                                        <template v-else>
-                                            <i class="green checkmark large icon"></i>
-                                        </template>
-                                    </span>
+                                                <template v-if="categoryId===undefined || categoryId===null || categoryId ==''">
+                                                    <i class="red alarm outline large icon" :data-content="strings.categoryFieldRequired"></i>
+                                                </template>
+                                                <template v-else>
+                                                    <i class="green checkmark large icon"></i>
+                                                </template>
+                                            </span>
                                         </div>
                                         <div class="content">
                                             <div class="required field">
-                                                <categories-dropdown-menu
-                                                        :old-choice="oldCategoryId"
-                                                        :with-all="false">
-                                                </categories-dropdown-menu>
+                                                <div class="ui grid">
+                                                    <div class="sixteen wide mobile only column">
+                                                        <categories-select-menu
+                                                                :old-choice="oldCategoryId"
+                                                                :with-all="false"
+                                                        ></categories-select-menu>
+                                                    </div>
+                                                    <div class="sixteen wide tablet only siwteen wide computer only column">
+                                                        <categories-dropdown-menu
+                                                                :old-choice="oldCategoryId"
+                                                                :with-all="false">
+                                                        </categories-dropdown-menu>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="title">
