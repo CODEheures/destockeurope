@@ -127,8 +127,14 @@ let destockTools = {
     },
 
     goToUrl(url) {
-        Pace.restart();
+        this.paceRestart();
         window.location.href = url;
+    },
+
+    paceRestart() {
+        let paceForcing = document.getElementById('paceforcing');
+        paceForcing !== null ? paceForcing.remove() : null;
+        Pace.restart();
     }
 };
 

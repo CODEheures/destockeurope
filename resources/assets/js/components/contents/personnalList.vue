@@ -172,7 +172,7 @@
                     closable: true,
                     blurring: true,
                     onApprove: function () {
-                        Pace.restart();
+                        DestockTools.paceRestart();
                         axios.delete(url)
                             .then(function (response) {
                                 that.gotoNextUrl(true);

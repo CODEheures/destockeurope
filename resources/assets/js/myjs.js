@@ -48,7 +48,7 @@
 
             $(window).on('click', function (event) {
                 if($(event.target).closest("a").length > 0){
-                    Pace.restart();
+                    DestockTools.paceRestart();
                 }
             })
 
