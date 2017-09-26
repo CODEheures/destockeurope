@@ -1,16 +1,19 @@
 <template>
-    <select>
-        <option>{{ strings.allItem }}</option>
-        <template v-for="category in categories">
-            <optgroup :label="category['description'][properties.actualLocale]">
-                <option v-if="withAll">{{ strings.allItem }}</option>
-                <template v-if="category.children.length>0" v-for="child in category.children">
-                    <recursive-categories-select-menu
-                            :parent-description="child['description'][properties.actualLocale]"
-                            :categories="child.children"
-                            :parent-id="child.id">
-                    </recursive-categories-select-menu>
-                </template>
+    <select v-model="selected">
+        <option v-if="withAll" value="0">{{ strings.allItem }}</option>
+        <template v-for="group in optgroups">
+            <optgroup :label="group['name']">
+                <option v-if="withAll" :value="group['id']">{{ strings.allItem }}</option>
+                <option v-for="option in options" v-if="option[0]['id']==group['id']" :value="option[option.length-1]['id']">
+                    <template v-for="description ,index in option">
+                        <!--<template v-if="index > 0 && index < option.length-1">-->
+                            <!--{{ description['name'] }} >-->
+                        <!--</template>-->
+                        <template v-if="index == option.length-1">
+                            {{ description['name'] }}
+                        </template>
+                    </template>
+                </option>
             </optgroup>
         </template>
     </select>
@@ -51,7 +54,10 @@
                 strings: {},
                 properties: {},
                 categories: [],
-                nextUrl: ""
+                nextUrl: "",
+                options: [],
+                optgroups: [],
+                selected: ''
             } ;
         },
         mounted () {
@@ -59,39 +65,45 @@
             this.properties = this.$store.state.properties['global'];
             this.categories = this.$store.state.properties['categories-select-menu']['datas'];
             this.nextUrl = this.$store.state.properties['global']['routeHome'];
-
-
-//            let that = this;
-//            this.$watch('oldChoice', function () { that.setOldChoice() });
-        },
-        updated () {
-//            let that = this;
-
-//            $('#'+this._uid).dropdown({
-//                allowCategorySelection: that.allowCategorySelection,
-//                onChange: function(value, text, $selectedItem) {
-//                    if(value != undefined && value != ''){
-//                        if(!that.withRedirectionOnClick){
-//                            that.$parent.$emit('categoryChoice', {id: value});
-//                        } else {
-//                            console.log([that.oldChoice, value]);
-//                            value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId',value) : null;
-//                        }
-//                    }
-//                }
-//            })
-//            ;
-//            this.setOldChoice();
+            this.getNativeSelectCategories(this.$store.state.properties['categories-select-menu']['datas']);
+            this.selected = this.oldChoice;
+            let that = this;
+            this.$watch('selected', function() {
+                that.choiceCategory(that.selected);
+            });
         },
         methods: {
-//            setOldChoice () {
-//                if(!isNaN(Number(this.oldChoice)) && Number(this.oldChoice)>0) {
-//                    $('#'+this._uid).dropdown('set selected', this.oldChoice)
-//                }
-//            },
+            getNativeSelectCategories(categories) {
+                for(let category in categories) {
+                    this.optgroups.push({'id': categories[category]['id'], 'name': categories[category]['description'][this.properties.actualLocale]});
+                    this.traverse(categories[category]);
+                }
+            },
+            traverse(category, concat= []) {
+                let localConcat = _.cloneDeep(concat);
+                if('children' in category && category.children.length > 0) {
+                    localConcat.push({'id': category['id'], 'name': category['description'][this.properties.actualLocale]});
+                    for(let child in category.children) {
+                        this.traverse(category.children[child], localConcat);
+                    }
+                } else {
+                    localConcat.push({'id': category['id'], 'name': category['description'][this.properties.actualLocale]});
+                    this.options.push(localConcat);
+                }
+            },
             getNextUrl(paramName, paramValue) {
                 return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
             },
+            choiceCategory(value) {
+                let that = this;
+                if(value != undefined && value != ''){
+                    if(!that.withRedirectionOnClick){
+                        that.$parent.$emit('categoryChoice', {id: value});
+                    } else {
+                        value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId',value) : null;
+                    }
+                }
+            }
         }
     }
 </script>

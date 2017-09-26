@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Advert;
 use App\Common\AdvertsManager;
 use App\Common\AdvertUtils;
+use App\Common\CategoryUtils;
 use App\Common\InvoiceUtils;
 use App\Common\PrivilegesUtils;
 use App\Common\SiteMapUtils;
@@ -503,7 +504,8 @@ class AdminController extends Controller
      * Tempo tests
      */
     public function tempo(){
-
+        $var = [];
+        return view('application.debug', compact('var'));
     }
 
     /**

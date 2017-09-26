@@ -62,7 +62,6 @@ Vue.component('recursive-categories-horizontal-menu', require('./components/cate
 Vue.component('categories-dropdown-menu', require('./components/categories/dropdown/all/menu.vue'));
 Vue.component('recursive-categories-dropdown-menu', require('./components/categories/dropdown/all/recursive.vue'));
 Vue.component('categories-select-menu', require('./components/categories/select/menu.vue'));
-Vue.component('recursive-categories-select-menu', require('./components/categories/select/recursive.vue'));
 Vue.component('categories-list-move-to', require('./components/categories/dropdown/listMoveTo/menu.vue'));
 Vue.component('recursive-categories-list-move-to', require('./components/categories/dropdown/listMoveTo/recursive.vue'));
 Vue.component('categories-updatable', require('./components/categories/categoriesUpdatable.vue'));

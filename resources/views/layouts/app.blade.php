@@ -73,5 +73,7 @@
     @endif
     @include('includes.structuredDatas.logoLdScript')
     @include('includes.structuredDatas.socialsLdScript')
+    <!-- PACE LOADER -->
+    @include('includes.paceLoader.footer')
 </body>
 </html>
