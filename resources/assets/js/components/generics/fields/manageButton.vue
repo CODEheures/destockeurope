@@ -57,22 +57,22 @@
                 this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
             },
             renewMe: function () {
-                window.location.assign(this.advert.renewUrl);
+                DestockTools.goToUrl(this.advert.renewUrl);
             },
             backToTopMe: function () {
-                window.location.assign(this.advert.backToTopUrl);
+                DestockTools.goToUrl(this.advert.backToTopUrl);
             },
             highlightMe: function () {
-                window.location.assign(this.advert.highlightUrl);
+                DestockTools.goToUrl(this.advert.highlightUrl);
             },
             seeMe: function () {
-                window.location.assign(this.advert.url);
+                DestockTools.goToUrl(this.advert.url);
             },
             delegationMe: function () {
-                window.location.assign(this.advert.delegationUrl);
+                DestockTools.goToUrl(this.advert.delegationUrl);
             },
             editMe: function () {
-                window.location.assign(this.advert.editUrl);
+                DestockTools.goToUrl(this.advert.editUrl);
             },
         }
     }

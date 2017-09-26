@@ -952,6 +952,7 @@
             },
             submitForm (event) {
                 event.preventDefault();
+                Pace.restart();
                 this.setStorage();
                 $('#create_advert_form_'+this._uid).submit();
             },

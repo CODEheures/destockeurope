@@ -1230,7 +1230,7 @@
                 return DestockTools.getNextUrl(this.properties.routeHome, paramName, paramValue, true)
             },
             goHome () {
-                window.location.assign(this.nextUrl);
+                DestockTools.goToUrl(this.nextUrl);
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;

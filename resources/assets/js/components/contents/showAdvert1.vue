@@ -508,7 +508,7 @@
                         that.isLoaded = false;
                         axios.delete(that.routeDeleteAdvert)
                             .then(function (response) {
-                                window.location.assign(response.data);
+                                DestockTools.goToUrl(response.data);
                             })
                             .catch(function (error) {
                                 if (error.response && error.response.status == 409) {

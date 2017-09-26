@@ -125,6 +125,11 @@ let destockTools = {
         'page' in parsed.query && reinitPage ? delete parsed.query['page'] : null;
         return Parser.format(parsed);
     },
+
+    goToUrl(url) {
+        Pace.restart();
+        window.location.href = url;
+    }
 };
 
 module.exports = destockTools;

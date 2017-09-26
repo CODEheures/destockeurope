@@ -686,7 +686,7 @@ class AdvertController extends Controller
                     return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isRenew_name'), 'infoCost' => $cost]));
                 } else {
                     $this->advertUpdate($advert, Invoice::STATE_RENEW, null);
-                    return redirect()->back()->with('success', trans('strings.noPayment_renew_success'));
+                    return redirect()->back()->with('success', trans('strings.noPayment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]));
                 }
             } catch (\Exception $e) {
                 return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));

@@ -381,7 +381,7 @@
                 let timer = function () {
                     setTimeout(function () {
                         if(that.updateInProgress <= 0){
-                            window.location.assign(that.routeNextUrl);
+                            DestockTools.goToUrl(that.routeNextUrl);
                         } else {
                             counter++;
                             if (counter < 20) {

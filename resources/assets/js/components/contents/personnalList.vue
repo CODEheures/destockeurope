@@ -195,8 +195,7 @@
             },
             gotoNextUrl(forceLoad=false) {
                 if(this.nextUrl !== window.location.href || forceLoad===true){
-                    Pace.restart();
-                    window.location.href = this.nextUrl;
+                    DestockTools.goToUrl(this.nextUrl);
                 }
             }
         }

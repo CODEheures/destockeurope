@@ -37,7 +37,7 @@
         methods: {
             goTo(lang) {
                 let link_hreflang = $("link[hreflang|="+lang+"]");
-                window.location.assign((link_hreflang.attr('href')));
+                DestockTools.goToUrl((link_hreflang.attr('href')));
             }
         },
         updated () {
