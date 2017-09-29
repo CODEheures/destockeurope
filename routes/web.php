@@ -156,11 +156,11 @@
         Route::get('/cost/{nbPictures?}/{isUrgent?}', ['as' => 'advert.cost', 'uses' => 'AdvertController@cost']);
         Route::post('/sendMail', ['as' => 'advert.sendMail', 'uses' => 'AdvertController@sendMail']);
         Route::post('/report', ['as' => 'advert.report', 'uses' => 'AdvertController@report']);
-        Route::get('/pay/paypal/{invoiceId}', ['as' => 'advert.payByPaypal', 'uses' => 'AdvertController@payByPaypal']);
-        Route::get('/pay/paypal/status/{invoiceId}/{success}', ['as' => 'advert.paypalStatus', 'uses' => 'AdvertController@paypalStatus'])
-            ->where(['invoiceId' => '[0-9]+'])
-            ->where(['success' => '\b(true|false)\b']);
-        Route::post('/pay/card/{invoiceId}', ['as' => 'advert.payByCard', 'uses' => 'AdvertController@payByCard']);
+
+        Route::post('/postNonce/{invoiceId}', ['uses' => 'AdvertController@noncePost'])->name('advert.postNonce');
+        Route::get('/validateOrder/{invoiceId}/{token}', ['uses' => 'AdvertController@validateOrder'])->name('advert.validateOrder');
+
+
         Route::get('/renew/{id}', ['as' => 'advert.renew', 'uses' => 'AdvertController@renew']);
         Route::get('/backToTop/{id}', ['as' => 'advert.backToTop', 'uses' => 'AdvertController@backToTop']);
         Route::get('/highlight/{id}', ['as' => 'advert.highlight', 'uses' => 'AdvertController@highlight']);

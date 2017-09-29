@@ -67,7 +67,7 @@ class AdvertNotApprove extends Notification
                     ->line(trans('strings.mail_advertNotApproveEdit_line',['title' => $this->advert->title]))
                     ->customLines($this->disapproveReason);
 
-        if($this->invoice && $this->invoice->voidId){
+        if($this->invoice && $this->invoice->voided){
             $message->line(trans('strings.mail_advertNotApprove_line_voidPayment'));
         }
 

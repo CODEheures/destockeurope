@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Advert;
 use App\Common\MoneyUtils;
-use App\Common\PaymentManager;
+use App\Common\PaymentUtils;
 use App\Common\PrivilegesUtils;
 use Illuminate\Support\Str;
 
@@ -72,15 +72,14 @@ class AdvertObserver
         }
 
         $invoicesInStandBy = $advert->invoices()
-            ->where('authorization', '<>', null)
-            ->where('captureId', null)
-            ->where('voidId', null)
-            ->where('refundId', null)
+            ->where('transaction_id', '<>', null)
+            ->where('captured', false)
+            ->where('voided', false)
+            ->where('refunded', false)
             ->get();
 
         foreach ($invoicesInStandBy as $invoice) {
-            $paymentManager = new PaymentManager();
-            $paymentManager->voidPayment($invoice);
+            PaymentUtils::voidTransaction($invoice);
         }
     }
 

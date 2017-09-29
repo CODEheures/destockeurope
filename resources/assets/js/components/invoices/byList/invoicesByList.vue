@@ -18,9 +18,10 @@
                         <th>#</th>
                         <th>{{ strings.listHeaderDate }}</th>
                         <th>{{ strings.listHeaderUsermail }}</th>
-                        <th>{{ strings.listHeaderPaypalCapture }}</th>
-                        <th>{{ strings.listHeaderPaypalVoid }}</th>
-                        <th>{{ strings.listHeaderPaypalRefund }}</th>
+                        <th>{{ strings.listHeaderTransactionId }}</th>
+                        <th>{{ strings.listHeaderCaptured }}</th>
+                        <th>{{ strings.listHeaderVoided }}</th>
+                        <th>{{ strings.listHeaderRefunded }}</th>
                         <th></th>
                     </tr>
                 </thead>

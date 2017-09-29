@@ -555,9 +555,7 @@ class AdminController extends Controller
         if(!is_null($search)){
             $invoices = $invoices->where(function ($query) use ($search) {
                 $query->where('invoices.invoice_number', 'LIKE', '%' .$search .'%')
-                    ->orWhere('invoices.captureId', 'LIKE', '%' .$search .'%')
-                    ->orWhere('invoices.voidId', 'LIKE', '%' .$search .'%')
-                    ->orWhere('invoices.refundId', 'LIKE', '%' .$search .'%')
+                    ->orWhere('invoices.transaction_id', 'LIKE', '%' .$search .'%')
                     ->orWhere('users.email', 'LIKE', '%' .$search .'%')
                     ->orWhere(function ($query) use ($search) {
                         try {

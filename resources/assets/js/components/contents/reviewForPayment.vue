@@ -1,6 +1,9 @@
 <template>
     <div class="ui one column grid">
         <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
+        <div :id="'modal-'+_uid" class="ui modal">
+            <i class="close icon"></i>
+        </div>
         <div class="column">
             <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
@@ -71,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui icon attached info message">
+                <div class="ui icon top attached info message">
                     <i class="lock icon"></i>
                     <div class="content">
                         <div class="header">{{ strings.lockInfoHeader }}</div>
@@ -80,74 +83,94 @@
                 </div>
                 <div :class="isCgvApprove ? 'ui attached fluid segment':'ui disabled attached fluid segment'">
                     <div class="ui grid">
-                        <div class="sixteen wide column">
-                            <div class="ui center aligned basic segment">
-                                {{ strings.infoPaymentType }} <i :id="'help-'+_uid" class="circular help icon link"></i>
-                                <div class="ui flowing special popup">
-                                    <img class="ui huge centered image" :src="urlImgPaypalInfo" />
+                        <transition name="slide-fade">
+                            <div v-if="nonce != '' && nonce.length > 0 && method=='card'" class="one wide tablet only one wide computer only column"></div>
+                        </transition>
+                        <div class="sixteen wide mobile eight wide tablet six wide computer centered column">
+                            <form accept-charset="UTF-8" autocomplete="off" action="#"  id="payment-form" method="post" class="ui form" >
+                                <input type="hidden" name="_token" :value="properties.csrfToken"/>
+                                <div :class="isCgvApprove ? 'sixteen wide field' : 'sixteen wide disabled field'">
+                                    <label>{{ strings.paymentCardNumberLabel }} {{ dataCardNiceType }}</label>
+                                    <div class="ui labeled input braintree">
+                                        <div class="ui label">
+                                            <i class="payment icon"></i>
+                                        </div>
+                                        <div id="card-number" class="form-card-control"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <a :href="dataRoutePaypalChoice" data-paypal-button="true" :title="strings.paypalBtnTitle">
-                                <img class="ui medium centered image spaced-top-2" :src="dataUrlImgPaypal" :alt="strings.paypalBtnTitle" />
-                            </a>
-                            <!--<div class="spaced-top-2">-->
-                                <!--<div class="ui horizontal divider">-->
-                                    <!--{{ strings.dividerChoiceLabel }}-->
-                                <!--</div>-->
-                            <!--</div>-->
+                                <div class="two fields">
+                                    <div :class="isCgvApprove ? 'ten wide field' : 'disabled ten wide field'">
+                                        <label>{{ strings.paymentCardExpirationLabel }}</label>
+                                        <div class="ui labeled input braintree">
+                                            <div class="ui label">
+                                                <i class="calendar icon"></i>
+                                            </div>
+                                            <div id="expiration-date" class="form-card-control"></div>
+                                        </div>
+                                    </div>
+                                    <div :class="isCgvApprove ? 'six wide field' : 'disabled six wide field'">
+                                        <label>{{ dataCVCLabel }}</label>
+                                        <div class="ui labeled input braintree">
+                                            <div class="ui label">
+                                                <i class="lock icon"></i>
+                                            </div>
+                                            <div id="cvv" class="form-card-control"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="valid-card" type="submit" :class="isCgvApprove ? 'ui primary right labeled icon button':'ui disabled primary right labeled icon button'">
+                                    <i class="right arrow icon"></i>
+                                    {{ strings.payment_btn_check_card }}
+                                </button>
+                            </form>
                         </div>
-                        <!--<div class="sixteen wide mobile eight wide tablet six wide computer centered column">-->
-                            <!--<form accept-charset="UTF-8" autocomplete="off" :action="routeCardChoice"  id="payment-form" method="post" class="ui form" >-->
-                                <!--<input type="hidden" name="_token" :value="properties.csrfToken"/>-->
-                                <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
-                                    <!--<select class="ui fluid search dropdown" name="card_type">-->
-                                        <!--<option value="">{{ strings.paymentCardTypeLabel }}</option>-->
-                                        <!--<option :value="index" v-for="(card, index) in dataCardsTypes">{{ card }}</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
-                                <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
-                                    <!--<label>{{ strings.paymentCardNameLabel }}</label>-->
-                                    <!--<input type='text' name="name">-->
-                                <!--</div>-->
-                                <!--<div class="two fields">-->
-                                    <!--<div :class="isCgvApprove ? 'twelve wide field' : 'twelve wide disabled field'">-->
-                                        <!--<label>{{ strings.paymentCardNumberLabel }}</label>-->
-                                        <!--<input type="text" name="card_no" maxlength="25" :placeholder="strings.paymentCardNumberPlaceholder">-->
-                                    <!--</div>-->
-                                    <!--<div :class="isCgvApprove ? 'four wide field' : 'four wide disabled field'">-->
-                                        <!--<label>{{ strings.paymentCardCvcLabel }}</label>-->
-                                        <!--<input type="text" name="cvc" maxlength="3" :placeholder="strings.paymentCardCvcLabel">-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="field">-->
-                                    <!--<label>{{ strings.paymentCardExpirationLabel }}</label>-->
-                                    <!--<div class="two fields">-->
-                                        <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
-                                            <!--<select class="ui fluid search dropdown" name="expiration_month">-->
-                                                <!--<option value="">{{ strings.paymentCardExpirationMonthPlaceholder }}</option>-->
-                                                <!--<option value="1">{{ strings.january }}</option>-->
-                                                <!--<option value="2">{{ strings.february }}</option>-->
-                                                <!--<option value="3">{{ strings.march }}</option>-->
-                                                <!--<option value="4">{{ strings.april }}</option>-->
-                                                <!--<option value="5">{{ strings.may }}</option>-->
-                                                <!--<option value="6">{{ strings.june }}</option>-->
-                                                <!--<option value="7">{{ strings.july }}</option>-->
-                                                <!--<option value="8">{{ strings.august }}</option>-->
-                                                <!--<option value="9">{{ strings.september }}</option>-->
-                                                <!--<option value="10">{{ strings.october }}</option>-->
-                                                <!--<option value="11">{{ strings.november }}</option>-->
-                                                <!--<option value="12">{{ strings.december }}</option>-->
-                                            <!--</select>-->
-                                        <!--</div>-->
-                                        <!--<div :class="isCgvApprove ? 'field' : 'disabled field'">-->
-                                            <!--<input type="text" name="expiration_year" maxlength="4" :placeholder="strings.paymentCardExpirationYearPlaceholder">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<button type="submit" :class="isCgvApprove ? 'ui primary right labeled icon button':'ui disabled primary right labeled icon button'">-->
-                                    <!--<i class="right arrow icon"></i>Payer</button>-->
-                            <!--</form>-->
-                        <!--</div>-->
+                        <transition name="slide-fade">
+                            <div v-if="nonce != '' && nonce.length > 0 && method=='card'" class="sixteen wide mobile only center aligned column">
+                                <i class="big circular check green icon"></i>
+                            </div>
+                        </transition>
+                        <transition name="slide-fade">
+                            <div v-if="nonce != '' && nonce.length > 0 && method=='card'" class="one wide tablet only one wide computer only column">
+                                <i class="big circular check green icon" style="position: absolute; right: 10px;"></i>
+                            </div>
+                        </transition>
+
+                        <div class="sixteen wide column">
+                            <div class="ui horizontal divider">
+                                {{ strings.dividerChoiceLabel }}
+                            </div>
+                        </div>
+
+                        <div class="sixteen wide column">
+                            <div class="ui grid">
+                                <transition name="slide-fade">
+                                    <div v-if="nonce != '' && nonce.length > 0 && method=='paypal'" class="one wide tablet only one wide computer only column"></div>
+                                </transition>
+                                <div class="sixteen wide mobile eight wide tablet six wide computer centered column">
+                                    <div id="paypal-button"></div>
+                                </div>
+                                <transition name="slide-fade">
+                                    <div v-if="nonce != '' && nonce.length > 0 && method=='paypal'" class="sixteen wide mobile only center aligned column">
+                                        <i class="big circular check green icon"></i>
+                                    </div>
+                                </transition>
+                                <transition name="slide-fade">
+                                    <div v-if="nonce != '' && nonce.length > 0 && method=='paypal'" class="one wide tablet only one wide computer only column">
+                                        <i class="big circular check green icon" style="position: absolute; right: 10px;"></i>
+                                    </div>
+                                </transition>
+                            </div>
+                        </div>
+
+
+
+                        <div class="sixteen wide right aligned column">
+                            <transition name="slide-fade">
+                            <button id="validate-order-btn" v-if="nonce != '' && nonce.length > 0" class="ui blue button" v-on:click="sendNonce()">
+                                {{ strings.payment_btn_valid }}
+                            </button>
+                            </transition>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -159,15 +182,12 @@
     export default {
         props: [
             //vue routes
-            'routePaypalChoice',
-            'routeCardChoice',
+            'routePostNonce',
             'routePrices',
             //vue vars
             'invoice',
-            'cardsTypes',
-            'urlImgPaypalDisabled',
-            'urlImgPaypalEnabled',
-            'urlImgPaypalInfo'
+            'mode',
+            'clientToken'
         ],
         data: () => {
             return {
@@ -183,19 +203,18 @@
                 dataCgvA: '',
                 dataCgvHref: '',
                 isCgvApprove: false,
-                dataRoutePaypalChoice: '',
-                dataUrlImgPaypal: null,
                 dataInvoice: {},
-                dataCardsTypes: []
+                nonce: '',
+                method: '',
+                dataCVCLabel: '',
+                dataCardNiceType: '',
+                deviceData: null
             };
         },
         mounted () {
             this.strings = this.$store.state.strings['review-for-payment'];
             this.properties = this.$store.state.properties['global'];
             this.dataInvoice = JSON.parse(this.invoice);
-            this.dataCardsTypes = JSON.parse(this.cardsTypes);
-            this.dataUrlImgPaypal = this.urlImgPaypalDisabled;
-            this.dataRoutePaypalChoice = null;
             this.steps = [
                 {
                     isActive : false,
@@ -223,69 +242,22 @@
                     icon: 'payment'
                 }
             ];
+            this.dataCVCLabel = this.strings.paymentCardCvcLabel;
             this.setSteps();
             this.calcTVA();
             this.setDataCgv();
+            this.braintreeCreate();
         },
         updated () {
             let that = this;
             $('#cgvSlider').checkbox({
                 onChecked: function() {
                     that.isCgvApprove = true;
-                    that.dataUrlImgPaypal = that.urlImgPaypalEnabled;
-                    that.dataRoutePaypalChoice = that.routePaypalChoice;
                 },
                 onUnchecked: function() {
                     that.isCgvApprove = false;
-                    that.dataUrlImgPaypal = that.urlImgPaypalDisabled;
-                    that.dataRoutePaypalChoice = null;
                 }
             });
-            $('#payment-form')
-                .form({
-                    on: 'blur',
-                    inline: true,
-                    fields: {
-                        card_no: {
-                            identifier  : 'card_no',
-                            rules: [
-                                {
-                                    type   : 'creditCard',
-                                    prompt : that.strings.paymentCardNumberError
-                                }
-                            ]
-                        },
-                        name: {
-                            identifier  : 'name',
-                            rules: [
-                                {
-                                    type   : 'regExp[/^[A-Za-z\\s]{1,255}$/]',
-                                    prompt : that.strings.paymentCardNameError
-                                }
-                            ]
-                        },
-                        cvc: {
-                            identifier  : 'cvc',
-                            rules: [
-                                {
-                                    type   : 'integer[0..999]',
-                                    prompt : that.strings.paymentCardCvcError
-                                }
-                            ]
-                        },
-                        expiration_year: {
-                            identifier  : 'expiration_year',
-                            rules: [
-                                {
-                                    type   : 'integer[' + new Date().getFullYear() + '..' + ((new Date().getFullYear())+50) +']',
-                                    prompt : that.strings.paymentCardYearError
-                                }
-                            ]
-                        }
-                    }
-                })
-            ;
-            $('#help-'+this._uid).popup({popup: '.special.popup', position   : 'left center'});
         },
         methods: {
             sendToast: function(message,type) {
@@ -302,12 +274,280 @@
                 this.dataCgvA = htmlObject[0].firstElementChild.innerHTML;
                 this.dataCgvHref = htmlObject[0].firstElementChild.href;
             },
-            calcTVA () {
-                this.tva = 0;
-                if(this.dataInvoice.tvaSubject){
-                    for(let index in this.dataInvoice.options){
-                        this.tva = this.tva + (this.dataInvoice.options[index].tvaVal);
+            calcTVA (synchrone=false) {
+                if(!synchrone){
+                    this.tva = 0;
+                    if(this.dataInvoice.tvaSubject){
+                        for(let index in this.dataInvoice.options){
+                            this.tva = this.tva + (this.dataInvoice.options[index].tvaVal);
+                        }
                     }
+                } else {
+                    let tva = 0;
+                    let dataInvoice = JSON.parse(this.invoice);
+                    if(dataInvoice.tvaSubject){
+                        for(let index in dataInvoice.options){
+                            tva = tva + (dataInvoice.options[index].tvaVal);
+                        }
+                    }
+                    return tva;
+                }
+
+            },
+            braintreeCreate () {
+                let that = this;
+
+                let threeDSecure;
+
+
+                let form = document.querySelector('#payment-form');
+                let submit = document.querySelector('#valid-card');
+
+                braintree.client.create({
+                    authorization: that.clientToken
+                }, function (clientErr, clientInstance) {
+
+                    // Stop if there was a problem creating the client.
+                    // This could happen if there is a network error or if the authorization
+                    // is invalid.
+                    if (clientErr) {
+                        console.error('Error creating client:', clientErr);
+                        return;
+                    }
+
+                    //Recalc Price on synchrone for ensure
+                    let price = ((JSON.parse(that.invoice).cost + that.tva)/100).toFixed(2);
+
+
+                    // Create dataCollector component.
+                    braintree.dataCollector.create({client: clientInstance,paypal: true}, function (err, dataCollectorInstance) {
+                        if (err) {
+                            // Handle error
+                            return;
+                        }
+                        // At this point, you should access the dataCollectorInstance.deviceData value and provide it
+                        // to your server, e.g. by injecting it into your form as a hidden input.
+                        that.deviceData = dataCollectorInstance.deviceData;
+                    });
+
+                    // Create a PayPal Checkout component.
+                    braintree.paypalCheckout.create({client: clientInstance}, function (paypalCheckoutErr, paypalCheckoutInstance) {
+
+                        // Stop if there was a problem creating PayPal Checkout.
+                        // This could happen if there was a network error or if it's incorrectly
+                        // configured.
+                        if (paypalCheckoutErr) {
+                            console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+                            return;
+                        }
+
+                        // Set up PayPal with the checkout.js library
+                        paypal.Button.render({
+                            env: that.mode, // or 'sandbox'
+                            style: {label: 'pay', size:  'responsive', shape: 'rect',  color: 'blue'},
+                            payment: function () {
+                                return paypalCheckoutInstance.createPayment({
+                                    // Your PayPal options here. For available options, see
+                                    // http://braintree.github.io/braintree-web/current/PayPalCheckout.html#createPayment
+                                    flow: 'vault',
+                                    billingAgreementDescription: that.strings.billingAgreementDescription + price + '€',
+                                    enableShippingAddress: false,
+                                });
+                            },
+
+                            onAuthorize: function (data, actions) {
+                                return paypalCheckoutInstance.tokenizePayment(data)
+                                    .then(function (payload) {
+                                        that.nonce = payload.nonce;
+                                        that.method = 'paypal';
+                                    });
+                            },
+
+                            onCancel: function (data) {
+                                console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+                                that.nonce = '';
+                                that.method = '';
+                            },
+
+                            onError: function (err) {
+                                console.error('checkout.js error', err);
+                                that.nonce = '';
+                                that.method = '';
+                            }
+                        }, '#paypal-button').then(function () {
+                            // The PayPal button will be rendered in an html element with the id
+                            // `paypal-button`. This function will be called when the PayPal button
+                            // is set up and ready to be used.
+                        });
+
+                    });
+
+                    // Create 3DS component
+                    braintree.threeDSecure.create({client: clientInstance}, function (threeDSecureErr, threeDSecureInstance) {
+                        if (threeDSecureErr) {
+                            // Handle error in 3D Secure component creation
+                            return;
+                        }
+                        threeDSecure = threeDSecureInstance;
+                    });
+
+                    //Create Hosted Fields Component
+                    braintree.hostedFields.create({
+                        client: clientInstance,
+                        styles: {
+                            // Styling a specific field
+                            'input': {
+                                'line-height' : '1.2em',
+                                'height': '2em'
+                            },
+                            '.number': {
+                                'font-family': 'monospace'
+                            },
+
+                            // Styling element state
+                            ':focus': {
+                                'color': 'blue'
+                            },
+                            '.valid': {
+                                'color': 'green'
+                            },
+                            '.invalid': {
+                                'color': 'red'
+                            },
+                        },
+                        fields: {
+                            number: {
+                                selector: '#card-number',
+                                placeholder: '4111 1111 1111 1111'
+                            },
+                            cvv: {
+                                selector: '#cvv',
+                                placeholder: '123'
+                            },
+                            expirationDate: {
+                                selector: '#expiration-date',
+                                placeholder: '10 / 19'
+                            }
+                        }
+                    }, function (hostedFieldsErr, hostedFieldsInstance) {
+                        if (hostedFieldsErr) {
+                            console.error(hostedFieldsErr);
+                            return;
+                        }
+
+                        hostedFieldsInstance.on('cardTypeChange', function (event) {
+                            // This event is fired whenever a change in card type is detected.
+                            // It will only ever be fired from the number field.
+                            if (event.cards.length === 1) {
+                                that.dataCardNiceType = event.cards[0].niceType;
+                                that.dataCVCLabel = event.cards[0].code.name;
+                                let placeHolder = '';
+                                for(let i = 1; i<=event.cards[0].code.size; i++){
+                                    placeHolder = placeHolder + i.toString();
+                                }
+                                hostedFieldsInstance.setAttribute({
+                                    field: 'cvv',
+                                    attribute: 'placeholder',
+                                    value: placeHolder
+                                });
+                            } else {
+                                that.dataCardNiceType = '';
+                                that.dataCVCLabel = that.strings.paymentCardCvcLabel;
+                                hostedFieldsInstance.setAttribute({
+                                    field: 'cvv',
+                                    attribute: 'placeholder',
+                                    value: '123'
+                                });
+                            }
+
+
+                        });
+
+                        form.addEventListener('submit', function (event) {
+                            event.preventDefault();
+
+                            let state = hostedFieldsInstance.getState();
+                            let formValid = Object.keys(state.fields).every(function (key) {
+                                return state.fields[key].isValid;
+                            });
+
+                            if (formValid) {
+                                $(submit).addClass('loading');
+                                that.nonce = '';
+                                that.method = '';
+
+
+                                // Tokenize Hosted Fields
+                                hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+                                    if (tokenizeErr) {
+                                        $(submit).removeClass('loading');
+                                        console.error(tokenizeErr);
+                                        alert(that.strings.errorInPaymentProcess);
+                                        return;
+                                    }
+
+                                    let my3DSContainer = document.createElement('div');
+                                    let modal3DSContainer = document.querySelector('#modal-'+that._uid);
+
+
+                                    let removeFrame = function () {
+                                        // Remove UI that you added in addFrame.
+                                        modal3DSContainer.removeChild(my3DSContainer);
+                                        $(modal3DSContainer).modal({closable: false}).modal('hide');
+                                        $(submit).removeClass('loading');
+                                    };
+
+                                    let addFrame = function (err, iframe) {
+                                        // Set up your UI and add the iframe.
+                                        my3DSContainer.appendChild(iframe);
+                                        modal3DSContainer.appendChild(my3DSContainer);
+                                        $(modal3DSContainer).modal({
+                                            closable: false,
+                                            onHide  : function(){
+                                                threeDSecure.cancelVerifyCard(removeFrame());
+                                            }
+                                        }).modal('show');
+                                    };
+
+                                    threeDSecure.verifyCard({
+                                        amount: price,
+                                        nonce: payload.nonce,
+                                        addFrame: addFrame,
+                                        removeFrame: removeFrame
+                                    }, function(err, verification) {
+                                        $(submit).removeClass('loading');
+                                        if (err) {
+                                            that.nonce = '';
+                                            that.method = '';
+                                            alert(that.strings.cardInvalid);
+                                            return;
+                                        }
+                                        that.nonce = verification.nonce;
+                                        that.method = 'card';
+                                    });
+
+                                });
+                            } else {
+                                // Let the customer know their fields are invalid
+                                alert(that.strings.formInvalid);
+                            }
+                        }, false);
+                    });
+                });
+            },
+            sendNonce () {
+                if(this.nonce !== '' && this.nonce.length > 0) {
+                    $('#validate-order-btn').addClass('loading');
+                    axios.post(this.routePostNonce, {'nonce': this.nonce, 'deviceData': this.deviceData})
+                        .then(function (response) {
+                            DestockTools.goToUrl(response.data);
+                            $('#validate-order-btn').removeClass('loading');
+                        })
+                        .catch(function (error) {
+                            $('#validate-order-btn').removeClass('loading');
+                            alert(that.strings.errorInPaymentProcess);
+                        });
+
                 }
             }
         }

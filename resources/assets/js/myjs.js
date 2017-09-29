@@ -47,8 +47,19 @@
             document.body.appendChild(paceForcingDiv);
 
             $(window).on('click', function (event) {
-                if($(event.target).closest("a").length > 0){
-                    DestockTools.paceRestart();
+                let $anchor = $(event.target).closest("a");
+                if($anchor.length > 0 && $anchor.attr('href') !== undefined){
+                    let parsedAnchor = Parser.parse($anchor.attr('href'), true);
+                    parsedAnchor.search=undefined;
+                    parsedAnchor.hash = '';
+
+                    let actualHref = Parser.parse(window.location.href, true);
+                    actualHref.search=undefined;
+                    actualHref.hash = '';
+
+                    if(Parser.format(parsedAnchor)!==Parser.format(actualHref)){
+                        DestockTools.paceRestart();
+                    }
                 }
             })
 

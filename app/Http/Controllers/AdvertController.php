@@ -10,11 +10,9 @@ use App\Common\GeoManager;
 use App\Common\InvoiceUtils;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
-use App\Common\PaymentManager;
+use App\Common\PaymentUtils;
 use App\Common\PrivilegesUtils;
 use App\Common\UserUtils;
-use App\Exceptions\PaymentException;
-use App\Http\Requests\CreditCardRequest;
 use App\Http\Requests\StoreAdvertRequest;
 use App\Invoice;
 use App\Notifications\AdvertApprove;
@@ -42,7 +40,6 @@ use Vinkla\Vimeo\VimeoManager;
 class AdvertController extends Controller
 {
     private $vimeoManager;
-    private $paymentManager;
 
     /**
      * AdvertController constructor.
@@ -68,7 +65,6 @@ class AdvertController extends Controller
         $this->middleware('stopAnalytics', ['only' => ['toApprove']]);
         $this->middleware('picturesExists', ['only' => ['store']]);
         $this->vimeoManager = $vimeoManager;
-        $this->paymentManager = new PaymentManager();
     }
 
 
@@ -365,28 +361,11 @@ class AdvertController extends Controller
                 $invoice->tvaSubject = false;
             }
             $invoice->save();
-            $listCardTypes = config('paypal_cards.list');
 
-            switch ($invoice->state) {
-                case Invoice::STATE_CREATION:
-                    $title = null;
-                    break;
-                case Invoice::STATE_EDIT:
-                    $title = trans('strings.option_isEdit_name');
-                    break;
-                case Invoice::STATE_RENEW:
-                    $title = trans('strings.option_isRenew_name');
-                    break;
-                case Invoice::STATE_BACKTOTOP:
-                    $title = trans('strings.option_isBackToTop_name');
-                    break;
-                case Invoice::STATE_HIGHLIGHT:
-                    $title = trans('strings.option_isHighlight_name');
-                    break;
-            }
+            $mode = PaymentUtils::getMode();
+            $clientToken = PaymentUtils::getBraintreeClientToken();
 
-
-            return view('advert.reviewForPayment', compact('invoice', 'listCardTypes', 'title'));
+            return view('advert.reviewForPayment', compact('invoice', 'title', 'mode', 'clientToken'));
         }
         return redirect(route('home'));
     }
@@ -623,9 +602,9 @@ class AdvertController extends Controller
     public function refund($id)
     {
         $refundInvoice = Invoice::find($id);
-        if(!is_null($refundInvoice) && is_null($refundInvoice->refundId) && !is_null($refundInvoice->captureId) && is_null($refundInvoice->voidId)){
+        if(!is_null($refundInvoice) && !($refundInvoice->refunded) && $refundInvoice->captured && !($refundInvoice->voided)){
             try {
-                $this->paymentManager->refundPayment($refundInvoice);
+                PaymentUtils::refundTransaction($refundInvoice);
             } catch (\Exception $e) {
                 return response(trans('strings.view_manage_invoice_refund_fail'), 409);
             }
@@ -795,57 +774,42 @@ class AdvertController extends Controller
 
     /**
      *
-     * Route when choice Pay by paypal
+     * Get the nonce token to call Brantree_transaction to get authorization
+     * Send route to go if authorize (route validateOrder)
      *
-     * @param $invoiceId
-     * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function payByPaypal($invoiceId) {
-        try {
-            $redirect_url = $this->paymentManager->createPayment($invoiceId, PaymentManager::PAYPAL);
-        }  catch (PaymentException $e) {
-            return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                ->withErrors($e->getMessage());
-        }
-        return redirect($redirect_url);
-    }
-
-    /**
-     *
-     * Route when choice Pay by Card
-     *
-     * @param $invoiceId
-     * @param CreditCardRequest $request
-     * @return Controller|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function payByCard($invoiceId, CreditCardRequest $request) {
-        try {
-            $resultOfPayment = $this->paymentManager->createPayment($invoiceId, PaymentManager::CARD, $request);
-        }  catch (PaymentException $e) {
-            return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                ->withErrors($e->getMessage());
-        }
-        return $this->processResultPayment($resultOfPayment['state'], $resultOfPayment['payment'], $resultOfPayment['invoice'], $resultOfPayment['request']);
-    }
-
-    /**
-     *
-     * Get Result of Paypal Payment
-     *
-     * @param $invoiceId
-     * @param $success
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param $invoiceId
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function paypalStatus($invoiceId, $success, Request $request) {
-        try {
-            $result = $this->paymentManager->paypalStatus($invoiceId, $success, $request);
-        }  catch (PaymentException $e) {
-            return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
-                ->withErrors($e->getMessage());
+    public function noncePost(Request $request, $invoiceId) {
+        $routeToGo = false;
+        if($request->filled('nonce') && $request->filled('deviceData') && filter_var($invoiceId, FILTER_VALIDATE_INT)){
+            $routeToGo = PaymentUtils::getAuthorization($request->nonce, $request->deviceData,  $invoiceId);
+        }
+        if($routeToGo){
+            return response()->json($routeToGo);
+        } else {
+            return response('ko', 402);
+        }
+    }
+
+    /**
+     *
+     *
+     *
+     * @param Request $request
+     * @param $invoiceId
+     * @param $token
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function validateOrder(Request $request, $invoiceId, $token) {
+        $invoice = Invoice::find($invoiceId);
+        if($invoice && $invoice->user->id == auth()->user()->id && $token = md5($invoice->transaction_id)){
+            return $this->setAdvertState($invoice, $request);
         }
 
-        return $this->processResultPayment($result['state'], $result['payment'], $result['invoice'], $result['request']);
+        return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoiceId]))
+            ->withErrors('err2: ' . trans('strings.payment_all_error'));
     }
 
     /**
@@ -995,26 +959,6 @@ class AdvertController extends Controller
 
     /**
      *
-     * Process the result of the payment
-     *
-     * @param $result
-     * @param $payment
-     * @param $invoice
-     * @param $request
-     * @return AdvertController|\Illuminate\Http\RedirectResponse
-     */
-    private function processResultPayment($result, $payment, $invoice, $request) {
-        if ($result == 'approved') { // payment made
-            $this->paymentManager->saveAuthorization($payment, $invoice);
-            return $this->setAdvertState($invoice, $request);
-        }
-
-        return redirect(route('advert.reviewForPayment', ['invoiceId' => $invoice->id]))
-            ->withErrors('err2: ' . trans('strings.payment_all_error'));
-    }
-
-    /**
-     *
      * Common Save Result Of payment and Process to publish Advert before validation
      *
      * @param Invoice $invoice
@@ -1029,7 +973,7 @@ class AdvertController extends Controller
             $advert = $invoice->advert;
             $this->advertPublish($advert, $request);
             //stop process here, admin approve is required
-            return redirect(route('home'))->with('success', trans('strings.payment_paypal_success'));
+            return redirect(route('home'))->with('success', trans('strings.payment_success'));
 
         } elseif ($invoice->state == Invoice::STATE_RENEW) {
             $advert = Advert::withTrashed()->find($invoice->advert_id);
@@ -1062,7 +1006,7 @@ class AdvertController extends Controller
             $advert = Advert::where('isEditOf', $invoice->advert->id)->latest()->first();
             $this->advertPublish($advert, $request);
             //stop process here, admin approve is required
-            return redirect(route('home'))->with('success', trans('strings.payment_paypal_success'));
+            return redirect(route('home'))->with('success', trans('strings.payment_success'));
         }
     }
 
@@ -1102,10 +1046,14 @@ class AdvertController extends Controller
             //1 Capture + stats or Void
             if(!is_null($invoice)){
                 if(is_null($isApproved) || $isApproved==true){
-                    $this->paymentManager->capturePayment($invoice);
-                    $this->updateStats($invoice);
+                    $result = PaymentUtils::captureTransaction($invoice);
+                    if($result === true){
+                        $this->updateStats($invoice);
+                    } else {
+                        throw new \Exception($result);
+                    }
                 } else {
-                    $this->paymentManager->voidPayment($invoice);
+                    PaymentUtils::voidTransaction($invoice);
                 }
             } else {
                 $isApproved==true ? $this->updateStats(null) : null;

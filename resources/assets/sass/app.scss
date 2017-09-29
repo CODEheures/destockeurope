@@ -48,6 +48,37 @@ body.yellowbg.pushable {
   box-shadow: 3px 5px 12px 0 rgba(0, 0, 0, 0.35)
 }
 
+.ui.input.braintree {
+  height: 2.6em;
+  & .ui.label {
+    width: 3em;
+  }
+  & .form-card-control {
+    margin: 0;
+    max-width: calc(100% - 3em);
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
+    outline: 0;
+    -webkit-tap-highlight-color: rgba(255,255,255,0);
+    text-align: left;
+    line-height: 1.21428571em;
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    padding: .67857143em 1em;
+    background: #fff;
+    border: 1px solid rgba(34,36,38,.15);
+    color: rgba(0,0,0,.87);
+    border-radius: .28571429rem;
+    -webkit-transition: box-shadow .1s ease,border-color .1s ease;
+    transition: box-shadow .1s ease,border-color .1s ease;
+    box-shadow: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-color: transparent;
+  }
+}
+
+
 .portal {
   //margin-top: 20px;
   & div.ui.vertical.segment.header {
@@ -845,4 +876,17 @@ img.lightbox {
 @keyframes marqueelike {
   0%, 10%, 100% {margin-left:0;}
   99.99% {margin-left:-100%;}
+}
+
+//VueJs Transitions
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }

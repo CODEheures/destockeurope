@@ -4,9 +4,10 @@
                         'values' => [
                                 'noResultFoundHeader' => trans('strings.view_advert_list_no_result_header'),
                                 'noResultFoundMessage' => trans('strings.view_advert_list_no_result_message'),
-                                'listHeaderPaypalCapture' => trans('strings.view_manage_invoices_list_header_paypal_capture'),
-                                'listHeaderPaypalVoid' => trans('strings.view_manage_invoices_list_header_paypal_void'),
-                                'listHeaderPaypalRefund' => trans('strings.view_manage_invoices_list_header_paypal_refundId'),
+                                'listHeaderTransactionId' => trans('strings.view_manage_invoices_list_header_transaction_id'),
+                                'listHeaderCaptured' => trans('strings.view_manage_invoices_list_header_captured'),
+                                'listHeaderVoided' => trans('strings.view_manage_invoices_list_header_voided'),
+                                'listHeaderRefunded' => trans('strings.view_manage_invoices_list_header_refunded'),
                                 'listHeaderUsermail' => trans('strings.view_manage_invoices_list_header_usermail'),
                                 'listHeaderDate' => trans('strings.view_manage_invoices_list_header_date')
                         ]

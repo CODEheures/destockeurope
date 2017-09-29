@@ -12,7 +12,7 @@ class Invoice extends Model {
     use SoftDeletes;
 
     const PAYPAL = 0;
-    const CARD_STRIPE = 1;
+    const BRAINTREE = 1;
 
     const STATE_CREATION = 0;
     const STATE_RENEW = 1;
@@ -26,6 +26,10 @@ class Invoice extends Model {
         'invoice_number',
         'method',
         'authorization',
+        'transaction_id',
+        'voided',
+        'captured',
+        'refunded',
         'captureId',
         'voidId',
         'refundId',
@@ -38,7 +42,10 @@ class Invoice extends Model {
     ];
 
     protected $casts = [
-        'options' => 'array'
+        'options' => 'array',
+        'voided' => 'Boolean',
+        'captured' => 'Boolean',
+        'refunded' => 'Boolean'
     ];
 
     protected $appends = array('url', 'refundUrl', 'storagePath', 'filePath', 'costWithDecimalAndCurrency', 'isUserOwner');
@@ -64,7 +71,7 @@ class Invoice extends Model {
 
     public function getRefundUrlAttribute() {
         if (PrivilegesUtils::canRefund()
-            && is_null($this->refundId) && is_null($this->voidId) && !is_null($this->captureId)
+            && !($this->refunded) && !($this->voided) && ($this->captured)
         ) {
             return route('advert.refund', ['id' => $this->id]);
         } else {
