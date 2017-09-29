@@ -346,7 +346,7 @@ class AdvertController extends Controller
             return redirect()->back()->withErrors(trans('strings.middleware_complete_account'));
         }
         $invoice = Invoice::find($invoiceId);
-        if(!is_null($invoice) && PrivilegesUtils::canReviewInvoice($invoice) && !$invoice->authorization) {
+        if(!is_null($invoice) && PrivilegesUtils::canReviewInvoice($invoice) && !$invoice->transaction_id) {
             $invoice->tva_customer = $invoice->user->registrationNumber;
             $invoice->tva_requester = $invoice->user->requesterNumber;
             $invoice->vatIdentifier = $invoice->user->vatIdentifier;
