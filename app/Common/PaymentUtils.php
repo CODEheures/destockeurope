@@ -15,7 +15,7 @@ trait PaymentUtils
         if(env('BRAINTREE_SANDBOX')){
             return 'sandbox';
         } else {
-            return 'live';
+            return 'production';
         }
     }
 
