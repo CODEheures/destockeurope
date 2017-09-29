@@ -109,7 +109,7 @@
                 let that = this;
                 modalForm.modal({
                     closable: true,
-                    blurring: true,
+                    blurring: false,
                     onApprove: function () {
                         that.isLoaded = false;
                         axios.delete(url)

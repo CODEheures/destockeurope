@@ -17,6 +17,8 @@
 
             // create sidebar and attach to menu open
             $('.ui.sidebar')
+                .sidebar({dimPage:  false})
+                .sidebar('setting', 'transition', 'overlay')
                 .sidebar('attach events', '.toc.item')
             ;
 

@@ -225,7 +225,7 @@
                 this.dataHeight = $('.lightBox').width/this.properties.imageRatio;
                 $('#modal-'+this._uid).modal({
                     closable: true,
-                    blurring: true
+                    blurring: false
                 }).modal('show');
             },
             updateMargins () {

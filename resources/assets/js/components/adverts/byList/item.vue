@@ -310,7 +310,7 @@
                                             <div class="header">
                                                 {{ strings.validationOnProgressLabel }}
                                             </div>
-                                            <div v-on:click="destroyMe()" class="ui red button">
+                                            <div v-on:click="destroyMe()" :class="'ui red button destroy-'+_uid">
                                                 <i class="trash icon"></i>
                                                 {{ strings.deleteAdvertLabel }}
                                             </div>
@@ -381,7 +381,7 @@
                                     <div class="header">
                                         {{ strings.validationOnProgressLabel }}
                                     </div>
-                                    <div v-on:click="destroyMe()" class="ui red button">
+                                    <div v-on:click="destroyMe()" :class="'ui red button destroy-'+_uid">
                                         <i class="trash icon"></i>
                                         {{ strings.deleteAdvertLabel }}
                                     </div>
@@ -486,6 +486,7 @@
                     });
             },
             destroyMe: function () {
+                $(".ui.red.button.destroy-" + this._uid).addClass('loading disabled');
                 this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
             },
             getThumbUrl(advert) {

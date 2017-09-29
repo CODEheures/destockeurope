@@ -170,9 +170,8 @@
                 let that = this;
                 modalForm.modal({
                     closable: true,
-                    blurring: true,
+                    blurring: false,
                     onApprove: function () {
-                        DestockTools.paceRestart();
                         axios.delete(url)
                             .then(function (response) {
                                 that.gotoNextUrl(true);

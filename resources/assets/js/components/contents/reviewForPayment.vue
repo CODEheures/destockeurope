@@ -472,7 +472,7 @@
                             });
 
                             if (formValid) {
-                                $(submit).addClass('loading');
+                                $(submit).addClass('loading disabled');
                                 that.nonce = '';
                                 that.method = '';
 
@@ -480,7 +480,7 @@
                                 // Tokenize Hosted Fields
                                 hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
                                     if (tokenizeErr) {
-                                        $(submit).removeClass('loading');
+                                        $(submit).removeClass('loading disabled');
                                         console.error(tokenizeErr);
                                         alert(that.strings.errorInPaymentProcess);
                                         return;
@@ -494,7 +494,7 @@
                                         // Remove UI that you added in addFrame.
                                         modal3DSContainer.removeChild(my3DSContainer);
                                         $(modal3DSContainer).modal({closable: false}).modal('hide');
-                                        $(submit).removeClass('loading');
+                                        $(submit).removeClass('loading disabled');
                                     };
 
                                     let addFrame = function (err, iframe) {
@@ -515,7 +515,7 @@
                                         addFrame: addFrame,
                                         removeFrame: removeFrame
                                     }, function(err, verification) {
-                                        $(submit).removeClass('loading');
+                                        $(submit).removeClass('loading disabled');
                                         if (err) {
                                             that.nonce = '';
                                             that.method = '';
@@ -538,14 +538,14 @@
             sendNonce () {
                 let that = this;
                 if(this.nonce !== '' && this.nonce.length > 0) {
-                    $('#validate-order-btn').addClass('loading');
+                    $('#validate-order-btn').addClass('loading disabled');
                     axios.post(this.routePostNonce, {'nonce': this.nonce, 'deviceData': this.deviceData})
                         .then(function (response) {
                             DestockTools.goToUrl(response.data);
                             $('#validate-order-btn').removeClass('loading');
                         })
                         .catch(function (error) {
-                            $('#validate-order-btn').removeClass('loading');
+                            $('#validate-order-btn').removeClass('loading disabled');
                             alert(that.strings.errorInPaymentProcess);
                         });
 

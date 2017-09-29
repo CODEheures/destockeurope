@@ -423,7 +423,7 @@
                 let that = this;
                 modalForm.modal({
                     closable: true,
-                    blurring: true,
+                    blurring: false,
                     onApprove: function () {
                         axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
                             .then(function (response) {
@@ -444,7 +444,7 @@
                 let that = this;
                 modalForm.modal({
                     closable: true,
-                    blurring: true,
+                    blurring: false,
                     onApprove: function () {
                         axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
                             .then(function (response) {
@@ -503,7 +503,7 @@
                 let that = this;
                 modalForm.modal({
                     closable: true,
-                    blurring: true,
+                    blurring: false,
                     onApprove: function () {
                         that.isLoaded = false;
                         axios.delete(that.routeDeleteAdvert)
