@@ -536,6 +536,7 @@
                 });
             },
             sendNonce () {
+                let that = this;
                 if(this.nonce !== '' && this.nonce.length > 0) {
                     $('#validate-order-btn').addClass('loading');
                     axios.post(this.routePostNonce, {'nonce': this.nonce, 'deviceData': this.deviceData})

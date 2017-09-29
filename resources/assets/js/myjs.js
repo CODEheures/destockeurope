@@ -48,7 +48,7 @@
 
             $(window).on('click', function (event) {
                 let $anchor = $(event.target).closest("a");
-                if($anchor.length > 0 && $anchor.attr('href') !== undefined){
+                if($anchor.length > 0 && $anchor.attr('href') !== undefined && ($anchor.attr('target')===undefined || $anchor.attr('target')!=='_blank') ){
                     let parsedAnchor = Parser.parse($anchor.attr('href'), true);
                     parsedAnchor.search=undefined;
                     parsedAnchor.hash = '';
