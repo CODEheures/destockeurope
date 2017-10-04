@@ -445,13 +445,13 @@ class AdminController extends Controller
         $header = '
         <div class="pdfHeader">
         <div class="logo">
-            <a href="http://destockeurope.progress/home" class="navbar-logo ">
+            <a href="http://destockeurope.dev/home" class="navbar-logo ">
                 <img src="'. asset('/images/logopdf.svg') .'"/>
             </a>
         </div>
         
         <p class="navbar-menu">
-            <a href="http://destockeurope.progress/home">Facture n°1<br/>
+            <a href="http://destockeurope.dev/home">Facture n°1<br/>
                 <span class="created_at">
                         Emise le: mercredi 22 mars 2017
                     </span>

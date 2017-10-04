@@ -73,7 +73,7 @@ let destockTools = {
                 globalDiscount = (1 - totalPriceMargin/totalPriceByLotMargin)*100;
             }
 
-            margins.coefficientTotalIsOverMax = totalPriceMargin >= priceMargin*advert.totalQuantity;
+            margins.coefficientTotalIsOverMax = totalPriceMargin >= this.truncFloat(priceMargin*advert.totalQuantity, advert.priceSubUnit);
 
 
             margins.unitMargin = unitMargin.toFixed(advert.priceSubUnit);

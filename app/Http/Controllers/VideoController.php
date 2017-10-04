@@ -80,7 +80,7 @@ class VideoController extends Controller
                 ]],
                 'PATCH'
             );
-//            $this->vimeoManager->request($response['headers']['location'].'/privacy/domains/destockeurope.progress',[],'PUT');
+//            $this->vimeoManager->request($response['headers']['location'].'/privacy/domains/destockeurope.dev',[],'PUT');
         }
         return response($response['body'], $response['status'], $response['headers']);
     }
