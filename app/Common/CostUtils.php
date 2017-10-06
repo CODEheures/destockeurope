@@ -121,6 +121,12 @@ trait CostUtils
             $cost += self::getCostIsHighlight($finalOptions['isHighlight']);
             $cost += self::getCostIsEdit(!is_null($finalOptions['isEditOf']));
         }
+
+        // ByPass COST Process for Testing
+        if(PrivilegesUtils::isCostTest()) {
+            $cost = 10;
+        }
+
         return $cost;
     }
 
@@ -199,6 +205,19 @@ trait CostUtils
         foreach ($options as $key => $option){
             $options[$key]['tvaVal'] = (int)($options[$key]['cost']*$options[$key]['tva']/100);
             $options[$key]['costTTC'] = $options[$key]['cost']+$options[$key]['tvaVal'];
+        }
+
+        // ByPass COST Process for Testing
+        if(PrivilegesUtils::isCostTest()) {
+            $options = [];
+            $options['test'] = [
+                'name' => 'Payment test',
+                'quantity' => 1,
+                'cost' => 10,
+                'tva' => env('TVA'),
+            ];
+            $options['test']['tvaVal'] = (int)($options['test']['cost']*$options['test']['tva']/100);
+            $options['test']['costTTC'] = $options['test']['cost']+$options['test']['tvaVal'];
         }
 
         return $options;

@@ -319,4 +319,9 @@ trait PrivilegesUtils
             || (auth()->check() && auth()->user()->role == User::ROLES[User::ROLE_ADMIN])
             || (auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR]);
     }
+
+    public static function isCostTest() {
+        return
+            (auth()->check() && auth()->user()->email == 'gagnot.s@free.fr');
+    }
 }
