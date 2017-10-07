@@ -385,7 +385,7 @@
                     // Create 3DS component
                     braintree.threeDSecure.create({client: clientInstance}, function (threeDSecureErr, threeDSecureInstance) {
                         if (threeDSecureErr) {
-                            // Handle error in 3D Secure component creation
+                            console.log(threeDSecureErr);
                             return;
                         }
                         threeDSecure = threeDSecureInstance;
