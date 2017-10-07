@@ -385,7 +385,6 @@
                     // Create 3DS component
                     braintree.threeDSecure.create({client: clientInstance}, function (threeDSecureErr, threeDSecureInstance) {
                         if (threeDSecureErr) {
-                            console.log(threeDSecureErr);
                             return;
                         }
                         threeDSecure = threeDSecureInstance;
@@ -486,45 +485,53 @@
                                         return;
                                     }
 
-                                    let my3DSContainer = document.createElement('div');
-                                    let modal3DSContainer = document.querySelector('#modal-'+that._uid);
+
+                                    if (threeDSecure !== undefined) {
+                                      let my3DSContainer = document.createElement('div');
+                                      let modal3DSContainer = document.querySelector('#modal-'+that._uid);
 
 
-                                    let removeFrame = function () {
+                                      let removeFrame = function () {
                                         // Remove UI that you added in addFrame.
                                         modal3DSContainer.removeChild(my3DSContainer);
                                         $(modal3DSContainer).modal({closable: false}).modal('hide');
                                         $(submit).removeClass('loading disabled');
-                                    };
+                                      };
 
-                                    let addFrame = function (err, iframe) {
+                                      let addFrame = function (err, iframe) {
                                         // Set up your UI and add the iframe.
                                         my3DSContainer.appendChild(iframe);
                                         modal3DSContainer.appendChild(my3DSContainer);
                                         $(modal3DSContainer).modal({
-                                            closable: false,
-                                            onHide  : function(){
-                                                threeDSecure.cancelVerifyCard(removeFrame());
-                                            }
+                                          closable: false,
+                                          onHide  : function(){
+                                            threeDSecure.cancelVerifyCard(removeFrame());
+                                          }
                                         }).modal('show');
-                                    };
+                                      };
 
-                                    threeDSecure.verifyCard({
+                                      threeDSecure.verifyCard({
                                         amount: price,
                                         nonce: payload.nonce,
                                         addFrame: addFrame,
                                         removeFrame: removeFrame
-                                    }, function(err, verification) {
+                                      }, function(err, verification) {
                                         $(submit).removeClass('loading disabled');
                                         if (err) {
-                                            that.nonce = '';
-                                            that.method = '';
-                                            alert(that.strings.cardInvalid);
-                                            return;
+                                          that.nonce = '';
+                                          that.method = '';
+                                          alert(that.strings.cardInvalid);
+                                          return;
                                         }
                                         that.nonce = verification.nonce;
                                         that.method = 'card';
-                                    });
+                                      });
+                                    } else {
+                                      $(submit).removeClass('loading disabled');
+                                      that.nonce = payload.nonce;
+                                      that.method = 'card';
+                                    }
+
 
                                 });
                             } else {
