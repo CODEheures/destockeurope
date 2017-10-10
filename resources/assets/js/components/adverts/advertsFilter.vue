@@ -284,13 +284,10 @@
                                     value: elem.id
                                 });
                             });
-                            that.setHeader();
+                            that.$parent.$emit('breadCrumbItems', that.dataBreadcrumbItems);
                         })
                         .catch(function (error) {
-                            that.dataBreadcrumbItems.push({
-                                name: that.strings.loadErrorMessage,
-                                value:''
-                            });
+
                         });
                 }
             },

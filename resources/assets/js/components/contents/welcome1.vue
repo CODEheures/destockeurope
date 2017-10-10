@@ -231,6 +231,12 @@
             this.$on('unbookmarkSuccess', function () {
                 this.sendToast(this.strings.unbookmarkSuccess, 'success');
             });
+            this.$on('breadCrumbItems', function (breadcrumbsItems) {
+                if (breadcrumbsItems !== undefined && breadcrumbsItems !== null) {
+                    that.breadcrumbItems = breadcrumbsItems;
+                    that.setHeader();
+                }
+            })
         },
         methods: {
             sendToast: function(message,type) {
