@@ -12,7 +12,7 @@
     self.selector = selector;
     self.defaults = {
       debug: false,
-      on: 'mousedown',
+      on: ['mousedown', 'touchstart'],
 
       opacity: 0.4,
       color: "auto",
@@ -130,6 +130,8 @@
       }).addClass("ripple-animate");
     };
 
-    $(document).on(self.defaults.on, self.selector, Trigger);
+    self.defaults.on.forEach( function (eventName) {
+      $(document).on(eventName, self.selector, Trigger);
+    })
   };
 })(jQuery, document, Math);
