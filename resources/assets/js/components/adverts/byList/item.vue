@@ -2,7 +2,7 @@
     <div class="item advert">
         <template  v-if="!isPersonnalList">
             <a :href="advert.url">
-                <div class="ui grid">
+                <div class="ui grid ripple-me">
                     <div class="sixteen wide tablet only sixteen wide computer only column">
                         <div class="ui vertical middle aligned grid">
                             <div class="four wide tablet four wide computer column">

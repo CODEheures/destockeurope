@@ -9,6 +9,7 @@ require('./bootstrap');
 require('../semantic/dist/semantic');
 //require('./semantic');
 require('swiper');
+require('../ripple/ripple')
 require('./myjs');
 /**
  * Next, we will create a fresh Vue application instance and attach it to

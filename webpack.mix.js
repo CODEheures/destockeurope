@@ -22,6 +22,7 @@ mix//.js('resources/assets/js/sw.js', 'public')
         'resources/assets/css/ion.rangeSlider.css',
         'resources/assets/css/ion.rangeSlider.skinFlat.css',
         'resources/assets/css/swiper.css',
+        'resources/assets/ripple/ripple.css'
     ], 'public/css/vendor.css')
     .copy('resources/assets/pace/pace.min.js', 'public/js/pace.min.js')
     .copy('resources/assets/pace/pace-theme-corner-indicator.css', 'public/css/pace-theme.css')

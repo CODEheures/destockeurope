@@ -42,28 +42,30 @@
                 })
             ;
 
+          $.ripple('.ripple-me')
+
             //Add paceforcing for PACE JS forcing restart when window beforeunload
             //Improve loader for mobiles devices without browser indicators
-            let paceForcingDiv = document.createElement('div');
-            paceForcingDiv.id="paceforcing";
-            document.body.appendChild(paceForcingDiv);
-
-            $(window).on('click', function (event) {
-                let $anchor = $(event.target).closest("a");
-                if($anchor.length > 0 && $anchor.attr('href') !== undefined && ($anchor.attr('target')===undefined || $anchor.attr('target')!=='_blank') ){
-                    let parsedAnchor = Parser.parse($anchor.attr('href'), true);
-                    parsedAnchor.search=undefined;
-                    parsedAnchor.hash = '';
-
-                    let actualHref = Parser.parse(window.location.href, true);
-                    actualHref.search=undefined;
-                    actualHref.hash = '';
-
-                    if(Parser.format(parsedAnchor)!==Parser.format(actualHref)){
-                        DestockTools.paceRestart();
-                    }
-                }
-            })
+            // let paceForcingDiv = document.createElement('div');
+            // paceForcingDiv.id="paceforcing";
+            // document.body.appendChild(paceForcingDiv);
+            //
+            // $(window).on('click', function (event) {
+            //     let $anchor = $(event.target).closest("a");
+            //     if($anchor.length > 0 && $anchor.attr('href') !== undefined && ($anchor.attr('target')===undefined || $anchor.attr('target')!=='_blank') ){
+            //         let parsedAnchor = Parser.parse($anchor.attr('href'), true);
+            //         parsedAnchor.search=undefined;
+            //         parsedAnchor.hash = '';
+            //
+            //         let actualHref = Parser.parse(window.location.href, true);
+            //         actualHref.search=undefined;
+            //         actualHref.hash = '';
+            //
+            //         if(Parser.format(parsedAnchor)!==Parser.format(actualHref)){
+            //             DestockTools.paceRestart();
+            //         }
+            //     }
+            // })
 
         })
     ;

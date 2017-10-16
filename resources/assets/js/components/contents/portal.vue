@@ -35,7 +35,7 @@
                                 <div class="ui horizontal divider"><h2 class="ui blue disabled sub header" style="font-size: 0.75rem;">{{ strings.divider }}</h2></div>
                                 <div class="ui centered grid flags">
                                     <template v-for="country, key in dataCountries">
-                                        <h3 class="five wide mobile five wide tablet three wide computer center aligned column" style="margin-bottom: 0; margin-top: 0">
+                                        <h3 class="five wide mobile five wide tablet three wide computer center aligned column ripple-me" style="margin-bottom: 0; margin-top: 0">
                                             <a :title="strings.header + ' - ' +  country.name" :href="getNextUrlForCountry('forLocation', country.name)" :data-country="country.code" :data-country-name="country.name" >
                                             <svg v-if="key=='italy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" style="mix-blend-mode:multiply" :class="browser=='edge' ? 'shadow' : ''">
                                                 <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>

@@ -2,9 +2,6 @@
     paceOptions = {
         document: false,
         eventLag: false,
-        elements : {
-            selectors: ['#paceforcing']
-        },
         ajax: {
             ignoreURLs: [/^((?!destockeurope).)*$/]
         }
