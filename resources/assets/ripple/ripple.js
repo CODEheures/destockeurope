@@ -3,8 +3,6 @@
 
     var self = this;
 
-    self.touchstart = {x: 0, y: 0, t: 0};
-    self.touchend = {x: 0, y: 0, t: 0};
 
     var _log = self.log = function() {
       if(self.defaults.debug && console && console.log) {
@@ -134,25 +132,6 @@
     };
 
     $(document).on(self.defaults.on, self.selector, Trigger);
-
-    $(document).on('touchstart', self.selector, function (event) {
-      self.touchstart.x = event.changedTouches[0].pageX
-      self.touchstart.y = event.changedTouches[0].pageY
-      self.touchstart.t = event.timeStamp
-    })
-    $(document).on('touchend', self.selector, function (event) {
-      self.touchend.x = event.changedTouches[0].pageX
-      self.touchend.y = event.changedTouches[0].pageY
-      self.touchend.t = event.timeStamp
-
-      let deltaTime = self.touchend.t - self.touchstart.t
-      let deltaSpace = (self.touchend.x - self.touchstart.x)*(self.touchend.x - self.touchstart.x) + (self.touchend.y - self.touchstart.y)*(self.touchend.y - self.touchstart.y)
-      deltaSpace = Math.sqrt(deltaSpace)
-
-      if(deltaTime < 500 && deltaSpace < 80) {
-        Trigger ()
-      }
-    })
 
   };
 })(jQuery, document, Math);
