@@ -85,7 +85,7 @@
                             "bad": 20,
                             "limit": 78,
                             "full": 100,
-                            "bullet": that.loadInfos.count_load * 100
+                            "bullet": that.loadInfos.count_load
                         }],
                         "valueAxes": [{
                             "maximum": 100,
@@ -148,7 +148,7 @@
                             "bad": 20,
                             "limit": 78,
                             "full": 100,
-                            "bullet": that.loadInfos.bytes_load * 100
+                            "bullet": that.loadInfos.bytes_load
                         }],
                         "valueAxes": [{
                             "maximum": 100,
