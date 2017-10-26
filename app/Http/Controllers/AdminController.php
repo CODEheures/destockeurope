@@ -134,7 +134,7 @@ class AdminController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getStats(){
-        $date = Carbon::now()->subMonths(6);
+        $date = Carbon::now()->subMonths(2);
         $viewsByDay = Stats::viewsByDay($date)->get();
         $advertsByDay = Stats::advertsByDay($date)->get();
         $costsByDay = Stats::costsByDay($date)->get();
