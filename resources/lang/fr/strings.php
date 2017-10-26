@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'app_meta_description_portal' => 'Choisir un pays et voir les annonces de déstockage, fins de séries, arrivages, faillites, redressements et fins de stocks des profesionnels',
+    'app_meta_description_portal' => 'Choisir un pays et voir les annonces de déstockage, fins de séries, arrivages, faillites, redressements et fins de stocks des professionnels',
     'app_meta_description_home' => 'Chercher ou déposer une annonces de déstockage, fins de séries, arrivages, faillites, redressements et fins de stocks',
     'app_meta_description_advert' => 'Déstockage :category: :title à vendre au prix de :price',
     'app_meta_description_ads' => 'Faites votre publicité sur notre site d\'annonces de déstockage.',
