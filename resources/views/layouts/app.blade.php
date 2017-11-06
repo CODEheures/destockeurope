@@ -23,6 +23,7 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     @include('includes.destockShareVar.script')
     @include('includes.serviceWorker.registerWithFirebase')
+    @include('layouts.head.cookiesAndServices')
     @yield('headscripts')
 </head>
 <body class="yellowbg">
@@ -65,12 +66,6 @@
     <script src="{{ mix("js/vendor.js") }}"></script>
     <script src="{{ mix("js/app.js") }}"></script>
     @yield('scripts')
-    @if(env('APP_URL')=='https://destockeurope.com')
-        @include('plugins.googleAnalytic.tracking')
-    @endif
-    @if(env('APP_ADSENSE')=='true')
-        @include('plugins.googleAdsense.script')
-    @endif
     @include('includes.structuredDatas.logoLdScript')
     @include('includes.structuredDatas.socialsLdScript')
 </body>

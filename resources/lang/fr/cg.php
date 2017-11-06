@@ -863,7 +863,8 @@ return [
                 <li>Sous Firefox : en haut de la fenêtre du navigateur, cliquez sur le bouton Firefox, puis aller dans l\'onglet Options. Cliquer sur l\'onglet Vie privée. Paramétrez les Règles de conservation sur : utiliser les paramètres personnalisés pour l\'historique. Enfin décochez-la pour désactiver les cookies.</li>
                 <li>Sous Safari : Cliquez en haut à droite du navigateur sur le pictogramme de menu (symbolisé par un rouage). Sélectionnez Paramètres. Cliquez sur Afficher les paramètres avancés. Dans la section "Confidentialité", cliquez sur Paramètres de contenu. Dans la section "Cookies", vous pouvez bloquer les cookies.</li>
                 <li>Sous Chrome : Cliquez en haut à droite du navigateur sur le pictogramme de menu (symbolisé par trois lignes horizontales). Sélectionnez Paramètres. Cliquez sur Afficher les paramètres avancés. Dans la section "Confidentialité", cliquez sur préférences. Dans l\'onglet "Confidentialité", vous pouvez bloquer les cookies.</li>
-            </ul>',
+            </ul>
+            <p><a href="javascript:tarteaucitron.userInterface.openPanel();">Gestion des cookies</a></p>',
 
         'modification' => '
             <h2  class="ui dividing header">Article 9: Modification du service '. env('LEGAL_COMPAGNY_PSEUDONAME').'</h2>

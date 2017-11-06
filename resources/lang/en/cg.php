@@ -785,7 +785,8 @@ return [
                 <li>Under Firefox: At the top of the browser window, click the Firefox button, then go to the Options tab. Click on the Privacy tab. Set the Retention rules to: use the custom settings for the history. Finally uncheck it to disable cookies.</li>
                 <li>Under Safari: Click at the top right of the browser on the menu pictogram (symbolized by a cog). Select Settings. Click Show Advanced Settings. In the "Privacy" section, click Content Settings. In the "Cookies" section, you can block cookies.</li>
                 <li>Under Chrome: Click on the upper right of the browser on the menu pictogram (symbolized by three horizontal lines). Select Settings. Click Show Advanced Settings. In the "Privacy" section, click Preferences. In the "Privacy" tab, you can block cookies.</li>
-            </ul>',
+            </ul>
+            <p><a href="javascript:tarteaucitron.userInterface.openPanel();">Ccookies Mananger</a></p>',
 
         'modification' => '
             <h2  class="ui dividing header">Article 9: Modification of the service '. env('LEGAL_COMPAGNY_PSEUDONAME').'</h2>
