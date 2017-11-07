@@ -22,6 +22,7 @@
                 <div class="sixteen wide column">
                     <div class="ui segment">
                         <h1>{!! trans('join.title') !!}</h1>
+                        {!! trans('join.presentation') !!}
                     </div>
                 </div>
             </div>

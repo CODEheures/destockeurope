@@ -22,6 +22,7 @@
                 <div class="sixteen wide column">
                     <div class="ui segment">
                         <h1>{!! trans('who.title') !!}</h1>
+                        {!! trans('who.presentation') !!}
                     </div>
                 </div>
             </div>
