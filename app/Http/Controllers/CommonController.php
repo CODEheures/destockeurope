@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Anonymous;
+use App\Category;
 use App\Common\AdvertUtils;
 use App\Common\CostUtils;
 use App\Common\LocaleUtils;
@@ -151,13 +152,18 @@ class CommonController extends Controller
         if(!is_null($location)){
             $countries = LocaleUtils::getListCountries();
             foreach ($countries as $country){
-                if(in_array($location, $country)){
+                if(in_array(strtolower($location), $country)){
                     $countryCode = $country['code'];
                     $countryName = $country['name'];
                     $request->replace(array_merge($request->all(), ['country' => $countryCode]));
                     break;
                 }
             }
+        }
+
+        $categoryName = null;
+        if($request->filled('categoryId')) {
+            $categoryName = (Category::find($request->categoryId))->description[App::getLocale()];
         }
 
 
@@ -189,7 +195,7 @@ class CommonController extends Controller
 
         if(!$isSearchRequest){
             $advertsList['adverts'] = $advertsList['adverts']->toArray();
-            return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
+            return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'categoryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
         } else {
             return response()->json($advertsList);
         }
