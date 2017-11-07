@@ -588,7 +588,7 @@ class AdvertController extends Controller
                 $this->approveAdvert($key, $value['isApprove'], $value['lotMiniQuantity'], $value['priceCoefficient'], $value['priceCoefficientTotal'], $value['disapproveReason']);
             }
         } catch (\Exception $e) {
-            return response(trans('strings.view_advert_approve_error'), 500);
+            return response(trans('strings.view_advert_approve_error') . '(' . $e->getMessage() . ')', 409);
         }
         return response('ok',200);
     }
@@ -1050,7 +1050,7 @@ class AdvertController extends Controller
                     if($result === true){
                         $this->updateStats($invoice);
                     } else {
-                        throw new \Exception($result);
+                        throw new \Exception('payment capture fails');
                     }
                 } else {
                     PaymentUtils::voidTransaction($invoice);
@@ -1078,7 +1078,12 @@ class AdvertController extends Controller
 
         } catch (\Exception $e) {
             $this->notifyError($advert);
-            return $redirectOptions['withRedirect'] == true ? redirect(route('home'))->withErrors($redirectOptions['errorMessage']) : null;
+            if ($redirectOptions['withRedirect'] == true) {
+                return  redirect(route('home'))->withErrors($redirectOptions['errorMessage']);
+            } else {
+                throw new \Exception('autoprocess error: ' . $e->getMessage());
+            }
+
         }
     }
 

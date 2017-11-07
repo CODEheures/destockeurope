@@ -57,6 +57,14 @@ class GetConfig
         }
         config(['runtime.stopAnalytics' => false]);
 
+        //Runtime query
+        config(['runtime.query' => []]);
+        try {
+            config(['runtime.query' => $request->query()]);
+        } catch (\Exception $e) {
+
+        }
+
         return $next($request);
 
     }
