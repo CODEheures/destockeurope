@@ -5,7 +5,7 @@ return [
     'app_meta_description_home' => 'Grossistes, professionnels: cherchez ou déposez des annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
     'app_meta_description_home_country' => 'Grossistes, professionnels en :country: cherchez ou déposez des annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
     'app_meta_description_home_category' => 'Grossistes, professionnels en :category: cherchez ou déposez des annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
-    'app_meta_description_home_category_country' => 'Grossistes, professionnels en :category en :country : cherchez ou déposez es annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
+    'app_meta_description_home_category_country' => 'Grossistes, professionnels en :category en :country : cherchez ou déposez des annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
     'app_meta_description_advert' => 'Déstockage :category: :title à vendre au prix de :price',
     'app_meta_description_ads' => 'Faites votre publicité sur notre site d\'annonces de déstockage.',
     'app_meta_description_who' => 'Qui sommes nous?',
