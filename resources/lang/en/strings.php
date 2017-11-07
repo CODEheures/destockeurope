@@ -1,8 +1,11 @@
 <?php
 
 return [
-    'app_meta_description_portal' => 'Choose a country to see Web classifieds for destocking, end of series, arrivals, bankruptcies, adjustments and end of stocks',
-    'app_meta_description_home' => 'Find or place an ads of destocking, end of series, arrivals, bankruptcies, adjustments and ends of stocks',
+    'app_meta_description_portal' => 'WholeSalers and Pro: Choose a country to find and post Web classifieds for destocking, end of series, arrivals, bankruptcies, adjustments and end of stocks',
+    'app_meta_description_home' => 'WholeSalers and Pro: Find or place classfields of destocking, end of series, arrivals, bankruptcies, adjustments and ends of stocks',
+    'app_meta_description_home_country' => 'WholeSalers and Pro in :country: Find or place classfields of destocking, end of series, arrivals, bankruptcies, adjustments and ends of stocks.',
+    'app_meta_description_home_category' => 'WholeSalers and Pro for :category: Find or place classfields of destocking, end of series, arrivals, bankruptcies, adjustments and ends of stocks.',
+    'app_meta_description_home_category_country' => 'WholeSalers and Pro for :category in :country: Find or place classfields of destocking, end of series, arrivals, bankruptcies, adjustments and ends of stocks.',
     'app_meta_description_advert' => 'Destocking of :category: :title to sell for :price',
     'app_meta_description_ads' => 'Advertise on our site of destocking classifieds',
     'app_meta_description_who' => 'Who are whe?',
@@ -379,8 +382,10 @@ return [
     'view_portal_newsletter_unsubscribe_success' => 'Your unsubscription is save',
     'view_portal_newsletter_subscribe_error' => 'Ho no! your request fail \'-(',
 
-    'view_home_title_with_country' => 'Destocking classifieds and discontinued in :country',
-    'view_home_title_without_country' => 'Destocking classifieds and discontinued in Europe',
+    'view_home_title' => 'Destocking classifieds and discontinued in Europe',
+    'view_home_title_country' => 'Destocking classifieds and discontinued in :country',
+    'view_home_title_category' => 'Destocking classifieds and discontinued of :category',
+    'view_home_title_category_country' => 'Destocking classifieds and discontinued of :category in :country',
     'view_home_fake_advert_title' => 'Your Classified HERE on FRONT for :price',
     'view_home_header' => 'Classifieds for destocking',
 

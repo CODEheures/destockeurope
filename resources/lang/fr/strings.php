@@ -1,8 +1,11 @@
 <?php
 
 return [
-    'app_meta_description_portal' => 'Choisir un pays et voir les annonces de déstockage, fins de séries, arrivages, faillites, redressements et fins de stocks des professionnels',
-    'app_meta_description_home' => 'Chercher ou déposer une annonces de déstockage, fins de séries, arrivages, faillites, redressements et fins de stocks',
+    'app_meta_description_portal' => 'Grossistes, professionnels: Choisir un pays pour trouver et deposer des annonces de déstockage, vente en gros, fins de séries, arrivages, faillites, redressements et fins de stocks.',
+    'app_meta_description_home' => 'Grossistes, professionnels: cherchez ou déposez des annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
+    'app_meta_description_home_country' => 'Grossistes, professionnels en :country: cherchez ou déposez des annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
+    'app_meta_description_home_category' => 'Grossistes, professionnels en :category: cherchez ou déposez des annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
+    'app_meta_description_home_category_country' => 'Grossistes, professionnels en :category en :country : cherchez ou déposez es annonces de vente en gros, déstockage, fins de séries, arrivages, faillites, redressements et fins de stock.',
     'app_meta_description_advert' => 'Déstockage :category: :title à vendre au prix de :price',
     'app_meta_description_ads' => 'Faites votre publicité sur notre site d\'annonces de déstockage.',
     'app_meta_description_who' => 'Qui sommes nous?',
@@ -364,7 +367,7 @@ return [
     'view_manage_users_delete_success' => 'L\'utilisateur est bien supprimé.',
     'view_manage_invoices_list_role_button_label' => 'Rôle',
 
-    'view_portal_title' => 'Annonces de déstockage, arrivages, fin de séries en Europe',
+    'view_portal_title' => 'Annonces de déstockage, arrivages, fin de séries, vente en gros en Europe',
     'view_portal_list_header_1' => 'Annonces Fins de series',
     'view_portal_list_header_2' => 'Arrivages',
     'view_portal_list_header_3' => 'Déstockage',
@@ -380,8 +383,10 @@ return [
     'view_portal_newsletter_unsubscribe_success' => 'Votre désincription est enregistrée',
     'view_portal_newsletter_subscribe_error' => 'Ho non! Votre demande n\'a pas pu aboutir \'-(',
 
-    'view_home_title_with_country' => 'Annonces déstockage, fin de série et arrivages en :country',
-    'view_home_title_without_country' => 'Annonces arrivages déstockage et fin de stock en Europe',
+    'view_home_title' => 'Annonces arrivages déstockage et fin de stock grossiste en Europe',
+    'view_home_title_country' => 'Annonces déstockage, fin de série et arrivages en :country',
+    'view_home_title_category' => 'Annonces déstockage, fin de série et arrivages de :category',
+    'view_home_title_category_country' => 'Annonces déstockage, arrivages, vente en gros de :category en :country',
     'view_home_fake_advert_title' => 'Votre annonce ICI en UNE pour :price',
     'view_home_header' => 'Annonces de déstockage',
 

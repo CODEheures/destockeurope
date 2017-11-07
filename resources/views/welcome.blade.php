@@ -1,11 +1,27 @@
 @extends('layouts.app')
 
 @section('titlePagePlus')
-{{ isset($countryName) ? trans('strings.view_home_title_with_country', ['country' =>$countryName]) : trans('strings.view_home_title_without_country')  }}
+@if(isset($categoryName) && isset($countryName) && !is_null($categoryName) && !is_null($countryName))
+{{trans('strings.view_home_title_category_country', ['category' => $categoryName, 'country' =>$countryName]) }}
+@elseif(isset($categoryName) && !is_null($categoryName))
+{{trans('strings.view_home_title_category', ['category' => $categoryName]) }}
+@elseif(isset($countryName) && !is_null($countryName))
+{{trans('strings.view_home_title_country', ['country' =>$countryName]) }}
+@else
+{{ trans('strings.view_home_title') }}
+@endif
 @endsection
 
 @section('meta-description')
+@if(isset($categoryName) && isset($countryName) && !is_null($categoryName) && !is_null($countryName))
+{{trans('strings.app_meta_description_home_category_country', ['category' => $categoryName, 'country' =>$countryName]) }}
+@elseif(isset($categoryName) && !is_null($categoryName))
+{{trans('strings.app_meta_description_home_category', ['category' => $categoryName]) }}
+@elseif(isset($countryName) && !is_null($countryName))
+{{trans('strings.app_meta_description_home_country', ['country' =>$countryName]) }}
+@else
 {{ trans('strings.app_meta_description_home') }}
+@endif
 @endsection
 
 @section('content')
