@@ -28,9 +28,7 @@
             }
         },
         mounted() {
-            console.log('mounted ads');
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-            console.log('ads:',window.adsbygoogle);
+           (window.adsbygoogle = window.adsbygoogle || []).push({})
         }
     }
 </script>

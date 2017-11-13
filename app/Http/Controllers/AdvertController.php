@@ -804,7 +804,7 @@ class AdvertController extends Controller
      */
     public function validateOrder(Request $request, $invoiceId, $token) {
         $invoice = Invoice::find($invoiceId);
-        if($invoice && $invoice->user->id == auth()->user()->id && $token = md5($invoice->transaction_id)){
+        if($invoice && $invoice->user->id == auth()->user()->id && $token == md5($invoice->transaction_id)){
             return $this->setAdvertState($invoice, $request);
         }
 

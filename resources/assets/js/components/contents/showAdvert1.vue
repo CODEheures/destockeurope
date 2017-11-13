@@ -139,7 +139,7 @@
                     <div>
                         <div class="ui form">
                             <div class="field" v-if="!isUserOwner">
-                                <button class="ui basic teal icon fluid button"
+                                <button class="ui primary icon fluid button"
                                         v-on:click="openMessageBox">
                                     <i class="mail outline icon"></i>
                                     {{ strings.contactLabel }}
@@ -188,7 +188,7 @@
                 </div>
             </div>
             <div class="mobile only tablet only sixteen wide center aligned column" v-if="!isUserOwner">
-                <button class="ui basic teal icon fluid button"
+                <button class="ui primary icon fluid button"
                         v-on:click="openMessageBox">
                     <i class="mail outline icon"></i>
                     {{ strings.contactLabel }}
