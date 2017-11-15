@@ -13,6 +13,7 @@
                                 :all-item="allItem"
                                 :level="level+1"
                                 :max-level="parseInt(0)"
+                                @categoryChoice="$emit('categoryChoice', $event)"
                         ></recursive-categories-horizontal-menu>
                     </div>
                 </template>
@@ -24,16 +25,16 @@
                     <h4 class="ui header">{{ parentDescription }}</h4>
                     <div class="ui link list">
                         <template v-for="(category,index) in categories">
-                            <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)">{{ category['description'][properties.actualLocale] }}</a>
+                            <a class="item" :data-value="category.id" v-on:click="$emit('categoryChoice', category.id)">{{ category['description'][properties.actualLocale] }}</a>
                         </template>
                     </div>
                 </div>
             </div>
         </template>
         <template v-if="level>1">
-            <a class="item" :data-value="parentId" v-on:click="emitCategoryChoice(parentId)">{{ allItem }}</a>
+            <a class="item" :data-value="parentId" v-on:click="$emit('categoryChoice', parentId)">{{ allItem }}</a>
             <template v-for="(category,index) in categories">
-                <a class="item" :data-value="category.id" v-on:click="emitCategoryChoice(category.id)" v-if="category.children.length==0">{{ category['description'][properties.actualLocale] }}</a>
+                <a class="item" :data-value="category.id" v-on:click="$emit('categoryChoice', category.id)" v-if="category.children.length==0">{{ category['description'][properties.actualLocale] }}</a>
             </template>
         </template>
     </div>
@@ -50,25 +51,19 @@
             level: Number,
             maxLevel: Number
         },
-        data: () => {
-            return {
-                properties: {}
-            } ;
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
+            }
         },
         mounted () {
-            this.properties = this.$store.state.properties['global'];
             let that=this;
-            this.$on('categoryChoice', function (event) {
-                this.$parent.$emit('categoryChoice', {id: event.id});
-            });
+
             (this.categories).forEach(function (elem, index) {
                 $('#'+that._uid+'-'+index).dropdown();
             });
         },
         methods: {
-            emitCategoryChoice: function (value) {
-                this.$parent.$emit('categoryChoice', {id: value});
-            },
             numberToWord: function (num) {
                 var a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
                 return a[num];

@@ -11,6 +11,7 @@
                     :pictures="advert.pictures"
                     :main-picture="advert.mainPicture"
                     :video-id="advert.video_id"
+                    @openLightBox="openLightBox"
             ></swiper-gallerie>
         </div>
         <div class="sixteen wide column">
@@ -161,10 +162,16 @@
                 required: false
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['advert-by-id']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 isLoaded: false,
                 dataLightBoxUrl: '',
                 dataHeight: '',
@@ -189,12 +196,7 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['advert-by-id'];
-            this.properties = this.$store.state.properties['global'];
             let that = this;
-            this.$on('openLightBox', function (imgUrl) {
-                this.openLightBox(imgUrl);
-            });
             this.dataHeight = $('#modal-'+this._uid).width()/this.properties.imageRatio;
 
             if(!this.isStatic){

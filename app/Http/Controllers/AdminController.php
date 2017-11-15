@@ -119,8 +119,7 @@ class AdminController extends Controller
      * Return the view of invoice manager
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function invoiceManage(Request $request) {
-        $request->session()->flash('clear',true);
+    public function invoiceManage() {
         return view('invoice.manage');
     }
 
@@ -227,8 +226,7 @@ class AdminController extends Controller
      * Return the view of user manager
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function userManage(Request $request) {
-        $request->session()->flash('clear',true);
+    public function userManage() {
         return view('user.manage');
     }
 

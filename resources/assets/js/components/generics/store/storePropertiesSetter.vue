@@ -6,17 +6,8 @@
                 type: String
             }
         },
-        data: () => {
-            return {
-                dataProps: {}
-            };
-        },
-        mounted () {
-            this.dataProps = JSON.parse(this.properties);
-            this.$store.commit('setProperties', {'name': this.dataProps.key, 'properties': this.dataProps.values});
-        },
-        methods: {
-
+        created () {
+            this.$store.commit('setProperties', {'name': (JSON.parse(this.properties)).key, 'properties': (JSON.parse(this.properties)).values})
         }
     }
 </script>

@@ -3,7 +3,6 @@
 @section('content')
         @include('storeSetter.contents.personnal-list')
         <personnal-list
-                clear-storage="{{ session()->has('clear') ? true : false }}"
                 ads-frequency="{{ 0 }}"
                 can-get-delegations="{{ \App\Common\PrivilegesUtils::canGetDelegations() }}"
                 is-personnal-list="{{ true }}"

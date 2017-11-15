@@ -3,6 +3,7 @@
         <transition name="appear-right">
             <div id="toast" class="ui icon message" :class="type" v-if="visible">
                 <i class="info icon"></i>
+                <i class="close icon" @click.prevent.stop="visible = false"></i>
                 <div class="content">
                     <p>{{ message }}</p>
                 </div>
@@ -18,26 +19,20 @@
             'type',
             'sendMessage'
         ],
-        data: () => {
-            return {
-                visible: false,
-                timeOut: 4000
+        watch: {
+            sendMessage () {
+                this.visible = false;
+                this.setVisible();
             }
         },
-        mounted () {
-            let that = this;
-            this.$watch('sendMessage', function () {
-                that.visible = false;
-                that.setVisible();
-            })
+        data () {
+            return {
+                visible: false
+            }
         },
         methods: {
-            setVisible: function () {
+            setVisible () {
                 this.visible = true;
-                let that = this;
-                setTimeout(function () {
-                    that.visible = false;
-                },that.timeOut);
             }
         },
     }

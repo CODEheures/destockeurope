@@ -20,16 +20,16 @@
             'width',
             'adsOffsetY'
         ],
-        data: () => {
+        computed: {
+            dataIsActive () { return this.isActive === '1' }
+        },
+        data () {
             return {
-                dataIsActive: false,
                 datasrc: '/images/background.jpg',
                 datawidth: 1400
             }
         },
         mounted () {
-            let that = this;
-            this.dataIsActive = this.isActive == '1';
             this.setDatasrc();
             this.setDataWidth();
         },

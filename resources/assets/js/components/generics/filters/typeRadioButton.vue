@@ -34,7 +34,7 @@
                 required: false
             }
         },
-        data: () => {
+        data () {
             return {
                 listType: [],
                 isLoaded: false
@@ -48,7 +48,7 @@
             for(let index in this.listType){
                 $('#radio-'+index+'-'+that._uid).checkbox({
                     onChange: function () {
-                        that.$parent.$emit('typeChoice', {'type': this.value})
+                        that.$emit('typeChoice', this.value)
                     }
                 })
             }

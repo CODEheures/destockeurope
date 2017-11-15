@@ -34,16 +34,10 @@
             },
             left: Boolean,
         },
-        data: () => {
-            return {
-                properties: {}
-            } ;
-        },
-        mounted () {
-            this.properties = this.$store.state.properties['global'];
-        },
-        methods: {
-
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
+            }
         }
     }
 </script>

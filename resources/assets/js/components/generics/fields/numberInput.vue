@@ -34,9 +34,8 @@
                 default: null
             }
         },
-        data: () => {
+        data () {
             return {
-                strings: {},
                 dataValue: 0
             }
         },
@@ -87,8 +86,8 @@
                     this.dataValue = this.fixed(this.value);
                     this.$emit('input', Number(this.fixed(result.number)));
                 }
-                if(isOnBlur && this.emitOnBlur!==null){
-                    this.$parent.$emit(this.emitOnBlur, null);
+                if(isOnBlur){
+                    this.$emit('blur');
                 }
             },
             fixed: function (number) {

@@ -112,7 +112,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="ui fluid input">
-                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
+                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" @blur="setMaxLotMini"></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -188,6 +188,7 @@
                                                 :first-menu-name="strings.listTypeFirstMenuName"
                                                 :old-choice="'bid'"
                                                 :is-disabled="true"
+                                                @typeChoice="typeChoice"
                                         ></type-radio-button>
                                     </div>
                                     <div :id="'params_accordion'+_uid" class="ui accordion">
@@ -213,13 +214,15 @@
                                                         <categories-select-menu
                                                                 :old-choice="oldCategoryId"
                                                                 :with-all="false"
+                                                                @categoryChoice="categoryChoice"
                                                         ></categories-select-menu>
                                                     </div>
                                                     <div class="sixteen wide tablet only siwteen wide computer only column">
                                                         <categories-dropdown-menu
                                                                 :old-choice="oldCategoryId"
-                                                                :with-all="false">
-                                                        </categories-dropdown-menu>
+                                                                :with-all="false"
+                                                                @categoryChoice="categoryChoice"
+                                                        ></categories-dropdown-menu>
                                                     </div>
                                                 </div>
                                             </div>
@@ -251,6 +254,11 @@
                                                     :is-edit-advert="isEditAdvert"
                                                     :edit-advert-id="isEditAdvert ? dataAdvertEdit.id : 0"
                                                     nb-columns="two"
+                                                    @updatePictures="updatePictures"
+                                                    @updateMainPicture="mainPicture = $event"
+                                                    @sendToast="sendToast($event.message, $event.type)"
+                                                    @fileSizeError="sendToast(strings.filesizeErrorMessage, 'error')"
+                                                    @loadError="sendToast(strings.loadErrorMessage, 'error')"
                                             ></photo-uploader>
                                         </div>
                                         <div class="title">
@@ -270,6 +278,11 @@
                                                     :is-edit-advert="isEditAdvert"
                                                     :edit-advert-id="isEditAdvert ? dataAdvertEdit.id : 0"
                                                     :format="'auto'"
+                                                    @vimeoStateChange="vimeoStateChange"
+                                                    @videoUploadStatusChange="submitEnable = !$event"
+                                                    @fileSizeError="sendToast(strings.filesizeErrorMessage, 'error')"
+                                                    @sendToast="sendToast($event.message, $event.type)"
+                                                    @loadError="sendToast(strings.loadErrorMessage, 'error')"
                                             ></vimeo-uploader>
                                         </div>
                                         <div class="title">
@@ -306,8 +319,8 @@
                                                         :lng="lng"
                                                         :lat="lat"
                                                         :geoloc="geoloc"
-                                                        :square="true"
                                                         :resize="flagMapResize"
+                                                        @locationChange="latLngChange"
                                                 ></googleMap>
                                             </div>
                                         </div>
@@ -321,8 +334,9 @@
                                         <div class="content">
                                             <div class="field">
                                                 <currencies-dropdown-2
-                                                        :old-currency="oldCurrency">
-                                                </currencies-dropdown-2>
+                                                        :old-currency="oldCurrency"
+                                                        @currencyChoice="currencyChoice"
+                                                ></currencies-dropdown-2>
                                             </div>
                                         </div>
                                         <div v-show="!isNegociated" class="title">
@@ -335,7 +349,7 @@
                                         <div v-show="!isNegociated" class="content">
                                             <div class="field">
                                                 <label>{{ strings.formTotalQuantityLabel }}</label>
-                                               <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
+                                               <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" @blur="setMaxLotMini"></number-input>
                                             </div>
                                             <div class="field">
                                                 <label>{{ strings.formLotMiniQuantityLabel }}</label>
@@ -472,7 +486,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="field">
-                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
+                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" @blur="setMaxLotMini"></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -585,10 +599,60 @@
             'maxVideoFileSize',
             'sessionVideoId',
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['createOrEditAdvert']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        watch: {
+            categoryId () {
+                this.setBreadCrumbItems()
+            },
+            isUrgent () {
+                this.setSteps();
+                if(this.isUrgent){
+                    $('#isUrgent'+this._uid).checkbox('check');
+                } else {
+
+                    $('#isUrgent'+this._uid).checkbox('uncheck');
+                }
+            },
+            isNegociated () {
+                if(this.isNegociated){
+                    $('#isNegociated'+this._uid).checkbox('check');
+                } else {
+
+                    $('#isNegociated'+this._uid).checkbox('uncheck');
+                }
+            },
+            subunit () {
+                this.calcSubUnit = Math.pow(10,-(this.subunit));
+                this.setFakeAdvert();
+            },
+            currencySymbol () {
+                this.setFakeAdvert()
+            },
+            price () {
+                this.setFakeAdvert()
+            },
+            discountOnTotal () {
+                this.setFakeAdvert()
+            },
+            buyingPrice () {
+                this.setFakeAdvert()
+            },
+            totalQuantity () {
+                this.setFakeAdvert()
+            },
+            lotMiniQuantity () {
+                this.setFakeAdvert()
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 categoryId: '',
                 listType: [],
                 type: '',
@@ -660,8 +724,6 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['createOrEditAdvert'];
-            this.properties = this.$store.state.properties['global'];
             let that = this;
             this.steps = [
                 {
@@ -692,91 +754,6 @@
             ];
             this.setBreadCrumbItems(this.strings.defaultBreadcrumb);
             this.description = this.strings.formDescriptionLabel;
-
-            //Events
-            this.$on('typeChoice', function (event) {
-                this.typeChoice(event.type);
-            });
-            this.$on('categoryChoice', function (event) {
-                this.categoryChoice(event.id);
-            });
-            this.$on('currencyChoice', function (event) {
-                this.currencyChoice(event.cur, event.subunit, event.symbol);
-            });
-            this.$on('locationChange', function (event) {
-                this.latLngChange(event);
-            });
-            this.$on('updatePictures', function (pictures) {
-                this.pictures = pictures;
-                this.setSteps();
-            });
-            this.$on('vimeoStateChange', function (event) {
-                this.hasVideo = event.hasVideo;
-                this.videoId = event.videoId;
-                this.setSteps();
-            });
-            this.$on('updateMainPicture', function (event) {
-                this.mainPicture = event;
-            });
-            this.$on('loadError', function () {
-                this.sendToast(this.strings.loadErrorMessage, 'error');
-            });
-            this.$on('sendToast', function (event) {
-                this.sendToast(event.message, event.type);
-            });
-            this.$on('fileSizeError', function () {
-                this.sendToast(this.strings.filesizeErrorMessage, 'error');
-            });
-            this.$on('videoUploadStatusChange', function(onUpload){
-                this.submitEnable = !onUpload;
-            });
-            this.$on('setMaxLotMini', function () {
-                this.maxLotMini = this.totalQuantity;
-            });
-
-            //Watchers
-            this.$watch('categoryId', function () {
-                this.setBreadCrumbItems();
-            });
-            this.$watch('isUrgent', function () {
-                this.setSteps();
-                if(this.isUrgent){
-                    $('#isUrgent'+this._uid).checkbox('check');
-                } else {
-
-                    $('#isUrgent'+this._uid).checkbox('uncheck');
-                }
-            });
-            this.$watch('isNegociated', function () {
-                if(this.isNegociated){
-                    $('#isNegociated'+this._uid).checkbox('check');
-                } else {
-
-                    $('#isNegociated'+this._uid).checkbox('uncheck');
-                }
-            });
-            this.$watch('subunit', function () {
-                this.calcSubUnit = Math.pow(10,-(this.subunit));
-                this.setFakeAdvert();
-            });
-            this.$watch('currencySymbol', function () {
-                this.setFakeAdvert();
-            });
-            this.$watch('price', function () {
-                this.setFakeAdvert();
-            });
-            this.$watch('discountOnTotal', function () {
-                this.setFakeAdvert();
-            });
-            this.$watch('buyingPrice', function () {
-                this.setFakeAdvert();
-            });
-            this.$watch('totalQuantity', function () {
-                this.setFakeAdvert();
-            });
-            this.$watch('lotMiniQuantity', function () {
-                this.setFakeAdvert();
-            });
 
 
             //Inits
@@ -842,10 +819,10 @@
             categoryChoice: function (id) {
                 this.categoryId = parseInt(id);
             },
-            currencyChoice: function (currency, subunit, symbol) {
-                this.currency = currency;
-                this.currencySymbol = symbol;
-                this.subunit = subunit;
+            currencyChoice: function (event) {
+                this.currency = event.cur;
+                this.currencySymbol = event.symbol;
+                this.subunit = event.subunit;
             },
             sendToast: function(message,type) {
                 this.typeMessage = type;
@@ -994,6 +971,18 @@
                 sessionStorage.getItem('lng') != undefined ? this.lng =  sessionStorage.getItem('lng') : null;
                 sessionStorage.getItem('isUrgent') != undefined ? this.isUrgent =  sessionStorage.getItem('isUrgent') == 'true' : null;
                 sessionStorage.getItem('isNegociated') != undefined ? this.isNegociated =  sessionStorage.getItem('isNegociated') == 'true' : null;
+            },
+            setMaxLotMini () {
+                this.maxLotMini = this.totalQuantity;
+            },
+            updatePictures (pictures) {
+                this.pictures = pictures;
+                this.setSteps();
+            },
+            vimeoStateChange (event) {
+                this.hasVideo = event.hasVideo;
+                this.videoId = event.videoId;
+                this.setSteps();
             }
         }
     }

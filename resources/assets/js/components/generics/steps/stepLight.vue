@@ -16,19 +16,11 @@
                 type: Array
             }
         },
-        data: () => {
-            return {
-
-            }
-        },
         mounted () {
             $('#mini-steps'+this._uid).visibility({
                 type   : 'fixed',
                 offset : 70
             });
-        },
-        methods: {
-
         }
     }
 </script>

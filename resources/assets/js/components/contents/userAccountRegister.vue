@@ -79,26 +79,39 @@
             'oldEmailValue',
             'captchaKey',
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['user-account-register']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            dataInvoice () {
+                return JSON.parse(this.invoice)
+            },
+            dataCguText () {
+                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
+                return htmlObject[0].firstChild.data;
+            },
+            dataCguA () {
+                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
+                return htmlObject[0].firstElementChild.innerHTML;
+            },
+            dataCguHref () {
+                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
+                return htmlObject[0].firstElementChild.href;
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
-                dataCguText: '',
-                dataCguA: '',
-                dataCguHref: '',
                 isCguApprove: false,
                 isNewsLetterApprove: false,
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['user-account-register'];
-            this.properties = this.$store.state.properties['global'];
-            this.setDataCgu();
-        },
-        updated () {
             let that = this;
             $('#cguCheckBox').checkbox({
                 onChecked: function() {
@@ -122,12 +135,6 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
-            },
-            setDataCgu () {
-                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
-                this.dataCguText = htmlObject[0].firstChild.data;
-                this.dataCguA = htmlObject[0].firstElementChild.innerHTML;
-                this.dataCguHref = htmlObject[0].firstElementChild.href;
             }
         }
     }

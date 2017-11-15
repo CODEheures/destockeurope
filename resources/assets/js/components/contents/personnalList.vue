@@ -35,6 +35,8 @@
                 <div class="row filters">
                     <advert-simple-search-filter
                             :route-search="nextUrl"
+                            @clearSearchResults="clearSearchResults"
+                            @refreshResults="refreshResults"
                     ></advert-simple-search-filter>
                 </div>
             </div>
@@ -46,6 +48,11 @@
                             :ads-frequency="parseInt(adsFrequency)"
                             :can-get-delegations="canGetDelegations==true"
                             :is-personnal-list="isPersonnalList==true"
+                            @deleteAdvert="destroyMe($event.url)"
+                            @updateSuccess="sendToast(strings.updateSuccessMessage, 'success')"
+                            @loadError="sendToast(strings.loadErrorMessage, 'error')"
+                            @unbookmarkSuccess="unbookmarkSuccess"
+                            @sendToast="sendToast($event.message, $event.type)"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -54,6 +61,7 @@
                             :pages="paginate"
                             :route-get-list="''"
                             :fake-page-route="nextUrl"
+                            @changePage="changePage"
                         ></pagination>
                     </div>
                 </div>
@@ -76,7 +84,6 @@
             'routeBookmarkAdd',
             'routeBookmarkRemove',
             //vue vars
-            'clearStorage',
             'reloadAdvertOnUnbookmarkSuccess',
             'adsFrequency',
             'canGetDelegations',
@@ -85,79 +92,30 @@
             //vue strings
             'contentHeader',
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['personnal-list']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            paginate () {
+                let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list-item']['list']['adverts']);
+                delete paginate.data;
+                return paginate;
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
-                paginate: {},
                 nextUrl: '',
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['personnal-list'];
-            this.properties = this.$store.state.properties['global'];
             this.nextUrl = this.getHref();
-
-            let that = this;
-            if(this.clearStorage){
-                sessionStorage.clear();
-            }
-
-            //On load Error or Update success
-            this.$on('loadError', function () {
-                this.sendToast(this.strings.loadErrorMessage, 'error');
-            });
-            this.$on('updateSuccess', function () {
-                this.sendToast(this.strings.updateSuccessMessage, 'success');
-            });
-
-
-            //pagination
-            let paginate = this.$store.state.properties['adverts-by-list-item']['list']['adverts'];
-            delete paginate.data;
-            this.paginate = paginate;
-            this.$on('changePage', function (url) {
-                this.nextUrl = url;
-                this.gotoNextUrl();
-            });
-
-
-
-            //When Update Filter
-            this.$on('updateFilter', function (result) {
-                Object.keys(result).forEach(function (key) {
-                    that.nextUrl = that.getNextUrl(key, result[key]);
-                });
-                this.gotoNextUrl();
-            });
-
-            //When search query results valid
-            this.$on('refreshResults', function (query) {
-                if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
-                    that.nextUrl = that.getNextUrl('resultsFor', query);
-                    that.gotoNextUrl();
-                }
-            });
-            this.$on('clearSearchResults', function () {
-                this.nextUrl = this.getNextUrl('resultsFor', null);
-                this.gotoNextUrl();
-            });
-
-            //Bookmarks
-            this.$on('unbookmarkSuccess', function () {
-                this.nextUrl = this.getNextUrl('page', null);
-                this.gotoNextUrl(true);
-            });
-
-            this.$on('sendToast', function (event) {
-                this.sendToast(event.message, event.type);
-            });
-            this.$on('deleteAdvert', function (event) {
-                this.destroyMe(event.url);
-            })
+            sessionStorage.clear();
         },
         methods: {
             sendToast: function(message,type) {
@@ -196,6 +154,24 @@
                 if(this.nextUrl !== window.location.href || forceLoad===true){
                     DestockTools.goToUrl(this.nextUrl);
                 }
+            },
+            clearSearchResults () {
+                this.nextUrl = this.getNextUrl('resultsFor', null);
+                this.gotoNextUrl();
+            },
+            refreshResults (query) {
+                if(query !== undefined && query.length >= this.properties.filterMinLengthSearch){
+                    this.nextUrl = this.getNextUrl('resultsFor', query);
+                    this.gotoNextUrl();
+                }
+            },
+            changePage (url) {
+                this.nextUrl = url;
+                this.gotoNextUrl();
+            },
+            unbookmarkSuccess () {
+                this.nextUrl = this.getNextUrl('page', null);
+                this.gotoNextUrl(true);
             }
         }
     }

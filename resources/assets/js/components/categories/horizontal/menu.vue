@@ -1,12 +1,12 @@
 <template>
     <div class="horizontal-category-menu">
         <div class="ui blue inverted category menu">
-            <a class="browse item" v-on:click="emitCategoryChoice(0)">
+            <a class="browse item" v-on:click="$emit('categoryChoice', 0)">
             {{ strings.allItem }}
             </a>
             <template v-for="(category,index) in categories">
                 <a :id="'browse-'+index+'-'+_uid" class="browse item"
-                   v-on:click="emitCategoryChoice(category.id)">
+                   v-on:click="$emit('categoryChoice', category.id)">
                     {{ category['description'][properties.actualLocale] }}
                     <i class="dropdown icon"></i>
                 </a>
@@ -20,6 +20,7 @@
                     :all-item="strings.allItem"
                     :level="1"
                     :max-level="countLevel(category)"
+                    @categoryChoice="$emit('categoryChoice', $event)"
             ></recursive-categories-horizontal-menu>
         </div>
     </div>
@@ -31,22 +32,18 @@
         props: {
 
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {},
-                categories: []
-            } ;
+        computed: {
+            strings () {
+                return  this.$store.state.strings['categories-horizontal-menu']
+            },
+            properties () {
+                return  this.$store.state.properties['global']
+            },
+            categories () {
+                return  this.$store.state.properties['categories-horizontal-menu']['datas']
+            }
         },
         mounted () {
-            this.strings = this.$store.state.strings['categories-horizontal-menu'];
-            this.properties = this.$store.state.properties['global'];
-            this.categories = this.$store.state.properties['categories-horizontal-menu']['datas'];
-            this.$on('categoryChoice', function (event) {
-                this.$parent.$emit('categoryChoice', {id: event.id});
-            });
-        },
-        updated() {
             this.setPopup();
             let fixedMenu = $('.horizontal-category-menu');
             fixedMenu.visibility({
@@ -55,9 +52,6 @@
             });
         },
         methods: {
-            emitCategoryChoice: function(value){
-                this.$parent.$emit('categoryChoice', {id: value});
-            },
             setPopup () {
                 let that = this;
                 (this.categories).forEach(function (elem, index) {

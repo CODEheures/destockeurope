@@ -122,9 +122,23 @@
                 default: "three"
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['photo-uploader']
+            }
+        },
+        watch: {
+            pictures () {
+                this.setPicturesIndicators();
+                this.setMainPicture();
+                this.$emit('updatePictures', this.pictures);
+            },
+            mainPicture () {
+                this.$emit('updateMainPicture', this.mainPicture);
+            }
+        },
+        data () {
             return {
-                strings: {},
                 filePhotoToPost: new FormData(),
                 formPhotoFileInputName: 'addpicture',
                 helpUploadP: '',
@@ -141,18 +155,9 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['photo-uploader'];
             this.setPicturesIndicators();
             this.helpUpload();
             this.getListPosts();
-            this.$watch('pictures', function () {
-                this.setPicturesIndicators();
-                this.setMainPicture();
-                this.$parent.$emit('updatePictures', this.pictures);
-            });
-            this.$watch('mainPicture', function () {
-                this.$parent.$emit('updateMainPicture', this.mainPicture);
-            });
         },
         updated () {
             let that = this;
@@ -205,14 +210,14 @@
                             that.filePhotoToPost = new FormData();
                             event.target.value="";
                             if (error.response && error.response.status == 422) {
-                                let msg = error.response.data.addpicture[0];
-                                that.$parent.$emit('sendToast', {'message': msg, 'type':'error'});
+                                let msg = error.response.data.errors.addpicture[0];
+                                that.$emit('sendToast', {'message': msg, 'type':'error'});
                             } else if(error.response && error.response.status == 413) {
-                                that.$parent.$emit('fileSizeError');
+                                that.$emit('fileSizeError');
                             }  else if(error.response && error.response.status == 503) {
-                                that.$parent.$emit('sendToast', {'message': error.response.data, 'type':'error'});
+                                that.$emit('sendToast', {'message': error.response.data, 'type':'error'});
                             }else {
-                                that.$parent.$emit('loadError');
+                                that.$emit('loadError');
                             }
                         });
                 }
@@ -229,7 +234,7 @@
                         that.pictures = response.data;
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError');
+                        that.$emit('loadError');
                     });
             },
             delPhoto: function (event) {
@@ -240,7 +245,7 @@
                         that.pictures = response.data;
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError');
+                        that.$emit('loadError');
                     });
             },
             setPicturesIndicators () {

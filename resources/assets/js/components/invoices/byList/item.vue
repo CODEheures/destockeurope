@@ -50,15 +50,13 @@
         props: {
             invoice: Object,
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {}
-            };
-        },
-        mounted () {
-            this.strings = this.$store.state.strings['invoice-by-list-item'];
-            this.properties = this.$store.state.properties['global'];
+        computed: {
+            strings () {
+                return this.$store.state.strings['invoice-by-list-item']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
         },
         methods: {
             getMoment: function (dateTime) {
@@ -66,7 +64,7 @@
                 return moment(dateTime).format('L');
             },
             refundMe() {
-                this.$parent.$emit('refund', {'refundUrl': this.invoice.refundUrl, 'amount':this.invoice.costWithDecimalAndCurrency});
+                this.$emit('refund', {'refundUrl': this.invoice.refundUrl, 'amount':this.invoice.costWithDecimalAndCurrency});
             }
         }
     }

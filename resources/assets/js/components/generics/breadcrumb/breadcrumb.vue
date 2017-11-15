@@ -5,10 +5,10 @@
                 <div class="ui big breadcrumb">
                     <template v-for="(item, index) in items">
                         <template v-if="withAction">
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop="">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop="">{{ item.name }}</a>
                         </template>
                         <template v-else>
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop.prevent="">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop.prevent="">{{ item.name }}</a>
                         </template>
                         <template v-if="index!=items.length-1">
                             <i class="right angle icon divider"></i>
@@ -20,10 +20,10 @@
                 <div class="ui breadcrumb">
                     <template v-for="(item, index) in items">
                         <template v-if="withAction">
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop="">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop="">{{ item.name }}</a>
                         </template>
                         <template v-else>
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" v-on:click.stop.prevent="">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop.prevent="">{{ item.name }}</a>
                         </template>
                         <template v-if="index!=items.length-1">
                             <i class="right angle icon divider"></i>
@@ -45,13 +45,10 @@
                 default: false
             }
         },
-        data: () => {
-            return {
-                nextUrl: ""
+        computed: {
+            nextUrl () {
+                return this.$store.state.properties['global']['routeHome']
             }
-        },
-        mounted () {
-            this.nextUrl = this.$store.state.properties['global']['routeHome'];
         },
         methods: {
             getNextUrl(paramName, paramValue) {

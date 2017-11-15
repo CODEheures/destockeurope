@@ -42,11 +42,15 @@
                                 <div class="ui large text loader">Loading</div>
                             </div>
                             <adverts-by-list-item v-if="dataAdvert"
-                                    :route-bookmark-add="''"
-                                    :route-bookmark-remove="''"
-                                    :advert="dataAdvert"
-                                    :can-get-delegations="canGetDelegations==1"
-                                    :is-personnal-list="isPersonnalList==1"
+                                :route-bookmark-add="''"
+                                :route-bookmark-remove="''"
+                                :advert="dataAdvert"
+                                :can-get-delegations="canGetDelegations==1"
+                                :is-personnal-list="isPersonnalList==1"
+                                @deleteAdvert="destroyMe($event.url)"
+                                @updateSuccess="sendToast(strings.updateSuccessMessage, 'success')"
+                                @loadError="sendToast(strings.loadErrorMessage, 'error')"
+                                @sendToast="sendToast($event.message, $event.type)"
                             ></adverts-by-list-item>
                         </div>
                     </div>
@@ -68,35 +72,22 @@
             //vue strings
             'contentHeader',
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['manage-delegation']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
-                dataAdvert: null,
+                dataAdvert: JSON.parse(this.advert),
                 isLoaded: true,
             }
-        },
-        mounted () {
-            this.strings = this.$store.state.strings['manage-delegation'];
-            this.properties = this.$store.state.properties['global'];
-            this.dataAdvert = JSON.parse(this.advert);
-            //On load Error
-            this.$on('loadError', function () {
-                this.sendToast(this.strings.loadErrorMessage, 'error');
-            });
-            this.$on('updateSuccess', function () {
-                this.sendToast(this.strings.updateSuccessMessage, 'success');
-            });
-
-            this.$on('sendToast', function (event) {
-                this.sendToast(event.message, event.type);
-            });
-            this.$on('deleteAdvert', function (event) {
-                this.destroyMe(event.url);
-            })
         },
         methods: {
             sendToast: function(message,type) {

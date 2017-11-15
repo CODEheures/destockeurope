@@ -60,32 +60,33 @@
                default: false
             }
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {},
-                categories: [],
-                nextUrl: ""
-            } ;
+        watch: {
+            oldChoice () {
+                this.setOldChoice()
+            }
+        },
+        computed: {
+            strings () {
+                return this.$store.state.strings['categories-dropdown-menu']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            categories () {
+                return this.$store.state.properties['categories-dropdown-menu']['datas']
+            },
+            nextUrl () {
+                return this.$store.state.properties['global']['routeHome']
+            }
         },
         mounted () {
-            this.strings = this.$store.state.strings['categories-dropdown-menu'];
-            this.properties = this.$store.state.properties['global'];
-            this.categories = this.$store.state.properties['categories-dropdown-menu']['datas'];
-            this.nextUrl = this.$store.state.properties['global']['routeHome'];
-
             let that = this;
-            this.$watch('oldChoice', function () { that.setOldChoice() });
-        },
-        updated () {
-            let that = this;
-
             $('#'+this._uid).dropdown({
                 allowCategorySelection: that.allowCategorySelection,
                 onChange: function(value, text, $selectedItem) {
                     if(value != undefined && value != ''){
                         if(!that.withRedirectionOnClick){
-                            that.$parent.$emit('categoryChoice', {id: value});
+                            that.$emit('categoryChoice', value);
                         } else {
                             console.log([that.oldChoice, value]);
                             value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId',value) : null;

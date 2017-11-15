@@ -5,7 +5,7 @@
                 <div class="two fields">
                     <div class="field">
                         <label>{{ strings.totalQuantityLabel }}</label>
-                        <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
+                        <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" @blur="setMaxLotMini"></number-input>
                     </div>
                     <div class="field">
                         <label>{{ strings.lotMiniQuantityLabel }}</label>
@@ -25,7 +25,7 @@
             <div class="two fields">
                 <div class="field">
                     <label>{{ strings.totalQuantityLabel }}</label>
-                    <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" emitOnBlur="setMaxLotMini"></number-input>
+                    <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" @blur="setMaxLotMini"></number-input>
                 </div>
                 <div class="field">
                     <label>{{ strings.lotMiniQuantityLabel }}</label>
@@ -57,17 +57,17 @@
                 default: false
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['quantities-input-field']
+            }
+        },
+        data () {
             return {
-                strings: {},
                 maxLotMini: null
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['quantities-input-field'];
-            this.$on('setMaxLotMini', function () {
-                this.maxLotMini = this.advert.totalQuantity;
-            });
             this.maxLotMini = this.advert.totalQuantity;
         },
         methods: {
@@ -75,11 +75,14 @@
                 let that = this;
                 axios.patch(that.advert.updateQuantitiesUrl, {'totalQuantity': that.advert.totalQuantity, 'lotMiniQuantity': that.advert.lotMiniQuantity})
                     .then(function (response) {
-                        that.$parent.$emit('updateSuccess')
+                        that.$emit('updateSuccess')
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError')
+                        that.$emit('loadError')
                     });
+            },
+            setMaxLotMini () {
+                this.maxLotMini = this.advert.totalQuantity
             }
         }
     }

@@ -34,21 +34,24 @@
                 default:true
             }
         },
-        data: () => {
-            return {
-                isInitial: true,
-                properties: {}
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
             }
         },
-        mounted () {
-            this.properties = this.$store.state.properties['global'];
-            this.$watch('reload', function () {
-                if (this.isInitial) {
-                    this.isInitial = false;
-                } else {
-                    console.log('reload ads vertical160x600');
-                }
-            })
+        watch: {
+          reload () {
+              if (this.isInitial) {
+                  this.isInitial = false;
+              } else {
+                  console.log('reload ads vertical160x600');
+              }
+          }
+        },
+        data () {
+            return {
+                isInitial: true
+            }
         }
     }
 </script>

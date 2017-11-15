@@ -162,7 +162,7 @@ class CommonController extends Controller
         }
 
         $categoryName = null;
-        if($request->filled('categoryId')) {
+        if($request->filled('categoryId') && $request->categoryId != '0') {
             $categoryName = (Category::find($request->categoryId))->description[App::getLocale()];
         }
 

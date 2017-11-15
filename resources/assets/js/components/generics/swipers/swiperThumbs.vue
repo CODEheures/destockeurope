@@ -32,7 +32,15 @@
                 default: null
             }
         },
-        data: () => {
+        watch: {
+            mainPicture () {
+                this.updateDataPictures()
+            },
+            pictures () {
+                this.updateDataPictures()
+            }
+        },
+        data () {
             return {
                 dataPictures: []
             };
@@ -41,12 +49,6 @@
             if (!this.swiper && typeof global.window != 'undefined') {
                 this.swiper = new Swiper(this.$el, this.options)
             }
-            this.$watch('mainPicture', function () {
-                this.updateDataPictures();
-            });
-            this.$watch('pictures', function () {
-                this.updateDataPictures();
-            });
             this.updateDataPictures();
         },
         updated: function(){

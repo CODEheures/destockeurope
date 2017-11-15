@@ -80,9 +80,48 @@
                 required: false,
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['vimeo-uploader']
+            }
+        },
+        watch: {
+            videoId () {
+                let that = this
+                let hasVideo = this.videoId != undefined && this.videoId != null && this.videoId != '';
+                this.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': null});
+                if(hasVideo){
+                    let counter = 0;
+                    function timeout(seconds) {
+                        setTimeout(function () {
+                            counter++;
+                            axios.get(that.routeGetStatusVideo)
+                                .then(function (response) {
+                                    if(response.data.status=='available'){
+                                        setTimeout(function () {
+                                            that.videoReady = true;
+                                            that.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': that.videoId});
+                                        },2000)
+                                    } else {
+                                        timeout(10+(Math.random()*10));
+                                    }
+                                })
+                                .catch(function (error) {
+                                    if(counter<4){
+                                        timeout(10+(Math.random()*10));
+                                    }
+                                });
+                        }, seconds*1000);
+                    }
+                    timeout(0.01);
+                }
+            },
+            videoOnUpload () {
+                this.$emit('videoUploadStatusChange', this.videoOnUpload)
+            }
+        },
+        data () {
             return {
-                strings: {},
                 formVideoFileInputName: 'addvideo',
                 videoInputEventTarget: null,
                 videoBlob: undefined,
@@ -100,45 +139,11 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['vimeo-uploader'];
-            let that = this;
             if(this.format != undefined && this.format=="auto"){
                 this.iframeWidth= 'auto';
                 this.iframeHeight= 'auto';
             }
-            this.$watch('videoId', function () {
-                let hasVideo = this.videoId != undefined && this.videoId != null && this.videoId != '';
-                this.$parent.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': null});
-                if(hasVideo){
-                    let counter = 0;
-                    function timeout(seconds) {
-                        setTimeout(function () {
-                            counter++;
-                            axios.get(that.routeGetStatusVideo)
-                                .then(function (response) {
-                                    if(response.data.status=='available'){
-                                        setTimeout(function () {
-                                            that.videoReady = true;
-                                            that.$parent.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': that.videoId});
-                                        },2000)
-                                    } else {
-                                        timeout(10+(Math.random()*10));
-                                    }
-                                })
-                                .catch(function (error) {
-                                    if(counter<4){
-                                        timeout(10+(Math.random()*10));
-                                    }
-                                });
-                        }, seconds*1000);
-                    }
-                    timeout(0.01);
-                }
-            });
             this.videoId = this.sessionVideoId;
-            this.$watch('videoOnUpload', function () {
-                that.$parent.$emit('videoUploadStatusChange', that.videoOnUpload)
-            })
         },
         methods: {
             triggerClickInput: function () {
@@ -162,7 +167,7 @@
                     if (this.fileToUpload.size > this.maxVideoFileSize) {
                         this.videoInputEventTarget.value="";
                         this.videoBlob = undefined;
-                        this.$parent.$emit('fileSizeError');
+                        this.$emit('fileSizeError');
                     } else {
                         //get ticket to set routes post
                         this.getTicket();
@@ -180,9 +185,9 @@
                     .catch(function (error) {
                         that.resetUploadVideoState();
                         if(error.response && error.response.status == 503) {
-                            that.$parent.$emit('sendToast', {'message': error.response.data, 'type':'error'});
+                            that.$emit('sendToast', {'message': error.response.data, 'type':'error'});
                         } else {
-                            that.$parent.$emit('loadError');
+                            that.$emit('loadError');
                         }
                     });
             },
@@ -224,7 +229,7 @@
                                 },this.retry*1000)
                             } else {
                                 that.resetUploadVideoState();
-                                that.$parent.$emit('loadError');
+                                that.$emit('loadError');
                             }
                         } else {
                             that.closeTicket(routes.routeCloseTicket, routes.completeVideoUpload);
@@ -232,7 +237,7 @@
                     })
                     .catch(function (error) {
                         that.resetUploadVideoState();
-                        that.$parent.$emit('loadError');
+                        that.$emit('loadError');
                     });
             },
             progressPostVideo: function (routeGetProgress) {
@@ -273,7 +278,7 @@
                     })
                     .catch(function (error) {
                         that.onCloseTicket = false;
-                        that.$parent.$emit('loadError');
+                        that.$emit('loadError');
                     });
             },
             extractPerformUpload: function (range) {
@@ -293,7 +298,7 @@
                         that.videoReady = false;
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError');
+                        that.$emit('loadError');
                     });
             },
         }

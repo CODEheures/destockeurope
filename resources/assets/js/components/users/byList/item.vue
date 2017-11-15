@@ -40,19 +40,19 @@
         props: {
             user: Object,
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {}
-            };
+        computed: {
+            strings () {
+                return this.$store.state.strings['users-by-list-item']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
         },
         mounted () {
-            this.strings = this.$store.state.strings['users-by-list-item'];
-            this.properties = this.$store.state.properties['global'];
             let that = this;
             $('#dropdown-'+this._uid).dropdown({
                 onChange: function(value, text, $selectedItem) {
-                    that.$parent.$emit('changeRole', {'url': that.user.urlSetRole, 'role': value});
+                    that.$emit('changeRole', {'url': that.user.urlSetRole, 'role': value});
                 }
             });
         },
@@ -71,7 +71,7 @@
             },
             delMe(event) {
                 event.preventDefault();
-                this.$parent.$emit('deleteUser', {"route": this.user.urlDelete});
+                this.$emit('deleteUser', this.user.urlDelete);
             }
         }
     }

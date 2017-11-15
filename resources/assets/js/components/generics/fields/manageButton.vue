@@ -31,13 +31,12 @@
                 default: true
             }
         },
-        data: () => {
-            return {
-                strings: {},
+        computed: {
+            strings () {
+                return this.$store.state.strings['advert-manage-button']
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['advert-manage-button'];
             this.constructMe();
         },
         updated () {
@@ -54,7 +53,7 @@
                 });
             },
             destroyMe: function () {
-                this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
+                this.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
             },
             renewMe: function () {
                 DestockTools.goToUrl(this.advert.renewUrl);

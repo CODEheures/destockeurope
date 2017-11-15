@@ -1,10 +1,10 @@
 ;(function($, document, Math){
   $.ripple = function(selector, options) {
 
-    var self = this;
+    let self = this;
 
 
-    var _log = self.log = function() {
+    let _log = self.log = function() {
       if(self.defaults.debug && console && console.log) {
         console.log.apply(console, arguments);
       }
@@ -29,11 +29,15 @@
 
     self.defaults = $.extend({}, self.defaults, options);
 
-    var Trigger = function(e) {
+    let Trigger = function(e) {
 
-      var $this = $(this);
-      var $ripple;
-      var settings;
+      if ('stopRipple' in e.target.dataset) {
+        return
+      }
+
+      let $this = $(this);
+      let $ripple;
+      let settings;
 
       $this.addClass('has-ripple');
 
@@ -49,7 +53,7 @@
 
         // Set ripple size
         if (!$ripple.height() && !$ripple.width()) {
-          var size = Math.max($this.outerWidth(), $this.outerHeight());
+          let size = Math.max($this.outerWidth(), $this.outerHeight());
           $ripple.css({
             height: size,
             width: size
@@ -62,13 +66,13 @@
         if(settings.rate && typeof settings.rate == "function") {
 
           // rate = pixels per second
-          var rate = Math.round( $ripple.width() / settings.duration );
+          let rate = Math.round( $ripple.width() / settings.duration );
 
           // new amount of pixels per second
-          var filteredRate = settings.rate(rate);
+          let filteredRate = settings.rate(rate);
 
           // Determine the new duration for the animation
-          var newDuration = ( $ripple.width() / filteredRate);
+          let newDuration = ( $ripple.width() / filteredRate);
 
           // Set the new duration if it has not changed
           if(settings.duration.toFixed(2) !== newDuration.toFixed(2)) {
@@ -81,8 +85,8 @@
         }
 
         // Set the color and opacity
-        var color = (settings.color == "auto") ? $this.css('color') : settings.color;
-        var css = {
+        let color = (settings.color == "auto") ? $this.css('color') : settings.color;
+        let css = {
           animationDuration: (settings.duration).toString() + 's',
           animationTimingFunction: settings.easing,
           background: color,
@@ -105,8 +109,8 @@
 
 
       // Retrieve coordinates
-      var x = e.pageX - $this.offset().left - $ripple.width() / 2;
-      var y = e.pageY - $this.offset().top - $ripple.height() / 2;
+      let x = e.pageX - $this.offset().left - $ripple.width() / 2;
+      let y = e.pageY - $this.offset().top - $ripple.height() / 2;
 
       /**
        * We want to delete the ripple elements if we allow multiple so we dont sacrifice any page

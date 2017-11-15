@@ -8,11 +8,6 @@
                 <div class="text" >{{ strings.firstMenuName }}</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <!--<div class="ui left icon input">-->
-                        <!--<i class="search icon"></i>-->
-                        <!--<input type="text" :placeholder="strings.inputSearchLabel">-->
-                    <!--</div>-->
-                    <!--<div class="divider"></div>-->
                     <div class="scrolling menu">
                         <div v-for="(currency, key) in currencies.listCurrencies" class="item" :data-value="key">
                             <span class="text">{{ currency.code }} {{ currency.symbol }}</span>
@@ -32,23 +27,23 @@
                 type: String,
             }
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {},
-                currencies: []
-            };
+        computed: {
+            strings () {
+                return this.$store.state.strings['currencies-dropdown-2']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            currencies () {
+                return this.$store.state.properties['currencies-dropdown-menu-2']['datas']
+            }
+        },
+        watch: {
+            oldCurrency () {
+                this.setOldChoice()
+            }
         },
         mounted () {
-            this.strings = this.$store.state.strings['currencies-dropdown-2'];
-            this.properties = this.$store.state.properties['global'];
-            this.currencies = this.$store.state.properties['currencies-dropdown-menu-2']['datas'];
-
-            let that = this;
-
-            this.$watch('oldCurrency', function () { that.setOldChoice() });
-        },
-        updated () {
             let that = this;
             $('#'+this._uid)
                 .dropdown({
@@ -58,7 +53,7 @@
                         if(value != undefined && value != ''){
                             let subUnit = that.currencies.listCurrencies[value]['subunit'];
                             let symbol = that.currencies.listCurrencies[value]['symbol'];
-                            that.$parent.$emit('currencyChoice', {cur: value, subunit: subUnit, symbol: symbol});
+                            that.$emit('currencyChoice', {cur: value, subunit: subUnit, symbol: symbol});
                         }
                     }
                 });

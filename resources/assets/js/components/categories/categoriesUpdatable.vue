@@ -16,7 +16,7 @@
                                v-model="category['description'][locale]"
                                v-on:keyup.enter="updateCategory"
                                v-on:focus="focused={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
-                               v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
+                               v-on:blur="testChanged(focused, {'id': category.id, 'locale': locale, 'value': category['description'][locale]})"
                         />
                     </div>
                 </span>
@@ -25,6 +25,7 @@
                     <span>
                         <categories-list-move-to
                                 :category="category"
+                                @categoryChoice="$emit('categoryChoice', $event)"
                         ></categories-list-move-to>
                     </span>
                     <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
@@ -46,8 +47,16 @@
                 <categories-updatable
                         :categories="category.children"
                         :parent-id="category.id"
-                        :color-number="colorNumber+1">
-                </categories-updatable>
+                        :color-number="colorNumber+1"
+                        @categoryChoice="$emit('categoryChoice', $event)"
+                        @getCategories="$emit('getCategories', $event)"
+                        @addCategory="$emit('addCategory', $event)"
+                        @delCategory="$emit('delCategory', $event)"
+                        @updateCategory="$emit('updateCategory', $event)"
+                        @shiftDown="$emit('shiftDown', $event)"
+                        @shiftUp="$emit('shiftUp', $event)"
+                        @patchError="$emit('patchError', $event)"
+                ></categories-updatable>
             </div>
         </div>
         <div :class="'ui ' + colors[colorNumber%colors.length] + ' segment'">
@@ -85,61 +94,35 @@
                 default: 0
             }
         },
-        data: () => {
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            colors () {
+                return [
+                    'violet',
+                    'purple',
+                    'pink',
+                    'brown',
+                    'grey',
+                    'black',
+                    'red',
+                    'orange',
+                    'yellow',
+                    'olive',
+                    'green',
+                    'teal',
+                    'blue',
+                ]
+            }
+        },
+        data () {
             return {
-                properties: {},
                 isLoaded: false,
                 categoryName: {},
                 focused: {},
-                blured: {},
-                colors: [
-                        'violet',
-                        'purple',
-                        'pink',
-                        'brown',
-                        'grey',
-                        'black',
-                        'red',
-                        'orange',
-                        'yellow',
-                        'olive',
-                        'green',
-                        'teal',
-                        'blue',
-                ]
+                blured: {}
             };
-        },
-        mounted () {
-            this.properties = this.$store.state.properties['global'];
-            this.$on('categoryChoice', function (event) {
-                this.$parent.$emit('categoryChoice', event);
-            });
-            this.$on('getCategories', function (withLoadIndicator) {
-                this.$parent.$emit('getCategories', withLoadIndicator);
-            });
-            this.$on('addCategory', function (postValue) {
-                this.$parent.$emit('addCategory', postValue);
-            });
-            this.$on('delCategory', function (id) {
-                this.$parent.$emit('delCategory', id);
-            });
-            this.$on('updateCategory', function (postValue) {
-                this.$parent.$emit('updateCategory', postValue);
-            });
-            this.$on('shiftDown', function (event) {
-                this.$parent.$emit('shiftDown', event);
-            });
-            this.$on('shiftUp', function (event) {
-                this.$parent.$emit('shiftUp', event);
-            });
-            this.$on('patchError', function (message) {
-                this.$parent.$emit('patchError', message);
-            });
-            this.$watch('blured', function () {
-                if (this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
-                    this.updateCategory();
-                }
-            });
         },
         methods: {
             addCategory: function (event) {
@@ -157,14 +140,14 @@
                     if (!isEmpty) {
                         this.isLoaded = false;
                         this.categoryName = {};
-                        this.$parent.$emit('addCategory', postValue);
+                        this.$emit('addCategory', postValue);
                     }
                 }
 
             },
             delCategory: function (event) {
                 if (event.target.dataset.id != undefined && event.target.dataset.id > 0) {
-                    this.$parent.$emit('delCategory', event.target.dataset.id);
+                    this.$emit('delCategory', event.target.dataset.id);
                 }
             },
             updateCategory: function (event) {
@@ -182,17 +165,23 @@
                     this.focused.value = event.target.value;
                 }
                 if (postValue[key] != undefined && postValue[key] != '') {
-                    this.$parent.$emit('updateCategory', {postValue: postValue, key: key, id: id});
+                    this.$emit('updateCategory', {postValue: postValue, key: key, id: id});
                 } else {
-                    this.$parent.$emit('getCategories', false);
-                    this.$parent.$emit('patchError');
+                    this.$emit('getCategories', false);
+                    this.$emit('patchError');
                 }
             },
             shiftDown: function (event) {
-                this.$parent.$emit('shiftDown', event);
+                this.$emit('shiftDown', event);
             },
             shiftUp: function (event) {
-                this.$parent.$emit('shiftUp', event);
+                this.$emit('shiftUp', event);
+            },
+            testChanged ($in, $out) {
+                if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
+                    this.blured = {id: $out.id, locale: $out.locale, value: $out.value}
+                    this.updateCategory()
+                }
             }
         }
     }

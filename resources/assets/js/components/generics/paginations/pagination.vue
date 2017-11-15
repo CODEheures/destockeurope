@@ -34,18 +34,24 @@
                 default: null
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['pagination']
+            }
+        },
+        watch: {
+            pages () {
+                this.constructPages()
+            }
+        },
+        data () {
             return {
-                strings: {},
                 datapages: [],
                 url: ''
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['pagination'];
-            this.$watch('pages', function () {
-                this.constructPages();
-            })
+            this.constructPages()
         },
         methods: {
             urlForPageNumber(pageNumber) {
@@ -166,7 +172,7 @@
             },
             changePage (event) {
                 event.preventDefault();
-                this.$parent.$emit('changePage', event.target.href);
+                this.$emit('changePage', event.target.href);
             }
         }
     }

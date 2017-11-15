@@ -173,6 +173,7 @@
                                 <advert-manage-button
                                         :advert="dataAdvert"
                                         :with-see-action="false"
+                                        @deleteAdvert="destroyMe"
                                 ></advert-manage-button>
                             </div>
                             <div class="fb-share-button"
@@ -212,6 +213,7 @@
                 <advert-manage-button
                         :advert="dataAdvert"
                         :with-see-action="false"
+                        @deleteAdvert="destroyMe"
                 ></advert-manage-button>
             </div>
             <div class="sixteen wide right aligned column" v-if="!isUserOwner">
@@ -246,16 +248,42 @@
             'formPhoneMaxValid',
             'formCompagnyNameMaxValid',
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['showAdvert1']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            dataAdvert () {
+                return JSON.parse(this.advert)
+            },
+            dataOwnerUser () {
+                return this.dataAdvert.user
+            }
+
+        },
+        watch: {
+            dataUserName () {
+                this.testValidForm()
+            },
+            dataUserMail () {
+                this.testValidForm()
+                this.testValidReportForm()
+            },
+            dataMessage () {
+                this.testValidForm()
+            },
+            dataReportMessage () {
+                this.testValidReportForm()
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 typeMessage : '',
                 message : '',
                 sendMessage: false,
                 breadcrumbItems: [],
-                dataAdvert: {},
-                dataOwnerUser: {},
                 dataUserName: '',
                 dataUserMail: '',
                 dataUserPhone: '',
@@ -270,10 +298,6 @@
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['showAdvert1'];
-            this.properties = this.$store.state.properties['global'];
-            this.dataAdvert= JSON.parse(this.advert);
-            this.dataOwnerUser = this.dataAdvert.user;
             this.dataUserMail = this.userMail;
             this.dataUserName = this.userName;
             this.dataUserPhone = this.userPhone;
@@ -282,10 +306,6 @@
             //BreadCrumbs
             this.setBreadCrumbItems();
 
-            //On load Error
-            this.$on('loadError', function () {
-                this.sendToast(this.strings.loadErrorMessage, 'error');
-            });
             let that = this;
             let messageForm = $('#form-'+this._uid);
             messageForm.form({
@@ -374,22 +394,6 @@
                 on     : 'change'
             })
             ;
-            this.$watch('dataUserName', function () {
-                this.testValidForm();
-            });
-            this.$watch('dataUserMail', function () {
-                this.testValidForm();
-                this.testValidReportForm();
-            });
-            this.$watch('dataMessage', function () {
-                this.testValidForm();
-            });
-            this.$watch('dataReportMessage', function () {
-                this.testValidReportForm();
-            });
-            this.$on('deleteAdvert', function (event) {
-                this.destroyMe();
-            })
         },
         methods: {
             sendToast: function(message,type) {
@@ -400,12 +404,7 @@
             setBreadCrumbItems: function () {
                 let that = this;
                 let breadcrumb = this.dataAdvert.breadCrumb;
-//                let lastBread = {
-//                    description: [],
-//                    id: 0
-//                };
-//                lastBread.description[this.properties.actualLocale] = this.dataAdvert.title;
-//                breadcrumb.push(lastBread);
+
                 this.breadcrumbItems = [];
                 this.breadcrumbItems.push({
                     name: this.strings.allLabel,

@@ -24,13 +24,10 @@
                 default: '#'
             }
         },
-        data: () => {
-            return {
-                properties: {}
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
             }
-        },
-        mounted () {
-            this.properties = this.$store.state.properties['global'];
         }
     }
 </script>

@@ -30,14 +30,14 @@
                             <input type="text" name="name" :placeholder="strings.nameLabel" v-model:value="dataUserName"
                                    v-on:keyup.enter="updateByEnter"
                                    v-on:focus="focused={'input': 'name', 'value': dataUserName}"
-                                   v-on:blur="blured={'input': 'name', 'value': dataUserName}">
+                                   v-on:blur="testChanged(focused, {'input': 'name', 'value': dataUserName})">
                         </div>
                         <div class="field">
                             <label>{{ strings.phoneLabel }}</label>
                             <input type="text" name="phone" :placeholder="strings.phoneLabel" v-model:value="dataUserPhone" :maxlength="formPhoneMaxValid"
                                    v-on:keyup.enter="updateByEnter"
                                    v-on:focus="focused={'input': 'phone', 'value': dataUserPhone}"
-                                   v-on:blur="blured={'input': 'phone', 'value': dataUserPhone}">
+                                   v-on:blur="testChanged(focused, {'input': 'phone', 'value': dataUserPhone})">
                         </div>
                         <div class="field">
                             <div class="sixteen wide disabled field">
@@ -61,13 +61,16 @@
                                 <h5>{{ strings.localesFirstMenuName }}</h5>
                                 <locales-dropdown-2
                                         :old-locale="''"
+                                        @localeChoice="localeChoice"
+                                        @loadError="sendToast(strings.loadErrorMessage, 'error')"
                                 ></locales-dropdown-2>
                             </div>
                             <div class="field">
                                 <h5>{{ strings.currenciesFirstMenuName }}</h5>
                                 <currencies-dropdown-2
-                                        :old-currency="''">
-                                </currencies-dropdown-2>
+                                        :old-currency="''"
+                                        @currencyChoice="currencyChoice($event.cur)"
+                                ></currencies-dropdown-2>
                             </div>
                         </div>
                     </div>
@@ -84,7 +87,7 @@
                                 <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="strings.compagnyNumberLabel" v-model:value="dataRegistrationNumber"
                                        v-on:keyup.enter="updateByEnter"
                                        v-on:focus="focused={'input': 'registration-number', 'value': dataRegistrationNumber}"
-                                       v-on:blur="blured={'input': 'registration-number', 'value': dataRegistrationNumber}"
+                                       v-on:blur="testChanged(focused, {'input': 'registration-number', 'value': dataRegistrationNumber})"
                                        :title="!hasValidVat ? strings.formVatWarningLabel:''">
                                 <i :class="hasValidVat ? 'green checkmark icon': 'yellow warning sign icon'"></i>
                             </div>
@@ -98,7 +101,7 @@
                                 <input type="text" name="compagny-name" :maxlength="formCompagnyNameMaxValid" :placeholder="strings.compagnyNameLabel" v-model:value="dataCompagnyName"
                                        v-on:keyup.enter="updateByEnter"
                                        v-on:focus="focused={'input': 'compagny-name', 'value': dataCompagnyName}"
-                                       v-on:blur="blured={'input': 'compagny-name', 'value': dataCompagnyName}">
+                                       v-on:blur="testChanged(focused, {'input': 'compagny-name', 'value': dataCompagnyName})">
                                 <i class="icon"></i>
                             </div>
                             <transition name="p-fade">
@@ -116,6 +119,7 @@
                             :lng="lng"
                             :lat="lat"
                             :geoloc="geoloc"
+                            @locationChange="latLngChange"
                     ></googleMap>
                 </div>
                 <div class="field" v-if="advertAccountVerifiedStep">
@@ -161,36 +165,41 @@
             'formCompagnyNameMaxValid',
             'formRegistrationNumberMaxValid',
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['user-account']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 isLoaded: false,
                 sendMessage: false,
                 typeMessage: '',
                 message:'',
-                currenciesDropDownUpdate: false,
                 lat: '',
                 lng: '',
                 geoloc: '',
                 dataFirstGeoloc: false,
-                dataUserName: '',
-                dataUserPhone: '',
-                dataCompagnyName: '',
-                dataRegistrationNumber: '',
-                dataVatIdentifier: '',
+                firstCurrencyChoice: true,
+                firstLocaleChoice: true,
+                dataUserName: this.userName,
+                dataUserPhone: this.userPhone,
+                dataCompagnyName: this.compagnyName,
+                dataRegistrationNumber: this.registrationNumber,
+                dataVatIdentifier: this.vatIdentifier,
                 focused: {},
                 blured: {},
                 steps: [],
                 updateInProgress: 0,
                 updateFails: false,
                 vatOnCheckProgress: false,
-                hasValidVat: false,
+                hasValidVat: this.vatIdentifier !== '',
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['user-account'];
-            this.properties = this.$store.state.properties['global'];
             this.steps = [
                 {
                     isActive : false,
@@ -218,42 +227,19 @@
                     icon: 'payment'
                 }
             ];
-            this.$on('currencyChoice', function (event) {
-                if(event.initial == undefined || event.initial!=true){
-                    this.currencyChoice(event.cur);
-                }
-            });
-            this.$on('localeChoice', function (event) {
-                if(event.initial == undefined || event.initial!=true){
-                    this.localeChoice(event.locale);
-                }
-            });
-            this.$on('locationChange', function (event) {
-                this.latLngChange(event);
-            });
-            this.$on('loadError', function () {
-                this.sendToast(this.strings.loadErrorMessage, 'error');
-            });
             this.setSteps();
-            this.dataUserName = this.userName;
-            this.dataUserPhone = this.userPhone;
-            this.dataCompagnyName = this.compagnyName;
-            this.dataRegistrationNumber = this.registrationNumber;
-            this.dataVatIdentifier = this.vatIdentifier;
-            this.hasValidVat = this.vatIdentifier != '';
             sessionStorage.setItem('lat', this.latitude);
             sessionStorage.setItem('lng', this.longitude);
             sessionStorage.setItem('geoloc', this.geoloc);
-            this.firstGeoloc == '1' ? this.dataFirstGeoloc = true :  null;
-            this.$watch('blured', function () {
-                if (this.blured.input == this.focused.input && this.blured.value != this.focused.value) {
-                    this.updateAccount(this.blured.input, this.blured.value);
-                }
-            });
+            this.firstGeoloc === '1' ? this.dataFirstGeoloc = true :  null;
         },
         methods: {
             currencyChoice: function (cur) {
                 let that = this;
+                if (this.firstCurrencyChoice) {
+                    this.firstCurrencyChoice = false
+                    return
+                }
                 axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
                     .then(function (response) {
                         that.sendToast(that.strings.accountPatchSuccess, 'success');
@@ -268,10 +254,13 @@
             },
             localeChoice: function (locale) {
                 let that = this;
+                if (this.firstLocaleChoice) {
+                    this.firstLocaleChoice = false
+                    return
+                }
                 axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
                     .then(function (response) {
                         that.sendToast(that.strings.accountPatchSuccess, 'success');
-                        that.currenciesDropDownUpdate = !that.currenciesDropDownUpdate;
                     })
                     .catch(function (error) {
                         if(error.response && error.response.status == 409) {
@@ -399,6 +388,11 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
+            },
+            testChanged ($in, $out) {
+                if ($in.input === $out.input && $in.value !== $out.value) {
+                    this.updateAccount($out.input, $out.value);
+                }
             }
         }
     }

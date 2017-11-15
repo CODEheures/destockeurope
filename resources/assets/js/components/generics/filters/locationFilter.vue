@@ -27,14 +27,17 @@
                 required: false
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['location-filter']
+            }
+        },
+        data () {
             return {
-                strings: {},
                 wantSearch: true
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['location-filter'];
             this.updateSearch();
         },
         methods: {
@@ -53,7 +56,7 @@
                 });
                 event['forLocation']=$('#filter_location').val();
                 if(!this.wantSearch){
-                    this.$parent.$emit('locationUpdate', event);
+                    this.$emit('locationUpdate', event);
                 }
             },
             parseAddressComponent (addressComponents) {
@@ -66,7 +69,7 @@
             resetSearch(withEmit) {
                 $('#filter_location').val('');
                 this.wantSearch = true;
-                withEmit ? this.$parent.$emit('clearLocationResults') : null;
+                withEmit ? this.$emit('clearLocationResults') : null;
             },
             updateSearch() {
                 let previousVal = DestockTools.findInUrl('forLocation');

@@ -22,19 +22,11 @@
                 type: Array
             }
         },
-        data: () => {
-            return {
-
-            }
-        },
         mounted () {
             $('.ui.steps').visibility({
                 type   : 'fixed',
                 offset : 70
             });
-        },
-        methods: {
-
         }
     }
 </script>

@@ -149,10 +149,16 @@
             //vue vars
             'advertNbFreePicture',
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['approve-advert-form']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 advertsList: [],
                 isLoaded: false,
                 action: false,
@@ -163,8 +169,6 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['approve-advert-form'];
-            this.properties = this.$store.state.properties['global'];
             this.getAdvertsList();
         },
         updated () {

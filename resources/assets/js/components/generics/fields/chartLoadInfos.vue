@@ -48,20 +48,17 @@
                 type: Object
             }
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {},
+        computed: {
+            strings () {
+                return this.$store.state.strings['chart-load-infos']
+            },
+            properties () {
+                return this.$store.state.properties['global']
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['chart-load-infos'];
-            this.properties = this.$store.state.properties['global'];
             this.chartCountLoad();
             this.chartBytesLoad();
-        },
-        updated() {
-
         },
         methods: {
             chartCountLoad () {

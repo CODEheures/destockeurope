@@ -56,7 +56,7 @@
                                                v-model="category['description'][locale]"
                                                v-on:keyup.enter="updateCategory"
                                                v-on:focus="focused={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"
-                                               v-on:blur="blured={'id': category.id, 'locale': locale, 'value': category['description'][locale]}"/>
+                                               v-on:blur="testChanged(focused, {'id': category.id, 'locale': locale, 'value': category['description'][locale]})"/>
                                     </div>
                                 </span>
                             </div>
@@ -64,6 +64,7 @@
                                 <span>
                                     <categories-list-move-to
                                             :category="category"
+                                            @categoryChoice="appendToCategory($event.id, $event.parentId)"
                                     ></categories-list-move-to>
                                 </span>
                                 <span class="drag-category" :data-value="category.id" v-if="categories.length>1">
@@ -84,6 +85,14 @@
                             <categories-updatable
                                     :categories="category.children"
                                     :parent-id="category.id"
+                                    @categoryChoice="appendToCategory($event.id, $event.parentId)"
+                                    @getCategories="getCategories"
+                                    @addCategory="addCategory(null, $event)"
+                                    @delCategory="delCategory(null, $event)"
+                                    @updateCategory="updateCategory(null, $event)"
+                                    @shiftDown="shiftCategory($event, 'down')"
+                                    @shiftUp="shiftCategory($event, 'up')"
+                                    @patchError="patchError($event)"
                             ></categories-updatable>
                         </div>
                     </div>
@@ -119,10 +128,16 @@
             routeShiftDownCategory: String,
             routeAppendToCategory: String,
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['manage-categories']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 isLoaded: false,
                 sendMessage: false,
                 typeMessage: '',
@@ -134,42 +149,7 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['manage-categories'];
-            this.properties = this.$store.state.properties['global'];
             this.getCategories();
-            this.$on('categoryChoice', function (event) {
-                this.appendToCategory(event.id, event.parentId);
-            });
-            this.$on('getCategories', function (withLoadIndicator) {
-                this.getCategories(withLoadIndicator);
-            });
-            this.$on('addCategory', function (postValue) {
-                this.addCategory(null, postValue);
-            });
-            this.$on('delCategory', function (id) {
-                this.delCategory(null, id);
-            });
-            this.$on('updateCategory', function (postValue) {
-                this.updateCategory(null, postValue);
-            });
-            this.$on('shiftDown', function (event) {
-                this.shiftCategory(event, 'down');
-            });
-            this.$on('shiftUp', function (event) {
-                this.shiftCategory(event, 'up');
-            });
-            this.$on('patchError', function ($message) {
-                if ($message != undefined && $message != '') {
-                    this.sendToast($message, 'error');
-                } else {
-                    this.sendToast(this.strings.patchErrorMessage, 'error');
-                }
-            });
-            this.$watch('blured', function () {
-                if (this.blured.id == this.focused.id && this.blured.locale == this.focused.locale && this.blured.value != this.focused.value) {
-                    this.updateCategory();
-                }
-            });
         },
         updated () {
             for(let index in this.categories){
@@ -371,6 +351,7 @@
 
             },
             appendToCategory(childId, parentId){
+                console.log('append')
                 let that = this;
                 axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
                     .then(function (response) {
@@ -384,6 +365,19 @@
                             that.sendToast(this.strings.patchErrorMessage, 'error');
                         }
                     });
+            },
+            patchError (message) {
+                if (message != undefined && message != '') {
+                    this.sendToast(message, 'error');
+                } else {
+                    this.sendToast(this.strings.patchErrorMessage, 'error');
+                }
+            },
+            testChanged ($in, $out) {
+                if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
+                    this.blured = {id: $out.id, locale: $out.locale, value: $out.value}
+                    this.updateCategory()
+                }
             }
         }
     }

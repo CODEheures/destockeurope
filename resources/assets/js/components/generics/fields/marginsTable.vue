@@ -112,9 +112,13 @@
                 default: true
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['margin-table']
+            }
+        },
+        data () {
             return {
-                strings: {},
                 margins: {
                     unitMargin: 0,
                     totalMargin: 0,
@@ -135,7 +139,6 @@
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['margin-table'];
             let that = this;
             if(!this.forSeller){
                 this.$watch('advert.price_coefficient', function () {

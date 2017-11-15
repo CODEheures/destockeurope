@@ -32,6 +32,12 @@
                             :advert="advert"
                             :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
+                            @deleteAdvert="$emit('deleteAdvert', $event)"
+                            @updateSuccess="$emit('updateSuccess')"
+                            @loadError="$emit('loadError')"
+                            @bookmarkSuccess="$emit('bookmarkSuccess')"
+                            @unbookmarkSuccess="$emit('unbookmarkSuccess')"
+                            @sendToast="$emit('sendToast', $event)"
                     ></adverts-by-list-item>
                     <div class="item ads">
                         <div class="ui grid">
@@ -51,6 +57,12 @@
                             :advert="advert"
                             :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
+                            @deleteAdvert="$emit('deleteAdvert', $event)"
+                            @updateSuccess="$emit('updateSuccess')"
+                            @loadError="$emit('loadError')"
+                            @bookmarkSuccess="$emit('bookmarkSuccess')"
+                            @unbookmarkSuccess="$emit('unbookmarkSuccess')"
+                            @sendToast="$emit('sendToast', $event)"
                     ></adverts-by-list-item>
                 </template>
             </template>
@@ -80,52 +92,16 @@
                 required: false
             }
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {},
-                advertsList: [],
-                minPrice: 0,
-                maxPrice: 0
-            };
-        },
-        mounted () {
-            this.strings = this.$store.state.strings['adverts-by-list'];
-            this.properties = this.$store.state.properties['global'];
-            this.advertsList = this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data'];
-
-            if(this.$store.state.properties['adverts-by-list-item']['ranges'] !== null){
-                this.minPrice = parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice']);
-                this.maxPrice = parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice']);
+        computed: {
+            strings () {
+                return this.$store.state.strings['adverts-by-list']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            advertsList () {
+                return this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data']
             }
-
-            let that = this;
-            this.$watch('minPrice', function () {
-                this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
-            });
-            this.$watch('maxPrice', function () {
-                this.$parent.$emit('setRangePrice', {'mini': this.minPrice, 'maxi': this.maxPrice});
-            });
-            this.$on('bookmarkSuccess', function () {
-                that.$parent.$emit('bookmarkSuccess');
-            });
-            this.$on('unbookmarkSuccess', function () {
-                that.$parent.$emit('unbookmarkSuccess');
-            });
-            this.$on('deleteAdvert', function (event) {
-               that.$parent.$emit('deleteAdvert', event);
-            });
-            this.$on('sendToast', function (message) {
-                that.$parent.$emit('sendToast', message);
-            });
-            this.$on('loadError', function () {
-                that.$parent.$emit('loadError');
-            });
-            this.$on('updateSuccess', function () {
-                that.$parent.$emit('updateSuccess');
-            });
-        },
-        methods: {
 
         }
     }

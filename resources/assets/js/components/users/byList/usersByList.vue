@@ -28,6 +28,8 @@
                     <template v-for="(user, index) in usersList">
                         <users-by-list-item
                                 :user="user"
+                                @changeRole="patchUserRole($event.url, $event.role)"
+                                @deleteUser="$emit('deleteUser', $event)"
                         ></users-by-list-item>
                     </template>
                 </tbody>
@@ -47,36 +49,27 @@
                 required: false
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['users-by-list']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        watch: {
+            routeGetUsersList () {
+                this.getUsersList()
+            },
+            flagForceReload () {
+                this.getUsersList()
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 usersList: [],
                 isLoaded: false,
             };
-        },
-        mounted () {
-            this.strings = this.$store.state.strings['users-by-list'];
-            this.properties = this.$store.state.properties['global'];
-            let that = this;
-            this.$watch('routeGetUsersList', function () {
-                this.getUsersList();
-            });
-            this.$watch('flagForceReload', function () {
-                this.getUsersList();
-            });
-            this.$on('sendToast', function (message) {
-                that.$parent.$emit('sendToast', message);
-            });
-            this.$on('loadError', function () {
-                that.$parent.$emit('loadError');
-            });
-            this.$on('changeRole', function (event) {
-                that.patchUserRole(event.url, event.role);
-            });
-            this.$on('deleteUser', function (event) {
-                that.$parent.$emit('deleteUser', event);
-            })
         },
         methods: {
             getUsersList: function (withLoadIndicator) {
@@ -90,10 +83,10 @@
                         that.isLoaded = true;
                         let paginate = response.data.users;
                         delete paginate.data;
-                        that.$parent.$emit('paginate', paginate);
+                        that.$emit('paginate', paginate);
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError')
+                        that.$emit('loadError')
                     });
             },
             patchUserRole: function (url, role) {
@@ -106,9 +99,9 @@
                     .catch(function (error) {
                         if (error.response && error.response.status == 409) {
                             let msg = error.response.data;
-                            that.$parent.$emit('sendToast', {'message': msg, 'type':'error'});
+                            that.$emit('sendToast', {'message': msg, 'type':'error'});
                         } else {
-                            that.$parent.$emit('loadError');
+                            that.$emit('loadError');
                         }
                         that.getUsersList();
                     });

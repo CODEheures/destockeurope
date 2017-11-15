@@ -15,6 +15,7 @@
                                 :old-choice="getCurrentCategory()"
                                 :with-all="true"
                                 :with-redirection-on-click="true"
+                                @categoryChoice="$emit('categoryChoice', $event)"
                         ></categories-select-menu>
                     </div>
                 </div>
@@ -32,14 +33,17 @@
                                             name="price"
                                             :prefix="dataPricePrefix"
                                             :title="strings.priceTitle"
+                                            @rangeUpdate="rangeUpdate"
+                                            ref="price1"
                                     ></range-filter>
                                 </div>
                                 <div class="two wide column">
                                     <currencies-button
                                             :currencies-list="dataCurrenciesList"
                                             :oldCurrency="getCurrentCurrency()"
-                                            :withAll="true">
-                                    </currencies-button>
+                                            :withAll="true"
+                                            @currencyChoice="$emit('updateFilter', {'currency' : $event})"
+                                    ></currencies-button>
                                 </div>
                             </div>
                         </div>
@@ -52,6 +56,7 @@
                                     name="quantity"
                                     prefix=""
                                     :title="strings.quantityTitle"
+                                    @rangeUpdate="rangeUpdate"
                             ></range-filter>
                         </div>
                     </template>
@@ -66,6 +71,8 @@
                                     name="price"
                                     :prefix="dataPricePrefix"
                                     :title="strings.priceTitle"
+                                    @rangeUpdate="rangeUpdate"
+                                    ref="price2"
                             ></range-filter>
                         </div>
                         <div class="sixteen wide mobile eight wide computer center aligned column price">
@@ -77,6 +84,7 @@
                                     name="quantity"
                                     prefix=""
                                     :title="strings.quantityTitle"
+                                    @rangeUpdate="rangeUpdate"
                             ></range-filter>
                         </div>
                     </template>
@@ -91,11 +99,15 @@
                                     :update="dataUpdateSearch"
                                     :flag-reset="false"
                                     :fields="{title: 'titleWithManuRef', description : 'resume', image: 'thumb', price: 'price_margin'}"
+                                    @clearSearchResults="$emit('clearSearchResults')"
+                                    @refreshResults="$emit('refreshResults', $event)"
                             ></search-filter>
                         </div>
                         <div class="column">
                             <location-filter
                                     :accurate-list="locationAccurateList"
+                                    @locationUpdate="$emit('updateFilter', $event)"
+                                    @clearLocationResults="$emit('clearLocationResults')"
                             ></location-filter>
                         </div>
                     </div>
@@ -147,57 +159,71 @@
                 type: Array
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['advert-filter']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            dataCurrenciesList () {
+                return this.$store.state.properties['adverts-by-list-item']['ranges']['currenciesList']
+            },
+            dataMinPrice () {
+                return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
+            },
+            dataMaxPrice () {
+                return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
+            },
+            dataHandleMinPrice () {
+                return parseFloat(DestockTools.findInUrl('minPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
+            },
+            dataHandleMaxPrice () {
+                return parseFloat(DestockTools.findInUrl('maxPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
+            },
+            dataPricePrefix () {
+                return this.$store.state.properties['adverts-by-list-item']['ranges']['currencySymbol']
+            },
+            dataMinQuantity () {
+                return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
+            },
+            dataMaxQuantity () {
+                return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
+            },
+            dataHandleMinQuantity () {
+                return parseInt(DestockTools.findInUrl('minQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
+            },
+            dataHandleMaxQuantity () {
+                return parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
+            },
+            dataResultsFor () {
+                return DestockTools.findInUrl('resultsFor')
+            }
+        },
+        watch: {
+            isUrgent () {
+                this.$emit('updateFilter', {'isUrgent' : this.isUrgent})
+            },
+            isNegociated () {
+                this.$emit('updateFilter', {'isNegociated' : this.isNegociated, 'minPrice': 0})
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 isUrgent: false,
                 isNegociated: false,
-                dataMinPrice: 0,
-                dataMaxPrice: 0,
-                dataHandleMinPrice: 0,
-                dataHandleMaxPrice: 0,
-                dataPricePrefix: '',
-                dataMinQuantity: 0,
-                dataMaxQuantity: 0,
-                dataHandleMinQuantity: 0,
-                dataHandleMaxQuantity: 0,
-                dataResultsFor: '',
                 dataUpdateSearch: false,
-                dataCurrenciesList: [],
                 dataBreadcrumbItems: []
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['advert-filter'];
-            this.properties = this.$store.state.properties['global'];
             let that = this;
 
             //breadcrumbItems
             this.setBreadCrumbItems();
 
-            //Currencies
-            this.dataCurrenciesList = this.$store.state.properties['adverts-by-list-item']['ranges']['currenciesList'];
-            this.$on('currencyChoice', function (event) {
-                this.$parent.$emit('updateFilter', {'currency' : event.cur});
-            });
-
-            //Ranges
-            this.setRangeFilter();
-            this.$on('rangeUpdate', function (event) {
-                if(event.name == 'price'){
-                    this.$parent.$emit('updateFilter', {'minPrice' : event.values[0], 'maxPrice': event.values[1]});
-                }
-                if(event.name == 'quantity'){
-                    this.$parent.$emit('updateFilter', {'minQuantity' : event.values[0], 'maxQuantity': event.values[1]});
-                }
-            });
-
             //isUrgent
-            this.isUrgent =  DestockTools.findInUrl('isUrgent') == 'true' || false ;
-            this.$watch('isUrgent', function () {
-                this.$parent.$emit('updateFilter', {'isUrgent' : this.isUrgent})
-            });
+            this.isUrgent =  DestockTools.findInUrl('isUrgent') === 'true' || false ;
             let isUrgent = $('#isUrgent'+this._uid);
             isUrgent.checkbox({
                 onChecked: function() {that.isUrgent = true;},
@@ -205,35 +231,15 @@
             });
 
             //isNegociated
-            this.isNegociated =  DestockTools.findInUrl('isNegociated') == 'true' || false ;
-            this.$watch('isNegociated', function () {
-                this.$parent.$emit('updateFilter', {'isNegociated' : this.isNegociated, 'minPrice': 0})
-            });
+            this.isNegociated =  DestockTools.findInUrl('isNegociated') === 'true' || false ;
             let isNegociated = $('#isNegociated'+this._uid);
             isNegociated.checkbox({
                 onChecked: function() {that.isNegociated = true;},
                 onUnchecked: function() {that.isNegociated = false;}
             });
 
-
-            //location
-            this.$on('locationUpdate', function (event) {
-                this.$parent.$emit('updateFilter', event)
-            });
-            this.$on('clearLocationResults', function () {
-                this.$parent.$emit('clearLocationResults');
-            });
-
-
             //search filter
-            this.dataResultsFor = DestockTools.findInUrl('resultsFor');
             this.dataUpdateSearch = !this.dataUpdateSearch;
-            this.$on('refreshResults', function (query) {
-                this.$parent.$emit('refreshResults', query);
-            });
-            this.$on('clearSearchResults', function () {
-                this.$parent.$emit('clearSearchResults');
-            });
 
             //Accordion
             let accordionElement = $('#filter-accordion-'+this._uid);
@@ -244,17 +250,6 @@
             }
         },
         methods: {
-            setRangeFilter: function () {
-                this.dataMinPrice = parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice']);
-                this.dataMaxPrice = parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice']);
-                this.dataHandleMinPrice = parseFloat(DestockTools.findInUrl('minPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice']);
-                this.dataHandleMaxPrice = parseFloat(DestockTools.findInUrl('maxPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice']);
-                this.dataPricePrefix = this.$store.state.properties['adverts-by-list-item']['ranges']['currencySymbol'];
-                this.dataMinQuantity = parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity']);
-                this.dataMaxQuantity = parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity']);
-                this.dataHandleMinQuantity = parseInt(DestockTools.findInUrl('minQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity']);
-                this.dataHandleMaxQuantity = parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity']);
-            },
             getCurrentCategory () {
                 let categoryId = DestockTools.findInUrl('categoryId');
                 if(categoryId !== null && categoryId==parseInt(categoryId) && categoryId > 0 ) {
@@ -284,13 +279,21 @@
                                     value: elem.id
                                 });
                             });
-                            that.$parent.$emit('breadCrumbItems', that.dataBreadcrumbItems);
+                            that.$emit('breadCrumbItems', that.dataBreadcrumbItems);
                         })
                         .catch(function (error) {
 
                         });
                 }
             },
+            rangeUpdate (event) {
+                if(event.name === 'price'){
+                    this.$emit('updateFilter', {'minPrice' : event.values[0], 'maxPrice': event.values[1]});
+                }
+                if(event.name === 'quantity'){
+                    this.$emit('updateFilter', {'minQuantity' : event.values[0], 'maxQuantity': event.values[1]});
+                }
+            }
         }
     }
 </script>

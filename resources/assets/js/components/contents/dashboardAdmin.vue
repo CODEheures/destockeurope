@@ -75,24 +75,29 @@
             //vue vars
             loadInfos: String
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['dashboard-admin']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            dataLoadInfos () {
+                return JSON.parse(this.loadInfos)
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 isLoaded: false,
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
                 dataCleanLoading: false,
                 dataStatsLoading : false,
-                dataStats: {},
-                dataLoadInfos: []
+                dataStats: {}
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['dashboard-admin'];
-            this.properties = this.$store.state.properties['global'];
-            this.dataLoadInfos = JSON.parse(this.loadInfos);
             this.getStats();
         },
         methods: {

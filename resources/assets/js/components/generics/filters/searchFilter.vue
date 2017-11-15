@@ -40,45 +40,50 @@
             //vue strings
             placeHolder: String
         },
-        data: () => {
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        watch: {
+            flagReset () {
+                this.resetSearch(false)
+            },
+            update () {
+                this.updateSearch()
+            },
+            routeSearch () {
+                let that = this
+                this.urlForSearch(function (url) {
+                    that.elemSearch
+                        .search({
+                            apiSettings: {
+                                url: url.replace('query', '{query}'),
+                                beforeXHR: function(xhr) {
+                                    // adjust XHR with additional headers
+                                    if(that.withXsrfToken===true){
+                                        xhr.setRequestHeader ('X-XSRF-TOKEN', that.readCookie('XSRF-TOKEN'));
+                                    }
+                                }
+                            },
+                            //type: 'category',
+                            fields: that.fields,
+                            minCharacters : that.properties.filterMinLengthSearch
+                        })
+                })
+            }
+        },
+        data () {
             return {
-                properties: {},
                 dataRouteSearch: '',
                 wantSearch: true,
                 elemSearch: undefined
             }
         },
         mounted () {
-            this.properties = this.$store.state.properties['global'];
             let that = this;
             this.elemSearch = $('#'+that._uid);
             this.observeElem(this.elemSearch[0]);
-            this.$watch('routeSearch', function () {
-                this.urlForSearch(function (url) {
-                    that.elemSearch
-                            .search({
-                                apiSettings: {
-                                    url: url.replace('query', '{query}'),
-                                    beforeXHR: function(xhr) {
-                                        // adjust XHR with additional headers
-                                        if(that.withXsrfToken===true){
-                                            xhr.setRequestHeader ('X-XSRF-TOKEN', that.readCookie('XSRF-TOKEN'));
-                                        }
-                                    }
-                                },
-                                //type: 'category',
-                                fields: that.fields,
-                                minCharacters : that.properties.filterMinLengthSearch
-                            })
-                    ;
-                });
-            });
-            this.$watch('flagReset', function () {
-                this.resetSearch(false);
-            });
-            this.$watch('update', function () {
-                this.updateSearch();
-            });
         },
         methods: {
             urlForSearch(callback) {
@@ -93,11 +98,11 @@
                 this.elemSearch.search('set value','');
                 this.elemSearch.search('clear cache');
                 this.wantSearch = true;
-                withEmit ? this.$parent.$emit('clearSearchResults') : null;
+                withEmit ? this.$emit('clearSearchResults') : null;
             },
             updateSearch() {
                 this.elemSearch = $('#'+this._uid);
-                if(this.resultsFor != undefined){
+                if(this.resultsFor !== undefined && this.resultsFor !== null){
                     this.elemSearch.search('set value',this.resultsFor);
                     this.wantSearch = false;
                 } else {
@@ -124,7 +129,7 @@
                             event.preventDefault();
                             that.elemSearch.search('hide results');
                             let query = that.elemSearch.search('get value');
-                            that.$parent.$emit('refreshResults', query);
+                            that.$emit('refreshResults', query);
                             that.wantSearch = false;
                         });
                     }

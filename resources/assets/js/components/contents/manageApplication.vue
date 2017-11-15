@@ -14,8 +14,9 @@
                     <type-radio-button
                             :route-get-list-type="routeGetListType"
                             :first-menu-name="strings.listTypeFirstMenuName"
-                            :old-choice="oldType">
-                    </type-radio-button>
+                            :old-choice="oldType"
+                            @typeChoice="typeChoice"
+                    ></type-radio-button>
                 </div>
                 <h4 class="ui horizontal divider header"><i class="browser icon"></i> {{ strings.advertPreferencesLabel }} </h4>
                 <div class="field">
@@ -29,7 +30,7 @@
                                    v-model="parameters.nbFreePictures"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'nbFreePictures', 'value': parameters.nbFreePictures}"
-                                   v-on:blur="blured={'name': 'nbFreePictures', 'value': parameters.nbFreePictures}">
+                                   v-on:blur="testChanged(focused, {'name': 'nbFreePictures', 'value': parameters.nbFreePictures})">
                         </div>
                         <div class="field">
                             <label>{{ strings.advertNbMaxPicturesLabel }}</label>
@@ -39,7 +40,7 @@
                                    v-model="parameters.nbMaxPictures"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}"
-                                   v-on:blur="blured={'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures}">
+                                   v-on:blur="testChanged(focused, {'name': 'nbMaxPictures', 'value': parameters.nbMaxPictures})">
                         </div>
                         <div class="field">
                             <label>{{ strings.advertResumeLenghtLabel }}</label>
@@ -49,7 +50,7 @@
                                    v-model="parameters.advertResumeLenght"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}"
-                                   v-on:blur="blured={'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght}">
+                                   v-on:blur="testChanged(focused, {'name': 'advertResumeLenght', 'value': parameters.advertResumeLenght})">
                         </div>
                     </div>
                 </div>
@@ -64,7 +65,7 @@
                                    v-model="parameters.urgentCost"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'urgentCost', 'value': parameters.urgentCost}"
-                                   v-on:blur="blured={'name': 'urgentCost', 'value': parameters.urgentCost}">
+                                   v-on:blur="testChanged(focused, {'name': 'urgentCost', 'value': parameters.urgentCost})">
                         </div>
                         <div class="field">
                             <label>{{ strings.advertVideoCostLabel }}</label>
@@ -74,7 +75,7 @@
                                    v-model="parameters.videoCost"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'videoCost', 'value': parameters.videoCost}"
-                                   v-on:blur="blured={'name': 'videoCost', 'value': parameters.videoCost}">
+                                   v-on:blur="testChanged(focused, {'name': 'videoCost', 'value': parameters.videoCost})">
                         </div>
                         <div class="field">
                             <label>{{ strings.advertRenewCostLabel }}</label>
@@ -84,7 +85,7 @@
                                    v-model="parameters.renewCost"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'renewCost', 'value': parameters.renewCost}"
-                                   v-on:blur="blured={'name': 'renewCost', 'value': parameters.renewCost}">
+                                   v-on:blur="testChanged(focused, {'name': 'renewCost', 'value': parameters.renewCost})">
                         </div>
                     </div>
                     <div class="three fields">
@@ -96,7 +97,7 @@
                                    v-model="parameters.editCost"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'editCost', 'value': parameters.editCost}"
-                                   v-on:blur="blured={'name': 'editCost', 'value': parameters.editCost}">
+                                   v-on:blur="testChanged(focused, {'name': 'editCost', 'value': parameters.editCost})">
                         </div>
                         <div class="field">
                             <label>{{ strings.advertBackToTopCostLabel }}</label>
@@ -106,7 +107,7 @@
                                    v-model="parameters.backToTopCost"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'backToTopCost', 'value': parameters.backToTopCost}"
-                                   v-on:blur="blured={'name': 'backToTopCost', 'value': parameters.backToTopCost}">
+                                   v-on:blur="testChanged(focused, {'name': 'backToTopCost', 'value': parameters.backToTopCost})">
                         </div>
                         <div class="field">
                             <label>{{ strings.advertHighlightCostLabel }}</label>
@@ -116,7 +117,7 @@
                                    v-model="parameters.highlightCost"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'highlightCost', 'value': parameters.highlightCost}"
-                                   v-on:blur="blured={'name': 'highlightCost', 'value': parameters.highlightCost}">
+                                   v-on:blur="testChanged(focused, {'name': 'highlightCost', 'value': parameters.highlightCost})">
                         </div>
                     </div>
                 </div>
@@ -131,7 +132,7 @@
                                    v-model="parameters.minLengthSearch"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'minLengthSearch', 'value': parameters.minLengthSearch}"
-                                   v-on:blur="blured={'name': 'minLengthSearch', 'value': parameters.minLengthSearch}">
+                                   v-on:blur="testChanged(focused, {'name': 'minLengthSearch', 'value': parameters.minLengthSearch})">
                         </div>
                         <div class="field">
                             <label>{{ strings.maxNumberOfSearchResultsLabel }}</label>
@@ -141,7 +142,7 @@
                                    v-model="parameters.maxNumberOfSearchResults"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'maxNumberOfSearchResults', 'value': parameters.maxNumberOfSearchResults}"
-                                   v-on:blur="blured={'name': 'maxNumberOfSearchResults', 'value': parameters.maxNumberOfSearchResults}">
+                                   v-on:blur="testChanged(focused, {'name': 'maxNumberOfSearchResults', 'value': parameters.maxNumberOfSearchResults})">
                         </div>
                     </div>
                 </div>
@@ -156,7 +157,7 @@
                                    v-model="parameters.advertsPerPage"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}"
-                                   v-on:blur="blured={'name': 'advertsPerPage', 'value': parameters.advertsPerPage}">
+                                   v-on:blur="testChanged(focused, {'name': 'advertsPerPage', 'value': parameters.advertsPerPage})">
                         </div>
                         <div class="field">
                             <label>{{ strings.adsFrequencyLabel }}</label>
@@ -167,7 +168,7 @@
                                    v-model="parameters.adsFrequency"
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'adsFrequency', 'value': parameters.adsFrequency}"
-                                   v-on:blur="blured={'name': 'adsFrequency', 'value': parameters.adsFrequency}">
+                                   v-on:blur="testChanged(focused, {'name': 'adsFrequency', 'value': parameters.adsFrequency})">
                         </div>
                     </div>
                 </div>
@@ -190,7 +191,7 @@
                                            v-model="parameters.urlMasterAds"
                                            v-on:keyup.enter="updateParameter"
                                            v-on:focus="focused={'name': 'urlMasterAds', 'value': parameters.urlMasterAds}"
-                                           v-on:blur="blured={'name': 'urlMasterAds', 'value': parameters.urlMasterAds}">
+                                           v-on:blur="testChanged(focused, {'name': 'urlMasterAds', 'value': parameters.urlMasterAds})">
                                 </div>
                             </transition>
                         </div>
@@ -203,7 +204,7 @@
                                            v-model="parameters.urlLinkMasterAds"
                                            v-on:keyup.enter="updateParameter"
                                            v-on:focus="focused={'name': 'urlLinkMasterAds', 'value': parameters.urlLinkMasterAds}"
-                                           v-on:blur="blured={'name': 'urlLinkMasterAds', 'value': parameters.urlLinkMasterAds}">
+                                           v-on:blur="testChanged(focused, {'name': 'urlLinkMasterAds', 'value': parameters.urlLinkMasterAds})">
                                 </div>
                             </transition>
                         </div>
@@ -216,7 +217,7 @@
                                            v-model="parameters.offsetYMasterAds"
                                            v-on:keyup.enter="updateParameter"
                                            v-on:focus="focused={'name': 'offsetYMasterAds', 'value': parameters.offsetYMasterAds}"
-                                           v-on:blur="blured={'name': 'offsetYMasterAds', 'value': parameters.offsetYMasterAds}">
+                                           v-on:blur="testChanged(focused, {'name': 'offsetYMasterAds', 'value': parameters.offsetYMasterAds})">
                                 </div>
                             </transition>
                         </div>
@@ -237,10 +238,16 @@
             routeTestIsPicture: String,
             routeGetListType: String,
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['manage-application']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 isLoaded: false,
                 sendMessage: false,
                 typeMessage: '',
@@ -253,12 +260,7 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['manage-application'];
-            this.properties = this.$store.state.properties['global'];
             this.getParameters();
-            this.$on('typeChoice', function (event) {
-                this.typeChoice(event.type);
-            });
             let that = this;
             $('#slider1-'+this._uid).checkbox({
                 onChecked: function() {
@@ -268,11 +270,6 @@
                 onUnchecked: function() {
                     that.parameters['masterAds']=0;
                     that.activeMasterAds(0);
-                }
-            });
-            this.$watch('blured', function () {
-                if (this.blured.name == this.focused.name && this.blured.value != this.focused.value) {
-                    this.updateParameter();
                 }
             });
         },
@@ -366,6 +363,12 @@
                 this.typeMessage = type;
                 this.message = message;
                 this.sendMessage = !this.sendMessage;
+            },
+            testChanged ($in, $out) {
+                if ($in.name === $out.name && $in.value !== $out.value) {
+                    this.blured = {name: $out.name, value: $out.value}
+                    this.updateParameter();
+                }
             }
         }
     }

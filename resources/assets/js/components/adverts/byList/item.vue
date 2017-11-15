@@ -56,8 +56,8 @@
                                         <p>
                                             <i class="green big protect icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>
                                             <i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
-                                            <i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>
-                                            <i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>
+                                            <i class="empty big heart yellow icon" v-on:click.prevent.stop="bookmarkMe" data-stop-ripple :data-id="dataAdvert.id" v-if="!dataAdvert.isUserOwner && !dataAdvert.isUserBookmark"></i>
+                                            <i class="big heart yellow icon" v-on:click.prevent.stop="unbookmarkMe" data-stop-ripple :data-id="dataAdvert.id" v-if="!dataAdvert.isUserOwner && dataAdvert.isUserBookmark"></i>
                                             <br /><i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
                                             <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                             <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
@@ -91,12 +91,6 @@
                             <div class="ten wide mobile only column" style="padding-left : 0; display: flex; justify-content: space-between; flex-direction: column;">
                                 <div class="sixteen wide column">
                                     <div class="header"><h4>{{ advert.title }}</h4></div>
-                                    <!--<span class="ui mini breadcrumb">-->
-                                    <!--<template v-for="(item,index) in advert.breadCrumb">-->
-                                    <!--<div class="active section">{{ item.description[properties.actualLocale] }}</div>-->
-                                    <!--<i class="right angle icon divider" v-if="index != advert.breadCrumb.length-1"></i>-->
-                                    <!--</template>-->
-                                    <!--</span>-->
                                     <p class="infos" style="text-align: right;">
                                         <span v-if="advert.isUrgent" class="ui mini red horizontal label">{{ strings.urgentLabel }}</span>
                                     </p>
@@ -109,17 +103,6 @@
                                     </p>
                                 </div>
                             </div>
-                            <!--<div class="sixteen wide right aligned mobile only column geodate-mobile">-->
-                                <!--<p>-->
-                                    <!--<i class="green big protect icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>-->
-                                    <!--<i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>-->
-                                    <!--<i class="empty big heart yellow icon" v-on:click="bookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && !advert.isUserBookmark"></i>-->
-                                    <!--<i class="big heart yellow icon" v-on:click="unbookmarkMe" :data-id="advert.id" v-if="!advert.isUserOwner && advert.isUserBookmark"></i>-->
-                                    <!--<br /><i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>-->
-                                    <!--<br /><i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>-->
-                                    <!--<i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>-->
-                                <!--</p>-->
-                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -161,6 +144,7 @@
                                 <advert-manage-button
                                         :advert="advert"
                                         :with-delegation-action="false"
+                                        @deleteAdvert="$emit('deleteAdvert', $event)"
                                 ></advert-manage-button>
                             </template>
                         </div>
@@ -190,6 +174,8 @@
                                 <div class="ui form">
                                     <quantities-input-field
                                             :advert="advert"
+                                            @updateSuccess="$emit('updateSuccess')"
+                                            @loadError="$emit('loadError')"
                                     ></quantities-input-field>
                                 </div>
                             </div>
@@ -197,6 +183,8 @@
                                 <div class="ui form">
                                     <margin-input-field
                                             :advert="advert"
+                                            @updateSuccess="$emit('updateSuccess')"
+                                            @loadError="$emit('loadError')"
                                     ></margin-input-field>
                                 </div>
                             </div>
@@ -225,6 +213,8 @@
                         <div class="ui form">
                             <quantities-input-field
                                     :advert="advert"
+                                    @updateSuccess="$emit('updateSuccess')"
+                                    @loadError="$emit('loadError')"
                             ></quantities-input-field>
                         </div>
                     </div>
@@ -232,6 +222,8 @@
                         <div class="ui form">
                             <margin-input-field
                                     :advert="advert"
+                                    @updateSuccess="$emit('updateSuccess')"
+                                    @loadError="$emit('loadError')"
                             ></margin-input-field>
                         </div>
                     </div>
@@ -278,6 +270,7 @@
                                     <template v-if="!advert.deleted_at">
                                         <advert-manage-button
                                             :advert="advert"
+                                            @deleteAdvert="$emit('deleteAdvert', $event)"
                                         ></advert-manage-button>
                                     </template>
                                     <template v-else>
@@ -322,6 +315,8 @@
                                 <div class="ui form">
                                     <quantities-input-field
                                             :advert="advert"
+                                            @updateSuccess="$emit('updateSuccess')"
+                                            @loadError="$emit('loadError')"
                                     ></quantities-input-field>
                                 </div>
                             </div>
@@ -345,6 +340,7 @@
                             <template v-if="!advert.deleted_at">
                                 <advert-manage-button
                                         :advert="advert"
+                                        @deleteAdvert="$emit('deleteAdvert', $event)"
                                 ></advert-manage-button>
                             </template>
                             <template v-else>
@@ -393,6 +389,8 @@
                         <div class="ui form">
                             <quantities-input-field
                                     :advert="advert"
+                                    @updateSuccess="$emit('updateSuccess')"
+                                    @loadError="$emit('loadError')"
                             ></quantities-input-field>
                         </div>
                     </div>
@@ -409,6 +407,8 @@
 </template>
 
 <script>
+    import _ from 'lodash'
+
     export default {
         props: {
             routeBookmarkAdd: String,
@@ -425,24 +425,23 @@
                 required: false
             }
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {}
-            };
+        computed: {
+            strings () {
+                return this.$store.state.strings['adverts-by-list-item']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
         },
-        mounted () {
-            this.strings = this.$store.state.strings['adverts-by-list-item'];
-            this.properties = this.$store.state.properties['global'];
-            this.$on('deleteAdvert', function (event) {
-                this.$parent.$emit('deleteAdvert', event);
-            });
-            this.$on('loadError', function (event) {
-                this.$parent.$emit('loadError')
-            });
-            this.$on('updateSuccess', function (event) {
-                this.$parent.$emit('updateSuccess')
-            });
+        watch: {
+            advert () {
+                this.dataAdvert = _.cloneDeep(this.advert)
+            }
+        },
+        data () {
+            return {
+                dataAdvert: _.cloneDeep(this.advert)
+            }
         },
         methods: {
             getMoment: function (dateTime) {
@@ -456,14 +455,14 @@
                 axios.get(this.routeBookmarkAdd+'/'+this.advert.id)
                     .then(function (response) {
                         that.dataIsUserBookmark = true;
-                        that.$parent.$emit('bookmarkSuccess');
-                        that.advert.isUserBookmark = true;
+                        that.$emit('bookmarkSuccess');
+                        that.dataAdvert.isUserBookmark = true;
                     })
                     .catch(function (error) {
                         if (error.response && error.response.status == 409) {
-                            that.$parent.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
+                            that.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
                         } else {
-                            that.$parent.$emit('loadError')
+                            that.$emit('loadError')
                         }
                     });
             },
@@ -474,20 +473,20 @@
                 axios.get(this.routeBookmarkRemove+'/'+this.advert.id)
                     .then(function (response) {
                         that.dataIsUserBookmark = false;
-                        that.$parent.$emit('unbookmarkSuccess');
-                        that.advert.isUserBookmark = false;
+                        that.$emit('unbookmarkSuccess');
+                        that.dataAdvert.isUserBookmark = false;
                     })
                     .catch(function (error) {
                         if (error.response && error.response.status == 409) {
-                            that.$parent.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
+                            that.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
                         } else {
-                            that.$parent.$emit('loadError')
+                            that.$emit('loadError')
                         }
                     });
             },
             destroyMe: function () {
                 $(".ui.red.button.destroy-" + this._uid).addClass('loading disabled');
-                this.$parent.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
+                this.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
             },
             getThumbUrl(advert) {
                 let picture = [];

@@ -38,6 +38,8 @@
                             :filter="filter"
                             :route-search="dataRouteGetUsersList"
                             :flag-reset-search="dataFlagResetSearch"
+                            @clearSearchResults="clearSearchResults"
+                            @refreshResults="refreshResults"
                     ></user-filter>
                 </div>
             </div>
@@ -46,6 +48,10 @@
                     <users-by-list
                             :route-get-users-list="dataRouteGetUsersList"
                             :flag-force-reload="dataForceReload"
+                            @deleteUser="deleteUser($event)"
+                            @paginate="paginate=$event"
+                            @loadError="sendToast(strings.loadErrorMessage, 'error')"
+                            @sendToast="sendToast(event.message, event.type)"
                     ></users-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -53,6 +59,7 @@
                         <pagination
                                 :pages="paginate"
                                 :route-get-list="dataRouteGetUsersList"
+                                @changePage="changePage"
                         ></pagination>
                     </div>
                 </div>
@@ -68,13 +75,9 @@
         props: [
             //vue routes
             'routeGetUsersList',
-            //vue vars
-            'clearStorage',
         ],
-        data: () => {
+        data () {
             return {
-                strings: {},
-                properties: {},
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
@@ -87,56 +90,17 @@
                 dataForceReload: false
             };
         },
-        mounted () {
-            this.strings = this.$store.state.strings['manage-users'];
-            this.properties = this.$store.state.properties['global'];
-            let that = this;
-            if(this.clearStorage){
-                sessionStorage.clear();
+        computed: {
+            strings () {
+                return this.$store.state.strings['manage-users']
+            },
+            properties () {
+                return this.$store.state.properties['global']
             }
-            //On load Error
-            this.$on('loadError', function () {
-                this.sendToast(this.strings.loadErrorMessage, 'error');
-            });
-            this.$on('sendToast', function (event) {
-                this.sendToast(event.message, event.type);
-            });
-
-            //on reconstruit le filtre
-            this.initFilterBySessionStorage();
-            this.updateResults();
-
-            this.$on('paginate', function (result) {
-                this.paginate=result;
-            });
-            this.$on('updateFilter', function (result) {
-                this.updateFilter(result);
-            });
-            this.$on('changePage', function (url) {
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600, function () {
-                    that.dataRouteGetUsersList = url;
-                });
-            });
-            this.$on('refreshResults', function (query) {
-                if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
-                    this.filter.resultsFor = query;
-                    this.updateResults(true);
-                }
-            });
-            this.$on('clearSearchResults', function () {
-                let haveClearAction = this.clearInputSearch();
-                if(haveClearAction){
-                    this.updateResults(true);
-                }
-            });
-            this.$on('deleteUser', function (event) {
-                this.deleteUser(event.route);
-            })
         },
-        updated () {
-
+        mounted () {
+            sessionStorage.clear();
+            this.updateResults();
         },
         methods: {
             sendToast: function (message, type) {
@@ -189,11 +153,6 @@
                     this.updateResults();
                 }
             },
-            initFilterBySessionStorage: function () {
-                if(sessionStorage.getItem('filter') != null){
-                    this.filter = JSON.parse(sessionStorage.getItem('filter'));
-                }
-            },
             deleteUser(url) {
                 let that = this;
                 $('#modal-'+this._uid).modal({
@@ -216,6 +175,26 @@
                             });
                     }
                 }).modal('show');
+            },
+            clearSearchResults () {
+                let haveClearAction = this.clearInputSearch();
+                if(haveClearAction){
+                    this.updateResults(true);
+                }
+            },
+            refreshResults (query) {
+                if(query !== undefined && query.length >= this.properties.filterMinLengthSearch){
+                    this.filter.resultsFor = query;
+                    this.updateResults(true);
+                }
+            },
+            changePage (url) {
+                let that = this
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 600, function () {
+                    that.dataRouteGetUsersList = url;
+                });
             }
         }
     }

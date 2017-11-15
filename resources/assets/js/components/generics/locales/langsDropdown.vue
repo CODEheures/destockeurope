@@ -24,15 +24,13 @@
                 required: false,
             }
         },
-        data: () => {
-            return {
-                properties: {},
-                dataListAvailableLang: null
-            };
-        },
-        mounted () {
-            this.properties = this.$store.state.properties['global'];
-            this.dataListAvailableLang = JSON.parse(this.listAvailableLang);
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            dataListAvailableLang () {
+                return JSON.parse(this.listAvailableLang)
+            }
         },
         methods: {
             goTo(lang) {
@@ -40,9 +38,8 @@
                 DestockTools.goToUrl((link_hreflang.attr('href')));
             }
         },
-        updated () {
+        mounted () {
             $('#langChoice-'+this._uid).dropdown()
-            ;
         }
     }
 </script>

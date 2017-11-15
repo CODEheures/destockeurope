@@ -15,6 +15,8 @@
                                 :flag-reset="flagResetSearch"
                                 :with-xsrf-token="true"
                                 :fields="{title: 'email', description : 'created_at'}"
+                                @clearSearchResults="$emit('clearSearchResults')"
+                                @refreshResults="$emit('refreshResults', $event)"
                         ></search-filter>
                     </div>
                 </div>
@@ -43,28 +45,24 @@
                 type: Boolean
             },
         },
-        data: () => {
+        watch: {
+            update () {
+                this.setSearchFilter();
+                this.dataUpdate = !this.dataUpdate;
+            }
+        },
+        computed: {
+            strings () {
+                return this.$store.state.strings['user-filter']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 dataResultsFor: '',
                 dataUpdate: false
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['user-filter'];
-            this.properties = this.$store.state.properties['global'];
-            this.$watch('update', function () {
-                this.setSearchFilter();
-                this.dataUpdate = !this.dataUpdate;
-            });
-            this.$on('refreshResults', function (query) {
-                this.$parent.$emit('refreshResults', query);
-            });
-            this.$on('clearSearchResults', function () {
-                this.$parent.$emit('clearSearchResults');
-            });
-            let that = this;
             let accordionElement = $('#filter-accordion-'+this._uid);
             if($(window).width()<768){
                 accordionElement.accordion('close',0);

@@ -8,10 +8,10 @@
             <template v-if="dataPictures.length > 0">
                 <div class="swiper-slide" v-for="picture in dataPictures">
                     <template v-if="!lazyLoad">
-                        <img :src="picture.normalUrl" v-on:click="lightBoxMe(picture)">
+                        <img :src="picture.normalUrl" v-on:click="$emit('openLightBox', picture.normalUrl)">
                     </template>
                     <template v-else>
-                        <img :data-src="picture.normalUrl" class="swiper-lazy" v-on:click="lightBoxMe(picture)">
+                        <img :data-src="picture.normalUrl" class="swiper-lazy" v-on:click="$emit('openLightBox', picture.normalUrl)">
                         <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
                     </template>
                 </div>
@@ -61,23 +61,28 @@
                 default: true
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['swiper-top']
+            }
+        },
+        watch: {
+            mainPicture () {
+                this.updateDataPictures()
+            },
+            pictures () {
+                this.updateDataPictures()
+            }
+        },
+        data () {
             return {
-                strings: {},
                 dataPictures: []
             };
         },
         mounted: function() {
-            this.strings = this.$store.state.strings['swiper-top'];
             if (!this.swiper && typeof global.window != 'undefined') {
                 this.swiper = new Swiper(this.$el, this.options)
             }
-            this.$watch('mainPicture', function () {
-                this.updateDataPictures();
-            });
-            this.$watch('pictures', function () {
-                this.updateDataPictures();
-            });
             this.updateDataPictures();
         },
         updated: function(){
@@ -90,9 +95,6 @@
             }
         },
         methods : {
-            lightBoxMe (img) {
-                this.$parent.$emit('openLightBox', img.normalUrl)
-            },
             updateDataPictures: function () {
                 let pictures=[];
                 let that = this;

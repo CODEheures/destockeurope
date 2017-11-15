@@ -6,9 +6,6 @@
                 <option v-if="withAll" :value="group['id']">{{ strings.allItem }}</option>
                 <option v-for="option in options" v-if="option[0]['id']==group['id']" :value="option[option.length-1]['id']">
                     <template v-for="description ,index in option">
-                        <!--<template v-if="index > 0 && index < option.length-1">-->
-                            <!--{{ description['name'] }} >-->
-                        <!--</template>-->
                         <template v-if="index == option.length-1">
                             {{ description['name'] }}
                         </template>
@@ -49,28 +46,34 @@
                default: false
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['categories-select-menu']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            categories () {
+                return this.$store.state.properties['categories-select-menu']['datas']
+            },
+            nextUrl () {
+                return this.$store.state.properties['global']['routeHome']
+            }
+        },
+        watch: {
+            selected () {
+                this.choiceCategory(this.selected)
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
-                categories: [],
-                nextUrl: "",
                 options: [],
                 optgroups: [],
-                selected: ''
+                selected: this.oldChoice
             } ;
         },
         mounted () {
-            this.strings = this.$store.state.strings['categories-select-menu'];
-            this.properties = this.$store.state.properties['global'];
-            this.categories = this.$store.state.properties['categories-select-menu']['datas'];
-            this.nextUrl = this.$store.state.properties['global']['routeHome'];
             this.getNativeSelectCategories(this.$store.state.properties['categories-select-menu']['datas']);
-            this.selected = this.oldChoice;
-            let that = this;
-            this.$watch('selected', function() {
-                that.choiceCategory(that.selected);
-            });
         },
         methods: {
             getNativeSelectCategories(categories) {
@@ -98,7 +101,7 @@
                 let that = this;
                 if(value != undefined && value != ''){
                     if(!that.withRedirectionOnClick){
-                        that.$parent.$emit('categoryChoice', {id: value});
+                        that.$emit('categoryChoice', value);
                     } else {
                         value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId',value) : null;
                     }

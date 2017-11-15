@@ -29,6 +29,7 @@
                     <template v-for="(invoice, index) in invoicesList">
                         <invoices-by-list-item
                                 :invoice="invoice"
+                                @refund="$emit('refund', $event)"
                         ></invoices-by-list-item>
                     </template>
                 </tbody>
@@ -47,31 +48,24 @@
                 required: false
             }
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['invoice-by-list']
+            }
+        },
+        watch: {
+            routeGetInvoicesList () {
+                this.getInvoicesList()
+            },
+            flagForceReload () {
+                this.getInvoicesList()
+            }
+        },
+        data () {
             return {
-                strings: {},
                 invoicesList: [],
                 isLoaded: false,
             };
-        },
-        mounted () {
-            this.strings = this.$store.state.strings['invoice-by-list'];
-            let that = this;
-            this.$watch('routeGetInvoicesList', function () {
-                this.getInvoicesList();
-            });
-            this.$watch('flagForceReload', function () {
-                this.getInvoicesList();
-            });
-            this.$on('sendToast', function (message) {
-                that.$parent.$emit('sendToast', message);
-            });
-            this.$on('loadError', function () {
-                that.$parent.$emit('loadError');
-            });
-            this.$on('refund', function (refund) {
-                this.$parent.$emit('refund', refund);
-            })
         },
         methods: {
             getInvoicesList: function (withLoadIndicator) {
@@ -85,10 +79,10 @@
                         that.isLoaded = true;
                         let paginate = response.data.invoices;
                         delete paginate.data;
-                        that.$parent.$emit('paginate', paginate);
+                        that.$emit('paginate', paginate);
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError')
+                        that.$emit('loadError')
                     });
             }
         }

@@ -1,5 +1,5 @@
 <template>
-        <div :id="_uid" :class="dataCurrent!=0 ? 'ui blue mini right pointing dropdown icon button' : 'ui mini right pointing dropdown icon button'">
+        <div :id="_uid" :class="oldCurrency !== 0 && oldCurrency !== null && oldCurrency !== undefined ? 'ui blue mini right pointing dropdown icon button' : 'ui mini right pointing dropdown icon button'">
             <i class="setting icon"></i>
             <div class="menu">
                 <div class="ui right search icon input">
@@ -36,14 +36,12 @@
                 required: false
             }
         },
-        data: () => {
-            return {
-                strings: {},
-                dataCurrent: 0
-            };
+        computed: {
+            strings () {
+                return this.$store.state.strings['currencies-button']
+            }
         },
         mounted () {
-            this.strings = this.$store.state.strings['currencies-button'];
             let that = this;
             $('#'+this._uid)
                 .dropdown('set selected', that.oldCurrency)
@@ -51,18 +49,14 @@
                     fullTextSearch: true,
                     forceSelection: false,
                     onChange: function (value, text, $selectedItem) {
-                        that.dataCurrent =  value;
                         if(value==0){
-                            that.$parent.$emit('currencyChoice', {cur: null});
+                            that.$emit('currencyChoice', null);
                         } else {
-                            that.$parent.$emit('currencyChoice', {cur: value});
+                            that.$emit('currencyChoice', value);
                         }
                     }
                 })
             ;
-        },
-        methods: {
-
         }
     }
 </script>

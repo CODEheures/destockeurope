@@ -11,11 +11,6 @@
                 <div class="text" >{{ strings.firstMenuName }}</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <!--<div class="ui left icon input">-->
-                        <!--<i class="search icon"></i>-->
-                        <!--<input type="text" :placeholder="strings.inputSearchLabel">-->
-                    <!--</div>-->
-                    <!--<div class="divider"></div>-->
                     <div class="scrolling menu">
                         <div v-for="(locale, key) in locales.listLocales" class="item" :data-value="key" :data-text="locale.name">
                             {{ locale.name }}
@@ -35,10 +30,24 @@
                 type: String,
             }
         },
-        data: () => {
+        computed: {
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            strings () {
+                return this.$store.state.strings['locales-dropdown-2']
+            }
+        },
+        watch: {
+            isReady () {
+                this.setOldChoice()
+            },
+            oldLocale () {
+                this.setOldChoice()
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 locales: [],
                 countLocales: 0,
                 isLoaded: false,
@@ -46,10 +55,7 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['locales-dropdown-2'];
-            this.properties = this.$store.state.properties['global'];
             this.getListLocales();
-
             let that = this;
             $('#'+this._uid)
                 .dropdown({
@@ -57,14 +63,12 @@
                     forceSelection: false,
                     onChange: function (value, text, $selectedItem) {
                         if(value != undefined && value != ''){
-                            that.$parent.$emit('localeChoice', {locale: value});
+                            that.$emit('localeChoice', value);
                         }
                     }
                 });
 
             this.setReady();
-            this.$watch('isReady', function () { that.setOldChoice() });
-            this.$watch('oldLocale', function () { that.setOldChoice() });
         },
         methods: {
             getListLocales: function (withLoadIndicator) {
@@ -78,7 +82,7 @@
                         that.isLoaded = true;
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError');
+                        that.$emit('loadError');
                     });
             },
             setReady () {

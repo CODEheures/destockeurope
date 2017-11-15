@@ -58,26 +58,25 @@
                 default: true
             },
         },
-        data: () => {
-            return {
-                strings: {},
+        computed: {
+            strings () {
+                return this.$store.state.strings['margin-input-field']
             }
         },
-        mounted () {
-            this.strings = this.$store.state.strings['margin-input-field'];
-            this.$watch('advert.price_coefficient', function () {
-               this.advert.price_coefficient_total = this.advert.price_coefficient
-            });
+        watch: {
+            'advert.price_coefficient' () {
+                this.advert.price_coefficient_total = this.advert.price_coefficient
+            }
         },
         methods: {
             updateCoefficient: function () {
                 let that = this;
                 axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient*100).toFixed(0), 'coefficient_total': (that.advert.price_coefficient_total*100).toFixed(0)})
                     .then(function (response) {
-                        that.$parent.$emit('updateSuccess')
+                        that.$emit('updateSuccess')
                     })
                     .catch(function (error) {
-                        that.$parent.$emit('loadError')
+                        that.$emit('loadError')
                     });
             }
         }

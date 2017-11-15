@@ -189,10 +189,19 @@
             'mode',
             'clientToken'
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['review-for-payment']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            dataInvoice () {
+                return JSON.parse(this.invoice)
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 isLoaded: true,
                 sendMessage: false,
                 typeMessage: '',
@@ -203,7 +212,6 @@
                 dataCgvA: '',
                 dataCgvHref: '',
                 isCgvApprove: false,
-                dataInvoice: {},
                 nonce: '',
                 method: '',
                 dataCVCLabel: '',
@@ -212,9 +220,6 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['review-for-payment'];
-            this.properties = this.$store.state.properties['global'];
-            this.dataInvoice = JSON.parse(this.invoice);
             this.steps = [
                 {
                     isActive : false,

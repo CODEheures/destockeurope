@@ -19,15 +19,32 @@
                 required: false,
                 default: 1
             },
-                //Vue Strings
+            //Vue Strings
             name: String,
             prefix: String,
             title: String
         },
-        data: () => {
-            return {
-
+        watch: {
+            prefix () {
+                this.updateSlider()
+            },
+            mini () {
+                this.updateSlider()
+            },
+            maxi () {
+                this.updateSlider()
+            },
+            handleMin () {
+                this.updateSlider()
+            },
+            handleMax () {
+                this.updateSlider()
             }
+        },
+        data () {
+          return {
+              slider: Object
+          }
         },
         mounted () {
             let that = this;
@@ -40,63 +57,27 @@
                 to: that.handleMax,
                 grid: true,
                 step: that.step,
-                prefix: that.prefix
-            });
-            let slider = elemSlider.data("ionRangeSlider");
-            this.$watch('prefix', function () {
-                slider.update({
-                    prefix: that.prefix
-                });
-            });
-            this.$watch('maxi', function () {
-                slider.update({
-                    max: that.maxi
-                });
-            });
-            this.$watch('mini', function () {
-                slider.update({
-                    min: that.mini
-                });
-            });
-            this.$watch('handleMin', function () {
-                slider.update({
-                    from: that.handleMin,
-                });
-            });
-            this.$watch('handleMax', function () {
-                slider.update({
-                    to: that.handleMax,
-                });
-            });
-//
-            slider.update({
-                min: that.mini,
-                max: that.maxi,
                 prefix: that.prefix,
-                from: that.handleMin,
-                to: that.handleMax,
                 onFinish: function (data) {
-                    that.$parent.$emit('rangeUpdate', {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]});
+                    that.$emit('rangeUpdate', {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]});
                 }
             });
-        },
-        updated () {
-            let elemSlider = $('#'+this._uid);
-            let slider = elemSlider.data("ionRangeSlider");
-            let that = this;
-            slider.update({
-                min: that.mini,
-                max: that.maxi,
-                prefix: that.prefix,
-                from: that.handleMin,
-                to: that.handleMax,
-                onFinish: function (data) {
-                    that.$parent.$emit('rangeUpdate', {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]});
-                }
-            });
+            this.slider = elemSlider.data("ionRangeSlider");
         },
         methods: {
-
+            updateSlider () {
+                let that = this;
+                this.slider.update({
+                    min: that.mini,
+                    max: that.maxi,
+                    prefix: that.prefix,
+                    from: that.handleMin,
+                    to: that.handleMax,
+                    onFinish: function (data) {
+                        that.$emit('rangeUpdate', {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]});
+                    }
+                });
+            }
         }
     }
 </script>

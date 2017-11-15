@@ -15,6 +15,8 @@
                                 :flag-reset="false"
                                 :with-xsrf-token="true"
                                 :fields="{title: 'titleWithManuRef', description : 'resume', image: 'thumb', price: 'price_margin'}"
+                                @clearSearchResults="$emit('clearSearchResults')"
+                                @refreshResults="$emit('refreshResults', $event)"
                         ></search-filter>
                     </div>
                 </div>
@@ -34,7 +36,7 @@
                 type: String
             },
         },
-        data: () => {
+        data () {
             return {
                 strings: {},
                 properties: {},
@@ -50,12 +52,6 @@
             //search filter
             this.dataResultsFor = DestockTools.findInUrl('resultsFor');
             this.dataUpdateSearch = !this.dataUpdateSearch;
-            this.$on('refreshResults', function (query) {
-                this.$parent.$emit('refreshResults', query);
-            });
-            this.$on('clearSearchResults', function () {
-                this.$parent.$emit('clearSearchResults');
-            });
 
             //Accordion
             let accordionElement = $('#filter-accordion-'+this._uid);
@@ -64,9 +60,6 @@
             } else {
                 accordionElement.accordion();
             }
-        },
-        methods: {
-
         }
     }
 </script>

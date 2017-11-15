@@ -38,6 +38,8 @@
                             :filter="filter"
                             :route-search="dataRouteGetInvoicesList"
                             :flag-reset-search="dataFlagResetSearch"
+                            @clearSearchResults="clearSearchResults"
+                            @refreshResults="refreshResults"
                     ></invoice-filter>
                 </div>
             </div>
@@ -49,6 +51,9 @@
                     <invoices-by-list
                             :route-get-invoices-list="dataRouteGetInvoicesList"
                             :flag-force-reload="dataForceReload"
+                            @refund="refund($event)"
+                            @paginate="paginate=$event"
+                            @loadError="sendToast(strings.loadErrorMessage, 'error')"
                     ></invoices-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -56,6 +61,7 @@
                         <pagination
                                 :pages="paginate"
                                 :route-get-list="dataRouteGetInvoicesList"
+                                @changePage="changePage"
                         ></pagination>
                     </div>
                 </div>
@@ -70,14 +76,18 @@
     export default {
         props: [
             //vue routes
-            'routeGetInvoicesList',
-            //vue vars
-            'clearStorage',
+            'routeGetInvoicesList'
         ],
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['manage-invoices']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 sendMessage: false,
                 typeMessage: '',
                 message: '',
@@ -93,52 +103,8 @@
             };
         },
         mounted () {
-            this.strings = this.$store.state.strings['manage-invoices'];
-            this.properties = this.$store.state.properties['global'];
-            let that = this;
-            if(this.clearStorage){
-                sessionStorage.clear();
-            }
-            //On load Error
-            this.$on('loadError', function () {
-                this.sendToast(this.strings.loadErrorMessage, 'error');
-            });
-
-            //on reconstruit le filtre
-            this.initFilterBySessionStorage();
-            this.updateResults();
-
-            this.$on('paginate', function (result) {
-                this.paginate=result;
-            });
-            this.$on('updateFilter', function (result) {
-                this.updateFilter(result);
-            });
-            this.$on('changePage', function (url) {
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600, function () {
-                    that.dataRouteGetInvoicesList = url;
-                });
-            });
-            this.$on('refreshResults', function (query) {
-                if(query != undefined && query.length >= this.properties.filterMinLengthSearch){
-                    this.filter.resultsFor = query;
-                    this.updateResults(true);
-                }
-            });
-            this.$on('clearSearchResults', function () {
-                let haveClearAction = this.clearInputSearch();
-                if(haveClearAction){
-                    this.updateResults(true);
-                }
-            });
-            this.$on('refund', function (refund) {
-                this.refund(refund);
-            })
-        },
-        updated () {
-
+            sessionStorage.clear()
+            this.updateResults()
         },
         methods: {
             sendToast: function (message, type) {
@@ -176,26 +142,6 @@
                 this.update = !this.update;
                 this.dataRouteGetInvoicesList = this.urlForFilter(true);
             },
-            updateFilter(result){
-                let oldFilter= _.cloneDeep(this.filter);
-                for(let elem in result){
-                    if(result[elem] == null){
-                        if(elem in this.filter){
-                            delete this.filter[elem];
-                        }
-                    } else {
-                        this.filter[elem] = result[elem];
-                    }
-                }
-                if(!_.isEqual(oldFilter, this.filter)){
-                    this.updateResults();
-                }
-            },
-            initFilterBySessionStorage: function () {
-                if(sessionStorage.getItem('filter') != null){
-                    this.filter = JSON.parse(sessionStorage.getItem('filter'));
-                }
-            },
             refund(refund) {
                 event.preventDefault();
                 this.refundAmount = refund.amount;
@@ -220,6 +166,26 @@
                             });
                     }
                 }).modal('show');
+            },
+            clearSearchResults () {
+                let haveClearAction = this.clearInputSearch();
+                if(haveClearAction){
+                    this.updateResults(true);
+                }
+            },
+            refreshResults (query) {
+                if(query !== undefined && query.length >= this.properties.filterMinLengthSearch){
+                    this.filter.resultsFor = query;
+                    this.updateResults(true);
+                }
+            },
+            changePage (url) {
+                let that = this
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 600, function () {
+                    that.dataRouteGetInvoicesList = url;
+                });
             }
         }
     }

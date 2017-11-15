@@ -22,35 +22,31 @@
         props: {
             category: Object,
         },
-        data: () => {
-            return {
-                strings: {},
-                properties: {},
-            } ;
+        computed: {
+            strings () {
+                return this.$store.state.strings['categories-list-move-to']
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            }
         },
         mounted () {
-            this.strings = this.$store.state.strings['categories-list-move-to'];
-            this.properties = this.$store.state.properties['global'];
-        },
-        methods: {
-
-        },
-        updated () {
             let that = this;
             let dropdown = $('#'+that._uid);
             dropdown.on('click', function () {
-               $(this).closest('.accordion').css({'z-index':'2'});
+                $(this).closest('.accordion').css({'z-index':'2'});
             });
             dropdown.dropdown({
-                        allowCategorySelection: true,
-                        action: 'select',
-                        onChange: function(value, text, $selectedItem) {
-                            if(value != undefined && value != ''){
-                                $(this).closest('.accordion').css({'z-index':''});
-                                that.$parent.$emit('categoryChoice', {parentId: value, id: that.category.id});
-                            }
-                        }
-                    })
+                allowCategorySelection: true,
+                action: 'select',
+                onChange: function(value, text, $selectedItem) {
+                    if(value != undefined && value != ''){
+                        $(this).closest('.accordion').css({'z-index':''});
+                        console.log('listMoveTo cat choice', {parentId: value, id: that.category.id})
+                        that.$emit('categoryChoice', {parentId: value, id: that.category.id});
+                    }
+                }
+            })
             ;
         }
     }

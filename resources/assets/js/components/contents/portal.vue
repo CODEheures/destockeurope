@@ -20,6 +20,8 @@
                                                     <location-filter
                                                             :accurate-list="locationAccurateList"
                                                             :with-null-border-radius-bottom="true"
+                                                            @locationUpdate="locationUpdate"
+                                                            @clearLocationResults="clearLocationResults"
                                                     ></location-filter>
                                                 </div>
                                             </div>
@@ -1179,14 +1181,24 @@
             'countries',
             'filterLocationAccurateList',
         ],
-        data: () => {
+        computed: {
+            dataCountries () {
+                return JSON.parse(this.countries)
+            },
+            locationAccurateList () {
+                return JSON.parse(this.filterLocationAccurateList)
+            },
+            properties () {
+                return this.$store.state.properties['global']
+            },
+            strings () {
+                return this.$store.state.strings['portal']
+            }
+        },
+        data () {
             return {
-                strings: {},
-                properties: {},
                 filter: {},
-                dataCountries: {},
                 dataUpdate: false,
-                locationAccurateList: [],
                 isLocationReady: false,
                 sendMessage: false,
                 typeMessage: '',
@@ -1198,36 +1210,14 @@
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['portal'];
-            this.properties = this.$store.state.properties['global'];
-            this.dataCountries = JSON.parse(this.countries);
-            this.locationAccurateList = JSON.parse(this.filterLocationAccurateList);
             this.nextUrl = this.properties.routeHome;
-            let that = this;
-            //When Update Filter
-            this.$on('locationUpdate', function (result) {
-                this.isLocationReady = true;
-                Object.keys(result).forEach(function (key) {
-                    that.nextUrl = that.getNextUrl(key, result[key]);
-                });
-            });
-
-
-            //When clear Location
-            this.$on('clearLocationResults', function () {
-                this.isLocationReady = false;
-                this.locationAccurateList.forEach(function(key){
-                    that.nextUrl = that.getNextUrl(key, null);
-                });
-                this.nextUrl = this.getNextUrl('forLocation', null);
-            });
         },
         methods: {
             getNextUrl(paramName, paramValue) {
                 return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
             },
             getNextUrlForCountry(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.properties.routeHome, paramName, paramValue, true)
+                return DestockTools.getNextUrl(this.$store.state.properties['global'].routeHome, paramName, paramValue, true)
             },
             goHome () {
                 DestockTools.goToUrl(this.nextUrl);
@@ -1256,6 +1246,19 @@
                             that.sendToast(error.response.data, 'error');
                         }
                     });
+            },
+            locationUpdate (result) {
+                this.isLocationReady = true;
+                Object.keys(result).forEach( (key) => {
+                    this.nextUrl = this.getNextUrl(key, result[key]);
+                });
+            },
+            clearLocationResults () {
+                this.isLocationReady = false;
+                this.locationAccurateList.forEach((key) => {
+                    this.nextUrl = this.getNextUrl(key, null);
+                });
+                this.nextUrl = this.getNextUrl('forLocation', null);
             }
         }
     }

@@ -30,17 +30,6 @@
                 required: false,
                 default: false
             }
-        },
-        data: () => {
-            return {
-
-            }
-        },
-        mounted () {
-
-        },
-        methods: {
-
         }
     }
 </script>

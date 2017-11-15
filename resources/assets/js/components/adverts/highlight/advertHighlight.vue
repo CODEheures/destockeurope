@@ -24,13 +24,10 @@
         props: {
             advert: Object,
         },
-        data: () => {
-            return {
-                strings: {},
-            };
-        },
-        mounted () {
-            this.strings = this.$store.state.strings['advert-highlight'];
+        computed: {
+            strings () {
+                return this.$store.state.strings['advert-highlight']
+            }
         },
         methods: {
             getThumbUrl(advert) {

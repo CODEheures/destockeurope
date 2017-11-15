@@ -15,15 +15,30 @@
             //Vue vars
             topic_id: Number
         },
-        data: () => {
+        computed: {
+            strings () {
+                return this.$store.state.strings['notifications-activer']
+            }
+        },
+        watch: {
+            'destockShareVarData.firebase.token' (token) {
+                this.existInToken(token)
+            },
+            'existIn' (value) {
+                if(value==true) {
+                    subscribeCheckbox.checkbox('set checked');
+                } else {
+                    subscribeCheckbox.checkbox('set unchecked');
+                }
+            }
+        },
+        data () {
             return {
-                strings: {},
                 destockShareVarData: destockShareVar,
                 existIn: false,
             }
         },
         mounted () {
-            this.strings = this.$store.state.strings['notifications-activer'];
             //App Notifications
             let that = this;
             let subscribeCheckbox = $('#subscribe-'+this._uid);
@@ -31,18 +46,6 @@
             if(this.destockShareVarData.firebase.token!=undefined){
                 this.existInToken(this.destockShareVarData.firebase.token);
             }
-
-            this.$watch('destockShareVarData.firebase.token', function (token) {
-                that.existInToken(token);
-            });
-
-            this.$watch('existIn', function (value) {
-                if(value==true) {
-                    subscribeCheckbox.checkbox('set checked');
-                } else {
-                    subscribeCheckbox.checkbox('set unchecked');
-                }
-            });
 
             subscribeCheckbox.checkbox({
                 onChecked: function() {

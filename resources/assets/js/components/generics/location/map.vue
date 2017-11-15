@@ -20,39 +20,31 @@
             lng: String,
             lat: String,
             geoloc: String,
-            square: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
             resize: {
                 type: Boolean,
                 required: false,
             }
         },
-        data: () => {
-            return {
-                strings: {},
-                dataLng: '',
-                dataLat: '',
-                dataGeoloc: '',
+        computed: {
+            strings () {
+                return this.$store.state.strings['googleMap']
             }
         },
-        mounted () {
-            this.strings = this.$store.state.strings['googleMap'];
-            this.dataLng = this.lng;
-            this.dataLat = this.lat;
-            this.dataGeoloc = this.geoloc;
-            if(this.square){
-                //this.setSizeMap();
+        watch: {
+            resize () {
+                this.setSizeMap()
             }
-            this.$watch('resize', function () {
-                this.setSizeMap();
-            })
+        },
+        data () {
+            return {
+                dataLng: this.lng,
+                dataLat: this.lat,
+                dataGeoloc: this.geoloc
+            }
         },
         methods: {
             latLngChange (event) {
-                this.$parent.$emit('locationChange', {'lat' : event.target.dataset.lat, 'lng':event.target.dataset.lng, 'geoloc': event.target.dataset.geoloc})
+                this.$emit('locationChange', {'lat' : event.target.dataset.lat, 'lng':event.target.dataset.lng, 'geoloc': event.target.dataset.geoloc})
             },
             setSizeMap () {
                 let map = $('#map');
