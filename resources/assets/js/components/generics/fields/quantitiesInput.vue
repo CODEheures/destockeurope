@@ -41,6 +41,7 @@
 </template>
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             advert: {
@@ -73,7 +74,7 @@
         methods: {
             updateQuantities: function () {
                 let that = this;
-                axios.patch(that.advert.updateQuantitiesUrl, {'totalQuantity': that.advert.totalQuantity, 'lotMiniQuantity': that.advert.lotMiniQuantity})
+                Axios.patch(that.advert.updateQuantitiesUrl, {'totalQuantity': that.advert.totalQuantity, 'lotMiniQuantity': that.advert.lotMiniQuantity})
                     .then(function (response) {
                         that.$emit('updateSuccess')
                     })

@@ -39,6 +39,7 @@
 </template>
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             routeGetInvoicesList: String,
@@ -73,7 +74,7 @@
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
                 this.invoicesList = [];
-                axios.get(this.routeGetInvoicesList)
+                Axios.get(this.routeGetInvoicesList)
                     .then(function (response) {
                         that.invoicesList = (response.data).invoices.data;
                         that.isLoaded = true;

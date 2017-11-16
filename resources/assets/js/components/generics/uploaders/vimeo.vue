@@ -66,6 +66,7 @@
 
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             //vue routes
@@ -95,7 +96,7 @@
                     function timeout(seconds) {
                         setTimeout(function () {
                             counter++;
-                            axios.get(that.routeGetStatusVideo)
+                            Axios.get(that.routeGetStatusVideo)
                                 .then(function (response) {
                                     if(response.data.status=='available'){
                                         setTimeout(function () {
@@ -178,7 +179,7 @@
                 //Get Ticket, return routes
                 let that = this;
                 this.videoOnUpload = true;
-                axios.put(this.routeGetVideoPostTicket, {'size': that.fileToUpload.size,'type': that.fileToUpload.type})
+                Axios.put(this.routeGetVideoPostTicket, {'size': that.fileToUpload.size,'type': that.fileToUpload.type})
                     .then(function (response) {
                         that.postVideo(response.data);
                     })
@@ -194,9 +195,9 @@
             postVideo: function(routes, offset) {
                 offset==undefined ? offset = 0 : null;
                 let that = this;
-                this.cancelToken = axios.CancelToken;
+                this.cancelToken = Axios.CancelToken;
                 this.sourceCancelToken = this.cancelToken.source();
-                axios.request({
+                Axios.request({
                     cancelToken: that.sourceCancelToken.token,
                     url: routes.routePutVideo,
                     method: 'put',
@@ -242,7 +243,7 @@
             },
             progressPostVideo: function (routeGetProgress) {
                 let that = this;
-                axios.request({
+                Axios.request({
                     url: routeGetProgress,
                     method: 'put',
                     headers: {
@@ -270,7 +271,7 @@
                 let that = this;
                 this.onCloseTicket = true;
                 this.resetUploadVideoState();
-                axios.patch(routeCloseTicket, {'completeVideoUpload': routesCompleteVideoUpload})
+                Axios.patch(routeCloseTicket, {'completeVideoUpload': routesCompleteVideoUpload})
                     .then(function (response) {
                         that.onCloseTicket = false;
                         let location = response.headers.location;
@@ -292,7 +293,7 @@
             },
             delVideo: function () {
                 let that = this;
-                axios.delete(this.routeDelTempoVideo + '/' + that.videoId)
+                Axios.delete(this.routeDelTempoVideo + '/' + that.videoId)
                     .then(function (response) {
                         that.videoId = '';
                         that.videoReady = false;

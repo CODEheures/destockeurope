@@ -132,6 +132,7 @@
 
 <script>
   import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
     export default {
         directives: {focus: focus},
         props: [
@@ -241,7 +242,7 @@
                     this.firstCurrencyChoice = false
                     return
                 }
-                axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
+                Axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
                     .then(function (response) {
                         that.sendToast(that.strings.accountPatchSuccess, 'success');
                     })
@@ -259,7 +260,7 @@
                     this.firstLocaleChoice = false
                     return
                 }
-                axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
+                Axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
                     .then(function (response) {
                         that.sendToast(that.strings.accountPatchSuccess, 'success');
                     })
@@ -277,7 +278,7 @@
                 this.lng= event.lng;
                 this.geoloc= event.geoloc;
                 if(this.dataFirstGeoloc || parseFloat(this.lat) != parseFloat(this.latitude) || parseFloat(this.lng) != parseFloat(this.longitude)){
-                    axios.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
+                    Axios.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
                         .then(function (response) {
                             that.dataFirstGeoloc = false;
                             that.sendToast(that.strings.accountPatchSuccess, 'success');
@@ -305,7 +306,7 @@
                 } else if(inputName == 'phone') {
                     updateRoute = this.routeUserSetPhone;
                 }
-                axios.patch(updateRoute, {'value': value})
+                Axios.patch(updateRoute, {'value': value})
                     .then(function (response) {
                         that.updateFails = false;
                         that.sendToast(that.strings.accountPatchSuccess, 'success');
@@ -330,7 +331,7 @@
             },
             userGetMe: function () {
                 let that = this;
-                axios.get(this.routeUserGetMe)
+                Axios.get(this.routeUserGetMe)
                     .then(function (response) {
                         that.dataUserName = response.data.userName;
                         that.dataCompagnyName = response.data.compagnyName;

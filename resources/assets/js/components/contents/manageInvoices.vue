@@ -73,6 +73,8 @@
 
 
 <script>
+    import Parser from 'url'
+    import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -150,7 +152,7 @@
                     closable: false,
                     onApprove: function () {
                         that.isLoaded = false;
-                        axios.get(refund.refundUrl)
+                        Axios.get(refund.refundUrl)
                             .then(function (response) {
                                 that.isLoaded = true;
                                 that.dataForceReload=!that.dataForceReload;

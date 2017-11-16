@@ -146,6 +146,7 @@
 
 <script>
     import { DestockTools } from '../../destockTools'
+    import Axios from 'axios'
     export default {
         props: {
             //vue routes
@@ -267,7 +268,7 @@
                 let that = this;
                 let categoryId = DestockTools.findInUrl('categoryId');
                 if(categoryId !== null && categoryId==parseInt(categoryId) && categoryId > 0 ) {
-                    axios.get(this.properties.routeCategory+'/'+categoryId)
+                    Axios.get(this.properties.routeCategory+'/'+categoryId)
                         .then(function (response) {
                             let chainedCategories = response.data;
                             that.dataBreadcrumbItems.push({

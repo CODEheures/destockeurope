@@ -7,6 +7,7 @@
 </template>
 
 <script>
+  import Parser from 'url'
     export default {
         props: [
             //vue routes

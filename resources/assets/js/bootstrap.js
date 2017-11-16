@@ -1,3 +1,4 @@
+// Globals Vars and requires
 import { DestockMap } from './destockMap'
 
 window.initAutocomplete = function () {
@@ -10,14 +11,14 @@ window.initMap = function () {
 }
 
 window.$ = window.jQuery = require('jquery')
-window.ionRangeSlider = require('ion-rangeslider')
-window.Parser = require('url')
-window.axios = require('axios')
-window.Vuex = require('vuex')
 
+require('../semantic/dist/semantic')
+require('ion-rangeslider')
 require('amcharts3/amcharts/amcharts')
 require('amcharts3/amcharts/gauge')
 require('amcharts3/amcharts/serial')
 require('amcharts3/amcharts/themes/light')
-
+require('swiper')
+require('../ripple/ripple')
 require('vue-focus')
+require('./myjs')

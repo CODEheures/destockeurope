@@ -573,6 +573,7 @@
 <script>
   import moment from 'moment'
   import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -850,7 +851,7 @@
                         params = {'isEditOf': this.dataAdvertEdit.id};
                     }
 
-                    axios.get(this.routeGetCost+'/'+this.pictures.length + '/'+ this.isUrgent, {params: params})
+                    Axios.get(this.routeGetCost+'/'+this.pictures.length + '/'+ this.isUrgent, {params: params})
                         .then(function (response) {
                             that.cost = response.data;
                             (that.steps[2]).title = that.strings.stepThreeTitle + '(' + (that.cost/100).toFixed(2) + that.strings.stepThreeTitlePost + ')';
@@ -878,7 +879,7 @@
                     })
                 } else {
                     if(this.categoryId != undefined && this.categoryId>0 ) {
-                        axios.get(this.properties.routeCategory+'/'+this.categoryId)
+                        Axios.get(this.properties.routeCategory+'/'+this.categoryId)
                             .then(function (response) {
                                 let chainedCategories = response.data;
                                 that.breadcrumbItems.push({

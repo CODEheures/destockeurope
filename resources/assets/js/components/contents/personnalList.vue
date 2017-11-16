@@ -80,6 +80,7 @@
 <script>
     import _ from 'lodash'
     import { DestockTools } from '../../destockTools'
+    import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -132,7 +133,7 @@
                     closable: true,
                     blurring: false,
                     onApprove: function () {
-                        axios.delete(url)
+                        Axios.delete(url)
                             .then(function (response) {
                                 that.gotoNextUrl(true);
                             })

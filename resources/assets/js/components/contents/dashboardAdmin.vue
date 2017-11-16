@@ -67,6 +67,7 @@
 
 <script>
   import moment from 'moment'
+  import Axios from 'axios'
     export default {
         directives: {focus: focus},
         props: {
@@ -105,7 +106,7 @@
             getStats() {
                 let that = this;
                 this.dataStatsLoading = true;
-                axios.get(this.routeGetStats)
+                Axios.get(this.routeGetStats)
                     .then(function (response) {
                         that.dataStatsLoading = false;
                         that.isLoaded = true;
@@ -323,7 +324,7 @@
             cleanApp() {
                 let that = this;
                 this.dataCleanLoading = true;
-                axios.get(this.routeCleanApp)
+                Axios.get(this.routeCleanApp)
                     .then(function (response) {
                         that.dataCleanLoading = false;
                         that.getStats();

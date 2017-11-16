@@ -1,24 +1,7 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and .
- */
 require('./bootstrap')
-require('../semantic/dist/semantic')
-// require('./semantic');
-require('swiper')
-require('../ripple/ripple')
-require('./myjs')
-
 import Vue from 'vue'
 
 Vue.config.devtools = (window.destockShareVar.vueJsDevTool === '1')
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the body of the page. From here, you may begin adding components to
- * the application, or feel free to tweak this setup for your needs.
- */
 // Special Store
 Vue.component('store-strings-setter', require('./components/generics/store/storeStringsSetter.vue'))
 Vue.component('store-properties-setter', require('./components/generics/store/storePropertiesSetter.vue'))

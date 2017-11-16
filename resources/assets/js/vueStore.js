@@ -1,22 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 const store = new Vuex.Store({
-    state: {
-        strings: {},
-        properties: {}
+  state: {
+    strings: {},
+    properties: {}
+  },
+  mutations: {
+    setStrings (state, payload) {
+      state.strings[payload.name] = payload.strings
     },
-    mutations: {
-        setStrings(state, payload) {
-            "use strict";
-            state.strings[payload.name] = payload.strings;
-        },
-        setProperties(state, payload) {
-            "use strict";
-            state.properties[payload.name] = payload.properties;
-        }
+    setProperties (state, payload) {
+      state.properties[payload.name] = payload.properties
     }
-});
+  }
+})
 
-export default store;
+export default store

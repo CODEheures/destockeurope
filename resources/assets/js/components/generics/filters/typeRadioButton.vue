@@ -19,6 +19,7 @@
 
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             routeGetListType: String,
@@ -57,7 +58,7 @@
         methods: {
             getListType: function () {
                 let that = this;
-                axios.get(this.routeGetListType)
+                Axios.get(this.routeGetListType)
                     .then(function (response) {
                         that.listType = response.data;
                         that.isLoaded = true;

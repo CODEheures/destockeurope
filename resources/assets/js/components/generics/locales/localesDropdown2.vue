@@ -24,6 +24,7 @@
 
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             oldLocale: {
@@ -75,7 +76,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.properties.routeListLocales)
+                Axios.get(this.properties.routeListLocales)
                     .then(function (response) {
                         that.locales = response.data;
                         that.countLocales = Object.keys(response.data.listLocales).length;

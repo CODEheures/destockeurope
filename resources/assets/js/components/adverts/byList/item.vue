@@ -409,6 +409,8 @@
 <script>
     import _ from 'lodash'
     import moment from 'moment'
+    import Axios from 'axios'
+
     export default {
         props: {
             routeBookmarkAdd: String,
@@ -452,7 +454,7 @@
                 event.preventDefault();
                 event.stopPropagation();
                 let that = this;
-                axios.get(this.routeBookmarkAdd+'/'+this.advert.id)
+                Axios.get(this.routeBookmarkAdd+'/'+this.advert.id)
                     .then(function (response) {
                         that.dataIsUserBookmark = true;
                         that.$emit('bookmarkSuccess');
@@ -470,7 +472,7 @@
                 event.preventDefault();
                 event.stopPropagation();
                 let that = this;
-                axios.get(this.routeBookmarkRemove+'/'+this.advert.id)
+                Axios.get(this.routeBookmarkRemove+'/'+this.advert.id)
                     .then(function (response) {
                         that.dataIsUserBookmark = false;
                         that.$emit('unbookmarkSuccess');

@@ -180,6 +180,7 @@
 
 <script>
   import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -552,7 +553,7 @@
                 let that = this;
                 if(this.nonce !== '' && this.nonce.length > 0) {
                     $('#validate-order-btn').addClass('loading disabled');
-                    axios.post(this.routePostNonce, {'nonce': this.nonce, 'deviceData': this.deviceData})
+                    Axios.post(this.routePostNonce, {'nonce': this.nonce, 'deviceData': this.deviceData})
                         .then(function (response) {
                             DestockTools.goToUrl(response.data);
                             $('#validate-order-btn').removeClass('loading');

@@ -47,6 +47,7 @@
 </template>
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             advert: {
@@ -71,7 +72,7 @@
         methods: {
             updateCoefficient: function () {
                 let that = this;
-                axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient*100).toFixed(0), 'coefficient_total': (that.advert.price_coefficient_total*100).toFixed(0)})
+                Axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient*100).toFixed(0), 'coefficient_total': (that.advert.price_coefficient_total*100).toFixed(0)})
                     .then(function (response) {
                         that.$emit('updateSuccess')
                     })

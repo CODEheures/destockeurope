@@ -230,6 +230,7 @@
 
 
 <script>
+  import Axios from 'axios'
     export default {
         directives: {focus: focus},
         props: {
@@ -278,7 +279,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.routeParameters)
+                Axios.get(this.routeParameters)
                     .then(function (response) {
                         that.parameters = response.data;
                         that.oldType=that.parameters.welcomeType;
@@ -325,7 +326,7 @@
             },
             updateRequest(patchValue) {
                 let that = this;
-                axios.patch(this.routeParameters, patchValue)
+                Axios.patch(this.routeParameters, patchValue)
                     .then(function (response) {
                         that.getParameters(false);
                         that.sendToast(that.strings.patchSuccessMessage, 'success');
@@ -342,7 +343,7 @@
             testValidImgUrl(url, callback){
                 let that = this;
                 this.isLoaded = false;
-                axios.post(this.routeTestIsPicture, {url: url})
+                Axios.post(this.routeTestIsPicture, {url: url})
                     .then(function (response) {
                         that.isLoaded = true;
                         if(response.data && response.data == true){

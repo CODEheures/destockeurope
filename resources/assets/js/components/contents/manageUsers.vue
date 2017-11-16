@@ -71,7 +71,9 @@
 
 
 <script>
+    import Parser from 'url'
     import _ from 'lodash'
+    import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -160,7 +162,7 @@
                     closable: false,
                     onApprove: function () {
                         that.isLoaded = false;
-                        axios.delete(url)
+                        Axios.delete(url)
                             .then(function (response) {
                                 that.isLoaded = true;
                                 that.dataForceReload=!that.dataForceReload;

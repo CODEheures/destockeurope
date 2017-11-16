@@ -61,6 +61,7 @@
 </template>
 
 <script>
+  import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -103,7 +104,7 @@
                     blurring: false,
                     onApprove: function () {
                         that.isLoaded = false;
-                        axios.delete(url)
+                        Axios.delete(url)
                             .then(function (response) {
                                 that.flagForceReload = !that.flagForceReload;
                                 that.isLoaded = true;

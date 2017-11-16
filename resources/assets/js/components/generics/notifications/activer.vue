@@ -6,6 +6,7 @@
 </template>
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             //vue routes
@@ -49,7 +50,7 @@
 
             subscribeCheckbox.checkbox({
                 onChecked: function() {
-                    axios.post(that.routeAdd, {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id})
+                    Axios.post(that.routeAdd, {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id})
                         .then(function (response) {
                             //console.log('subscribe success', response)
                         })
@@ -58,7 +59,7 @@
                         });
                 },
                 onUnchecked: function() {
-                    axios.delete(that.routeRemove, {data: {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id}})
+                    Axios.delete(that.routeRemove, {data: {'token': that.destockShareVarData.firebase.token,'topic_id': that.topic_id}})
                         .then(function (response) {
                             //console.log('unsubscribe success', response)
                         })
@@ -71,7 +72,7 @@
         methods: {
             existInToken: function (token) {
                 let that = this;
-                axios.post(that.routeExistIn, {'token': token,'topic_id': that.topic_id})
+                Axios.post(that.routeExistIn, {'token': token,'topic_id': that.topic_id})
                     .then(function (response) {
                         that.existIn = response.data.existIn == true;
                     })

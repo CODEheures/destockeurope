@@ -40,6 +40,7 @@
 </template>
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             routeGetUsersList: String,
@@ -77,7 +78,7 @@
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
                 this.usersList = [];
-                axios.get(this.routeGetUsersList)
+                Axios.get(this.routeGetUsersList)
                     .then(function (response) {
                         that.usersList = (response.data).users.data;
                         that.isLoaded = true;
@@ -92,7 +93,7 @@
             patchUserRole: function (url, role) {
                 this.isLoaded = false;
                 let that = this;
-                axios.patch(url, {'role': role})
+                Axios.patch(url, {'role': role})
                     .then(function (response) {
                         that.getUsersList();
                     })

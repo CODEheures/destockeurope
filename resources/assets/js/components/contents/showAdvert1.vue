@@ -226,6 +226,7 @@
 
 <script>
   import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -425,7 +426,7 @@
                     closable: true,
                     blurring: false,
                     onApprove: function () {
-                        axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
+                        Axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
                             .then(function (response) {
                                 that.sendToast(that.strings.sendSuccessMessage, 'success');
                             })
@@ -446,7 +447,7 @@
                     closable: true,
                     blurring: false,
                     onApprove: function () {
-                        axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
+                        Axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
                             .then(function (response) {
                                 that.sendToast(that.strings.sendSuccessReportMessage, 'success');
                             })
@@ -468,7 +469,7 @@
             },
             bookmarkMe: function () {
                 let that = this;
-                axios.get(this.routeBookmarkAdd)
+                Axios.get(this.routeBookmarkAdd)
                     .then(function (response)  {
                         that.dataIsUserBookmark = true;
                         that.sendToast(that.strings.bookmarkSuccess, 'success');
@@ -484,7 +485,7 @@
             },
             unbookmarkMe: function () {
                 let that = this;
-                axios.get(this.routeBookmarkRemove)
+                Axios.get(this.routeBookmarkRemove)
                     .then(function (response)  {
                         that.dataIsUserBookmark = false;
                         that.sendToast(that.strings.unbookmarkSuccess, 'success');
@@ -506,7 +507,7 @@
                     blurring: false,
                     onApprove: function () {
                         that.isLoaded = false;
-                        axios.delete(that.routeDeleteAdvert)
+                        Axios.delete(that.routeDeleteAdvert)
                             .then(function (response) {
                                 DestockTools.goToUrl(response.data);
                             })

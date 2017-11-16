@@ -124,6 +124,7 @@
 <script>
     import _ from 'lodash'
     import { DestockTools } from '../../destockTools'
+    import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -188,7 +189,7 @@
             },
             getHighLightAdvert: function () {
                 let that = this;
-                axios.get(this.routeGetHighlight)
+                Axios.get(this.routeGetHighlight)
                     .then(function (response) {
                         that.dataHighlightAdverts = (response.data).adverts;
                     })

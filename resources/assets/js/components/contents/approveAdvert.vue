@@ -140,6 +140,7 @@
 </template>
 
 <script>
+  import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -203,7 +204,7 @@
                 let that = this;
                 this.approveList={};
                 this.advertsList={};
-                axios.get(this.routeGetAdvertsList)
+                Axios.get(this.routeGetAdvertsList)
                     .then(function (response) {
                         that.advertsList = response.data;
                         that.isLoaded = true;
@@ -224,7 +225,7 @@
                     closable: false,
                     onApprove: function () {
                         that.isLoaded = false;
-                        axios.post(that.routeAdvertApprove, that.approveList)
+                        Axios.post(that.routeAdvertApprove, that.approveList)
                             .then(function (response) {
                                 that.getAdvertsList();
                                 that.sendToast(that.strings.advertApproveSuccess, 'success');

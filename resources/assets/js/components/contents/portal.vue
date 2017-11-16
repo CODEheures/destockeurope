@@ -1173,6 +1173,7 @@
 
 <script>
   import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
     export default {
         props: [
             //vue routes
@@ -1230,7 +1231,7 @@
             },
             subscribeNewsletter () {
                 let that = this;
-                axios.post(this.routeSubscribeNewsLetter, {'name': that.dataName, 'email': that.dataEmail, 'phone': that.dataPhone})
+                Axios.post(this.routeSubscribeNewsLetter, {'name': that.dataName, 'email': that.dataEmail, 'phone': that.dataPhone})
                     .then(function (response) {
                         that.sendToast(response.data, 'success');
                     })

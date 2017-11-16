@@ -1,4 +1,4 @@
-import axios from 'axios'
+import Axios from 'axios'
 
 class DestockMap {
   constructor () {
@@ -50,7 +50,7 @@ class DestockMap {
 
   latLngByIp () {
     let that = this
-    axios.get(this._routeGetGeoByIp)
+    Axios.get(this._routeGetGeoByIp)
       .then(function (response) {
         let loc = response.data.loc.split(',')
         let position = {

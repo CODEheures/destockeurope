@@ -120,6 +120,7 @@
 
 
 <script>
+  import Axios from 'axios'
     export default {
         directives: {focus: focus},
         props: {
@@ -165,7 +166,7 @@
                 withLoadIndicator == undefined ? withLoadIndicator = true : null;
                 withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
                 let that = this;
-                axios.get(this.properties.routeCategory+'?withInfos=true')
+                Axios.get(this.properties.routeCategory+'?withInfos=true')
                     .then(function (response) {
                         that.categories = response.data;
                         that.isLoaded = true;
@@ -194,7 +195,7 @@
                     this.isLoaded = false;
                     this.categoryName = {};
                     let that = this;
-                    axios.post(this.properties.routeCategory, postValue)
+                    Axios.post(this.properties.routeCategory, postValue)
                         .then(function (response) {
                             that.getCategories();
                         })
@@ -222,7 +223,7 @@
                         closable: false,
                         onApprove: function () {
                             that.isLoaded = false;
-                            axios.delete(that.properties.routeCategory + '/' + categoryId)
+                            Axios.delete(that.properties.routeCategory + '/' + categoryId)
                                 .then(function (response) {
                                     that.getCategories();
                                 })
@@ -260,7 +261,7 @@
                     }
                 }
                 if (postValue[key] != undefined && postValue[key] != '') {
-                    axios.patch(this.properties.routeCategory + '/' + id, {description: postValue})
+                    Axios.patch(this.properties.routeCategory + '/' + id, {description: postValue})
                         .then(function (response) {
                             //that.getCategories(false);
                             that.sendToast(that.strings.patchSuccessMessage, 'success');
@@ -328,7 +329,7 @@
                                 } else {
                                     route = that.routeShiftUpCategory;
                                 }
-                                axios.patch(route, {id: event.target.dataset.value})
+                                Axios.patch(route, {id: event.target.dataset.value})
                                     .then(function (response) {
                                         that.getCategories(false);
                                         $(me).css('top', 0);
@@ -353,7 +354,7 @@
             appendToCategory(childId, parentId){
                 console.log('append')
                 let that = this;
-                axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
+                Axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
                     .then(function (response) {
                         that.getCategories(false);
                         that.sendToast(that.strings.patchSuccessMessage, 'success');

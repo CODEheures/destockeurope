@@ -101,6 +101,7 @@
 
 
 <script>
+  import Axios from 'axios'
     export default {
         props: {
             //vue routes
@@ -187,9 +188,9 @@
                     this.filePhotoToPost.append(this.formPhotoFileInputName, event.target.files[0]);
                     let that = this;
                     this.onUpload = true;
-                    this.cancelToken = axios.CancelToken;
+                    this.cancelToken = Axios.CancelToken;
                     this.sourceCancelToken = this.cancelToken.source();
-                    axios.post(this.routePostPicture, this.filePhotoToPost, {
+                    Axios.post(this.routePostPicture, this.filePhotoToPost, {
                         onUploadProgress: function (progressEvent) {
                             let perform = 100*(progressEvent.loaded)/progressEvent.total;
                             that.performUpload = ((progressEvent.loaded)/(1024*1024)).toFixed(2)+'Mb';
@@ -229,7 +230,7 @@
             },
             getListPosts: function (event) {
                 let that = this;
-                axios.get(this.routeGetListPosts)
+                Axios.get(this.routeGetListPosts)
                     .then(function (response) {
                         that.pictures = response.data;
                     })
@@ -240,7 +241,7 @@
             delPhoto: function (event) {
                 event.preventDefault();
                 let that=this;
-                axios.delete(this.routeDelPicture + '/' + event.target.dataset.file)
+                Axios.delete(this.routeDelPicture + '/' + event.target.dataset.file)
                     .then(function (response) {
                         that.pictures = response.data;
                     })
