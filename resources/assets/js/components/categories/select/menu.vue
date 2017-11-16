@@ -18,6 +18,8 @@
 
 
 <script>
+    import _ from 'lodash'
+    import { DestockTools } from '../../../destockTools'
     export default {
         props: {
            oldChoice: {

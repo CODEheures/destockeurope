@@ -27,6 +27,7 @@
 
 
 <script>
+  import { DestockTools } from '../../destockTools'
     export default {
         props: {
             //vue routes

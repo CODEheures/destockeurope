@@ -66,6 +66,7 @@
 
 
 <script>
+  import moment from 'moment'
     export default {
         directives: {focus: focus},
         props: {

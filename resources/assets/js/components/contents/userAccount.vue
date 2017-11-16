@@ -131,6 +131,7 @@
 </template>
 
 <script>
+  import { DestockTools } from '../../destockTools'
     export default {
         directives: {focus: focus},
         props: [

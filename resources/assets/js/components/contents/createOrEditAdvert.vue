@@ -571,6 +571,8 @@
 </template>
 
 <script>
+  import moment from 'moment'
+  import { DestockTools } from '../../destockTools'
     export default {
         props: [
             //vue routes

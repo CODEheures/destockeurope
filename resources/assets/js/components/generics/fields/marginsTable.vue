@@ -96,6 +96,7 @@
 </template>
 
 <script>
+  import { DestockTools } from '../../../destockTools'
     export default {
         props: {
             advert: {

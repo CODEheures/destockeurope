@@ -1,39 +1,23 @@
+import { DestockMap } from './destockMap'
 
-window._ = require('lodash');
-window.$ = window.jQuery = require('jquery');
-window.moment = require('moment');
-window.ionRangeSlider = require('ion-rangeslider');
-window.Parser = require('url');
-window.axios = require('axios');
-window.DestockMap = require('./destockMap');
-window.DestockTools = require('./destockTools');
-window.Vue = require('vue');
-window.Vuex = require('vuex');
+window.initAutocomplete = function () {
+  window.destockMap = new DestockMap()
+  window.destockMap.initAutocomplete('filter_location')
+}
 
-require('amcharts3/amcharts/amcharts');
-require('amcharts3/amcharts/gauge');
-require('amcharts3/amcharts/serial');
-require('amcharts3/amcharts/themes/light');
-// require('amcharts3/amcharts/plugins/export/export');
-//require('amcharts3/images/style.css');
-// require('amcharts3/amcharts/plugins/export/libs/fabric.js/fabric')
-// require('amcharts3/amcharts/plugins/export/libs/FileSaver.js/FileSaver')
-// require('amcharts3/amcharts/plugins/export/libs/jszip/jszip')
-// require('amcharts3/amcharts/plugins/export/libs/pdfmake/pdfmake')
+window.initMap = function () {
+  window.destockMap = new DestockMap()
+}
 
+window.$ = window.jQuery = require('jquery')
+window.ionRangeSlider = require('ion-rangeslider')
+window.Parser = require('url')
+window.axios = require('axios')
+window.Vuex = require('vuex')
 
-require('vue-focus');
+require('amcharts3/amcharts/amcharts')
+require('amcharts3/amcharts/gauge')
+require('amcharts3/amcharts/serial')
+require('amcharts3/amcharts/themes/light')
 
-Vue.config.devtools = (window.destockShareVar.vueJsDevTool==='1');
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by . Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from "laravel-echo"
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
+require('vue-focus')
