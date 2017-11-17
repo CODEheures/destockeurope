@@ -145,157 +145,151 @@
 
 
 <script>
-    import { DestockTools } from '../../destockTools'
-    import Axios from 'axios'
-    export default {
-        props: {
-            //vue routes
-            routeNotificationsExistIn: String,
-            routeNotificationsAdd: String,
-            routeNotificationsRemove: String,
-            //vue vars
-            routeSearch: {
-                type: String
-            },
-            locationAccurateList: {
-                type: Array
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['advert-filter']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            dataCurrenciesList () {
-                return this.$store.state.properties['adverts-by-list-item']['ranges']['currenciesList']
-            },
-            dataMinPrice () {
-                return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
-            },
-            dataMaxPrice () {
-                return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
-            },
-            dataHandleMinPrice () {
-                return parseFloat(DestockTools.findInUrl('minPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
-            },
-            dataHandleMaxPrice () {
-                return parseFloat(DestockTools.findInUrl('maxPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
-            },
-            dataPricePrefix () {
-                return this.$store.state.properties['adverts-by-list-item']['ranges']['currencySymbol']
-            },
-            dataMinQuantity () {
-                return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
-            },
-            dataMaxQuantity () {
-                return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
-            },
-            dataHandleMinQuantity () {
-                return parseInt(DestockTools.findInUrl('minQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
-            },
-            dataHandleMaxQuantity () {
-                return parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
-            },
-            dataResultsFor () {
-                return DestockTools.findInUrl('resultsFor')
-            }
-        },
-        watch: {
-            isUrgent () {
-                this.$emit('updateFilter', {'isUrgent' : this.isUrgent})
-            },
-            isNegociated () {
-                this.$emit('updateFilter', {'isNegociated' : this.isNegociated, 'minPrice': 0})
-            }
-        },
-        data () {
-            return {
-                isUrgent: false,
-                isNegociated: false,
-                dataUpdateSearch: false,
-                dataBreadcrumbItems: []
-            };
-        },
-        mounted () {
-            let that = this;
-
-            //breadcrumbItems
-            this.setBreadCrumbItems();
-
-            //isUrgent
-            this.isUrgent =  DestockTools.findInUrl('isUrgent') === 'true' || false ;
-            let isUrgent = $('#isUrgent'+this._uid);
-            isUrgent.checkbox({
-                onChecked: function() {that.isUrgent = true;},
-                onUnchecked: function() {that.isUrgent = false;}
-            });
-
-            //isNegociated
-            this.isNegociated =  DestockTools.findInUrl('isNegociated') === 'true' || false ;
-            let isNegociated = $('#isNegociated'+this._uid);
-            isNegociated.checkbox({
-                onChecked: function() {that.isNegociated = true;},
-                onUnchecked: function() {that.isNegociated = false;}
-            });
-
-            //search filter
-            this.dataUpdateSearch = !this.dataUpdateSearch;
-
-            //Accordion
-            let accordionElement = $('#filter-accordion-'+this._uid);
-            if($(window).width()<768){
-                accordionElement.accordion('close',0);
-            } else {
-                accordionElement.accordion();
-            }
-        },
-        methods: {
-            getCurrentCategory () {
-                let categoryId = DestockTools.findInUrl('categoryId');
-                if(categoryId !== null && categoryId==parseInt(categoryId) && categoryId > 0 ) {
-                    return parseInt(DestockTools.findInUrl('categoryId'));
-                } else {
-                    return 0
-                }
-            },
-            getCurrentCurrency () {
-                return DestockTools.findInUrl('currency');
-            },
-            setBreadCrumbItems: function () {
-                this.dataBreadcrumbItems = [];
-                let that = this;
-                let categoryId = DestockTools.findInUrl('categoryId');
-                if(categoryId !== null && categoryId==parseInt(categoryId) && categoryId > 0 ) {
-                    Axios.get(this.properties.routeCategory+'/'+categoryId)
-                        .then(function (response) {
-                            let chainedCategories = response.data;
-                            that.dataBreadcrumbItems.push({
-                                name: that.strings.allLabel,
-                                value: 0
-                            });
-                            chainedCategories.forEach(function (elem,index) {
-                                that.dataBreadcrumbItems.push({
-                                    name: elem['description'][that.properties.actualLocale],
-                                    value: elem.id
-                                });
-                            });
-                            that.$emit('breadCrumbItems', that.dataBreadcrumbItems);
-                        })
-                        .catch(function (error) {
-
-                        });
-                }
-            },
-            rangeUpdate (event) {
-                if(event.name === 'price'){
-                    this.$emit('updateFilter', {'minPrice' : event.values[0], 'maxPrice': event.values[1]});
-                }
-                if(event.name === 'quantity'){
-                    this.$emit('updateFilter', {'minQuantity' : event.values[0], 'maxQuantity': event.values[1]});
-                }
-            }
+  import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
+  export default {
+    props: {
+      // vue routes
+      routeNotificationsExistIn: String,
+      routeNotificationsAdd: String,
+      routeNotificationsRemove: String,
+      // vue vars
+      routeSearch: {
+        type: String
+      },
+      locationAccurateList: {
+        type: Array
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['advert-filter']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      dataCurrenciesList () {
+        return this.$store.state.properties['adverts-by-list-item']['ranges']['currenciesList']
+      },
+      dataMinPrice () {
+        return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
+      },
+      dataMaxPrice () {
+        return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
+      },
+      dataHandleMinPrice () {
+        return parseFloat(DestockTools.findInUrl('minPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
+      },
+      dataHandleMaxPrice () {
+        return parseFloat(DestockTools.findInUrl('maxPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
+      },
+      dataPricePrefix () {
+        return this.$store.state.properties['adverts-by-list-item']['ranges']['currencySymbol']
+      },
+      dataMinQuantity () {
+        return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
+      },
+      dataMaxQuantity () {
+        return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
+      },
+      dataHandleMinQuantity () {
+        return parseInt(DestockTools.findInUrl('minQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
+      },
+      dataHandleMaxQuantity () {
+        return parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
+      },
+      dataResultsFor () {
+        return DestockTools.findInUrl('resultsFor')
+      }
+    },
+    watch: {
+      isUrgent () {
+        this.$emit('updateFilter', {'isUrgent': this.isUrgent})
+      },
+      isNegociated () {
+        this.$emit('updateFilter', {'isNegociated': this.isNegociated, 'minPrice': 0})
+      }
+    },
+    data () {
+      return {
+        isUrgent: DestockTools.findInUrl('isUrgent') === 'true' || false,
+        isNegociated: DestockTools.findInUrl('isNegociated') === 'true' || false,
+        dataUpdateSearch: false,
+        dataBreadcrumbItems: []
+      }
+    },
+    mounted () {
+      let that = this
+      // breadcrumbItems
+      this.setBreadCrumbItems()
+      // isUrgent
+      let isUrgent = $('#isUrgent' + this._uid)
+      isUrgent.checkbox({
+        onChecked: function () { that.isUrgent = true },
+        onUnchecked: function () { that.isUrgent = false }
+      })
+      // isNegociated
+      let isNegociated = $('#isNegociated' + this._uid)
+      isNegociated.checkbox({
+        onChecked: function () { that.isNegociated = true },
+        onUnchecked: function () { that.isNegociated = false }
+      })
+      // search filter
+      this.dataUpdateSearch = !this.dataUpdateSearch
+      // Accordion
+      let accordionElement = $('#filter-accordion-' + this._uid)
+      if ($(window).width() < 768) {
+        accordionElement.accordion('close', 0)
+      }
+      else {
+        accordionElement.accordion()
+      }
+    },
+    methods: {
+      getCurrentCategory () {
+        let categoryId = DestockTools.findInUrl('categoryId')
+        if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
+          return parseInt(DestockTools.findInUrl('categoryId'))
         }
+        else {
+          return 0
+        }
+      },
+      getCurrentCurrency () {
+        return DestockTools.findInUrl('currency')
+      },
+      setBreadCrumbItems: function () {
+        this.dataBreadcrumbItems = []
+        let that = this
+        let categoryId = DestockTools.findInUrl('categoryId')
+        if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
+          Axios.get(this.properties.routeCategory + '/' + categoryId)
+            .then(function (response) {
+              let chainedCategories = response.data
+              that.dataBreadcrumbItems.push({
+                name: that.strings.allLabel,
+                value: 0
+              })
+              chainedCategories.forEach(function (elem, index) {
+                that.dataBreadcrumbItems.push({
+                  name: elem['description'][that.properties.actualLocale],
+                  value: elem.id
+                })
+              })
+              that.$emit('breadCrumbItems', that.dataBreadcrumbItems)
+            })
+            .catch(function () {
+            })
+        }
+      },
+      rangeUpdate (event) {
+        if (event.name === 'price') {
+          this.$emit('updateFilter', {'minPrice': event.values[0], 'maxPrice': event.values[1]})
+        }
+        if (event.name === 'quantity') {
+          this.$emit('updateFilter', {'minQuantity': event.values[0], 'maxQuantity': event.values[1]})
+        }
+      }
     }
+  }
 </script>

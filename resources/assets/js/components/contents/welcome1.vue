@@ -122,144 +122,144 @@
 </template>
 
 <script>
-    import _ from 'lodash'
-    import { DestockTools } from '../../destockTools'
-    import Axios from 'axios'
-    export default {
-        props: [
-            //vue routes
-            'routeBookmarkAdd',
-            'routeBookmarkRemove',
-            'routeNotificationsExistIn',
-            'routeNotificationsAdd',
-            'routeNotificationsRemove',
-            'routeGetHighlight',
-            //vue vars
-            'masteradsRouteImageServer',
-            'masteradsIsActive',
-            'masteradsUrlImg',
-            'masteradsUrlRedirect',
-            'masteradsOffsetYMainContainer',
-            'masteradsWidth',
-            'filterLocationAccurateList',
-            'adsFrenquency',
-            'fakeHighlightAdvert',
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['welcome1']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            dataLocationAccurateList () {
-                return JSON.parse(this.filterLocationAccurateList)
-            },
-            dataFakeHighlightAdvert () {
-                return JSON.parse(this.fakeHighlightAdvert)
-            },
-            paginate () {
-                let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list-item']['list']['adverts'])
-                delete paginate.data
-                return paginate
-            }
-        },
-        data () {
-            return {
-                typeMessage : '',
-                message : '',
-                sendMessage: false,
-                isLoaded: true,
-                breadcrumbItems: [],
-                dataHighlightAdverts: [],
-                dataHeader: '',
-                nextUrl: '',
-            }
-        },
-        mounted () {
-            this.nextUrl = this.getHref();
-            this.getHighLightAdvert();
-            this.setHeader();
-        },
-        methods: {
-            sendToast: function (message, type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            getHighLightAdvert: function () {
-                let that = this;
-                Axios.get(this.routeGetHighlight)
-                    .then(function (response) {
-                        that.dataHighlightAdverts = (response.data).adverts;
-                    })
-                    .catch(function (error) {
-                        //that.sendToast(that.strings.loadErrorMessage, 'error');
-                    });
-            },
-            setHeader: function () {
-                this.dataHeader = this.strings.header;
-                if (this.breadcrumbItems.length > 0) {
-                    this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length - 1].name;
-                }
-                if (DestockTools.findInUrl('forLocation')) {
-                    this.dataHeader = this.dataHeader + ' - ' + DestockTools.findInUrl('forLocation');
-                }
-            },
-            getHref: function () {
-                return window.location.href;
-            },
-            getNextUrl(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
-            },
-            gotoNextUrl(forceLoad = false) {
-                if (this.nextUrl !== window.location.href || forceLoad === true) {
-                    DestockTools.goToUrl(this.nextUrl);
-                }
-            },
-            updateFilter(result) {
-                Object.keys(result).forEach((key) => {
-                    this.nextUrl = this.getNextUrl(key, result[key])
-                })
-                this.gotoNextUrl()
-            },
-            clearLocationResults() {
-                this.dataLocationAccurateList.forEach((key) => {
-                    this.nextUrl = this.getNextUrl(key, null)
-                })
-                this.nextUrl = this.getNextUrl('forLocation', null)
-                this.gotoNextUrl()
-            },
-            clearSearchResults() {
-                this.nextUrl = this.getNextUrl('resultsFor', null);
-                this.gotoNextUrl();
-            },
-            refreshResults (query) {
-                if(query !== undefined && query.length >= this.properties.filterMinLengthSearch){
-                    this.nextUrl = this.getNextUrl('resultsFor', query);
-                    this.gotoNextUrl();
-                }
-            },
-            changePage (url) {
-                this.nextUrl = url;
-                this.gotoNextUrl();
-            },
-            breadCrumbItems (breadcrumbsItems) {
-                if (breadcrumbsItems !== undefined && breadcrumbsItems !== null) {
-                    this.breadcrumbItems = breadcrumbsItems;
-                    this.setHeader();
-                }
-            },
-            categoryChoice (id) {
-                if(id != undefined && id >= 0) {
-                    this.nextUrl = this.getNextUrl('minPrice', null);
-                    this.nextUrl = this.getNextUrl('maxPrice', null);
-                    this.nextUrl = this.getNextUrl('minQuantity', null);
-                    this.nextUrl = this.getNextUrl('maxQuantity', null);
-                    this.nextUrl = this.getNextUrl('categoryId', id);
-                    this.gotoNextUrl();
-                }
-            }
+  import _ from 'lodash'
+  import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
+  export default {
+    props: [
+      // vue routes
+      'routeBookmarkAdd',
+      'routeBookmarkRemove',
+      'routeNotificationsExistIn',
+      'routeNotificationsAdd',
+      'routeNotificationsRemove',
+      'routeGetHighlight',
+      // vue vars
+      'masteradsRouteImageServer',
+      'masteradsIsActive',
+      'masteradsUrlImg',
+      'masteradsUrlRedirect',
+      'masteradsOffsetYMainContainer',
+      'masteradsWidth',
+      'filterLocationAccurateList',
+      'adsFrenquency',
+      'fakeHighlightAdvert'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['welcome1']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      dataLocationAccurateList () {
+        return JSON.parse(this.filterLocationAccurateList)
+      },
+      dataFakeHighlightAdvert () {
+        return JSON.parse(this.fakeHighlightAdvert)
+      },
+      paginate () {
+        let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list-item']['list']['adverts'])
+        delete paginate.data
+        return paginate
+      }
+    },
+    data () {
+      return {
+        typeMessage: '',
+        message: '',
+        sendMessage: false,
+        isLoaded: true,
+        breadcrumbItems: [],
+        dataHighlightAdverts: [],
+        dataHeader: '',
+        nextUrl: ''
+      }
+    },
+    mounted () {
+      this.nextUrl = this.getHref()
+      this.getHighLightAdvert()
+      this.setHeader()
+    },
+    methods: {
+      sendToast: function (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      getHighLightAdvert: function () {
+        let that = this
+        Axios.get(this.routeGetHighlight)
+          .then(function (response) {
+            that.dataHighlightAdverts = (response.data).adverts
+          })
+          .catch(function () {
+            // that.sendToast(that.strings.loadErrorMessage, 'error')
+          })
+      },
+      setHeader: function () {
+        this.dataHeader = this.strings.header
+        if (this.breadcrumbItems.length > 0) {
+          this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length - 1].name
         }
+        if (DestockTools.findInUrl('forLocation')) {
+          this.dataHeader = this.dataHeader + ' - ' + DestockTools.findInUrl('forLocation')
+        }
+      },
+      getHref: function () {
+        return window.location.href
+      },
+      getNextUrl (paramName, paramValue) {
+        return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
+      },
+      gotoNextUrl () {
+        if (this.nextUrl !== window.location.href) {
+          DestockTools.goToUrl(this.nextUrl)
+        }
+      },
+      updateFilter (result) {
+        Object.keys(result).forEach((key) => {
+          this.nextUrl = this.getNextUrl(key, result[key])
+        })
+        this.gotoNextUrl()
+      },
+      clearLocationResults () {
+        this.dataLocationAccurateList.forEach((key) => {
+          this.nextUrl = this.getNextUrl(key, null)
+        })
+        this.nextUrl = this.getNextUrl('forLocation', null)
+        this.gotoNextUrl()
+      },
+      clearSearchResults () {
+        this.nextUrl = this.getNextUrl('resultsFor', null)
+        this.gotoNextUrl()
+      },
+      refreshResults (query) {
+        if (query !== undefined && query.length >= this.properties.filterMinLengthSearch) {
+          this.nextUrl = this.getNextUrl('resultsFor', query)
+          this.gotoNextUrl()
+        }
+      },
+      changePage (url) {
+        this.nextUrl = url
+        this.gotoNextUrl()
+      },
+      breadCrumbItems (breadcrumbsItems) {
+        if (breadcrumbsItems !== undefined && breadcrumbsItems !== null) {
+          this.breadcrumbItems = breadcrumbsItems
+          this.setHeader()
+        }
+      },
+      categoryChoice (id) {
+        if (id !== undefined && id !== null && id >= 0) {
+          this.nextUrl = this.getNextUrl('minPrice', null)
+          this.nextUrl = this.getNextUrl('maxPrice', null)
+          this.nextUrl = this.getNextUrl('minQuantity', null)
+          this.nextUrl = this.getNextUrl('maxQuantity', null)
+          this.nextUrl = this.getNextUrl('categoryId', id)
+          this.gotoNextUrl()
+        }
+      }
     }
+  }
 </script>
