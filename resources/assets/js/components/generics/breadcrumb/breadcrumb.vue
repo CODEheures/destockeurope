@@ -37,24 +37,24 @@
 
 <script>
   import { DestockTools } from '../../../destockTools'
-    export default {
-        props: {
-            'items': Array,
-            'withAction' : {
-                type: Boolean,
-                required: false,
-                default: false
-            }
-        },
-        computed: {
-            nextUrl () {
-                return this.$store.state.properties['global']['routeHome']
-            }
-        },
-        methods: {
-            getNextUrl(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
-            },
-        },
+  export default {
+    props: {
+      'items': Array,
+      'withAction': {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
+    computed: {
+      nextUrl () {
+        return this.$store.state.properties['global']['routeHome']
+      }
+    },
+    methods: {
+      getNextUrl (paramName, paramValue) {
+        return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
+      }
     }
+  }
 </script>

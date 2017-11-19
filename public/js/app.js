@@ -257,8 +257,9 @@ var DestockTools = function () {
         delete parsed.query[paramName];
       }
 
-      // eslint-disable-next-line no-unused-expressions
-      'page' in parsed.query && reinitPage ? delete parsed.query['page'] : null;
+      if ('page' in parsed.query && reinitPage) {
+        delete parsed.query['page'];
+      }
       return __WEBPACK_IMPORTED_MODULE_1_url___default.a.format(parsed);
     }
   }, {
@@ -271,8 +272,10 @@ var DestockTools = function () {
     key: 'paceRestart',
     value: function paceRestart() {
       var paceForcing = document.getElementById('paceforcing');
-      // eslint-disable-next-line no-unused-expressions
-      paceForcing !== null ? paceForcing.remove() : null;
+
+      if (paceForcing !== null) {
+        paceForcing.remove();
+      }
       window.Pace.restart();
     }
   }]);
@@ -10589,57 +10592,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {},
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['categories-horizontal-menu'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        },
-        categories: function categories() {
-            return this.$store.state.properties['categories-horizontal-menu']['datas'];
-        }
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['categories-horizontal-menu'];
     },
-    mounted: function mounted() {
-        this.setPopup();
-        var fixedMenu = $('.horizontal-category-menu');
-        fixedMenu.visibility({
-            type: 'fixed',
-            offset: 66 // give some space from top of screen
-        });
+    properties: function properties() {
+      return this.$store.state.properties['global'];
     },
-
-    methods: {
-        setPopup: function setPopup() {
-            var that = this;
-            this.categories.forEach(function (elem, index) {
-                var $elem = $('#browse-' + index + '-' + that._uid);
-                var $popup = $('#popup-' + index + '-' + that._uid + ' div.ui.fluid.popup');
-                $elem.popup({
-                    inline: true,
-                    target: $('.ui.category.menu'),
-                    popup: $popup,
-                    hoverable: true,
-                    exclusive: true,
-                    position: 'bottom left',
-                    lastResort: true,
-                    delay: {
-                        show: 300,
-                        hide: 800
-                    }
-                });
-            });
-        },
-
-        countLevel: function countLevel(category) {
-            var level = 1;
-            for (var i = 0; i < category.children.length; i++) {
-                category.children[i].children.length > 0 ? level = 2 : null;
-            }
-            return level;
-        }
+    categories: function categories() {
+      return this.$store.state.properties['categories-horizontal-menu']['datas'];
     }
+  },
+  mounted: function mounted() {
+    this.setPopup();
+    var fixedMenu = $('.horizontal-category-menu');
+    fixedMenu.visibility({
+      type: 'fixed',
+      offset: 66 // give some space from top of screen
+    });
+  },
+
+  methods: {
+    setPopup: function setPopup() {
+      var that = this;
+      this.categories.forEach(function (elem, index) {
+        var $elem = $('#browse-' + index + '-' + that._uid);
+        var $popup = $('#popup-' + index + '-' + that._uid + ' div.ui.fluid.popup');
+        $elem.popup({
+          inline: true,
+          target: $('.ui.category.menu'),
+          popup: $popup,
+          hoverable: true,
+          exclusive: true,
+          position: 'bottom left',
+          lastResort: true,
+          delay: {
+            show: 300,
+            hide: 800
+          }
+        });
+      });
+    },
+
+    countLevel: function countLevel(category) {
+      var level = 1;
+      for (var i = 0; i < category.children.length; i++) {
+        if (category.children[i].children.length > 0) {
+          level = 2;
+        }
+      }
+      return level;
+    }
+  }
 });
 
 /***/ }),
@@ -10839,33 +10843,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        categories: Array,
-        allItem: String,
-        parentId: Number,
-        parentDescription: String,
-        level: Number,
-        maxLevel: Number
-    },
-    computed: {
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
-    },
-    mounted: function mounted() {
-        var that = this;
-
-        this.categories.forEach(function (elem, index) {
-            $('#' + that._uid + '-' + index).dropdown();
-        });
-    },
-
-    methods: {
-        numberToWord: function numberToWord(num) {
-            var a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
-            return a[num];
-        }
+  props: {
+    categories: Array,
+    allItem: String,
+    parentId: Number,
+    parentDescription: String,
+    level: Number,
+    maxLevel: Number
+  },
+  computed: {
+    properties: function properties() {
+      return this.$store.state.properties['global'];
     }
+  },
+  mounted: function mounted() {
+    var that = this;
+    this.categories.forEach(function (elem, index) {
+      $('#' + that._uid + '-' + index).dropdown();
+    });
+  },
+
+  methods: {
+    numberToWord: function numberToWord(num) {
+      var a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
+      return a[num];
+    }
+  }
 });
 
 /***/ }),
@@ -11134,80 +11137,81 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        oldChoice: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        withAll: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        allowCategorySelection: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        isButton: {
-            type: Boolean,
-            required: false,
-            default: true
-        },
-        withRedirectionOnClick: {
-            type: Boolean,
-            required: false,
-            default: false
-        }
+  props: {
+    oldChoice: {
+      type: Number,
+      required: false,
+      default: 0
     },
-    watch: {
-        oldChoice: function oldChoice() {
-            this.setOldChoice();
-        }
+    withAll: {
+      type: Boolean,
+      required: false,
+      default: false
     },
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['categories-dropdown-menu'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        },
-        categories: function categories() {
-            return this.$store.state.properties['categories-dropdown-menu']['datas'];
-        },
-        nextUrl: function nextUrl() {
-            return this.$store.state.properties['global']['routeHome'];
-        }
+    allowCategorySelection: {
+      type: Boolean,
+      required: false,
+      default: false
     },
-    mounted: function mounted() {
-        var that = this;
-        $('#' + this._uid).dropdown({
-            allowCategorySelection: that.allowCategorySelection,
-            onChange: function onChange(value, text, $selectedItem) {
-                if (value != undefined && value != '') {
-                    if (!that.withRedirectionOnClick) {
-                        that.$emit('categoryChoice', value);
-                    } else {
-                        console.log([that.oldChoice, value]);
-                        value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId', value) : null;
-                    }
-                }
-            }
-        });
-        this.setOldChoice();
+    isButton: {
+      type: Boolean,
+      required: false,
+      default: true
     },
-
-    methods: {
-        setOldChoice: function setOldChoice() {
-            if (!isNaN(Number(this.oldChoice)) && Number(this.oldChoice) > 0) {
-                $('#' + this._uid).dropdown('set selected', this.oldChoice);
-            }
-        },
-        getNextUrl: function getNextUrl(paramName, paramValue) {
-            return __WEBPACK_IMPORTED_MODULE_0__destockTools__["a" /* DestockTools */].getNextUrl(this.nextUrl, paramName, paramValue, true);
-        }
+    withRedirectionOnClick: {
+      type: Boolean,
+      required: false,
+      default: false
     }
+  },
+  watch: {
+    oldChoice: function oldChoice() {
+      this.setOldChoice();
+    }
+  },
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['categories-dropdown-menu'];
+    },
+    properties: function properties() {
+      return this.$store.state.properties['global'];
+    },
+    categories: function categories() {
+      return this.$store.state.properties['categories-dropdown-menu']['datas'];
+    },
+    nextUrl: function nextUrl() {
+      return this.$store.state.properties['global']['routeHome'];
+    }
+  },
+  mounted: function mounted() {
+    var that = this;
+    $('#' + this._uid).dropdown({
+      allowCategorySelection: that.allowCategorySelection,
+      onChange: function onChange(value, text, $selectedItem) {
+        if (value !== undefined && value !== null && value !== '') {
+          if (!that.withRedirectionOnClick) {
+            that.$emit('categoryChoice', value);
+          } else {
+            if (value !== that.oldChoice) {
+              document.location.href = that.getNextUrl('categoryId', value);
+            }
+          }
+        }
+      }
+    });
+    this.setOldChoice();
+  },
+
+  methods: {
+    setOldChoice: function setOldChoice() {
+      if (!isNaN(Number(this.oldChoice)) && Number(this.oldChoice) > 0) {
+        $('#' + this._uid).dropdown('set selected', this.oldChoice);
+      }
+    },
+    getNextUrl: function getNextUrl(paramName, paramValue) {
+      return __WEBPACK_IMPORTED_MODULE_0__destockTools__["a" /* DestockTools */].getNextUrl(this.nextUrl, paramName, paramValue, true);
+    }
+  }
 });
 
 /***/ }),
@@ -11394,23 +11398,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        parentDescription: String,
-        categories: Array,
-        parentId: Number,
-        withAll: Boolean,
-        allItem: {
-            type: String,
-            required: false,
-            default: ''
-        },
-        left: Boolean
+  props: {
+    parentDescription: String,
+    categories: Array,
+    parentId: Number,
+    withAll: Boolean,
+    allItem: {
+      type: String,
+      required: false,
+      default: ''
     },
-    computed: {
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
+    left: Boolean
+  },
+  computed: {
+    properties: function properties() {
+      return this.$store.state.properties['global'];
     }
+  }
 });
 
 /***/ }),
@@ -11578,98 +11582,103 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        oldChoice: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        withAll: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        allowCategorySelection: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        isButton: {
-            type: Boolean,
-            required: false,
-            default: true
-        },
-        withRedirectionOnClick: {
-            type: Boolean,
-            required: false,
-            default: false
-        }
+  props: {
+    oldChoice: {
+      type: Number,
+      required: false,
+      default: 0
     },
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['categories-select-menu'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        },
-        categories: function categories() {
-            return this.$store.state.properties['categories-select-menu']['datas'];
-        },
-        nextUrl: function nextUrl() {
-            return this.$store.state.properties['global']['routeHome'];
-        }
+    withAll: {
+      type: Boolean,
+      required: false,
+      default: false
     },
-    watch: {
-        selected: function selected() {
-            this.choiceCategory(this.selected);
-        }
+    allowCategorySelection: {
+      type: Boolean,
+      required: false,
+      default: false
     },
-    data: function data() {
-        return {
-            options: [],
-            optgroups: [],
-            selected: this.oldChoice
-        };
+    isButton: {
+      type: Boolean,
+      required: false,
+      default: true
     },
-    mounted: function mounted() {
-        this.getNativeSelectCategories(this.$store.state.properties['categories-select-menu']['datas']);
-    },
-
-    methods: {
-        getNativeSelectCategories: function getNativeSelectCategories(categories) {
-            for (var category in categories) {
-                this.optgroups.push({ 'id': categories[category]['id'], 'name': categories[category]['description'][this.properties.actualLocale] });
-                this.traverse(categories[category]);
-            }
-        },
-        traverse: function traverse(category) {
-            var concat = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-            var localConcat = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.cloneDeep(concat);
-            if ('children' in category && category.children.length > 0) {
-                localConcat.push({ 'id': category['id'], 'name': category['description'][this.properties.actualLocale] });
-                for (var child in category.children) {
-                    this.traverse(category.children[child], localConcat);
-                }
-            } else {
-                localConcat.push({ 'id': category['id'], 'name': category['description'][this.properties.actualLocale] });
-                this.options.push(localConcat);
-            }
-        },
-        getNextUrl: function getNextUrl(paramName, paramValue) {
-            return __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].getNextUrl(this.nextUrl, paramName, paramValue, true);
-        },
-        choiceCategory: function choiceCategory(value) {
-            var that = this;
-            if (value != undefined && value != '') {
-                if (!that.withRedirectionOnClick) {
-                    that.$emit('categoryChoice', value);
-                } else {
-                    value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId', value) : null;
-                }
-            }
-        }
+    withRedirectionOnClick: {
+      type: Boolean,
+      required: false,
+      default: false
     }
+  },
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['categories-select-menu'];
+    },
+    properties: function properties() {
+      return this.$store.state.properties['global'];
+    },
+    categories: function categories() {
+      return this.$store.state.properties['categories-select-menu']['datas'];
+    },
+    nextUrl: function nextUrl() {
+      return this.$store.state.properties['global']['routeHome'];
+    }
+  },
+  watch: {
+    selected: function selected() {
+      this.choiceCategory(this.selected);
+    },
+    oldChoice: function oldChoice() {
+      this.selected = this.oldChoice;
+    }
+  },
+  data: function data() {
+    return {
+      options: [],
+      optgroups: [],
+      selected: this.oldChoice
+    };
+  },
+  mounted: function mounted() {
+    this.getNativeSelectCategories(this.$store.state.properties['categories-select-menu']['datas']);
+  },
+
+  methods: {
+    getNativeSelectCategories: function getNativeSelectCategories(categories) {
+      for (var category in categories) {
+        this.optgroups.push({ 'id': categories[category]['id'], 'name': categories[category]['description'][this.properties.actualLocale] });
+        this.traverse(categories[category]);
+      }
+    },
+    traverse: function traverse(category) {
+      var concat = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+      var localConcat = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.cloneDeep(concat);
+      if ('children' in category && category.children.length > 0) {
+        localConcat.push({ 'id': category['id'], 'name': category['description'][this.properties.actualLocale] });
+        for (var child in category.children) {
+          this.traverse(category.children[child], localConcat);
+        }
+      } else {
+        localConcat.push({ 'id': category['id'], 'name': category['description'][this.properties.actualLocale] });
+        this.options.push(localConcat);
+      }
+    },
+    getNextUrl: function getNextUrl(paramName, paramValue) {
+      return __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].getNextUrl(this.nextUrl, paramName, paramValue, true);
+    },
+    choiceCategory: function choiceCategory(value) {
+      var that = this;
+      if (value !== undefined && value !== null && value !== '') {
+        if (!that.withRedirectionOnClick) {
+          that.$emit('categoryChoice', value);
+        } else {
+          if (value !== that.oldChoice) {
+            document.location.href = that.getNextUrl('categoryId', value);
+          }
+        }
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -11844,35 +11853,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        category: Object
+  props: {
+    category: Object
+  },
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['categories-list-move-to'];
     },
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['categories-list-move-to'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
-    },
-    mounted: function mounted() {
-        var that = this;
-        var dropdown = $('#' + that._uid);
-        dropdown.on('click', function () {
-            $(this).closest('.accordion').css({ 'z-index': '2' });
-        });
-        dropdown.dropdown({
-            allowCategorySelection: true,
-            action: 'select',
-            onChange: function onChange(value, text, $selectedItem) {
-                if (value != undefined && value != '') {
-                    $(this).closest('.accordion').css({ 'z-index': '' });
-                    console.log('listMoveTo cat choice', { parentId: value, id: that.category.id });
-                    that.$emit('categoryChoice', { parentId: value, id: that.category.id });
-                }
-            }
-        });
+    properties: function properties() {
+      return this.$store.state.properties['global'];
     }
+  },
+  mounted: function mounted() {
+    var that = this;
+    var dropdown = $('#' + that._uid);
+    dropdown.on('click', function () {
+      $(this).closest('.accordion').css({ 'z-index': '2' });
+    });
+    dropdown.dropdown({
+      allowCategorySelection: true,
+      action: 'select',
+      onChange: function onChange(value, text, $selectedItem) {
+        if (value !== undefined && value !== null && value !== '') {
+          $(this).closest('.accordion').css({ 'z-index': '' });
+          that.$emit('categoryChoice', { parentId: value, id: that.category.id });
+        }
+      }
+    });
+  }
 });
 
 /***/ }),
@@ -12016,19 +12024,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        categories: Array,
-        left: {
-            type: Boolean,
-            required: false,
-            default: false
-        }
-    },
-    computed: {
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
+  props: {
+    categories: Array,
+    left: {
+      type: Boolean,
+      required: false,
+      default: false
     }
+  },
+  computed: {
+    properties: function properties() {
+      return this.$store.state.properties['global'];
+    }
+  }
 });
 
 /***/ }),
@@ -12219,91 +12227,91 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        categories: Array,
-        parentId: Number,
-        colorNumber: {
-            type: Number,
-            required: false,
-            default: 0
-        }
-    },
-    computed: {
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        },
-        colors: function colors() {
-            return ['violet', 'purple', 'pink', 'brown', 'grey', 'black', 'red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue'];
-        }
-    },
-    data: function data() {
-        return {
-            isLoaded: false,
-            categoryName: {},
-            focused: {},
-            blured: {}
-        };
-    },
-
-    methods: {
-        addCategory: function addCategory(event) {
-            if (this.categoryName != undefined) {
-                var isEmpty = true;
-                var postValue = {};
-                postValue['descriptions'] = {};
-                postValue['parentId'] = this.parentId;
-                for (var category in this.categoryName) {
-                    postValue['descriptions'][category] = this.categoryName[category];
-                    if (this.categoryName[category] != '') {
-                        isEmpty = false;
-                    }
-                }
-                if (!isEmpty) {
-                    this.isLoaded = false;
-                    this.categoryName = {};
-                    this.$emit('addCategory', postValue);
-                }
-            }
-        },
-        delCategory: function delCategory(event) {
-            if (event.target.dataset.id != undefined && event.target.dataset.id > 0) {
-                this.$emit('delCategory', event.target.dataset.id);
-            }
-        },
-        updateCategory: function updateCategory(event) {
-            var postValue = {};
-            var key = '';
-            var id = '';
-            if (event == undefined) {
-                id = this.blured.id;
-                key = this.blured.locale;
-                postValue[key] = this.blured.value;
-            } else if (event instanceof KeyboardEvent && event.key == "Enter") {
-                id = event.target.dataset.id;
-                key = event.target.dataset.key;
-                postValue[key] = event.target.value;
-                this.focused.value = event.target.value;
-            }
-            if (postValue[key] != undefined && postValue[key] != '') {
-                this.$emit('updateCategory', { postValue: postValue, key: key, id: id });
-            } else {
-                this.$emit('getCategories', false);
-                this.$emit('patchError');
-            }
-        },
-        shiftDown: function shiftDown(event) {
-            this.$emit('shiftDown', event);
-        },
-        shiftUp: function shiftUp(event) {
-            this.$emit('shiftUp', event);
-        },
-        testChanged: function testChanged($in, $out) {
-            if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
-                this.blured = { id: $out.id, locale: $out.locale, value: $out.value };
-                this.updateCategory();
-            }
-        }
+  props: {
+    categories: Array,
+    parentId: Number,
+    colorNumber: {
+      type: Number,
+      required: false,
+      default: 0
     }
+  },
+  computed: {
+    properties: function properties() {
+      return this.$store.state.properties['global'];
+    },
+    colors: function colors() {
+      return ['violet', 'purple', 'pink', 'brown', 'grey', 'black', 'red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue'];
+    }
+  },
+  data: function data() {
+    return {
+      isLoaded: false,
+      categoryName: {},
+      focused: {},
+      blured: {}
+    };
+  },
+
+  methods: {
+    addCategory: function addCategory(event) {
+      if (this.categoryName !== undefined && this.categoryName !== null) {
+        var isEmpty = true;
+        var postValue = {};
+        postValue['descriptions'] = {};
+        postValue['parentId'] = this.parentId;
+        for (var category in this.categoryName) {
+          postValue['descriptions'][category] = this.categoryName[category];
+          if (this.categoryName[category] !== '') {
+            isEmpty = false;
+          }
+        }
+        if (!isEmpty) {
+          this.isLoaded = false;
+          this.categoryName = {};
+          this.$emit('addCategory', postValue);
+        }
+      }
+    },
+    delCategory: function delCategory(event) {
+      if (event.target.dataset.id !== undefined && event.target.dataset.id !== null && event.target.dataset.id > 0) {
+        this.$emit('delCategory', event.target.dataset.id);
+      }
+    },
+    updateCategory: function updateCategory(event) {
+      var postValue = {};
+      var key = '';
+      var id = '';
+      if (event === undefined || event === null) {
+        id = this.blured.id;
+        key = this.blured.locale;
+        postValue[key] = this.blured.value;
+      } else if (event instanceof KeyboardEvent && event.key === 'Enter') {
+        id = event.target.dataset.id;
+        key = event.target.dataset.key;
+        postValue[key] = event.target.value;
+        this.focused.value = event.target.value;
+      }
+      if (postValue[key] !== undefined && postValue[key] !== null && postValue[key] !== '') {
+        this.$emit('updateCategory', { postValue: postValue, key: key, id: id });
+      } else {
+        this.$emit('getCategories', false);
+        this.$emit('patchError');
+      }
+    },
+    shiftDown: function shiftDown(event) {
+      this.$emit('shiftDown', event);
+    },
+    shiftUp: function shiftUp(event) {
+      this.$emit('shiftUp', event);
+    },
+    testChanged: function testChanged($in, $out) {
+      if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
+        this.blured = { id: $out.id, locale: $out.locale, value: $out.value };
+        this.updateCategory();
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -12910,6 +12918,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     getCurrentCategory: function getCurrentCategory() {
       var categoryId = __WEBPACK_IMPORTED_MODULE_0__destockTools__["a" /* DestockTools */].findInUrl('categoryId');
+      // eslint-disable-next-line eqeqeq
       if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
         return parseInt(__WEBPACK_IMPORTED_MODULE_0__destockTools__["a" /* DestockTools */].findInUrl('categoryId'));
       } else {
@@ -12924,6 +12933,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.dataBreadcrumbItems = [];
       var that = this;
       var categoryId = __WEBPACK_IMPORTED_MODULE_0__destockTools__["a" /* DestockTools */].findInUrl('categoryId');
+      // eslint-disable-next-line eqeqeq
       if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
         __WEBPACK_IMPORTED_MODULE_1_axios___default.a.get(this.properties.routeCategory + '/' + categoryId).then(function (response) {
           var chainedCategories = response.data;
@@ -13441,39 +13451,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        //vue routes
-        //vue vars
-        //search component
-        routeSearch: {
-            type: String
-        }
-    },
-    data: function data() {
-        return {
-            strings: {},
-            properties: {},
-            dataResultsFor: '',
-            dataUpdateSearch: false
-        };
-    },
-    mounted: function mounted() {
-        this.strings = this.$store.state.strings['advert-simple-search-filter'];
-        this.properties = this.$store.state.properties['global'];
-        var that = this;
-
-        //search filter
-        this.dataResultsFor = __WEBPACK_IMPORTED_MODULE_0__destockTools__["a" /* DestockTools */].findInUrl('resultsFor');
-        this.dataUpdateSearch = !this.dataUpdateSearch;
-
-        //Accordion
-        var accordionElement = $('#filter-accordion-' + this._uid);
-        if ($(window).width() < 768) {
-            accordionElement.accordion('close', 0);
-        } else {
-            accordionElement.accordion();
-        }
+  props: {
+    routeSearch: {
+      type: String
     }
+  },
+  data: function data() {
+    return {
+      strings: {},
+      properties: {},
+      dataResultsFor: '',
+      dataUpdateSearch: false
+    };
+  },
+  mounted: function mounted() {
+    this.strings = this.$store.state.strings['advert-simple-search-filter'];
+    this.properties = this.$store.state.properties['global'];
+    // search filter
+    this.dataResultsFor = __WEBPACK_IMPORTED_MODULE_0__destockTools__["a" /* DestockTools */].findInUrl('resultsFor');
+    this.dataUpdateSearch = !this.dataUpdateSearch;
+    // Accordion
+    var accordionElement = $('#filter-accordion-' + this._uid);
+    if ($(window).width() < 768) {
+      accordionElement.accordion('close', 0);
+    } else {
+      accordionElement.accordion();
+    }
+  }
 });
 
 /***/ }),
@@ -13681,37 +13685,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        routeBookmarkAdd: String,
-        routeBookmarkRemove: String,
-        flagForceReload: {
-            type: Boolean,
-            default: false,
-            required: false
-        },
-        adsFrequency: Number,
-        canGetDelegations: {
-            type: Boolean,
-            default: false,
-            required: false
-        },
-        isPersonnalList: {
-            type: Boolean,
-            default: false,
-            required: false
-        }
+  props: {
+    routeBookmarkAdd: String,
+    routeBookmarkRemove: String,
+    flagForceReload: {
+      type: Boolean,
+      default: false,
+      required: false
     },
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['adverts-by-list'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        },
-        advertsList: function advertsList() {
-            return this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data'];
-        }
+    adsFrequency: Number,
+    canGetDelegations: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    isPersonnalList: {
+      type: Boolean,
+      default: false,
+      required: false
     }
+  },
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['adverts-by-list'];
+    },
+    properties: function properties() {
+      return this.$store.state.properties['global'];
+    },
+    advertsList: function advertsList() {
+      return this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data'];
+    }
+  }
 });
 
 /***/ }),
@@ -14358,94 +14362,92 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        routeBookmarkAdd: String,
-        routeBookmarkRemove: String,
-        advert: Object,
-        canGetDelegations: {
-            type: Boolean,
-            default: false,
-            required: false
-        },
-        isPersonnalList: {
-            type: Boolean,
-            default: false,
-            required: false
-        }
+  props: {
+    routeBookmarkAdd: String,
+    routeBookmarkRemove: String,
+    advert: Object,
+    canGetDelegations: {
+      type: Boolean,
+      default: false,
+      required: false
     },
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['adverts-by-list-item'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
-    },
-    watch: {
-        advert: function advert() {
-            this.dataAdvert = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.cloneDeep(this.advert);
-        }
-    },
-    data: function data() {
-        return {
-            dataAdvert: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.cloneDeep(this.advert)
-        };
-    },
-
-    methods: {
-        getMoment: function getMoment(dateTime) {
-            __WEBPACK_IMPORTED_MODULE_1_moment___default.a.locale(this.properties.actualLocale);
-            return __WEBPACK_IMPORTED_MODULE_1_moment___default()(dateTime).fromNow();
-        },
-        bookmarkMe: function bookmarkMe(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            var that = this;
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.routeBookmarkAdd + '/' + this.advert.id).then(function (response) {
-                that.dataIsUserBookmark = true;
-                that.$emit('bookmarkSuccess');
-                that.dataAdvert.isUserBookmark = true;
-            }).catch(function (error) {
-                if (error.response && error.response.status == 409) {
-                    that.$emit('sendToast', { 'message': error.response.data, 'type': 'error' });
-                } else {
-                    that.$emit('loadError');
-                }
-            });
-        },
-        unbookmarkMe: function unbookmarkMe(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            var that = this;
-            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.routeBookmarkRemove + '/' + this.advert.id).then(function (response) {
-                that.dataIsUserBookmark = false;
-                that.$emit('unbookmarkSuccess');
-                that.dataAdvert.isUserBookmark = false;
-            }).catch(function (error) {
-                if (error.response && error.response.status == 409) {
-                    that.$emit('sendToast', { 'message': error.response.data, 'type': 'error' });
-                } else {
-                    that.$emit('loadError');
-                }
-            });
-        },
-        destroyMe: function destroyMe() {
-            $(".ui.red.button.destroy-" + this._uid).addClass('loading disabled');
-            this.$emit('deleteAdvert', { 'url': this.advert.destroyUrl });
-        },
-        getThumbUrl: function getThumbUrl(advert) {
-            var picture = [];
-            if ('pictures' in advert) {
-                picture = advert.pictures.filter(function (elem) {
-                    return elem.hashName === advert.mainPicture;
-                });
-            }
-
-            return picture.length >= 1 ? picture[0].thumbUrl : '';
-        }
+    isPersonnalList: {
+      type: Boolean,
+      default: false,
+      required: false
     }
+  },
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['adverts-by-list-item'];
+    },
+    properties: function properties() {
+      return this.$store.state.properties['global'];
+    }
+  },
+  watch: {
+    advert: function advert() {
+      this.dataAdvert = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.cloneDeep(this.advert);
+    }
+  },
+  data: function data() {
+    return {
+      dataAdvert: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.cloneDeep(this.advert)
+    };
+  },
+
+  methods: {
+    getMoment: function getMoment(dateTime) {
+      __WEBPACK_IMPORTED_MODULE_1_moment___default.a.locale(this.properties.actualLocale);
+      return __WEBPACK_IMPORTED_MODULE_1_moment___default()(dateTime).fromNow();
+    },
+    bookmarkMe: function bookmarkMe(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var that = this;
+      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.routeBookmarkAdd + '/' + this.advert.id).then(function (response) {
+        that.dataIsUserBookmark = true;
+        that.$emit('bookmarkSuccess');
+        that.dataAdvert.isUserBookmark = true;
+      }).catch(function (error) {
+        if (error.response && error.response.status === 409) {
+          that.$emit('sendToast', { 'message': error.response.data, 'type': 'error' });
+        } else {
+          that.$emit('loadError');
+        }
+      });
+    },
+    unbookmarkMe: function unbookmarkMe(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var that = this;
+      __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.routeBookmarkRemove + '/' + this.advert.id).then(function (response) {
+        that.dataIsUserBookmark = false;
+        that.$emit('unbookmarkSuccess');
+        that.dataAdvert.isUserBookmark = false;
+      }).catch(function (error) {
+        if (error.response && error.response.status === 409) {
+          that.$emit('sendToast', { 'message': error.response.data, 'type': 'error' });
+        } else {
+          that.$emit('loadError');
+        }
+      });
+    },
+    destroyMe: function destroyMe() {
+      $('.ui.red.button.destroy-' + this._uid).addClass('loading disabled');
+      this.$emit('deleteAdvert', { 'url': this.advert.destroyUrl });
+    },
+    getThumbUrl: function getThumbUrl(advert) {
+      var picture = [];
+      if ('pictures' in advert) {
+        picture = advert.pictures.filter(function (elem) {
+          return elem.hashName === advert.mainPicture;
+        });
+      }
+      return picture.length >= 1 ? picture[0].thumbUrl : '';
+    }
+  }
 });
 
 /***/ }),
@@ -16286,100 +16288,99 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        //vue routes
-        //vue vars
-        advert: Object,
-        userName: {
-            type: String,
-            default: undefined,
-            required: false
-        },
-        isUserOwner: {
-            type: Boolean,
-            default: false,
-            required: false
-        },
-        isStatic: {
-            type: Boolean,
-            default: true,
-            required: false
-        }
+  props: {
+    // vue routes
+    // vue vars
+    advert: Object,
+    userName: {
+      type: String,
+      default: undefined,
+      required: false
     },
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['advert-by-id'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
+    isUserOwner: {
+      type: Boolean,
+      default: false,
+      required: false
     },
-    data: function data() {
-        return {
-            isLoaded: false,
-            dataLightBoxUrl: '',
-            dataHeight: '',
-            dataVideoId: '',
-            margins: {
-                unitMargin: 0,
-                totalMargin: 0,
-                lotMiniMargin: 0,
-                unitSellerPrice: 0,
-                priceMargin: 0,
-                totalSellerPrice: 0,
-                totalSellerPriceWholePart: 0,
-                totalSellerPriceDecimalPart: 0,
-                totalPriceMargin: 0,
-                totalPriceMarginWholePart: 0,
-                totalPriceMarginDecimalPart: 0,
-                totalPriceByLot: 0,
-                totalPriceByLotMargin: 0,
-                globalDiscount: 0,
-                coefficientTotalIsOverMax: false
-            }
-        };
-    },
-    mounted: function mounted() {
-        var that = this;
-        this.dataHeight = $('#modal-' + this._uid).width() / this.properties.imageRatio;
-
-        if (!this.isStatic) {
-            this.$watch('advert.price_coefficient', function () {
-                that.updateMargins();
-            });
-            this.$watch('advert.price_coefficient_total', function () {
-                that.updateMargins();
-            });
-            this.$watch('advert.price_margin', function () {
-                that.updateMargins();
-            });
-            this.$watch('advert.totalPriceMargin', function () {
-                that.updateMargins();
-            });
-        }
-    },
-    updated: function updated() {
-        this.updateMargins();
-    },
-
-    methods: {
-        getMoment: function getMoment(dateTime) {
-            __WEBPACK_IMPORTED_MODULE_0_moment___default.a.locale(this.properties.actualLocale);
-            return __WEBPACK_IMPORTED_MODULE_0_moment___default()(dateTime).fromNow();
-        },
-        openLightBox: function openLightBox(imgUrl) {
-            this.dataLightBoxUrl = imgUrl;
-            this.dataHeight = $('.lightBox').width / this.properties.imageRatio;
-            $('#modal-' + this._uid).modal({
-                closable: true,
-                blurring: false
-            }).modal('show');
-        },
-        updateMargins: function updateMargins() {
-            var calcMargins = __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].calcMargins(this.advert, false);
-            Object.assign(this.margins, calcMargins);
-        }
+    isStatic: {
+      type: Boolean,
+      default: true,
+      required: false
     }
+  },
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['advert-by-id'];
+    },
+    properties: function properties() {
+      return this.$store.state.properties['global'];
+    }
+  },
+  data: function data() {
+    return {
+      isLoaded: false,
+      dataLightBoxUrl: '',
+      dataHeight: '',
+      dataVideoId: '',
+      margins: {
+        unitMargin: 0,
+        totalMargin: 0,
+        lotMiniMargin: 0,
+        unitSellerPrice: 0,
+        priceMargin: 0,
+        totalSellerPrice: 0,
+        totalSellerPriceWholePart: 0,
+        totalSellerPriceDecimalPart: 0,
+        totalPriceMargin: 0,
+        totalPriceMarginWholePart: 0,
+        totalPriceMarginDecimalPart: 0,
+        totalPriceByLot: 0,
+        totalPriceByLotMargin: 0,
+        globalDiscount: 0,
+        coefficientTotalIsOverMax: false
+      }
+    };
+  },
+  mounted: function mounted() {
+    var that = this;
+    this.dataHeight = $('#modal-' + this._uid).width() / this.properties.imageRatio;
+    if (!this.isStatic) {
+      this.$watch('advert.price_coefficient', function () {
+        that.updateMargins();
+      });
+      this.$watch('advert.price_coefficient_total', function () {
+        that.updateMargins();
+      });
+      this.$watch('advert.price_margin', function () {
+        that.updateMargins();
+      });
+      this.$watch('advert.totalPriceMargin', function () {
+        that.updateMargins();
+      });
+    }
+  },
+  updated: function updated() {
+    this.updateMargins();
+  },
+
+  methods: {
+    getMoment: function getMoment(dateTime) {
+      __WEBPACK_IMPORTED_MODULE_0_moment___default.a.locale(this.properties.actualLocale);
+      return __WEBPACK_IMPORTED_MODULE_0_moment___default()(dateTime).fromNow();
+    },
+    openLightBox: function openLightBox(imgUrl) {
+      this.dataLightBoxUrl = imgUrl;
+      this.dataHeight = $('.lightBox').width / this.properties.imageRatio;
+      $('#modal-' + this._uid).modal({
+        closable: true,
+        blurring: false
+      }).modal('show');
+    },
+    updateMargins: function updateMargins() {
+      var calcMargins = __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].calcMargins(this.advert, false);
+      Object.assign(this.margins, calcMargins);
+    }
+  }
 });
 
 /***/ }),
@@ -16898,26 +16899,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        advert: Object
-    },
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['advert-highlight'];
-        }
-    },
-    methods: {
-        getThumbUrl: function getThumbUrl(advert) {
-            var picture = [];
-            if ('pictures' in advert) {
-                picture = advert.pictures.filter(function (elem) {
-                    return elem.hashName === advert.mainPicture;
-                });
-            }
-
-            return picture.length >= 1 ? picture[0].thumbUrl : '';
-        }
+  props: {
+    advert: Object
+  },
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['advert-highlight'];
     }
+  },
+  methods: {
+    getThumbUrl: function getThumbUrl(advert) {
+      var picture = [];
+      if ('pictures' in advert) {
+        picture = advert.pictures.filter(function (elem) {
+          return elem.hashName === advert.mainPicture;
+        });
+      }
+      return picture.length >= 1 ? picture[0].thumbUrl : '';
+    }
+  }
 });
 
 /***/ }),
@@ -36902,397 +36902,429 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: [
-    //vue routes
-    'routeAdvertFormPost', 'routeGetCost', 'routePrices', 'routeGetListType', 'routePostPicture', 'routeGetListPosts', 'routeDelPicture', 'routeGetVideoPostTicket', 'routeDelTempoVideo', 'routeGetStatusVideo',
-    //vue vars
-    'old', 'formTitleMinValid', 'formTitleMaxValid', 'formDescriptionMinValid', 'formDescriptionMaxValid', 'isDelegation', 'editAdvert', 'geolocInitLat', 'geolocInitLng', 'advertFormPhotoNbFreePicture', 'maxFiles', 'maxVideoFileSize', 'sessionVideoId'],
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['createOrEditAdvert'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
+  props: [
+  // vue routes
+  'routeAdvertFormPost', 'routeGetCost', 'routePrices', 'routeGetListType', 'routePostPicture', 'routeGetListPosts', 'routeDelPicture', 'routeGetVideoPostTicket', 'routeDelTempoVideo', 'routeGetStatusVideo',
+  // vue vars
+  'old', 'formTitleMinValid', 'formTitleMaxValid', 'formDescriptionMinValid', 'formDescriptionMaxValid', 'isDelegation', 'editAdvert', 'geolocInitLat', 'geolocInitLng', 'advertFormPhotoNbFreePicture', 'maxFiles', 'maxVideoFileSize', 'sessionVideoId'],
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['createOrEditAdvert'];
     },
-    watch: {
-        categoryId: function categoryId() {
-            this.setBreadCrumbItems();
-        },
-        isUrgent: function isUrgent() {
-            this.setSteps();
-            if (this.isUrgent) {
-                $('#isUrgent' + this._uid).checkbox('check');
-            } else {
-
-                $('#isUrgent' + this._uid).checkbox('uncheck');
-            }
-        },
-        isNegociated: function isNegociated() {
-            if (this.isNegociated) {
-                $('#isNegociated' + this._uid).checkbox('check');
-            } else {
-
-                $('#isNegociated' + this._uid).checkbox('uncheck');
-            }
-        },
-        subunit: function subunit() {
-            this.calcSubUnit = Math.pow(10, -this.subunit);
-            this.setFakeAdvert();
-        },
-        currencySymbol: function currencySymbol() {
-            this.setFakeAdvert();
-        },
-        price: function price() {
-            this.setFakeAdvert();
-        },
-        discountOnTotal: function discountOnTotal() {
-            this.setFakeAdvert();
-        },
-        buyingPrice: function buyingPrice() {
-            this.setFakeAdvert();
-        },
-        totalQuantity: function totalQuantity() {
-            this.setFakeAdvert();
-        },
-        lotMiniQuantity: function lotMiniQuantity() {
-            this.setFakeAdvert();
-        }
-    },
-    data: function data() {
-        return {
-            categoryId: '',
-            listType: [],
-            type: '',
-            title: '',
-            manuRef: '',
-            description: '',
-            price: 0,
-            discountOnTotal: 0,
-            buyingPrice: 0,
-            fakeAdvert: {
-                originalPrice: 0,
-                buyingPrice: 0,
-                priceSubUnit: 2,
-                totalQuantity: 0,
-                lotMiniQuantity: 0,
-                discount_on_total: 0,
-                currencySymbol: ''
-            },
-            margins: {
-                unitMargin: 0,
-                totalMargin: 0,
-                lotMiniMargin: 0,
-                unitSellerPrice: 0,
-                priceMargin: 0,
-                totalSellerPrice: 0,
-                totalSellerPriceWholePart: 0,
-                totalSellerPriceDecimalPart: 0,
-                totalPriceMargin: 0,
-                totalPriceMarginWholePart: 0,
-                totalPriceMarginDecimalPart: 0,
-                totalPriceByLot: 0,
-                totalPriceByLotMargin: 0,
-                globalDiscount: 0,
-                coefficientTotalIsOverMax: false
-            },
-            totalQuantity: 1,
-            maxLotMini: 1,
-            lotMiniQuantity: 1,
-            oldCategoryId: 0,
-            oldType: '',
-            oldCurrency: '',
-            sendMessage: false,
-            typeMessage: '',
-            message: '',
-            currency: '',
-            currencySymbol: '',
-            subunit: 2,
-            calcSubUnit: 0.01,
-            lat: '',
-            lng: '',
-            geoloc: '',
-            flagMapResize: false,
-            dataCompleteGeoloc: '',
-            searchPlace: '',
-            pictures: [],
-            mainPicture: '',
-            steps: [],
-            successFormSubmit: false,
-            isUrgent: false,
-            isNegociated: false,
-            hasVideo: false,
-            videoId: undefined,
-            cost: 0,
-            onSetSteps: false,
-            submitEnable: true,
-            breadcrumbItems: [],
-            dataAdvertEdit: {},
-            isEditAdvert: false
-        };
-    },
-    mounted: function mounted() {
-        var that = this;
-        this.steps = [{
-            isActive: true,
-            isDisabled: false,
-            isCompleted: false,
-            title: this.strings.stepOneTitle,
-            description: this.strings.stepOneDescription,
-            icon: 'write'
-        }, {
-            isActive: false,
-            isDisabled: this.isDelegation == 1,
-            isCompleted: this.isDelegation == 1,
-            title: this.strings.stepTwoTitle,
-            description: this.strings.stepTwoDescription,
-            icon: 'user'
-        }, {
-            isActive: false,
-            isDisabled: true,
-            isCompleted: this.isDelegation == 1,
-            title: this.strings.stepThreeTitle,
-            description: this.strings.stepThreeDescription,
-            routeDescription: this.isDelegation == 1 ? undefined : this.routePrices,
-            icon: 'payment'
-        }];
-        this.setBreadCrumbItems(this.strings.defaultBreadcrumb);
-        this.description = this.strings.formDescriptionLabel;
-
-        //Inits
-        if (this.editAdvert !== '') {
-            this.dataAdvertEdit = JSON.parse(this.editAdvert);
-            this.isEditAdvert = true;
-            if (this.old == '0') {
-                this.categoryId = this.dataAdvertEdit.category_id;
-                this.title = this.dataAdvertEdit.title;
-                this.manuRef = this.dataAdvertEdit.manu_ref != null ? this.dataAdvertEdit.manu_ref : '';
-                this.description = this.dataAdvertEdit.description;
-                this.price = this.dataAdvertEdit.originalPrice / Math.pow(10, this.dataAdvertEdit.priceSubUnit);
-                this.totalQuantity = this.dataAdvertEdit.totalQuantity;
-                this.maxLotMini = this.totalQuantity;
-                this.lotMiniQuantity = this.dataAdvertEdit.lotMiniQuantity;
-                this.discountOnTotal = this.dataAdvertEdit.discount_on_total.toFixed(2);
-                this.type = this.dataAdvertEdit.type;
-                this.currency = this.dataAdvertEdit.currency;
-                this.currencySymbol = this.dataAdvertEdit.currencySymbol;
-                this.lat = this.dataAdvertEdit.latitude;
-                this.lng = this.dataAdvertEdit.longitude;
-                this.isUrgent = this.dataAdvertEdit.isUrgent;
-                this.isNegociated = this.dataAdvertEdit.isNegociated;
-                this.setStorage();
-            }
-        } else {
-            if (this.old == '0') {
-                sessionStorage.clear();
-                this.lat = this.geolocInitLat;
-                this.lng = this.geolocInitLng;
-                sessionStorage.setItem('lat', this.lat);
-                sessionStorage.setItem('lng', this.lng);
-            }
-        }
-
-        this.getStorage();
-        var paramsAccordion = $('#params_accordion' + this._uid);
-        paramsAccordion.accordion({
-            exclusive: false,
-            'onOpen': function onOpen() {
-                that.flagMapResize = !that.flagMapResize;
-            }
-        });
-        paramsAccordion.accordion('open', 0);
-        $('.red.alarm.outline.large.icon').popup();
-    },
-    updated: function updated() {
-        var that = this;
-        $('#isUrgent' + this._uid).checkbox({
-            onChecked: function onChecked() {
-                that.isUrgent = true;
-            },
-            onUnchecked: function onUnchecked() {
-                that.isUrgent = false;
-            }
-        });
-        $('#isNegociated' + this._uid).checkbox({
-            onChecked: function onChecked() {
-                that.isNegociated = true;
-            },
-            onUnchecked: function onUnchecked() {
-                that.isNegociated = false;
-            }
-        });
-    },
-
-    methods: {
-        typeChoice: function typeChoice(type) {
-            this.type = type;
-        },
-        categoryChoice: function categoryChoice(id) {
-            this.categoryId = parseInt(id);
-        },
-        currencyChoice: function currencyChoice(event) {
-            this.currency = event.cur;
-            this.currencySymbol = event.symbol;
-            this.subunit = event.subunit;
-        },
-        sendToast: function sendToast(message, type) {
-            this.typeMessage = type;
-            this.message = message;
-            this.sendMessage = !this.sendMessage;
-        },
-        latLngChange: function latLngChange(event) {
-            this.lat = event.lat;
-            this.lng = event.lng;
-            this.geoloc = event.geoloc;
-            this.dataCompleteGeoloc = sessionStorage.getItem('geoloc');
-            this.searchPlace = sessionStorage.getItem('searchPlace');
-        },
-        setSteps: function setSteps() {
-            if (this.isDelegation != 1) {
-                if (this.isDelegation != 1) {
-                    this.steps[2].isDisabled = false;
-                }
-                var that = this;
-
-                var params = {};
-                if (this.isEditAdvert) {
-                    params = { 'isEditOf': this.dataAdvertEdit.id };
-                }
-
-                __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.routeGetCost + '/' + this.pictures.length + '/' + this.isUrgent, { params: params }).then(function (response) {
-                    that.cost = response.data;
-                    that.steps[2].title = that.strings.stepThreeTitle + '(' + (that.cost / 100).toFixed(2) + that.strings.stepThreeTitlePost + ')';
-                }).catch(function (error) {
-                    that.cost = 0;
-                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                });
-            } else {
-                this.cost = 0;
-                this.steps[2].title = this.strings.stepThreeTitle;
-                this.steps[2].isDisabled = true;
-            }
-        },
-
-        setBreadCrumbItems: function setBreadCrumbItems(initString) {
-            this.breadcrumbItems = [];
-            var that = this;
-            if (initString !== undefined && initString !== null) {
-                var words = initString.split(" ");
-                words.forEach(function (word) {
-                    that.breadcrumbItems.push({
-                        name: word,
-                        value: 0
-                    });
-                });
-            } else {
-                if (this.categoryId != undefined && this.categoryId > 0) {
-                    __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.properties.routeCategory + '/' + this.categoryId).then(function (response) {
-                        var chainedCategories = response.data;
-                        that.breadcrumbItems.push({
-                            name: that.strings.allLabel,
-                            value: 0
-                        });
-                        chainedCategories.forEach(function (elem, index) {
-                            that.breadcrumbItems.push({
-                                name: elem['description'][that.properties.actualLocale],
-                                value: elem.id
-                            });
-                        });
-                    }).catch(function (error) {
-                        that.breadcrumbItems.push({
-                            name: this.strings.loadErrorMessage,
-                            value: ''
-                        });
-                    });
-                }
-            }
-        },
-        getMoment: function getMoment(dateTime) {
-            __WEBPACK_IMPORTED_MODULE_0_moment___default.a.locale(this.properties.actualLocale);
-            return __WEBPACK_IMPORTED_MODULE_0_moment___default()(dateTime).fromNow();
-        },
-        calcNbFreePictures: function calcNbFreePictures() {
-            var nbOriginalPictures = 'pictures' in this.dataAdvertEdit ? parseInt(this.dataAdvertEdit.pictures.length) : 0;
-            if (nbOriginalPictures > parseInt(this.advertFormPhotoNbFreePicture)) {
-                return nbOriginalPictures;
-            } else {
-                return parseInt(this.advertFormPhotoNbFreePicture);
-            }
-        },
-        setFakeAdvert: function setFakeAdvert() {
-            Object.assign(this.fakeAdvert, {
-                originalPrice: Number((this.price * Math.pow(10, this.subunit)).toFixed(0)),
-                buyingPrice: Number((this.buyingPrice * Math.pow(10, this.subunit)).toFixed(0)),
-                priceSubUnit: this.subunit,
-                totalQuantity: this.totalQuantity,
-                lotMiniQuantity: this.lotMiniQuantity,
-                discount_on_total: this.discountOnTotal,
-                currencySymbol: this.currencySymbol
-            });
-            this.updateMargins();
-        },
-        updateMargins: function updateMargins() {
-            var calcMargins = __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].calcMargins(this.fakeAdvert, true);
-            Object.assign(this.margins, calcMargins);
-        },
-        submitForm: function submitForm(event) {
-            event.preventDefault();
-            __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].paceRestart();
-            this.setStorage();
-            $('#create_advert_form_' + this._uid).submit();
-        },
-        setStorage: function setStorage() {
-            sessionStorage.setItem('category', this.categoryId);
-            sessionStorage.setItem('title', this.title);
-            sessionStorage.setItem('manuRef', this.manuRef);
-            sessionStorage.setItem('description', this.description);
-            sessionStorage.setItem('price', this.price);
-            sessionStorage.setItem('discountOnTotal', this.discountOnTotal);
-            sessionStorage.setItem('totalQuantity', this.totalQuantity);
-            sessionStorage.setItem('lotMiniQuantity', this.lotMiniQuantity);
-            sessionStorage.setItem('type', this.type);
-            sessionStorage.setItem('currency', this.currency);
-            sessionStorage.setItem('subunit', this.subunit);
-            sessionStorage.setItem('lat', this.lat);
-            sessionStorage.setItem('lng', this.lng);
-            sessionStorage.setItem('isUrgent', this.isUrgent);
-            sessionStorage.setItem('isNegociated', this.isNegociated);
-        },
-        getStorage: function getStorage() {
-            sessionStorage.getItem('successFormSubmit') != undefined ? this.successFormSubmit = sessionStorage.getItem('successFormSubmit') : null;
-            sessionStorage.getItem('category') != undefined ? this.categoryId = Number(sessionStorage.getItem('category')) : null;
-            sessionStorage.getItem('category') != undefined ? this.oldCategoryId = Number(sessionStorage.getItem('category')) : null;
-            sessionStorage.getItem('title') != undefined ? this.title = sessionStorage.getItem('title') : null;
-            sessionStorage.getItem('manuRef') != undefined ? this.manuRef = sessionStorage.getItem('manuRef') : null;
-            sessionStorage.getItem('description') != undefined ? this.description = sessionStorage.getItem('description') : null;
-            sessionStorage.getItem('price') != undefined ? this.price = Number(sessionStorage.getItem('price')) : null;
-            sessionStorage.getItem('discountOnTotal') != undefined ? this.discountOnTotal = Number(sessionStorage.getItem('discountOnTotal')) : null;
-            sessionStorage.getItem('totalQuantity') != undefined ? this.totalQuantity = Number(sessionStorage.getItem('totalQuantity')) : null;
-            this.maxLotMini = this.totalQuantity;
-            sessionStorage.getItem('lotMiniQuantity') != undefined ? this.lotMiniQuantity = Number(sessionStorage.getItem('lotMiniQuantity')) : null;
-            sessionStorage.getItem('type') != undefined ? this.type = sessionStorage.getItem('type') : null;
-            sessionStorage.getItem('type') != undefined ? this.oldType = sessionStorage.getItem('type') : null;
-            sessionStorage.getItem('currency') != undefined ? this.currency = sessionStorage.getItem('currency') : null;
-            sessionStorage.getItem('currency') != undefined ? this.oldCurrency = sessionStorage.getItem('currency') : null;
-            sessionStorage.getItem('subunit') != undefined ? this.subunit = Number(sessionStorage.getItem('subunit')) : null;
-            sessionStorage.getItem('lat') != undefined ? this.lat = sessionStorage.getItem('lat') : null;
-            sessionStorage.getItem('lng') != undefined ? this.lng = sessionStorage.getItem('lng') : null;
-            sessionStorage.getItem('isUrgent') != undefined ? this.isUrgent = sessionStorage.getItem('isUrgent') == 'true' : null;
-            sessionStorage.getItem('isNegociated') != undefined ? this.isNegociated = sessionStorage.getItem('isNegociated') == 'true' : null;
-        },
-        setMaxLotMini: function setMaxLotMini() {
-            this.maxLotMini = this.totalQuantity;
-        },
-        updatePictures: function updatePictures(pictures) {
-            this.pictures = pictures;
-            this.setSteps();
-        },
-        vimeoStateChange: function vimeoStateChange(event) {
-            this.hasVideo = event.hasVideo;
-            this.videoId = event.videoId;
-            this.setSteps();
-        }
+    properties: function properties() {
+      return this.$store.state.properties['global'];
     }
+  },
+  watch: {
+    categoryId: function categoryId() {
+      this.setBreadCrumbItems();
+    },
+    isUrgent: function isUrgent() {
+      this.setSteps();
+      if (this.isUrgent) {
+        $('#isUrgent' + this._uid).checkbox('check');
+      } else {
+        $('#isUrgent' + this._uid).checkbox('uncheck');
+      }
+    },
+    isNegociated: function isNegociated() {
+      if (this.isNegociated) {
+        $('#isNegociated' + this._uid).checkbox('check');
+      } else {
+        $('#isNegociated' + this._uid).checkbox('uncheck');
+      }
+    },
+    subunit: function subunit() {
+      this.calcSubUnit = Math.pow(10, -this.subunit);
+      this.setFakeAdvert();
+    },
+    currencySymbol: function currencySymbol() {
+      this.setFakeAdvert();
+    },
+    price: function price() {
+      this.setFakeAdvert();
+    },
+    discountOnTotal: function discountOnTotal() {
+      this.setFakeAdvert();
+    },
+    buyingPrice: function buyingPrice() {
+      this.setFakeAdvert();
+    },
+    totalQuantity: function totalQuantity() {
+      this.setFakeAdvert();
+    },
+    lotMiniQuantity: function lotMiniQuantity() {
+      this.setFakeAdvert();
+    }
+  },
+  data: function data() {
+    return {
+      categoryId: '',
+      listType: [],
+      type: '',
+      title: '',
+      manuRef: '',
+      description: '',
+      price: 0,
+      discountOnTotal: 0,
+      buyingPrice: 0,
+      fakeAdvert: {
+        originalPrice: 0,
+        buyingPrice: 0,
+        priceSubUnit: 2,
+        totalQuantity: 0,
+        lotMiniQuantity: 0,
+        discount_on_total: 0,
+        currencySymbol: ''
+      },
+      margins: {
+        unitMargin: 0,
+        totalMargin: 0,
+        lotMiniMargin: 0,
+        unitSellerPrice: 0,
+        priceMargin: 0,
+        totalSellerPrice: 0,
+        totalSellerPriceWholePart: 0,
+        totalSellerPriceDecimalPart: 0,
+        totalPriceMargin: 0,
+        totalPriceMarginWholePart: 0,
+        totalPriceMarginDecimalPart: 0,
+        totalPriceByLot: 0,
+        totalPriceByLotMargin: 0,
+        globalDiscount: 0,
+        coefficientTotalIsOverMax: false
+      },
+      totalQuantity: 1,
+      maxLotMini: 1,
+      lotMiniQuantity: 1,
+      oldCategoryId: 0,
+      oldType: '',
+      oldCurrency: '',
+      sendMessage: false,
+      typeMessage: '',
+      message: '',
+      currency: '',
+      currencySymbol: '',
+      subunit: 2,
+      calcSubUnit: 0.01,
+      lat: '',
+      lng: '',
+      geoloc: '',
+      flagMapResize: false,
+      dataCompleteGeoloc: '',
+      searchPlace: '',
+      pictures: [],
+      mainPicture: '',
+      steps: [],
+      successFormSubmit: false,
+      isUrgent: false,
+      isNegociated: false,
+      hasVideo: false,
+      videoId: undefined,
+      cost: 0,
+      onSetSteps: false,
+      submitEnable: true,
+      breadcrumbItems: [],
+      dataAdvertEdit: {},
+      isEditAdvert: false
+    };
+  },
+  mounted: function mounted() {
+    var that = this;
+    this.steps = [{
+      isActive: true,
+      isDisabled: false,
+      isCompleted: false,
+      title: this.strings.stepOneTitle,
+      description: this.strings.stepOneDescription,
+      icon: 'write'
+    }, {
+      isActive: false,
+      isDisabled: this.isDelegation === '1',
+      isCompleted: this.isDelegation === '1',
+      title: this.strings.stepTwoTitle,
+      description: this.strings.stepTwoDescription,
+      icon: 'user'
+    }, {
+      isActive: false,
+      isDisabled: true,
+      isCompleted: this.isDelegation === '1',
+      title: this.strings.stepThreeTitle,
+      description: this.strings.stepThreeDescription,
+      routeDescription: this.isDelegation === '1' ? undefined : this.routePrices,
+      icon: 'payment'
+    }];
+    this.setBreadCrumbItems(this.strings.defaultBreadcrumb);
+    this.description = this.strings.formDescriptionLabel;
+    // Inits
+    if (this.editAdvert !== '') {
+      this.dataAdvertEdit = JSON.parse(this.editAdvert);
+      this.isEditAdvert = true;
+      if (this.old === '0') {
+        this.categoryId = this.dataAdvertEdit.category_id;
+        this.title = this.dataAdvertEdit.title;
+        this.manuRef = this.dataAdvertEdit.manu_ref !== undefined && this.dataAdvertEdit.manu_ref !== null ? this.dataAdvertEdit.manu_ref : '';
+        this.description = this.dataAdvertEdit.description;
+        this.price = this.dataAdvertEdit.originalPrice / Math.pow(10, this.dataAdvertEdit.priceSubUnit);
+        this.totalQuantity = this.dataAdvertEdit.totalQuantity;
+        this.maxLotMini = this.totalQuantity;
+        this.lotMiniQuantity = this.dataAdvertEdit.lotMiniQuantity;
+        this.discountOnTotal = this.dataAdvertEdit.discount_on_total.toFixed(2);
+        this.type = this.dataAdvertEdit.type;
+        this.currency = this.dataAdvertEdit.currency;
+        this.currencySymbol = this.dataAdvertEdit.currencySymbol;
+        this.lat = this.dataAdvertEdit.latitude;
+        this.lng = this.dataAdvertEdit.longitude;
+        this.isUrgent = this.dataAdvertEdit.isUrgent;
+        this.isNegociated = this.dataAdvertEdit.isNegociated;
+        this.setStorage();
+      }
+    } else {
+      if (this.old === '0') {
+        sessionStorage.clear();
+        this.lat = this.geolocInitLat;
+        this.lng = this.geolocInitLng;
+        sessionStorage.setItem('lat', this.lat);
+        sessionStorage.setItem('lng', this.lng);
+      }
+    }
+    this.getStorage();
+    var paramsAccordion = $('#params_accordion' + this._uid);
+    paramsAccordion.accordion({
+      exclusive: false,
+      'onOpen': function onOpen() {
+        that.flagMapResize = !that.flagMapResize;
+      }
+    });
+    paramsAccordion.accordion('open', 0);
+    $('.red.alarm.outline.large.icon').popup();
+  },
+  updated: function updated() {
+    var that = this;
+    $('#isUrgent' + this._uid).checkbox({
+      onChecked: function onChecked() {
+        that.isUrgent = true;
+      },
+      onUnchecked: function onUnchecked() {
+        that.isUrgent = false;
+      }
+    });
+    $('#isNegociated' + this._uid).checkbox({
+      onChecked: function onChecked() {
+        that.isNegociated = true;
+      },
+      onUnchecked: function onUnchecked() {
+        that.isNegociated = false;
+      }
+    });
+  },
+
+  methods: {
+    typeChoice: function typeChoice(type) {
+      this.type = type;
+    },
+    categoryChoice: function categoryChoice(id) {
+      this.categoryId = parseInt(id);
+    },
+    currencyChoice: function currencyChoice(event) {
+      this.currency = event.cur;
+      this.currencySymbol = event.symbol;
+      this.subunit = event.subunit;
+    },
+    sendToast: function sendToast(message, type) {
+      this.typeMessage = type;
+      this.message = message;
+      this.sendMessage = !this.sendMessage;
+    },
+    latLngChange: function latLngChange(event) {
+      this.lat = event.lat;
+      this.lng = event.lng;
+      this.geoloc = event.geoloc;
+      this.dataCompleteGeoloc = sessionStorage.getItem('geoloc');
+      this.searchPlace = sessionStorage.getItem('searchPlace');
+    },
+    setSteps: function setSteps() {
+      if (this.isDelegation !== '1') {
+        if (this.isDelegation !== '1') {
+          this.steps[2].isDisabled = false;
+        }
+        var that = this;
+        var params = {};
+        if (this.isEditAdvert) {
+          params = { 'isEditOf': this.dataAdvertEdit.id };
+        }
+        __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.routeGetCost + '/' + this.pictures.length + '/' + this.isUrgent, { params: params }).then(function (response) {
+          that.cost = response.data;
+          that.steps[2].title = that.strings.stepThreeTitle + '(' + (that.cost / 100).toFixed(2) + that.strings.stepThreeTitlePost + ')';
+        }).catch(function () {
+          that.cost = 0;
+          that.sendToast(that.strings.loadErrorMessage, 'error');
+        });
+      } else {
+        this.cost = 0;
+        this.steps[2].title = this.strings.stepThreeTitle;
+        this.steps[2].isDisabled = true;
+      }
+    },
+
+    setBreadCrumbItems: function setBreadCrumbItems(initString) {
+      this.breadcrumbItems = [];
+      var that = this;
+      if (initString !== undefined && initString !== null) {
+        var words = initString.split(' ');
+        words.forEach(function (word) {
+          that.breadcrumbItems.push({
+            name: word,
+            value: 0
+          });
+        });
+      } else {
+        if (this.categoryId !== undefined && this.categoryId !== null && this.categoryId > 0) {
+          __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(this.properties.routeCategory + '/' + this.categoryId).then(function (response) {
+            var chainedCategories = response.data;
+            that.breadcrumbItems.push({
+              name: that.strings.allLabel,
+              value: 0
+            });
+            chainedCategories.forEach(function (elem, index) {
+              that.breadcrumbItems.push({
+                name: elem['description'][that.properties.actualLocale],
+                value: elem.id
+              });
+            });
+          }).catch(function () {
+            that.breadcrumbItems.push({
+              name: this.strings.loadErrorMessage,
+              value: ''
+            });
+          });
+        }
+      }
+    },
+    getMoment: function getMoment(dateTime) {
+      __WEBPACK_IMPORTED_MODULE_0_moment___default.a.locale(this.properties.actualLocale);
+      return __WEBPACK_IMPORTED_MODULE_0_moment___default()(dateTime).fromNow();
+    },
+    calcNbFreePictures: function calcNbFreePictures() {
+      var nbOriginalPictures = 'pictures' in this.dataAdvertEdit ? parseInt(this.dataAdvertEdit.pictures.length) : 0;
+      if (nbOriginalPictures > parseInt(this.advertFormPhotoNbFreePicture)) {
+        return nbOriginalPictures;
+      } else {
+        return parseInt(this.advertFormPhotoNbFreePicture);
+      }
+    },
+    setFakeAdvert: function setFakeAdvert() {
+      Object.assign(this.fakeAdvert, {
+        originalPrice: Number((this.price * Math.pow(10, this.subunit)).toFixed(0)),
+        buyingPrice: Number((this.buyingPrice * Math.pow(10, this.subunit)).toFixed(0)),
+        priceSubUnit: this.subunit,
+        totalQuantity: this.totalQuantity,
+        lotMiniQuantity: this.lotMiniQuantity,
+        discount_on_total: this.discountOnTotal,
+        currencySymbol: this.currencySymbol
+      });
+      this.updateMargins();
+    },
+    updateMargins: function updateMargins() {
+      var calcMargins = __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].calcMargins(this.fakeAdvert, true);
+      Object.assign(this.margins, calcMargins);
+    },
+    submitForm: function submitForm(event) {
+      event.preventDefault();
+      __WEBPACK_IMPORTED_MODULE_1__destockTools__["a" /* DestockTools */].paceRestart();
+      this.setStorage();
+      $('#create_advert_form_' + this._uid).submit();
+    },
+    setStorage: function setStorage() {
+      sessionStorage.setItem('category', this.categoryId);
+      sessionStorage.setItem('title', this.title);
+      sessionStorage.setItem('manuRef', this.manuRef);
+      sessionStorage.setItem('description', this.description);
+      sessionStorage.setItem('price', this.price);
+      sessionStorage.setItem('discountOnTotal', this.discountOnTotal);
+      sessionStorage.setItem('totalQuantity', this.totalQuantity);
+      sessionStorage.setItem('lotMiniQuantity', this.lotMiniQuantity);
+      sessionStorage.setItem('type', this.type);
+      sessionStorage.setItem('currency', this.currency);
+      sessionStorage.setItem('subunit', this.subunit);
+      sessionStorage.setItem('lat', this.lat);
+      sessionStorage.setItem('lng', this.lng);
+      sessionStorage.setItem('isUrgent', this.isUrgent);
+      sessionStorage.setItem('isNegociated', this.isNegociated);
+    },
+    getStorage: function getStorage() {
+      if (sessionStorage.getItem('successFormSubmit') != undefined) {
+        this.successFormSubmit = sessionStorage.getItem('successFormSubmit');
+      }
+      if (sessionStorage.getItem('category') != undefined) {
+        this.categoryId = Number(sessionStorage.getItem('category'));
+      }
+      if (sessionStorage.getItem('category') != undefine) {
+        this.oldCategoryId = Number(sessionStorage.getItem('category'));
+      }
+      if (sessionStorage.getItem('title') != undefined) {
+        this.title = sessionStorage.getItem('title');
+      }
+      if (sessionStorage.getItem('manuRef') != undefined) {
+        this.manuRef = sessionStorage.getItem('manuRef');
+      }
+      if (sessionStorage.getItem('description') != undefined) {
+        this.description = sessionStorage.getItem('description');
+      }
+      if (sessionStorage.getItem('price') != undefined) {
+        this.price = Number(sessionStorage.getItem('price'));
+      }
+      if (sessionStorage.getItem('discountOnTotal') != undefined) {
+        this.discountOnTotal = Number(sessionStorage.getItem('discountOnTotal'));
+      }
+      if (sessionStorage.getItem('totalQuantity') != undefined) {
+        this.totalQuantity = Number(sessionStorage.getItem('totalQuantity'));
+      }
+      this.maxLotMini = this.totalQuantity;
+      if (sessionStorage.getItem('lotMiniQuantity') != undefined) {
+        this.lotMiniQuantity = Number(sessionStorage.getItem('lotMiniQuantity'));
+      }
+      if (sessionStorage.getItem('type') != undefined) {
+        this.type = sessionStorage.getItem('type');
+      }
+      if (sessionStorage.getItem('type') != undefined) {
+        this.oldType = sessionStorage.getItem('type');
+      }
+      if (sessionStorage.getItem('currency') != undefined) {
+        this.currency = sessionStorage.getItem('currency');
+      }
+      if (sessionStorage.getItem('currency') != undefined) {
+        this.oldCurrency = sessionStorage.getItem('currency');
+      }
+      if (sessionStorage.getItem('subunit') != undefined) {
+        this.subunit = Number(sessionStorage.getItem('subunit'));
+      }
+      if (sessionStorage.getItem('lat') != undefined) {
+        this.lat = sessionStorage.getItem('lat');
+      }
+      if (sessionStorage.getItem('lng') != undefined) {
+        this.lng = sessionStorage.getItem('lng');
+      }
+      if (sessionStorage.getItem('isUrgent') != undefined) {
+        this.isUrgent = sessionStorage.getItem('isUrgent') === 'true';
+      }
+      if (sessionStorage.getItem('isNegociated') != undefined) {
+        this.isNegociated = sessionStorage.getItem('isNegociated') === 'true';
+      }
+    },
+    setMaxLotMini: function setMaxLotMini() {
+      this.maxLotMini = this.totalQuantity;
+    },
+    updatePictures: function updatePictures(pictures) {
+      this.pictures = pictures;
+      this.setSteps();
+    },
+    vimeoStateChange: function vimeoStateChange(event) {
+      this.hasVideo = event.hasVideo;
+      this.videoId = event.videoId;
+      this.setSteps();
+    }
+  }
 });
 
 /***/ }),
@@ -39585,125 +39617,121 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: [
-    //vue routes
-    'routeGetAdvertsList', 'routeAdvertApprove', 'routeGetThumb',
-    //vue vars
-    'advertNbFreePicture'],
-    computed: {
-        strings: function strings() {
-            return this.$store.state.strings['approve-advert-form'];
-        },
-        properties: function properties() {
-            return this.$store.state.properties['global'];
-        }
+  props: [
+  // vue routes
+  'routeGetAdvertsList', 'routeAdvertApprove', 'routeGetThumb',
+  // vue vars
+  'advertNbFreePicture'],
+  computed: {
+    strings: function strings() {
+      return this.$store.state.strings['approve-advert-form'];
     },
-    data: function data() {
-        return {
-            advertsList: [],
-            isLoaded: false,
-            action: false,
-            approveList: {},
-            sendMessage: false,
-            typeMessage: '',
-            message: ''
-        };
-    },
-    mounted: function mounted() {
-        this.getAdvertsList();
-    },
-    updated: function updated() {
-        var that = this;
-        for (var index in this.advertsList) {
-            $('#slider1-' + this._uid + '-' + this.advertsList[index]['id']).checkbox({
-                onChange: function onChange() {
-                    that.action = true;
-                    if (!(this.name in that.approveList)) {
-                        that.$set(that.approveList, this.name, { 'isApprove': this.value, 'disapproveReason': '' });
-                    } else {
-                        that.approveList[this.name].isApprove = this.value;
-                    }
-                }
-            });
-            $('#slider2-' + this._uid + '-' + this.advertsList[index]['id']).checkbox({
-                onChange: function onChange() {
-                    that.action = true;
-                    if (!(this.name in that.approveList)) {
-                        that.$set(that.approveList, this.name, { 'isApprove': this.value, 'disapproveReason': '' });
-                    } else {
-                        that.approveList[this.name].isApprove = this.value;
-                    }
-                }
-            });
-        }
-    },
-
-    methods: {
-        getAdvertsList: function getAdvertsList(withLoadIndicator) {
-            withLoadIndicator == undefined ? withLoadIndicator = true : null;
-            withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-            var that = this;
-            this.approveList = {};
-            this.advertsList = {};
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(this.routeGetAdvertsList).then(function (response) {
-                that.advertsList = response.data;
-                that.isLoaded = true;
-            }).catch(function (error) {
-                that.sendToast(that.strings.loadErrorMessage, 'error');
-            });
-        },
-        approveAll: function approveAll(event) {
-            event.preventDefault();
-            var that = this;
-            for (var index in this.approveList) {
-                this.approveList[index]['priceCoefficient'] = this.advertsList[index]['price_coefficient'];
-                this.approveList[index]['priceCoefficientTotal'] = this.advertsList[index]['price_coefficient_total'];
-                this.approveList[index]['lotMiniQuantity'] = this.advertsList[index]['lotMiniQuantity'];
-            }
-            $('#modal-' + this._uid).modal({
-                closable: false,
-                onApprove: function onApprove() {
-                    that.isLoaded = false;
-                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(that.routeAdvertApprove, that.approveList).then(function (response) {
-                        that.getAdvertsList();
-                        that.sendToast(that.strings.advertApproveSuccess, 'success');
-                    }).catch(function (error) {
-                        if (error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error');
-                        } else {
-                            that.sendToast(that.strings.loadErrorMessage, 'error');
-                        }
-                        that.isLoaded = false;
-                    });
-                }
-            }).modal('show');
-        },
-        sendToast: function sendToast(message, type) {
-            this.typeMessage = type;
-            this.message = message;
-            this.sendMessage = !this.sendMessage;
-        },
-        getFormattedAddress: function getFormattedAddress(geoloc) {
-            var parsed = JSON.parse(geoloc);
-            if (parsed && parsed.length > 0 && 'formatted_address' in parsed[0]) {
-                return JSON.parse(geoloc)[0]['formatted_address'];
-            }
-        },
-
-        setBreadCrumbItems: function setBreadCrumbItems(advert) {
-            var that = this;
-
-            var breadcrumbItems = [];
-
-            advert.breadCrumb.forEach(function (element) {
-                breadcrumbItems.push({
-                    name: element['description'][that.properties.actualLocale],
-                    value: element.id
-                });
-            });
-            return breadcrumbItems;
-        }
+    properties: function properties() {
+      return this.$store.state.properties['global'];
     }
+  },
+  data: function data() {
+    return {
+      advertsList: [],
+      isLoaded: false,
+      action: false,
+      approveList: {},
+      sendMessage: false,
+      typeMessage: '',
+      message: ''
+    };
+  },
+  mounted: function mounted() {
+    this.getAdvertsList();
+  },
+  updated: function updated() {
+    var that = this;
+    for (var index in this.advertsList) {
+      $('#slider1-' + this._uid + '-' + this.advertsList[index]['id']).checkbox({
+        onChange: function onChange() {
+          that.action = true;
+          if (!(this.name in that.approveList)) {
+            that.$set(that.approveList, this.name, { 'isApprove': this.value, 'disapproveReason': '' });
+          } else {
+            that.approveList[this.name].isApprove = this.value;
+          }
+        }
+      });
+      $('#slider2-' + this._uid + '-' + this.advertsList[index]['id']).checkbox({
+        onChange: function onChange() {
+          that.action = true;
+          if (!(this.name in that.approveList)) {
+            that.$set(that.approveList, this.name, { 'isApprove': this.value, 'disapproveReason': '' });
+          } else {
+            that.approveList[this.name].isApprove = this.value;
+          }
+        }
+      });
+    }
+  },
+
+  methods: {
+    getAdvertsList: function getAdvertsList() {
+      this.isLoaded = false;
+      var that = this;
+      this.approveList = {};
+      this.advertsList = {};
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(this.routeGetAdvertsList).then(function (response) {
+        that.advertsList = response.data;
+        that.isLoaded = true;
+      }).catch(function () {
+        that.sendToast(that.strings.loadErrorMessage, 'error');
+      });
+    },
+    approveAll: function approveAll(event) {
+      var that = this;
+      for (var index in this.approveList) {
+        this.approveList[index]['priceCoefficient'] = this.advertsList[index]['price_coefficient'];
+        this.approveList[index]['priceCoefficientTotal'] = this.advertsList[index]['price_coefficient_total'];
+        this.approveList[index]['lotMiniQuantity'] = this.advertsList[index]['lotMiniQuantity'];
+      }
+      $('#modal-' + this._uid).modal({
+        closable: false,
+        onApprove: function onApprove() {
+          that.isLoaded = false;
+          __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(that.routeAdvertApprove, that.approveList).then(function (response) {
+            that.getAdvertsList();
+            that.sendToast(that.strings.advertApproveSuccess, 'success');
+          }).catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error');
+            } else {
+              that.sendToast(that.strings.loadErrorMessage, 'error');
+            }
+            that.isLoaded = false;
+          });
+        }
+      }).modal('show');
+    },
+    sendToast: function sendToast(message, type) {
+      this.typeMessage = type;
+      this.message = message;
+      this.sendMessage = !this.sendMessage;
+    },
+    getFormattedAddress: function getFormattedAddress(geoloc) {
+      var parsed = JSON.parse(geoloc);
+      if (parsed && parsed.length > 0 && 'formatted_address' in parsed[0]) {
+        return JSON.parse(geoloc)[0]['formatted_address'];
+      }
+    },
+
+    setBreadCrumbItems: function setBreadCrumbItems(advert) {
+      var that = this;
+      var breadcrumbItems = [];
+      advert.breadCrumb.forEach(function (element) {
+        breadcrumbItems.push({
+          name: element['description'][that.properties.actualLocale],
+          value: element.id
+        });
+      });
+      return breadcrumbItems;
+    }
+  }
 });
 
 /***/ }),
@@ -40127,7 +40155,12 @@ var render = function() {
                 {
                   staticClass: "ui primary button",
                   class: _vm.action ? "" : "disabled",
-                  on: { click: _vm.approveAll }
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.approveAll($event)
+                    }
+                  }
                 },
                 [
                   _vm._v(

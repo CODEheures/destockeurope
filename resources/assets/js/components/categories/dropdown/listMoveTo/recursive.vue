@@ -14,19 +14,19 @@
 
 
 <script>
-    export default {
-        props: {
-            categories: Array,
-            left: {
-                type: Boolean,
-                required: false,
-                default: false
-            }
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        }
+  export default {
+    props: {
+      categories: Array,
+      left: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      }
     }
+  }
 </script>

@@ -28,39 +28,34 @@
 
 <script>
   import { DestockTools } from '../../destockTools'
-    export default {
-        props: {
-            //vue routes
-            //vue vars
-            //search component
-            routeSearch: {
-                type: String
-            },
-        },
-        data () {
-            return {
-                strings: {},
-                properties: {},
-                dataResultsFor: '',
-                dataUpdateSearch: false
-            };
-        },
-        mounted () {
-            this.strings = this.$store.state.strings['advert-simple-search-filter'];
-            this.properties = this.$store.state.properties['global'];
-            let that = this;
-
-            //search filter
-            this.dataResultsFor = DestockTools.findInUrl('resultsFor');
-            this.dataUpdateSearch = !this.dataUpdateSearch;
-
-            //Accordion
-            let accordionElement = $('#filter-accordion-'+this._uid);
-            if($(window).width()<768){
-                accordionElement.accordion('close',0);
-            } else {
-                accordionElement.accordion();
-            }
-        }
+  export default {
+    props: {
+      routeSearch: {
+        type: String
+      }
+    },
+    data () {
+      return {
+        strings: {},
+        properties: {},
+        dataResultsFor: '',
+        dataUpdateSearch: false
+      }
+    },
+    mounted () {
+      this.strings = this.$store.state.strings['advert-simple-search-filter']
+      this.properties = this.$store.state.properties['global']
+      // search filter
+      this.dataResultsFor = DestockTools.findInUrl('resultsFor')
+      this.dataUpdateSearch = !this.dataUpdateSearch
+      // Accordion
+      let accordionElement = $('#filter-accordion-' + this._uid)
+      if ($(window).width() < 768) {
+        accordionElement.accordion('close', 0)
+      }
+      else {
+        accordionElement.accordion()
+      }
     }
+  }
 </script>

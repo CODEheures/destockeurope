@@ -10,17 +10,17 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            steps: {
-                type: Array
-            }
-        },
-        mounted () {
-            $('#mini-steps'+this._uid).visibility({
-                type   : 'fixed',
-                offset : 70
-            });
-        }
+  export default {
+    props: {
+      steps: {
+        type: Array
+      }
+    },
+    mounted () {
+      $('#mini-steps' + this._uid).visibility({
+        type: 'fixed',
+        offset: 70
+      })
     }
+  }
 </script>

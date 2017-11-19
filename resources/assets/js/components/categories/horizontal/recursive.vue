@@ -42,32 +42,31 @@
 
 
 <script>
-    export default {
-        props: {
-            categories: Array,
-            allItem: String,
-            parentId: Number,
-            parentDescription: String,
-            level: Number,
-            maxLevel: Number
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        mounted () {
-            let that=this;
-
-            (this.categories).forEach(function (elem, index) {
-                $('#'+that._uid+'-'+index).dropdown();
-            });
-        },
-        methods: {
-            numberToWord: function (num) {
-                var a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
-                return a[num];
-            }
-        }
+  export default {
+    props: {
+      categories: Array,
+      allItem: String,
+      parentId: Number,
+      parentDescription: String,
+      level: Number,
+      maxLevel: Number
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    mounted () {
+      let that = this
+      this.categories.forEach(function (elem, index) {
+        $('#' + that._uid + '-' + index).dropdown()
+      })
+    },
+    methods: {
+      numberToWord (num) {
+        let a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen']
+        return a[num]
+      }
     }
+  }
 </script>

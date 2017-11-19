@@ -25,85 +25,84 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            oldLocale: {
-                type: String,
+  export default {
+    props: {
+      oldLocale: {
+        type: String
+      }
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      strings () {
+        return this.$store.state.strings['locales-dropdown-2']
+      }
+    },
+    watch: {
+      isReady () {
+        this.setOldChoice()
+      },
+      oldLocale () {
+        this.setOldChoice()
+      }
+    },
+    data () {
+      return {
+        locales: [],
+        countLocales: 0,
+        isLoaded: false,
+        isReady: false
+      }
+    },
+    mounted () {
+      this.getListLocales()
+      let that = this
+      $('#' + this._uid)
+        .dropdown({
+          fullTextSearch: true,
+          forceSelection: false,
+          onChange (value, text, $selectedItem) {
+            if (value !== undefined && value !== null && value !== '') {
+              that.$emit('localeChoice', value)
             }
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            strings () {
-                return this.$store.state.strings['locales-dropdown-2']
+          }
+        })
+      this.setReady()
+    },
+    methods: {
+      getListLocales () {
+        this.isLoaded = false
+        let that = this
+        Axios.get(this.properties.routeListLocales)
+          .then(function (response) {
+            that.locales = response.data
+            that.countLocales = Object.keys(response.data.listLocales).length
+            that.isLoaded = true
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      },
+      setReady () {
+        let that = this
+        this.$watch('isLoaded', function () {
+          let testLoadedInterval = setInterval(function () {
+            if ($('#' + that._uid).find('.item').length === that.countLocales) {
+              that.isReady = true
+              clearInterval(testLoadedInterval)
             }
-        },
-        watch: {
-            isReady () {
-                this.setOldChoice()
-            },
-            oldLocale () {
-                this.setOldChoice()
-            }
-        },
-        data () {
-            return {
-                locales: [],
-                countLocales: 0,
-                isLoaded: false,
-                isReady: false,
-            };
-        },
-        mounted () {
-            this.getListLocales();
-            let that = this;
-            $('#'+this._uid)
-                .dropdown({
-                    fullTextSearch: true,
-                    forceSelection: false,
-                    onChange: function (value, text, $selectedItem) {
-                        if(value != undefined && value != ''){
-                            that.$emit('localeChoice', value);
-                        }
-                    }
-                });
-
-            this.setReady();
-        },
-        methods: {
-            getListLocales: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                Axios.get(this.properties.routeListLocales)
-                    .then(function (response) {
-                        that.locales = response.data;
-                        that.countLocales = Object.keys(response.data.listLocales).length;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError');
-                    });
-            },
-            setReady () {
-                let that = this;
-                this.$watch('isLoaded', function () {
-                    let testLoadedInterval = setInterval(function () {
-                        if($('#'+that._uid).find('.item').length === that.countLocales) {
-                            that.isReady = true;
-                            clearInterval(testLoadedInterval);
-                        }
-                    }, 200);
-                });
-            },
-            setOldChoice () {
-                if(this.oldLocale !== '' && this.oldLocale in this.locales.listLocales){
-                    $('#'+this._uid).dropdown('set selected', this.oldLocale)
-                } else {
-                    $('#'+this._uid).dropdown('set selected', this.locales.userPrefLocale)
-                }
-            }
+          }, 200)
+        })
+      },
+      setOldChoice () {
+        if (this.oldLocale !== '' && this.oldLocale in this.locales.listLocales) {
+          $('#' + this._uid).dropdown('set selected', this.oldLocale)
         }
+        else {
+          $('#' + this._uid).dropdown('set selected', this.locales.userPrefLocale)
+        }
+      }
     }
+  }
 </script>

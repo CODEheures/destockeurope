@@ -21,52 +21,53 @@
 
 
 <script>
-    export default {
-        props: {
-            oldCurrency: {
-                type: String,
+  export default {
+    props: {
+      oldCurrency: {
+        type: String
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['currencies-dropdown-2']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      currencies () {
+        return this.$store.state.properties['currencies-dropdown-menu-2']['datas']
+      }
+    },
+    watch: {
+      oldCurrency () {
+        this.setOldChoice()
+      }
+    },
+    mounted () {
+      let that = this
+      $('#' + this._uid)
+        .dropdown({
+          fullTextSearch: true,
+          forceSelection: false,
+          onChange (value, text, $selectedItem) {
+            if (value !== undefined && value !== null && value !== ''){
+              let subUnit = that.currencies.listCurrencies[value]['subunit']
+              let symbol = that.currencies.listCurrencies[value]['symbol']
+              that.$emit('currencyChoice', {cur: value, subunit: subUnit, symbol: symbol})
             }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['currencies-dropdown-2']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            currencies () {
-                return this.$store.state.properties['currencies-dropdown-menu-2']['datas']
-            }
-        },
-        watch: {
-            oldCurrency () {
-                this.setOldChoice()
-            }
-        },
-        mounted () {
-            let that = this;
-            $('#'+this._uid)
-                .dropdown({
-                    fullTextSearch: true,
-                    forceSelection: false,
-                    onChange: function (value, text, $selectedItem) {
-                        if(value != undefined && value != ''){
-                            let subUnit = that.currencies.listCurrencies[value]['subunit'];
-                            let symbol = that.currencies.listCurrencies[value]['symbol'];
-                            that.$emit('currencyChoice', {cur: value, subunit: subUnit, symbol: symbol});
-                        }
-                    }
-                });
-            this.setOldChoice();
-        },
-        methods: {
-            setOldChoice () {
-                if(this.oldCurrency !== '' && this.oldCurrency in this.currencies.listCurrencies){
-                    $('#'+this._uid).dropdown('set selected', this.oldCurrency)
-                } else {
-                    $('#'+this._uid).dropdown('set selected', this.currencies.userPrefCurrency)
-                }
-            }
+          }
+        })
+      this.setOldChoice()
+    },
+    methods: {
+      setOldChoice () {
+        if (this.oldCurrency !== '' && this.oldCurrency in this.currencies.listCurrencies) {
+          $('#' + this._uid).dropdown('set selected', this.oldCurrency)
         }
+        else {
+          $('#' + this._uid).dropdown('set selected', this.currencies.userPrefCurrency)
+        }
+      }
     }
+  }
 </script>

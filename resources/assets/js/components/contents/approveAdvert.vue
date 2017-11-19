@@ -129,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="ui primary button" :class="action ? '': 'disabled'" v-on:click="approveAll">
+                    <button class="ui primary button" :class="action ? '': 'disabled'" @click.prevent="approveAll">
                         {{ strings.formValidationButtonLabel }}
                     </button>
                 </form>
@@ -141,130 +141,129 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: [
-            //vue routes
-            'routeGetAdvertsList',
-            'routeAdvertApprove',
-            'routeGetThumb',
-            //vue vars
-            'advertNbFreePicture',
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['approve-advert-form']
-            },
-            properties () {
-                return this.$store.state.properties['global']
+  export default {
+    props: [
+      // vue routes
+      'routeGetAdvertsList',
+      'routeAdvertApprove',
+      'routeGetThumb',
+      // vue vars
+      'advertNbFreePicture'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['approve-advert-form']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    data () {
+      return {
+        advertsList: [],
+        isLoaded: false,
+        action: false,
+        approveList: {},
+        sendMessage: false,
+        typeMessage: '',
+        message: ''
+      }
+    },
+    mounted () {
+      this.getAdvertsList()
+    },
+    updated () {
+      let that = this
+      for (let index in this.advertsList) {
+        $('#slider1-' + this._uid + '-' + this.advertsList[index]['id']).checkbox({
+          onChange () {
+            that.action = true
+            if (!(this.name in that.approveList)) {
+              that.$set(that.approveList, this.name, {'isApprove': this.value, 'disapproveReason': ''})
             }
-        },
-        data () {
-            return {
-                advertsList: [],
-                isLoaded: false,
-                action: false,
-                approveList: {},
-                sendMessage: false,
-                typeMessage: '',
-                message: ''
-            };
-        },
-        mounted () {
-            this.getAdvertsList();
-        },
-        updated () {
-            let that = this;
-            for(let index in this.advertsList){
-                $('#slider1-'+this._uid+'-'+this.advertsList[index]['id']).checkbox({
-                    onChange: function () {
-                        that.action = true;
-                        if(!(this.name in that.approveList)){
-                            that.$set(that.approveList, this.name, {'isApprove': this.value, 'disapproveReason': ''});
-                        } else {
-                            (that.approveList[this.name]).isApprove = this.value;
-                        }
-                    }
-                });
-                $('#slider2-'+this._uid+'-'+this.advertsList[index]['id']).checkbox({
-                    onChange: function () {
-                        that.action = true;
-                        if(!(this.name in that.approveList)){
-                            that.$set(that.approveList, this.name, {'isApprove': this.value, 'disapproveReason': ''});
-                        } else {
-                            (that.approveList[this.name]).isApprove = this.value;
-                        }
-                    }
-                });
+            else {
+              that.approveList[this.name].isApprove = this.value
             }
-        },
-        methods: {
-            getAdvertsList: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                this.approveList={};
-                this.advertsList={};
-                Axios.get(this.routeGetAdvertsList)
-                    .then(function (response) {
-                        that.advertsList = response.data;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error)  {
-                        that.sendToast(that.strings.loadErrorMessage, 'error');
-                    });
-            },
-            approveAll: function (event) {
-                event.preventDefault();
-                let that = this;
-                for(let index in this.approveList){
-                    this.approveList[index]['priceCoefficient']= this.advertsList[index]['price_coefficient'];
-                    this.approveList[index]['priceCoefficientTotal']= this.advertsList[index]['price_coefficient_total'];
-                    this.approveList[index]['lotMiniQuantity']= this.advertsList[index]['lotMiniQuantity'];
-                }
-                $('#modal-'+this._uid).modal({
-                    closable: false,
-                    onApprove: function () {
-                        that.isLoaded = false;
-                        Axios.post(that.routeAdvertApprove, that.approveList)
-                            .then(function (response) {
-                                that.getAdvertsList();
-                                that.sendToast(that.strings.advertApproveSuccess, 'success');
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                                }
-                                that.isLoaded = false;
-                            });
-                    }
-                }).modal('show');
-            },
-            sendToast: function(message,type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            getFormattedAddress(geoloc) {
-                let parsed = JSON.parse(geoloc);
-                if(parsed && parsed.length>0 && 'formatted_address' in parsed[0]) {
-                    return (JSON.parse(geoloc)[0]['formatted_address']);
-                }
-            },
-            setBreadCrumbItems: function (advert) {
-                let that = this;
-
-                let breadcrumbItems = [];
-
-                advert.breadCrumb.forEach(function (element){
-                    breadcrumbItems.push({
-                        name: element['description'][that.properties.actualLocale],
-                        value: element.id
-                    });
-                });
-                return breadcrumbItems;
+          }
+        })
+        $('#slider2-' + this._uid + '-' + this.advertsList[index]['id']).checkbox({
+          onChange () {
+            that.action = true
+            if (!(this.name in that.approveList)) {
+              that.$set(that.approveList, this.name, {'isApprove': this.value, 'disapproveReason': ''})
             }
+            else {
+              that.approveList[this.name].isApprove = this.value
+            }
+          }
+        })
+      }
+    },
+    methods: {
+      getAdvertsList () {
+        this.isLoaded = false
+        let that = this
+        this.approveList = {}
+        this.advertsList = {}
+        Axios.get(this.routeGetAdvertsList)
+          .then(function (response) {
+            that.advertsList = response.data
+            that.isLoaded = true
+          })
+          .catch(function () {
+            that.sendToast(that.strings.loadErrorMessage, 'error')
+          })
+      },
+      approveAll (event) {
+        let that = this
+        for (let index in this.approveList) {
+          this.approveList[index]['priceCoefficient'] = this.advertsList[index]['price_coefficient']
+          this.approveList[index]['priceCoefficientTotal'] = this.advertsList[index]['price_coefficient_total']
+          this.approveList[index]['lotMiniQuantity'] = this.advertsList[index]['lotMiniQuantity']
         }
+        $('#modal-' + this._uid).modal({
+          closable: false,
+          onApprove () {
+            that.isLoaded = false
+            Axios.post(that.routeAdvertApprove, that.approveList)
+              .then(function (response) {
+                that.getAdvertsList()
+                that.sendToast(that.strings.advertApproveSuccess, 'success')
+              })
+              .catch(function (error) {
+                if (error.response && error.response.status === 409) {
+                  that.sendToast(error.response.data, 'error')
+                }
+                else {
+                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                }
+                that.isLoaded = false
+              })
+          }
+        }).modal('show')
+      },
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      getFormattedAddress (geoloc) {
+        let parsed = JSON.parse(geoloc)
+        if (parsed && parsed.length > 0 && 'formatted_address' in parsed[0]) {
+          return (JSON.parse(geoloc)[0]['formatted_address'])
+        }
+      },
+      setBreadCrumbItems (advert) {
+        let that = this
+        let breadcrumbItems = []
+        advert.breadCrumb.forEach(function (element) {
+          breadcrumbItems.push({
+            name: element['description'][that.properties.actualLocale],
+            value: element.id
+          })
+        })
+        return breadcrumbItems
+      }
     }
+  }
 </script>

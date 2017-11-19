@@ -225,14 +225,14 @@
       // isUrgent
       let isUrgent = $('#isUrgent' + this._uid)
       isUrgent.checkbox({
-        onChecked: function () { that.isUrgent = true },
-        onUnchecked: function () { that.isUrgent = false }
+        onChecked () { that.isUrgent = true },
+        onUnchecked () { that.isUrgent = false }
       })
       // isNegociated
       let isNegociated = $('#isNegociated' + this._uid)
       isNegociated.checkbox({
-        onChecked: function () { that.isNegociated = true },
-        onUnchecked: function () { that.isNegociated = false }
+        onChecked () { that.isNegociated = true },
+        onUnchecked () { that.isNegociated = false }
       })
       // search filter
       this.dataUpdateSearch = !this.dataUpdateSearch
@@ -248,6 +248,7 @@
     methods: {
       getCurrentCategory () {
         let categoryId = DestockTools.findInUrl('categoryId')
+        // eslint-disable-next-line eqeqeq
         if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
           return parseInt(DestockTools.findInUrl('categoryId'))
         }
@@ -258,10 +259,11 @@
       getCurrentCurrency () {
         return DestockTools.findInUrl('currency')
       },
-      setBreadCrumbItems: function () {
+      setBreadCrumbItems () {
         this.dataBreadcrumbItems = []
         let that = this
         let categoryId = DestockTools.findInUrl('categoryId')
+        // eslint-disable-next-line eqeqeq
         if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
           Axios.get(this.properties.routeCategory + '/' + categoryId)
             .then(function (response) {

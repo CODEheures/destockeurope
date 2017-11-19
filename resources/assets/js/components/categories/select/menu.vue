@@ -18,97 +18,102 @@
 
 
 <script>
-    import _ from 'lodash'
-    import { DestockTools } from '../../../destockTools'
-    export default {
-        props: {
-           oldChoice: {
-                type: Number,
-                required: false,
-                default: 0
-            },
-            withAll: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
-            allowCategorySelection: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
-            isButton: {
-                type: Boolean,
-                required: false,
-                default: true
-            },
-            withRedirectionOnClick: {
-               type: Boolean,
-               required: false,
-               default: false
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['categories-select-menu']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            categories () {
-                return this.$store.state.properties['categories-select-menu']['datas']
-            },
-            nextUrl () {
-                return this.$store.state.properties['global']['routeHome']
-            }
-        },
-        watch: {
-            selected () {
-                this.choiceCategory(this.selected)
-            }
-        },
-        data () {
-            return {
-                options: [],
-                optgroups: [],
-                selected: this.oldChoice
-            } ;
-        },
-        mounted () {
-            this.getNativeSelectCategories(this.$store.state.properties['categories-select-menu']['datas']);
-        },
-        methods: {
-            getNativeSelectCategories(categories) {
-                for(let category in categories) {
-                    this.optgroups.push({'id': categories[category]['id'], 'name': categories[category]['description'][this.properties.actualLocale]});
-                    this.traverse(categories[category]);
-                }
-            },
-            traverse(category, concat= []) {
-                let localConcat = _.cloneDeep(concat);
-                if('children' in category && category.children.length > 0) {
-                    localConcat.push({'id': category['id'], 'name': category['description'][this.properties.actualLocale]});
-                    for(let child in category.children) {
-                        this.traverse(category.children[child], localConcat);
-                    }
-                } else {
-                    localConcat.push({'id': category['id'], 'name': category['description'][this.properties.actualLocale]});
-                    this.options.push(localConcat);
-                }
-            },
-            getNextUrl(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
-            },
-            choiceCategory(value) {
-                let that = this;
-                if(value != undefined && value != ''){
-                    if(!that.withRedirectionOnClick){
-                        that.$emit('categoryChoice', value);
-                    } else {
-                        value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId',value) : null;
-                    }
-                }
-            }
+  import _ from 'lodash'
+  import { DestockTools } from '../../../destockTools'
+  export default {
+    props: {
+      oldChoice: {
+        type: Number,
+        required: false,
+        default: 0
+      },
+      withAll: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      allowCategorySelection: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      isButton: {
+        type: Boolean,
+        required: false,
+        default: true
+      },
+      withRedirectionOnClick: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['categories-select-menu']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      categories () {
+        return this.$store.state.properties['categories-select-menu']['datas']
+      },
+      nextUrl () {
+        return this.$store.state.properties['global']['routeHome']
+      }
+    },
+    watch: {
+      selected () {
+        this.choiceCategory(this.selected)
+      },
+      oldChoice () {
+        this.selected = this.oldChoice
+      }
+    },
+    data () {
+      return {
+        options: [],
+        optgroups: [],
+        selected: this.oldChoice
+      }
+    },
+    mounted () {
+      this.getNativeSelectCategories(this.$store.state.properties['categories-select-menu']['datas'])
+    },
+    methods: {
+      getNativeSelectCategories (categories) {
+        for (let category in categories) {
+          this.optgroups.push({'id': categories[category]['id'], 'name': categories[category]['description'][this.properties.actualLocale]})
+          this.traverse(categories[category])
         }
+      },
+      traverse (category, concat = []) {
+        let localConcat = _.cloneDeep(concat)
+        if ('children' in category && category.children.length > 0) {
+          localConcat.push({'id': category['id'], 'name': category['description'][this.properties.actualLocale]})
+          for (let child in category.children) {
+            this.traverse(category.children[child], localConcat)
+          }
+        }
+        else {
+          localConcat.push({'id': category['id'], 'name': category['description'][this.properties.actualLocale]})
+          this.options.push(localConcat)
+        }
+      },
+      getNextUrl (paramName, paramValue) {
+        return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
+      },
+      choiceCategory (value) {
+        let that = this
+        if (value !== undefined && value !== null && value !== '') {
+          if (!that.withRedirectionOnClick) {
+            that.$emit('categoryChoice', value)
+          }
+          else {
+            if (value !== that.oldChoice) { document.location.href = that.getNextUrl('categoryId', value) }
+          }
+        }
+      }
     }
+  }
 </script>

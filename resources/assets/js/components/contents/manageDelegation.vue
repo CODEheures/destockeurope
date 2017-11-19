@@ -62,64 +62,65 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: [
-            //vue routes
-            'advert',
-            //vue vars
-            'canGetDelegations',
-            'isPersonnalList',
-            'isDelegation',
-            //vue strings
-            'contentHeader',
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['manage-delegation']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        data () {
-            return {
-                typeMessage : '',
-                message : '',
-                sendMessage: false,
-                dataAdvert: JSON.parse(this.advert),
-                isLoaded: true,
-            }
-        },
-        methods: {
-            sendToast: function(message,type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            destroyMe: function (url) {
-                let modalForm = $('#modal2-' + this._uid);
-                let that = this;
-                modalForm.modal({
-                    closable: true,
-                    blurring: false,
-                    onApprove: function () {
-                        that.isLoaded = false;
-                        Axios.delete(url)
-                            .then(function (response) {
-                                that.flagForceReload = !that.flagForceReload;
-                                that.isLoaded = true;
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                                }
-                                that.isLoaded = true;
-                            });
-                    }
-                }).modal('show');
-            }
-        }
+  export default {
+    props: [
+      // vue routes
+      'advert',
+      // vue vars
+      'canGetDelegations',
+      'isPersonnalList',
+      'isDelegation',
+      // vue strings
+      'contentHeader'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['manage-delegation']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    data () {
+      return {
+        typeMessage: '',
+        message: '',
+        sendMessage: false,
+        dataAdvert: JSON.parse(this.advert),
+        isLoaded: true
+      }
+    },
+    methods: {
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      destroyMe (url) {
+        let modalForm = $('#modal2-' + this._uid)
+        let that = this
+        modalForm.modal({
+          closable: true,
+          blurring: false,
+          onApprove () {
+            that.isLoaded = false
+            Axios.delete(url)
+              .then(function (response) {
+                that.flagForceReload = !that.flagForceReload
+                that.isLoaded = true
+              })
+              .catch(function (error) {
+                if (error.response && error.response.status === 409) {
+                  that.sendToast(error.response.data, 'error')
+                }
+                else {
+                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                }
+                that.isLoaded = true
+              })
+          }
+        }).modal('show')
+      }
     }
+  }
 </script>

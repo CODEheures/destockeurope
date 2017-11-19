@@ -13,27 +13,27 @@
 </template>
 
 <script>
-    export default {
-        props: [
-            'message',
-            'type',
-            'sendMessage'
-        ],
-        watch: {
-            sendMessage () {
-                this.visible = false;
-                this.setVisible();
-            }
-        },
-        data () {
-            return {
-                visible: false
-            }
-        },
-        methods: {
-            setVisible () {
-                this.visible = true;
-            }
-        },
+  export default {
+    props: [
+      'message',
+      'type',
+      'sendMessage'
+    ],
+    watch: {
+      sendMessage () {
+        this.visible = false
+        this.setVisible()
+      }
+    },
+    data () {
+      return {
+        visible: false
+      }
+    },
+    methods: {
+      setVisible () {
+        this.visible = true
+      }
     }
+  }
 </script>

@@ -1174,94 +1174,95 @@
 <script>
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
-    export default {
-        props: [
-            //vue routes
-            'routeSubscribeNewsLetter',
-            //vue vars
-            'browser',
-            'countries',
-            'filterLocationAccurateList',
-        ],
-        computed: {
-            dataCountries () {
-                return JSON.parse(this.countries)
-            },
-            locationAccurateList () {
-                return JSON.parse(this.filterLocationAccurateList)
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            strings () {
-                return this.$store.state.strings['portal']
+  export default {
+    props: [
+      // vue routes
+      'routeSubscribeNewsLetter',
+      // vue vars
+      'browser',
+      'countries',
+      'filterLocationAccurateList'
+    ],
+    computed: {
+      dataCountries () {
+        return JSON.parse(this.countries)
+      },
+      locationAccurateList () {
+        return JSON.parse(this.filterLocationAccurateList)
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      strings () {
+        return this.$store.state.strings['portal']
+      }
+    },
+    data () {
+      return {
+        filter: {},
+        dataUpdate: false,
+        isLocationReady: false,
+        sendMessage: false,
+        typeMessage: '',
+        message: '',
+        dataEmail: '',
+        dataName: '',
+        dataPhone: '',
+        nextUrl: ''
+      }
+    },
+    mounted () {
+      this.nextUrl = this.properties.routeHome
+    },
+    methods: {
+      getNextUrl (paramName, paramValue) {
+        return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
+      },
+      getNextUrlForCountry (paramName, paramValue) {
+        return DestockTools.getNextUrl(this.$store.state.properties['global'].routeHome, paramName, paramValue, true)
+      },
+      goHome () {
+        DestockTools.goToUrl(this.nextUrl)
+      },
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      subscribeNewsletter () {
+        let that = this
+        Axios.post(this.routeSubscribeNewsLetter, {'name': that.dataName, 'email': that.dataEmail, 'phone': that.dataPhone})
+          .then(function (response) {
+            that.sendToast(response.data, 'success')
+          })
+          .catch(function (error) {
+            if (error.response.status === 422) {
+              let i = 0
+              for (let item in error.response.data) {
+                if (i === 0) {
+                  that.sendToast(error.response.data[item][0], 'error')
+                  i++
+                }
+              }
             }
-        },
-        data () {
-            return {
-                filter: {},
-                dataUpdate: false,
-                isLocationReady: false,
-                sendMessage: false,
-                typeMessage: '',
-                message:'',
-                dataEmail: '',
-                dataName: '',
-                dataPhone: '',
-                nextUrl: '',
+            else {
+              that.sendToast(error.response.data, 'error')
             }
-        },
-        mounted () {
-            this.nextUrl = this.properties.routeHome;
-        },
-        methods: {
-            getNextUrl(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
-            },
-            getNextUrlForCountry(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.$store.state.properties['global'].routeHome, paramName, paramValue, true)
-            },
-            goHome () {
-                DestockTools.goToUrl(this.nextUrl);
-            },
-            sendToast: function(message,type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            subscribeNewsletter () {
-                let that = this;
-                Axios.post(this.routeSubscribeNewsLetter, {'name': that.dataName, 'email': that.dataEmail, 'phone': that.dataPhone})
-                    .then(function (response) {
-                        that.sendToast(response.data, 'success');
-                    })
-                    .catch(function (error) {
-                        if(error.response.status == 422){
-                            let i = 0;
-                            for(let item in error.response.data) {
-                                if(i==0){
-                                    that.sendToast(error.response.data[item][0], 'error');
-                                    i++;
-                                }
-                            }
-                        } else {
-                            that.sendToast(error.response.data, 'error');
-                        }
-                    });
-            },
-            locationUpdate (result) {
-                this.isLocationReady = true;
-                Object.keys(result).forEach( (key) => {
-                    this.nextUrl = this.getNextUrl(key, result[key]);
-                });
-            },
-            clearLocationResults () {
-                this.isLocationReady = false;
-                this.locationAccurateList.forEach((key) => {
-                    this.nextUrl = this.getNextUrl(key, null);
-                });
-                this.nextUrl = this.getNextUrl('forLocation', null);
-            }
-        }
+          })
+      },
+      locationUpdate (result) {
+        this.isLocationReady = true
+        Object.keys(result).forEach((key) => {
+          this.nextUrl = this.getNextUrl(key, result[key])
+        })
+      },
+      clearLocationResults () {
+        this.isLocationReady = false
+        this.locationAccurateList.forEach((key) => {
+          this.nextUrl = this.getNextUrl(key, null)
+        })
+        this.nextUrl = this.getNextUrl('forLocation', null)
+      }
     }
+  }
 </script>

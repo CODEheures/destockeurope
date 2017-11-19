@@ -20,53 +20,52 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            routeGetListType: String,
-            firstMenuName: String,
-            oldChoice: {
-                type: String,
-                default: undefined,
-                required: false
-            },
-            isDisabled: {
-                type: Boolean,
-                default: false,
-                required: false
-            }
-        },
-        data () {
-            return {
-                listType: [],
-                isLoaded: false
-            } ;
-        },
-        mounted () {
-            this.getListType();
-        },
-        updated () {
-            let that = this;
-            for(let index in this.listType){
-                $('#radio-'+index+'-'+that._uid).checkbox({
-                    onChange: function () {
-                        that.$emit('typeChoice', this.value)
-                    }
-                })
-            }
-
-        },
-        methods: {
-            getListType: function () {
-                let that = this;
-                Axios.get(this.routeGetListType)
-                    .then(function (response) {
-                        that.listType = response.data;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.$parent.$emit('loadError');
-                    });
-            }
-        }
+  export default {
+    props: {
+      routeGetListType: String,
+      firstMenuName: String,
+      oldChoice: {
+        type: String,
+        default: undefined,
+        required: false
+      },
+      isDisabled: {
+        type: Boolean,
+        default: false,
+        required: false
+      }
+    },
+    data () {
+      return {
+        listType: [],
+        isLoaded: false
+      }
+    },
+    mounted () {
+      this.getListType()
+    },
+    updated () {
+      let that = this
+      for (let index in this.listType) {
+        $('#radio-' + index + '-' + that._uid).checkbox({
+          onChange () {
+            that.$emit('typeChoice', this.value)
+          }
+        })
+      }
+    },
+    methods: {
+      getListType () {
+        let that = this
+        Axios.get(this.routeGetListType)
+          .then(function (response) {
+            that.listType = response.data
+            that.isLoaded = true
+          })
+          .catch(function () {
+            that.$parent.$emit('loadError')
+          })
+      }
     }
+  }
 </script>

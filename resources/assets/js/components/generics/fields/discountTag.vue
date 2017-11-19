@@ -18,18 +18,18 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            advert: {
-                type: Object
-            },
-            margins: {
-                type: Object
-            },
-            forSeller: {
-                required: false,
-                default: false
-            }
-        }
+  export default {
+    props: {
+      advert: {
+        type: Object
+      },
+      margins: {
+        type: Object
+      },
+      forSeller: {
+        required: false,
+        default: false
+      }
     }
+  }
 </script>

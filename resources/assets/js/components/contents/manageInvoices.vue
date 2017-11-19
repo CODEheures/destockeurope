@@ -73,122 +73,122 @@
 
 
 <script>
-    import Parser from 'url'
-    import Axios from 'axios'
-    export default {
-        props: [
-            //vue routes
-            'routeGetInvoicesList'
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['manage-invoices']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        data () {
-            return {
-                sendMessage: false,
-                typeMessage: '',
-                message: '',
-                filter: {},
-                paginate: {},
-                dataRouteGetInvoicesList: '',
-                dataFlagResetSearch: false,
-                oldChoice: {},
-                update: false,
-                refundAmount: 0,
-                dataForceReload: false,
-                isLoaded: true
-            };
-        },
-        mounted () {
-            sessionStorage.clear()
-            this.updateResults()
-        },
-        methods: {
-            sendToast: function (message, type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            urlForFilter(init=false) {
-                let urlBase = init ? this.routeGetInvoicesList : this.dataRouteGetInvoicesList;
-                let parsed = Parser.parse(urlBase, true);
-                parsed.search=undefined;
-                parsed.query={};
-
-                //reset sessionStorageFilter
-                sessionStorage.removeItem('filter');
-                sessionStorage.setItem('filter', JSON.stringify(this.filter));
-
-                for(let elem in this.filter){
-                    if(this.filter[elem] != null){
-                        parsed.query[elem]=(this.filter[elem]).toString();
-                    }
-                }
-                return Parser.format(parsed);
-            },
-            clearInputSearch() {
-                if('resultsFor' in this.filter) {
-                    delete this.filter.resultsFor;
-                    this.dataFlagResetSearch = !this.dataFlagResetSearch;
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            updateResults(){
-                this.update = !this.update;
-                this.dataRouteGetInvoicesList = this.urlForFilter(true);
-            },
-            refund(refund) {
-                event.preventDefault();
-                this.refundAmount = refund.amount;
-                let that = this;
-                $('#modal-'+this._uid).modal({
-                    closable: false,
-                    onApprove: function () {
-                        that.isLoaded = false;
-                        Axios.get(refund.refundUrl)
-                            .then(function (response) {
-                                that.isLoaded = true;
-                                that.dataForceReload=!that.dataForceReload;
-                                that.sendToast(that.strings.invoiceRefundSuccess, 'success');
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                                }
-                                that.isLoaded = true;
-                            });
-                    }
-                }).modal('show');
-            },
-            clearSearchResults () {
-                let haveClearAction = this.clearInputSearch();
-                if(haveClearAction){
-                    this.updateResults(true);
-                }
-            },
-            refreshResults (query) {
-                if(query !== undefined && query.length >= this.properties.filterMinLengthSearch){
-                    this.filter.resultsFor = query;
-                    this.updateResults(true);
-                }
-            },
-            changePage (url) {
-                let that = this
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600, function () {
-                    that.dataRouteGetInvoicesList = url;
-                });
-            }
+  import Parser from 'url'
+  import Axios from 'axios'
+  export default {
+    props: [
+      // vue routes
+      'routeGetInvoicesList'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['manage-invoices']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    data () {
+      return {
+        sendMessage: false,
+        typeMessage: '',
+        message: '',
+        filter: {},
+        paginate: {},
+        dataRouteGetInvoicesList: '',
+        dataFlagResetSearch: false,
+        oldChoice: {},
+        update: false,
+        refundAmount: 0,
+        dataForceReload: false,
+        isLoaded: true
+      }
+    },
+    mounted () {
+      sessionStorage.clear()
+      this.updateResults()
+    },
+    methods: {
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      urlForFilter (init = false) {
+        let urlBase = init ? this.routeGetInvoicesList : this.dataRouteGetInvoicesList
+        let parsed = Parser.parse(urlBase, true)
+        parsed.search = undefined
+        parsed.query = {}
+        // reset sessionStorageFilter
+        sessionStorage.removeItem('filter')
+        sessionStorage.setItem('filter', JSON.stringify(this.filter))
+        for (let elem in this.filter) {
+          if (this.filter[elem] !== undefined && this.filter[elem] !== null) {
+            parsed.query[elem] = (this.filter[elem]).toString()
+          }
         }
+        return Parser.format(parsed)
+      },
+      clearInputSearch () {
+        if ('resultsFor' in this.filter) {
+          delete this.filter.resultsFor
+          this.dataFlagResetSearch = !this.dataFlagResetSearch
+          return true
+        }
+        else {
+          return false
+        }
+      },
+      updateResults () {
+        this.update = !this.update
+        this.dataRouteGetInvoicesList = this.urlForFilter(true)
+      },
+      refund (refund) {
+        event.preventDefault()
+        this.refundAmount = refund.amount
+        let that = this
+        $('#modal-' + this._uid).modal({
+          closable: false,
+          onApprove () {
+            that.isLoaded = false
+            Axios.get(refund.refundUrl)
+              .then(function (response) {
+                that.isLoaded = true
+                that.dataForceReload = !that.dataForceReload
+                that.sendToast(that.strings.invoiceRefundSuccess, 'success')
+              })
+              .catch(function (error) {
+                if (error.response && error.response.status === 409) {
+                  that.sendToast(error.response.data, 'error')
+                }
+                else {
+                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                }
+                that.isLoaded = true
+              })
+          }
+        }).modal('show')
+      },
+      clearSearchResults () {
+        let haveClearAction = this.clearInputSearch()
+        if (haveClearAction) {
+          this.updateResults(true)
+        }
+      },
+      refreshResults (query) {
+        if (query !== undefined && query.length >= this.properties.filterMinLengthSearch) {
+          this.filter.resultsFor = query
+          this.updateResults(true)
+        }
+      },
+      changePage (url) {
+        let that = this
+        $('html, body').animate({
+          scrollTop: 0
+        }, 600, function () {
+          that.dataRouteGetInvoicesList = url
+        })
+      }
     }
+  }
 </script>

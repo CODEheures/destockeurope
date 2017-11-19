@@ -78,104 +78,105 @@
 </template>
 
 <script>
-    import _ from 'lodash'
-    import { DestockTools } from '../../destockTools'
-    import Axios from 'axios'
-    export default {
-        props: [
-            //vue routes
-            'routeBookmarkAdd',
-            'routeBookmarkRemove',
-            //vue vars
-            'reloadAdvertOnUnbookmarkSuccess',
-            'adsFrequency',
-            'canGetDelegations',
-            'isPersonnalList',
-            'isDelegation',
-            //vue strings
-            'contentHeader',
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['personnal-list']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            paginate () {
-                let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list-item']['list']['adverts']);
-                delete paginate.data;
-                return paginate;
-            }
-        },
-        data () {
-            return {
-                typeMessage : '',
-                message : '',
-                sendMessage: false,
-                nextUrl: '',
-            }
-        },
-        mounted () {
-            this.nextUrl = this.getHref();
-            sessionStorage.clear();
-        },
-        methods: {
-            sendToast: function(message,type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            destroyMe: function (url) {
-                let modalForm = $('#modal2-' + this._uid);
-                let that = this;
-                modalForm.modal({
-                    closable: true,
-                    blurring: false,
-                    onApprove: function () {
-                        Axios.delete(url)
-                            .then(function (response) {
-                                that.gotoNextUrl(true);
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                                }
-                            });
-                    }
-                }).modal('show');
-            },
-            getHref: function () {
-                return window.location.href;
-            },
-            getNextUrl(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
-            },
-            gotoNextUrl(forceLoad=false) {
-                if(this.nextUrl !== window.location.href || forceLoad===true){
-                    DestockTools.goToUrl(this.nextUrl);
+  import _ from 'lodash'
+  import { DestockTools } from '../../destockTools'
+  import Axios from 'axios'
+  export default {
+    props: [
+      // vue routes
+      'routeBookmarkAdd',
+      'routeBookmarkRemove',
+      // vue vars
+      'reloadAdvertOnUnbookmarkSuccess',
+      'adsFrequency',
+      'canGetDelegations',
+      'isPersonnalList',
+      'isDelegation',
+      // vue strings
+      'contentHeader'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['personnal-list']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      paginate () {
+        let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list-item']['list']['adverts'])
+        delete paginate.data
+        return paginate
+      }
+    },
+    data () {
+      return {
+        typeMessage: '',
+        message: '',
+        sendMessage: false,
+        nextUrl: ''
+      }
+    },
+    mounted () {
+      this.nextUrl = this.getHref()
+      sessionStorage.clear()
+    },
+    methods: {
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      destroyMe (url) {
+        let modalForm = $('#modal2-' + this._uid)
+        let that = this
+        modalForm.modal({
+          closable: true,
+          blurring: false,
+          onApprove () {
+            Axios.delete(url)
+              .then(function (response) {
+                that.gotoNextUrl(true)
+              })
+              .catch(function (error) {
+                if (error.response && error.response.status === 409) {
+                  that.sendToast(error.response.data, 'error')
                 }
-            },
-            clearSearchResults () {
-                this.nextUrl = this.getNextUrl('resultsFor', null);
-                this.gotoNextUrl();
-            },
-            refreshResults (query) {
-                if(query !== undefined && query.length >= this.properties.filterMinLengthSearch){
-                    this.nextUrl = this.getNextUrl('resultsFor', query);
-                    this.gotoNextUrl();
+                else {
+                  that.sendToast(that.strings.loadErrorMessage, 'error')
                 }
-            },
-            changePage (url) {
-                this.nextUrl = url;
-                this.gotoNextUrl();
-            },
-            unbookmarkSuccess () {
-                this.nextUrl = this.getNextUrl('page', null);
-                this.gotoNextUrl(true);
-            }
+              })
+          }
+        }).modal('show')
+      },
+      getHref () {
+        return window.location.href
+      },
+      getNextUrl (paramName, paramValue) {
+        return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
+      },
+      gotoNextUrl (forceLoad = false) {
+        if (this.nextUrl !== window.location.href || forceLoad === true) {
+          DestockTools.goToUrl(this.nextUrl)
         }
+      },
+      clearSearchResults () {
+        this.nextUrl = this.getNextUrl('resultsFor', null)
+        this.gotoNextUrl()
+      },
+      refreshResults (query) {
+        if (query !== undefined && query.length >= this.properties.filterMinLengthSearch) {
+          this.nextUrl = this.getNextUrl('resultsFor', query)
+          this.gotoNextUrl()
+        }
+      },
+      changePage (url) {
+        this.nextUrl = url
+        this.gotoNextUrl()
+      },
+      unbookmarkSuccess () {
+        this.nextUrl = this.getNextUrl('page', null)
+        this.gotoNextUrl(true)
+      }
     }
+  }
 </script>

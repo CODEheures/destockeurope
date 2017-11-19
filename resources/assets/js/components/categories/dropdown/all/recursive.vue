@@ -21,23 +21,23 @@
 
 
 <script>
-    export default {
-        props: {
-            parentDescription: String,
-            categories: Array,
-            parentId: Number,
-            withAll: Boolean,
-            allItem: {
-                type: String,
-                required: false,
-                default: ''
-            },
-            left: Boolean,
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        }
+  export default {
+    props: {
+      parentDescription: String,
+      categories: Array,
+      parentId: Number,
+      withAll: Boolean,
+      allItem: {
+        type: String,
+        required: false,
+        default: ''
+      },
+      left: Boolean,
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      }
     }
+  }
 </script>

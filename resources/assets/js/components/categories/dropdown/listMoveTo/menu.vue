@@ -18,36 +18,34 @@
 
 
 <script>
-    export default {
-        props: {
-            category: Object,
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['categories-list-move-to']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        mounted () {
-            let that = this;
-            let dropdown = $('#'+that._uid);
-            dropdown.on('click', function () {
-                $(this).closest('.accordion').css({'z-index':'2'});
-            });
-            dropdown.dropdown({
-                allowCategorySelection: true,
-                action: 'select',
-                onChange: function(value, text, $selectedItem) {
-                    if(value != undefined && value != ''){
-                        $(this).closest('.accordion').css({'z-index':''});
-                        console.log('listMoveTo cat choice', {parentId: value, id: that.category.id})
-                        that.$emit('categoryChoice', {parentId: value, id: that.category.id});
-                    }
-                }
-            })
-            ;
+  export default {
+    props: {
+      category: Object,
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['categories-list-move-to']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    mounted () {
+      let that = this
+      let dropdown = $('#' + that._uid)
+      dropdown.on('click', function () {
+        $(this).closest('.accordion').css({'z-index': '2'})
+      })
+      dropdown.dropdown({
+        allowCategorySelection: true,
+        action: 'select',
+        onChange (value, text, $selectedItem) {
+          if (value !== undefined && value !== null && value !== '') {
+            $(this).closest('.accordion').css({'z-index': ''})
+            that.$emit('categoryChoice', {parentId: value, id: that.category.id})
+          }
         }
+      })
     }
+  }
 </script>

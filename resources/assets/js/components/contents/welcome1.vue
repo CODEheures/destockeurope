@@ -182,12 +182,12 @@
       this.setHeader()
     },
     methods: {
-      sendToast: function (message, type) {
+      sendToast (message, type) {
         this.typeMessage = type
         this.message = message
         this.sendMessage = !this.sendMessage
       },
-      getHighLightAdvert: function () {
+      getHighLightAdvert () {
         let that = this
         Axios.get(this.routeGetHighlight)
           .then(function (response) {
@@ -197,7 +197,7 @@
             // that.sendToast(that.strings.loadErrorMessage, 'error')
           })
       },
-      setHeader: function () {
+      setHeader () {
         this.dataHeader = this.strings.header
         if (this.breadcrumbItems.length > 0) {
           this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length - 1].name
@@ -206,7 +206,7 @@
           this.dataHeader = this.dataHeader + ' - ' + DestockTools.findInUrl('forLocation')
         }
       },
-      getHref: function () {
+      getHref () {
         return window.location.href
       },
       getNextUrl (paramName, paramValue) {

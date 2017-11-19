@@ -40,52 +40,51 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            routeGetInvoicesList: String,
-            flagForceReload: {
-                type: Boolean,
-                default: false,
-                required: false
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['invoice-by-list']
-            }
-        },
-        watch: {
-            routeGetInvoicesList () {
-                this.getInvoicesList()
-            },
-            flagForceReload () {
-                this.getInvoicesList()
-            }
-        },
-        data () {
-            return {
-                invoicesList: [],
-                isLoaded: false,
-            };
-        },
-        methods: {
-            getInvoicesList: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                this.invoicesList = [];
-                Axios.get(this.routeGetInvoicesList)
-                    .then(function (response) {
-                        that.invoicesList = (response.data).invoices.data;
-                        that.isLoaded = true;
-                        let paginate = response.data.invoices;
-                        delete paginate.data;
-                        that.$emit('paginate', paginate);
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError')
-                    });
-            }
-        }
+  export default {
+    props: {
+      routeGetInvoicesList: String,
+      flagForceReload: {
+        type: Boolean,
+        default: false,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['invoice-by-list']
+      }
+    },
+    watch: {
+      routeGetInvoicesList () {
+        this.getInvoicesList()
+      },
+      flagForceReload () {
+        this.getInvoicesList()
+      }
+    },
+    data () {
+      return {
+        invoicesList: [],
+        isLoaded: false
+      }
+    },
+    methods: {
+      getInvoicesList () {
+        this.isLoaded = false
+        let that = this
+        this.invoicesList = []
+        Axios.get(this.routeGetInvoicesList)
+          .then(function (response) {
+            that.invoicesList = (response.data).invoices.data
+            that.isLoaded = true
+            let paginate = response.data.invoices
+            delete paginate.data
+            that.$emit('paginate', paginate)
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      }
     }
+  }
 </script>

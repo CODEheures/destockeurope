@@ -11,36 +11,36 @@
 
 <script>
   import { DestockTools } from '../../../destockTools'
-    export default {
-        props: {
-            listAvailableLang: String,
-            size: {
-                type: String,
-                default: '',
-                required: false,
-            },
-            color: {
-                type: String,
-                default: 'basic',
-                required: false,
-            }
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            dataListAvailableLang () {
-                return JSON.parse(this.listAvailableLang)
-            }
-        },
-        methods: {
-            goTo(lang) {
-                let link_hreflang = $("link[hreflang|="+lang+"]");
-                DestockTools.goToUrl((link_hreflang.attr('href')));
-            }
-        },
-        mounted () {
-            $('#langChoice-'+this._uid).dropdown()
-        }
+  export default {
+    props: {
+      listAvailableLang: String,
+      size: {
+        type: String,
+        default: '',
+        required: false
+      },
+      color: {
+        type: String,
+        default: 'basic',
+        required: false
+      }
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      dataListAvailableLang () {
+        return JSON.parse(this.listAvailableLang)
+      }
+    },
+    methods: {
+      goTo (lang) {
+        let linkHreflang = $('link[hreflang|=' + lang + ']')
+        DestockTools.goToUrl((linkHreflang.attr('href')))
+      }
+    },
+    mounted () {
+      $('#langChoice-' + this._uid).dropdown()
     }
+  }
 </script>

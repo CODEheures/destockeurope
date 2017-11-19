@@ -67,241 +67,241 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            //vue routes
-            routeGetVideoPostTicket : String,
-            routeDelTempoVideo: String,
-            routeGetStatusVideo: String,
-            //vue vars
-            maxVideoFileSize: Number,
-            sessionVideoId: String,
-            format: {
-                type: String,
-                required: false,
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['vimeo-uploader']
-            }
-        },
-        watch: {
-            videoId () {
-                let that = this
-                let hasVideo = this.videoId != undefined && this.videoId != null && this.videoId != '';
-                this.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': null});
-                if(hasVideo){
-                    let counter = 0;
-                    function timeout(seconds) {
-                        setTimeout(function () {
-                            counter++;
-                            Axios.get(that.routeGetStatusVideo)
-                                .then(function (response) {
-                                    if(response.data.status=='available'){
-                                        setTimeout(function () {
-                                            that.videoReady = true;
-                                            that.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': that.videoId});
-                                        },2000)
-                                    } else {
-                                        timeout(10+(Math.random()*10));
-                                    }
-                                })
-                                .catch(function (error) {
-                                    if(counter<4){
-                                        timeout(10+(Math.random()*10));
-                                    }
-                                });
-                        }, seconds*1000);
-                    }
-                    timeout(0.01);
-                }
-            },
-            videoOnUpload () {
-                this.$emit('videoUploadStatusChange', this.videoOnUpload)
-            }
-        },
-        data () {
-            return {
-                formVideoFileInputName: 'addvideo',
-                videoInputEventTarget: null,
-                videoBlob: undefined,
-                fileToUpload: undefined,
-                videoOnUpload: false,
-                performUpload: 0,
-                retry: 0,
-                onCloseTicket: false,
-                videoId: '',
-                cancelToken: null,
-                sourceCancelToken: null,
-                videoReady: false,
-                iframeWidth: 600,
-                iframeHeight: 360
-            };
-        },
-        mounted () {
-            if(this.format != undefined && this.format=="auto"){
-                this.iframeWidth= 'auto';
-                this.iframeHeight= 'auto';
-            }
-            this.videoId = this.sessionVideoId;
-        },
-        methods: {
-            triggerClickInput: function () {
-                $('#'+this.formVideoFileInputName).click()
-            },
-            resetUploadVideoState: function () {
-                this.videoBlob = undefined;
-                this.videoInputEventTarget.value="";
-                this.performUpload = 0;
-                $('#progress-'+this._uid).progress({
-                    percent: 0
-                });
-                this.videoOnUpload = false;
-            },
-            uploadVideo: function (event) {
-                //File to Post
-                this.videoInputEventTarget = event.target;
-                this.fileToUpload = this.videoInputEventTarget.files[0];
-                if(this.fileToUpload != undefined){
-                    this.videoBlob= new Blob([this.fileToUpload], {type: this.fileToUpload.type});
-                    if (this.fileToUpload.size > this.maxVideoFileSize) {
-                        this.videoInputEventTarget.value="";
-                        this.videoBlob = undefined;
-                        this.$emit('fileSizeError');
-                    } else {
-                        //get ticket to set routes post
-                        this.getTicket();
-                    }
-                }
-            },
-            getTicket: function () {
-                //Get Ticket, return routes
-                let that = this;
-                this.videoOnUpload = true;
-                Axios.put(this.routeGetVideoPostTicket, {'size': that.fileToUpload.size,'type': that.fileToUpload.type})
-                    .then(function (response) {
-                        that.postVideo(response.data);
-                    })
-                    .catch(function (error) {
-                        that.resetUploadVideoState();
-                        if(error.response && error.response.status == 503) {
-                            that.$emit('sendToast', {'message': error.response.data, 'type':'error'});
-                        } else {
-                            that.$emit('loadError');
-                        }
-                    });
-            },
-            postVideo: function(routes, offset) {
-                offset==undefined ? offset = 0 : null;
-                let that = this;
-                this.cancelToken = Axios.CancelToken;
-                this.sourceCancelToken = this.cancelToken.source();
-                Axios.request({
-                    cancelToken: that.sourceCancelToken.token,
-                    url: routes.routePutVideo,
-                    method: 'put',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': that.fileToUpload.type,
-                        'Content-Range': 'bytes ' + offset + '-' + (that.fileToUpload.size-1) + '/' + that.fileToUpload.size,
-                    },
-                    data: that.videoBlob.slice(offset,that.fileToUpload.size-1),
-                    validateStatus: function (status) {
-                        return status >= 200 && status < 400;
-                    },
-                    onUploadProgress: function (progressEvent) {
-                        let perform = 100*(offset+progressEvent.loaded)/progressEvent.total;
-                        that.performUpload = ((offset+progressEvent.loaded)/(1024*1024)).toFixed(2)+'Mb';
-                        $('#progress-'+that._uid).progress({
-                            percent: perform
-                        });
-                    },
-                })
-                    .then(function (response) {
-                        if(response.status==308){
-                            this.retry = this.retry + 1;
-                            let passRetry = this.retry;
-                            if(this.retry < 10) {
-                                setTimeout(function () {
-                                    let calc_offset = that.extractPerformUpload(response.headers.range)+1;
-                                    //console.log('retry upload n°' + passRetry + ' at ' + calc_offset + ' bytes');
-                                    this.postVideo(routes,calc_offset);
-                                },this.retry*1000)
-                            } else {
-                                that.resetUploadVideoState();
-                                that.$emit('loadError');
-                            }
-                        } else {
-                            that.closeTicket(routes.routeCloseTicket, routes.completeVideoUpload);
-                        }
-                    })
-                    .catch(function (error) {
-                        that.resetUploadVideoState();
-                        that.$emit('loadError');
-                    });
-            },
-            progressPostVideo: function (routeGetProgress) {
-                let that = this;
-                Axios.request({
-                    url: routeGetProgress,
-                    method: 'put',
-                    headers: {
-                        'Content-Type': 'bytes */*'
-                    },
-                    validateStatus: function (status) {
-                        return status == 308; // default
-                    }
-                })
-                    .then(function (response) {
-                        let perform = that.extractPerformUpload(response.headers.range);
-                        $('#progress-'+this._uid).progress({
-                            total: that.fileToUpload.size,
-                            value: perform.toFixed(1)
-                        });
-                        if(perform>=that.fileToUpload.size){
-
-                        }
-                    })
-                    .catch(function (error) {
-                        //console.log('error get Progress');
-                    });
-            },
-            closeTicket: function (routeCloseTicket, routesCompleteVideoUpload) {
-                let that = this;
-                this.onCloseTicket = true;
-                this.resetUploadVideoState();
-                Axios.patch(routeCloseTicket, {'completeVideoUpload': routesCompleteVideoUpload})
-                    .then(function (response) {
-                        that.onCloseTicket = false;
-                        let location = response.headers.location;
-                        that.videoId = location.substr(8);
-                    })
-                    .catch(function (error) {
-                        that.onCloseTicket = false;
-                        that.$emit('loadError');
-                    });
-            },
-            extractPerformUpload: function (range) {
-                let pos = range.lastIndexOf('-');
-                return parseInt(range.substr(pos+1));
-            },
-            cancelUploadVideo: function () {
-                let that = this;
-                this.sourceCancelToken.cancel();
-                that.resetUploadVideoState();
-            },
-            delVideo: function () {
-                let that = this;
-                Axios.delete(this.routeDelTempoVideo + '/' + that.videoId)
-                    .then(function (response) {
-                        that.videoId = '';
-                        that.videoReady = false;
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError');
-                    });
-            },
+  export default {
+    props: {
+      // vue routes
+      routeGetVideoPostTicket: String,
+      routeDelTempoVideo: String,
+      routeGetStatusVideo: String,
+      // vue vars
+      maxVideoFileSize: Number,
+      sessionVideoId: String,
+      format: {
+        type: String,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['vimeo-uploader']
+      }
+    },
+    watch: {
+      videoId () {
+        let hasVideo = this.videoId !== undefined && this.videoId !== null && this.videoId !== ''
+        this.$emit('vimeoStateChange', {'hasVideo': hasVideo, 'videoId': null})
+        if (hasVideo) {
+          this.timeout(0.01)
         }
+      },
+      videoOnUpload () {
+        this.$emit('videoUploadStatusChange', this.videoOnUpload)
+      }
+    },
+    data () {
+      return {
+        formVideoFileInputName: 'addvideo',
+        videoInputEventTarget: null,
+        videoBlob: undefined,
+        fileToUpload: undefined,
+        videoOnUpload: false,
+        performUpload: 0,
+        retry: 0,
+        onCloseTicket: false,
+        videoId: '',
+        cancelToken: null,
+        sourceCancelToken: null,
+        videoReady: false,
+        iframeWidth: 600,
+        iframeHeight: 360
+      }
+    },
+    mounted () {
+      if (this.format !== undefined && this.format !== null && this.format === 'auto') {
+        this.iframeWidth = 'auto'
+        this.iframeHeight = 'auto'
+      }
+      this.videoId = this.sessionVideoId
+    },
+    methods: {
+      triggerClickInput () {
+        $('#' + this.formVideoFileInputName).click()
+      },
+      resetUploadVideoState () {
+        this.videoBlob = undefined
+        this.videoInputEventTarget.value = ''
+        this.performUpload = 0
+        $('#progress-' + this._uid).progress({
+          percent: 0
+        })
+        this.videoOnUpload = false
+      },
+      uploadVideo (event) {
+        // File to Post
+        this.videoInputEventTarget = event.target
+        this.fileToUpload = this.videoInputEventTarget.files[0]
+        if (this.fileToUpload !== undefined && this.fileToUpload !== null) {
+          this.videoBlob = new Blob([this.fileToUpload], {type: this.fileToUpload.type})
+          if (this.fileToUpload.size > this.maxVideoFileSize) {
+            this.videoInputEventTarget.value = ''
+            this.videoBlob = undefined
+            this.$emit('fileSizeError')
+          }
+          else {
+            // get ticket to set routes post
+            this.getTicket()
+          }
+        }
+      },
+      getTicket () {
+        // Get Ticket, return routes
+        let that = this
+        this.videoOnUpload = true
+        Axios.put(this.routeGetVideoPostTicket, {'size': that.fileToUpload.size, 'type': that.fileToUpload.type})
+          .then(function (response) {
+            that.postVideo(response.data)
+          })
+          .catch(function (error) {
+            that.resetUploadVideoState()
+            if (error.response && error.response.status === 503) {
+              that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
+            }
+            else {
+              that.$emit('loadError')
+            }
+          })
+      },
+      postVideo (routes, offset) {
+        if (offset === undefined) { offset = 0 }
+        let that = this
+        this.cancelToken = Axios.CancelToken
+        this.sourceCancelToken = this.cancelToken.source()
+        Axios.request({
+          cancelToken: that.sourceCancelToken.token,
+          url: routes.routePutVideo,
+          method: 'put',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': that.fileToUpload.type,
+            'Content-Range': 'bytes ' + offset + '-' + (that.fileToUpload.size - 1) + '/' + that.fileToUpload.size
+          },
+          data: that.videoBlob.slice(offset, that.fileToUpload.size - 1),
+          validateStatus (status) {
+            return status >= 200 && status < 400
+          },
+          onUploadProgress (progressEvent) {
+            let perform = 100 * (offset + progressEvent.loaded) / progressEvent.total
+            that.performUpload = ((offset + progressEvent.loaded) / (1024 * 1024)).toFixed(2) + 'Mb'
+            $('#progress-' + that._uid).progress({
+              percent: perform
+            })
+          }
+        })
+          .then(function (response) {
+            if (response.status === 308) {
+              this.retry = this.retry + 1
+              if (this.retry < 10) {
+                setTimeout(function () {
+                  let calcOffset = that.extractPerformUpload(response.headers.range) + 1
+                  this.postVideo(routes, calcOffset)
+                }, this.retry * 1000)
+              }
+              else {
+                that.resetUploadVideoState()
+                that.$emit('loadError')
+              }
+            }
+            else {
+              that.closeTicket(routes.routeCloseTicket, routes.completeVideoUpload)
+            }
+          })
+          .catch(function () {
+            that.resetUploadVideoState()
+            that.$emit('loadError')
+          })
+      },
+      progressPostVideo (routeGetProgress) {
+        let that = this
+        Axios.request({
+          url: routeGetProgress,
+          method: 'put',
+          headers: {
+            'Content-Type': 'bytes */*'
+          },
+          validateStatus (status) {
+            return status === 308
+          }
+        })
+          .then(function (response) {
+            let perform = that.extractPerformUpload(response.headers.range)
+            $('#progress-' + this._uid).progress({
+              total: that.fileToUpload.size,
+              value: perform.toFixed(1)
+            })
+            if (perform >= that.fileToUpload.size) {
+            }
+          })
+          .catch(function () {
+          })
+      },
+      closeTicket (routeCloseTicket, routesCompleteVideoUpload) {
+        let that = this
+        this.onCloseTicket = true
+        this.resetUploadVideoState()
+        Axios.patch(routeCloseTicket, {'completeVideoUpload': routesCompleteVideoUpload})
+          .then(function (response) {
+            that.onCloseTicket = false
+            let location = response.headers.location
+            that.videoId = location.substr(8)
+          })
+          .catch(function () {
+            that.onCloseTicket = false
+            that.$emit('loadError')
+          })
+      },
+      extractPerformUpload (range) {
+        let pos = range.lastIndexOf('-')
+        return parseInt(range.substr(pos + 1))
+      },
+      cancelUploadVideo () {
+        this.sourceCancelToken.cancel()
+        this.resetUploadVideoState()
+      },
+      delVideo () {
+        let that = this
+        Axios.delete(this.routeDelTempoVideo + '/' + that.videoId)
+          .then(function (response) {
+            that.videoId = ''
+            that.videoReady = false
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      },
+      timeout (seconds) {
+        let counter = 0
+        let that = this
+        setTimeout(function () {
+          counter++
+          Axios.get(that.routeGetStatusVideo)
+            .then(function (response) {
+              if (response.data.status === 'available') {
+                setTimeout(function () {
+                  that.videoReady = true
+                  that.$emit('vimeoStateChange', {'hasVideo': true, 'videoId': that.videoId})
+                }, 2000)
+              }
+              else {
+                that.timeout(10 + (Math.random() * 10))
+              }
+            })
+            .catch(function () {
+              if (counter < 4) {
+                that.timeout(10 + (Math.random() * 10))
+              }
+            })
+        }, seconds * 1000)
+      }
     }
+  }
 </script>

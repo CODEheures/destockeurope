@@ -41,72 +41,72 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            routeGetUsersList: String,
-            flagForceReload: {
-                type: Boolean,
-                default: false,
-                required: false
+  export default {
+    props: {
+      routeGetUsersList: String,
+      flagForceReload: {
+        type: Boolean,
+        default: false,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['users-by-list']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    watch: {
+      routeGetUsersList () {
+        this.getUsersList()
+      },
+      flagForceReload () {
+        this.getUsersList()
+      }
+    },
+    data () {
+      return {
+        usersList: [],
+        isLoaded: false
+      }
+    },
+    methods: {
+      getUsersList () {
+        this.isLoaded = false
+        let that = this
+        this.usersList = []
+        Axios.get(this.routeGetUsersList)
+          .then(function (response) {
+            that.usersList = (response.data).users.data
+            that.isLoaded = true
+            let paginate = response.data.users
+            delete paginate.data
+            that.$emit('paginate', paginate)
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      },
+      patchUserRole (url, role) {
+        this.isLoaded = false
+        let that = this
+        Axios.patch(url, {'role': role})
+          .then(function (response) {
+            that.getUsersList()
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              let msg = error.response.data
+              that.$emit('sendToast', {'message': msg, 'type': 'error'})
             }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['users-by-list']
-            },
-            properties () {
-                return this.$store.state.properties['global']
+            else {
+              that.$emit('loadError')
             }
-        },
-        watch: {
-            routeGetUsersList () {
-                this.getUsersList()
-            },
-            flagForceReload () {
-                this.getUsersList()
-            }
-        },
-        data () {
-            return {
-                usersList: [],
-                isLoaded: false,
-            };
-        },
-        methods: {
-            getUsersList: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                this.usersList = [];
-                Axios.get(this.routeGetUsersList)
-                    .then(function (response) {
-                        that.usersList = (response.data).users.data;
-                        that.isLoaded = true;
-                        let paginate = response.data.users;
-                        delete paginate.data;
-                        that.$emit('paginate', paginate);
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError')
-                    });
-            },
-            patchUserRole: function (url, role) {
-                this.isLoaded = false;
-                let that = this;
-                Axios.patch(url, {'role': role})
-                    .then(function (response) {
-                        that.getUsersList();
-                    })
-                    .catch(function (error) {
-                        if (error.response && error.response.status == 409) {
-                            let msg = error.response.data;
-                            that.$emit('sendToast', {'message': msg, 'type':'error'});
-                        } else {
-                            that.$emit('loadError');
-                        }
-                        that.getUsersList();
-                    });
-            }
-        }
+            that.getUsersList()
+          })
+      }
     }
+  }
 </script>

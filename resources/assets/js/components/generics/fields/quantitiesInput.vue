@@ -42,49 +42,49 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            advert: {
-                type: Object
-            },
-            withValidButton: {
-                type: Boolean,
-                required: false,
-                default: true
-            },
-            onlyMiniLot: {
-                type: Boolean,
-                required: false,
-                default: false
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['quantities-input-field']
-            }
-        },
-        data () {
-            return {
-                maxLotMini: null
-            }
-        },
-        mounted () {
-            this.maxLotMini = this.advert.totalQuantity;
-        },
-        methods: {
-            updateQuantities: function () {
-                let that = this;
-                Axios.patch(that.advert.updateQuantitiesUrl, {'totalQuantity': that.advert.totalQuantity, 'lotMiniQuantity': that.advert.lotMiniQuantity})
-                    .then(function (response) {
-                        that.$emit('updateSuccess')
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError')
-                    });
-            },
-            setMaxLotMini () {
-                this.maxLotMini = this.advert.totalQuantity
-            }
-        }
+  export default {
+    props: {
+      advert: {
+        type: Object
+      },
+      withValidButton: {
+        type: Boolean,
+        required: false,
+        default: true
+      },
+      onlyMiniLot: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['quantities-input-field']
+      }
+    },
+    data () {
+      return {
+        maxLotMini: null
+      }
+    },
+    mounted () {
+      this.maxLotMini = this.advert.totalQuantity
+    },
+    methods: {
+      updateQuantities () {
+        let that = this
+        Axios.patch(that.advert.updateQuantitiesUrl, {'totalQuantity': that.advert.totalQuantity, 'lotMiniQuantity': that.advert.lotMiniQuantity})
+          .then(function (response) {
+            that.$emit('updateSuccess')
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      },
+      setMaxLotMini () {
+        this.maxLotMini = this.advert.totalQuantity
+      }
     }
+  }
 </script>

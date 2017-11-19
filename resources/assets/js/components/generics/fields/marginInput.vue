@@ -48,38 +48,38 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            advert: {
-                type: Object
-            },
-            withValidButton: {
-                type: Boolean,
-                required: false,
-                default: true
-            },
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['margin-input-field']
-            }
-        },
-        watch: {
-            'advert.price_coefficient' () {
-                this.advert.price_coefficient_total = this.advert.price_coefficient
-            }
-        },
-        methods: {
-            updateCoefficient: function () {
-                let that = this;
-                Axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient*100).toFixed(0), 'coefficient_total': (that.advert.price_coefficient_total*100).toFixed(0)})
-                    .then(function (response) {
-                        that.$emit('updateSuccess')
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError')
-                    });
-            }
-        }
+  export default {
+    props: {
+      advert: {
+        type: Object
+      },
+      withValidButton: {
+        type: Boolean,
+        required: false,
+        default: true
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['margin-input-field']
+      }
+    },
+    watch: {
+      'advert.price_coefficient' () {
+        this.advert.price_coefficient_total = this.advert.price_coefficient
+      }
+    },
+    methods: {
+      updateCoefficient () {
+        let that = this
+        Axios.patch(that.advert.updateCoefficientUrl, {'coefficient': (that.advert.price_coefficient * 100).toFixed(0), 'coefficient_total': (that.advert.price_coefficient_total * 100).toFixed(0)})
+          .then(function (response) {
+            that.$emit('updateSuccess')
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      }
     }
+  }
 </script>

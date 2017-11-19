@@ -20,39 +20,39 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            //Vue vars
-            'img1': {
-                required: false,
-                type: String,
-                default: '/images/ads/bandeau180x150.jpg'
-            },
-            'img2': {
-                required: false,
-                type: String,
-                default: '/images/ads/bandeau180x150_2.jpg'
-            },
-            'url1': {
-                required: false,
-                type: String,
-                default: '#'
-            },
-            'url2': {
-                required: false,
-                type: String,
-                default: '#'
-            },
-            'centered': {
-                required: false,
-                type: Boolean,
-                default: false
-            }
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        }
+  export default {
+    props: {
+      // Vue vars
+      'img1': {
+        required: false,
+        type: String,
+        default: '/images/ads/bandeau180x150.jpg'
+      },
+      'img2': {
+        required: false,
+        type: String,
+        default: '/images/ads/bandeau180x150_2.jpg'
+      },
+      'url1': {
+        required: false,
+        type: String,
+        default: '#'
+      },
+      'url2': {
+        required: false,
+        type: String,
+        default: '#'
+      },
+      'centered': {
+        required: false,
+        type: Boolean,
+        default: false
+      }
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      }
     }
+  }
 </script>

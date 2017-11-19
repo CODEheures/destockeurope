@@ -27,53 +27,54 @@
 
 
 <script>
-    export default {
-        props: {
-            //vue routes
-            //vue vars
-            update: {
-                type: Boolean
-            },
-            filter: {
-                type: Object
-            },
-            //search component
-            routeSearch: {
-                type: String
-            },
-            flagResetSearch: {
-                type: Boolean
-            }
-        },
-        watch: {
-            update () {
-                this.setSearchFilter();
-                this.dataUpdate = !this.dataUpdate;
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['invoice-filter']
-            }
-        },
-        data () {
-            return {
-                dataResultsFor: '',
-                dataUpdate: false
-            };
-        },
-        mounted () {
-            let accordionElement = $('#filter-accordion-'+this._uid);
-            if($(window).width()<768){
-                accordionElement.accordion('close',0);
-            } else {
-                accordionElement.accordion();
-            }
-        },
-        methods: {
-            setSearchFilter: function () {
-                this.dataResultsFor = this.filter.resultsFor;
-            }
-        }
+  export default {
+    props: {
+      // vue routes
+      // vue vars
+      update: {
+        type: Boolean
+      },
+      filter: {
+        type: Object
+      },
+      // search component
+      routeSearch: {
+        type: String
+      },
+      flagResetSearch: {
+        type: Boolean
+      }
+    },
+    watch: {
+      update () {
+        this.setSearchFilter()
+        this.dataUpdate = !this.dataUpdate
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['invoice-filter']
+      }
+    },
+    data () {
+      return {
+        dataResultsFor: '',
+        dataUpdate: false
+      }
+    },
+    mounted () {
+      let accordionElement = $('#filter-accordion-' + this._uid)
+      if ($(window).width() < 768) {
+        accordionElement.accordion('close', 0)
+      }
+      else {
+        accordionElement.accordion()
+      }
+    },
+    methods: {
+      setSearchFilter () {
+        this.dataResultsFor = this.filter.resultsFor
+      }
     }
+  }
 </script>

@@ -16,17 +16,17 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            steps: {
-                type: Array
-            }
-        },
-        mounted () {
-            $('.ui.steps').visibility({
-                type   : 'fixed',
-                offset : 70
-            });
-        }
+  export default {
+    props: {
+      steps: {
+        type: Array
+      }
+    },
+    mounted () {
+      $('.ui.steps').visibility({
+        type: 'fixed',
+        offset: 70
+      })
     }
+  }
 </script>

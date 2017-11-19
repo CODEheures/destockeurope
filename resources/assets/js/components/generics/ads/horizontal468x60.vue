@@ -10,24 +10,24 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            //Vue vars
-            'img1': {
-                required: false,
-                type: String,
-                default: '/images/ads/bandeau468x60.jpg'
-            },
-            'url1': {
-                required: false,
-                type: String,
-                default: '#'
-            }
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        }
+  export default {
+    props: {
+      // Vue vars
+      'img1': {
+        required: false,
+        type: String,
+        default: '/images/ads/bandeau468x60.jpg'
+      },
+      'url1': {
+        required: false,
+        type: String,
+        default: '#'
+      }
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      }
     }
+  }
 </script>

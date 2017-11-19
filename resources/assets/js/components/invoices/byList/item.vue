@@ -47,27 +47,26 @@
 
 <script>
   import moment from 'moment'
-    export default {
-
-        props: {
-            invoice: Object,
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['invoice-by-list-item']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        methods: {
-            getMoment: function (dateTime) {
-                moment.locale(this.properties.actualLocale);
-                return moment(dateTime).format('L');
-            },
-            refundMe() {
-                this.$emit('refund', {'refundUrl': this.invoice.refundUrl, 'amount':this.invoice.costWithDecimalAndCurrency});
-            }
-        }
+  export default {
+    props: {
+      invoice: Object
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['invoice-by-list-item']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    methods: {
+      getMoment (dateTime) {
+        moment.locale(this.properties.actualLocale)
+        return moment(dateTime).format('L')
+      },
+      refundMe () {
+        this.$emit('refund', {'refundUrl': this.invoice.refundUrl, 'amount': this.invoice.costWithDecimalAndCurrency})
+      }
     }
+  }
 </script>

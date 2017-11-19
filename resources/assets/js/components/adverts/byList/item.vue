@@ -407,99 +407,99 @@
 </template>
 
 <script>
-    import _ from 'lodash'
-    import moment from 'moment'
-    import Axios from 'axios'
-
-    export default {
-        props: {
-            routeBookmarkAdd: String,
-            routeBookmarkRemove: String,
-            advert: Object,
-            canGetDelegations: {
-                type: Boolean,
-                default: false,
-                required: false
-            },
-            isPersonnalList: {
-                type: Boolean,
-                default: false,
-                required: false
+  import _ from 'lodash'
+  import moment from 'moment'
+  import Axios from 'axios'
+  export default {
+    props: {
+      routeBookmarkAdd: String,
+      routeBookmarkRemove: String,
+      advert: Object,
+      canGetDelegations: {
+        type: Boolean,
+        default: false,
+        required: false
+      },
+      isPersonnalList: {
+        type: Boolean,
+        default: false,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['adverts-by-list-item']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    watch: {
+      advert () {
+        this.dataAdvert = _.cloneDeep(this.advert)
+      }
+    },
+    data () {
+      return {
+        dataAdvert: _.cloneDeep(this.advert)
+      }
+    },
+    methods: {
+      getMoment (dateTime) {
+        moment.locale(this.properties.actualLocale)
+        return moment(dateTime).fromNow()
+      },
+      bookmarkMe (event) {
+        event.preventDefault()
+        event.stopPropagation()
+        let that = this
+        Axios.get(this.routeBookmarkAdd + '/' + this.advert.id)
+          .then(function (response) {
+            that.dataIsUserBookmark = true
+            that.$emit('bookmarkSuccess')
+            that.dataAdvert.isUserBookmark = true
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
             }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['adverts-by-list-item']
-            },
-            properties () {
-                return this.$store.state.properties['global']
+            else {
+              that.$emit('loadError')
             }
-        },
-        watch: {
-            advert () {
-                this.dataAdvert = _.cloneDeep(this.advert)
+          })
+      },
+      unbookmarkMe (event) {
+        event.preventDefault()
+        event.stopPropagation()
+        let that = this
+        Axios.get(this.routeBookmarkRemove + '/' + this.advert.id)
+          .then(function (response) {
+            that.dataIsUserBookmark = false
+            that.$emit('unbookmarkSuccess')
+            that.dataAdvert.isUserBookmark = false
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
             }
-        },
-        data () {
-            return {
-                dataAdvert: _.cloneDeep(this.advert)
+            else {
+              that.$emit('loadError')
             }
-        },
-        methods: {
-            getMoment: function (dateTime) {
-                moment.locale(this.properties.actualLocale);
-                return moment(dateTime).fromNow();
-            },
-            bookmarkMe: function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                let that = this;
-                Axios.get(this.routeBookmarkAdd+'/'+this.advert.id)
-                    .then(function (response) {
-                        that.dataIsUserBookmark = true;
-                        that.$emit('bookmarkSuccess');
-                        that.dataAdvert.isUserBookmark = true;
-                    })
-                    .catch(function (error) {
-                        if (error.response && error.response.status == 409) {
-                            that.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
-                        } else {
-                            that.$emit('loadError')
-                        }
-                    });
-            },
-            unbookmarkMe: function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                let that = this;
-                Axios.get(this.routeBookmarkRemove+'/'+this.advert.id)
-                    .then(function (response) {
-                        that.dataIsUserBookmark = false;
-                        that.$emit('unbookmarkSuccess');
-                        that.dataAdvert.isUserBookmark = false;
-                    })
-                    .catch(function (error) {
-                        if (error.response && error.response.status == 409) {
-                            that.$emit('sendToast', {'message': error.response.data, 'type': 'error'});
-                        } else {
-                            that.$emit('loadError')
-                        }
-                    });
-            },
-            destroyMe: function () {
-                $(".ui.red.button.destroy-" + this._uid).addClass('loading disabled');
-                this.$emit('deleteAdvert', {'url': this.advert.destroyUrl});
-            },
-            getThumbUrl(advert) {
-                let picture = [];
-                if('pictures' in advert) {
-                    picture = advert.pictures.filter(function (elem) {
-                        return elem.hashName === advert.mainPicture;
-                    });
-                }
-
-                return picture.length >= 1 ? picture[0].thumbUrl : '';
-            }
+          })
+      },
+      destroyMe () {
+        $('.ui.red.button.destroy-' + this._uid).addClass('loading disabled')
+        this.$emit('deleteAdvert', {'url': this.advert.destroyUrl})
+      },
+      getThumbUrl (advert) {
+        let picture = []
+        if ('pictures' in advert) {
+          picture = advert.pictures.filter(function (elem) {
+            return elem.hashName === advert.mainPicture
+          })
         }
+        return picture.length >= 1 ? picture[0].thumbUrl : ''
+      }
     }
+  }
 </script>

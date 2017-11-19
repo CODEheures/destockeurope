@@ -15,42 +15,42 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            lng: String,
-            lat: String,
-            geoloc: String,
-            resize: {
-                type: Boolean,
-                required: false,
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['googleMap']
-            }
-        },
-        watch: {
-            resize () {
-                this.setSizeMap()
-            }
-        },
-        data () {
-            return {
-                dataLng: this.lng,
-                dataLat: this.lat,
-                dataGeoloc: this.geoloc
-            }
-        },
-        methods: {
-            latLngChange (event) {
-                this.$emit('locationChange', {'lat' : event.target.dataset.lat, 'lng':event.target.dataset.lng, 'geoloc': event.target.dataset.geoloc})
-            },
-            setSizeMap () {
-                let map = $('#map');
-                map.css({height: map.width()});
-                window.destockMap.resize();
-            }
-        }
+  export default {
+    props: {
+      lng: String,
+      lat: String,
+      geoloc: String,
+      resize: {
+        type: Boolean,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['googleMap']
+      }
+    },
+    watch: {
+      resize () {
+        this.setSizeMap()
+      }
+    },
+    data () {
+      return {
+        dataLng: this.lng,
+        dataLat: this.lat,
+        dataGeoloc: this.geoloc
+      }
+    },
+    methods: {
+      latLngChange (event) {
+        this.$emit('locationChange', {'lat': event.target.dataset.lat, 'lng': event.target.dataset.lng, 'geoloc': event.target.dataset.geoloc})
+      },
+      setSizeMap () {
+        let map = $('#map')
+        map.css({height: map.width()})
+        window.destockMap.resize()
+      }
     }
+  }
 </script>

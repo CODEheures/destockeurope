@@ -84,105 +84,106 @@
 
 
 <script>
-    export default {
-        props: {
-            categories: Array,
-            parentId: Number,
-            colorNumber: {
-                type: Number,
-                required: false,
-                default: 0
+  export default {
+    props: {
+      categories: Array,
+      parentId: Number,
+      colorNumber: {
+        type: Number,
+        required: false,
+        default: 0
+      }
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      colors () {
+        return [
+          'violet',
+          'purple',
+          'pink',
+          'brown',
+          'grey',
+          'black',
+          'red',
+          'orange',
+          'yellow',
+          'olive',
+          'green',
+          'teal',
+          'blue'
+        ]
+      }
+    },
+    data () {
+      return {
+        isLoaded: false,
+        categoryName: {},
+        focused: {},
+        blured: {}
+      }
+    },
+    methods: {
+      addCategory (event) {
+        if (this.categoryName !== undefined && this.categoryName !== null) {
+          let isEmpty = true
+          let postValue = {}
+          postValue['descriptions'] = {}
+          postValue['parentId'] = this.parentId
+          for (let category in this.categoryName) {
+            postValue['descriptions'][category] = this.categoryName[category]
+            if (this.categoryName[category] !== '') {
+              isEmpty = false
             }
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            colors () {
-                return [
-                    'violet',
-                    'purple',
-                    'pink',
-                    'brown',
-                    'grey',
-                    'black',
-                    'red',
-                    'orange',
-                    'yellow',
-                    'olive',
-                    'green',
-                    'teal',
-                    'blue',
-                ]
-            }
-        },
-        data () {
-            return {
-                isLoaded: false,
-                categoryName: {},
-                focused: {},
-                blured: {}
-            };
-        },
-        methods: {
-            addCategory: function (event) {
-                if (this.categoryName != undefined) {
-                    let isEmpty = true;
-                    let postValue = {};
-                    postValue['descriptions'] = {};
-                    postValue['parentId'] = this.parentId;
-                    for (let category in this.categoryName) {
-                        postValue['descriptions'][category] = this.categoryName[category];
-                        if (this.categoryName[category] != '') {
-                            isEmpty = false;
-                        }
-                    }
-                    if (!isEmpty) {
-                        this.isLoaded = false;
-                        this.categoryName = {};
-                        this.$emit('addCategory', postValue);
-                    }
-                }
-
-            },
-            delCategory: function (event) {
-                if (event.target.dataset.id != undefined && event.target.dataset.id > 0) {
-                    this.$emit('delCategory', event.target.dataset.id);
-                }
-            },
-            updateCategory: function (event) {
-                let postValue = {};
-                let key = '';
-                let id = '';
-                if (event == undefined) {
-                    id = this.blured.id;
-                    key = this.blured.locale;
-                    postValue[key] = this.blured.value;
-                } else if ((event instanceof KeyboardEvent) && event.key == "Enter") {
-                    id = event.target.dataset.id;
-                    key = event.target.dataset.key;
-                    postValue[key] = event.target.value;
-                    this.focused.value = event.target.value;
-                }
-                if (postValue[key] != undefined && postValue[key] != '') {
-                    this.$emit('updateCategory', {postValue: postValue, key: key, id: id});
-                } else {
-                    this.$emit('getCategories', false);
-                    this.$emit('patchError');
-                }
-            },
-            shiftDown: function (event) {
-                this.$emit('shiftDown', event);
-            },
-            shiftUp: function (event) {
-                this.$emit('shiftUp', event);
-            },
-            testChanged ($in, $out) {
-                if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
-                    this.blured = {id: $out.id, locale: $out.locale, value: $out.value}
-                    this.updateCategory()
-                }
-            }
+          }
+          if (!isEmpty) {
+            this.isLoaded = false
+            this.categoryName = {}
+            this.$emit('addCategory', postValue)
+          }
         }
+      },
+      delCategory (event) {
+        if (event.target.dataset.id !== undefined && event.target.dataset.id !== null && event.target.dataset.id > 0) {
+          this.$emit('delCategory', event.target.dataset.id)
+        }
+      },
+      updateCategory (event) {
+        let postValue = {}
+        let key = ''
+        let id = ''
+        if (event === undefined || event === null) {
+          id = this.blured.id
+          key = this.blured.locale
+          postValue[key] = this.blured.value
+        }
+        else if ((event instanceof KeyboardEvent) && event.key === 'Enter') {
+          id = event.target.dataset.id
+          key = event.target.dataset.key
+          postValue[key] = event.target.value
+          this.focused.value = event.target.value
+        }
+        if (postValue[key] !== undefined && postValue[key] !== null && postValue[key] !== '') {
+          this.$emit('updateCategory', {postValue: postValue, key: key, id: id})
+        }
+        else {
+          this.$emit('getCategories', false)
+          this.$emit('patchError')
+        }
+      },
+      shiftDown (event) {
+        this.$emit('shiftDown', event)
+      },
+      shiftUp (event) {
+        this.$emit('shiftUp', event)
+      },
+      testChanged ($in, $out) {
+        if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
+          this.blured = {id: $out.id, locale: $out.locale, value: $out.value}
+          this.updateCategory()
+        }
+      }
     }
+  }
 </script>

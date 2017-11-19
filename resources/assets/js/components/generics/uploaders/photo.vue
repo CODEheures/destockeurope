@@ -102,192 +102,201 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        props: {
-            //vue routes
-            routePostPicture: String,
-            routeGetListPosts: String,
-            routeDelPicture: String,
-            //vue vars
-            advertFormPhotoNbFreePicture: Number,
-            maxFiles: Number,
-            isDelegation: Boolean,
-            oldMainPicture: {
-                type: String,
-                required: false,
-                default: ''
+  export default {
+    props: {
+      // vue routes
+      routePostPicture: String,
+      routeGetListPosts: String,
+      routeDelPicture: String,
+      // vue vars
+      advertFormPhotoNbFreePicture: Number,
+      maxFiles: Number,
+      isDelegation: Boolean,
+      oldMainPicture: {
+        type: String,
+        required: false,
+        default: ''
+      },
+      nbColumns: {
+        type: String,
+        required: false,
+        default: 'three'
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['photo-uploader']
+      }
+    },
+    watch: {
+      pictures () {
+        this.setPicturesIndicators()
+        this.setMainPicture()
+        this.$emit('updatePictures', this.pictures)
+      },
+      mainPicture () {
+        this.$emit('updateMainPicture', this.mainPicture)
+      }
+    },
+    data () {
+      return {
+        filePhotoToPost: new FormData(),
+        formPhotoFileInputName: 'addpicture',
+        helpUploadP: '',
+        helpUploadA: '',
+        helpUploadAHref: '',
+        pictures: [],
+        nbPicturesIndicator: '',
+        helpHeaderIndicator: '',
+        mainPicture: '',
+        onUpload: false,
+        performUpload: 0,
+        cancelToken: null,
+        sourceCancelToken: null
+      }
+    },
+    mounted () {
+      this.setPicturesIndicators()
+      this.helpUpload()
+      this.getListPosts()
+    },
+    updated () {
+      let that = this
+      this.mainPicture = this.oldMainPicture
+      this.setMainPicture()
+      this.pictures.forEach(function (elem, index) {
+        $('#slider1-' + that._uid + '-' + index).checkbox({
+          onChange () {
+            that.mainPicture = this.value
+          }
+        })
+      })
+      $('#fakeSlider1-' + that._uid).checkbox()
+    },
+    methods: {
+      triggerClickInput () {
+        $('#' + this.formPhotoFileInputName).click()
+      },
+      helpUpload () {
+        let htmlObject = $('<p>' + this.strings.photoHelpContent + '</p>')
+        this.helpUploadP = htmlObject[0].firstChild.data
+        this.helpUploadA = htmlObject[0].firstElementChild.innerHTML
+        this.helpUploadAHref = htmlObject[0].firstElementChild.href
+      },
+      uploadPhoto (event) {
+        if (event.target.files[0] !== undefined && event.target.files[0] !== null) {
+          this.filePhotoToPost.append(this.formPhotoFileInputName, event.target.files[0])
+          let that = this
+          this.onUpload = true
+          this.cancelToken = Axios.CancelToken
+          this.sourceCancelToken = this.cancelToken.source()
+          Axios.post(this.routePostPicture, this.filePhotoToPost, {
+            onUploadProgress (progressEvent) {
+              let perform = 100 * progressEvent.loaded / progressEvent.total
+              that.performUpload = ((progressEvent.loaded) / (1024 * 1024)).toFixed(2) + 'Mb'
+              $('#progress-' + that._uid).progress({
+                percent: perform
+              })
             },
-            nbColumns: {
-                type: String,
-                required: false,
-                default: "three"
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['photo-uploader']
-            }
-        },
-        watch: {
-            pictures () {
-                this.setPicturesIndicators();
-                this.setMainPicture();
-                this.$emit('updatePictures', this.pictures);
-            },
-            mainPicture () {
-                this.$emit('updateMainPicture', this.mainPicture);
-            }
-        },
-        data () {
-            return {
-                filePhotoToPost: new FormData(),
-                formPhotoFileInputName: 'addpicture',
-                helpUploadP: '',
-                helpUploadA: '',
-                helpUploadAHref: '',
-                pictures: [],
-                nbPicturesIndicator: '',
-                helpHeaderIndicator: '',
-                mainPicture: '',
-                onUpload: false,
-                performUpload: 0,
-                cancelToken: null,
-                sourceCancelToken: null,
-            };
-        },
-        mounted () {
-            this.setPicturesIndicators();
-            this.helpUpload();
-            this.getListPosts();
-        },
-        updated () {
-            let that = this;
-            this.mainPicture = this.oldMainPicture;
-            this.setMainPicture();
-            (this.pictures).forEach(function (elem,index) {
-                $('#slider1-'+that._uid+'-'+index).checkbox({
-                    onChange: function () {
-                        that.mainPicture = this.value;
-                    }
-                });
-            });
-            $('#fakeSlider1-'+that._uid).checkbox();
-        },
-        methods: {
-            triggerClickInput: function () {
-                $('#'+this.formPhotoFileInputName).click()
-            },
-            helpUpload: function () {
-                let htmlObject = $('<p>'+this.strings.photoHelpContent+'</p>');
-                this.helpUploadP = htmlObject[0].firstChild.data;
-                this.helpUploadA = htmlObject[0].firstElementChild.innerHTML;
-                this.helpUploadAHref = htmlObject[0].firstElementChild.href;
-            },
-            uploadPhoto: function (event) {
-                if(event.target.files[0] != undefined){
-                    this.filePhotoToPost.append(this.formPhotoFileInputName, event.target.files[0]);
-                    let that = this;
-                    this.onUpload = true;
-                    this.cancelToken = Axios.CancelToken;
-                    this.sourceCancelToken = this.cancelToken.source();
-                    Axios.post(this.routePostPicture, this.filePhotoToPost, {
-                        onUploadProgress: function (progressEvent) {
-                            let perform = 100*(progressEvent.loaded)/progressEvent.total;
-                            that.performUpload = ((progressEvent.loaded)/(1024*1024)).toFixed(2)+'Mb';
-                            $('#progress-'+that._uid).progress({
-                                percent: perform
-                            });
-                        },
-                        cancelToken: that.sourceCancelToken.token,
-                    })
-                        .then(function (response) {
-                            that.onUpload = false;
-                            that.filePhotoToPost = new FormData();
-                            event.target.value="";
-                            that.pictures = response.data;
-                        })
-                        .catch(function (error) {
-                            that.onUpload = false;
-                            that.filePhotoToPost = new FormData();
-                            event.target.value="";
-                            if (error.response && error.response.status == 422) {
-                                let msg = error.response.data.errors.addpicture[0];
-                                that.$emit('sendToast', {'message': msg, 'type':'error'});
-                            } else if(error.response && error.response.status == 413) {
-                                that.$emit('fileSizeError');
-                            }  else if(error.response && error.response.status == 503) {
-                                that.$emit('sendToast', {'message': error.response.data, 'type':'error'});
-                            }else {
-                                that.$emit('loadError');
-                            }
-                        });
-                }
-            },
-            cancelUploadPhoto: function () {
-                let that = this;
-                this.sourceCancelToken.cancel();
-                that.onUpload = false;
-            },
-            getListPosts: function (event) {
-                let that = this;
-                Axios.get(this.routeGetListPosts)
-                    .then(function (response) {
-                        that.pictures = response.data;
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError');
-                    });
-            },
-            delPhoto: function (event) {
-                event.preventDefault();
-                let that=this;
-                Axios.delete(this.routeDelPicture + '/' + event.target.dataset.file)
-                    .then(function (response) {
-                        that.pictures = response.data;
-                    })
-                    .catch(function (error) {
-                        that.$emit('loadError');
-                    });
-            },
-            setPicturesIndicators () {
-                let resultIndicator;
-                if(this.isDelegation==1){
-                    resultIndicator =  this.maxFiles - this.pictures.length;
-                } else {
-                    resultIndicator =  this.advertFormPhotoNbFreePicture - this.pictures.length;
-                }
-                if(resultIndicator>=0){
-                    this.nbPicturesIndicator = resultIndicator;
-                    if(resultIndicator>1){
-                        this.helpHeaderIndicator = this.strings.freePhotoHelpHeaderPlural;
-                    } else {
-                        this.helpHeaderIndicator = this.strings.freePhotoHelpHeaderSingular;
-                    }
-                } else {
-                    this.nbPicturesIndicator = -resultIndicator;
-                    if(this.nbPicturesIndicator>1){
-                        this.helpHeaderIndicator = this.strings.payPhotoHelpHeaderPlural;
-                    } else {
-                        this.helpHeaderIndicator = this.strings.payPhotoHelpHeaderSingular;
-                    }
-                }
-            },
-            setMainPicture() {
-                let that = this;
-                if(this.pictures.length == 0){
-                    this.mainPicture ='';
-                } else if(this.pictures.length == 1 || this.pictures.indexOf(this.mainPicture)==-1){
-                    let firstElem = $('#slider1-'+this._uid+'-0');
-                    this.mainPicture=firstElem.children('input').val();
-                    firstElem.checkbox('check');
-                } else if(this.pictures.indexOf(this.mainPicture)>=0) {
-                    (this.pictures).forEach(function (elem,index) {
-                        if(elem==that.mainPicture){
-                            $('#slider1-'+that._uid+'-'+index).checkbox('check');
-                        }
-                    });
-                }
-            },
+            cancelToken: that.sourceCancelToken.token
+          })
+            .then(function (response) {
+              that.onUpload = false
+              that.filePhotoToPost = new FormData()
+              event.target.value = ''
+              that.pictures = response.data
+            })
+            .catch(function (error) {
+              that.onUpload = false
+              that.filePhotoToPost = new FormData()
+              event.target.value = ''
+              if (error.response && error.response.status === 422) {
+                let msg = error.response.data.errors.addpicture[0]
+                that.$emit('sendToast', {'message': msg, 'type': 'error'})
+              }
+              else if (error.response && error.response.status === 413) {
+                that.$emit('fileSizeError')
+              }
+              else if (error.response && error.response.status === 503) {
+                that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
+              }
+              else {
+                that.$emit('loadError')
+              }
+            })
         }
+      },
+      cancelUploadPhoto () {
+        let that = this
+        this.sourceCancelToken.cancel()
+        that.onUpload = false
+      },
+      getListPosts (event) {
+        let that = this
+        Axios.get(this.routeGetListPosts)
+          .then(function (response) {
+            that.pictures = response.data
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      },
+      delPhoto (event) {
+        event.preventDefault()
+        let that = this
+        Axios.delete(this.routeDelPicture + '/' + event.target.dataset.file)
+          .then(function (response) {
+            that.pictures = response.data
+          })
+          .catch(function () {
+            that.$emit('loadError')
+          })
+      },
+      setPicturesIndicators () {
+        let resultIndicator
+        if (this.isDelegation) {
+          resultIndicator = this.maxFiles - this.pictures.length
+        }
+        else {
+          resultIndicator = this.advertFormPhotoNbFreePicture - this.pictures.length
+        }
+        if (resultIndicator >= 0) {
+          this.nbPicturesIndicator = resultIndicator
+          if (resultIndicator > 1) {
+            this.helpHeaderIndicator = this.strings.freePhotoHelpHeaderPlural
+          }
+          else {
+            this.helpHeaderIndicator = this.strings.freePhotoHelpHeaderSingular
+          }
+        }
+        else {
+          this.nbPicturesIndicator = -resultIndicator
+          if (this.nbPicturesIndicator > 1) {
+            this.helpHeaderIndicator = this.strings.payPhotoHelpHeaderPlural
+          }
+          else {
+            this.helpHeaderIndicator = this.strings.payPhotoHelpHeaderSingular
+          }
+        }
+      },
+      setMainPicture () {
+        let that = this
+        if (this.pictures.length === 0) {
+          this.mainPicture = ''
+        }
+        else if (this.pictures.length === 1 || this.pictures.indexOf(this.mainPicture) === -1) {
+          let firstElem = $('#slider1-' + this._uid + '-0')
+          this.mainPicture = firstElem.children('input').val()
+          firstElem.checkbox('check')
+        }
+        else if (this.pictures.indexOf(this.mainPicture) >= 0) {
+          this.pictures.forEach(function (elem, index) {
+            if (elem === that.mainPicture) {
+              $('#slider1-' + that._uid + '-' + index).checkbox('check')
+            }
+          })
+        }
+      }
     }
+  }
 </script>

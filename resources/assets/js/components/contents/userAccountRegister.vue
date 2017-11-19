@@ -67,75 +67,75 @@
 </template>
 
 <script>
-    export default {
-        props: [
-            //vue routes
-            'routeRegister',
-            'routeFacebookRegister',
-            'routeTwitterRegister',
-            'routeGoogleRegister',
-            //vue vars
-            'oldNameValue',
-            'oldEmailValue',
-            'captchaKey',
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['user-account-register']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            dataInvoice () {
-                return JSON.parse(this.invoice)
-            },
-            dataCguText () {
-                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
-                return htmlObject[0].firstChild.data;
-            },
-            dataCguA () {
-                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
-                return htmlObject[0].firstElementChild.innerHTML;
-            },
-            dataCguHref () {
-                let htmlObject = $('<p>'+this.strings.formCguCheckLabel+'</p>');
-                return htmlObject[0].firstElementChild.href;
-            }
+  export default {
+    props: [
+      // vue routes
+      'routeRegister',
+      'routeFacebookRegister',
+      'routeTwitterRegister',
+      'routeGoogleRegister',
+      // vue vars
+      'oldNameValue',
+      'oldEmailValue',
+      'captchaKey'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['user-account-register']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      dataInvoice () {
+        return JSON.parse(this.invoice)
+      },
+      dataCguText () {
+        let htmlObject = $('<p>' + this.strings.formCguCheckLabel + '</p>')
+        return htmlObject[0].firstChild.data
+      },
+      dataCguA () {
+        let htmlObject = $('<p>' + this.strings.formCguCheckLabel + '</p>')
+        return htmlObject[0].firstElementChild.innerHTML
+      },
+      dataCguHref () {
+        let htmlObject = $('<p>' + this.strings.formCguCheckLabel + '</p>')
+        return htmlObject[0].firstElementChild.href
+      }
+    },
+    data () {
+      return {
+        sendMessage: false,
+        typeMessage: '',
+        message: '',
+        isCguApprove: false,
+        isNewsLetterApprove: false
+      }
+    },
+    mounted () {
+      let that = this
+      $('#cguCheckBox').checkbox({
+        onChecked () {
+          that.isCguApprove = true
         },
-        data () {
-            return {
-                sendMessage: false,
-                typeMessage: '',
-                message: '',
-                isCguApprove: false,
-                isNewsLetterApprove: false,
-            };
-        },
-        mounted () {
-            let that = this;
-            $('#cguCheckBox').checkbox({
-                onChecked: function() {
-                    that.isCguApprove = true;
-                },
-                onUnchecked: function() {
-                    that.isCguApprove = false;
-                }
-            });
-            $('#newsLetterCheckBox').checkbox({
-                onChecked: function() {
-                    that.isNewsLetterApprove = true;
-                },
-                onUnchecked: function() {
-                    that.isNewsLetterApprove = false;
-                }
-            });
-        },
-        methods: {
-            sendToast: function(message,type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            }
+        onUnchecked () {
+          that.isCguApprove = false
         }
+      })
+      $('#newsLetterCheckBox').checkbox({
+        onChecked () {
+          that.isNewsLetterApprove = true
+        },
+        onUnchecked () {
+          that.isNewsLetterApprove = false
+        }
+      })
+    },
+    methods: {
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      }
     }
+  }
 </script>

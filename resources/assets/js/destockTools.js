@@ -124,8 +124,7 @@ class DestockTools {
       delete parsed.query[paramName]
     }
 
-    // eslint-disable-next-line no-unused-expressions
-    'page' in parsed.query && reinitPage ? delete parsed.query['page'] : null
+    if ('page' in parsed.query && reinitPage) { delete parsed.query['page'] }
     return Parser.format(parsed)
   }
 
@@ -136,8 +135,8 @@ class DestockTools {
 
   static paceRestart () {
     let paceForcing = document.getElementById('paceforcing')
-    // eslint-disable-next-line no-unused-expressions
-    paceForcing !== null ? paceForcing.remove() : null
+
+    if (paceForcing !== null) { paceForcing.remove() }
     window.Pace.restart()
   }
 }

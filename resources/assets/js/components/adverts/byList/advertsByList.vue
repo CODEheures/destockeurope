@@ -71,38 +71,37 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            routeBookmarkAdd: String,
-            routeBookmarkRemove: String,
-            flagForceReload: {
-                type: Boolean,
-                default: false,
-                required: false
-            },
-            adsFrequency: Number,
-            canGetDelegations: {
-                type: Boolean,
-                default: false,
-                required: false
-            },
-            isPersonnalList: {
-                type: Boolean,
-                default: false,
-                required: false
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['adverts-by-list']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            advertsList () {
-                return this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data']
-            }
-
-        }
+  export default {
+    props: {
+      routeBookmarkAdd: String,
+      routeBookmarkRemove: String,
+      flagForceReload: {
+        type: Boolean,
+        default: false,
+        required: false
+      },
+      adsFrequency: Number,
+      canGetDelegations: {
+        type: Boolean,
+        default: false,
+        required: false
+      },
+      isPersonnalList: {
+        type: Boolean,
+        default: false,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['adverts-by-list']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      advertsList () {
+        return this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data']
+      }
     }
+  }
 </script>

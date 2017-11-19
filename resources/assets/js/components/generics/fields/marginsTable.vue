@@ -97,89 +97,89 @@
 
 <script>
   import { DestockTools } from '../../../destockTools'
-    export default {
-        props: {
-            advert: {
-                type: Object
-            },
-            forSeller: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
-            forLotMargin: {
-                type: Boolean,
-                required: false,
-                default: true
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['margin-table']
-            }
-        },
-        data () {
-            return {
-                margins: {
-                    unitMargin: 0,
-                    totalMargin: 0,
-                    lotMiniMargin: 0,
-                    unitSellerPrice: 0,
-                    priceMargin: 0,
-                    totalSellerPrice: 0,
-                    totalSellerPriceWholePart: 0,
-                    totalSellerPriceDecimalPart: 0,
-                    totalPriceMargin: 0,
-                    totalPriceMarginWholePart: 0,
-                    totalPriceMarginDecimalPart: 0,
-                    totalPriceByLot: 0,
-                    totalPriceByLotMargin: 0,
-                    globalDiscount: 0,
-                    coefficientTotalIsOverMax: false
-                }
-            }
-        },
-        mounted () {
-            let that = this;
-            if(!this.forSeller){
-                this.$watch('advert.price_coefficient', function () {
-                    that.updateMargins();
-                });
-                this.$watch('advert.price_coefficient_total', function () {
-                    that.updateMargins();
-                });
-            }
-            if(this.forSeller){
-                this.$watch('advert.buyingPrice', function () {
-                    that.updateMargins();
-                });
-                this.$watch('advert.originalPrice', function () {
-                    that.updateMargins();
-                });
-                this.$watch('advert.discount_on_total', function () {
-                    that.updateMargins();
-                });
-            }
-            this.$watch('advert.lotMiniQuantity', function () {
-                that.updateMargins();
-            });
-            this.$watch('advert.totalQuantity', function () {
-                that.updateMargins();
-            });
-            $('#tr_total_price_'+this._uid).popup();
-            $('#tr_lot_margin_'+this._uid).popup();
-            $('#tr_total_margin1_'+this._uid).popup();
-            $('#tr_total_margin2_'+this._uid).popup();
-            this.updateMargins();
-        },
-        methods: {
-            updateMargins () {
-                let calcMargins = DestockTools.calcMargins(this.advert, this.forSeller);
-                Object.assign(this.margins, calcMargins);
-                if(!this.forSeller && this.forLotMargin){
-                    this.advert.price_margin = this.margins.priceMargin + this.advert.currencySymbol;
-                }
-            }
+  export default {
+    props: {
+      advert: {
+        type: Object
+      },
+      forSeller: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      forLotMargin: {
+        type: Boolean,
+        required: false,
+        default: true
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['margin-table']
+      }
+    },
+    data () {
+      return {
+        margins: {
+          unitMargin: 0,
+          totalMargin: 0,
+          lotMiniMargin: 0,
+          unitSellerPrice: 0,
+          priceMargin: 0,
+          totalSellerPrice: 0,
+          totalSellerPriceWholePart: 0,
+          totalSellerPriceDecimalPart: 0,
+          totalPriceMargin: 0,
+          totalPriceMarginWholePart: 0,
+          totalPriceMarginDecimalPart: 0,
+          totalPriceByLot: 0,
+          totalPriceByLotMargin: 0,
+          globalDiscount: 0,
+          coefficientTotalIsOverMax: false
         }
+      }
+    },
+    mounted () {
+      let that = this
+      if (!this.forSeller) {
+        this.$watch('advert.price_coefficient', function () {
+          that.updateMargins()
+        })
+        this.$watch('advert.price_coefficient_total', function () {
+          that.updateMargins()
+        })
+      }
+      if (this.forSeller) {
+        this.$watch('advert.buyingPrice', function () {
+          that.updateMargins()
+        })
+        this.$watch('advert.originalPrice', function () {
+          that.updateMargins()
+        })
+        this.$watch('advert.discount_on_total', function () {
+          that.updateMargins()
+        })
+      }
+      this.$watch('advert.lotMiniQuantity', function () {
+        that.updateMargins()
+      })
+      this.$watch('advert.totalQuantity', function () {
+        that.updateMargins()
+      })
+      $('#tr_total_price_' + this._uid).popup()
+      $('#tr_lot_margin_' + this._uid).popup()
+      $('#tr_total_margin1_' + this._uid).popup()
+      $('#tr_total_margin2_' + this._uid).popup()
+      this.updateMargins()
+    },
+    methods: {
+      updateMargins () {
+        let calcMargins = DestockTools.calcMargins(this.advert, this.forSeller)
+        Object.assign(this.margins, calcMargins)
+        if (!this.forSeller && this.forLotMargin) {
+          this.advert.price_margin = this.margins.priceMargin + this.advert.currencySymbol
+        }
+      }
     }
+  }
 </script>

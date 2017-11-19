@@ -133,269 +133,280 @@
 <script>
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
-    export default {
-        directives: {focus: focus},
-        props: [
-            //vue routes
-            'routeUserGetMe',
-            'routeChangeEmail',
-            'routeChangePassword',
-            'routeUserSetPrefCurrency',
-            'routeUserSetPrefLocale',
-            'routeUserSetPrefLocation',
-            'routeUserSetName',
-            'routeUserSetPhone',
-            'routeUserSetCompagnyName',
-            'routeUserSetRegistrationNumber',
-            'routeAvatar',
-            'routeNextUrl',
-            'routePrices',
-            //vue vars
-            'userEmail',
-            'userName',
-            'userPhone',
-            'latitude',
-            'longitude',
-            'firstGeoloc',
-            'compagnyName',
-            'registrationNumber',
-            'vatIdentifier',
-            'advertAccountVerifiedStep',
-            'advertCost',
-            'formPhoneMaxValid',
-            'formCompagnyNameMinValid',
-            'formCompagnyNameMaxValid',
-            'formRegistrationNumberMaxValid',
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['user-account']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
+  export default {
+    directives: {focus: focus},
+    props: [
+      // vue routes
+      'routeUserGetMe',
+      'routeChangeEmail',
+      'routeChangePassword',
+      'routeUserSetPrefCurrency',
+      'routeUserSetPrefLocale',
+      'routeUserSetPrefLocation',
+      'routeUserSetName',
+      'routeUserSetPhone',
+      'routeUserSetCompagnyName',
+      'routeUserSetRegistrationNumber',
+      'routeAvatar',
+      'routeNextUrl',
+      'routePrices',
+      // vue vars
+      'userEmail',
+      'userName',
+      'userPhone',
+      'latitude',
+      'longitude',
+      'firstGeoloc',
+      'compagnyName',
+      'registrationNumber',
+      'vatIdentifier',
+      'advertAccountVerifiedStep',
+      'advertCost',
+      'formPhoneMaxValid',
+      'formCompagnyNameMinValid',
+      'formCompagnyNameMaxValid',
+      'formRegistrationNumberMaxValid'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['user-account']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    data () {
+      return {
+        isLoaded: false,
+        sendMessage: false,
+        typeMessage: '',
+        message: '',
+        lat: '',
+        lng: '',
+        geoloc: '',
+        dataFirstGeoloc: false,
+        firstCurrencyChoice: true,
+        firstLocaleChoice: true,
+        dataUserName: this.userName,
+        dataUserPhone: this.userPhone,
+        dataCompagnyName: this.compagnyName,
+        dataRegistrationNumber: this.registrationNumber,
+        dataVatIdentifier: this.vatIdentifier,
+        focused: {},
+        blured: {},
+        steps: [],
+        updateInProgress: 0,
+        updateFails: false,
+        vatOnCheckProgress: false,
+        hasValidVat: this.vatIdentifier !== ''
+      }
+    },
+    mounted () {
+      this.steps = [
+        {
+          isActive: false,
+          isDisabled: false,
+          isCompleted: true,
+          title: this.strings.stepOneTitle,
+          description: this.strings.stepOneDescription,
+          icon: 'write'
         },
-        data () {
-            return {
-                isLoaded: false,
-                sendMessage: false,
-                typeMessage: '',
-                message:'',
-                lat: '',
-                lng: '',
-                geoloc: '',
-                dataFirstGeoloc: false,
-                firstCurrencyChoice: true,
-                firstLocaleChoice: true,
-                dataUserName: this.userName,
-                dataUserPhone: this.userPhone,
-                dataCompagnyName: this.compagnyName,
-                dataRegistrationNumber: this.registrationNumber,
-                dataVatIdentifier: this.vatIdentifier,
-                focused: {},
-                blured: {},
-                steps: [],
-                updateInProgress: 0,
-                updateFails: false,
-                vatOnCheckProgress: false,
-                hasValidVat: this.vatIdentifier !== '',
-            };
+        {
+          isActive: true,
+          isDisabled: false,
+          isCompleted: false,
+          title: this.strings.stepTwoTitle,
+          description: this.strings.stepTwoDescription,
+          icon: 'user'
         },
-        mounted () {
-            this.steps = [
-                {
-                    isActive : false,
-                    isDisabled : false,
-                    isCompleted: true,
-                    title: this.strings.stepOneTitle,
-                    description: this.strings.stepOneDescription,
-                    icon: 'write'
-                },
-                {
-                    isActive : true,
-                    isDisabled : false,
-                    isCompleted: false,
-                    title: this.strings.stepTwoTitle,
-                    description: this.strings.stepTwoDescription,
-                    icon: 'user'
-                },
-                {
-                    isActive : false,
-                    isDisabled : true,
-                    isCompleted: false,
-                    title: this.strings.stepThreeTitle,
-                    description: this.strings.stepThreeDescription,
-                    routeDescription: this.routePrices,
-                    icon: 'payment'
-                }
-            ];
-            this.setSteps();
-            sessionStorage.setItem('lat', this.latitude);
-            sessionStorage.setItem('lng', this.longitude);
-            sessionStorage.setItem('geoloc', this.geoloc);
-            this.firstGeoloc === '1' ? this.dataFirstGeoloc = true :  null;
-        },
-        methods: {
-            currencyChoice: function (cur) {
-                let that = this;
-                if (this.firstCurrencyChoice) {
-                    this.firstCurrencyChoice = false
-                    return
-                }
-                Axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
-                    .then(function (response) {
-                        that.sendToast(that.strings.accountPatchSuccess, 'success');
-                    })
-                    .catch(function (error) {
-                        if(error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error');
-                        } else {
-                            that.sendToast(that.strings.loadErrorMessage, 'error');
-                        }
-                    });
-            },
-            localeChoice: function (locale) {
-                let that = this;
-                if (this.firstLocaleChoice) {
-                    this.firstLocaleChoice = false
-                    return
-                }
-                Axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
-                    .then(function (response) {
-                        that.sendToast(that.strings.accountPatchSuccess, 'success');
-                    })
-                    .catch(function (error) {
-                        if(error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error');
-                        } else {
-                            that.sendToast(that.strings.loadErrorMessage, 'error');
-                        }
-                    });
-            },
-            latLngChange: function (event) {
-                let that = this;
-                this.lat= event.lat;
-                this.lng= event.lng;
-                this.geoloc= event.geoloc;
-                if(this.dataFirstGeoloc || parseFloat(this.lat) != parseFloat(this.latitude) || parseFloat(this.lng) != parseFloat(this.longitude)){
-                    Axios.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
-                        .then(function (response) {
-                            that.dataFirstGeoloc = false;
-                            that.sendToast(that.strings.accountPatchSuccess, 'success');
-                        })
-                        .catch(function (error) {
-                            if(error.response && error.response.status == 409) {
-                                that.sendToast(error.response.data, 'error');
-                            } else {
-                                that.sendToast(that.strings.loadErrorMessage, 'error');
-                            }
-                        });
-                }
-            },
-            updateAccount: function (inputName, value){
-                this.updateInProgress++;
-                let that = this;
-                let updateRoute = '';
-                if(inputName == 'name'){
-                    updateRoute = this.routeUserSetName;
-                } else if(inputName == 'compagny-name') {
-                    updateRoute = this.routeUserSetCompagnyName;
-                } else if(inputName == 'registration-number') {
-                    updateRoute = this.routeUserSetRegistrationNumber;
-                    this.vatOnCheckProgress=true;
-                } else if(inputName == 'phone') {
-                    updateRoute = this.routeUserSetPhone;
-                }
-                Axios.patch(updateRoute, {'value': value})
-                    .then(function (response) {
-                        that.updateFails = false;
-                        that.sendToast(that.strings.accountPatchSuccess, 'success');
-                        that.updateInProgress--;
-                        if(inputName == 'registration-number'){
-                            that.userGetMe();
-                        }
-                    })
-                    .catch(function (error) {
-                        that.updateFails = true;
-                        that.updateInProgress--;
-                        that.vatOnCheckProgress=false;
-                        if(error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error.response');
-                        } else if(error.response && error.response.status == 422) {
-                            that.sendToast(error.response.data.value[0], 'error');
-                        } else {
-                            that.sendToast(that.strings.loadErrorMessage, 'error');
-                        }
-                        that.userGetMe();
-                    });
-            },
-            userGetMe: function () {
-                let that = this;
-                Axios.get(this.routeUserGetMe)
-                    .then(function (response) {
-                        that.dataUserName = response.data.userName;
-                        that.dataCompagnyName = response.data.compagnyName;
-                        that.dataRegistrationNumber = response.data.registrationNumber;
-                        that.dataVatIdentifier= response.data.vatIdentifier;
-                        that.hasValidVat = that.dataVatIdentifier != null && that.dataVatIdentifier != '';
-                        that.lng= response.data.lng;
-                        that.lat= response.data.lat;
-                        that.geoloc= response.data.geoloc;
-                        sessionStorage.setItem('lat', that.lat);
-                        sessionStorage.setItem('lng', that.lng);
-                        sessionStorage.setItem('geoloc', that.geoloc);
-                        window.destockMap.initLocation();
-                        that.vatOnCheckProgress=false;
-                    })
-                    .catch(function (error) {
-                        that.vatOnCheckProgress=false;
-                        that.sendToast(that.strings.loadErrorMessage, 'error');
-                    });
-            },
-            updateByEnter: function (event) {
-                this.focused={'input': event.target.name, 'value': event.target.value};
-                this.updateAccount(event.target.name, event.target.value);
-            },
-            setSteps () {
-                if(parseFloat(this.advertCost)>0) {
-                    (this.steps[2]).isDisabled = false;
-                    (this.steps[2]).title = this.strings.stepThreeTitle + '(' + (this.advertCost/100).toFixed(2) + this.strings.stepThreeTitlePost + ')';
-                } else {
-                    (this.steps[2]).isDisabled = true;
-                }
-            },
-            submitForm (event) {
-                event.preventDefault();
-                this.isLoaded = false;
-                let counter = 0;
-                let that = this;
-                let timer = function () {
-                    setTimeout(function () {
-                        if(that.updateInProgress <= 0){
-                            DestockTools.goToUrl(that.routeNextUrl);
-                        } else {
-                            counter++;
-                            if (counter < 20) {
-                                timer();
-                            } else {
-                                that.isLoaded = true;
-                                that.updateFails = true;
-                            }
-                        }
-                    }, 250);
-                };
-                timer();
-            },
-            sendToast: function(message,type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            testChanged ($in, $out) {
-                if ($in.input === $out.input && $in.value !== $out.value) {
-                    this.updateAccount($out.input, $out.value);
-                }
-            }
+        {
+          isActive: false,
+          isDisabled: true,
+          isCompleted: false,
+          title: this.strings.stepThreeTitle,
+          description: this.strings.stepThreeDescription,
+          routeDescription: this.routePrices,
+          icon: 'payment'
         }
+      ]
+      this.setSteps()
+      sessionStorage.setItem('lat', this.latitude)
+      sessionStorage.setItem('lng', this.longitude)
+      sessionStorage.setItem('geoloc', this.geoloc)
+      if (this.firstGeoloc === '1') { this.dataFirstGeoloc = true }
+    },
+    methods: {
+      currencyChoice (cur) {
+        let that = this
+        if (this.firstCurrencyChoice) {
+          this.firstCurrencyChoice = false
+          return
+        }
+        Axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
+          .then(function (response) {
+            that.sendToast(that.strings.accountPatchSuccess, 'success')
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error')
+            }
+            else {
+              that.sendToast(that.strings.loadErrorMessage, 'error')
+            }
+          })
+      },
+      localeChoice (locale) {
+        let that = this
+        if (this.firstLocaleChoice) {
+          this.firstLocaleChoice = false
+          return
+        }
+        Axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
+          .then(function (response) {
+            that.sendToast(that.strings.accountPatchSuccess, 'success')
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error')
+            }
+            else {
+              that.sendToast(that.strings.loadErrorMessage, 'error')
+            }
+          })
+      },
+      latLngChange (event) {
+        let that = this
+        this.lat = event.lat
+        this.lng = event.lng
+        this.geoloc = event.geoloc
+        if (this.dataFirstGeoloc || parseFloat(this.lat) !== parseFloat(this.latitude) || parseFloat(this.lng) !== parseFloat(this.longitude)) {
+          Axios.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
+            .then(function (response) {
+              that.dataFirstGeoloc = false
+              that.sendToast(that.strings.accountPatchSuccess, 'success')
+            })
+            .catch(function (error) {
+              if (error.response && error.response.status === 409) {
+                that.sendToast(error.response.data, 'error')
+              }
+              else {
+                that.sendToast(that.strings.loadErrorMessage, 'error')
+              }
+            })
+        }
+      },
+      updateAccount (inputName, value) {
+        this.updateInProgress++
+        let that = this
+        let updateRoute = ''
+        if (inputName === 'name') {
+          updateRoute = this.routeUserSetName
+        }
+        else if (inputName === 'compagny-name') {
+          updateRoute = this.routeUserSetCompagnyName
+        }
+        else if (inputName === 'registration-number') {
+          updateRoute = this.routeUserSetRegistrationNumber
+          this.vatOnCheckProgress = true
+        }
+        else if (inputName === 'phone') {
+          updateRoute = this.routeUserSetPhone
+        }
+        Axios.patch(updateRoute, {'value': value})
+          .then(function (response) {
+            that.updateFails = false
+            that.sendToast(that.strings.accountPatchSuccess, 'success')
+            that.updateInProgress--
+            if (inputName === 'registration-number') {
+              that.userGetMe()
+            }
+          })
+          .catch(function (error) {
+            that.updateFails = true
+            that.updateInProgress--
+            that.vatOnCheckProgress = false
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error.response')
+            }
+            else if (error.response && error.response.status === 422) {
+              that.sendToast(error.response.data.value[0], 'error')
+            }
+            else {
+              that.sendToast(that.strings.loadErrorMessage, 'error')
+            }
+            that.userGetMe()
+          })
+      },
+      userGetMe () {
+        let that = this
+        Axios.get(this.routeUserGetMe)
+          .then(function (response) {
+            that.dataUserName = response.data.userName
+            that.dataCompagnyName = response.data.compagnyName
+            that.dataRegistrationNumber = response.data.registrationNumber
+            that.dataVatIdentifier = response.data.vatIdentifier
+            that.hasValidVat = that.dataVatIdentifier !== undefined && that.dataVatIdentifier !== null && that.dataVatIdentifier !== ''
+            that.lng = response.data.lng
+            that.lat = response.data.lat
+            that.geoloc = response.data.geoloc
+            sessionStorage.setItem('lat', that.lat)
+            sessionStorage.setItem('lng', that.lng)
+            sessionStorage.setItem('geoloc', that.geoloc)
+            window.destockMap.initLocation()
+            that.vatOnCheckProgress = false
+          })
+          .catch(function () {
+            that.vatOnCheckProgress = false
+            that.sendToast(that.strings.loadErrorMessage, 'error')
+          })
+      },
+      updateByEnter (event) {
+        this.focused = {'input': event.target.name, 'value': event.target.value}
+        this.updateAccount(event.target.name, event.target.value)
+      },
+      setSteps () {
+        if (parseFloat(this.advertCost) > 0) {
+          this.steps[2].isDisabled = false
+          this.steps[2].title = this.strings.stepThreeTitle + '(' + (this.advertCost / 100).toFixed(2) + this.strings.stepThreeTitlePost + ')'
+        }
+        else {
+          this.steps[2].isDisabled = true
+        }
+      },
+      submitForm (event) {
+        event.preventDefault()
+        this.isLoaded = false
+        let counter = 0
+        let that = this
+        let timer = function () {
+          setTimeout(function () {
+            if (that.updateInProgress <= 0) {
+              DestockTools.goToUrl(that.routeNextUrl)
+            }
+            else {
+              counter++
+              if (counter < 20) {
+                timer()
+              }
+              else {
+                that.isLoaded = true
+                that.updateFails = true
+              }
+            }
+          }, 250)
+        }
+        timer()
+      },
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      testChanged ($in, $out) {
+        if ($in.input === $out.input && $in.value !== $out.value) {
+          this.updateAccount($out.input, $out.value)
+        }
+      }
     }
+  }
 </script>

@@ -231,146 +231,150 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        directives: {focus: focus},
-        props: {
-            //vue routes
-            routeParameters: String,
-            routeTestIsPicture: String,
-            routeGetListType: String,
+  export default {
+    directives: {focus: focus},
+    props: {
+      // vue routes
+      routeParameters: String,
+      routeTestIsPicture: String,
+      routeGetListType: String
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['manage-application']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    data () {
+      return {
+        isLoaded: false,
+        sendMessage: false,
+        typeMessage: '',
+        message: '',
+        focused: {},
+        blured: {},
+        parameters: [],
+        oldType: '',
+        isValidImage: false
+      }
+    },
+    mounted () {
+      this.getParameters()
+      let that = this
+      $('#slider1-' + this._uid).checkbox({
+        onChecked () {
+          that.parameters['masterAds'] = 1
+          that.activeMasterAds(1)
         },
-        computed: {
-            strings () {
-                return this.$store.state.strings['manage-application']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        data () {
-            return {
-                isLoaded: false,
-                sendMessage: false,
-                typeMessage: '',
-                message: '',
-                focused: {},
-                blured: {},
-                parameters: [],
-                oldType: '',
-                isValidImage: false,
-            };
-        },
-        mounted () {
-            this.getParameters();
-            let that = this;
-            $('#slider1-'+this._uid).checkbox({
-                onChecked: function() {
-                    that.parameters['masterAds']=1;
-                    that.activeMasterAds(1);
-                },
-                onUnchecked: function() {
-                    that.parameters['masterAds']=0;
-                    that.activeMasterAds(0);
-                }
-            });
-        },
-        methods: {
-            getParameters: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                Axios.get(this.routeParameters)
-                    .then(function (response) {
-                        that.parameters = response.data;
-                        that.oldType=that.parameters.welcomeType;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.sendToast(that.strings.loadErrorMessage, 'error');
-                    });
-            },
-            typeChoice: function (type) {
-                this.blured.name = 'welcomeType';
-                this.blured.value = type;
-                this.updateParameter();
-            },
-            activeMasterAds(flag){
-                this.blured.name = 'masterAds';
-                this.blured.value = flag;
-                this.updateParameter();
-            },
-            updateParameter: function (event) {
-                let patchValue = {};
-                let name = '';
-                if (event == undefined) {
-                    name = this.blured.name;
-                    patchValue[name] = this.blured.value;
-                } else if ((event instanceof KeyboardEvent) && event.key == "Enter") {
-                    name = event.target.name;
-                    patchValue[name] = event.target.value;
-                    this.focused.value = event.target.value;
-                }
-                if (name != undefined && patchValue[name] != undefined) {
-                    if(name=='urlMasterAds' && patchValue[name] != ''){
-                        let that = this;
-                        this.testValidImgUrl(patchValue[name], function () {
-                            that.updateRequest(patchValue);
-                        });
-                    } else {
-                        this.updateRequest(patchValue);
-                    }
-                } else {
-                    this.getParameters(false);
-                    this.sendToast(this.strings.patchErrorMessage, 'error');
-                }
-            },
-            updateRequest(patchValue) {
-                let that = this;
-                Axios.patch(this.routeParameters, patchValue)
-                    .then(function (response) {
-                        that.getParameters(false);
-                        that.sendToast(that.strings.patchSuccessMessage, 'success');
-                    })
-                    .catch(function (error) {
-                        that.getParameters(false);
-                        if (error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error');
-                        } else {
-                            that.sendToast(that.strings.patchErrorMessage, 'error');
-                        }
-                    });
-            },
-            testValidImgUrl(url, callback){
-                let that = this;
-                this.isLoaded = false;
-                Axios.post(this.routeTestIsPicture, {url: url})
-                    .then(function (response) {
-                        that.isLoaded = true;
-                        if(response.data && response.data == true){
-                            that.isValidImage = true;
-                            callback();
-                        } else {
-                            that.isValidImage = false;
-                            that.sendToast(this.strings.invalidImageMessage, 'error');
-                        }
-                    })
-                    .catch(function (error) {
-                        that.isLoaded = true;
-                        that.isValidImage = false;
-                        that.sendToast(that.strings.invalidImageMessage, 'error');
-                    });
-            },
-            sendToast: function (message, type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            testChanged ($in, $out) {
-                if ($in.name === $out.name && $in.value !== $out.value) {
-                    this.blured = {name: $out.name, value: $out.value}
-                    this.updateParameter();
-                }
-            }
+        onUnchecked () {
+          that.parameters['masterAds'] = 0
+          that.activeMasterAds(0)
         }
+      })
+    },
+    methods: {
+      getParameters () {
+        this.isLoaded = false
+        let that = this
+        Axios.get(this.routeParameters)
+          .then(function (response) {
+            that.parameters = response.data
+            that.oldType = that.parameters.welcomeType
+            that.isLoaded = true
+          })
+          .catch(function () {
+            that.sendToast(that.strings.loadErrorMessage, 'error')
+          })
+      },
+      typeChoice (type) {
+        this.blured.name = 'welcomeType'
+        this.blured.value = type
+        this.updateParameter()
+      },
+      activeMasterAds (flag) {
+        this.blured.name = 'masterAds'
+        this.blured.value = flag
+        this.updateParameter()
+      },
+      updateParameter (event) {
+        let patchValue = {}
+        let name = ''
+        if (event === undefined || event === null) {
+          name = this.blured.name
+          patchValue[name] = this.blured.value
+        }
+        else if ((event instanceof KeyboardEvent) && event.key === 'Enter') {
+          name = event.target.name
+          patchValue[name] = event.target.value
+          this.focused.value = event.target.value
+        }
+        if (name !== undefined && name !== null && patchValue[name] !== undefined && patchValue[name] !== null) {
+          if (name === 'urlMasterAds' && patchValue[name] !== '') {
+            let that = this
+            this.testValidImgUrl(patchValue[name], function () {
+              that.updateRequest(patchValue)
+            })
+          }
+          else {
+            this.updateRequest(patchValue)
+          }
+        }
+        else {
+          this.getParameters()
+          this.sendToast(this.strings.patchErrorMessage, 'error')
+        }
+      },
+      updateRequest (patchValue) {
+        let that = this
+        Axios.patch(this.routeParameters, patchValue)
+          .then(function (response) {
+            that.getParameters()
+            that.sendToast(that.strings.patchSuccessMessage, 'success')
+          })
+          .catch(function (error) {
+            that.getParameters()
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error')
+            }
+            else {
+              that.sendToast(that.strings.patchErrorMessage, 'error')
+            }
+          })
+      },
+      testValidImgUrl (url, callback) {
+        let that = this
+        this.isLoaded = false
+        Axios.post(this.routeTestIsPicture, {url: url})
+          .then(function (response) {
+            that.isLoaded = true
+            if (response.data && response.data === true) {
+              that.isValidImage = true
+              callback()
+            }
+            else {
+              that.isValidImage = false
+              that.sendToast(this.strings.invalidImageMessage, 'error')
+            }
+          })
+          .catch(function () {
+            that.isLoaded = true
+            that.isValidImage = false
+            that.sendToast(that.strings.invalidImageMessage, 'error')
+          })
+      },
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      testChanged ($in, $out) {
+        if ($in.name === $out.name && $in.value !== $out.value) {
+          this.blured = {name: $out.name, value: $out.value}
+          this.updateParameter()
+        }
+      }
     }
+  }
 </script>

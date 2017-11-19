@@ -121,265 +121,270 @@
 
 <script>
   import Axios from 'axios'
-    export default {
-        directives: {focus: focus},
-        props: {
-            //vue routes
-            routeShiftUpCategory: String,
-            routeShiftDownCategory: String,
-            routeAppendToCategory: String,
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['manage-categories']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        data () {
-            return {
-                isLoaded: false,
-                sendMessage: false,
-                typeMessage: '',
-                message: '',
-                focused: {},
-                blured: {},
-                categories: {},
-                categoryName: {},
-            };
-        },
-        mounted () {
-            this.getCategories();
-        },
-        updated () {
-            for(let index in this.categories){
-                $('#accordion-'+this._uid+'-'+index).accordion({
-                    selector: {
-                        trigger: '.title > div > .dropdown.icon'
-                    }
-                });
-            }
-        },
-        methods: {
-            getCategories: function (withLoadIndicator) {
-                withLoadIndicator == undefined ? withLoadIndicator = true : null;
-                withLoadIndicator ? this.isLoaded = false : this.isLoaded = true;
-                let that = this;
-                Axios.get(this.properties.routeCategory+'?withInfos=true')
-                    .then(function (response) {
-                        that.categories = response.data;
-                        that.isLoaded = true;
-                    })
-                    .catch(function (error) {
-                        that.sendToast(that.strings.loadErrorMessage, 'error');
-                    });
-            },
-            addCategory: function (event, emitPostValue) {
-                let isEmpty = true;
-                let postValue = {};
-                if (emitPostValue != undefined) {
-                    postValue = emitPostValue;
-                    isEmpty = false;
-                } else if (this.categoryName != undefined) {
-                    postValue['descriptions'] = {};
-                    for (let lang in this.categoryName) {
-                        postValue['descriptions'][lang] = this.categoryName[lang];
-                        if (this.categoryName[lang] != '') {
-                            isEmpty = false;
-                        }
-                    }
-
-                }
-                if (!isEmpty) {
-                    this.isLoaded = false;
-                    this.categoryName = {};
-                    let that = this;
-                    Axios.post(this.properties.routeCategory, postValue)
-                        .then(function (response) {
-                            that.getCategories();
-                        })
-                        .catch(function (error) {
-                            that.isLoaded = true;
-                            if (error.response && error.response.status == 409) {
-                                that.sendToast(error.response.data, 'error');
-                            } else {
-                                that.sendToast(that.strings.addErrorMessage, 'error');
-                            }
-                        });
-                }
-            },
-            delCategory: function (event, id) {
-                let categoryId = undefined;
-                if (event != undefined && event.target.dataset.id != undefined && event.target.dataset.id > 0) {
-                    categoryId = event.target.dataset.id;
-                } else if (id != undefined && id > 0) {
-                    categoryId = id;
-                }
-
-                if (categoryId != undefined && categoryId > 0) {
-                    let that = this;
-                    $('#modal-'+this._uid).modal({
-                        closable: false,
-                        onApprove: function () {
-                            that.isLoaded = false;
-                            Axios.delete(that.properties.routeCategory + '/' + categoryId)
-                                .then(function (response) {
-                                    that.getCategories();
-                                })
-                                .catch(function (error) {
-                                    that.isLoaded = true;
-                                    if (error.response && error.response.status == 409) {
-                                        that.sendToast(error.response.data, 'error');
-                                    } else {
-                                        that.sendToast(that.strings.delErrorMessage, 'error');
-                                    }
-                                });
-                        }
-                    }).modal('show');
-                }
-            },
-            updateCategory: function (event, emitPostValue) {
-                let postValue = {};
-                let key = '';
-                let id = '';
-                let that = this;
-                if (emitPostValue != undefined) {
-                    postValue = emitPostValue.postValue;
-                    key = emitPostValue.key;
-                    id = emitPostValue.id;
-                } else {
-                    if (event == undefined) {
-                        id = this.blured.id;
-                        key = this.blured.locale;
-                        postValue[key] = this.blured.value;
-                    } else if ((event instanceof KeyboardEvent) && event.key == "Enter") {
-                        id = event.target.dataset.id;
-                        key = event.target.dataset.key;
-                        postValue[key] = event.target.value;
-                        this.focused.value = event.target.value;
-                    }
-                }
-                if (postValue[key] != undefined && postValue[key] != '') {
-                    Axios.patch(this.properties.routeCategory + '/' + id, {description: postValue})
-                        .then(function (response) {
-                            //that.getCategories(false);
-                            that.sendToast(that.strings.patchSuccessMessage, 'success');
-                        })
-                        .catch(function (error) {
-                            that.getCategories(false);
-                            if (error.response && error.response.status == 409) {
-                                that.sendToast(error.response.data, 'error');
-                            } else {
-                                that.sendToast(that.strings.patchErrorMessage, 'error');
-                            }
-                        });
-                } else {
-                    this.getCategories(false);
-                    this.sendToast(this.strings.patchErrorMessage, 'error');
-                }
-            },
-            sendToast: function (message, type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            shiftUp: function (event) {
-                this.shiftCategory(event, 'up');
-            },
-            shiftDown: function (event) {
-                this.shiftCategory(event, 'down');
-            },
-            shiftCategory(event, way){
-                let animTime = 600;
-                let me = $(event.target).closest('.accordion');
-
-                let sibling = null;
-                if (way == 'down') {
-                    sibling = $(me).next('.accordion');
-                } else {
-                    sibling = $(me).prev('.accordion');
-                }
-
-                let meTop = ($(me).position()).top;
-                let siblingTop = ($(sibling).position()).top;
-
-                //Animation
-                $(me).addClass('main-action');
-                $(sibling).addClass('sub-action');
-                $(me).animate(
-                        {top: siblingTop - meTop},
-                        {
-                            duration: animTime,
-                            complete: function () {
-                                $(me).removeClass('main-action');
-                            }
-                        }
-                );
-                let that = this;
-                $(sibling).animate(
-                        {top: meTop - siblingTop},
-                        {
-                            duration: animTime,
-                            complete: function () {
-                                $(sibling).removeClass('sub-action');
-                                let route = null;
-                                if (way == 'down') {
-                                    route = that.routeShiftDownCategory;
-                                } else {
-                                    route = that.routeShiftUpCategory;
-                                }
-                                Axios.patch(route, {id: event.target.dataset.value})
-                                    .then(function (response) {
-                                        that.getCategories(false);
-                                        $(me).css('top', 0);
-                                        $(sibling).css('top', 0);
-                                        that.sendToast(that.strings.patchSuccessMessage, 'success');
-                                    })
-                                    .catch(function (error) {
-                                        that.getCategories(false);
-                                        $(me).animate('top', 0);
-                                        $(sibling).animate('top', 0);
-                                        if (error.response && error.response.status == 409) {
-                                            that.sendToast(error.response.data, 'error');
-                                        } else {
-                                            that.sendToast(this.strings.patchErrorMessage, 'error');
-                                        }
-                                    });
-                            }
-                        }
-                );
-
-            },
-            appendToCategory(childId, parentId){
-                console.log('append')
-                let that = this;
-                Axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
-                    .then(function (response) {
-                        that.getCategories(false);
-                        that.sendToast(that.strings.patchSuccessMessage, 'success');
-                    })
-                    .catch(function (error) {
-                        if (error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error');
-                        } else {
-                            that.sendToast(this.strings.patchErrorMessage, 'error');
-                        }
-                    });
-            },
-            patchError (message) {
-                if (message != undefined && message != '') {
-                    this.sendToast(message, 'error');
-                } else {
-                    this.sendToast(this.strings.patchErrorMessage, 'error');
-                }
-            },
-            testChanged ($in, $out) {
-                if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
-                    this.blured = {id: $out.id, locale: $out.locale, value: $out.value}
-                    this.updateCategory()
-                }
-            }
+  export default {
+    directives: {focus: focus},
+    props: {
+      // vue routes
+      routeShiftUpCategory: String,
+      routeShiftDownCategory: String,
+      routeAppendToCategory: String
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['manage-categories']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    data () {
+      return {
+        isLoaded: false,
+        sendMessage: false,
+        typeMessage: '',
+        message: '',
+        focused: {},
+        blured: {},
+        categories: {},
+        categoryName: {}
+      }
+    },
+    mounted () {
+      this.getCategories()
+    },
+    updated () {
+      for (let index in this.categories) {
+        $('#accordion-' + this._uid + '-' + index).accordion({
+          selector: {
+            trigger: '.title > div > .dropdown.icon'
+          }
+        })
+      }
+    },
+    methods: {
+      getCategories () {
+        this.isLoaded = false
+        let that = this
+        Axios.get(this.properties.routeCategory + '?withInfos=true')
+          .then(function (response) {
+            that.categories = response.data
+            that.isLoaded = true
+          })
+          .catch(function () {
+            that.sendToast(that.strings.loadErrorMessage, 'error')
+          })
+      },
+      addCategory (event, emitPostValue) {
+        let isEmpty = true
+        let postValue = {}
+        if (emitPostValue !== undefined && emitPostValue !== null) {
+          postValue = emitPostValue
+          isEmpty = false
         }
+        else if (this.categoryName !== undefined && this.categoryName !== null) {
+          postValue['descriptions'] = {}
+          for (let lang in this.categoryName) {
+            postValue['descriptions'][lang] = this.categoryName[lang]
+            if (this.categoryName[lang] !== '') {
+              isEmpty = false
+            }
+          }
+        }
+        if (!isEmpty) {
+          this.isLoaded = false
+          this.categoryName = {}
+          let that = this
+          Axios.post(this.properties.routeCategory, postValue)
+            .then(function (response) {
+              that.getCategories()
+            })
+            .catch(function (error) {
+              that.isLoaded = true
+              if (error.response && error.response.status === 409) {
+                that.sendToast(error.response.data, 'error')
+              }
+              else {
+                that.sendToast(that.strings.addErrorMessage, 'error')
+              }
+            })
+        }
+      },
+      delCategory (event, id) {
+        let categoryId = null
+        if (event !== undefined && event !== null && event.target.dataset.id !== undefined && event.target.dataset.id !== null && event.target.dataset.id > 0) {
+          categoryId = event.target.dataset.id
+        }
+        else if (id !== undefined && id !== null && id > 0) {
+          categoryId = id
+        }
+        if (categoryId !== null && categoryId > 0) {
+          let that = this
+          $('#modal-' + this._uid).modal({
+            closable: false,
+            onApprove () {
+              that.isLoaded = false
+              Axios.delete(that.properties.routeCategory + '/' + categoryId)
+                .then(function (response) {
+                  that.getCategories()
+                })
+                .catch(function (error) {
+                  that.isLoaded = true
+                  if (error.response && error.response.status === 409) {
+                    that.sendToast(error.response.data, 'error')
+                  }
+                  else {
+                    that.sendToast(that.strings.delErrorMessage, 'error')
+                  }
+                })
+            }
+          }).modal('show')
+        }
+      },
+      updateCategory (event, emitPostValue) {
+        let postValue = {}
+        let key = ''
+        let id = ''
+        let that = this
+        if (emitPostValue !== undefined && emitPostValue !== null) {
+          postValue = emitPostValue.postValue
+          key = emitPostValue.key
+          id = emitPostValue.id
+        }
+        else {
+          if (event === undefined || event === null) {
+            id = this.blured.id
+            key = this.blured.locale
+            postValue[key] = this.blured.value
+          }
+          else if ((event instanceof KeyboardEvent) && event.key === 'Enter') {
+            id = event.target.dataset.id
+            key = event.target.dataset.key
+            postValue[key] = event.target.value
+            this.focused.value = event.target.value
+          }
+        }
+        if (postValue[key] !== undefined && postValue[key] !== null && postValue[key] !== '') {
+          Axios.patch(this.properties.routeCategory + '/' + id, {description: postValue})
+            .then(function (response) {
+              that.sendToast(that.strings.patchSuccessMessage, 'success')
+            })
+            .catch(function (error) {
+              that.getCategories()
+              if (error.response && error.response.status === 409) {
+                that.sendToast(error.response.data, 'error')
+              }
+              else {
+                that.sendToast(that.strings.patchErrorMessage, 'error')
+              }
+            })
+        }
+        else {
+          this.getCategories()
+          this.sendToast(this.strings.patchErrorMessage, 'error')
+        }
+      },
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      shiftUp (event) {
+        this.shiftCategory(event, 'up')
+      },
+      shiftDown (event) {
+        this.shiftCategory(event, 'down')
+      },
+      shiftCategory (event, way) {
+        let animTime = 600
+        let me = $(event.target).closest('.accordion')
+        let sibling = null
+        if (way === 'down') {
+          sibling = $(me).next('.accordion')
+        }
+        else {
+          sibling = $(me).prev('.accordion')
+        }
+        let meTop = ($(me).position()).top
+        let siblingTop = ($(sibling).position()).top
+        // Animation
+        $(me).addClass('main-action')
+        $(sibling).addClass('sub-action')
+        $(me).animate(
+          {top: siblingTop - meTop},
+          {
+            duration: animTime,
+            complete () {
+              $(me).removeClass('main-action')
+            }
+          }
+        )
+        let that = this
+        $(sibling).animate(
+          {top: meTop - siblingTop},
+          {
+            duration: animTime,
+            complete () {
+              $(sibling).removeClass('sub-action')
+              let route = null
+              if (way === 'down') {
+                route = that.routeShiftDownCategory
+              }
+              else {
+                route = that.routeShiftUpCategory
+              }
+              Axios.patch(route, {id: event.target.dataset.value})
+                .then(function (response) {
+                  that.getCategories()
+                  $(me).css('top', 0)
+                  $(sibling).css('top', 0)
+                  that.sendToast(that.strings.patchSuccessMessage, 'success')
+                })
+                .catch(function (error) {
+                  that.getCategories()
+                  $(me).animate('top', 0)
+                  $(sibling).animate('top', 0)
+                  if (error.response && error.response.status === 409) {
+                    that.sendToast(error.response.data, 'error')
+                  }
+                  else {
+                    that.sendToast(this.strings.patchErrorMessage, 'error')
+                  }
+                })
+            }
+          }
+        )
+      },
+      appendToCategory (childId, parentId) {
+        console.log('append')
+        let that = this
+        Axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
+          .then(function (response) {
+            that.getCategories()
+            that.sendToast(that.strings.patchSuccessMessage, 'success')
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error')
+            }
+            else {
+              that.sendToast(this.strings.patchErrorMessage, 'error')
+            }
+          })
+      },
+      patchError (message) {
+        if (message !== undefined && message !== null && message !== '') {
+          this.sendToast(message, 'error')
+        }
+        else {
+          this.sendToast(this.strings.patchErrorMessage, 'error')
+        }
+      },
+      testChanged ($in, $out) {
+        if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
+          this.blured = {id: $out.id, locale: $out.locale, value: $out.value}
+          this.updateCategory()
+        }
+      }
     }
+  }
 </script>

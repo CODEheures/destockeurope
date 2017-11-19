@@ -36,79 +36,78 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            options: {
-                type: Object,
-                default: function() {
-                    return {
-                        autoplay: 3500
-                    }
-                }
-            },
-            pictures: {
-                type: Array
-            },
-            mainPicture: String,
-            videoId: {
-                type: Number,
-                required: false,
-                default: null
-            },
-            lazyLoad: {
-                type: Boolean,
-                required: false,
-                default: true
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['swiper-top']
-            }
-        },
-        watch: {
-            mainPicture () {
-                this.updateDataPictures()
-            },
-            pictures () {
-                this.updateDataPictures()
-            }
-        },
-        data () {
-            return {
-                dataPictures: []
-            };
-        },
-        mounted: function() {
-            if (!this.swiper && typeof global.window != 'undefined') {
-                this.swiper = new Swiper(this.$el, this.options)
-            }
-            this.updateDataPictures();
-        },
-        updated: function(){
-            this.swiper.update();
-        },
-        beforeDestroy: function() {
-            if (!!this.swiper) {
-                this.swiper = null;
-                delete this.swiper
-            }
-        },
-        methods : {
-            updateDataPictures: function () {
-                let pictures=[];
-                let that = this;
-                if(this.pictures){
-                    this.pictures.forEach(function (picture) {
-                        if(picture.hashName == that.mainPicture){
-                            pictures.unshift(picture);
-                        } else {
-                            pictures.push(picture);
-                        }
-                    });
-                }
-                this.dataPictures = pictures;
-            }
+  export default {
+    props: {
+      options: {
+        type: Object,
+        default: {
+          autoplay: 3500
         }
+      },
+      pictures: {
+        type: Array
+      },
+      mainPicture: String,
+      videoId: {
+        type: Number,
+        required: false,
+        default: null
+      },
+      lazyLoad: {
+        type: Boolean,
+        required: false,
+        default: true
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['swiper-top']
+      }
+    },
+    watch: {
+      mainPicture () {
+        this.updateDataPictures()
+      },
+      pictures () {
+        this.updateDataPictures()
+      }
+    },
+    data () {
+      return {
+        dataPictures: []
+      }
+    },
+    mounted () {
+      if (!this.swiper && typeof global.window !== 'undefined') {
+        this.swiper = new window.Swiper(this.$el, this.options)
+      }
+      this.updateDataPictures()
+    },
+    updated () {
+      this.swiper.update()
+    },
+    beforeDestroy () {
+      if (this.swiper) {
+        this.swiper = null
+        delete this.swiper
+      }
+    },
+    methods: {
+      updateDataPictures () {
+        let pictures = []
+        let that = this
+        if (this.pictures) {
+          this.pictures.forEach(function (picture) {
+            if (picture.hashName === that.mainPicture) {
+              pictures.unshift(picture)
+            }
+            else {
+              pictures.push(picture)
+            }
+          })
+        }
+        this.dataPictures = pictures
+      }
     }
+  }
 </script>

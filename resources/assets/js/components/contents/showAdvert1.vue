@@ -227,304 +227,304 @@
 <script>
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
-    export default {
-        props: [
-            //vue routes
-            'routeSendMail',
-            'routeBookmarkAdd',
-            'routeBookmarkRemove',
-            'routeDeleteAdvert',
-            'routeReportAdvert',
-            'routeFacebookSharer',
-            //vue vars
-            'advert',
-            'userMail',
-            'userName',
-            'userPhone',
-            'userCompagnyName',
-            'isUserOwner',
-            'isUserBookmark',
-            'formNameMinValid',
-            'formMessageMinValid',
-            'formMessageMaxValid',
-            'formPhoneMaxValid',
-            'formCompagnyNameMaxValid',
-        ],
-        computed: {
-            strings () {
-                return this.$store.state.strings['showAdvert1']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            dataAdvert () {
-                return JSON.parse(this.advert)
-            },
-            dataOwnerUser () {
-                return this.dataAdvert.user
-            }
-
+  export default {
+    props: [
+      // vue routes
+      'routeSendMail',
+      'routeBookmarkAdd',
+      'routeBookmarkRemove',
+      'routeDeleteAdvert',
+      'routeReportAdvert',
+      'routeFacebookSharer',
+      // vue vars
+      'advert',
+      'userMail',
+      'userName',
+      'userPhone',
+      'userCompagnyName',
+      'isUserOwner',
+      'isUserBookmark',
+      'formNameMinValid',
+      'formMessageMinValid',
+      'formMessageMaxValid',
+      'formPhoneMaxValid',
+      'formCompagnyNameMaxValid'
+    ],
+    computed: {
+      strings () {
+        return this.$store.state.strings['showAdvert1']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      dataAdvert () {
+        return JSON.parse(this.advert)
+      },
+      dataOwnerUser () {
+        return this.dataAdvert.user
+      }
+    },
+    watch: {
+      dataUserName () {
+        this.testValidForm()
+      },
+      dataUserMail () {
+        this.testValidForm()
+        this.testValidReportForm()
+      },
+      dataMessage () {
+        this.testValidForm()
+      },
+      dataReportMessage () {
+        this.testValidReportForm()
+      }
+    },
+    data () {
+      return {
+        typeMessage: '',
+        message: '',
+        sendMessage: false,
+        breadcrumbItems: [],
+        dataUserName: '',
+        dataUserMail: '',
+        dataUserPhone: '',
+        dataUserCompagnyName: '',
+        dataMessage: '',
+        dataReportMessage: '',
+        dataEnabledMessage: false,
+        dataEnabledReportMessage: false,
+        dataIsUserBookmark: false,
+        phoneIsVisible: false,
+        isLoaded: true
+      }
+    },
+    mounted () {
+      this.dataUserMail = this.userMail
+      this.dataUserName = this.userName
+      this.dataUserPhone = this.userPhone
+      this.dataUserCompagnyName = this.userCompagnyName
+      this.dataIsUserBookmark = this.isUserBookmark
+      // BreadCrumbs
+      this.setBreadCrumbItems()
+      let that = this
+      let messageForm = $('#form-' + this._uid)
+      messageForm.form({
+        fields: {
+          email: {
+            identifier: 'email',
+            rules: [
+              {
+                type: 'email',
+                prompt: that.strings.formValidationEmail
+              }
+            ]
+          },
+          name: {
+            identifier: 'name',
+            rules: [
+              {
+                type: 'minLength[' + that.formNameMinValid + ']',
+                prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
+              }
+            ]
+          },
+          message: {
+            identifier: 'message',
+            rules: [
+              {
+                type: 'minLength[' + that.formMessageMinValid + ']',
+                prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
+              },
+              {
+                type: 'maxLength[' + that.formMessageMaxValid + ']',
+                prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
+              }
+            ]
+          },
+          phone: {
+            identifier: 'phone',
+            rules: [
+              {
+                type: 'maxLength[' + that.formPhoneMaxValid + ']',
+                prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
+              }
+            ]
+          },
+          compagnyName: {
+            identifier: 'compagnyName',
+            rules: [
+              {
+                type: 'maxLength[' + that.formCompagnyNameMaxValid + ']',
+                prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
+              }
+            ]
+          }
         },
-        watch: {
-            dataUserName () {
-                this.testValidForm()
-            },
-            dataUserMail () {
-                this.testValidForm()
-                this.testValidReportForm()
-            },
-            dataMessage () {
-                this.testValidForm()
-            },
-            dataReportMessage () {
-                this.testValidReportForm()
-            }
+        inline: true,
+        on: 'change'
+      })
+      let messageReportForm = $('#reportform-' + this._uid)
+      messageReportForm.form({
+        fields: {
+          reportemail: {
+            identifier: 'reportemail',
+            rules: [
+              {
+                type: 'email',
+                prompt: that.strings.formValidationEmail
+              }
+            ]
+          },
+          reportmessage: {
+            identifier: 'reportmessage',
+            rules: [
+              {
+                type: 'minLength[' + that.formMessageMinValid + ']',
+                prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
+              },
+              {
+                type: 'maxLength[' + that.formMessageMaxValid + ']',
+                prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
+              }
+            ]
+          }
         },
-        data () {
-            return {
-                typeMessage : '',
-                message : '',
-                sendMessage: false,
-                breadcrumbItems: [],
-                dataUserName: '',
-                dataUserMail: '',
-                dataUserPhone: '',
-                dataUserCompagnyName: '',
-                dataMessage: '',
-                dataReportMessage: '',
-                dataEnabledMessage: false,
-                dataEnabledReportMessage: false,
-                dataIsUserBookmark: false,
-                phoneIsVisible: false,
-                isLoaded: true
+        inline: true,
+        on: 'change'
+      })
+    },
+    methods: {
+      sendToast (message, type) {
+        this.typeMessage = type
+        this.message = message
+        this.sendMessage = !this.sendMessage
+      },
+      setBreadCrumbItems () {
+        let that = this
+        let breadcrumb = this.dataAdvert.breadCrumb
+        this.breadcrumbItems = []
+        this.breadcrumbItems.push({
+          name: this.strings.allLabel,
+          value: 0
+        })
+        breadcrumb.forEach(function (element) {
+          that.breadcrumbItems.push({
+            name: element['description'][that.properties.actualLocale],
+            value: element.id
+          })
+        })
+      },
+      openMessageBox () {
+        let modalForm = $('#modal1-' + this._uid)
+        let that = this
+        modalForm.modal({
+          closable: true,
+          blurring: false,
+          onApprove () {
+            Axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
+              .then(function (response) {
+                that.sendToast(that.strings.sendSuccessMessage, 'success')
+              })
+              .catch(function (error) {
+                if (error.response && error.response.status === 409) {
+                  that.sendToast(error.response.data, 'error')
+                }
+                else {
+                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                }
+              })
+          }
+        }).modal('show')
+      },
+      report () {
+        let modalForm = $('#modal3-' + this._uid)
+        let that = this
+        modalForm.modal({
+          closable: true,
+          blurring: false,
+          onApprove () {
+            Axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
+              .then(function (response) {
+                that.sendToast(that.strings.sendSuccessReportMessage, 'success')
+              })
+              .catch(function (error) {
+                if (error.response && error.response.status === 409) {
+                  that.sendToast(error.response.data, 'error')
+                }
+                else {
+                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                }
+              })
+          }
+        }).modal('show')
+      },
+      testValidForm () {
+        this.dataEnabledMessage = $('#form-' + this._uid).form('is valid')
+      },
+      testValidReportForm () {
+        this.dataEnabledReportMessage = $('#reportform-' + this._uid).form('is valid')
+      },
+      bookmarkMe () {
+        let that = this
+        Axios.get(this.routeBookmarkAdd)
+          .then(function (response) {
+            that.dataIsUserBookmark = true
+            that.sendToast(that.strings.bookmarkSuccess, 'success')
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error')
             }
-        },
-        mounted () {
-            this.dataUserMail = this.userMail;
-            this.dataUserName = this.userName;
-            this.dataUserPhone = this.userPhone;
-            this.dataUserCompagnyName = this.userCompagnyName;
-            this.dataIsUserBookmark = this.isUserBookmark;
-            //BreadCrumbs
-            this.setBreadCrumbItems();
-
-            let that = this;
-            let messageForm = $('#form-'+this._uid);
-            messageForm.form({
-                    fields : {
-                        email: {
-                            identifier  : 'email',
-                            rules: [
-                                {
-                                    type   : 'email',
-                                    prompt : that.strings.formValidationEmail
-                                }
-                            ]
-                        },
-                        name: {
-                            identifier  : 'name',
-                            rules: [
-                                {
-                                    type : 'minLength['+that.formNameMinValid+']',
-                                    prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
-                                }
-                            ]
-                        },
-                        message: {
-                            identifier  : 'message',
-                            rules: [
-                                {
-                                    type : 'minLength['+that.formMessageMinValid+']',
-                                    prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
-                                },
-                                {
-                                    type : 'maxLength['+that.formMessageMaxValid+']',
-                                    prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
-                                }
-                            ]
-                        },
-                        phone: {
-                            identifier  : 'phone',
-                            rules: [
-                                {
-                                    type : 'maxLength['+that.formPhoneMaxValid+']',
-                                    prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
-                                }
-                            ]
-                        },
-                        compagnyName: {
-                            identifier  : 'compagnyName',
-                            rules: [
-                                {
-                                    type : 'maxLength['+that.formCompagnyNameMaxValid+']',
-                                    prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
-                                }
-                            ]
-                        }
-                    },
-                    inline : true,
-                    on: 'change'
-                })
-            ;
-            let messageReportForm = $('#reportform-'+this._uid);
-            messageReportForm.form({
-                fields : {
-                    reportemail: {
-                        identifier  : 'reportemail',
-                        rules: [
-                            {
-                                type   : 'email',
-                                prompt : that.strings.formValidationEmail
-                            }
-                        ]
-                    },
-                    reportmessage: {
-                        identifier  : 'reportmessage',
-                        rules: [
-                            {
-                                type : 'minLength['+that.formMessageMinValid+']',
-                                prompt: '{ruleValue} ' + that.strings.formPointingMinimumChars
-                            },
-                            {
-                                type : 'maxLength['+that.formMessageMaxValid+']',
-                                prompt: '{ruleValue} ' + that.strings.formPointingMaximumChars
-                            }
-                        ]
-                    }
-                },
-                inline : true,
-                on     : 'change'
-            })
-            ;
-        },
-        methods: {
-            sendToast: function(message,type) {
-                this.typeMessage = type;
-                this.message = message;
-                this.sendMessage = !this.sendMessage;
-            },
-            setBreadCrumbItems: function () {
-                let that = this;
-                let breadcrumb = this.dataAdvert.breadCrumb;
-
-                this.breadcrumbItems = [];
-                this.breadcrumbItems.push({
-                    name: this.strings.allLabel,
-                    value: 0
-                });
-                breadcrumb.forEach(function (element){
-                    that.breadcrumbItems.push({
-                        name: element['description'][that.properties.actualLocale],
-                        value: element.id
-                    });
-                });
-            },
-            openMessageBox: function () {
-                let modalForm = $('#modal1-'+this._uid);
-                let that = this;
-                modalForm.modal({
-                    closable: true,
-                    blurring: false,
-                    onApprove: function () {
-                        Axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
-                            .then(function (response) {
-                                that.sendToast(that.strings.sendSuccessMessage, 'success');
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                                }
-                            });
-                    }
-                }).modal('show');
-            },
-            report: function () {
-                let modalForm = $('#modal3-'+this._uid);
-                let that = this;
-                modalForm.modal({
-                    closable: true,
-                    blurring: false,
-                    onApprove: function () {
-                        Axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
-                            .then(function (response) {
-                                that.sendToast(that.strings.sendSuccessReportMessage, 'success');
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                                }
-                            });
-                    }
-                }).modal('show');
-            },
-            testValidForm: function () {
-                this.dataEnabledMessage = $('#form-'+this._uid).form('is valid');
-            },
-            testValidReportForm: function () {
-                this.dataEnabledReportMessage = $('#reportform-'+this._uid).form('is valid');
-            },
-            bookmarkMe: function () {
-                let that = this;
-                Axios.get(this.routeBookmarkAdd)
-                    .then(function (response)  {
-                        that.dataIsUserBookmark = true;
-                        that.sendToast(that.strings.bookmarkSuccess, 'success');
-                    })
-                    .catch(function (error)  {
-                        if (error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error');
-                        } else {
-                            that.sendToast(that.strings.loadErrorMessage, 'error');
-                        }
-                        that.isLoaded = false;
-                    });
-            },
-            unbookmarkMe: function () {
-                let that = this;
-                Axios.get(this.routeBookmarkRemove)
-                    .then(function (response)  {
-                        that.dataIsUserBookmark = false;
-                        that.sendToast(that.strings.unbookmarkSuccess, 'success');
-                    })
-                    .catch(function (error)  {
-                        if (error.response && error.response.status == 409) {
-                            that.sendToast(error.response.data, 'error');
-                        } else {
-                            that.sendToast(that.strings.loadErrorMessage, 'error');
-                        }
-                        that.isLoaded = false;
-                    });
-            },
-            destroyMe: function () {
-                let modalForm = $('#modal2-'+this._uid);
-                let that = this;
-                modalForm.modal({
-                    closable: true,
-                    blurring: false,
-                    onApprove: function () {
-                        that.isLoaded = false;
-                        Axios.delete(that.routeDeleteAdvert)
-                            .then(function (response) {
-                                DestockTools.goToUrl(response.data);
-                            })
-                            .catch(function (error) {
-                                if (error.response && error.response.status == 409) {
-                                    that.sendToast(error.response.data, 'error');
-                                } else {
-                                    that.sendToast(that.strings.loadErrorMessage, 'error');
-                                }
-                                that.isLoaded = true;
-                            });
-                    }
-                }).modal('show');
-            },
-            seePhone: function() {
-                this.phoneIsVisible = true;
+            else {
+              that.sendToast(that.strings.loadErrorMessage, 'error')
             }
-        }
+            that.isLoaded = false
+          })
+      },
+      unbookmarkMe () {
+        let that = this
+        Axios.get(this.routeBookmarkRemove)
+          .then(function (response) {
+            that.dataIsUserBookmark = false
+            that.sendToast(that.strings.unbookmarkSuccess, 'success')
+          })
+          .catch(function (error) {
+            if (error.response && error.response.status === 409) {
+              that.sendToast(error.response.data, 'error')
+            }
+            else {
+              that.sendToast(that.strings.loadErrorMessage, 'error')
+            }
+            that.isLoaded = false
+          })
+      },
+      destroyMe () {
+        let modalForm = $('#modal2-' + this._uid)
+        let that = this
+        modalForm.modal({
+          closable: true,
+          blurring: false,
+          onApprove () {
+            that.isLoaded = false
+            Axios.delete(that.routeDeleteAdvert)
+              .then(function (response) {
+                DestockTools.goToUrl(response.data)
+              })
+              .catch(function (error) {
+                if (error.response && error.response.status === 409) {
+                  that.sendToast(error.response.data, 'error')
+                }
+                else {
+                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                }
+                that.isLoaded = true
+              })
+          }
+        }).modal('show')
+      },
+      seePhone () {
+        this.phoneIsVisible = true
+      }
     }
+  }
 </script>

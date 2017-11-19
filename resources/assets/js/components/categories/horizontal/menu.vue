@@ -28,58 +28,54 @@
 
 
 <script>
-    export default {
-        props: {
-
-        },
-        computed: {
-            strings () {
-                return  this.$store.state.strings['categories-horizontal-menu']
-            },
-            properties () {
-                return  this.$store.state.properties['global']
-            },
-            categories () {
-                return  this.$store.state.properties['categories-horizontal-menu']['datas']
+  export default {
+    computed: {
+      strings () {
+        return this.$store.state.strings['categories-horizontal-menu']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      categories () {
+        return this.$store.state.properties['categories-horizontal-menu']['datas']
+      }
+    },
+    mounted () {
+      this.setPopup()
+      let fixedMenu = $('.horizontal-category-menu')
+      fixedMenu.visibility({
+        type: 'fixed',
+        offset: 66 // give some space from top of screen
+      })
+    },
+    methods: {
+      setPopup () {
+        let that = this
+        this.categories.forEach(function (elem, index) {
+          let $elem = $('#browse-' + index + '-' + that._uid)
+          let $popup = $('#popup-' + index + '-' + that._uid + ' div.ui.fluid.popup')
+          $elem.popup({
+            inline: true,
+            target: $('.ui.category.menu'),
+            popup: $popup,
+            hoverable: true,
+            exclusive: true,
+            position: 'bottom left',
+            lastResort: true,
+            delay: {
+              show: 300,
+              hide: 800
             }
-        },
-        mounted () {
-            this.setPopup();
-            let fixedMenu = $('.horizontal-category-menu');
-            fixedMenu.visibility({
-                type   : 'fixed',
-                offset : 66 // give some space from top of screen
-            });
-        },
-        methods: {
-            setPopup () {
-                let that = this;
-                (this.categories).forEach(function (elem, index) {
-                    let $elem = $('#browse-'+index+'-'+that._uid);
-                    let $popup = $('#popup-'+index+'-'+that._uid + ' div.ui.fluid.popup');
-                    $elem.popup({
-                        inline: true,
-                        target: $('.ui.category.menu'),
-                        popup: $popup,
-                        hoverable: true,
-                        exclusive: true,
-                        position: 'bottom left',
-                        lastResort: true,
-                        delay: {
-                            show: 300,
-                            hide: 800
-                        }
-                    })
-                    ;
-                });
-            },
-            countLevel: function (category) {
-                let level = 1;
-                for(let i=0; i<category.children.length;i++) {
-                    category.children[i].children.length > 0 ? level = 2: null;
-                }
-                return level;
-            }
+          })
+        })
+      },
+      countLevel (category) {
+        let level = 1
+        for (let i = 0; i < category.children.length; i++) {
+          if (category.children[i].children.length > 0) { level = 2 }
         }
+        return level
+      }
     }
+  }
 </script>

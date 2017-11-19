@@ -22,41 +22,41 @@
 
 
 <script>
-    export default {
-        props: {
-            currenciesList: Array,
-            oldCurrency: {
-                type: String,
-                required: false,
-                default: '0'
-            },
-            withAll: {
-                type: Boolean,
-                default: false,
-                required: false
+  export default {
+    props: {
+      currenciesList: Array,
+      oldCurrency: {
+        type: String,
+        required: false,
+        default: '0'
+      },
+      withAll: {
+        type: Boolean,
+        default: false,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['currencies-button']
+      }
+    },
+    mounted () {
+      let that = this
+      $('#' + this._uid)
+        .dropdown('set selected', that.oldCurrency)
+        .dropdown({
+          fullTextSearch: true,
+          forceSelection: false,
+          onChange (value, text, $selectedItem) {
+            if (value === 0) {
+              that.$emit('currencyChoice', null)
             }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['currencies-button']
+            else {
+              that.$emit('currencyChoice', value)
             }
-        },
-        mounted () {
-            let that = this;
-            $('#'+this._uid)
-                .dropdown('set selected', that.oldCurrency)
-                .dropdown({
-                    fullTextSearch: true,
-                    forceSelection: false,
-                    onChange: function (value, text, $selectedItem) {
-                        if(value==0){
-                            that.$emit('currencyChoice', null);
-                        } else {
-                            that.$emit('currencyChoice', value);
-                        }
-                    }
-                })
-            ;
-        }
+          }
+        })
     }
+  }
 </script>

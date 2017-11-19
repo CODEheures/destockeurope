@@ -141,101 +141,100 @@
 </template>
 
 <script>
-    import moment from 'moment'
-    import { DestockTools } from '../../../destockTools'
-    export default {
-        props: {
-            //vue routes
-            //vue vars
-            advert: Object,
-            userName: {
-                type: String,
-                default: undefined,
-                required: false
-            },
-            isUserOwner: {
-                type: Boolean,
-                default: false,
-                required: false
-            },
-            isStatic: {
-                type: Boolean,
-                default: true,
-                required: false
-            }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['advert-by-id']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        data () {
-            return {
-                isLoaded: false,
-                dataLightBoxUrl: '',
-                dataHeight: '',
-                dataVideoId: '',
-                margins: {
-                    unitMargin: 0,
-                    totalMargin: 0,
-                    lotMiniMargin: 0,
-                    unitSellerPrice: 0,
-                    priceMargin: 0,
-                    totalSellerPrice: 0,
-                    totalSellerPriceWholePart: 0,
-                    totalSellerPriceDecimalPart: 0,
-                    totalPriceMargin: 0,
-                    totalPriceMarginWholePart: 0,
-                    totalPriceMarginDecimalPart: 0,
-                    totalPriceByLot: 0,
-                    totalPriceByLotMargin: 0,
-                    globalDiscount: 0,
-                    coefficientTotalIsOverMax: false
-                }
-            };
-        },
-        mounted () {
-            let that = this;
-            this.dataHeight = $('#modal-'+this._uid).width()/this.properties.imageRatio;
-
-            if(!this.isStatic){
-                this.$watch('advert.price_coefficient', function () {
-                    that.updateMargins();
-                });
-                this.$watch('advert.price_coefficient_total', function () {
-                    that.updateMargins();
-                });
-                this.$watch('advert.price_margin', function () {
-                    that.updateMargins();
-                });
-                this.$watch('advert.totalPriceMargin', function () {
-                    that.updateMargins();
-                });
-            }
-        },
-        updated () {
-            this.updateMargins();
-        },
-        methods: {
-            getMoment: function (dateTime) {
-                moment.locale(this.properties.actualLocale);
-                return moment(dateTime).fromNow()
-            },
-            openLightBox: function (imgUrl) {
-                this.dataLightBoxUrl = imgUrl;
-                this.dataHeight = $('.lightBox').width/this.properties.imageRatio;
-                $('#modal-'+this._uid).modal({
-                    closable: true,
-                    blurring: false
-                }).modal('show');
-            },
-            updateMargins () {
-                let calcMargins = DestockTools.calcMargins(this.advert, false);
-                Object.assign(this.margins, calcMargins);
-            }
+  import moment from 'moment'
+  import { DestockTools } from '../../../destockTools'
+  export default {
+    props: {
+      // vue routes
+      // vue vars
+      advert: Object,
+      userName: {
+        type: String,
+        default: undefined,
+        required: false
+      },
+      isUserOwner: {
+        type: Boolean,
+        default: false,
+        required: false
+      },
+      isStatic: {
+        type: Boolean,
+        default: true,
+        required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['advert-by-id']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    data () {
+      return {
+        isLoaded: false,
+        dataLightBoxUrl: '',
+        dataHeight: '',
+        dataVideoId: '',
+        margins: {
+          unitMargin: 0,
+          totalMargin: 0,
+          lotMiniMargin: 0,
+          unitSellerPrice: 0,
+          priceMargin: 0,
+          totalSellerPrice: 0,
+          totalSellerPriceWholePart: 0,
+          totalSellerPriceDecimalPart: 0,
+          totalPriceMargin: 0,
+          totalPriceMarginWholePart: 0,
+          totalPriceMarginDecimalPart: 0,
+          totalPriceByLot: 0,
+          totalPriceByLotMargin: 0,
+          globalDiscount: 0,
+          coefficientTotalIsOverMax: false
         }
+      }
+    },
+    mounted () {
+      let that = this
+      this.dataHeight = $('#modal-' + this._uid).width() / this.properties.imageRatio
+      if (!this.isStatic) {
+        this.$watch('advert.price_coefficient', function () {
+          that.updateMargins()
+        })
+        this.$watch('advert.price_coefficient_total', function () {
+          that.updateMargins()
+        })
+        this.$watch('advert.price_margin', function () {
+          that.updateMargins()
+        })
+        this.$watch('advert.totalPriceMargin', function () {
+          that.updateMargins()
+        })
+      }
+    },
+    updated () {
+      this.updateMargins()
+    },
+    methods: {
+      getMoment (dateTime) {
+        moment.locale(this.properties.actualLocale)
+        return moment(dateTime).fromNow()
+      },
+      openLightBox (imgUrl) {
+        this.dataLightBoxUrl = imgUrl
+        this.dataHeight = $('.lightBox').width / this.properties.imageRatio
+        $('#modal-' + this._uid).modal({
+          closable: true,
+          blurring: false
+        }).modal('show')
+      },
+      updateMargins () {
+        let calcMargins = DestockTools.calcMargins(this.advert, false)
+        Object.assign(this.margins, calcMargins)
+      }
     }
+  }
 </script>

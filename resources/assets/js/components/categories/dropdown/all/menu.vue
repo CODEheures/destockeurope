@@ -33,80 +33,79 @@
 
 <script>
   import { DestockTools } from '../../../../destockTools'
-    export default {
-        props: {
-           oldChoice: {
-                type: Number,
-                required: false,
-                default: 0
-            },
-            withAll: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
-            allowCategorySelection: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
-            isButton: {
-                type: Boolean,
-                required: false,
-                default: true
-            },
-            withRedirectionOnClick: {
-               type: Boolean,
-               required: false,
-               default: false
+  export default {
+    props: {
+      oldChoice: {
+        type: Number,
+        required: false,
+        default: 0
+      },
+      withAll: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      allowCategorySelection: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      isButton: {
+        type: Boolean,
+        required: false,
+        default: true
+      },
+      withRedirectionOnClick: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
+    watch: {
+      oldChoice () {
+        this.setOldChoice()
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['categories-dropdown-menu']
+      },
+      properties () {
+        return this.$store.state.properties['global']
+      },
+      categories () {
+        return this.$store.state.properties['categories-dropdown-menu']['datas']
+      },
+      nextUrl () {
+        return this.$store.state.properties['global']['routeHome']
+      }
+    },
+    mounted () {
+      let that = this
+      $('#' + this._uid).dropdown({
+        allowCategorySelection: that.allowCategorySelection,
+        onChange (value, text, $selectedItem) {
+          if (value !== undefined && value !== null && value !== '') {
+            if (!that.withRedirectionOnClick) {
+              that.$emit('categoryChoice', value)
             }
-        },
-        watch: {
-            oldChoice () {
-                this.setOldChoice()
+            else {
+              if (value !== that.oldChoice) { document.location.href = that.getNextUrl('categoryId', value) }
             }
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['categories-dropdown-menu']
-            },
-            properties () {
-                return this.$store.state.properties['global']
-            },
-            categories () {
-                return this.$store.state.properties['categories-dropdown-menu']['datas']
-            },
-            nextUrl () {
-                return this.$store.state.properties['global']['routeHome']
-            }
-        },
-        mounted () {
-            let that = this;
-            $('#'+this._uid).dropdown({
-                allowCategorySelection: that.allowCategorySelection,
-                onChange: function(value, text, $selectedItem) {
-                    if(value != undefined && value != ''){
-                        if(!that.withRedirectionOnClick){
-                            that.$emit('categoryChoice', value);
-                        } else {
-                            console.log([that.oldChoice, value]);
-                            value != that.oldChoice ? document.location.href = that.getNextUrl('categoryId',value) : null;
-                        }
-                    }
-                }
-            })
-            ;
-            this.setOldChoice();
-        },
-        methods: {
-            setOldChoice () {
-                if(!isNaN(Number(this.oldChoice)) && Number(this.oldChoice)>0) {
-                    $('#'+this._uid).dropdown('set selected', this.oldChoice)
-                }
-            },
-            getNextUrl(paramName, paramValue) {
-                return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
-            },
+          }
         }
+      })
+      this.setOldChoice()
+    },
+    methods: {
+      setOldChoice () {
+        if (!isNaN(Number(this.oldChoice)) && Number(this.oldChoice) > 0) {
+          $('#' + this._uid).dropdown('set selected', this.oldChoice)
+        }
+      },
+      getNextUrl (paramName, paramValue) {
+        return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
+      }
     }
+  }
 </script>

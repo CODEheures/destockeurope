@@ -20,26 +20,25 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            advert: Object,
-        },
-        computed: {
-            strings () {
-                return this.$store.state.strings['advert-highlight']
-            }
-        },
-        methods: {
-            getThumbUrl(advert) {
-                let picture = [];
-                if('pictures' in advert) {
-                    picture = advert.pictures.filter(function (elem) {
-                        return elem.hashName === advert.mainPicture;
-                    });
-                }
-
-                return picture.length >= 1 ? picture[0].thumbUrl : '';
-            }
+  export default {
+    props: {
+      advert: Object
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['advert-highlight']
+      }
+    },
+    methods: {
+      getThumbUrl (advert) {
+        let picture = []
+        if ('pictures' in advert) {
+          picture = advert.pictures.filter(function (elem) {
+            return elem.hashName === advert.mainPicture
+          })
         }
+        return picture.length >= 1 ? picture[0].thumbUrl : ''
+      }
     }
+  }
 </script>

@@ -15,127 +15,127 @@
 
 <script>
   import Parser from 'url'
-    export default {
-        props: {
-            //vue routes
-            routeSearch: String,
-            //vue vars
-            flagReset: {
-                type: Boolean,
-                default: false
-            },
-            resultsFor: {
-                type: String
-            },
-            update: {
-                type: Boolean
-            },
-            withXsrfToken: {
-                type: Boolean,
-                required: false,
-                default: false
-            },
-            fields: {
-                type: Object,
-            },
-            //vue strings
-            placeHolder: String
-        },
-        computed: {
-            properties () {
-                return this.$store.state.properties['global']
-            }
-        },
-        watch: {
-            flagReset () {
-                this.resetSearch(false)
-            },
-            update () {
-                this.updateSearch()
-            },
-            routeSearch () {
-                let that = this
-                this.urlForSearch(function (url) {
-                    that.elemSearch
-                        .search({
-                            apiSettings: {
-                                url: url.replace('query', '{query}'),
-                                beforeXHR: function(xhr) {
-                                    // adjust XHR with additional headers
-                                    if(that.withXsrfToken===true){
-                                        xhr.setRequestHeader ('X-XSRF-TOKEN', that.readCookie('XSRF-TOKEN'));
-                                    }
-                                }
-                            },
-                            //type: 'category',
-                            fields: that.fields,
-                            minCharacters : that.properties.filterMinLengthSearch
-                        })
-                })
-            }
-        },
-        data () {
-            return {
-                dataRouteSearch: '',
-                wantSearch: true,
-                elemSearch: undefined
-            }
-        },
-        mounted () {
-            let that = this;
-            this.elemSearch = $('#'+that._uid);
-            this.observeElem(this.elemSearch[0]);
-        },
-        methods: {
-            urlForSearch(callback) {
-                let urlBase = this.routeSearch;
-                let parsed = Parser.parse(urlBase, true);
-                parsed.search=undefined;
-                parsed.query.search="query";
-                this.dataRouteSearch = Parser.format(parsed);
-                callback(this.dataRouteSearch);
-            },
-            resetSearch(withEmit) {
-                this.elemSearch.search('set value','');
-                this.elemSearch.search('clear cache');
-                this.wantSearch = true;
-                withEmit ? this.$emit('clearSearchResults') : null;
-            },
-            updateSearch() {
-                this.elemSearch = $('#'+this._uid);
-                if(this.resultsFor !== undefined && this.resultsFor !== null){
-                    this.elemSearch.search('set value',this.resultsFor);
-                    this.wantSearch = false;
-                } else {
-                    this.resetSearch(false);
+  export default {
+    props: {
+      // vue routes
+      routeSearch: String,
+      // vue vars
+      flagReset: {
+        type: Boolean,
+        default: false
+      },
+      resultsFor: {
+        type: String
+      },
+      update: {
+        type: Boolean
+      },
+      withXsrfToken: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      fields: {
+        type: Object
+      },
+      // vue strings
+      placeHolder: String
+    },
+    computed: {
+      properties () {
+        return this.$store.state.properties['global']
+      }
+    },
+    watch: {
+      flagReset () {
+        this.resetSearch(false)
+      },
+      update () {
+        this.updateSearch()
+      },
+      routeSearch () {
+        let that = this
+        this.urlForSearch(function (url) {
+          that.elemSearch
+            .search({
+              apiSettings: {
+                url: url.replace('query', '{query}'),
+                beforeXHR (xhr) {
+                  // adjust XHR with additional headers
+                  if (that.withXsrfToken === true) {
+                    xhr.setRequestHeader('X-XSRF-TOKEN', that.readCookie('XSRF-TOKEN'))
+                  }
                 }
-            },
-            readCookie: function read(name) {
-                let match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-                return (match ? decodeURIComponent(match[3]) : null);
-            },
-            observeElem: function (elem) {
-                let MutationObserver    = window.MutationObserver || window.WebKitMutationObserver;
-                let myObserver          = new MutationObserver (this.observeMutationHandler);
-                let obsConfig           = { childList: true, characterData: false, attributes: false, subtree: true };
-
-                myObserver.observe (elem, obsConfig);
-            },
-            observeMutationHandler: function (mutationRecords) {
-                let that = this;
-                mutationRecords.forEach ( function (mutation) {
-                    let btnAction = $(mutation.target).find('a.action');
-                    if(btnAction.length > 0){
-                        btnAction.click(function (event) {
-                            event.preventDefault();
-                            that.elemSearch.search('hide results');
-                            let query = that.elemSearch.search('get value');
-                            that.$emit('refreshResults', query);
-                            that.wantSearch = false;
-                        });
-                    }
-                });
-            }
+              },
+              // type: 'category',
+              fields: that.fields,
+              minCharacters: that.properties.filterMinLengthSearch
+            })
+        })
+      }
+    },
+    data () {
+      return {
+        dataRouteSearch: '',
+        wantSearch: true,
+        elemSearch: undefined
+      }
+    },
+    mounted () {
+      let that = this
+      this.elemSearch = $('#' + that._uid)
+      this.observeElem(this.elemSearch[0])
+    },
+    methods: {
+      urlForSearch (callback) {
+        let urlBase = this.routeSearch
+        let parsed = Parser.parse(urlBase, true)
+        parsed.search = undefined
+        parsed.query.search = 'query'
+        this.dataRouteSearch = Parser.format(parsed)
+        callback(this.dataRouteSearch)
+      },
+      resetSearch (withEmit) {
+        this.elemSearch.search('set value', '')
+        this.elemSearch.search('clear cache')
+        this.wantSearch = true
+        if (withEmit) { this.$emit('clearSearchResults') }
+      },
+      updateSearch () {
+        this.elemSearch = $('#' + this._uid)
+        if (this.resultsFor !== undefined && this.resultsFor !== null) {
+          this.elemSearch.search('set value', this.resultsFor)
+          this.wantSearch = false
         }
+        else {
+          this.resetSearch(false)
+        }
+      },
+      readCookie (name) {
+        let match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'))
+        return (match ? decodeURIComponent(match[3]) : null)
+      },
+      observeElem (elem) {
+        let MutationObserver = window.MutationObserver || window.WebKitMutationObserver
+        let myObserver = new MutationObserver(this.observeMutationHandler)
+        let obsConfig = { childList: true, characterData: false, attributes: false, subtree: true }
+        myObserver.observe(elem, obsConfig)
+      },
+      observeMutationHandler (mutationRecords) {
+        let that = this
+        mutationRecords.forEach(function (mutation) {
+          let btnAction = $(mutation.target).find('a.action')
+          if (btnAction.length > 0) {
+            btnAction.click(function (event) {
+              event.preventDefault()
+              that.elemSearch.search('hide results')
+              let query = that.elemSearch.search('get value')
+              that.$emit('refreshResults', query)
+              that.wantSearch = false
+            })
+          }
+        })
+      }
     }
+  }
 </script>
