@@ -145,21 +145,31 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeNotificationsExistIn: String. The route get if notification exist
+   *  - routeNotificationsAdd: String. The route to add user in notification
+   *  - routeNotificationsRemove: String. The route to del user of notification
+   *  - routeSearch: String. The route for search
+   *  - locationAccurateList: Array. The list of the accurate geolocation
+   *
+   * Events:
+   *  @categoryChoice: emit the categorie choice
+   *  @updateFilter: emit the object for update filter
+   *  @clearSearchResults
+   *  @refreshResults
+   *  @clearLocationResults
+   *  @breadCrumbItems
+   */
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {
     props: {
-      // vue routes
       routeNotificationsExistIn: String,
       routeNotificationsAdd: String,
       routeNotificationsRemove: String,
-      // vue vars
-      routeSearch: {
-        type: String
-      },
-      locationAccurateList: {
-        type: Array
-      }
+      routeSearch: String,
+      locationAccurateList: Array
     },
     computed: {
       strings () {

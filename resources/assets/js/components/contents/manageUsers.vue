@@ -1,6 +1,5 @@
 <template>
     <div class="ui grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
@@ -50,8 +49,7 @@
                             :flag-force-reload="dataForceReload"
                             @deleteUser="deleteUser($event)"
                             @paginate="paginate=$event"
-                            @loadError="sendToast(strings.loadErrorMessage, 'error')"
-                            @sendToast="sendToast(event.message, event.type)"
+                            @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                     ></users-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -106,11 +104,6 @@
       this.updateResults()
     },
     methods: {
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       urlForFilter (init = false) {
         let urlBase = init ? this.routeGetUsersList : this.dataRouteGetUsersList
         let parsed = Parser.parse(urlBase, true)
@@ -166,14 +159,14 @@
               .then(function (response) {
                 that.isLoaded = true
                 that.dataForceReload = !that.dataForceReload
-                that.sendToast(that.strings.deleteUserSuccess, 'success')
+                that.$alertV({'message': that.strings.deleteUserSuccess, 'type': 'success'})
               })
               .catch(function (error) {
                 if (error.response && error.response.status === 409) {
-                  that.sendToast(error.response.data, 'error')
+                  that.$alertV({'message': error.response.data, 'type': 'error'})
                 }
                 else {
-                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                  that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
                 }
                 that.isLoaded = false
               })

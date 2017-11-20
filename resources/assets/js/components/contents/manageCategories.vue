@@ -1,6 +1,5 @@
 <template>
     <div class="ui one column grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
@@ -171,7 +170,7 @@
             that.isLoaded = true
           })
           .catch(function () {
-            that.sendToast(that.strings.loadErrorMessage, 'error')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       addCategory (event, emitPostValue) {
@@ -201,10 +200,10 @@
             .catch(function (error) {
               that.isLoaded = true
               if (error.response && error.response.status === 409) {
-                that.sendToast(error.response.data, 'error')
+                that.$alertV({'message': error.response.data, 'type': 'error'})
               }
               else {
-                that.sendToast(that.strings.addErrorMessage, 'error')
+                that.$alertV({'message': that.strings.addErrorMessage, 'type': 'error'})
               }
             })
         }
@@ -230,10 +229,10 @@
                 .catch(function (error) {
                   that.isLoaded = true
                   if (error.response && error.response.status === 409) {
-                    that.sendToast(error.response.data, 'error')
+                    that.$alertV({'message': error.response.data, 'type': 'error'})
                   }
                   else {
-                    that.sendToast(that.strings.delErrorMessage, 'error')
+                    that.$alertV({'message': that.strings.delErrorMessage, 'type': 'error'})
                   }
                 })
             }
@@ -266,27 +265,22 @@
         if (postValue[key] !== undefined && postValue[key] !== null && postValue[key] !== '') {
           Axios.patch(this.properties.routeCategory + '/' + id, {description: postValue})
             .then(function (response) {
-              that.sendToast(that.strings.patchSuccessMessage, 'success')
+              that.$alertV({'message': that.strings.patchSuccessMessage, 'type': 'success'})
             })
             .catch(function (error) {
               that.getCategories()
               if (error.response && error.response.status === 409) {
-                that.sendToast(error.response.data, 'error')
+                that.$alertV({'message': error.response.data, 'type': 'error'})
               }
               else {
-                that.sendToast(that.strings.patchErrorMessage, 'error')
+                that.$alertV({'message': that.strings.patchErrorMessage, 'type': 'error'})
               }
             })
         }
         else {
           this.getCategories()
-          this.sendToast(this.strings.patchErrorMessage, 'error')
+          this.$alertV({'message': this.strings.patchErrorMessage, 'type': 'error'})
         }
-      },
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
       },
       shiftUp (event) {
         this.shiftCategory(event, 'up')
@@ -337,17 +331,17 @@
                   that.getCategories()
                   $(me).css('top', 0)
                   $(sibling).css('top', 0)
-                  that.sendToast(that.strings.patchSuccessMessage, 'success')
+                  that.$alertV({'message': that.strings.patchSuccessMessage, 'type': 'success'})
                 })
                 .catch(function (error) {
                   that.getCategories()
                   $(me).animate('top', 0)
                   $(sibling).animate('top', 0)
                   if (error.response && error.response.status === 409) {
-                    that.sendToast(error.response.data, 'error')
+                    that.$alertV({'message': error.response.data, 'type': 'error'})
                   }
                   else {
-                    that.sendToast(this.strings.patchErrorMessage, 'error')
+                    that.$alertV({'message': that.strings.patchErrorMessage, 'type': 'error'})
                   }
                 })
             }
@@ -360,23 +354,23 @@
         Axios.patch(this.routeAppendToCategory, {childId: childId, parentId: parentId})
           .then(function (response) {
             that.getCategories()
-            that.sendToast(that.strings.patchSuccessMessage, 'success')
+            that.$alertV({'message': that.strings.patchSuccessMessage, 'type': 'success'})
           })
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
-              that.sendToast(error.response.data, 'error')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.sendToast(this.strings.patchErrorMessage, 'error')
+              that.$alertV({'message': that.strings.patchErrorMessage, 'type': 'error'})
             }
           })
       },
       patchError (message) {
         if (message !== undefined && message !== null && message !== '') {
-          this.sendToast(message, 'error')
+          this.$alertV({'message': message, 'type': 'error'})
         }
         else {
-          this.sendToast(this.strings.patchErrorMessage, 'error')
+          this.$alertV({'message': this.strings.patchErrorMessage, 'type': 'error'})
         }
       },
       testChanged ($in, $out) {

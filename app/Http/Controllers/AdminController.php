@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
+use Mockery\Exception;
 use Mpdf\Mpdf;
 use Vinkla\Vimeo\VimeoManager;
 use GuzzleHttp\Client as GuzzleClient;

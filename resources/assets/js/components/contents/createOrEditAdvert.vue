@@ -1,6 +1,5 @@
 <template>
     <div>
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div class="ui grid">
             <div class="sixteen wide column">
                 <h2 class="ui header">{{ strings.contentHeader }}</h2>
@@ -249,6 +248,7 @@
                                                     :route-del-picture="routeDelPicture"
                                                     :advert-form-photo-nb-free-picture="calcNbFreePictures()"
                                                     :max-files="parseInt(maxFiles)"
+                                                    :max-photo-file-size="parseInt(maxPhotoFileSize)"
                                                     :is-delegation="isDelegation==1"
                                                     :old-main-picture="isEditAdvert ? dataAdvertEdit.mainPicturePicture : null"
                                                     :is-edit-advert="isEditAdvert"
@@ -256,9 +256,6 @@
                                                     nb-columns="two"
                                                     @updatePictures="updatePictures"
                                                     @updateMainPicture="mainPicture = $event"
-                                                    @sendToast="sendToast($event.message, $event.type)"
-                                                    @fileSizeError="sendToast(strings.filesizeErrorMessage, 'error')"
-                                                    @loadError="sendToast(strings.loadErrorMessage, 'error')"
                                             ></photo-uploader>
                                         </div>
                                         <div class="title">
@@ -280,9 +277,6 @@
                                                     :format="'auto'"
                                                     @vimeoStateChange="vimeoStateChange"
                                                     @videoUploadStatusChange="submitEnable = !$event"
-                                                    @fileSizeError="sendToast(strings.filesizeErrorMessage, 'error')"
-                                                    @sendToast="sendToast($event.message, $event.type)"
-                                                    @loadError="sendToast(strings.loadErrorMessage, 'error')"
                                             ></vimeo-uploader>
                                         </div>
                                         <div class="title">
@@ -599,6 +593,7 @@
       'geolocInitLng',
       'advertFormPhotoNbFreePicture',
       'maxFiles',
+      'maxPhotoFileSize',
       'maxVideoFileSize',
       'sessionVideoId'
     ],
@@ -824,11 +819,6 @@
         this.currencySymbol = event.symbol
         this.subunit = event.subunit
       },
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       latLngChange (event) {
         this.lat = event.lat
         this.lng = event.lng
@@ -853,7 +843,7 @@
             })
             .catch(function () {
               that.cost = 0
-              that.sendToast(that.strings.loadErrorMessage, 'error')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             })
         }
         else {

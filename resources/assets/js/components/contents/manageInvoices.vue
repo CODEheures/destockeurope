@@ -1,6 +1,5 @@
 <template>
     <div class="ui grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
@@ -53,7 +52,7 @@
                             :flag-force-reload="dataForceReload"
                             @refund="refund($event)"
                             @paginate="paginate=$event"
-                            @loadError="sendToast(strings.loadErrorMessage, 'error')"
+                            @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                     ></invoices-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -109,11 +108,6 @@
       this.updateResults()
     },
     methods: {
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       urlForFilter (init = false) {
         let urlBase = init ? this.routeGetInvoicesList : this.dataRouteGetInvoicesList
         let parsed = Parser.parse(urlBase, true)
@@ -155,14 +149,14 @@
               .then(function (response) {
                 that.isLoaded = true
                 that.dataForceReload = !that.dataForceReload
-                that.sendToast(that.strings.invoiceRefundSuccess, 'success')
+                that.$alertV({'message': that.strings.invoiceRefundSuccess, 'type': 'success'})
               })
               .catch(function (error) {
                 if (error.response && error.response.status === 409) {
-                  that.sendToast(error.response.data, 'error')
+                  that.$alertV({'message': error.response.data, 'type': 'error'})
                 }
                 else {
-                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                  that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
                 }
                 that.isLoaded = true
               })

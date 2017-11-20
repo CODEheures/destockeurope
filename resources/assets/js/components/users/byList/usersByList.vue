@@ -99,7 +99,7 @@
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
               let msg = error.response.data
-              that.$emit('sendToast', {'message': msg, 'type': 'error'})
+              that.$alertV({'message': msg, 'type': 'error'})
             }
             else {
               that.$emit('loadError')

@@ -66,6 +66,19 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeGetVideoPostTicket: String. The route to get a ticket for post video
+   *  - routeDelTempoVideo: String. The route to del the actual upload video
+   *  - routeGetStatusVideo: String. The route to get the status of upload video
+   *  - maxVideoFileSize: Number. The maximum size of the video
+   *  - sessionVideoId: String. The id of the actual upload video
+   *  - format: String. The format for iframe: 'auto'
+   *
+   * Events:
+   *  @vimeoStateChange: emit state of video: {hasVideo: Boolean, videoId: 'theVideoId'}
+   *  @videoUploadStatusChange: emit true when upload on progress. Otherwise emit false
+   */
   import Axios from 'axios'
   export default {
     props: {
@@ -141,13 +154,12 @@
         this.videoInputEventTarget = event.target
         this.fileToUpload = this.videoInputEventTarget.files[0]
         if (this.fileToUpload !== undefined && this.fileToUpload !== null) {
-          this.videoBlob = new Blob([this.fileToUpload], {type: this.fileToUpload.type})
           if (this.fileToUpload.size > this.maxVideoFileSize) {
             this.videoInputEventTarget.value = ''
-            this.videoBlob = undefined
-            this.$emit('fileSizeError')
+            this.$alertV({'message': this.strings.filesizeErrorMessage, 'type': 'error'})
           }
           else {
+            this.videoBlob = new Blob([this.fileToUpload], {type: this.fileToUpload.type})
             // get ticket to set routes post
             this.getTicket()
           }
@@ -164,10 +176,10 @@
           .catch(function (error) {
             that.resetUploadVideoState()
             if (error.response && error.response.status === 503) {
-              that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.$emit('loadError')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
           })
       },
@@ -208,7 +220,7 @@
               }
               else {
                 that.resetUploadVideoState()
-                that.$emit('loadError')
+                that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
               }
             }
             else {
@@ -217,7 +229,7 @@
           })
           .catch(function () {
             that.resetUploadVideoState()
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       progressPostVideo (routeGetProgress) {
@@ -256,7 +268,7 @@
           })
           .catch(function () {
             that.onCloseTicket = false
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       extractPerformUpload (range) {
@@ -275,7 +287,7 @@
             that.videoReady = false
           })
           .catch(function () {
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       timeout (seconds) {

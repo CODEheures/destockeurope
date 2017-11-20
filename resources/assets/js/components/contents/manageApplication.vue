@@ -1,6 +1,5 @@
 <template>
     <div class="ui one column grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div class="column">
             <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
@@ -285,7 +284,7 @@
             that.isLoaded = true
           })
           .catch(function () {
-            that.sendToast(that.strings.loadErrorMessage, 'error')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       typeChoice (type) {
@@ -323,7 +322,7 @@
         }
         else {
           this.getParameters()
-          this.sendToast(this.strings.patchErrorMessage, 'error')
+          this.$alertV({'message': this.strings.patchErrorMessage, 'type': 'error'})
         }
       },
       updateRequest (patchValue) {
@@ -331,15 +330,15 @@
         Axios.patch(this.routeParameters, patchValue)
           .then(function (response) {
             that.getParameters()
-            that.sendToast(that.strings.patchSuccessMessage, 'success')
+            that.$alertV({'message': that.strings.patchSuccessMessage, 'type': 'success'})
           })
           .catch(function (error) {
             that.getParameters()
             if (error.response && error.response.status === 409) {
-              that.sendToast(error.response.data, 'error')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.sendToast(that.strings.patchErrorMessage, 'error')
+              that.$alertV({'message': that.strings.patchErrorMessage, 'type': 'error'})
             }
           })
       },
@@ -355,19 +354,14 @@
             }
             else {
               that.isValidImage = false
-              that.sendToast(this.strings.invalidImageMessage, 'error')
+              that.$alertV({'message': that.strings.invalidImageMessage, 'type': 'error'})
             }
           })
           .catch(function () {
             that.isLoaded = true
             that.isValidImage = false
-            that.sendToast(that.strings.invalidImageMessage, 'error')
+            that.$alertV({'message': that.strings.invalidImageMessage, 'type': 'error'})
           })
-      },
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
       },
       testChanged ($in, $out) {
         if ($in.name === $out.name && $in.value !== $out.value) {

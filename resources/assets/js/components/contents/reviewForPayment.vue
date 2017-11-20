@@ -1,6 +1,5 @@
 <template>
     <div class="ui one column grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal-'+_uid" class="ui modal">
             <i class="close icon"></i>
         </div>
@@ -267,11 +266,6 @@
       })
     },
     methods: {
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       setSteps () {
         (this.steps[2]).title = this.strings.stepThreeTitle + '(' + (this.dataInvoice.cost / 100).toFixed(2) + this.strings.stepThreeTitlePost + ')'
       },

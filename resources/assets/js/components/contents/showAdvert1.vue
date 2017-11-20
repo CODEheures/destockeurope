@@ -1,6 +1,5 @@
 <template>
     <div>
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal1-'+_uid" class="ui modal">
             <i class="close icon"></i>
             <div class="header">
@@ -394,11 +393,6 @@
       })
     },
     methods: {
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       setBreadCrumbItems () {
         let that = this
         let breadcrumb = this.dataAdvert.breadCrumb
@@ -423,14 +417,14 @@
           onApprove () {
             Axios.post(that.routeSendMail, {'id': that.dataAdvert.id, 'name': that.dataUserName, 'email': that.dataUserMail, 'phone': that.dataUserPhone, 'compagnyName': that.dataUserCompagnyName, 'message': that.dataMessage})
               .then(function (response) {
-                that.sendToast(that.strings.sendSuccessMessage, 'success')
+                that.$alertV({'message': that.strings.sendSuccessMessage, 'type': 'success'})
               })
               .catch(function (error) {
                 if (error.response && error.response.status === 409) {
-                  that.sendToast(error.response.data, 'error')
+                  that.$alertV({'message': error.response.data, 'type': 'error'})
                 }
                 else {
-                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                  that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
                 }
               })
           }
@@ -445,14 +439,14 @@
           onApprove () {
             Axios.post(that.routeReportAdvert, {'id': that.dataAdvert.id, 'email': that.dataUserMail, 'message': that.dataReportMessage})
               .then(function (response) {
-                that.sendToast(that.strings.sendSuccessReportMessage, 'success')
+                that.$alertV({'message': that.strings.sendSuccessReportMessage, 'type': 'success'})
               })
               .catch(function (error) {
                 if (error.response && error.response.status === 409) {
-                  that.sendToast(error.response.data, 'error')
+                  that.$alertV({'message': error.response.data, 'type': 'error'})
                 }
                 else {
-                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                  that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
                 }
               })
           }
@@ -469,14 +463,14 @@
         Axios.get(this.routeBookmarkAdd)
           .then(function (response) {
             that.dataIsUserBookmark = true
-            that.sendToast(that.strings.bookmarkSuccess, 'success')
+            that.$alertV({'message': that.strings.bookmarkSuccess, 'type': 'success'})
           })
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
-              that.sendToast(error.response.data, 'error')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.sendToast(that.strings.loadErrorMessage, 'error')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
             that.isLoaded = false
           })
@@ -486,14 +480,14 @@
         Axios.get(this.routeBookmarkRemove)
           .then(function (response) {
             that.dataIsUserBookmark = false
-            that.sendToast(that.strings.unbookmarkSuccess, 'success')
+            that.$alertV({'message': that.strings.unbookmarkSuccess, 'type': 'success'})
           })
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
-              that.sendToast(error.response.data, 'error')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.sendToast(that.strings.loadErrorMessage, 'error')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
             that.isLoaded = false
           })
@@ -512,10 +506,10 @@
               })
               .catch(function (error) {
                 if (error.response && error.response.status === 409) {
-                  that.sendToast(error.response.data, 'error')
+                  that.$alertV({'message': error.response.data, 'type': 'error'})
                 }
                 else {
-                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                  that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
                 }
                 that.isLoaded = true
               })

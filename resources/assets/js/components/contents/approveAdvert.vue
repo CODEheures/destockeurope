@@ -1,6 +1,5 @@
 <template>
     <div class="ui one column grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
@@ -211,7 +210,7 @@
             that.isLoaded = true
           })
           .catch(function () {
-            that.sendToast(that.strings.loadErrorMessage, 'error')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       approveAll (event) {
@@ -228,24 +227,19 @@
             Axios.post(that.routeAdvertApprove, that.approveList)
               .then(function (response) {
                 that.getAdvertsList()
-                that.sendToast(that.strings.advertApproveSuccess, 'success')
+                that.$alertV({'message': that.strings.advertApproveSuccess, 'type': 'success'})
               })
               .catch(function (error) {
                 if (error.response && error.response.status === 409) {
-                  that.sendToast(error.response.data, 'error')
+                  that.$alertV({'message': error.response.data, 'type': 'error'})
                 }
                 else {
-                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                  that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
                 }
                 that.isLoaded = false
               })
           }
         }).modal('show')
-      },
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
       },
       getFormattedAddress (geoloc) {
         let parsed = JSON.parse(geoloc)

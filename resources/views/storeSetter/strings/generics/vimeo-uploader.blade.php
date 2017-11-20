@@ -8,6 +8,8 @@
                                 'videoBtnCancel' => trans('strings.form_file_cancel_video_label'),
                                 'waitingMessage' => trans('strings.form_waiting_for_process'),
                                 'transcodeMessage' => trans('strings.form_waiting_for_transcode'),
+                                'filesizeErrorMessage' => trans('strings.view_all_error_filesize_message'),
+                                'loadErrorMessage' => trans('strings.view_all_error_load_message'),
                         ]
                 ])}}"
 ></store-strings-setter>

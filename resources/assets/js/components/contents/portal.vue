@@ -1,6 +1,5 @@
 <template>
     <div class="ui one column row">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div class="row">
             <div class="ui grid">
                 <div class="four wide tablet only four wide computer only column">
@@ -1224,29 +1223,20 @@
       goHome () {
         DestockTools.goToUrl(this.nextUrl)
       },
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       subscribeNewsletter () {
         let that = this
         Axios.post(this.routeSubscribeNewsLetter, {'name': that.dataName, 'email': that.dataEmail, 'phone': that.dataPhone})
           .then(function (response) {
-            that.sendToast(response.data, 'success')
+            that.$alertV({'message': response.data, 'type': 'success'})
           })
           .catch(function (error) {
             if (error.response.status === 422) {
-              let i = 0
-              for (let item in error.response.data) {
-                if (i === 0) {
-                  that.sendToast(error.response.data[item][0], 'error')
-                  i++
-                }
+              for (let item in error.response.data.errors) {
+                that.$alertV({'message': error.response.data.errors[item][0], 'type': 'error'})
               }
             }
             else {
-              that.sendToast(error.response.data, 'error')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
           })
       },

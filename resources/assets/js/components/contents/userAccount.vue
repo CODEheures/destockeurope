@@ -1,6 +1,5 @@
 <template>
     <div class="ui one column grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <template v-if="advertAccountVerifiedStep">
             <div class="column">
                 <h2 class="ui header">{{ strings.contentHeader }}</h2>
@@ -62,7 +61,7 @@
                                 <locales-dropdown-2
                                         :old-locale="''"
                                         @localeChoice="localeChoice"
-                                        @loadError="sendToast(strings.loadErrorMessage, 'error')"
+                                        @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                                 ></locales-dropdown-2>
                             </div>
                             <div class="field">
@@ -105,7 +104,7 @@
                                 <i class="icon"></i>
                             </div>
                             <transition name="p-fade">
-                                <span class="ui red pointing basic label notransition" v-show="dataCompagnyName.length<formCompagnyNameMinValid">{{ formCompagnyNameMinValid }}{{strings.formPointingMinimumChars }}</span>
+                                <span class="ui red pointing basic label notransition" v-show="dataCompagnyName === null || dataCompagnyName.length<formCompagnyNameMinValid">{{ formCompagnyNameMinValid }}{{strings.formPointingMinimumChars }}</span>
                             </transition>
                         </div>
                     </div>
@@ -244,14 +243,14 @@
         }
         Axios.patch(this.routeUserSetPrefCurrency, {currency: cur})
           .then(function (response) {
-            that.sendToast(that.strings.accountPatchSuccess, 'success')
+            that.$alertV({'message': that.strings.accountPatchSuccess, 'type': 'success'})
           })
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
-              that.sendToast(error.response.data, 'error')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.sendToast(that.strings.loadErrorMessage, 'error')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
           })
       },
@@ -263,14 +262,14 @@
         }
         Axios.patch(this.routeUserSetPrefLocale, {localisation: locale})
           .then(function (response) {
-            that.sendToast(that.strings.accountPatchSuccess, 'success')
+            that.$alertV({'message': that.strings.accountPatchSuccess, 'type': 'success'})
           })
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
-              that.sendToast(error.response.data, 'error')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.sendToast(that.strings.loadErrorMessage, 'error')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
           })
       },
@@ -283,14 +282,14 @@
           Axios.patch(this.routeUserSetPrefLocation, {'lat': this.lat, 'lng': this.lng, 'geoloc': sessionStorage.getItem('geoloc')})
             .then(function (response) {
               that.dataFirstGeoloc = false
-              that.sendToast(that.strings.accountPatchSuccess, 'success')
+              that.$alertV({'message': that.strings.accountPatchSuccess, 'type': 'success'})
             })
             .catch(function (error) {
               if (error.response && error.response.status === 409) {
-                that.sendToast(error.response.data, 'error')
+                that.$alertV({'message': error.response.data, 'type': 'error'})
               }
               else {
-                that.sendToast(that.strings.loadErrorMessage, 'error')
+                that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
               }
             })
         }
@@ -315,7 +314,7 @@
         Axios.patch(updateRoute, {'value': value})
           .then(function (response) {
             that.updateFails = false
-            that.sendToast(that.strings.accountPatchSuccess, 'success')
+            that.$alertV({'message': that.strings.accountPatchSuccess, 'type': 'success'})
             that.updateInProgress--
             if (inputName === 'registration-number') {
               that.userGetMe()
@@ -326,13 +325,15 @@
             that.updateInProgress--
             that.vatOnCheckProgress = false
             if (error.response && error.response.status === 409) {
-              that.sendToast(error.response.data, 'error.response')
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else if (error.response && error.response.status === 422) {
-              that.sendToast(error.response.data.value[0], 'error')
+              for (let item in error.response.data.errors) {
+                that.$alertV({'message': error.response.data.errors[item][0], 'type': 'error'})
+              }
             }
             else {
-              that.sendToast(that.strings.loadErrorMessage, 'error')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
             that.userGetMe()
           })
@@ -357,7 +358,7 @@
           })
           .catch(function () {
             that.vatOnCheckProgress = false
-            that.sendToast(that.strings.loadErrorMessage, 'error')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       updateByEnter (event) {
@@ -396,11 +397,6 @@
           }, 250)
         }
         timer()
-      },
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
       },
       testChanged ($in, $out) {
         if ($in.input === $out.input && $in.value !== $out.value) {

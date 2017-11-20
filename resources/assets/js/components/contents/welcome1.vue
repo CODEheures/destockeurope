@@ -1,6 +1,5 @@
 <template>
     <div  class="ui grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal2-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
@@ -73,9 +72,8 @@
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :ads-frequency="parseInt(adsFrenquency)"
-                            @bookmarkSuccess="sendToast(strings.bookmarkSuccess, 'success')"
-                            @unbookmarkSuccess="sendToast(strings.unbookmarkSuccess, 'success')"
-                            @sendToast="sendToast($event.message, $event.type)"
+                            @bookmarkSuccess="$alertV({'message': strings.bookmarkSuccess, 'type': 'success'})"
+                            @unbookmarkSuccess="$alertV({'message': strings.unbookmarkSuccess, 'type': 'success'})"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -182,11 +180,6 @@
       this.setHeader()
     },
     methods: {
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       getHighLightAdvert () {
         let that = this
         Axios.get(this.routeGetHighlight)
@@ -194,7 +187,6 @@
             that.dataHighlightAdverts = (response.data).adverts
           })
           .catch(function () {
-            // that.sendToast(that.strings.loadErrorMessage, 'error')
           })
       },
       setHeader () {

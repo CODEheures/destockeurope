@@ -35,6 +35,7 @@
     @endphp
     <div id="app">
         @include('storeSetter.props.global')
+        <alert ref="alert"></alert>
         <div class="ui vertical segment header" id="headApp">
             <div class="rubalise"></div>
             <div class="ui container">

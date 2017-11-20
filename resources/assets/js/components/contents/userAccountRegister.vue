@@ -1,6 +1,5 @@
 <template>
     <div>
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <h2 class="ui center aligned icon header"><i
                 class="circular add user icon"></i> {{ strings.contentHeader }} </h2>
         <div class="ui centered grid">
@@ -129,13 +128,6 @@
           that.isNewsLetterApprove = false
         }
       })
-    },
-    methods: {
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      }
     }
   }
 </script>

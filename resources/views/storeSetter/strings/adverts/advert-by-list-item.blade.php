@@ -13,7 +13,8 @@
                                 'viewsInfo' => trans('strings.view_advert_show_views_info'),
                                 'trustedProviderLabel' => trans('strings.view_account_trusted_provider'),
                                 'refLabel' => trans('strings.view_advert_form_ref_label'),
-                                'providerLabel' => trans('strings.view_advert_form_provider_label')
+                                'providerLabel' => trans('strings.view_advert_form_provider_label'),
+                                'loadErrorMessage' => trans('strings.view_all_error_load_message'),
                         ]
                 ])}}"
 ></store-strings-setter>

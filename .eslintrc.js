@@ -19,11 +19,7 @@ module.exports = {
     'import'
   ],
   globals: {
-    'cordova': true,
-    'DEV': true,
-    'WATCH': true,
-    'PROD': true,
-    '__THEME': true
+
   },
   // add your custom rules here
   'rules': {

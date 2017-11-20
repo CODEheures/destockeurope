@@ -29,6 +29,7 @@
             edit-advert="{{ isset($editAdvert) ? json_encode($editAdvert) : '' }}"
             geoloc-init-lat="{{ isset($lat) ? $lat : null }}"
             geoloc-init-lng="{{ isset($lng) ? $lng : null }}"
+            max-photo-file-size="{{ env('PHOTO_MAX_SIZE_MB')*1024*1024 }}"
             max-video-file-size="{{ env('VIDEO_MAX_SIZE_MB')*1024*1024 }}"
             session-video-id="{{ session()->has('videoId') ? session('videoId') : null }}"
     ></create-or-edit-advert-form>

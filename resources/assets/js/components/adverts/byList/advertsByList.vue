@@ -37,7 +37,6 @@
                             @loadError="$emit('loadError')"
                             @bookmarkSuccess="$emit('bookmarkSuccess')"
                             @unbookmarkSuccess="$emit('unbookmarkSuccess')"
-                            @sendToast="$emit('sendToast', $event)"
                     ></adverts-by-list-item>
                     <div class="item ads">
                         <div class="ui grid">
@@ -62,7 +61,6 @@
                             @loadError="$emit('loadError')"
                             @bookmarkSuccess="$emit('bookmarkSuccess')"
                             @unbookmarkSuccess="$emit('unbookmarkSuccess')"
-                            @sendToast="$emit('sendToast', $event)"
                     ></adverts-by-list-item>
                 </template>
             </template>

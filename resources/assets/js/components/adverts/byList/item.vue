@@ -410,6 +410,7 @@
   import _ from 'lodash'
   import moment from 'moment'
   import Axios from 'axios'
+
   export default {
     props: {
       routeBookmarkAdd: String,
@@ -449,9 +450,7 @@
         moment.locale(this.properties.actualLocale)
         return moment(dateTime).fromNow()
       },
-      bookmarkMe (event) {
-        event.preventDefault()
-        event.stopPropagation()
+      bookmarkMe () {
         let that = this
         Axios.get(this.routeBookmarkAdd + '/' + this.advert.id)
           .then(function (response) {
@@ -461,16 +460,14 @@
           })
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
-              that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.$emit('loadError')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
           })
       },
-      unbookmarkMe (event) {
-        event.preventDefault()
-        event.stopPropagation()
+      unbookmarkMe () {
         let that = this
         Axios.get(this.routeBookmarkRemove + '/' + this.advert.id)
           .then(function (response) {
@@ -480,10 +477,10 @@
           })
           .catch(function (error) {
             if (error.response && error.response.status === 409) {
-              that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
+              that.$alertV({'message': error.response.data, 'type': 'error'})
             }
             else {
-              that.$emit('loadError')
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
             }
           })
       },

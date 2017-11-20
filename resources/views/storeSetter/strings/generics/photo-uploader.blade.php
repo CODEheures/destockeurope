@@ -11,6 +11,8 @@
                                 'payPhotoHelpHeaderPlural' => trans_choice('strings.form_file_add_pay_photo_help_header',2),
                                 'photoHelpContent' => trans('strings.form_file_add_photo_help_content',['nb' => config('runtime.nbFreePictures'), 'link' => route('home')]),
                                 'mainPhotoLabel' => trans('strings.form_radio_main_photo_label'),
+                                'filesizeErrorMessage' => trans('strings.view_all_error_filesize_message'),
+                                'loadErrorMessage' => trans('strings.view_all_error_load_message'),
                         ]
                 ])}}"
 ></store-strings-setter>

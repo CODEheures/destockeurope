@@ -101,6 +101,22 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routePostPicture: String. The route for post picture
+   *  - routeGetListPosts: String. The route to get list of posts pictures
+   *  - routeDelPicture: String. The route to del picture of list of posts
+   *  - advertFormPhotoNbFreePicture: Number. How many photos are free of cost
+   *  - maxFiles: Number. How many maximum photos
+   *  - maxVideoFileSize: Number. The maximum size of a photo
+   *  - isDelegation: Boolean. Is user delegation?
+   *  - oldMainPicture: String. The hash of mainPicture
+   *  - nbColumns: String. Number of preview columns. Literral: "one", "two"...
+   *
+   * Events:
+   *  @updatePictures: emit list of pictures when list change: ['haschcode1', 'haschcode2', ...]
+   *  @updateMainPicture: emit main picture when change: 'haschcode1'
+   */
   import Axios from 'axios'
   export default {
     props: {
@@ -111,6 +127,7 @@
       // vue vars
       advertFormPhotoNbFreePicture: Number,
       maxFiles: Number,
+      maxPhotoFileSize: Number,
       isDelegation: Boolean,
       oldMainPicture: {
         type: String,
@@ -185,7 +202,13 @@
       },
       uploadPhoto (event) {
         if (event.target.files[0] !== undefined && event.target.files[0] !== null) {
-          this.filePhotoToPost.append(this.formPhotoFileInputName, event.target.files[0])
+          let fileToPost = event.target.files[0]
+          if (fileToPost.size > this.maxPhotoFileSize) {
+            event.target.value = ''
+            this.$alertV({'message': this.strings.filesizeErrorMessage, 'type': 'error'})
+            return
+          }
+          this.filePhotoToPost.append(this.formPhotoFileInputName, fileToPost)
           let that = this
           this.onUpload = true
           this.cancelToken = Axios.CancelToken
@@ -212,16 +235,13 @@
               event.target.value = ''
               if (error.response && error.response.status === 422) {
                 let msg = error.response.data.errors.addpicture[0]
-                that.$emit('sendToast', {'message': msg, 'type': 'error'})
-              }
-              else if (error.response && error.response.status === 413) {
-                that.$emit('fileSizeError')
+                that.$alertV({'message': msg, 'type': 'error'})
               }
               else if (error.response && error.response.status === 503) {
-                that.$emit('sendToast', {'message': error.response.data, 'type': 'error'})
+                that.$alertV({'message': error.response.data, 'type': 'error'})
               }
               else {
-                that.$emit('loadError')
+                that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
               }
             })
         }
@@ -238,7 +258,7 @@
             that.pictures = response.data
           })
           .catch(function () {
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       delPhoto (event) {
@@ -249,7 +269,7 @@
             that.pictures = response.data
           })
           .catch(function () {
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       setPicturesIndicators () {

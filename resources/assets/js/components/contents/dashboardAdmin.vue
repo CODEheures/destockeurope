@@ -1,6 +1,5 @@
 <template>
     <div class="ui one column grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div class="column">
             <h2 class="ui header">{{ strings.contentHeader }}</h2>
         </div>
@@ -118,7 +117,7 @@
           .catch(function () {
             that.dataCleanLoading = false
             that.isLoaded = true
-            that.sendToast(that.strings.loadErrorMessage, 'error')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       chartAdverts () {
@@ -328,17 +327,14 @@
           .then(function (response) {
             that.dataCleanLoading = false
             that.getStats()
-            that.sendToast(response.data, 'success')
+            that.$alertV({'message': response.data, 'type': 'success'})
           })
           .catch(function (error) {
             that.dataCleanLoading = false
-            if (error.response) { that.sendToast(error.response.data, 'error') }
+            if (error.response) {
+              that.$alertV({'message': error.response.data, 'type': 'error'})
+            }
           })
-      },
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
       },
       getFormatDate ($date) {
         moment.locale(this.properties.actualLocale)

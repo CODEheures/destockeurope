@@ -15,7 +15,7 @@ Vue.component('currencies-dropdown-2', require('./components/generics/currencies
 Vue.component('currencies-button', require('./components/generics/currencies/currenciesButton.vue'))
 Vue.component('locales-dropdown-2', require('./components/generics/locales/localesDropdown2.vue'))
 Vue.component('langs-dropdown', require('./components/generics/locales/langsDropdown.vue'))
-Vue.component('toast', require('./components/generics/messages/toast.vue'))
+Vue.component('alert', require('./components/generics/messages/alert.vue'))
 Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb.vue'))
 Vue.component('steps', require('./components/generics/steps/step.vue'))
 Vue.component('steps-light', require('./components/generics/steps/stepLight.vue'))
@@ -101,8 +101,8 @@ Vue.component('manage-delegation', require('./components/contents/manageDelegati
 Vue.component('review-for-payment', require('./components/contents/reviewForPayment.vue'))
 
 import store from './vueStore'
-// eslint-disable-next-line no-new
-new Vue({
+// eslint-disable-next-line no-new,no-unused-vars
+const app = new Vue({
   el: '#app',
   store
 })

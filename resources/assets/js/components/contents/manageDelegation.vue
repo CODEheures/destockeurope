@@ -1,6 +1,5 @@
 <template>
     <div  class="ui one column grid">
-        <toast :send-message="sendMessage" :message="message" :type="typeMessage"></toast>
         <div :id="'modal2-'+_uid" class="ui basic modal">
             <i class="close icon"></i>
             <div class="header">
@@ -48,9 +47,8 @@
                                 :can-get-delegations="canGetDelegations==1"
                                 :is-personnal-list="isPersonnalList==1"
                                 @deleteAdvert="destroyMe($event.url)"
-                                @updateSuccess="sendToast(strings.updateSuccessMessage, 'success')"
-                                @loadError="sendToast(strings.loadErrorMessage, 'error')"
-                                @sendToast="sendToast($event.message, $event.type)"
+                                @updateSuccess="$alertV({'message': strings.updateSuccessMessage, 'type': 'success'})"
+                                @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                             ></adverts-by-list-item>
                         </div>
                     </div>
@@ -91,11 +89,6 @@
       }
     },
     methods: {
-      sendToast (message, type) {
-        this.typeMessage = type
-        this.message = message
-        this.sendMessage = !this.sendMessage
-      },
       destroyMe (url) {
         let modalForm = $('#modal2-' + this._uid)
         let that = this
@@ -111,10 +104,10 @@
               })
               .catch(function (error) {
                 if (error.response && error.response.status === 409) {
-                  that.sendToast(error.response.data, 'error')
+                  that.$alertV({'message': error.response.data, 'type': 'error'})
                 }
                 else {
-                  that.sendToast(that.strings.loadErrorMessage, 'error')
+                  that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
                 }
                 that.isLoaded = true
               })

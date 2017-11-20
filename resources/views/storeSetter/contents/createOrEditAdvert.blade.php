@@ -18,7 +18,6 @@
                                 'formBuyingPriceLabel' => trans('strings.view_advert_form_buyingPrice_label'),
                                 'formGooglemapLabel' => trans('strings.form_googlemap_label'),
                                 'formPhotoSeparator' => trans('strings.form_file_add_photo_separator'),
-                                'filesizeErrorMessage' => trans('strings.view_all_error_filesize_message'),
                                 'validationButtonLabel' => trans('strings.form_button_validation'),
                                 'formPointingMinimumChars' => trans('strings.form_pointing_minimum_chars'),
                                 'formTotalQuantityLabel' => trans('strings.form_quantity_label'),

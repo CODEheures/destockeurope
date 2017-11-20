@@ -38,6 +38,7 @@
     @include('menus.side.main')
 
     <div class="pusher stackable container" id="app">
+        <alert ref="alert"></alert>
         @include('storeSetter.props.global')
         <!-- fixed menu bar -->
         @include('menus.top.fixed')
