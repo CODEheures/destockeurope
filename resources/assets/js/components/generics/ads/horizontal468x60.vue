@@ -10,6 +10,10 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - img1: String. path of background ad1
+   */
   export default {
     props: {
       // Vue vars
@@ -17,11 +21,6 @@
         required: false,
         type: String,
         default: '/images/ads/bandeau468x60.jpg'
-      },
-      'url1': {
-        required: false,
-        type: String,
-        default: '#'
       }
     },
     computed: {

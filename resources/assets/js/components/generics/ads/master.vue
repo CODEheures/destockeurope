@@ -1,5 +1,5 @@
 <template>
-    <div v-if="dataIsActive" class="masterads">
+    <div v-if="isActive" class="masterads">
         <a :href="urlRedirect" target="_blank">
             <img :id="'img_masterads'+_uid" class="ui fluid image masterads" :src="datasrc">
         </a>
@@ -7,34 +7,46 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeImageServer: String. route of the image server service (use to bypass Cross-request)
+   *  - isActive: Boolean. If masterAd is active
+   *  - urlImg: String. Url of the AD image
+   *  - urlRedirect: String. Url of the redirect href
+   *  - offsetYMainContainer: String. Offset on Y axis of the container
+   *  - selectorMainContainer: String. Selector for the main container to Apply offset
+   *  - width: Number. The width for the Ad
+   *  - adsOffsetY: Number. Offset for the Ad
+   */
   import Parser from 'url'
   export default {
-    props: [
+    props: {
       // vue routes
-      'routeImageServer',
+      routeImageServer: String,
       // vue vars
-      'isActive',
-      'urlImg',
-      'urlRedirect',
-      'offsetYMainContainer',
-      'selectorMainContainer',
-      'width',
-      'adsOffsetY'
-    ],
-    computed: {
-      dataIsActive () { return this.isActive === '1' }
+      isActive: Boolean,
+      urlImg: String,
+      urlRedirect: String,
+      offsetYMainContainer: String,
+      selectorMainContainer: String,
+      width: Number,
+      adsOffsetY: Number
     },
-    data () {
-      return {
-        datasrc: '/images/background.jpg',
-        datawidth: 1400
+    computed: {
+      datasrc () {
+        if (this.urlImg !== '') {
+          let urlBase = this.routeImageServer
+          let parsed = Parser.parse(urlBase, true)
+          parsed.query = {}
+          parsed.query['url'] = this.urlImg
+          return Parser.format(parsed)
+        }
+        else {
+          return '/images/background.jpg'
+        }
       }
     },
     mounted () {
-      this.setDatasrc()
-      this.setDataWidth()
-    },
-    updated () {
       let that = this
       this.adaptView()
       $(window).bind('resize', function () {
@@ -42,22 +54,8 @@
       })
     },
     methods: {
-      setDatasrc () {
-        if (this.urlImg !== '') {
-          let urlBase = this.routeImageServer
-          let parsed = Parser.parse(urlBase, true)
-          parsed.query = {}
-          parsed.query['url'] = this.urlImg
-          this.datasrc = Parser.format(parsed)
-        }
-      },
-      setDataWidth () {
-        if (this.urlImg !== '' && this.width !== undefined && this.width !== null) {
-          this.datawidth = this.width
-        }
-      },
       adaptView () {
-        if (this.dataIsActive) {
+        if (this.isActive) {
           let that = this
           let img = $('div.masterads')
           let mainContainer = $(that.selectorMainContainer)

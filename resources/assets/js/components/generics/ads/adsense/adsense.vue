@@ -6,6 +6,12 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - adClient: String. The client ad ID: 'ca-pub-xxxxxxxxxxx'
+   *  - adSlot: String. The slot ad ID: '145407xxxx'
+   *  - adStyle: String. CSS style of AD: 'display: block; ...'
+   */
   export default {
     props: {
       adClient: {
@@ -15,11 +21,6 @@
       adSlot: {
         type: String,
         required: true
-      },
-      adFormat: {
-        type: String,
-        required: false,
-        default: 'auto'
       },
       adStyle: {
         type: String,

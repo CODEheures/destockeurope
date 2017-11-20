@@ -10,6 +10,11 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - img1: String. path of background ad1
+   *  - centered: Boolean. To center ad on div
+   */
   export default {
     props: {
       // Vue vars
@@ -18,40 +23,15 @@
         type: String,
         default: '/images/ads/bandeau160x600.jpg'
       },
-      'url1': {
-        required: false,
-        type: String,
-        default: '#'
-      },
       'centered': {
         required: false,
         type: Boolean,
         default: false
-      },
-      'reload': {
-        required: false,
-        type: Boolean,
-        default: true
       }
     },
     computed: {
       properties () {
         return this.$store.state.properties['global']
-      }
-    },
-    watch: {
-      reload () {
-        if (this.isInitial) {
-          this.isInitial = false
-        }
-        else {
-          console.log('reload ads vertical160x600')
-        }
-      }
-    },
-    data () {
-      return {
-        isInitial: true
       }
     }
   }

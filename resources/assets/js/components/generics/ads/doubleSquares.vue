@@ -20,6 +20,12 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - img1: String. path of background ad1
+   *  - img2: String. path of background ad1
+   *  - centered: Boolean. To center ad on div
+   */
   export default {
     props: {
       // Vue vars
@@ -32,16 +38,6 @@
         required: false,
         type: String,
         default: '/images/ads/bandeau180x150_2.jpg'
-      },
-      'url1': {
-        required: false,
-        type: String,
-        default: '#'
-      },
-      'url2': {
-        required: false,
-        type: String,
-        default: '#'
       },
       'centered': {
         required: false,

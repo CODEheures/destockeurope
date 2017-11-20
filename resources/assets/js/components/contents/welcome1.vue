@@ -36,12 +36,12 @@
         <div class="sixteen wide column" v-if="masteradsIsActive=='1'">
             <masterads
                     :route-image-server = "masteradsRouteImageServer"
-                    :is-active="masteradsIsActive"
+                    :is-active="masteradsIsActive==='1'"
                     :url-img="masteradsUrlImg"
                     :url-redirect="masteradsUrlRedirect"
                     :offset-y-main-container="masteradsOffsetYMainContainer"
                     :selector-main-container="'#ads-offset-y-'+_uid"
-                    :width="masteradsWidth"
+                    :width="parseInt(masteradsWidth)"
                     :ads-offset-y="-10"
             ></masterads>
         </div>
