@@ -36,6 +36,14 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - items: Array of objects. Categories items for breacrumb: [{value: 1, name: 'Multimedia'}, {value: 8, name: 'computers'}, ...]
+   *  - withAction: Boolean. To active link
+   *
+   * Events:
+   *
+   */
   import { DestockTools } from '../../../destockTools'
   export default {
     props: {

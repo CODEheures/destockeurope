@@ -1,5 +1,5 @@
 <template>
-        <div :id="_uid" :class="oldCurrency !== 0 && oldCurrency !== null && oldCurrency !== undefined ? 'ui blue mini right pointing dropdown icon button' : 'ui mini right pointing dropdown icon button'">
+        <div :id="_uid" :class="oldCurrency !== undefined && oldCurrency !== null && oldCurrency !== 0 ? 'ui blue mini right pointing dropdown icon button' : 'ui mini right pointing dropdown icon button'">
             <i class="setting icon"></i>
             <div class="menu">
                 <div class="ui right search icon input">
@@ -22,6 +22,15 @@
 
 
 <script>
+  /**
+   * Props
+   *  - currenciesList: Array of currencies objects. List of the currencies: [{code: 'EUR', symbol: '€'}, {code: 'USD', symbol: '$'}, ...]
+   *  - oldCurrency: String. The current currencie choice on mounted: 'EUR'
+   *  - withAll: Boolean. To add an All item choice
+   *
+   * Events:
+   * @currencyChoice: emit the currencie choice: 'EUR'
+   */
   export default {
     props: {
       currenciesList: Array,

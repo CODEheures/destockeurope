@@ -21,6 +21,13 @@
 
 
 <script>
+  /**
+   * Props
+   *  - oldCurrency: String. The current currencie choice on mounted or updated: 'EUR'
+   *
+   * Events:
+   * @currencyChoice: emit the currencie choice: {cur: 'EUR, subunit: 2, symbol: '€'}
+   */
   export default {
     props: {
       oldCurrency: {
