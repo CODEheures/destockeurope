@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="geoloc" class="ui icon info message" :data-lng="dataLng" :data-lat="dataLat" :data-geoloc="dataGeoloc" v-on:geochange="latLngChange">
+        <div id="geoloc" class="ui icon info message" data-lng="" data-lat="" data-geoloc="" v-on:geochange="latLngChange">
             <i class="marker icon"></i>
             <div class="content">
                 <div class="header"></div>
@@ -15,11 +15,15 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - resize: Boolean. When resize is necessary
+   *
+   * Events:
+   *  @locationChange: emit on a pin map change: {lat: 12.111xx, lng: 12.123xxx, geoloc: 'my place name'}
+   */
   export default {
     props: {
-      lng: String,
-      lat: String,
-      geoloc: String,
       resize: {
         type: Boolean,
         required: false
@@ -33,13 +37,6 @@
     watch: {
       resize () {
         this.setSizeMap()
-      }
-    },
-    data () {
-      return {
-        dataLng: this.lng,
-        dataLat: this.lat,
-        dataGeoloc: this.geoloc
       }
     },
     methods: {

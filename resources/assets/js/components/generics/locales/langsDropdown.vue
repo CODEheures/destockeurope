@@ -10,6 +10,15 @@
 
 
 <script>
+  /**
+   * Props
+   *  - listAvailableLang: String. Json of the list of languages: "['fr', 'en', ...]"
+   *  - size: String. Size of the dropdown: mini or tiny or huge ... (see semantic-ui sizes)
+   *  - color: String. Color of the dropdown: primary or blue or purple ... (see semantic-ui sizes)
+   *
+   * Events:
+   *
+   */
   import { DestockTools } from '../../../destockTools'
   export default {
     props: {

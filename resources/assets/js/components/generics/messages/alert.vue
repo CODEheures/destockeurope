@@ -13,6 +13,16 @@
 </template>
 
 <script>
+  /**
+   * Global $alertV
+   * Use: this.$alertV({message: 'my message', type: 'error'})
+   * type: see types of semantic-ui message class (error, success, warning, info...)
+   *
+   * Props
+   *
+   * Events:
+   *
+   */
   import Vue from 'vue'
   export default {
     data () {

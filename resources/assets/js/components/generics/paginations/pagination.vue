@@ -7,7 +7,7 @@
                 </template>
                 <template v-else>
                     <a :class="datapage.isDisabled ? 'disabled item' : 'active item'" :href="datapage.href"
-                       v-on:click="changePage"
+                       v-on:click.prevent="changePage"
                        v-html="datapage.label"
                        :title="datapage.title">
                     </a>
@@ -22,11 +22,24 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - pages: Object. The page object by laravel: {current_page: 1, first_page_url: http..., .... }
+   *  - routeGetList: String. The route to follow with add page number (use with xhr)
+   *  - fakePageRoute: String. The route to follow withadd page number (use with href)
+   *
+   * Events:
+   *  @changePage: emit the url to go (not automatic href to prevent if prefer xhr loading)
+   */
   import Parser from 'url'
   export default {
     props: {
       pages: Object,
-      routeGetList: String,
+      routeGetList: {
+        type: String,
+        required: false,
+        default: ''
+      },
       fakePageRoute: {
         type: String,
         required: false,
@@ -174,7 +187,6 @@
         }
       },
       changePage (event) {
-        event.preventDefault()
         this.$emit('changePage', event.target.href)
       }
     }

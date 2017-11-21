@@ -6,14 +6,22 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeExistIn: String. The route to get if user exist in notification list
+   *  - routeAdd: String. The route to add user in notification list
+   *  - routeRemove: String. The route to remove user of notification list
+   *  - topic_id: Number. The topic number list
+   *
+   * Events:
+   *
+   */
   import Axios from 'axios'
   export default {
     props: {
-      // vue routes
       routeExistIn: String,
       routeAdd: String,
       routeRemove: String,
-      // Vue vars
       topic_id: Number
     },
     computed: {

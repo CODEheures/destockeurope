@@ -57,7 +57,6 @@
                     <div class="sixteen wide column pagination">
                         <pagination
                             :pages="paginate"
-                            :route-get-list="''"
                             :fake-page-route="nextUrl"
                             @changePage="changePage"
                         ></pagination>

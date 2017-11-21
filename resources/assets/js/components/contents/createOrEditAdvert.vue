@@ -310,9 +310,6 @@
                                         <div class="content">
                                             <div class="field">
                                                 <googleMap
-                                                        :lng="lng"
-                                                        :lat="lat"
-                                                        :geoloc="geoloc"
                                                         :resize="flagMapResize"
                                                         @locationChange="latLngChange"
                                                 ></googleMap>

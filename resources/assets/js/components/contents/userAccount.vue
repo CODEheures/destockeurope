@@ -61,7 +61,6 @@
                                 <locales-dropdown-2
                                         :old-locale="''"
                                         @localeChoice="localeChoice"
-                                        @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                                 ></locales-dropdown-2>
                             </div>
                             <div class="field">
@@ -115,9 +114,6 @@
                         {{ strings.googlemapDivider }}
                     </h4>
                     <googleMap
-                            :lng="lng"
-                            :lat="lat"
-                            :geoloc="geoloc"
                             @locationChange="latLngChange"
                     ></googleMap>
                 </div>

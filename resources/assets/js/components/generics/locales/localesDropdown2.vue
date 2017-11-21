@@ -24,12 +24,17 @@
 
 
 <script>
+  /**
+   * Props
+   *  - oldLocale: String. To set the field by a value
+   *
+   * Events:
+   *  @localeChoice: emit on a choice: 'fr-FR'
+   */
   import Axios from 'axios'
   export default {
     props: {
-      oldLocale: {
-        type: String
-      }
+      oldLocale: String
     },
     computed: {
       properties () {
@@ -81,7 +86,7 @@
             that.isLoaded = true
           })
           .catch(function () {
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       setReady () {
