@@ -10,6 +10,13 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - steps: Array. The array of step objects: [{description:"describe", icon:"write", isActive:true, isCompleted:false, isDisabled:false, title:"Création de l'annonce"}, {..}, ...]
+   *
+   * Events:
+   *
+   */
   export default {
     props: {
       steps: {

@@ -18,13 +18,20 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - pictures: Array. List of picture object (with hashName, normalUrl, thumbUrl...)
+   *  - mainPicture: String. HashName of the main picture
+   *  - videoId: The id of the video
+   *  - lazyload: Boolean. To choice if lazy load or not
+   *
+   * Events:
+   *  @openLightBox: emit when click on image to open a ligthBox
+   *
+   */
   export default {
     props: {
-      // vue routes
-      // vue vars
-      pictures: {
-        type: Array
-      },
+      pictures: Array,
       mainPicture: {
         type: String,
         required: false,

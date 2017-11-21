@@ -36,6 +36,17 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - options: Object. Object of swiper  options
+   *  - pictures: Array. List of pictures objects
+   *  - mainPicture: String. Hash of the main picture
+   *  - videoId: The id of the video
+   *  - lazyload: Boolean. To choice if lazy load or not
+   *
+   * Events:
+   *  @openLightBox: emit when click on image to open a ligthBox
+   */
   export default {
     props: {
       options: {

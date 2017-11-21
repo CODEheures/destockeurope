@@ -11,6 +11,16 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - options: Object. Object of swiper  options
+   *  - pictures: Array. List of pictures objects
+   *  - mainPicture: String. Hash of the main picture
+   *  - videoId: The id of the video
+   *
+   * Events:
+   *
+   */
   import Player from '@vimeo/player'
   export default {
     props: {
@@ -20,9 +30,7 @@
           autoplay: 3500
         }
       },
-      pictures: {
-        type: Array
-      },
+      pictures: Array,
       mainPicture: String,
       videoId: {
         type: Number,
