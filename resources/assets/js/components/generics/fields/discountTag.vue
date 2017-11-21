@@ -18,15 +18,20 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - advert: Object. The advert object
+   *  - margins: Object. The margin object
+   *  - forSeller: Boolean. If the discount tag is for seller (with or without delegation margin)
+   * Events:
+   *
+   */
   export default {
     props: {
-      advert: {
-        type: Object
-      },
-      margins: {
-        type: Object
-      },
+      advert: Object,
+      margins: Object,
       forSeller: {
+        type: Boolean,
         required: false,
         default: false
       }

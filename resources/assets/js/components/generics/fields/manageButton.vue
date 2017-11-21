@@ -15,12 +15,19 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - advert: Object. The advert object
+   *  - withSeeAction: Boolean. If want see action in menu
+   *  - withDelegationAction: Boolean. If want delegation action in menu
+   * Events:
+   *  @deleteAdvert: emit url for delete advert: {'url': this.advert.destroyUrl}
+   *
+   */
   import { DestockTools } from '../../../destockTools'
   export default {
     props: {
-      advert: {
-        type: Object
-      },
+      advert: Object,
       withSeeAction: {
         type: Boolean,
         required: false,
@@ -38,9 +45,6 @@
       }
     },
     mounted () {
-      this.constructMe()
-    },
-    updated () {
       this.constructMe()
     },
     methods: {

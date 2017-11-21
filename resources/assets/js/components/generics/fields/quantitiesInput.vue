@@ -5,11 +5,11 @@
                 <div class="two fields">
                     <div class="field">
                         <label>{{ strings.totalQuantityLabel }}</label>
-                        <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" @blur="setMaxLotMini"></number-input>
+                        <number-input name="totalQuantity" :min="1" :decimal="0" v-model="dataAdvert.totalQuantity" @blur="setMaxLotMini"></number-input>
                     </div>
                     <div class="field">
                         <label>{{ strings.lotMiniQuantityLabel }}</label>
-                        <number-input  name="lotMiniQuantity" :min="1" :max="maxLotMini" :decimal="0" v-model="advert.lotMiniQuantity"></number-input>
+                        <number-input  name="lotMiniQuantity" :min="1" :max="maxLotMini" :decimal="0" v-model="dataAdvert.lotMiniQuantity"></number-input>
                     </div>
                 </div>
             </div>
@@ -25,28 +25,42 @@
             <div class="two fields">
                 <div class="field">
                     <label>{{ strings.totalQuantityLabel }}</label>
-                    <number-input name="totalQuantity" :min="1" :decimal="0" v-model="advert.totalQuantity" @blur="setMaxLotMini"></number-input>
+                    <number-input name="totalQuantity" :min="1" :decimal="0" v-model="dataAdvert.totalQuantity" @blur="setMaxLotMini"></number-input>
                 </div>
                 <div class="field">
                     <label>{{ strings.lotMiniQuantityLabel }}</label>
-                    <number-input  name="lotMiniQuantity" :min="1" :max="maxLotMini" :decimal="0" v-model="advert.lotMiniQuantity"></number-input>
+                    <number-input  name="lotMiniQuantity" :min="1" :max="maxLotMini" :decimal="0" v-model="dataAdvert.lotMiniQuantity"></number-input>
                 </div>
             </div>
         </template>
         <template v-if="!withValidButton && onlyMiniLot">
             <label>{{ strings.lotMiniQuantityLabel }}</label>
-            <number-input  name="lotMiniQuantity" :min="1" :max="advert.totalQuantity" :decimal="0" v-model="advert.lotMiniQuantity"></number-input>
+            <number-input  name="lotMiniQuantity" :min="1" :max="dataAdvert.totalQuantity" :decimal="0" v-model="dataAdvert.lotMiniQuantity"></number-input>
         </template>
     </div>
 </template>
 
 <script>
+  /**
+   * Model
+   *  - advert: Object. The advert object to process margins
+   *
+   * Props
+   *  - withValidButton: Boolean. If update values is doing with a valid button
+   *  - onlyMiniLot: Boolean. To see only the lot mini input
+   *
+   * Events:
+   *
+   */
   import Axios from 'axios'
+  import _ from 'lodash'
   export default {
+    model: {
+      prop: 'advert',
+      event: 'change'
+    },
     props: {
-      advert: {
-        type: Object
-      },
+      advert: Object,
       withValidButton: {
         type: Boolean,
         required: false,
@@ -63,8 +77,17 @@
         return this.$store.state.strings['quantities-input-field']
       }
     },
+    watch: {
+      'dataAdvert.totalQuantity' () {
+        this.$emit('change', this.dataAdvert)
+      },
+      'dataAdvert.lotMiniQuantity' () {
+        this.$emit('change', this.dataAdvert)
+      }
+    },
     data () {
       return {
+        dataAdvert: _.cloneDeep(this.advert),
         maxLotMini: null
       }
     },
@@ -74,16 +97,16 @@
     methods: {
       updateQuantities () {
         let that = this
-        Axios.patch(that.advert.updateQuantitiesUrl, {'totalQuantity': that.advert.totalQuantity, 'lotMiniQuantity': that.advert.lotMiniQuantity})
+        Axios.patch(that.advert.updateQuantitiesUrl, {'totalQuantity': that.dataAdvert.totalQuantity, 'lotMiniQuantity': that.dataAdvert.lotMiniQuantity})
           .then(function (response) {
-            that.$emit('updateSuccess')
+            that.$alertV({'message': that.strings.updateSuccessMessage, 'type': 'success'})
           })
           .catch(function () {
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       setMaxLotMini () {
-        this.maxLotMini = this.advert.totalQuantity
+        this.maxLotMini = this.dataAdvert.totalQuantity
       }
     }
   }

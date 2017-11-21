@@ -42,11 +42,16 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - loadInfos: Object. The object for charts {bytes_load:0, count:11, count_load:0.01, load:0.01, name:"statics.destockeurope.dev", size:1}
+   *
+   * Events:
+   *
+   */
   export default {
     props: {
-      loadInfos: {
-        type: Object
-      }
+      loadInfos: Object
     },
     computed: {
       strings () {

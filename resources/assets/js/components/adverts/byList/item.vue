@@ -164,27 +164,23 @@
                             </div>
                             <div class="six wide right aligned vertical middle aligned column">
                                 <p class="infos">
-                                    <span :class="advert.isNegociated ? 'ui big blue left pointing label price negociated' : 'ui big yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/>
-                                    <span :title="strings.totalQuantityLabel"><i class="cubes icon"></i>{{ advert.totalQuantity }} </span>
-                                    <span :title="strings.lotMiniQuantityLabel"><i class="cube icon"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span :class="advert.isNegociated ? 'ui big blue left pointing label price negociated' : 'ui big yellow left pointing label price'">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : dataAdvert.price_margin }}</span><br/>
+                                    <span :title="strings.totalQuantityLabel"><i class="cubes icon"></i>{{ dataAdvert.totalQuantity }} </span>
+                                    <span :title="strings.lotMiniQuantityLabel"><i class="cube icon"></i>{{ dataAdvert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
                                 </p>
                             </div>
                             <div class="sixteen wide column item-description" v-if="!advert.deleted_at">
                                 <div class="ui form">
                                     <quantities-input-field
-                                            :advert="advert"
-                                            @updateSuccess="$emit('updateSuccess')"
-                                            @loadError="$emit('loadError')"
+                                            v-model="dataAdvert"
                                     ></quantities-input-field>
                                 </div>
                             </div>
                             <div class="sixteen wide column item-description">
                                 <div class="ui form">
                                     <margin-input-field
-                                            :advert="advert"
-                                            @updateSuccess="$emit('updateSuccess')"
-                                            @loadError="$emit('loadError')"
+                                            v-model="dataAdvert"
                                     ></margin-input-field>
                                 </div>
                             </div>
@@ -201,9 +197,9 @@
                         <div class="ui grid">
                             <div class="sixteen wide mobile only right aligned column">
                                 <p class="infos">
-                                    <span class="ui big blue left pointing label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : advert.price_margin }}</span><br/>
-                                    <span><i class="cubes icon" :title="strings.totalQuantityLabel"></i>{{ advert.totalQuantity }} </span>
-                                    <span><i class="cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ advert.lotMiniQuantity }}</span>
+                                    <span class="ui big blue left pointing label">{{ advert.isNegociated ? strings.isNegociatedLabel + '(' + advert.currencySymbol + ')' : dataAdvert.price_margin }}</span><br/>
+                                    <span><i class="cubes icon" :title="strings.totalQuantityLabel"></i>{{ dataAdvert.totalQuantity }} </span>
+                                    <span><i class="cube icon" :title="strings.lotMiniQuantityLabel"></i>{{ dataAdvert.lotMiniQuantity }}</span>
                                     <span v-if="advert.isUrgent" class="ui red horizontal label">{{ strings.urgentLabel }}</span>
                                 </p>
                             </div>
@@ -212,18 +208,14 @@
                     <div class="sixteen wide mobile only column" v-if="!advert.deleted_at">
                         <div class="ui form">
                             <quantities-input-field
-                                    :advert="advert"
-                                    @updateSuccess="$emit('updateSuccess')"
-                                    @loadError="$emit('loadError')"
+                                    v-model="dataAdvert"
                             ></quantities-input-field>
                         </div>
                     </div>
                     <div class="sixteen wide mobile only column">
                         <div class="ui form">
                             <margin-input-field
-                                    :advert="advert"
-                                    @updateSuccess="$emit('updateSuccess')"
-                                    @loadError="$emit('loadError')"
+                                    v-model="dataAdvert"
                             ></margin-input-field>
                         </div>
                     </div>
@@ -314,9 +306,7 @@
                             <div class="sixteen wide column item-description" v-if="!advert.deleted_at">
                                 <div class="ui form">
                                     <quantities-input-field
-                                            :advert="advert"
-                                            @updateSuccess="$emit('updateSuccess')"
-                                            @loadError="$emit('loadError')"
+                                            v-model="dataAdvert"
                                     ></quantities-input-field>
                                 </div>
                             </div>
@@ -388,9 +378,7 @@
                     <div class="sixteen wide mobile only column" v-if="!advert.deleted_at">
                         <div class="ui form">
                             <quantities-input-field
-                                    :advert="advert"
-                                    @updateSuccess="$emit('updateSuccess')"
-                                    @loadError="$emit('loadError')"
+                                    v-model="dataAdvert"
                             ></quantities-input-field>
                         </div>
                     </div>

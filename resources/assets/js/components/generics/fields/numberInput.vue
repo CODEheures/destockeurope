@@ -7,6 +7,19 @@
 </template>
 
 <script>
+  /**
+   * Model
+   *  - value: Number. The number to process in input
+   *
+   * Props
+   *  - decimal: Number. Number of decimal of value
+   *  - min: Number. The limit min value
+   *  - max: Number. The limit max value
+   *  - emitOnBlur: Boolean. To activate @blur emiter
+   *
+   * Events:
+   *  @blur: emit when blur of input
+   */
   export default {
     props: {
       value: {

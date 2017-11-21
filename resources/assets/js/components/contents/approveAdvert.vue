@@ -93,12 +93,12 @@
                                         <div class="ui form">
                                             <div class="field" v-if="advert.user.isSupplier">
                                                 <quantities-input-field
-                                                        :advert="advert"
+                                                        v-model="advertsList[index]"
                                                         :with-valid-button="false"
                                                         :only-mini-lot="true"
                                                 ></quantities-input-field>
                                                 <margin-input-field
-                                                        :advert="advert"
+                                                        v-model="advertsList[index]"
                                                         :with-valid-button="false"
                                                 ></margin-input-field>
                                             </div>

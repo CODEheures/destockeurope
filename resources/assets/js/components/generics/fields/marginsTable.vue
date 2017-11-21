@@ -96,12 +96,18 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - advert: Object. The advert object
+   *  - forSeller: Boolean. If margin table is for the seller (with or without delegations margins)
+   *  - forLotMargin: Boolean. If margin table is for one lot
+   * Events:
+   *
+   */
   import { DestockTools } from '../../../destockTools'
   export default {
     props: {
-      advert: {
-        type: Object
-      },
+      advert: Object,
       forSeller: {
         type: Boolean,
         required: false,
