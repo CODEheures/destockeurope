@@ -6,6 +6,21 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - mini: Number. The min value of the slider
+   *  - maxi: Number. The max value of the slider
+   *  - handleMin: Number. The position of the handle min slider
+   *  - handleMax: Number. The position of the handle max slider
+   *  - step: Number. To move slider with a step
+   *  - name: String. The name of the slider (use in emitters)
+   *  - prefix: String. The prefix of handles values
+   *  - title: String. Title above the slider
+   *
+   * Events:
+   *  @rangeUpdate: emit object of handles position on end move {name: that.name, values: [parseFloat(data.from), parseFloat(data.to)]}
+   *
+   */
   export default {
     props: {
       mini: Number,

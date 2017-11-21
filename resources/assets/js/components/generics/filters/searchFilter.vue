@@ -1,9 +1,9 @@
 <template>
     <div :id="_uid" class="ui fluid search filter">
-        <div :class="!wantSearch ? 'ui fluid action left icon input' : 'ui fluid left icon input'">
+        <div :class="!canSearch ? 'ui fluid action left icon input' : 'ui fluid left icon input'">
             <i class="filter icon"></i>
-            <input :class="wantSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="placeHolder">
-            <button class="ui red icon button" v-if="!wantSearch">
+            <input :class="canSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="placeHolder">
+            <button class="ui red icon button" v-if="!canSearch">
                 <i class="remove icon"
                     v-on:click="resetSearch(true)">
                 </i>
@@ -14,31 +14,36 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeSearch: String. Url of the search route
+   *  - flagReset: Boolean. A flag to force reset
+   *  - resultsFor: String. The value in input when resultFor in url
+   *  - update: Boolean. To indicate an update is necessary
+   *  - withXsrfToken: Boolean. To add token at the search request
+   *  - fields: Object. Fields to show on results: {description:"resume", image:"thumb", price:"price_margin", title:"titleWithManuRef"}
+   *  - placeHolder: String. The placeHolder input value
+   *
+   * Events:
+   *  @refreshResults: emit the value of the search. Used for the 'resultFor' param in the next request
+   *  @clearSearchResults: emit when the input is cleared
+   */
   import Parser from 'url'
   export default {
     props: {
-      // vue routes
       routeSearch: String,
-      // vue vars
       flagReset: {
         type: Boolean,
         default: false
       },
-      resultsFor: {
-        type: String
-      },
-      update: {
-        type: Boolean
-      },
+      resultsFor: String,
+      update: Boolean,
       withXsrfToken: {
         type: Boolean,
         required: false,
         default: false
       },
-      fields: {
-        type: Object
-      },
-      // vue strings
+      fields: Object,
       placeHolder: String
     },
     computed: {
@@ -77,7 +82,7 @@
     data () {
       return {
         dataRouteSearch: '',
-        wantSearch: true,
+        canSearch: true,
         elemSearch: undefined
       }
     },
@@ -98,14 +103,14 @@
       resetSearch (withEmit) {
         this.elemSearch.search('set value', '')
         this.elemSearch.search('clear cache')
-        this.wantSearch = true
+        this.canSearch = true
         if (withEmit) { this.$emit('clearSearchResults') }
       },
       updateSearch () {
         this.elemSearch = $('#' + this._uid)
         if (this.resultsFor !== undefined && this.resultsFor !== null) {
           this.elemSearch.search('set value', this.resultsFor)
-          this.wantSearch = false
+          this.canSearch = false
         }
         else {
           this.resetSearch(false)
@@ -131,7 +136,7 @@
               that.elemSearch.search('hide results')
               let query = that.elemSearch.search('get value')
               that.$emit('refreshResults', query)
-              that.wantSearch = false
+              that.canSearch = false
             })
           }
         })

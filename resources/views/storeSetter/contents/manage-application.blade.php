@@ -36,3 +36,4 @@
                         ]
                 ])}}"
 ></store-strings-setter>
+@include('storeSetter.strings.generics.type-radio-button')

@@ -48,6 +48,7 @@
                         ]
                 ])}}"
 ></store-strings-setter>
+@include('storeSetter.strings.generics.type-radio-button')
 @include('storeSetter.strings.generics.margin-table')
 @include('storeSetter.strings.generics.currencies-dropdown-2')
 @include('storeSetter.strings.generics.googleMap')

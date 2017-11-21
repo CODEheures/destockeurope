@@ -9,17 +9,23 @@
                 </i>
             </button>
         </div>
-        <!--<input id="filter_location" class="" type="text">-->
     </div>
 </template>
 
 <script>
+  /**
+   * Props
+   *  - accurateList: Array of the possible accurate geolocation. ["locality", "postal_code", "administrative_area_level_2", ...]
+   *  - withNullBorderRadiusBottom: Boolean. To disable the border bottom radius
+   *
+   * Events:
+   *  @locationUpdate: emit the object of location on the input {locality: 'joué-les-tours', ..., locationFor: 'Joué-Lès-Tous'}
+   *  @clearLocationResults: emit when the input is cleared
+   */
   import { DestockTools } from '../../../destockTools'
   export default {
     props: {
-      accurateList: {
-        type: Array
-      },
+      accurateList: Array,
       withNullBorderRadiusBottom: {
         type: Boolean,
         default: false,

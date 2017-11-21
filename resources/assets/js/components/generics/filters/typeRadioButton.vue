@@ -19,6 +19,16 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeGetListType: String. Url of the list
+   *  - firstMenuName: String. The label of the field
+   *  - oldChoice: String. To set the field by a value
+   *  - isDisabled: Boolean. To disable the field
+   *
+   * Events:
+   *  @typeChoice: emit the value of the choice
+   */
   import Axios from 'axios'
   export default {
     props: {
@@ -33,6 +43,11 @@
         type: Boolean,
         default: false,
         required: false
+      }
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['type-radio-button']
       }
     },
     data () {
@@ -63,7 +78,7 @@
             that.isLoaded = true
           })
           .catch(function () {
-            that.$parent.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       }
     }
