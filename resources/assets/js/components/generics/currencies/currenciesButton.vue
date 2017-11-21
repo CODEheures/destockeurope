@@ -1,5 +1,5 @@
 <template>
-        <div :id="_uid" :class="oldCurrency !== undefined && oldCurrency !== null && oldCurrency !== 0 ? 'ui blue mini right pointing dropdown icon button' : 'ui mini right pointing dropdown icon button'">
+        <div :id="_uid" :class="oldCurrency !== undefined && oldCurrency !== null && oldCurrency !== '0' ? 'ui blue mini right pointing dropdown icon button' : 'ui mini right pointing dropdown icon button'">
             <i class="setting icon"></i>
             <div class="menu">
                 <div class="ui right search icon input">
@@ -58,7 +58,7 @@
           fullTextSearch: true,
           forceSelection: false,
           onChange (value, text, $selectedItem) {
-            if (value === 0) {
+            if (value === '0') {
               that.$emit('currencyChoice', null)
             }
             else {
