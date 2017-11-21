@@ -20,6 +20,13 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - advert: Object. Advert to place in highlight
+   *
+   * Events:
+   *
+   */
   export default {
     props: {
       advert: Object

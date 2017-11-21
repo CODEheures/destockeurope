@@ -27,26 +27,35 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeSearch: String. The route for search results
+   *
+   * Events:
+   *  @clearSearchResults: emit when search is cleared
+   *  @refreshResults: emit when search for: 'a term'
+   */
   import { DestockTools } from '../../destockTools'
   export default {
     props: {
-      routeSearch: {
-        type: String
+      routeSearch: String
+    },
+    computed: {
+      strings () {
+        return this.$store.state.strings['advert-simple-search-filter']
+      },
+      properties () {
+        return this.$store.state.properties['global']
       }
     },
     data () {
       return {
-        strings: {},
-        properties: {},
-        dataResultsFor: '',
+        dataResultsFor: DestockTools.findInUrl('resultsFor'),
         dataUpdateSearch: false
       }
     },
     mounted () {
-      this.strings = this.$store.state.strings['advert-simple-search-filter']
-      this.properties = this.$store.state.properties['global']
       // search filter
-      this.dataResultsFor = DestockTools.findInUrl('resultsFor')
       this.dataUpdateSearch = !this.dataUpdateSearch
       // Accordion
       let accordionElement = $('#filter-accordion-' + this._uid)

@@ -154,12 +154,12 @@
    *  - locationAccurateList: Array. The list of the accurate geolocation
    *
    * Events:
-   *  @categoryChoice: emit the categorie choice
-   *  @updateFilter: emit the object for update filter
-   *  @clearSearchResults
-   *  @refreshResults
-   *  @clearLocationResults
-   *  @breadCrumbItems
+   *  @categoryChoice: emit the categorie choice value
+   *  @updateFilter: emit the object for update filter: {'isUrgent': true}
+   *  @clearSearchResults: emit when search input is cleared
+   *  @refreshResults: emit when search for: 'a term'
+   *  @clearLocationResults: emit when location input is cleared
+   *  @breadCrumbItems: emit the breacrumb array [{name: 'multimedia', value: 1}, {name: 'computers', value: 14}, ...]
    */
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
@@ -179,34 +179,34 @@
         return this.$store.state.properties['global']
       },
       dataCurrenciesList () {
-        return this.$store.state.properties['adverts-by-list-item']['ranges']['currenciesList']
+        return this.$store.state.properties['adverts-by-list']['ranges']['currenciesList']
       },
       dataMinPrice () {
-        return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
+        return parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['minPrice'])
       },
       dataMaxPrice () {
-        return parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
+        return parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['maxPrice'])
       },
       dataHandleMinPrice () {
-        return parseFloat(DestockTools.findInUrl('minPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['minPrice'])
+        return parseFloat(DestockTools.findInUrl('minPrice')) || parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['minPrice'])
       },
       dataHandleMaxPrice () {
-        return parseFloat(DestockTools.findInUrl('maxPrice')) || parseFloat(this.$store.state.properties['adverts-by-list-item']['ranges']['maxPrice'])
+        return parseFloat(DestockTools.findInUrl('maxPrice')) || parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['maxPrice'])
       },
       dataPricePrefix () {
-        return this.$store.state.properties['adverts-by-list-item']['ranges']['currencySymbol']
+        return this.$store.state.properties['adverts-by-list']['ranges']['currencySymbol']
       },
       dataMinQuantity () {
-        return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
+        return parseInt(this.$store.state.properties['adverts-by-list']['ranges']['minQuantity'])
       },
       dataMaxQuantity () {
-        return parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
+        return parseInt(this.$store.state.properties['adverts-by-list']['ranges']['maxQuantity'])
       },
       dataHandleMinQuantity () {
-        return parseInt(DestockTools.findInUrl('minQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['minQuantity'])
+        return parseInt(DestockTools.findInUrl('minQuantity')) || parseInt(this.$store.state.properties['adverts-by-list']['ranges']['minQuantity'])
       },
       dataHandleMaxQuantity () {
-        return parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list-item']['ranges']['maxQuantity'])
+        return parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list']['ranges']['maxQuantity'])
       },
       dataResultsFor () {
         return DestockTools.findInUrl('resultsFor')

@@ -10,6 +10,8 @@
                                 'deleteAdvertLabel' => trans('strings.view_advert_show_delete2_label'),
                                 'validationOnProgressLabel' => trans('strings.view_advert_validation_on_progress'),
                                 'bookmarkInfo' => trans('strings.view_advert_show_bookmark_info'),
+                                'bookmarkSuccess' => trans('strings.view_advert_show_bookmark_success'),
+                                'unbookmarkSuccess' => trans('strings.view_advert_show_unbookmark_success'),
                                 'viewsInfo' => trans('strings.view_advert_show_views_info'),
                                 'trustedProviderLabel' => trans('strings.view_account_trusted_provider'),
                                 'refLabel' => trans('strings.view_advert_form_ref_label'),

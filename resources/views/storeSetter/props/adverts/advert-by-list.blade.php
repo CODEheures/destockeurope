@@ -1,6 +1,6 @@
 <store-properties-setter
         properties="{{ json_encode([
-                        'key' => 'adverts-by-list-item',
+                        'key' => 'adverts-by-list',
                         'values' => [
                                 'ranges' => isset($ranges) ? $ranges: null,
                                 'list' => $advertsList

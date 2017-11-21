@@ -47,8 +47,6 @@
                                 :can-get-delegations="canGetDelegations==1"
                                 :is-personnal-list="isPersonnalList==1"
                                 @deleteAdvert="destroyMe($event.url)"
-                                @updateSuccess="$alertV({'message': strings.updateSuccessMessage, 'type': 'success'})"
-                                @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                             ></adverts-by-list-item>
                         </div>
                     </div>

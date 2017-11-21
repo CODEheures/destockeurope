@@ -33,9 +33,6 @@
                             :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
                             @deleteAdvert="$emit('deleteAdvert', $event)"
-                            @updateSuccess="$emit('updateSuccess')"
-                            @loadError="$emit('loadError')"
-                            @bookmarkSuccess="$emit('bookmarkSuccess')"
                             @unbookmarkSuccess="$emit('unbookmarkSuccess')"
                     ></adverts-by-list-item>
                     <div class="item ads">
@@ -57,9 +54,6 @@
                             :can-get-delegations="canGetDelegations"
                             :is-personnal-list="isPersonnalList"
                             @deleteAdvert="$emit('deleteAdvert', $event)"
-                            @updateSuccess="$emit('updateSuccess')"
-                            @loadError="$emit('loadError')"
-                            @bookmarkSuccess="$emit('bookmarkSuccess')"
                             @unbookmarkSuccess="$emit('unbookmarkSuccess')"
                     ></adverts-by-list-item>
                 </template>
@@ -69,15 +63,23 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeBookmarkAdd: Route to add advert to bookmarks
+   *  - routeBookmarkRemove: Route to remove advert of bookmarks
+   *  - adsFrequency: Number. The frequency (period to be exact) of ads in advert list
+   *  - canGetDelegations: Boolean. If user can get delegation
+   *  - isPersonnalList: Boolean. If the list is a personnal list
+   *
+   * Events:
+   *  @unbookmarkSuccess: emit when unbookmark
+   *  @deleteAdvert: emit the url to delete advert {'url': this.advert.destroyUrl}
+   *
+   */
   export default {
     props: {
       routeBookmarkAdd: String,
       routeBookmarkRemove: String,
-      flagForceReload: {
-        type: Boolean,
-        default: false,
-        required: false
-      },
       adsFrequency: Number,
       canGetDelegations: {
         type: Boolean,
@@ -98,7 +100,7 @@
         return this.$store.state.properties['global']
       },
       advertsList () {
-        return this.$store.state.properties['adverts-by-list-item']['list']['adverts']['data']
+        return this.$store.state.properties['adverts-by-list']['list']['adverts']['data']
       }
     }
   }

@@ -141,12 +141,20 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - advert: Object. The advert object
+   *  - userName: String.
+   *  - isUserOwner: Boolean. If the user is the owner of the advert
+   *  - isStatic: Boolean. If the advert is static (no modification, only show)
+   *
+   * Events:
+   *
+   */
   import moment from 'moment'
   import { DestockTools } from '../../../destockTools'
   export default {
     props: {
-      // vue routes
-      // vue vars
       advert: Object,
       userName: {
         type: String,
@@ -199,6 +207,7 @@
     },
     mounted () {
       let that = this
+      this.updateMargins()
       this.dataHeight = $('#modal-' + this._uid).width() / this.properties.imageRatio
       if (!this.isStatic) {
         this.$watch('advert.price_coefficient', function () {
@@ -214,9 +223,6 @@
           that.updateMargins()
         })
       }
-    },
-    updated () {
-      this.updateMargins()
     },
     methods: {
       getMoment (dateTime) {

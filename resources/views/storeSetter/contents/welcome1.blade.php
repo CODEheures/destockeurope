@@ -8,8 +8,6 @@
                         'key' => 'welcome1',
                         'values' => [
                                 'loadErrorMessage' => trans('strings.view_all_error_load_message'),
-                                'bookmarkSuccess' => trans('strings.view_advert_show_bookmark_success'),
-                                'unbookmarkSuccess' => trans('strings.view_advert_show_unbookmark_success'),
                                 'modalValidHeader' => trans('strings.view_advert_show_modal_delete_header'),
                                 'modalValidDescription' => trans('strings.view_advert_show_modal_delete_description'),
                                 'modalNo' => trans('strings.modal_no'),

@@ -395,10 +395,22 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeBookmarkAdd: Route to add advert to bookmarks
+   *  - routeBookmarkRemove: Route to remove advert of bookmarks
+   *  - advert: Object. The advert object
+   *  - canGetDelegations: Boolean. If user can get delegation
+   *  - isPersonnalList: Boolean. If the list is a personnal list
+   *
+   * Events:
+   *  @unbookmarkSuccess: emit when unbookmark
+   *  @deleteAdvert: emit the url to delete advert {'url': this.advert.destroyUrl}
+   *
+   */
   import _ from 'lodash'
   import moment from 'moment'
   import Axios from 'axios'
-
   export default {
     props: {
       routeBookmarkAdd: String,
@@ -443,7 +455,7 @@
         Axios.get(this.routeBookmarkAdd + '/' + this.advert.id)
           .then(function (response) {
             that.dataIsUserBookmark = true
-            that.$emit('bookmarkSuccess')
+            that.$alertV({'message': that.strings.bookmarkSuccess, 'type': 'success'})
             that.dataAdvert.isUserBookmark = true
           })
           .catch(function (error) {
@@ -460,6 +472,7 @@
         Axios.get(this.routeBookmarkRemove + '/' + this.advert.id)
           .then(function (response) {
             that.dataIsUserBookmark = false
+            that.$alertV({'message': that.strings.unbookmarkSuccess, 'type': 'success'})
             that.$emit('unbookmarkSuccess')
             that.dataAdvert.isUserBookmark = false
           })

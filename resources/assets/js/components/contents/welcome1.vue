@@ -72,8 +72,6 @@
                             :route-bookmark-add="routeBookmarkAdd"
                             :route-bookmark-remove="routeBookmarkRemove"
                             :ads-frequency="parseInt(adsFrenquency)"
-                            @bookmarkSuccess="$alertV({'message': strings.bookmarkSuccess, 'type': 'success'})"
-                            @unbookmarkSuccess="$alertV({'message': strings.unbookmarkSuccess, 'type': 'success'})"
                     ></adverts-by-list>
                 </div>
                 <div class="ui right aligned grid">
@@ -156,7 +154,7 @@
         return JSON.parse(this.fakeHighlightAdvert)
       },
       paginate () {
-        let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list-item']['list']['adverts'])
+        let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list']['list']['adverts'])
         delete paginate.data
         return paginate
       }

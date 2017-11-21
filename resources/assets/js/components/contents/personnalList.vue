@@ -48,8 +48,6 @@
                             :can-get-delegations="canGetDelegations==true"
                             :is-personnal-list="isPersonnalList==true"
                             @deleteAdvert="destroyMe($event.url)"
-                            @updateSuccess="$alertV({'message': strings.updateSuccessMessage, 'type': 'success'})"
-                            @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                             @unbookmarkSuccess="unbookmarkSuccess"
                     ></adverts-by-list>
                 </div>
@@ -100,7 +98,7 @@
         return this.$store.state.properties['global']
       },
       paginate () {
-        let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list-item']['list']['adverts'])
+        let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list']['list']['adverts'])
         delete paginate.data
         return paginate
       }
