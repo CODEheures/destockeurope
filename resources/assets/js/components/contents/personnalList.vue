@@ -73,21 +73,32 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeBookmarkAdd: String. The route to add advert on user bookmarks
+   *  - routeBookmarkRemove: String. The route to remove advert of user bookmarks
+   *  - reloadAdvertOnUnbookmarkSuccess: String. Boolean status if want to reload on unbookmark
+   *  - adsFrequency: String. The frequency of ads on list (period to be exact)
+   *  - canGetDelegations: String. Boolean status if the user can get delegation
+   *  - isPersonnalList: String. Boolean status if list is personnal
+   *  - isDelegation: String. Boolean status if list is delegation list
+   *  - contentHeader: String. The header
+   *
+   * Events:
+   *
+   */
   import _ from 'lodash'
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeBookmarkAdd',
       'routeBookmarkRemove',
-      // vue vars
       'reloadAdvertOnUnbookmarkSuccess',
       'adsFrequency',
       'canGetDelegations',
       'isPersonnalList',
       'isDelegation',
-      // vue strings
       'contentHeader'
     ],
     computed: {

@@ -65,15 +65,22 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeCleanApp: String. The route to clean app
+   *  - routeGetStats: String. The route to get stats
+   *  - loadInfos: JSON of load of picture services
+   *
+   * Events:
+   *
+   */
   import moment from 'moment'
   import Axios from 'axios'
   export default {
     directives: {focus: focus},
     props: {
-      // vue routes
       routeCleanApp: String,
       routeGetStats: String,
-      // vue vars
       loadInfos: String
     },
     computed: {

@@ -562,12 +562,41 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeAdvertFormPost: String. The route to post advert
+   *  - routeGetCost: String. The route to get cost of advert
+   *  - routePrices: String. The route to list of prices
+   *  - routeGetListType: String. The route to list of advert types
+   *  - routePostPicture: String. The route to post a picture
+   *  - routeGetListPosts: String. The route to get the list of pictures
+   *  - routeDelPicture: String. The route to del a post picture
+   *  - routeGetVideoPostTicket: String. The route to get a vimeo ticket
+   *  - routeDelTempoVideo: String. The route for del tempo video
+   *  - routeGetStatusVideo: String. The route to get status of upload video
+   *  - old: String. JSON of the old inputs values
+   *  - formTitleMinValid: String. Minimun title length to valid form
+   *  - formDescriptionMaxValid: String. Maximum title length to valid form
+   *  - formDescriptionMinValid: String. Minimun description length to valid form
+   *  - formDescriptionMaxValid: String. Maximum description length to valid form
+   *  - isDelegation: String. Boolean status if the advert is a delegation
+   *  - editAdvert: String. Boolean status if the advert is on edit
+   *  - geolocInitLat: String. Latitude
+   *  - geolocInitLng: String. Longitude
+   *  - advertFormPhotoNbFreePicture: String. The number of free pictures
+   *  - maxFiles: String. The max number of photo files
+   *  - maxPhotoFileSize: String. The maximum photo file size
+   *  - maxVideoFileSize: String. The maximum video file size
+   *  - sessionVideoId: String. The Id of the video
+   *
+   * Events:
+   *
+   */
   import moment from 'moment'
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeAdvertFormPost',
       'routeGetCost',
       'routePrices',
@@ -578,7 +607,6 @@
       'routeGetVideoPostTicket',
       'routeDelTempoVideo',
       'routeGetStatusVideo',
-      // vue vars
       'old',
       'formTitleMinValid',
       'formTitleMaxValid',

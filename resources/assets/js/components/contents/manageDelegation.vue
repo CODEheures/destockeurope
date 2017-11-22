@@ -45,7 +45,7 @@
                                 :route-bookmark-remove="''"
                                 :advert="dataAdvert"
                                 :can-get-delegations="canGetDelegations==1"
-                                :is-personnal-list="isPersonnalList==1"
+                                :is-personnal-list="true"
                                 @deleteAdvert="destroyMe($event.url)"
                             ></adverts-by-list-item>
                         </div>
@@ -57,16 +57,20 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - advert: String. JSON of the advert to manage
+   *  - canGetDelegations: String. If auth user can get delegation
+   *  - contentHeader: String. The header
+   *
+   * Events:
+   *
+   */
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'advert',
-      // vue vars
       'canGetDelegations',
-      'isPersonnalList',
-      'isDelegation',
-      // vue strings
       'contentHeader'
     ],
     computed: {

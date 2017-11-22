@@ -178,14 +178,23 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routePostNonce: String. The route to post the nonce payment
+   *  - routePrices: String. The route to list of prices
+   *  - invoice: String. JSON of the invoice
+   *  - mode: String. mode of payment (prod/sandbox)
+   *  - clientToken: String. The token braintree
+   *
+   * Events:
+   *
+   */
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routePostNonce',
       'routePrices',
-      // vue vars
       'invoice',
       'mode',
       'clientToken'

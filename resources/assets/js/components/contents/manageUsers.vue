@@ -68,12 +68,18 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeGetUsersList: String. Route to get the list of users
+   *
+   * Events:
+   *
+   */
   import Parser from 'url'
   import _ from 'lodash'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeGetUsersList'
     ],
     data () {

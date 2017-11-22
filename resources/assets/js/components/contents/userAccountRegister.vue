@@ -66,14 +66,25 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeRegister: String. The route to registre a user
+   *  - routeFacebookRegister: String. The route to registre a user by facebook
+   *  - routeTwitterRegister: String. The route to registre a user by twitter
+   *  - routeGoogleRegister: String. The route to registre a user by google
+   *  - oldNameValue: String. The old input value of name
+   *  - oldEmailValue: String. The old input value of email
+   *  - captchaKey: String. The captcha key
+   *
+   * Events:
+   *
+   */
   export default {
     props: [
-      // vue routes
       'routeRegister',
       'routeFacebookRegister',
       'routeTwitterRegister',
       'routeGoogleRegister',
-      // vue vars
       'oldNameValue',
       'oldEmailValue',
       'captchaKey'

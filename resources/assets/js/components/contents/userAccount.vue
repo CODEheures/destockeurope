@@ -126,6 +126,40 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeUserGetMe: String. The route to get user infos
+   *  - routeChangeEmail: String. The route to change mail
+   *  - routeChangePassword: String. The route to change password
+   *  - routeUserSetPrefCurrency: String. The route to set user pref currency
+   *  - routeUserSetPrefLocale: String. The route to set user pref locale
+   *  - routeUserSetPrefLocation: String. The route to set user pref location
+   *  - routeUserSetName: String. The route to set user name
+   *  - routeUserSetPhone: String. The route to set user phone
+   *  - routeUserSetCompagnyName: String. The route to set user company name
+   *  - routeUserSetRegistrationNumber: String. The route to set user VAT
+   *  - routeAvatar: String. The route to get avatar
+   *  - routeNextUrl: String. The route to go after validate infos on payment process
+   *  - routePrices: String. The route to the list of prices
+   *  - userEmail: String. The actual auth user email
+   *  - userName: String. The actual auth user name
+   *  - userPhone: String. The actual auth user phone
+   *  - latitude: String. The actual auth user latitude
+   *  - longitude: String. The actual auth user longitude
+   *  - firstGeoloc: String. Boolean status if it is the first geoloc
+   *  - compagnyName: String. The actual auth user company name
+   *  - registrationNumber: String. The actual auth user VAT num
+   *  - vatIdentifier: String. The actual auth user vat identifier
+   *  - advertAccountVerifiedStep: String. JSON of step if payment process
+   *  - advertCost: String. The cost of the advert if process payment
+   *  - formPhoneMaxValid: String. The maximum length of phone to valid form
+   *  - formCompagnyNameMinValid: String.The minimum length of name to valid form
+   *  - formCompagnyNameMaxValid: String. The maximum length of name to valid form
+   *  - formRegistrationNumberMaxValid: String. The maximum length of VAT to valid form
+   *
+   * Events:
+   *
+   */
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {

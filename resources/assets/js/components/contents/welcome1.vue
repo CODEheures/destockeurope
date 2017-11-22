@@ -117,19 +117,38 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeBookmarkAdd: String. The route to add advert on user bookmark
+   *  - routeBookmarkRemove: String. The route to remove advert of user bookmark
+   *  - routeNotificationsExistIn: String. The route to get if user exist in notification
+   *  - routeNotificationsAdd: String. The route to add user in notification
+   *  - routeNotificationsRemove: String. The route to remove user of notification
+   *  - routeGetHighlight: String. The route to get highlights adverts
+   *  - masteradsRouteImageServer: String. The route to get image cross site
+   *  - masteradsIsActive: String. The boolean status of master ads
+   *  - masteradsUrlImg: String. The url of master img
+   *  - masteradsUrlRedirect: String. The url of master ads anchor
+   *  - masteradsOffsetYMainContainer: String. Offset of the container for master ads visibility
+   *  - masteradsWidth: String. The width of the master ads
+   *  - filterLocationAccurateList: String. JSON of the accurate possible geoloc
+   *  - adsFrenquency: String. The frequency of ads (period to be exact)
+   *  - fakeHighlightAdvert: String. Json of a fake advert for promotionnal hightlight
+   *
+   * Events:
+   *
+   */
   import _ from 'lodash'
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeBookmarkAdd',
       'routeBookmarkRemove',
       'routeNotificationsExistIn',
       'routeNotificationsAdd',
       'routeNotificationsRemove',
       'routeGetHighlight',
-      // vue vars
       'masteradsRouteImageServer',
       'masteradsIsActive',
       'masteradsUrlImg',

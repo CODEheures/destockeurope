@@ -224,18 +224,40 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeBookmarkAdd: String. The route to add advert on user bookmark
+   *  - routeBookmarkRemove: String. The route to remove advert of user bookmark
+   *  - routeSendMail: String. The route to send mail to seller
+   *  - routeDeleteAdvert: String. The route to delete advert
+   *  - routeReportAdvert: String. The route to report advert
+   *  - routeFacebookSharer: String. The route to share advert on facebook
+   *  - advert: String. JSON of the advert
+   *  - userMail: String. The actual auth user mail
+   *  - userName: String. The actual auth user name
+   *  - userPhone: String. The actual auth user phone
+   *  - userCompagnyName: String. The actual auth user company name
+   *  - isUserOwner: String. The boolean status if user is the owner of the advert
+   *  - isUserBookmark: String. The boolean status if user have bookmark the advert
+   *  - formNameMinValid: String. Minimun name length to valid form
+   *  - formMessageMinValid: String. Minimun message length to valid form
+   *  - formMessageMaxValid: String. Maximum message length to valid form
+   *  - formPhoneMaxValid: String. Maximum phone length to valid form
+   *  - formCompagnyNameMaxValid: String. Maximum company length to valid form
+   *
+   * Events:
+   *
+   */
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeSendMail',
       'routeBookmarkAdd',
       'routeBookmarkRemove',
       'routeDeleteAdvert',
       'routeReportAdvert',
       'routeFacebookSharer',
-      // vue vars
       'advert',
       'userMail',
       'userName',

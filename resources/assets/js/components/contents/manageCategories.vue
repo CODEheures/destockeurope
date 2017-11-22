@@ -118,11 +118,19 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeShiftUpCategory: String. The route to shift up a category
+   *  - routeShiftDownCategory: String. The route to shift down a category
+   *  - routeAppendToCategory: String. The route to append a category to another
+   *
+   * Events:
+   *
+   */
   import Axios from 'axios'
   export default {
     directives: {focus: focus},
     props: {
-      // vue routes
       routeShiftUpCategory: String,
       routeShiftDownCategory: String,
       routeAppendToCategory: String

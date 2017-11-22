@@ -229,11 +229,19 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeParameters: String. The route to get/patch parameters
+   *  - routeTestIsPicture: String. The route to test if url is a picture
+   *  - routeGetListType: The route to get type of welcome page
+   *
+   * Events:
+   *
+   */
   import Axios from 'axios'
   export default {
     directives: {focus: focus},
     props: {
-      // vue routes
       routeParameters: String,
       routeTestIsPicture: String,
       routeGetListType: String

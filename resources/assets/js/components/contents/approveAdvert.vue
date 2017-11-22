@@ -139,15 +139,19 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeGetAdvertsList: String. The route to get adverts
+   *  - routeAdvertApprove: String. The route to put approves status
+   *
+   * Events:
+   *
+   */
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeGetAdvertsList',
       'routeAdvertApprove',
-      'routeGetThumb',
-      // vue vars
-      'advertNbFreePicture'
     ],
     computed: {
       strings () {

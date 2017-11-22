@@ -1171,13 +1171,21 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeSubscribeNewsLetter: String. The route for subscribe news letter
+   *  - browser: String. The used browser
+   *  - countries: JSON of countries
+   *  - filterLocationAccurateList: JSON of the possible accurate geolocs
+   *
+   * Events:
+   *
+   */
   import { DestockTools } from '../../destockTools'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeSubscribeNewsLetter',
-      // vue vars
       'browser',
       'countries',
       'filterLocationAccurateList'

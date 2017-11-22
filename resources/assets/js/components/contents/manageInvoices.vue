@@ -71,11 +71,17 @@
 
 
 <script>
+  /**
+   * Props
+   *  - routeGetInvoicesList: String. Route to get the list of invoices
+   *
+   * Events:
+   *
+   */
   import Parser from 'url'
   import Axios from 'axios'
   export default {
     props: [
-      // vue routes
       'routeGetInvoicesList'
     ],
     computed: {
