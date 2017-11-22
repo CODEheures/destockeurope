@@ -18,6 +18,15 @@
 
 
 <script>
+  /**
+   * Props
+   *  - oldChoice: Number. The category Id to be selected when mounted
+   *  - withAll: Boolean. To available an All item in parent category
+   *  - withRedirectionOnClick. Redirect to next url with param of selected categoryId
+   *
+   * Events:
+   *  @categoryChoice: emit id of selected category
+   */
   import _ from 'lodash'
   import { DestockTools } from '../../../destockTools'
   export default {
@@ -31,16 +40,6 @@
         type: Boolean,
         required: false,
         default: false
-      },
-      allowCategorySelection: {
-        type: Boolean,
-        required: false,
-        default: false
-      },
-      isButton: {
-        type: Boolean,
-        required: false,
-        default: true
       },
       withRedirectionOnClick: {
         type: Boolean,

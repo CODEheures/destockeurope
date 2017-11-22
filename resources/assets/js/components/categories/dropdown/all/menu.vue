@@ -32,6 +32,17 @@
 
 
 <script>
+  /**
+   * Props
+   *  - oldChoice: Number. The category Id to be selected when mounted
+   *  - withAll: Boolean. To available an All item in parent category
+   *  - allowCategorySelection: Boolean. To allow a selection on a non last child category
+   *  - isButton: Boolean. To make dropdown button
+   *  - withRedirectionOnClick. Redirect to next url with param of selected categoryId
+   *
+   * Events:
+   *  @categoryChoice: emit id of selected category
+   */
   import { DestockTools } from '../../../../destockTools'
   export default {
     props: {

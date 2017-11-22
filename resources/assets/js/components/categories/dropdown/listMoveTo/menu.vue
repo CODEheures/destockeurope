@@ -7,9 +7,9 @@
                 <div v-for="category in category.availableMoveTo" class="item" :data-value="category.id">
                     <i class="dropdown icon" v-if="category.children.length>0"></i>
                     <span class="text">{{ category['description'][properties.actualLocale] }}</span>
-                    <recursive-categories-list-move-to
-                            :categories="category.children"
-                    ></recursive-categories-list-move-to>
+                    <recursive-categories-dropdown-menu
+                      :categories="category.children"
+                    ></recursive-categories-dropdown-menu>
                 </div>
             </div>
         </div>
@@ -18,9 +18,16 @@
 
 
 <script>
+  /**
+   * Props
+   *  - category: Object. The category object with parent, child, id etc etc to move
+   *
+   * Events:
+   *  @categoryChoice: emit the object to process move {parentId: value, id: that.category.id}
+   */
   export default {
     props: {
-      category: Object,
+      category: Object
     },
     computed: {
       strings () {

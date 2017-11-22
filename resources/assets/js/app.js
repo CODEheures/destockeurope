@@ -50,7 +50,6 @@ Vue.component('categories-dropdown-menu', require('./components/categories/dropd
 Vue.component('recursive-categories-dropdown-menu', require('./components/categories/dropdown/all/recursive.vue'))
 Vue.component('categories-select-menu', require('./components/categories/select/menu.vue'))
 Vue.component('categories-list-move-to', require('./components/categories/dropdown/listMoveTo/menu.vue'))
-Vue.component('recursive-categories-list-move-to', require('./components/categories/dropdown/listMoveTo/recursive.vue'))
 Vue.component('categories-updatable', require('./components/categories/categoriesUpdatable.vue'))
 
 // adverts

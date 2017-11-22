@@ -604,6 +604,7 @@
     },
     watch: {
       categoryId () {
+        this.oldCategoryId = this.categoryId
         this.setBreadCrumbItems()
       },
       isUrgent () {

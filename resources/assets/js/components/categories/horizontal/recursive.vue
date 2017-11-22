@@ -42,6 +42,18 @@
 
 
 <script>
+  /**
+   * Props
+   *  - categories: Array. The categories to process
+   *  - allItem: String. The all item label
+   *  - parentId: Number. The id of the parent of categories
+   *  - parentDescription: String. The description of the parent of categories
+   *  - level: Number. The depth level of categories
+   *  - maxLevel: Number. To determine if maxLevel==1 to choice the good template
+   *
+   * Events:
+   *  @categoryChoice: emit the object to process move {parentId: value, id: that.category.id}
+   */
   export default {
     props: {
       categories: Array,

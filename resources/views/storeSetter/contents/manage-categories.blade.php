@@ -18,3 +18,4 @@
                 ])}}"
 ></store-strings-setter>
 @include('storeSetter.strings.categories.categories-list-move-to')
+@include('storeSetter.strings.categories.categories-updatable')

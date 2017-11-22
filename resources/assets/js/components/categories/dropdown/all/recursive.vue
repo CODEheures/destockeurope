@@ -21,18 +21,42 @@
 
 
 <script>
+  /**
+   * Props
+   *  - parentDescription: String. Cumulative recursive description
+   *  - categories: Array. Categories with id, descriptions, children..
+   *  - parentId: Number. The id of the parent
+   *  - withAll: Boolean. To available an All item in parent category
+   *  - allItem: String. The All item label
+   *  - left: Boolean. To alternate left-right of the dropdown
+   *
+   * Events:
+   *
+   */
   export default {
     props: {
-      parentDescription: String,
+      parentDescription: {
+        type: String,
+        required: false,
+        default: ''
+      },
       categories: Array,
-      parentId: Number,
+      parentId: {
+        type: Number,
+        required: false,
+        default: 0
+      },
       withAll: Boolean,
       allItem: {
         type: String,
         required: false,
         default: ''
       },
-      left: Boolean,
+      left: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
     },
     computed: {
       properties () {

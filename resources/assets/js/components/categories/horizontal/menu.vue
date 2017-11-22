@@ -28,6 +28,12 @@
 
 
 <script>
+  /**
+   * Props
+   *
+   * Events:
+   *  @categoryChoice: emit the id of the selected category
+   */
   export default {
     computed: {
       strings () {

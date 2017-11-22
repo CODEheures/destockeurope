@@ -49,13 +49,12 @@
                         :parent-id="category.id"
                         :color-number="colorNumber+1"
                         @categoryChoice="$emit('categoryChoice', $event)"
-                        @getCategories="$emit('getCategories', $event)"
+                        @getCategories="$emit('getCategories')"
                         @addCategory="$emit('addCategory', $event)"
                         @delCategory="$emit('delCategory', $event)"
                         @updateCategory="$emit('updateCategory', $event)"
                         @shiftDown="$emit('shiftDown', $event)"
                         @shiftUp="$emit('shiftUp', $event)"
-                        @patchError="$emit('patchError', $event)"
                 ></categories-updatable>
             </div>
         </div>
@@ -84,6 +83,21 @@
 
 
 <script>
+  /**
+   * Props
+   *  - categories: Array. The categories to process
+   *  - parentId: Number. The id of the parent of categories
+   *  - colorNumber: Number. The color index
+   *
+   * Events:
+   *  @shiftDown: emit when shiftDown. Pass event to determine parent
+   *  @shiftUp: emit when shiftUp. Pass event to determine parent
+   *  @addCategory: emit to add Category {description: {fr: 'une description, en: 'a describe'}, parentId: 4}
+   *  @delCategory: emit the ID to delete category
+   *  @updateCategory: emit Object to update a category: {postValue: value, key: key, id: id}
+   *  @getCategories: emit to force reload categories
+   *  @categoryChoice: emit the object to process move {parentId: value, id: that.category.id}
+   */
   export default {
     props: {
       categories: Array,
@@ -97,6 +111,9 @@
     computed: {
       properties () {
         return this.$store.state.properties['global']
+      },
+      strings () {
+        return this.$store.state.strings['categories-updatable']
       },
       colors () {
         return [
@@ -168,8 +185,8 @@
           this.$emit('updateCategory', {postValue: postValue, key: key, id: id})
         }
         else {
-          this.$emit('getCategories', false)
-          this.$emit('patchError')
+          this.$emit('getCategories')
+          this.$alertV({'message': this.strings.patchErrorMessage, 'type': 'error'})
         }
       },
       shiftDown (event) {

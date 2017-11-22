@@ -91,7 +91,6 @@
                                     @updateCategory="updateCategory(null, $event)"
                                     @shiftDown="shiftCategory($event, 'down')"
                                     @shiftUp="shiftCategory($event, 'up')"
-                                    @patchError="patchError($event)"
                             ></categories-updatable>
                         </div>
                     </div>
@@ -364,14 +363,6 @@
               that.$alertV({'message': that.strings.patchErrorMessage, 'type': 'error'})
             }
           })
-      },
-      patchError (message) {
-        if (message !== undefined && message !== null && message !== '') {
-          this.$alertV({'message': message, 'type': 'error'})
-        }
-        else {
-          this.$alertV({'message': this.strings.patchErrorMessage, 'type': 'error'})
-        }
       },
       testChanged ($in, $out) {
         if ($in.id === $out.id && $in.locale === $out.locale && $in.value !== $out.value) {
