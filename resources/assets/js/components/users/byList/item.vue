@@ -36,6 +36,14 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - user: Object. The user object to process
+   *
+   * Events:
+   *  @deleteUser: emit url to delete user
+   *  @changeRole: emit to change user role: {'url': that.user.urlSetRole, 'role': value}
+   */
   import moment from 'moment'
   export default {
     props: {

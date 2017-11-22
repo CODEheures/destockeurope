@@ -9,7 +9,8 @@
                                 'listHeaderVoided' => trans('strings.view_manage_invoices_list_header_voided'),
                                 'listHeaderRefunded' => trans('strings.view_manage_invoices_list_header_refunded'),
                                 'listHeaderUsermail' => trans('strings.view_manage_invoices_list_header_usermail'),
-                                'listHeaderDate' => trans('strings.view_manage_invoices_list_header_date')
+                                'listHeaderDate' => trans('strings.view_manage_invoices_list_header_date'),
+                                'loadErrorMessage' => trans('strings.view_all_error_load_message'),
                         ]
                 ])}}"
 ></store-strings-setter>

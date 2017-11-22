@@ -27,27 +27,28 @@
 
 
 <script>
+  /**
+   * Props
+   *  - update: Boolean. A flag to update the search filter
+   *  - filter: Object. {resultFor: 'a term'} to set searchFilter resultFor
+   *  - routeSearch: String. The route to get results of search
+   *  - flagResetSearch: Boolean. To force search filter to clear
+   *
+   * Events:
+   *  @clearSearchResults: emit when search input is cleared
+   *  @refreshResults: emit when search for: 'a term'
+   *
+   */
   export default {
     props: {
-      // vue routes
-      // vue vars
-      update: {
-        type: Boolean
-      },
-      filter: {
-        type: Object
-      },
-      // search component
-      routeSearch: {
-        type: String
-      },
-      flagResetSearch: {
-        type: Boolean
-      }
+      update: Boolean,
+      filter: Object,
+      routeSearch: String,
+      flagResetSearch: Boolean
     },
     watch: {
       update () {
-        this.setSearchFilter()
+        this.dataResultsFor = this.filter.resultsFor
         this.dataUpdate = !this.dataUpdate
       }
     },
@@ -69,11 +70,6 @@
       }
       else {
         accordionElement.accordion()
-      }
-    },
-    methods: {
-      setSearchFilter () {
-        this.dataResultsFor = this.filter.resultsFor
       }
     }
   }

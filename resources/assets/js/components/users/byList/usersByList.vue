@@ -40,6 +40,16 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeGetUsersList: String. The route to get the users list
+   *  - flagForceReload: Boolean. The flag to force reloading list
+   *
+   * Events:
+   *  @deleteUser: emit url to delete user
+   *  @paginate: emit the pagination object
+   *
+   */
   import Axios from 'axios'
   export default {
     props: {
@@ -86,7 +96,7 @@
             that.$emit('paginate', paginate)
           })
           .catch(function () {
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       },
       patchUserRole (url, role) {
@@ -102,7 +112,7 @@
               that.$alertV({'message': msg, 'type': 'error'})
             }
             else {
-              that.$emit('loadError')
+              that.$alertV({'message': that.strings.patchErrorMessage, 'type': 'error'})
             }
             that.getUsersList()
           })

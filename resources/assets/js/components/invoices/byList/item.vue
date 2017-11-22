@@ -46,6 +46,13 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - invoice: Object. The invoice object to process
+   *
+   * Events:
+   *  @refund: emit refund event object: {'refundUrl': this.invoice.refundUrl, 'amount': this.invoice.costWithDecimalAndCurrency}
+   */
   import moment from 'moment'
   export default {
     props: {

@@ -39,6 +39,16 @@
 </template>
 
 <script>
+  /**
+   * Props
+   *  - routeGetInvoicesList: String. The route to get the invoices list
+   *  - flagForceReload: Boolean. The flag to force reloading list
+   *
+   * Events:
+   *  @refund: emit refund event object: {'refundUrl': this.invoice.refundUrl, 'amount': this.invoice.costWithDecimalAndCurrency}
+   *  @paginate: emit the pagination object
+   *
+   */
   import Axios from 'axios'
   export default {
     props: {
@@ -82,7 +92,7 @@
             that.$emit('paginate', paginate)
           })
           .catch(function () {
-            that.$emit('loadError')
+            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
       }
     }

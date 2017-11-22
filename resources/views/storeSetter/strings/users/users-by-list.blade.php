@@ -11,7 +11,9 @@
                                 'listHeaderRegisterDate' => trans('strings.view_manage_users_list_header_register_date'),
                                 'listHeaderVatNumber' => trans('strings.view_manage_users_list_header_vat_number'),
                                 'listVatVerificationNumberLabel' => trans('strings.view_manage_users_list_vat_verification_number_label'),
-                                'listHeaderAddress' => trans('strings.view_manage_users_list_header_address')
+                                'listHeaderAddress' => trans('strings.view_manage_users_list_header_address'),
+                                'loadErrorMessage' => trans('strings.view_all_error_load_message'),
+                                'patchErrorMessage' => trans('strings.view_all_error_patch_message'),
                         ]
                 ])}}"
 ></store-strings-setter>

@@ -52,7 +52,6 @@
                             :flag-force-reload="dataForceReload"
                             @refund="refund($event)"
                             @paginate="paginate=$event"
-                            @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                     ></invoices-by-list>
                 </div>
                 <div class="ui right aligned grid">

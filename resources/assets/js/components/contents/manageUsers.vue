@@ -49,7 +49,6 @@
                             :flag-force-reload="dataForceReload"
                             @deleteUser="deleteUser($event)"
                             @paginate="paginate=$event"
-                            @loadError="$alertV({'message': strings.loadErrorMessage, 'type': 'error'})"
                     ></users-by-list>
                 </div>
                 <div class="ui right aligned grid">
