@@ -289,6 +289,9 @@ class AdminController extends Controller
             if(in_array($request->role, PrivilegesUtils::mustBeCompleteToBePatched()) && !UserUtils::haveCompleteAccount($user)){
                 return response(trans('strings.view_all_incomplete_account'), 409);
             }
+            if(in_array($user->email, PrivilegesUtils::$listCostTest)){
+                return response(trans('strings.view_all_test_account'), 409);
+            }
             $user->role = $request->role;
             $user->save();
             return response('ok',200);

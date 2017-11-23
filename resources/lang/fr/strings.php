@@ -301,6 +301,7 @@ return [
     'view_all_error_invalid_image_message' => 'Image invalide',
     'view_all_ineligible_advert_action' => 'Désolé, mais cette annonce n\'est pas éligible pour cette action',
     'view_all_incomplete_account' => 'Désolé, mais l\'utilisateur doit avoir un compte avec toutes les informations remplies',
+    'view_all_test_account' => 'Désolé, mais cet utilisateur est un utilisateur test de paiement et ne peut pas changer de role',
     'view_all_urgent' => 'urgent',
     'view_all_negociate' => 'à negocier',
     'view_all_all' => 'Tous',

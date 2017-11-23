@@ -300,6 +300,7 @@ return [
     'view_all_error_invalid_image_message' => 'Unvaillable Image',
     'view_all_ineligible_advert_action' => 'Sorry but this classified is not eligible for this action',
     'view_all_incomplete_account' => 'Sorry but user must have a complet account informations',
+    'view_all_test_account' => 'Sorry, but this user is a payment test user so his role is locked',
     'view_all_urgent' => 'urgent',
     'view_all_negociate' => 'to negociate',
     'view_all_all' => 'All',

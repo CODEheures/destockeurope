@@ -9,6 +9,8 @@ use App\User;
 
 trait PrivilegesUtils
 {
+    static $listCostTest = ['gagnot.s@free.fr'];
+
     //Globals Privileges
     public static function canAdmin() {
         return
@@ -322,6 +324,6 @@ trait PrivilegesUtils
 
     public static function isCostTest() {
         return
-            (auth()->check() && auth()->user()->email == 'gagnot.s@free.fr');
+            (auth()->check() && in_array(auth()->user()->email, self::$listCostTest));
     }
 }

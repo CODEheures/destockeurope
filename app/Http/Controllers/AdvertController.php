@@ -768,7 +768,7 @@ class AdvertController extends Controller
             $this->advertPublish($advert, $request);
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } else {
-            return redirect(route('home'))->withErrors(trans('strings.view_all_error_patch_message'));
+            return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
         }
     }
 
