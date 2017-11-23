@@ -252,7 +252,7 @@ return [
 
     'auth_register_cgu_check' => 'I accept the <a href=":link">General terms of use</a>',
     'auth_register_newsletter_check' => 'I would like to receive all the good news by subscribing to the newsletter',
-    'auth_register_success' => 'Your account is create. Thank you validate it by clicking the link received in your email address',
+    'auth_register_success' => 'Your account is create. Thank you validate it by clicking the link received in your email address (Check spam directory if you don\'t find it).',
     'auth_register_resend_token' => 'Confirmation link send to your e-mail.',
     'auth_register_account_confirm' => 'Congratulations, your account has been validated.',
     'auth_register_account_already_confirm' => 'Your account is already validated.',

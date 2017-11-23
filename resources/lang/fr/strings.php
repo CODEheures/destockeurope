@@ -253,7 +253,7 @@ return [
 
     'auth_register_cgu_check' => 'J`accepte les <a href=":link">Conditions générales d\'utilisation</a>',
     'auth_register_newsletter_check' => 'Je souhaite recevoir tous les bons plan en m\'inscrivant à la newsletter',
-    'auth_register_success' => 'Votre compte est créé. Merci de le valider en cliquant le lien reçu à votre adresse email.',
+    'auth_register_success' => 'Votre compte est créé. Merci de le valider en cliquant le lien reçu à votre adresse email (Vérifier dans le dossier spam/indésirables si vous ne voyez pas l\'email). ',
     'auth_register_resend_token' => 'Le lien de confirmation de votre email vous a été renvoyé.',
     'auth_register_account_confirm' => 'Félicitation, votre compte est maintenant validé.',
     'auth_register_account_already_confirm' => 'Votre compte est déjà validé.',
