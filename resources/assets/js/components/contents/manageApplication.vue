@@ -57,6 +57,16 @@
                 <div class="field">
                     <div class="three fields">
                         <div class="field">
+                            <label>{{ strings.advertPhotoCostLabel }}</label>
+                            <input type="number"
+                                   name="photoCost"
+                                   min="0"
+                                   v-model="parameters.photoCost"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'photoCost', 'value': parameters.photoCost}"
+                                   v-on:blur="testChanged(focused, {'name': 'photoCost', 'value': parameters.photoCost})">
+                        </div>
+                        <div class="field">
                             <label>{{ strings.advertUrgentCostLabel }}</label>
                             <input type="number"
                                    name="urgentCost"
@@ -76,6 +86,8 @@
                                    v-on:focus="focused={'name': 'videoCost', 'value': parameters.videoCost}"
                                    v-on:blur="testChanged(focused, {'name': 'videoCost', 'value': parameters.videoCost})">
                         </div>
+                    </div>
+                    <div class="three fields">
                         <div class="field">
                             <label>{{ strings.advertRenewCostLabel }}</label>
                             <input type="number"
@@ -86,8 +98,6 @@
                                    v-on:focus="focused={'name': 'renewCost', 'value': parameters.renewCost}"
                                    v-on:blur="testChanged(focused, {'name': 'renewCost', 'value': parameters.renewCost})">
                         </div>
-                    </div>
-                    <div class="three fields">
                         <div class="field">
                             <label>{{ strings.advertEditCostLabel }}</label>
                             <input type="number"
@@ -108,6 +118,8 @@
                                    v-on:focus="focused={'name': 'backToTopCost', 'value': parameters.backToTopCost}"
                                    v-on:blur="testChanged(focused, {'name': 'backToTopCost', 'value': parameters.backToTopCost})">
                         </div>
+                    </div>
+                    <div class="three fields">
                         <div class="field">
                             <label>{{ strings.advertHighlightCostLabel }}</label>
                             <input type="number"
@@ -117,6 +129,16 @@
                                    v-on:keyup.enter="updateParameter"
                                    v-on:focus="focused={'name': 'highlightCost', 'value': parameters.highlightCost}"
                                    v-on:blur="testChanged(focused, {'name': 'highlightCost', 'value': parameters.highlightCost})">
+                        </div>
+                        <div class="field">
+                            <label>{{ strings.advertvalidityCostsLabel }}</label>
+                            <input type="date"
+                                   name="validityCosts"
+                                   min="0"
+                                   v-model="parameters.validityCosts"
+                                   v-on:keyup.enter="updateParameter"
+                                   v-on:focus="focused={'name': 'validityCosts', 'value': parameters.validityCosts}"
+                                   v-on:blur="testChanged(focused, {'name': 'validityCosts', 'value': parameters.validityCosts})">
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,12 +21,14 @@ class Parameters extends Model
         'offsetYMasterAds',
         'adsFrequency',
         'advertsPerPage',
+        'photoCost',
         'urgentCost',
         'backToTopCost',
         'highlightCost',
         'videoCost',
         'renewCost',
         'editCost',
+        'validityCosts',
         'nbFreePictures',
         'nbMaxPictures',
         'welcomeType',

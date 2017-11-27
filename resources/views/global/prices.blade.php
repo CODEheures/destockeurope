@@ -40,7 +40,11 @@
                                 <td></td>
                             </tr>
                             <tr>
+                                @if(config('runtime.nbFreePictures') < config('runtime.nbMaxPictures'))
                                 <td rowspan="2">{{ trans('strings.view_price_table_row_photos') }}</td>
+                                @else
+                                <td>{{ trans('strings.view_price_table_row_photos') }}</td>
+                                @endif
                                 <td class="center aligned">
                                     @if(config('runtime.nbFreePictures')==1)
                                         1
@@ -53,11 +57,13 @@
                                 </td>
                                 <td></td>
                             </tr>
+                            @if(config('runtime.nbFreePictures') < config('runtime.nbMaxPictures'))
                             <tr>
                                 <td class="center aligned">{{ trans('strings.view_price_table_row_photos_number', ['min' => config('runtime.nbFreePictures')+1, 'max' => config('runtime.nbMaxPictures')]) }}</td>
                                 <td class="center aligned"></td>
                                 <td class="center aligned">{{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostPictures(config('runtime.nbFreePictures')+1),'EUR',true) }}{{ trans('strings.view_price_table_row_photos_unit') }}</td>
                             </tr>
+                            @endif
                             <tr>
                                 <td colspan="2">{{ trans('strings.view_price_table_row_option_toNegociate') }} <span class="ui tiny blue right floated left pointing label price negociated" style="float: right;">{{ trans('strings.view_all_negociate') }}</span></td>
                                 <td class="center aligned">
@@ -67,44 +73,92 @@
                             </tr>
                             <tr>
                                 <td colspan="2">{{ trans('strings.view_price_table_row_option_urgent') }} <span class="ui red horizontal label" style="float: right">{{ trans('strings.view_all_urgent') }}</span></td>
-                                <td class="center aligned"></td>
-                                <td class="center aligned">{{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsUrgent(true),'EUR',true) }}</td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsUrgent(true),'EUR',false) <= 0)
+                                    <i class="large green checkmark icon"></i>
+                                    @endif
+                                </td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsUrgent(true),'EUR',false) > 0)
+                                    {{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsUrgent(true),'EUR',true) }}
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="2">{{ trans('strings.view_price_table_row_option_video') }}</td>
-                                <td class="center aligned"></td>
-                                <td class="center aligned">{{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostVideo(true),'EUR',true) }}</td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostVideo(true),'EUR',false) <= 0)
+                                    <i class="large green checkmark icon"></i>
+                                    @endif
+                                </td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostVideo(true),'EUR',false) > 0)
+                                    {{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostVideo(true),'EUR',true) }}
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="2">{{ trans('strings.view_price_table_row_edit') }}</td>
-                                <td class="center aligned"></td>
-                                <td class="center aligned">{{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsEdit(true),'EUR',true) }}</td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsEdit(true),'EUR',false) <= 0)
+                                    <i class="large green checkmark icon"></i>
+                                    @endif
+                                </td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsEdit(true),'EUR',false) > 0)
+                                    {{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsEdit(true),'EUR',true) }}
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="2">{{ trans('strings.view_price_table_row_backToTop') }}</td>
-                                <td class="center aligned"></td>
-                                <td class="center aligned">{{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsBackToTop(true),'EUR',true) }}</td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsBackToTop(true),'EUR',false) <= 0)
+                                    <i class="large green checkmark icon"></i>
+                                    @endif
+                                </td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsBackToTop(true),'EUR',false) > 0)
+                                    {{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsBackToTop(true),'EUR',true) }}
+                                    @endif
+                                </td>
                             </tr>
-                            <tr>
-                                <td rowspan="2">
-                                    {{ trans('strings.view_price_table_row_highlight_1') }}<br />
-                                    {{ trans('strings.view_price_table_row_highlight_2') }} {{ config('runtime.highlightCost') }}{{ trans('strings.view_price_table_row_highlight_3') }}</td>
-                                <td class="center aligned">NbU=0</td>
-                                <td class="center aligned"></td>
-                                <td class="center aligned">{{ \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsHighlight(true, 0),'EUR', true) }}</td>
-                            </tr>
-                            <?php $cases = [5] ?>
-                            @foreach($cases as $case)
+                            @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsHighlight(true, 0),'EUR', false) > 0)
                                 <tr>
-                                    <td class="center aligned">NbU={{ $case }}</td>
+                                    <td rowspan="2">
+                                        {{ trans('strings.view_price_table_row_highlight_1') }}<br />
+                                        {{ trans('strings.view_price_table_row_highlight_2') }} {{ config('runtime.highlightCost') }}{{ trans('strings.view_price_table_row_highlight_3') }}</td>
+                                    <td class="center aligned">NbU=0</td>
                                     <td class="center aligned"></td>
-                                    <td class="center aligned">{{ \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsHighlight(true, $case),'EUR', true) }}</td>
+                                    <td class="center aligned">{{ \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsHighlight(true, 0),'EUR', true) }}</td>
                                 </tr>
-                            @endforeach
+                                <?php $cases = [5] ?>
+                                @foreach($cases as $case)
+                                    <tr>
+                                        <td class="center aligned">NbU={{ $case }}</td>
+                                        <td class="center aligned"></td>
+                                        <td class="center aligned">{{ \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsHighlight(true, $case),'EUR', true) }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="2">{{ trans('strings.view_price_table_row_highlight_1') }}</td>
+                                    <td class="center aligned"><i class="large green checkmark icon"></i></td>
+                                    <td></td>
+                                </tr>
+                            @endif
                             <tr>
                                 <td colspan="2">{{ trans('strings.view_price_table_row_renew') }}</td>
-                                <td class="center aligned"></td>
-                                <td class="center aligned">{{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsRenew(true),'EUR',true) }}</td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsRenew(true),'EUR',false) <= 0)
+                                    <i class="large green checkmark icon"></i>
+                                    @endif
+                                </td>
+                                <td class="center aligned">
+                                    @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsRenew(true),'EUR',false) > 0)
+                                    {{  \App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsRenew(true),'EUR',true) }}
+                                    @endif
+                                </td>
                             </tr>
                             </tbody>
                         </table>

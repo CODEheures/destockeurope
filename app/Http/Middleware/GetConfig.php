@@ -32,12 +32,14 @@ class GetConfig
             config(['runtime.offsetYMasterAds' => $parameters->offsetYMasterAds]);
             config(['runtime.adsFrequency' => $parameters->adsFrequency]);
             config(['runtime.advertsPerPage' => $parameters->advertsPerPage]);
+            config(['runtime.photoCost' => $parameters->photoCost]);
             config(['runtime.urgentCost' => $parameters->urgentCost]);
             config(['runtime.backToTopCost' => $parameters->backToTopCost]);
             config(['runtime.highlightCost' => $parameters->highlightCost]);
             config(['runtime.videoCost' => $parameters->videoCost]);
             config(['runtime.renewCost' => $parameters->renewCost]);
             config(['runtime.editCost' => $parameters->editCost]);
+            config(['runtime.validityCost' => $parameters->validityCost]);
             config(['runtime.nbFreePictures' => $parameters->nbFreePictures]);
             config(['runtime.nbMaxPictures' => $parameters->nbMaxPictures]);
             config(['runtime.welcomeType' => $parameters->welcomeType]);
