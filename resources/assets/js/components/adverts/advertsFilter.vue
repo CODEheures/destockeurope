@@ -4,8 +4,8 @@
             <div class="active title">
                 <span class="ui blue ribbon label"><i class="dropdown icon"></i><span class="close">{{ strings.ribbonClose }}</span><span class="open">{{ strings.ribbonOpen }}</span></span>
                 <breadcrumb
-                        :items="dataBreadcrumbItems"
-                        :withAction="true"
+                        :withAction="false"
+                        @categoryChoice="$emit('categoryChoice', $event)"
                 ></breadcrumb>
             </div>
             <div class="active content">
@@ -159,10 +159,8 @@
    *  @clearSearchResults: emit when search input is cleared
    *  @refreshResults: emit when search for: 'a term'
    *  @clearLocationResults: emit when location input is cleared
-   *  @breadCrumbItems: emit the breacrumb array [{name: 'multimedia', value: 1}, {name: 'computers', value: 14}, ...]
    */
   import { DestockTools } from '../../destockTools'
-  import Axios from 'axios'
   export default {
     props: {
       routeNotificationsExistIn: String,
@@ -224,14 +222,11 @@
       return {
         isUrgent: DestockTools.findInUrl('isUrgent') === 'true' || false,
         isNegociated: DestockTools.findInUrl('isNegociated') === 'true' || false,
-        dataUpdateSearch: false,
-        dataBreadcrumbItems: []
+        dataUpdateSearch: false
       }
     },
     mounted () {
       let that = this
-      // breadcrumbItems
-      this.setBreadCrumbItems()
       // isUrgent
       let isUrgent = $('#isUrgent' + this._uid)
       isUrgent.checkbox({
@@ -268,31 +263,6 @@
       },
       getCurrentCurrency () {
         return DestockTools.findInUrl('currency')
-      },
-      setBreadCrumbItems () {
-        this.dataBreadcrumbItems = []
-        let that = this
-        let categoryId = DestockTools.findInUrl('categoryId')
-        // eslint-disable-next-line eqeqeq
-        if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
-          Axios.get(this.properties.routeCategory + '/' + categoryId)
-            .then(function (response) {
-              let chainedCategories = response.data
-              that.dataBreadcrumbItems.push({
-                name: that.strings.allLabel,
-                value: 0
-              })
-              chainedCategories.forEach(function (elem, index) {
-                that.dataBreadcrumbItems.push({
-                  name: elem['description'][that.properties.actualLocale],
-                  value: elem.id
-                })
-              })
-              that.$emit('breadCrumbItems', that.dataBreadcrumbItems)
-            })
-            .catch(function () {
-            })
-        }
       },
       rangeUpdate (event) {
         if (event.name === 'price') {

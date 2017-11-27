@@ -12,7 +12,7 @@ const store = new Vuex.Store({
       state.strings[payload.name] = payload.strings
     },
     setProperties (state, payload) {
-      state.properties[payload.name] = payload.properties
+      Vue.set(state.properties, payload.name, payload.properties)
     }
   }
 })

@@ -195,7 +195,11 @@ class CommonController extends Controller
 
         if(!$isSearchRequest){
             $advertsList['adverts'] = $advertsList['adverts']->toArray();
-            return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'categoryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
+            if($request->ajax()){
+                return response()->json(['ranges' => $ranges, 'list' => $advertsList]);
+            } else {
+                return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'categoryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
+            }
         } else {
             return response()->json($advertsList);
         }

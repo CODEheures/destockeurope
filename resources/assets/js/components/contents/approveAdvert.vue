@@ -52,8 +52,7 @@
                             <div class="ten wide tablet only ten wide computer only column">
                                 <div class="row">
                                     <breadcrumb
-                                            :items="setBreadCrumbItems(advert)"
-                                            :withAction="true"
+                                            :staticItems="setBreadCrumbItems(advert)"
                                     ></breadcrumb>
                                 </div>
                                 <div class="sixteen wide column">
