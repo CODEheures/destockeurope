@@ -186,10 +186,24 @@
         return parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['maxPrice'])
       },
       dataHandleMinPrice () {
-        return parseFloat(DestockTools.findInUrl('minPrice')) || parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['minPrice'])
+        let minByUrl = parseFloat(DestockTools.findInUrl('minPrice'))
+        let minByStore = parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['minPrice'])
+        if (isNaN(minByUrl)) {
+          return minByStore
+        }
+        else {
+          return minByUrl
+        }
       },
       dataHandleMaxPrice () {
-        return parseFloat(DestockTools.findInUrl('maxPrice')) || parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['maxPrice'])
+        let maxByUrl = parseFloat(DestockTools.findInUrl('maxPrice'))
+        let maxByStore = parseFloat(this.$store.state.properties['adverts-by-list']['ranges']['maxPrice'])
+        if (isNaN(maxByUrl)) {
+          return maxByStore
+        }
+        else {
+          return maxByUrl
+        }
       },
       dataPricePrefix () {
         return this.$store.state.properties['adverts-by-list']['ranges']['currencySymbol']
@@ -201,10 +215,24 @@
         return parseInt(this.$store.state.properties['adverts-by-list']['ranges']['maxQuantity'])
       },
       dataHandleMinQuantity () {
-        return parseInt(DestockTools.findInUrl('minQuantity')) || parseInt(this.$store.state.properties['adverts-by-list']['ranges']['minQuantity'])
+        let minByUrl = parseInt(DestockTools.findInUrl('minQuantity'))
+        let minByStore = parseInt(this.$store.state.properties['adverts-by-list']['ranges']['minQuantity'])
+        if (isNaN(minByUrl)) {
+          return minByStore
+        }
+        else {
+          return minByUrl
+        }
       },
       dataHandleMaxQuantity () {
-        return parseInt(DestockTools.findInUrl('maxQuantity')) || parseInt(this.$store.state.properties['adverts-by-list']['ranges']['maxQuantity'])
+        let maxByUrl = parseInt(DestockTools.findInUrl('maxQuantity'))
+        let maxByStore = parseInt(this.$store.state.properties['adverts-by-list']['ranges']['maxQuantity'])
+        if (isNaN(maxByUrl)) {
+          return maxByStore
+        }
+        else {
+          return maxByUrl
+        }
       },
       dataResultsFor () {
         return DestockTools.findInUrl('resultsFor')
