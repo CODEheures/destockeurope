@@ -11,6 +11,12 @@
 @section('content')
 <!-- main page -->
 @include('storeSetter.contents.portal')
+<alert-top-fix
+        message="{{ trans('strings.alert_top_fix_message') }}"
+        sub-message="{{ trans('strings.alert_top_fix_message_sub') }}"
+        validity="{{ \Carbon\Carbon::parse('29-11-2017')->toRfc1123String() }}"
+        name="offer1"
+></alert-top-fix>
 <portal
     route-subscribe-news-letter="{{ route('subscribeNewsLetter') }}"
     browser="{{ $browser }}"

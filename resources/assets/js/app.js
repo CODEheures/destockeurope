@@ -16,6 +16,7 @@ Vue.component('currencies-button', require('./components/generics/currencies/cur
 Vue.component('locales-dropdown-2', require('./components/generics/locales/localesDropdown2.vue'))
 Vue.component('langs-dropdown', require('./components/generics/locales/langsDropdown.vue'))
 Vue.component('alert', require('./components/generics/messages/alert.vue'))
+Vue.component('alert-top-fix', require('./components/generics/messages/alertTopFix.vue'))
 Vue.component('breadcrumb', require('./components/generics/breadcrumb/breadcrumb.vue'))
 Vue.component('steps', require('./components/generics/steps/step.vue'))
 Vue.component('steps-light', require('./components/generics/steps/stepLight.vue'))

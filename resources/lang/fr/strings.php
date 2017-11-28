@@ -19,6 +19,8 @@ return [
     'app_meta_description_legalMentions' => 'Mentions légales - Déstockage, fin de séries, arrivages',
     'app_meta_description_prices' => 'Prix des annonces de déstockage, arrivages et fin de stock',
 
+    'alert_top_fix_message' => 'Offre de lancement: Annonces Gratuites jusqu\'au 28/01/2018!!',
+    'alert_top_fix_message_sub' => '(or options urgent, mise à la une et remonter en tête de liste)',
 
     'meta_menu_common' => 'Annonces',
     'meta_menu_admin' => 'Admin',

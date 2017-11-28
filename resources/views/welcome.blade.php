@@ -26,6 +26,12 @@
 
 @section('content')
 @include('storeSetter.contents.welcome1')
+<alert-top-fix
+    message="{{ trans('strings.alert_top_fix_message') }}"
+    sub-message="{{ trans('strings.alert_top_fix_message_sub') }}"
+    validity="{{ \Carbon\Carbon::parse('29-11-2017')->toRfc1123String() }}"
+    name="offer1"
+></alert-top-fix>
 <welcome1
     route-bookmark-add="{{ route('bookmark.add') }}"
     route-bookmark-remove="{{ route('bookmark.remove') }}"

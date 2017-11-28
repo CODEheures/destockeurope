@@ -19,6 +19,9 @@ return [
     'app_meta_description_legalMentions' => 'Legal Notice - Destocking, end of series, arrivals',
     'app_meta_description_prices' => 'Price of the ads of destockage, arrivals and end of stock',
 
+    'alert_top_fix_message' => 'Introductory offer: Free classified ads until 28/01/2018!!',
+    'alert_top_fix_message_sub' => '(without options: urgent, highlight and back to top)',
+
     'meta_menu_common' => 'Classifieds',
     'meta_menu_admin' => 'Admin',
     'meta_menu_user' => 'User',

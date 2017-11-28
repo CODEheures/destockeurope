@@ -16,6 +16,36 @@ body.yellowbg.pushable {
   height: auto !important;
 }
 
+#alert-top-fixed {
+  display: block;
+  line-height: 1rem;
+  position: fixed;
+  width: 100%;
+  background-color: #920011;
+  top: -40px;
+  left: 0;
+  color: white;
+  text-align: center;
+  font-size: 1.15rem;
+  box-shadow: 1px 3px 13px 1px rgba(72, 0, 0, 0.46);
+  z-index: 5;
+  transition: top 0.8s;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  & p {
+    max-width: 95%;
+    line-height: 1rem;
+    & span {
+      font-size: 0.85rem;
+    }
+  }
+  & i {
+    position: absolute;
+    right: 6px;
+    cursor: pointer;
+  }
+}
+
 .rubalise {
   position: absolute;
   width: 100%;
