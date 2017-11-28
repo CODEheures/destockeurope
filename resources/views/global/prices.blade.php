@@ -23,6 +23,9 @@
                     <div class="ui segment">
                         <h1>{{ trans('strings.view_price_header') }}</h1>
                         <p>{!! trans('strings.view_price_cgu', ['link' => route('cgv')]) !!}</p>
+                        @if(\Carbon\Carbon::parse(config('runtime.validityCosts'))->isFuture())
+                        <p>{!! trans('strings.view_manage_adverts_validity_costs_label') !!}: {{ \App\Common\LocaleUtils::getTransDate(config('runtime.validityCosts')) }}</p>
+                        @endif
                         <table class="ui unstackable celled structured fixed table" style="border: none">
                             <thead>
                             <tr>
