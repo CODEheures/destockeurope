@@ -1,10 +1,4 @@
-<template>
-    <div>
-        <div id="alert-top-fixed" v-show="!isClosed">
-            <p>{{ message }}<br /><span>{{ subMessage }}</span><i class="ui close icon" @click="closeMe"></i></p>
-        </div>
-    </div>
-</template>
+<template></template>
 
 <script>
   /**
@@ -35,7 +29,6 @@
       }
     },
     mounted () {
-      console.log(this.readCookie())
       let alertTopFixedState = this.readCookie()
       if ((alertTopFixedState === undefined || alertTopFixedState === null) && ((new Date(this.validity)).valueOf() >= Date.now())) {
         this.openMe()
@@ -48,20 +41,38 @@
       },
       closeMe () {
         let alertBox = $('#alert-top-fixed')
-        alertBox.css({
-          'top': '-40px'
+        let body = $('body')
+        alertBox.css({'top': '-' + (alertBox.height() + 10) + 'px'})
+        alertBox.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', () => {
+          alertBox.remove()
+          body.css({'margin-top': ''})
         })
-        alertBox.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', () => { this.isClosed = true })
         document.cookie = this.cookieName + this.name + '=closed; expires=' + this.validity + '; path=/'
       },
       openMe () {
+        let template = this.getTemplate()
+        let divAlert = document.createElement('div')
+        divAlert.id = 'alert-top-fixed'
+        divAlert.innerHTML = template
+        document.body.insertBefore(divAlert, document.body.firstChild)
+
         let alertBox = $('#alert-top-fixed')
-        this.isClosed = false
+        alertBox.css({top: '-' + (alertBox.height() + 10) + 'px'})
+        let body = $('body')
+
+        let closeIcon = alertBox.find('i.ui.close.icon')
+        closeIcon.on('click', () => { this.closeMe() })
+
+        alertBox.css({transition: 'top 0.8s'})
+
         setTimeout(function () {
-          alertBox.css({
-            'top': '0'
-          })
+          body.css({marginTop: alertBox.height()})
+          alertBox.css({'top': '0'})
         }, 800)
+      },
+      getTemplate () {
+        return '<p>' + this.message + '<br /><span>' + this.subMessage +
+          '</span><i class="ui close icon"></i></p>'
       }
     }
   }
