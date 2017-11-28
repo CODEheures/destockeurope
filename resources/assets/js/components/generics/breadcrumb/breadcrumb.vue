@@ -8,7 +8,7 @@
                             <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop="">{{ item.name }}</a>
                         </template>
                         <template v-else>
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop.prevent="">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop.prevent="$emit('categoryChoice', item.value)">{{ item.name }}</a>
                         </template>
                         <template v-if="index!=items.length-1">
                             <i class="right angle icon divider"></i>
@@ -23,7 +23,7 @@
                             <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop="">{{ item.name }}</a>
                         </template>
                         <template v-else>
-                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop.prevent="">{{ item.name }}</a>
+                            <a :href="getNextUrl('categoryId',item.value)" class="section" :data-value="item.value" @click.stop.prevent="$emit('categoryChoice', item.value)">{{ item.name }}</a>
                         </template>
                         <template v-if="index!=items.length-1">
                             <i class="right angle icon divider"></i>
@@ -38,16 +38,20 @@
 <script>
   /**
    * Props
-   *  - items: Array of objects. Categories items for breacrumb: [{value: 1, name: 'Multimedia'}, {value: 8, name: 'computers'}, ...]
+   *  - staticItems: Array of objects. Categories items for breacrumb: [{value: 1, name: 'Multimedia'}, {value: 8, name: 'computers'}, ...]
    *  - withAction: Boolean. To active link
    *
    * Events:
-   *
+   *  @categoryChoice: emit the id of the category
    */
   import { DestockTools } from '../../../destockTools'
   export default {
     props: {
-      'items': Array,
+      'staticItems': {
+        type: Array,
+        required: false,
+        default: null
+      },
       'withAction': {
         type: Boolean,
         required: false,
@@ -57,6 +61,9 @@
     computed: {
       nextUrl () {
         return this.$store.state.properties['global']['routeHome']
+      },
+      items () {
+        return this.staticItems || this.$store.state.properties['breadcrumbItems'] || []
       }
     },
     methods: {

@@ -113,7 +113,7 @@
             <div class="sixteen wide column">
                 <div class="row">
                     <breadcrumb
-                            :items="breadcrumbItems"
+                            :staticItems="breadcrumbItems()"
                             :withAction="true"
                     ></breadcrumb>
                 </div>
@@ -305,7 +305,6 @@
         typeMessage: '',
         message: '',
         sendMessage: false,
-        breadcrumbItems: [],
         dataUserName: '',
         dataUserMail: '',
         dataUserPhone: '',
@@ -325,8 +324,6 @@
       this.dataUserPhone = this.userPhone
       this.dataUserCompagnyName = this.userCompagnyName
       this.dataIsUserBookmark = this.isUserBookmark
-      // BreadCrumbs
-      this.setBreadCrumbItems()
       let that = this
       let messageForm = $('#form-' + this._uid)
       messageForm.form({
@@ -415,20 +412,21 @@
       })
     },
     methods: {
-      setBreadCrumbItems () {
+      breadcrumbItems () {
         let that = this
         let breadcrumb = this.dataAdvert.breadCrumb
-        this.breadcrumbItems = []
-        this.breadcrumbItems.push({
+        let breadcrumbItems = []
+        breadcrumbItems.push({
           name: this.strings.allLabel,
           value: 0
         })
         breadcrumb.forEach(function (element) {
-          that.breadcrumbItems.push({
+          breadcrumbItems.push({
             name: element['description'][that.properties.actualLocale],
             value: element.id
           })
         })
+        return breadcrumbItems
       },
       openMessageBox () {
         let modalForm = $('#modal1-' + this._uid)

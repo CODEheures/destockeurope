@@ -58,7 +58,6 @@
                             @clearLocationResults="clearLocationResults"
                             @clearSearchResults="clearSearchResults"
                             @refreshResults="refreshResults"
-                            @breadCrumbItems="breadCrumbItems"
                             @categoryChoice="categoryChoice"
                     ></advert-filter>
                 </div>
@@ -176,6 +175,16 @@
         let paginate = _.cloneDeep(this.$store.state.properties['adverts-by-list']['list']['adverts'])
         delete paginate.data
         return paginate
+      },
+      dataHeader () {
+        let header = this.strings.header
+        if ('breadcrumbItems' in this.$store.state.properties && this.$store.state.properties.breadcrumbItems.length > 0) {
+          header = header + ' ' + this.$store.state.properties.breadcrumbItems[this.$store.state.properties.breadcrumbItems.length - 1].name
+        }
+        if (this.forLocation) {
+          header = header + ' - ' + this.forLocation
+        }
+        return header
       }
     },
     data () {
@@ -184,16 +193,18 @@
         message: '',
         sendMessage: false,
         isLoaded: true,
-        breadcrumbItems: [],
         dataHighlightAdverts: [],
-        dataHeader: '',
-        nextUrl: ''
+        nextUrl: '',
+        forLocation: DestockTools.findInUrl('forLocation')
       }
     },
     mounted () {
       this.nextUrl = this.getHref()
       this.getHighLightAdvert()
-      this.setHeader()
+      DestockTools.setBreadCrumbItems(this.$store, null, this.strings.allLabel)
+      window.onpopstate = () => {
+        this.goBack()
+      }
     },
     methods: {
       getHighLightAdvert () {
@@ -205,15 +216,6 @@
           .catch(function () {
           })
       },
-      setHeader () {
-        this.dataHeader = this.strings.header
-        if (this.breadcrumbItems.length > 0) {
-          this.dataHeader = this.dataHeader + ' ' + this.breadcrumbItems[this.breadcrumbItems.length - 1].name
-        }
-        if (DestockTools.findInUrl('forLocation')) {
-          this.dataHeader = this.dataHeader + ' - ' + DestockTools.findInUrl('forLocation')
-        }
-      },
       getHref () {
         return window.location.href
       },
@@ -221,8 +223,19 @@
         return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
       },
       gotoNextUrl () {
+        let that = this
         if (this.nextUrl !== window.location.href) {
-          DestockTools.goToUrl(this.nextUrl)
+          DestockTools.smoothscroll()
+          Axios.get(this.nextUrl, {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+            .then(function (response) {
+              that.$store.commit('setProperties', {name: 'adverts-by-list', properties: response.data})
+              history.pushState({byXhr: true}, '', that.nextUrl)
+              that.forLocation = DestockTools.findInUrl('forLocation')
+            })
+            .catch(function () {
+              that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
+            })
+          // DestockTools.goToUrl(this.nextUrl)
         }
       },
       updateFilter (result) {
@@ -252,13 +265,8 @@
         this.nextUrl = url
         this.gotoNextUrl()
       },
-      breadCrumbItems (breadcrumbsItems) {
-        if (breadcrumbsItems !== undefined && breadcrumbsItems !== null) {
-          this.breadcrumbItems = breadcrumbsItems
-          this.setHeader()
-        }
-      },
       categoryChoice (id) {
+        DestockTools.setBreadCrumbItems(this.$store, id, this.strings.allLabel)
         if (id !== undefined && id !== null && id >= 0) {
           this.nextUrl = this.getNextUrl('minPrice', null)
           this.nextUrl = this.getNextUrl('maxPrice', null)
@@ -267,6 +275,9 @@
           this.nextUrl = this.getNextUrl('categoryId', id)
           this.gotoNextUrl()
         }
+      },
+      goBack () {
+        window.location.reload()
       }
     }
   }

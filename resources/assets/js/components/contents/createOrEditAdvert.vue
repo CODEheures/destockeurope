@@ -49,7 +49,6 @@
                                 <div class="sixteen wide column">
                                     <div class="row">
                                         <breadcrumb
-                                                :items="breadcrumbItems"
                                                 :withAction="false"
                                         ></breadcrumb>
                                     </div>
@@ -415,7 +414,6 @@
                                 <div class="sixteen wide column">
                                     <div class="row">
                                         <breadcrumb
-                                                :items="breadcrumbItems"
                                                 :withAction="false"
                                         ></breadcrumb>
                                     </div>
@@ -742,7 +740,6 @@
         cost: 0,
         onSetSteps: false,
         submitEnable: true,
-        breadcrumbItems: [],
         dataAdvertEdit: {},
         isEditAdvert: false
       }
@@ -879,40 +876,19 @@
         }
       },
       setBreadCrumbItems (initString) {
-        this.breadcrumbItems = []
-        let that = this
+        let breadcrumbItems = []
         if (initString !== undefined && initString !== null) {
           let words = initString.split(' ')
           words.forEach(function (word) {
-            that.breadcrumbItems.push({
+            breadcrumbItems.push({
               name: word,
               value: 0
             })
           })
+          this.$store.commit('setProperties', {name: 'breadcrumbItems', properties: breadcrumbItems})
         }
         else {
-          if (this.categoryId !== undefined && this.categoryId !== null && this.categoryId > 0) {
-            Axios.get(this.properties.routeCategory + '/' + this.categoryId)
-              .then(function (response) {
-                let chainedCategories = response.data
-                that.breadcrumbItems.push({
-                  name: that.strings.allLabel,
-                  value: 0
-                })
-                chainedCategories.forEach(function (elem, index) {
-                  that.breadcrumbItems.push({
-                    name: elem['description'][that.properties.actualLocale],
-                    value: elem.id
-                  })
-                })
-              })
-              .catch(function () {
-                that.breadcrumbItems.push({
-                  name: this.strings.loadErrorMessage,
-                  value: ''
-                })
-              })
-          }
+          DestockTools.setBreadCrumbItems(this.$store, this.categoryId, this.strings.allLabel)
         }
       },
       getMoment (dateTime) {

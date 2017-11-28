@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import Parser from 'url'
+import Axios from 'axios'
 
 class DestockTools {
   static calcMargins (advert, forSeller) {
@@ -138,6 +139,41 @@ class DestockTools {
 
     if (paceForcing !== null) { paceForcing.remove() }
     window.Pace.restart()
+  }
+
+  static setBreadCrumbItems ($store, id = null, allLabel) {
+    let breadcrumbItems = []
+    let categoryId = id !== null ? id : this.findInUrl('categoryId')
+    // eslint-disable-next-line eqeqeq
+    if (categoryId !== null && categoryId == parseInt(categoryId) && categoryId > 0) {
+      Axios.get($store.state.properties.global.routeCategory + '/' + categoryId)
+        .then(function (response) {
+          let chainedCategories = response.data
+          breadcrumbItems.push({
+            name: allLabel,
+            value: 0
+          })
+          chainedCategories.forEach(function (elem, index) {
+            breadcrumbItems.push({
+              name: elem['description'][$store.state.properties.global.actualLocale],
+              value: elem.id
+            })
+          })
+        })
+        .catch(function () {
+        })
+    }
+    $store.commit('setProperties', {name: 'breadcrumbItems', properties: breadcrumbItems})
+  }
+
+  static smoothscroll () {
+    let h1PosTop = document.querySelector('h1').getBoundingClientRect().top
+    let currentScroll = document.documentElement.scrollTop || document.body.scrollTop
+    let delta = 110 - h1PosTop
+    if (h1PosTop < 110) {
+      window.requestAnimationFrame(this.smoothscroll.bind(this))
+      window.scrollTo(0, currentScroll - (delta / 7))
+    }
   }
 }
 
