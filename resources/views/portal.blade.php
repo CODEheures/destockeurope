@@ -14,7 +14,7 @@
 <alert-top-fix
         message="{{ trans('strings.alert_top_fix_message') }}"
         sub-message="{{ trans('strings.alert_top_fix_message_sub') }}"
-        validity="{{ \Carbon\Carbon::parse('29-11-2017')->toRfc1123String() }}"
+        validity="{{ \Carbon\Carbon::parse('29-01-2018')->toRfc1123String() }}"
         name="offer1"
 ></alert-top-fix>
 <portal
