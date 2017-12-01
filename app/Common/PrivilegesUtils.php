@@ -173,7 +173,9 @@ trait PrivilegesUtils
     //Adverts Privileges
     public static function canPublishAdvert(Advert $advert) {
         return
-            $advert->isUserOwner;
+            $advert->isUserOwner
+            || (auth()->check() && auth()->user()->role == User::ROLES[User::ROLE_ADMIN])
+            || ($advert->is_delegation && auth()->check() && auth()->user()->role==User::ROLES[User::ROLE_VALIDATOR]);
     }
 
     public static function canDestroyAdvert(Advert $advert) {

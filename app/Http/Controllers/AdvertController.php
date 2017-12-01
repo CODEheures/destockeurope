@@ -392,7 +392,7 @@ class AdvertController extends Controller
         if($category) {
             try {
                 $advert = new Advert();
-                $advert->user_id = auth()->user()->id;
+                $advert->user_id = $isEditOf ?  $editAdvert->user_id : auth()->user()->id;
                 $advert->category_id = $request->category;
                 $advert->type = $request->type;
                 $advert->title = $request->title;
@@ -412,6 +412,7 @@ class AdvertController extends Controller
                 $advert->isUrgent=filter_var($request->is_urgent, FILTER_VALIDATE_BOOLEAN);
                 $advert->isNegociated=filter_var($request->is_negociated, FILTER_VALIDATE_BOOLEAN);
                 $advert->isEditOf=$isEditOf;
+                $isEditOf ? $advert->is_delegation = true : null;
                 $isEditOf ? $advert->price_coefficient = $editAdvert->price_coefficient : null;
                 $isEditOf ? $advert->price_coefficient_total = $editAdvert->price_coefficient_total : null;
                 $persistent=null;
