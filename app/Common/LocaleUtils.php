@@ -44,15 +44,23 @@ trait LocaleUtils
      *
      * @return array
      */
-    public static function getListCountries(){
+    public static function getListCountries($lower = false){
         $countries = [];
         foreach (Lang::get('strings') as $key => $item){
             if (strpos($key, 'country_') !== false && strpos($key, 'country') === 0) {
                 $params = explode(';', $item);
-                $countries[str_replace('country_','',$key)]=[
-                    'name' => $params[0],
-                    'code' => $params[1]
-                ];
+                if ($lower) {
+                    $countries[str_replace('country_','',$key)]=[
+                        'name' => strtolower($params[0]),
+                        'code' => strtolower($params[1])
+                    ];
+                } else {
+                    $countries[str_replace('country_','',$key)]=[
+                        'name' => $params[0],
+                        'code' => $params[1]
+                    ];
+                }
+
             }
         }
         return $countries;

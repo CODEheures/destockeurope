@@ -150,7 +150,7 @@ class CommonController extends Controller
         $countryName = null;
         $countryCode = null;
         if(!is_null($location)){
-            $countries = LocaleUtils::getListCountries();
+            $countries = LocaleUtils::getListCountries(true);
             foreach ($countries as $country){
                 if(in_array(strtolower($location), $country)){
                     $countryCode = $country['code'];
