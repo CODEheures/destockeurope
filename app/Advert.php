@@ -239,7 +239,7 @@ class Advert extends Model {
         if(!$this->resumeLength || !is_numeric($this->resumeLength) || $this->resumeLength == 0){
             $this->resumeLength = config('runtime.advertResumeLenght');
         }
-        return ucfirst(substr($this->description, 0,$this->resumeLength)).'...';
+        return ucfirst(mb_substr($this->description, 0,$this->resumeLength)).'...';
     }
 
     public function getTitleWithManuRefAttribute() {
