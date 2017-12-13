@@ -17,7 +17,7 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
+                                        <img class="ui top aligned medium bordered rounded image" :src="dataThumbUrl" @error="getFailImgUrl()">
                                         <div class="ui right blue corner label">
                                             <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
@@ -81,7 +81,7 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <img class="ui top aligned small bordered rounded image" :src="getThumbUrl(advert)">
+                                        <img class="ui top aligned small bordered rounded image" :src="dataThumbUrl" @error="getFailImgUrl()">
                                         <div class="ui mini right blue corner label">
                                             <i class="icon">{{ advert.pictures.length }}</i>
                                         </div>
@@ -135,7 +135,7 @@
                                 </div>
                             </template>
                             <template v-else>
-                                <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
+                                <img class="ui top aligned medium bordered rounded image" :src="dataThumbUrl" @error="getFailImgUrl()">
                                 <div class="ui right blue corner label">
                                     <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
@@ -237,7 +237,7 @@
                                 </div>
                             </template>
                             <template v-else>
-                                <img class="ui top aligned medium bordered rounded image" :src="getThumbUrl(advert)">
+                                <img class="ui top aligned medium bordered rounded image" :src="dataThumbUrl" @error="getFailImgUrl()">
                                 <div class="ui right blue corner label">
                                     <i class="icon">{{ advert.pictures.length }}</i>
                                 </div>
@@ -437,12 +437,15 @@
     },
     watch: {
       advert () {
+        console.log('watch advert')
         this.dataAdvert = _.cloneDeep(this.advert)
+        this.dataThumbUrl = this.getThumbUrl()
       }
     },
     data () {
       return {
-        dataAdvert: _.cloneDeep(this.advert)
+        dataAdvert: _.cloneDeep(this.advert),
+        dataThumbUrl: this.getThumbUrl()
       }
     },
     methods: {
@@ -489,14 +492,27 @@
         $('.ui.red.button.destroy-' + this._uid).addClass('loading disabled')
         this.$emit('deleteAdvert', {'url': this.advert.destroyUrl})
       },
-      getThumbUrl (advert) {
+      getThumbUrl () {
         let picture = []
-        if ('pictures' in advert) {
-          picture = advert.pictures.filter(function (elem) {
-            return elem.hashName === advert.mainPicture
-          })
+        if (this.advert !== undefined && this.advert !== null) {
+          if ('pictures' in this.advert) {
+            picture = this.advert.pictures.filter((elem) => {
+              return elem.hashName === this.advert.mainPicture
+            })
+          }
         }
-        return picture.length >= 1 ? picture[0].thumbUrl : ''
+        if (picture.length >= 1) {
+          return picture[0].thumbUrl
+        }
+        else if (this.properties !== undefined && this.properties !== null && 'defaultUrlImg' in this.properties) {
+          return this.properties.defaultUrlImg
+        }
+        else {
+          return null
+        }
+      },
+      getFailImgUrl () {
+        this.dataThumbUrl = this.properties.defaultUrlImg
       }
     }
   }
