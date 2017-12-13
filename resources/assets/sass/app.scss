@@ -361,6 +361,9 @@ div.ui.vertical.segment.separator {
   border-bottom: none !important;
   & .ui.secondary.menu {
     position: relative;
+    & .right.item .fluid.search.filter {
+      display: none;
+    }
   }
   & .ui.container .links {
     display: none;
@@ -377,6 +380,9 @@ div.ui.vertical.segment.separator {
 
 .ui.top.fixed.menu{
   & .links {
+    display: none;
+  }
+  & .right.item .fluid.search.filter {
     display: none;
   }
 }
@@ -723,6 +729,7 @@ img.lightbox {
   #app img.masterads {
     display: block;
   }
+
 }
 
 @media only screen and (min-width: 490px) {
@@ -749,17 +756,16 @@ img.lightbox {
   }
 }
 
+@media only screen and (min-width: 820px) {
+  .ui.top.fixed.menu {
+    & .right.item .fluid.search.filter {
+      display: flex;
+    }
+  }
+}
+
 @media only screen and (min-width: 990px){
-  .masthead.segment {
-    & .ui.container .links {
-      display: flex;
-    }
-  }
-  .ui.top.fixed.menu{
-    & .links {
-      display: flex;
-    }
-  }
+
   .portal {
     margin-top: 20px;
     & div.ui.vertical.segment.header {
@@ -775,7 +781,22 @@ img.lightbox {
       }
     }
   }
+}
 
+@media only screen and (min-width: 992px) {
+  .masthead.segment .ui.secondary.menu {
+    & .right.item .fluid.search.filter {
+      display: flex;
+    }
+  }
+}
+
+@media only screen and (min-width: 1100px){
+  .ui.top.fixed.menu{
+    & .links {
+      display: flex;
+    }
+  }
 }
 
 @media only screen and (min-width: 1200px){
