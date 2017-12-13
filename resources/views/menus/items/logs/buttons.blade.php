@@ -5,7 +5,7 @@
         @include('layouts.head.langSelector')
     @else
         <div class="ui dropdown item">
-            {{ Auth::user()->name }}
+            {{ strlen($userName = Auth::user()->name) > 13 ? substr($userName,0,13) . '...' : $userName }}
             <i class="dropdown icon"></i>
             <div class="menu">
                 @if(\App\Common\PrivilegesUtils::canManageMyAccount())
