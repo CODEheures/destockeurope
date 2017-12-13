@@ -19,7 +19,7 @@ trait PrivilegesUtils
 
     public static function canManageMyAccount() {
         return
-            auth()->check() && auth()->user()->role != User::ROLES[User::ROLE_SUPPLIER];
+            auth()->check();
     }
 
     public static function  canBypassCompleteAccount() {
