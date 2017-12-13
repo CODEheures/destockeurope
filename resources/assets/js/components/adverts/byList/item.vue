@@ -437,7 +437,6 @@
     },
     watch: {
       advert () {
-        console.log('watch advert')
         this.dataAdvert = _.cloneDeep(this.advert)
         this.dataThumbUrl = this.getThumbUrl()
       }

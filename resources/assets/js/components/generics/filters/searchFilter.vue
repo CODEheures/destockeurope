@@ -1,8 +1,8 @@
 <template>
     <div :id="_uid" class="ui fluid search filter">
-        <div :class="!canSearch ? 'ui fluid action left icon input' : 'ui fluid left icon input'">
+        <div :class="(!canSearch ? 'ui action left icon input' : 'ui left icon input') + (fluid ? ' fluid' : '')">
             <i class="filter icon"></i>
-            <input :class="canSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="placeHolder">
+            <input :class="canSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="placeHolder" :style="minWidth !== null ? 'min-width:'+minWidth+'px' : ''">
             <button class="ui red icon button" v-if="!canSearch">
                 <i class="remove icon"
                     v-on:click="resetSearch(true)">
@@ -44,7 +44,17 @@
         default: false
       },
       fields: Object,
-      placeHolder: String
+      placeHolder: String,
+      fluid: {
+        type: Boolean,
+        required: false,
+        default: true
+      },
+      minWidth: {
+        type: Number,
+        required: false,
+        default: null
+      }
     },
     computed: {
       properties () {

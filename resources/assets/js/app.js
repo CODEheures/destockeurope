@@ -75,6 +75,7 @@ Vue.component('users-by-list-item', require('./components/users/byList/item.vue'
 Vue.component('portal', require('./components/contents/portal.vue'))
 // Welcome page vue
 Vue.component('welcome1', require('./components/contents/welcome1.vue'))
+Vue.component('menu-filter', require('./components/contents/menuFilter.vue'))
 // User page
 Vue.component('user-account', require('./components/contents/userAccount.vue'))
 Vue.component('user-account-register', require('./components/contents/userAccountRegister.vue'))

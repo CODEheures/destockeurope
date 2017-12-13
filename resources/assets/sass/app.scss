@@ -425,7 +425,7 @@ div.ui.vertical.segment.separator {
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
 }
 
-.ui.secondary.menu .right.item {
+.ui.secondary.menu .right.item, .ui.top.fixed.menu .right.item {
   display: none;
 }
 
@@ -808,7 +808,7 @@ img.lightbox {
 }
 
 @media only screen and (min-width: 650px){
-  .ui.secondary.menu .right.item {
+  .ui.secondary.menu .right.item, .ui.top.fixed.menu .right.item {
     display: flex;
   }
   .masthead.segment {
