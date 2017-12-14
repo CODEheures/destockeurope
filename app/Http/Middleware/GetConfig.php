@@ -60,7 +60,7 @@ class GetConfig
         }
 
         // redefine perPage
-        if($request->filled('perPage') && filter_var($request->perPage, FILTER_VALIDATE_INT) && (int)($request->perPage) > config('runtime.advertsPerPage')){
+        if($request->filled('perPage') && filter_var($request->perPage, FILTER_VALIDATE_INT) && (int)($request->perPage) > config('runtime.advertsPerPage') && (int)($request->perPage) < 101){
             config(['runtime.advertsPerPage' => (int)($request->perPage)]);
         }
 
