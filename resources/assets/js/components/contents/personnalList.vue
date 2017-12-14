@@ -56,6 +56,7 @@
                         <pagination
                             :pages="paginate"
                             :fake-page-route="nextUrl"
+                            :per-page-option="true"
                             @changePage="changePage"
                         ></pagination>
                     </div>

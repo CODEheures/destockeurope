@@ -31,6 +31,7 @@ class GetConfig
             config(['runtime.urlLinkMasterAds' => $parameters->urlLinkMasterAds]);
             config(['runtime.offsetYMasterAds' => $parameters->offsetYMasterAds]);
             config(['runtime.adsFrequency' => $parameters->adsFrequency]);
+            config(['runtime.minAdvertsPerPage' => $parameters->advertsPerPage]);
             config(['runtime.advertsPerPage' => $parameters->advertsPerPage]);
             config(['runtime.photoCost' => $parameters->photoCost]);
             config(['runtime.urgentCost' => $parameters->urgentCost]);
@@ -57,7 +58,13 @@ class GetConfig
                 config(['runtime.widthUrlMasterAds' => 0]);
             }
         }
-        config(['runtime.stopAnalytics' => false]);
+
+        // redefine perPage
+        if($request->filled('perPage') && filter_var($request->perPage, FILTER_VALIDATE_INT) && (int)($request->perPage) > config('runtime.advertsPerPage')){
+            config(['runtime.advertsPerPage' => (int)($request->perPage)]);
+        }
+
+            config(['runtime.stopAnalytics' => false]);
 
         //Runtime query
         config(['runtime.query' => []]);

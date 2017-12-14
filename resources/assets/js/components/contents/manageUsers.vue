@@ -56,6 +56,7 @@
                         <pagination
                                 :pages="paginate"
                                 :route-get-list="dataRouteGetUsersList"
+                                :per-page-option="true"
                                 @changePage="changePage"
                         ></pagination>
                     </div>

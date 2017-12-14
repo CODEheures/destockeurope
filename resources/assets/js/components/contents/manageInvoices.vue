@@ -59,6 +59,7 @@
                         <pagination
                                 :pages="paginate"
                                 :route-get-list="dataRouteGetInvoicesList"
+                                :per-page-option="true"
                                 @changePage="changePage"
                         ></pagination>
                     </div>

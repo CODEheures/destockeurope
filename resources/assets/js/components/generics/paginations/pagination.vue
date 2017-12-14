@@ -14,6 +14,14 @@
                 </template>
             </template>
         </div>
+        <div style="padding-top: 0.5rem" v-if="perPageOption">
+            <p>
+                <a :class="'ui mini ' + (perPage == properties.minPerPage ? 'blue' : 'basic') + ' circular label'" href="#" v-on:click.prevent="changePerPage(properties.minPerPage)">x{{ properties.minPerPage }}</a>
+                <a :class="'ui mini ' + (perPage == 20 ? 'blue' : 'basic') + ' circular label'" href="#" v-on:click.prevent="changePerPage(20)">x20</a>
+                <a :class="'ui mini ' + (perPage == 50 ? 'blue' : 'basic') + ' circular label'" href="#" v-on:click.prevent="changePerPage(50)">x50</a>
+                <a :class="'ui mini ' + (perPage == 100 ? 'blue' : 'basic') + ' circular label'" href="#" v-on:click.prevent="changePerPage(100)">x100</a>
+            </p>
+        </div>
         <div v-if="datapages.length==0">
             <p>{{ strings.pageLabel }} 1/1</p>
         </div>
@@ -32,6 +40,7 @@
    *  @changePage: emit the url to go (not automatic href to prevent if prefer xhr loading)
    */
   import Parser from 'url'
+  import { DestockTools } from '../../../destockTools'
   export default {
     props: {
       pages: Object,
@@ -44,11 +53,19 @@
         type: String,
         required: false,
         default: null
+      },
+      perPageOption: {
+        type: Boolean,
+        required: false,
+        default: false
       }
     },
     computed: {
       strings () {
         return this.$store.state.strings['pagination']
+      },
+      properties () {
+        return this.$store.state.properties['global']
       }
     },
     watch: {
@@ -62,11 +79,13 @@
     data () {
       return {
         datapages: [],
-        url: ''
+        url: '',
+        perPage: 0
       }
     },
     mounted () {
       this.constructPages()
+      this.perPage = this.properties.perPage
     },
     methods: {
       urlForPageNumber (pageNumber) {
@@ -188,6 +207,11 @@
       },
       changePage (event) {
         this.$emit('changePage', event.target.href)
+      },
+      changePerPage (value) {
+        this.perPage = value
+        let nextUrl = DestockTools.getNextUrl(window.location.href, 'perPage', value, true)
+        this.$emit('changePage', nextUrl)
       }
     }
   }

@@ -573,7 +573,7 @@ class AdminController extends Controller
             $countSearch = $invoices->count();
             $invoices = $invoices->orderBy('invoices.created_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
         } else {
-            $invoices = $invoices->orderBy('invoices.created_at', 'desc')->paginate(10);
+            $invoices = $invoices->orderBy('invoices.created_at', 'desc')->paginate(config('runtime.advertsPerPage'));
         }
 
         $invoices->load('user');
@@ -625,7 +625,7 @@ class AdminController extends Controller
             $countSearch = $users->count();
             $users = $users->orderBy('created_at', 'desc')->limit(config('runtime.maxNumberOfSearchResults'))->get();
         } else {
-            $users = $users->orderBy('created_at', 'desc')->paginate(10);
+            $users = $users->orderBy('created_at', 'desc')->paginate(config('runtime.advertsPerPage'));
         }
 
         if($isSearchRequest){

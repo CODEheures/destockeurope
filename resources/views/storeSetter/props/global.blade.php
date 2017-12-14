@@ -14,7 +14,9 @@
                                 'routeFacebookSharer' => $routeName == 'advert.show' ?  route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()])  : '',
                                 'csrfToken' => csrf_token(),
                                 'withAdsense' => (bool)(env('APP_ADSENSE')),
-                                'defaultUrlImg' => asset('/images/600x600_fail.png')
+                                'defaultUrlImg' => asset('/images/600x600_fail.png'),
+                                'minPerPage' => config('runtime.minAdvertsPerPage'),
+                                'perPage' => config('runtime.advertsPerPage'),
                         ]
                 ])}}"
 ></store-properties-setter>
