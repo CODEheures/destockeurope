@@ -27,3 +27,4 @@
 @include('storeSetter.strings.adverts.advert-by-id')
 @include('storeSetter.strings.generics.quantities-input-field')
 @include('storeSetter.strings.generics.margin-input-field')
+@include('storeSetter.strings.generics.pagination')

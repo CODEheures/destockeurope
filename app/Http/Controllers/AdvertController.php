@@ -124,7 +124,8 @@ class AdvertController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function listApprove() {
-        $adverts = Advert::onlyPublish()->get();
+        $adverts = Advert::onlyPublish()->paginate(config('runtime.advertsPerPage'));
+
         $adverts->load('user');
         $adverts->load('pictures');
         $adverts->load('category');
@@ -139,7 +140,10 @@ class AdvertController extends Controller
 
             $response[$advert->id] = $advert;
         }
-        return response()->json($response);
+
+        $pagination = json_decode($adverts->toJson(), true);
+        unset($pagination['data']);
+        return response()->json(['adverts' => $response, 'paginate' => $pagination]);
     }
 
     /**

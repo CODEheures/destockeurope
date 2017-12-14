@@ -210,7 +210,14 @@
       },
       changePerPage (value) {
         this.perPage = value
-        let nextUrl = DestockTools.getNextUrl(window.location.href, 'perPage', value, true)
+        let urlBase = ''
+        if (this.fakePageRoute === undefined || this.fakePageRoute === null) {
+          urlBase = this.routeGetList
+        }
+        else {
+          urlBase = this.fakePageRoute
+        }
+        let nextUrl = DestockTools.getNextUrl(urlBase, 'perPage', value, true)
         this.$emit('changePage', nextUrl)
       }
     }

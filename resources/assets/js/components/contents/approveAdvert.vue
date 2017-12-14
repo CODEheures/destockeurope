@@ -134,6 +134,18 @@
 
             </div>
         </div>
+        <div class="column">
+            <div class="ui right aligned grid">
+                <div class="sixteen wide column pagination">
+                    <pagination
+                      :pages="paginate"
+                      :fake-page-route="nextUrl"
+                      :per-page-option="true"
+                      @changePage="changePage"
+                    ></pagination>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -168,7 +180,9 @@
         approveList: {},
         sendMessage: false,
         typeMessage: '',
-        message: ''
+        message: '',
+        paginate: {},
+        nextUrl: this.routeGetAdvertsList
       }
     },
     mounted () {
@@ -207,9 +221,10 @@
         let that = this
         this.approveList = {}
         this.advertsList = {}
-        Axios.get(this.routeGetAdvertsList)
+        Axios.get(this.nextUrl)
           .then(function (response) {
-            that.advertsList = response.data
+            that.advertsList = response.data.adverts
+            that.paginate = response.data.paginate
             that.isLoaded = true
           })
           .catch(function () {
@@ -260,6 +275,15 @@
           })
         })
         return breadcrumbItems
+      },
+      changePage (url) {
+        let that = this
+        $('html, body').animate({
+          scrollTop: 0
+        }, 600, function () {
+          that.nextUrl = url
+          that.getAdvertsList()
+        })
       }
     }
   }

@@ -443,7 +443,7 @@ class Advert extends Model {
     }
 
     public function scopeOnlyPublish($query){
-        return $query->where('isPublish', true)->where('isValid', null)->orderBy('updated_at', 'asc')->take(200);
+        return $query->where('isPublish', true)->where('isValid', null)->orderBy('updated_at', 'asc');
     }
 
     public function scopeValidOnline($query){
