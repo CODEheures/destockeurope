@@ -6,7 +6,6 @@
       :update="false"
       :flag-reset="false"
       :fluid="false"
-      :min-width="235"
       :fields="{title: 'titleWithManuRef', description : 'resume', image: 'thumb', price: 'price_margin'}"
       @clearSearchResults="clearSearchResults"
       @refreshResults="refreshResults"

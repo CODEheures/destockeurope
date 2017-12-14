@@ -40,6 +40,7 @@
     <div class="pusher stackable container" id="app">
         <alert ref="alert"></alert>
         @include('storeSetter.props.global')
+        @include('storeSetter.contents.menu-filter')
         <!-- fixed menu bar -->
         @include('menus.top.fixed')
         <!-- Menu BAR -->

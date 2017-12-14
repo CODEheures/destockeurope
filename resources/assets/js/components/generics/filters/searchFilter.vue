@@ -1,7 +1,7 @@
 <template>
     <div :id="_uid" class="ui fluid search filter">
         <div :class="(!canSearch ? 'ui action left icon input' : 'ui left icon input') + (fluid ? ' fluid' : '')">
-            <i class="filter icon"></i>
+            <i class="find icon"></i>
             <input :class="canSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="placeHolder" :style="minWidth !== null ? 'min-width:'+minWidth+'px' : ''">
             <button class="ui red icon button" v-if="!canSearch">
                 <i class="remove icon"
