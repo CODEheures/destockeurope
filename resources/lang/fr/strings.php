@@ -524,6 +524,7 @@ return [
     'view_user_account_compagny_divider_label' => 'Votre société',
     'view_user_account_compagny_name_label' => 'Nom de votre société',
     'view_user_account_compagny_number_label' => 'Numero de TVA intracommunautaire',
+    'view_user_account_example_compagny_number_label' => 'Ex: FR12345678911',
     'view_user_account_compagny_number_warning_label' => 'Fournissez un bon numéro de TVA pour un calcul correct des tarifs',
     'view_user_account_compagny_number_check_progress' => 'N° en cours de vérification...',
     'view_user_account_compagny_number_identifier' => 'vérification n°',

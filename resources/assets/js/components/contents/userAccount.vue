@@ -82,7 +82,7 @@
                         <div class="required field">
                             <label>{{ strings.compagnyNumberLabel }}</label>
                             <div :class="vatOnCheckProgress ? 'ui icon input loading' : 'ui icon input'">
-                                <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="strings.compagnyNumberLabel" v-model:value="dataRegistrationNumber"
+                                <input type="text" name="registration-number" :maxlength="formRegistrationNumberMaxValid" :placeholder="strings.compagnyExampleNumberLabel" v-model:value="dataRegistrationNumber"
                                        v-on:keyup.enter="updateByEnter"
                                        v-on:focus="focused={'input': 'registration-number', 'value': dataRegistrationNumber}"
                                        v-on:blur="testChanged(focused, {'input': 'registration-number', 'value': dataRegistrationNumber})"

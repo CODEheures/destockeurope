@@ -525,6 +525,7 @@ return [
     'view_user_account_compagny_name_label' => 'Compagny Name',
     'view_user_account_compagny_number_label' => 'Compagny Intra-Europe VAT',
     'view_user_account_compagny_number_warning_label' => 'Provide a good VAT number for a correct calculation of rates',
+    'view_user_account_example_compagny_number_label' => 'Ex: FR12345678911',
     'view_user_account_compagny_number_check_progress' => 'Number check progress...',
     'view_user_account_compagny_number_identifier' => 'verification n°',
     'view_account_trusted_provider' => 'Trusted Provider',

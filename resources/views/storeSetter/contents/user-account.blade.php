@@ -16,6 +16,7 @@
                                 'compagnyDivider' => trans('strings.view_user_account_compagny_divider_label'),
                                 'compagnyNameLabel' => trans('strings.view_user_account_compagny_name_label'),
                                 'compagnyNumberLabel' => trans('strings.view_user_account_compagny_number_label'),
+                                'compagnyExampleNumberLabel' => trans('strings.view_user_account_example_compagny_number_label'),
                                 'contentHeader' => isset($title) ?  $title : trans('strings.view_advert_create_header'),
                                 'googlemapDivider' => trans('strings.form_googlemap_label'),
                                 'formValidationButtonLabel' => trans('strings.form_button_validation'),
