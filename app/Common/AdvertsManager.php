@@ -5,8 +5,10 @@ namespace App\Common;
 use App\Advert;
 use App\Http\Controllers\PictureController;
 use App\Notifications\AlertObsoleteAdvert;
+use App\Notifications\AlertWaitingsAdverts;
 use App\Persistent;
 use App\Picture;
+use App\User;
 use Carbon\Carbon;
 use Vinkla\Vimeo\VimeoManager;
 
@@ -213,6 +215,21 @@ class AdvertsManager
             return $counter;
         } catch (\Exception $e) {
             throw new \Exception('alert user for J-' . $days . ' obsolete advert fails');
+        }
+    }
+
+    public function alertWaitingsAdverts() {
+        try {
+            $waitingsAdverts = Advert::waiting()->count();
+            if($waitingsAdverts > 0){
+                $recipients = User::whereIn('role', PrivilegesUtils::canReceiveWaitingAlert())->get();
+                foreach ($recipients as $recipient){
+                    $recipient->notify(new AlertWaitingsAdverts($waitingsAdverts));
+                }
+            }
+            return $waitingsAdverts;
+        } catch (\Exception $e) {
+            throw new \Exception('Validation alert fails');
         }
     }
 }

@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
     const LOG_STOPS = 'stopadvert.log';
     const LOG_SCHEDULE = 'schedule.log';
     const LOG_NOTIFICATIONS = 'notifications.log';
+    const LOG_WAITINGS = 'waitings.log';
     const LOG_SITEMAP = 'sitemap.log';
     const LOG_GEOIPUPDATE = 'geoIpUpdate.log';
 
@@ -68,6 +69,33 @@ class Kernel extends ConsoleKernel
             }
 
         })->everyMinute();
+
+        //Alert by Mail validators for waitings Adverts
+        $waitingAlertScheduler = $schedule->call(function(){
+            $message = Carbon::now()->toDateTimeString();
+            $result1 = '';
+            try {
+                $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
+                $advertManager = new AdvertsManager($vimeoManager);
+                $result1 = $advertManager->alertWaitingsAdverts();
+                $message = $message . ';' . $result1 .';';
+            } catch (\Exception $e) {
+                $message = $message . ';' . $result1 .';' .  $e->getMessage();
+            }
+
+            if(!Storage::disk('logs')->exists(self::LOG_WAITINGS)){
+                Storage::disk('logs')->append(self::LOG_WAITINGS , 'DATE;WAITINGS ADVERTS;FAILS');
+            }
+
+            if($message){
+                Storage::disk('logs')->append(self::LOG_WAITINGS , $message);
+            }
+        });
+        if (env('APP_SCHEDULE_FAST')==true) {
+            $waitingAlertScheduler->everyMinute();
+        } else {
+            $waitingAlertScheduler->hourly()->between('8:00', '19:00');
+        }
 
         //Scheduler for STATS and Adverts Purges, Alerts
         $purgerScheduler = $schedule->call(function(){
@@ -157,7 +185,7 @@ class Kernel extends ConsoleKernel
         });
         env('APP_SCHEDULE_FAST')==true ? $notificationsScheduler->everyMinute() : $notificationsScheduler->dailyAt('6:48');
 
-        //Scheduler for Notifications
+        //Scheduler for Updating SiteMap
         $sitemapScheduler = $schedule->call(function(){
             $result = SiteMapUtils::sitemapUpdate();
             if(!Storage::disk('logs')->exists(self::LOG_SITEMAP)){

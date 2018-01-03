@@ -15,9 +15,9 @@
         "intervention/image": "^2.3",
         "iatstuti/laravel-cascade-soft-deletes": "1.*",
         "vinkla/vimeo": "^3.5",
-        "pragmarx/firewall": "^1.0",
+        "pragmarx/firewall": "^2.0",
         "codeheures/laravel-utils": "^1.0",
-        "mpdf/mpdf": "dev-master#4b5f88f7b826d3a67bff6a1d7bf43806dac33bb4",
+        "mpdf/mpdf": "^7.0",
         "sngrl/php-firebase-cloud-messaging": "dev-master",
         "braintree/braintree_php" : "3.25.0"
     },

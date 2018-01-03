@@ -168,7 +168,6 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Vinkla\Vimeo\VimeoServiceProvider::class,
-        PragmaRX\Firewall\Vendor\Laravel\ServiceProvider::class,
         Codeheures\LaravelUtils\LaravelUtilsServiceProvider::class,
         //Barryvdh\Debugbar\ServiceProvider::class,
         //Laravel\Scout\ScoutServiceProvider::class,
@@ -234,7 +233,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'Firewall' => PragmaRX\Firewall\Vendor\Laravel\Facade::class,
         'Vimeo' => Vinkla\Vimeo\Facades\Vimeo::class,
     ],
 

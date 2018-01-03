@@ -97,6 +97,11 @@ return [
     'mail_customerToDelegation_address' => 'Address: :address',
     'mail_customerToDelegation_line3' => 'Seller\'s contact',
 
+    'mail_alertWaitingsAdverts_subject' => 'Adverts are waiting for validation',
+    'mail_alertWaitingsAdverts_greeting' => 'Hello :validatorName,',
+    'mail_alertWaitingsAdverts_line' => 'You are :waintingsCount waiting adverts for validation.',
+    'mail_alertWaitingsAdverts_action' => 'See waiting adverts',
+
     'mail_report_send_error' => 'Ho non! The report could not be sent \'-(',
     'mail_report_subject' => 'A classified has just been report by a user',
     'mail_report_greeting' => 'Hello dear admin',

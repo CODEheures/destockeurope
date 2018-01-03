@@ -262,6 +262,13 @@ trait PrivilegesUtils
         ];
     }
 
+    public static function canReceiveWaitingAlert() {
+        return [
+            User::ROLES[User::ROLE_ADMIN],
+            User::ROLES[User::ROLE_VALIDATOR],
+        ];
+    }
+
     public static function canReceiveError() {
         return [
             User::ROLES[User::ROLE_ADMIN],

@@ -97,6 +97,11 @@ return [
     'mail_customerToDelegation_address' => 'Addresse: :address',
     'mail_customerToDelegation_line3' => 'Coordonnées du vendeur:',
 
+    'mail_alertWaitingsAdverts_subject' => 'Des annonces sont en attente de validation',
+    'mail_alertWaitingsAdverts_greeting' => 'Bonjour :validatorName,',
+    'mail_alertWaitingsAdverts_line' => 'Vous avez :waintingsCount annonces en attente de validation.',
+    'mail_alertWaitingsAdverts_action' => 'Voir les annonces à valider',
+
     'mail_report_send_error' => 'Ho non! Nous n\'avons pas réussi à envoyer le signalement \'-(',
     'mail_report_subject' => 'Une annonce vient d\'être signalée par un utilisateur',
     'mail_report_greeting' => 'Bonjour chèr(e) administrateur/administratice',
