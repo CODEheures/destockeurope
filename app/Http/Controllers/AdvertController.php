@@ -1250,7 +1250,7 @@ class AdvertController extends Controller
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
             foreach ($recipients as $recipient){
-                $recipient->notify(new InvoicePdf($advert, $invoice, $senderName, $senderMail));
+                $recipient->notify(new InvoicePdf($invoice, $senderName, $senderMail));
             }
         }
 

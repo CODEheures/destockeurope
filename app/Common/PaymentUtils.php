@@ -103,6 +103,16 @@ trait PaymentUtils
         }
     }
 
+    public static function getAndLockNextInvoiceNumber() {
+        $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
+        if ($previousInvoice) {
+            $next_invoice_number = $previousInvoice->invoice_number + 1;
+        } else {
+            $next_invoice_number = 1;
+        }
+        return $next_invoice_number;
+    }
+
     public static function captureTransaction(Invoice $invoice) {
         self::setBaintreeConfiguration();
 
@@ -112,13 +122,7 @@ trait PaymentUtils
             $invoice->captured = true;
 
             //GET INVOICE NUMBER
-            $previousInvoice = Invoice::orderBy('invoice_number', 'DESC')->lockForUpdate()->first();
-            if($previousInvoice){
-                $next_invoice_number = $previousInvoice->invoice_number + 1;
-            } else {
-                $next_invoice_number = 1;
-            }
-            $invoice->invoice_number = $next_invoice_number;
+            $invoice->invoice_number = self::getAndLockNextInvoiceNumber();
 
             //SAVE INVOICE
             $invoice->save();

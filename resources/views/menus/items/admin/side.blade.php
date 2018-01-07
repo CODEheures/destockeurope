@@ -16,6 +16,7 @@
             @endif
             @if(\App\Common\PrivilegesUtils::canManageInvoices())
             <a href="{{ route('admin.invoice.manage') }}" class="{{ $routeName == 'admin.invoice.manage' ? 'active' : '' }} item">{{ trans('strings.menu_invoices') }}</a>
+            <a href="{{ route('admin.invoice.createForDelegation') }}" class="{{ $routeName == 'admin.invoice.createForDelegation' ? 'active' : '' }} item">{{ trans('strings.menu_invoice_create_delegation', ['delegateName' => env('DELEGATE_NAME')]) }}</a>
             @endif
             @if(\App\Common\PrivilegesUtils::canManageApplication())
                 <a href="{{ route('application.dashboard') }}" class="{{ $routeName == 'application.dashboard' ? 'active' : '' }} item">{{ trans('strings.menu_dashboard') }}</a>

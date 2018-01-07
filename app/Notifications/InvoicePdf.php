@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Advert;
 use App\Invoice;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +14,6 @@ class InvoicePdf extends Notification
 {
 
     use Queueable;
-    private $advert;
     private $invoice;
     private $senderName;
     private $senderMail;
@@ -22,9 +22,8 @@ class InvoicePdf extends Notification
      *
      * @return void
      */
-    public function __construct(Advert $advert, Invoice $invoice, $senderName, $senderMail)
+    public function __construct(Invoice $invoice, $senderName, $senderMail)
     {
-        $this->advert = $advert;
         $this->invoice = $invoice;
         $this->senderName = $senderName;
         $this->senderMail = $senderMail;
@@ -51,8 +50,14 @@ class InvoicePdf extends Notification
     {
         $message =  (new MailMessage)
                     ->subject(trans('strings.mail_newInvoice_subject'))
-                    ->greeting(trans('strings.mail_newInvoice_greeting',['username' => $notifiable->name]))
-                    ->line(trans('strings.mail_newInvoice_line'));
+                    ->greeting(trans('strings.mail_newInvoice_greeting',['username' => $notifiable->name]));
+
+        if ($this->invoice->user->role != User::ROLES[User::ROLE_INTERMEDIARY]){
+            $message->line(trans('strings.mail_newInvoice_line'));
+        } else {
+            $message->line(trans('strings.mail_newInvoice_line2', ['description' => $this->invoice->options['intermediary']['name']]));
+        }
+
 
         if($this->invoice->filePath && file_exists($this->invoice->filePath)){
             $message->attach($this->invoice->filePath,['as' => trans('strings.pdf_invoice_attachment_name', ['num' => $this->invoice->invoice_number]), 'mime' => 'application/pdf']);

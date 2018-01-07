@@ -13,12 +13,14 @@ class Invoice extends Model {
 
     const PAYPAL = 0;
     const BRAINTREE = 1;
+    const TRANSFER = 2;
 
     const STATE_CREATION = 0;
     const STATE_RENEW = 1;
     const STATE_BACKTOTOP = 2;
     const STATE_HIGHLIGHT = 3;
     const STATE_EDIT = 4;
+    const STATE_INTERMEDIARY = 99;
 
     protected $fillable = [
         'user_id',
@@ -71,7 +73,7 @@ class Invoice extends Model {
 
     public function getRefundUrlAttribute() {
         if (PrivilegesUtils::canRefund()
-            && !($this->refunded) && !($this->voided) && ($this->captured)
+            && !($this->refunded) && !($this->voided) && !($this->user->role == User::ROLES[User::ROLE_INTERMEDIARY]) && ($this->captured)
         ) {
             return route('advert.refund', ['id' => $this->id]);
         } else {

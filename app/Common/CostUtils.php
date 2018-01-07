@@ -16,7 +16,8 @@ trait CostUtils
         'isRenew' => false,
         'isBackToTop' => false,
         'isHighlight' => false,
-        'isEditOf' => null
+        'isEditOf' => null,
+        'intermediary' => ['cost' => 0, 'description' => '']
     ];
 
     public static function countCostPictures($nbPictures, Advert $isEditOf=null) {
@@ -198,6 +199,14 @@ trait CostUtils
                 'name' => trans('strings.option_isHighlight_name'),
                 'quantity' => 1,
                 'cost' => self::getCostIsHighlight($finalOptions['isHighlight']),
+                'tva' => env('TVA')
+            ];
+        }
+        if($finalOptions['intermediary']['cost'] > 0 && strlen($finalOptions['intermediary']['description']) > 0){
+            $options['intermediary'] = [
+                'name' => $finalOptions['intermediary']['description'],
+                'quantity' => 1,
+                'cost' => $finalOptions['intermediary']['cost'],
                 'tva' => env('TVA')
             ];
         }

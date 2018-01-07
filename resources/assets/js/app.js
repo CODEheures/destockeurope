@@ -88,6 +88,8 @@ Vue.component('manage-application', require('./components/contents/manageApplica
 Vue.component('dashboard-admin', require('./components/contents/dashboardAdmin.vue'))
 // mange invoices page
 Vue.component('manage-invoices', require('./components/contents/manageInvoices.vue'))
+// create invoice for delegation
+Vue.component('create-invoice-for-delegation', require('./components/contents/createInvoiceForDelegation.vue'))
 // mange users page
 Vue.component('manage-users', require('./components/contents/manageUsers.vue'))
 // createAdvert page

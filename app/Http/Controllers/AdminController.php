@@ -7,13 +7,18 @@ use App\Advert;
 use App\Common\AdvertsManager;
 use App\Common\AdvertUtils;
 use App\Common\CategoryUtils;
+use App\Common\CostUtils;
 use App\Common\InvoiceUtils;
+use App\Common\MoneyUtils;
+use App\Common\PaymentUtils;
 use App\Common\PrivilegesUtils;
 use App\Common\SiteMapUtils;
 use App\Common\StatsManager;
 use App\Common\UserUtils;
 use App\Console\Kernel;
+use App\Http\Requests\CreateDelegationInvoiceRequest;
 use App\Invoice;
+use App\Notifications\InvoicePdf;
 use App\Parameters;
 use App\Stats;
 use App\User;
@@ -35,9 +40,9 @@ class AdminController extends Controller
 
     public function __construct(VimeoManager $vimeoManager) {
         $this->middleware('auth');
-        $this->middleware('isAdminUser', ['except' => ['delegations', 'delegation', 'invoiceManage', 'listInvoices', 'showInvoice']]);
+        $this->middleware('isAdminUser', ['except' => ['delegations', 'delegation', 'invoiceManage', 'createInvoiceForDelegation', 'postInvoiceForDelegation', 'listInvoices', 'showInvoice']]);
         $this->middleware('canGetDelegations', ['only' => ['delegations', 'delegation']]);
-        $this->middleware('canManageInvoices', ['only' => ['invoiceManage', 'listInvoices', 'showInvoice']]);
+        $this->middleware('canManageInvoices', ['only' => ['invoiceManage', 'createInvoiceForDelegation', 'postInvoiceForDelegation', 'listInvoices', 'showInvoice']]);
         $this->middleware('appOnDevelMode', ['only' => ['testGame','tempo']]);
         $this->middleware('stopAnalytics');
         $this->vimeoManager = $vimeoManager;
@@ -124,6 +129,13 @@ class AdminController extends Controller
         return view('invoice.manage');
     }
 
+    /**
+     * Return the view to create speciale invoice for delegation
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function createInvoiceForDelegation() {
+        return view('invoice.createForDelegation');
+    }
 
     /************************************************************************
      * PUBLIC PARTS: RETURN INFOS
@@ -292,6 +304,9 @@ class AdminController extends Controller
             if(in_array($user->email, PrivilegesUtils::$listCostTest)){
                 return response(trans('strings.view_all_test_account'), 409);
             }
+            if($request->role == User::ROLES[User::ROLE_INTERMEDIARY] && User::where('role', $request->role)->count() > 0){
+                return response(trans('strings.view_all_test_account2'), 409);
+            }
             $user->role = $request->role;
             $user->save();
             return response('ok',200);
@@ -319,6 +334,68 @@ class AdminController extends Controller
         } else {
             return response('error', 500);
         }
+    }
+
+    /**
+     * Create Invoice for delegation
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function postInvoiceForDelegation(CreateDelegationInvoiceRequest $request) {
+        $intermediaryUser = User::where('role', User::ROLES[User::ROLE_INTERMEDIARY])->first();
+        $cost = MoneyUtils::setPriceWithoutDecimal(strval($request->marge*env('DELEGATE_RATE')/100), env('DEFAULT_CURRENCY'));
+        $invoice = Invoice::create([
+            'user_id' => $intermediaryUser->id,
+            'advert_id' => 0,
+            'state' => Invoice::STATE_INTERMEDIARY,
+            'cost' => $cost,
+            'options' => CostUtils::setOptions([
+                'intermediary' => [
+                    'cost' => $cost,
+                    'description' => trans('strings.option_intermediary_name', [
+                        'name' => $intermediaryUser->name,
+                        'customerName' => $request->customer,
+                        'description' => $request->description,
+                        'marge' => $request->marge,
+                        'rateValue' => env('DELEGATE_RATE')
+                    ])
+                ]
+            ])
+        ]);
+
+        //GET INVOICE NUMBER
+        $invoice->invoice_number = PaymentUtils::getAndLockNextInvoiceNumber();
+
+        //SET INVOICE TRANSACTION
+        $invoice->method = Invoice::TRANSFER;
+        $invoice->transaction_id = 'externe';
+        $invoice->tva_customer = $intermediaryUser->registrationNumber;
+        $invoice->tva_requester = $intermediaryUser->requesterNumber;
+        $invoice->vatIdentifier = $intermediaryUser->vatIdentifier;
+        $invoice->tvaSubject = true;
+        $invoice->captured = true;
+
+        //SAVE INVOICE
+        $invoice->created_at = Carbon::parse($request->date);
+        $invoice->updated_at = Carbon::parse($request->date);
+        $invoice->save();
+
+        try {
+            InvoiceUtils::createInvoiceByInvoice($invoice);
+        } catch (\Exception $e) {
+            return response($e->getMessage(),409);
+        }
+
+        // Sending Invoice
+        $senderMail = env('SERVICE_MAIL_FROM');
+        $senderName = ucfirst(config('app.name'));
+        $intermediaryUser->notify(new InvoicePdf($invoice, $senderName, $senderMail));
+        $recipients = User::whereIn('role', PrivilegesUtils::canReceiveInvoice())->get();
+        foreach ($recipients as $recipient){
+            $recipient->notify(new InvoicePdf($invoice, $senderName, $senderMail));
+        }
+
+        return response()->json(['invoiceUrl' => route('admin.invoice.show', ['id' => $invoice->id])]);
     }
 
     /**

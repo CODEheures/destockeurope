@@ -69,7 +69,7 @@ trait InvoiceUtils
             $recipients = User::whereIn('role', PrivilegesUtils::canReceiveCreateInvoicePdfFail())->get();
             $senderMail = env('SERVICE_MAIL_FROM');
             $senderName = ucfirst(config('app.name'));
-            $message = trans('strings.mail_apperror_pdfinvoice_line', ['advertNumber' => is_null($advert) ? '0' : $advert->id, 'mailClient' => $advert->user->email]);
+            $message = trans('strings.mail_apperror_pdfinvoice_line', ['advertNumber' => is_null($advert) ? '0' : $advert->id, 'mailClient' => is_null($advert) ? '@' : $advert->user->email]);
             foreach ($recipients as $recipient){
                 $recipient->notify(new ReportAppError($message, $senderName, $senderMail));
             }

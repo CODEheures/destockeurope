@@ -247,6 +247,7 @@ trait PrivilegesUtils
     public static function canReceiveBypassAdvertMessage() {
         return [
             User::ROLES[User::ROLE_INTERMEDIARY],
+            User::ROLES[User::ROLE_ADMIN],
         ];
     }
 

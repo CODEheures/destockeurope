@@ -56,6 +56,8 @@
 
         Route::group(['prefix'=> 'invoice'], function () {
             Route::get('/manage', 'AdminController@invoiceManage')->name('admin.invoice.manage');
+            Route::get('/create/forDelegation', 'AdminController@createInvoiceForDelegation')->name('admin.invoice.createForDelegation');
+            Route::post('/create/forDelegation', 'AdminController@postInvoiceForDelegation')->name('admin.invoice.postForDelegation');
             Route::get('/list', 'AdminController@listInvoices')->name('admin.invoice.list');
             Route::get('/{id?}', 'AdminController@showInvoice')->name('admin.invoice.show');
         });
@@ -64,7 +66,7 @@
             Route::get('/manage', 'AdminController@userManage')->name('admin.user.manage');
             Route::get('/list', 'AdminController@listUsers')->name('admin.user.list');
             Route::patch('/role/{id}', 'AdminController@patchRole')->name('admin.user.role.patch');
-            Route::delete('/{id}', 'AdminController@deleteUser')->name('admin.user.delete');
+            Route::delete('/{id}', 'AdminController@deleteUser')->name('admin.user.delete')->where(['id' => '[0-9]+']);
         });
 
         //DANGEROUS
