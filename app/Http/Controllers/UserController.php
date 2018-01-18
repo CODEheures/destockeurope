@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Advert;
 use App\Common\GeoManager;
+use App\Common\LogsUtils;
 use App\Http\Requests\UpdateCompagnyNameRequest;
 use App\Http\Requests\UpdatePhoneRequest;
 use App\Http\Requests\UpdateRegistrationRequest;
@@ -62,6 +63,7 @@ class UserController extends Controller
      * @return UserController|\Illuminate\Http\RedirectResponse
      */
     public function completeAccount($id, Request $request){
+        LogsUtils::addStoreLog('Access complete account', $request);
         $title = $request->filled('title') ? $request->title : null;
         $cost = $request->filled('infoCost') ? $request->infoCost : 0;
         $user = $this->auth->user();
@@ -76,8 +78,14 @@ class UserController extends Controller
         $advertAccountVerifiedStep = true;
         $advert = Advert::withTrashed()->find($id);
         if($advert && $advert->user->id === $user->id){
+            LogsUtils::addStoreLog('Go to view account OK');
             return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title', 'cost', 'routeAvatar'));
         } else {
+            if (!$advert){
+                LogsUtils::addStoreLog('Error advert not exist');
+            } else {
+                LogsUtils::addStoreLog('Error advert not owner');
+            }
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
         }
     }

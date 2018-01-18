@@ -9,6 +9,7 @@ use App\Common\AdvertUtils;
 use App\Common\CategoryUtils;
 use App\Common\CostUtils;
 use App\Common\InvoiceUtils;
+use App\Common\LogsUtils;
 use App\Common\MoneyUtils;
 use App\Common\PaymentUtils;
 use App\Common\PrivilegesUtils;
@@ -154,19 +155,19 @@ class AdminController extends Controller
         $csvLogs=[];
 
         //schedule log
-        $csvLogs['schedule'] = $this->getLogs(Kernel::LOG_SCHEDULE);
+        $csvLogs['schedule'] = $this->getLogs(LogsUtils::$LOG_SCHEDULE);
 
         //stops log
-        $csvLogs['stops'] = $this->getLogs(Kernel::LOG_STOPS);
+        $csvLogs['stops'] = $this->getLogs(LogsUtils::$LOG_STOPS);
 
         //notifications log
-        $csvLogs['notifications'] = $this->getLogs(Kernel::LOG_NOTIFICATIONS);
+        $csvLogs['notifications'] = $this->getLogs(LogsUtils::$LOG_NOTIFICATIONS);
 
         //sitemaps log
-        $csvLogs['sitemaps'] = $this->getLogs(Kernel::LOG_SITEMAP);
+        $csvLogs['sitemaps'] = $this->getLogs(LogsUtils::$LOG_SITEMAP);
 
         //geoIpUpdate log
-        $csvLogs['geoIpUpdate'] = $this->getLogs(Kernel::LOG_GEOIPUPDATE);
+        $csvLogs['geoIpUpdate'] = $this->getLogs(LogsUtils::$LOG_GEOIPUPDATE);
 
         return response()->json([
             'viewsByDay' => $viewsByDay->toArray(),

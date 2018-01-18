@@ -9,6 +9,7 @@ use App\Common\CostUtils;
 use App\Common\GeoManager;
 use App\Common\InvoiceUtils;
 use App\Common\LocaleUtils;
+use App\Common\LogsUtils;
 use App\Common\MoneyUtils;
 use App\Common\PaymentUtils;
 use App\Common\PrivilegesUtils;
@@ -388,6 +389,7 @@ class AdvertController extends Controller
      */
     public function store(StoreAdvertRequest $request)
     {
+        LogsUtils::addStoreLog('BEGIN STORE', $request);
         $category = Category::find($request->category);
         $completeGeoLoc = json_decode($request->completegeoloc);
         $parsedAddressComponent = GeoManager::parseAddressComponent($completeGeoLoc[0]->address_components);
@@ -486,15 +488,19 @@ class AdvertController extends Controller
 
                 DB::commit();
                 if(PrivilegesUtils::isCostFree()){
+                    LogsUtils::addStoreLog('Redirect to publish');
                     return redirect(route('advert.publish', ['id' =>$advert->id]));
                 } else {
+                    LogsUtils::addStoreLog('Redirect to complete account');
                     return redirect(route('user.completeAccount', ['id' =>$advert->id, 'infoCost' => $cost]));
                 }
             } catch (\Exception $e) {
                 DB::rollback();
+                LogsUtils::addStoreLog('Error in store', null, $e->getMessage());
                 return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));
             }
         } else {
+            LogsUtils::addStoreLog('Error category not exist');
             return redirect()->back()->withInput()->withErrors(trans('strings.view_all_error_saving_message'));
         }
     }
@@ -635,8 +641,10 @@ class AdvertController extends Controller
     public function nextStep($id) {
         $advert = Advert::withTrashed()->find($id);
         if($advert) {
+            LogsUtils::addStoreLog('Go to next step OK');
             return redirect($advert->nextUrl);
         } else {
+            LogsUtils::addStoreLog('Go to next step KO advert not exist');
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_patch_message'));
         }
     }
@@ -770,9 +778,12 @@ class AdvertController extends Controller
         $advert = Advert::find($id);
         $advert->load('user');
         if($advert && PrivilegesUtils::canPublishAdvert($advert) && $advert->invoices()->count()==0 && $advert->isPublish==false){
+            LogsUtils::addStoreLog('Launch publish process', $request);
             $this->advertPublish($advert, $request);
+            LogsUtils::addStoreLog('Publish OK');
             return redirect(route('home'))->with('success', trans('strings.advert_create_success'));
         } else {
+            LogsUtils::addStoreLog('Block Publish process', $request);
             return redirect(route('home'))->withErrors(trans('strings.view_all_error_saving_message'));
         }
     }

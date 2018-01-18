@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Common\AdvertsManager;
+use App\Common\LogsUtils;
 use App\Common\SiteMapUtils;
 use App\Common\StatsManager;
 use App\Stats;
@@ -18,13 +19,6 @@ use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 
 class Kernel extends ConsoleKernel
 {
-
-    const LOG_STOPS = 'stopadvert.log';
-    const LOG_SCHEDULE = 'schedule.log';
-    const LOG_NOTIFICATIONS = 'notifications.log';
-    const LOG_WAITINGS = 'waitings.log';
-    const LOG_SITEMAP = 'sitemap.log';
-    const LOG_GEOIPUPDATE = 'geoIpUpdate.log';
 
     /**
      * The Artisan commands provided by your application.
@@ -60,12 +54,12 @@ class Kernel extends ConsoleKernel
             } catch (\Exception $e) {
                 $message = Carbon::now()->toDateTimeString() . ';' . $result1 . ';' .  $e->getMessage();
             }
-            if(!Storage::disk('logs')->exists(self::LOG_STOPS)){
-                Storage::disk('logs')->append(self::LOG_STOPS , 'DATE;STOP ADVERTS;FAILS');
+            if(!Storage::disk('logs')->exists(LogsUtils::$LOG_STOPS)){
+                Storage::disk('logs')->append(LogsUtils::$LOG_STOPS , 'DATE;STOP ADVERTS;FAILS');
             }
 
             if($message){
-                Storage::disk('logs')->append(self::LOG_STOPS , $message);
+                Storage::disk('logs')->append(LogsUtils::$LOG_STOPS , $message);
             }
 
         })->everyMinute();
@@ -83,12 +77,12 @@ class Kernel extends ConsoleKernel
                 $message = $message . ';' . $result1 .';' .  $e->getMessage();
             }
 
-            if(!Storage::disk('logs')->exists(self::LOG_WAITINGS)){
-                Storage::disk('logs')->append(self::LOG_WAITINGS , 'DATE;WAITINGS ADVERTS;FAILS');
+            if(!Storage::disk('logs')->exists(LogsUtils::$LOG_WAITINGS)){
+                Storage::disk('logs')->append(LogsUtils::$LOG_WAITINGS , 'DATE;WAITINGS ADVERTS;FAILS');
             }
 
             if($message){
-                Storage::disk('logs')->append(self::LOG_WAITINGS , $message);
+                Storage::disk('logs')->append(LogsUtils::$LOG_WAITINGS , $message);
             }
         });
         if (env('APP_SCHEDULE_FAST')==true) {
@@ -137,10 +131,10 @@ class Kernel extends ConsoleKernel
                     . $result4  .';'
                     .  $e->getMessage();
             }
-            if(!Storage::disk('logs')->exists(self::LOG_SCHEDULE)){
-                Storage::disk('logs')->append(self::LOG_SCHEDULE , 'DATE PURGE;INVALIDS;ABANDONED;OBSOLETES;PERSISTENT PICS;PERSISTENT VIDS;ALERT J-2;ALERT J-1;FAILS');
+            if(!Storage::disk('logs')->exists(LogsUtils::$LOG_SCHEDULE)){
+                Storage::disk('logs')->append(LogsUtils::$LOG_SCHEDULE , 'DATE PURGE;INVALIDS;ABANDONED;OBSOLETES;PERSISTENT PICS;PERSISTENT VIDS;ALERT J-2;ALERT J-1;FAILS');
             }
-            Storage::disk('logs')->append(self::LOG_SCHEDULE , $message);
+            Storage::disk('logs')->append(LogsUtils::$LOG_SCHEDULE , $message);
 
         });
         env('APP_SCHEDULE_FAST')==true ? $purgerScheduler->everyMinute() : $purgerScheduler->dailyAt('05:57');
@@ -177,10 +171,10 @@ class Kernel extends ConsoleKernel
                     $status = '500';
                     $msgTxt = $e->getMessage();
                 }
-                if(!Storage::disk('logs')->exists(self::LOG_NOTIFICATIONS)){
-                    Storage::disk('logs')->append(self::LOG_NOTIFICATIONS , 'DATE;STATUS_CODE;MESSAGE');
+                if(!Storage::disk('logs')->exists(LogsUtils::$LOG_NOTIFICATIONS)){
+                    Storage::disk('logs')->append(LogsUtils::$LOG_NOTIFICATIONS , 'DATE;STATUS_CODE;MESSAGE');
                 }
-                Storage::disk('logs')->append(self::LOG_NOTIFICATIONS , Carbon::now()->toDateTimeString() . ';' . $status . ';' . $msgTxt );
+                Storage::disk('logs')->append(LogsUtils::$LOG_NOTIFICATIONS , Carbon::now()->toDateTimeString() . ';' . $status . ';' . $msgTxt );
             }
         });
         env('APP_SCHEDULE_FAST')==true ? $notificationsScheduler->everyMinute() : $notificationsScheduler->dailyAt('6:48');
@@ -188,10 +182,10 @@ class Kernel extends ConsoleKernel
         //Scheduler for Updating SiteMap
         $sitemapScheduler = $schedule->call(function(){
             $result = SiteMapUtils::sitemapUpdate();
-            if(!Storage::disk('logs')->exists(self::LOG_SITEMAP)){
-                Storage::disk('logs')->append(self::LOG_SITEMAP , 'DATE;COUNT SITEMAPS URLS');
+            if(!Storage::disk('logs')->exists(LogsUtils::$LOG_SITEMAP)){
+                Storage::disk('logs')->append(LogsUtils::$LOG_SITEMAP , 'DATE;COUNT SITEMAPS URLS');
             }
-            Storage::disk('logs')->append(self::LOG_SITEMAP , Carbon::now()->toDateTimeString() . ';' . $result );
+            Storage::disk('logs')->append(LogsUtils::$LOG_SITEMAP , Carbon::now()->toDateTimeString() . ';' . $result );
         });
         env('APP_SCHEDULE_FAST')==true ? $sitemapScheduler->everyMinute() : $sitemapScheduler->dailyAt('3:48');
 
@@ -202,10 +196,10 @@ class Kernel extends ConsoleKernel
             } catch (\Exception $e) {
                 $geoIpResult = false;
             }
-            if(!Storage::disk('logs')->exists(self::LOG_GEOIPUPDATE)){
-                Storage::disk('logs')->append(self::LOG_GEOIPUPDATE , 'DATE;RESULT');
+            if(!Storage::disk('logs')->exists(LogsUtils::$LOG_GEOIPUPDATE)){
+                Storage::disk('logs')->append(LogsUtils::$LOG_GEOIPUPDATE , 'DATE;RESULT');
             }
-            Storage::disk('logs')->append(self::LOG_GEOIPUPDATE , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
+            Storage::disk('logs')->append(LogsUtils::$LOG_GEOIPUPDATE , Carbon::now()->toDateTimeString() . ';' . $geoIpResult);
         });
         env('APP_SCHEDULE_FAST')==true ? $geoIpScheduler->daily() : $geoIpScheduler->monthlyOn(7,'3:57');
     }
