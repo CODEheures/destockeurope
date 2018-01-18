@@ -29,6 +29,7 @@
                     <input type="hidden" name="main_picture" :value="mainPicture" />
                     <input type="hidden" name="is_urgent" :value="isUrgent ? 1 : 0" />
                     <input type="hidden" name="is_negociated" :value="isNegociated ? 1 : 0" />
+                    <input type="hidden" name="type" value="bid"/>
                     <div class="ui error message"></div>
 
                     <div class="ui grid">
@@ -180,15 +181,6 @@
                         <div class="sixteen wide mobile only six wide tablet only six wide computer only column glass-box">
                             <div class="ui grid">
                                 <div class="sixteen wide column">
-                                    <div style="display:none">
-                                        <type-radio-button
-                                                :route-get-list-type="routeGetListType"
-                                                :first-menu-name="strings.listTypeFirstMenuName"
-                                                :old-choice="'bid'"
-                                                :is-disabled="true"
-                                                @typeChoice="typeChoice"
-                                        ></type-radio-button>
-                                    </div>
                                     <div :id="'params_accordion'+_uid" class="ui accordion">
                                         <div class="title">
                                             <i class="dropdown icon"></i>
@@ -677,7 +669,7 @@
       return {
         categoryId: '',
         listType: [],
-        type: '',
+        type: 'bid',
         title: '',
         manuRef: '',
         description: '',
