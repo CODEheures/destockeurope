@@ -11,7 +11,7 @@
 @section('opengraph')
     <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
     <meta property="og:site_name" content="{{ config('app.name') }}">
-    <meta property="og:title" content="{{ $advert->title . ' ' . trans('strings.global_for') . ' ' . $advert->price_margin}}">
+    <meta property="og:title" content="{{ $advert->title . ' ' . ($advert->isNegociated ? trans('strings.view_all_negociate') : (trans('strings.global_for') . ' ' . $advert->price_margin))}}">
     <meta property="og:description" content="{{ $advert->resume }}">
     <meta property="og:image" content="{{ $advert->getMainPictureUrl() }}">
     <meta property="og:url" content="{{ route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()]) }}">
