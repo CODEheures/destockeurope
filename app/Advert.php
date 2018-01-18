@@ -316,6 +316,15 @@ class Advert extends Model {
         return $bread;
     }
 
+    public function getMainPictureUrl () {
+        foreach ($this->pictures as $picture) {
+            if ($picture->hashName == $this->mainPicture) {
+                return $picture->normalUrl;
+            }
+        }
+        return '';
+    }
+
     public function isEligibleForBackToTop() {
         $firstAdvert = Advert::orderBy('online_at', 'DESC')->first();
         if($firstAdvert->id != $this->id && is_null($this->deleted_at) &&  (Carbon::parse($this->ended_at)->subDay(1)->isFuture() || $this->is_delegation) ){
