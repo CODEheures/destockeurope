@@ -69,7 +69,6 @@ class StoreAdvertRequest extends FormRequest
 
 
         return [
-            'type' => 'required|in:'.$line,
             'category' => 'required|numeric|exists:categories,id',
             'title' => 'required|min:'. config('db_limits.adverts.minTitle') . '|max:'. config('db_limits.adverts.maxTitle') ,
             'manu_ref' => 'nullable|string',
