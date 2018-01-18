@@ -36,7 +36,7 @@
                             </thead>
                             <tbody style="border: 1px solid rgba(34,36,38,.1);">
                             <tr>
-                                <td colspan="2">{{ trans('strings.view_price_table_row_insertion') }}</td>
+                                <td colspan="2">{{ trans('strings.view_price_table_row_insertion', ['lifetime' => env('ADVERT_LIFE_TIME')]) }}</td>
                                 <td class="center aligned">
                                     <i class="large green checkmark icon"></i>
                                 </td>
@@ -129,7 +129,7 @@
                             @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsHighlight(true, 0),'EUR', false) > 0)
                                 <tr>
                                     <td rowspan="2">
-                                        {{ trans('strings.view_price_table_row_highlight_1') }}<br />
+                                        {{ trans('strings.view_price_table_row_highlight_1', ['hightlightTime' => env('HIGHLIGHT_HOURS_DURATION')]) }}<br />
                                         {{ trans('strings.view_price_table_row_highlight_2') }} {{ config('runtime.highlightCost') }}{{ trans('strings.view_price_table_row_highlight_3') }}</td>
                                     <td class="center aligned">NbU=0</td>
                                     <td class="center aligned"></td>
