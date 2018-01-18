@@ -151,7 +151,7 @@
                                 </tr>
                             @endif
                             <tr>
-                                <td colspan="2">{{ trans('strings.view_price_table_row_renew') }}</td>
+                                <td colspan="2">{{ trans('strings.view_price_table_row_renew', ['lifetime' => env('ADVERT_LIFE_TIME')]) }}</td>
                                 <td class="center aligned">
                                     @if(\App\Common\MoneyUtils::getPriceWithDecimal(\App\Common\CostUtils::getCostIsRenew(true),'EUR',false) <= 0)
                                     <i class="large green checkmark icon"></i>

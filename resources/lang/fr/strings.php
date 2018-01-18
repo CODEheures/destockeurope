@@ -581,7 +581,7 @@ return [
     'view_price_table_row_highlight_1' => 'Mise à la une pour :hightlightTime heures',
     'view_price_table_row_highlight_2' => 'Formule de calcul selon le nombre d\'annonces concurrentes déjà à la une et notées "NbU":',
     'view_price_table_row_highlight_3' => '/√nbU',
-    'view_price_table_row_renew' => 'Renouvellement d\'une annonce',
+    'view_price_table_row_renew' => 'Renouvellement d\'une annonce pour :lifetime jours',
 
     'view_ads_title' => 'Faire votre publicité sur notre site d\'annonces de déstockage',
     'view_who_title' => 'Qui sommes nous?',

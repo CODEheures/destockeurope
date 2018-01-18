@@ -581,7 +581,7 @@ return [
     'view_price_table_row_highlight_1' => 'Highlight classified for :hightlightTime hours',
     'view_price_table_row_highlight_2' => 'Calculation formula according to the number of competing ads already in the first one and marked "NbU":',
     'view_price_table_row_highlight_3' => '/√nbU',
-    'view_price_table_row_renew' => 'Renewal of an classified',
+    'view_price_table_row_renew' => 'Renewal of an classified for :lifetime days',
 
     'view_ads_title' => 'Advertise on our site of destocking classifieds',
     'view_who_title' => 'Who are whe?',
