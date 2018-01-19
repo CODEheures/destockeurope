@@ -16,7 +16,7 @@
             </div>
 
             <div class="sixteen wide column">
-                <form :id="'create_advert_form_'+_uid" class="ui form" :action="routeAdvertFormPost" method="post" @keyup.enter.prevent.stop>
+                <form :id="'create_advert_form_'+_uid" class="ui form" :action="routeAdvertFormPost" method="post" @keydown.enter.prevent.stop>
                     <input type="hidden" name="_token" :value="properties.csrfToken"/>
                     <input v-if="isEditAdvert" type="hidden" name="_method" value="PATCH">
                     <input type="hidden" name="category" :value="categoryId"/>
@@ -421,7 +421,7 @@
                                     </div>
                                     <div :class="!isUrgent ? 'sixteen wide column' : 'twelve wide column'">
                                         <h4 class="field">
-                                            <input name="title" type="text" :placeholder="strings.formTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
+                                            <input name="title" type="text" :placeholder="strings.formTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid" @keyup.enter.stop.prevent>
                                             <transition name="p-fade">
                                                 <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{strings.formPointingMinimumChars }}</span>
                                             </transition>
