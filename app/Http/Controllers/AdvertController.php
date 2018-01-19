@@ -492,7 +492,7 @@ class AdvertController extends Controller
                     return redirect(route('advert.publish', ['id' =>$advert->id]));
                 } else {
                     LogsUtils::addStoreLog('Redirect to complete account');
-                    return redirect(route('user.completeAccount', ['id' =>$advert->id, 'infoCost' => $cost]));
+                    return redirect(route('user.completeAccount', ['id' =>$advert->id, 'infoCost' => $cost, 'title' => trans('strings.view_user_account_title_from_create_advert') ]));
                 }
             } catch (\Exception $e) {
                 DB::rollback();
@@ -675,7 +675,7 @@ class AdvertController extends Controller
                     $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
                     $advert->save();
                     DB::commit();
-                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isRenew_name'), 'infoCost' => $cost]));
+                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.view_user_account_title_from_create_advert'), 'stepTitle' => trans('strings.option_isRenew_name'), 'infoCost' => $cost]));
                 } else {
                     $this->advertUpdate($advert, Invoice::STATE_RENEW, null);
                     return redirect()->back()->with('success', trans('strings.noPayment_renew_success', ['date' => LocaleUtils::getTransDate($advert->ended_at)]));
@@ -714,7 +714,7 @@ class AdvertController extends Controller
                     $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
                     $advert->save();
                     DB::commit();
-                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isBackToTop_name'), 'infoCost' => $cost]));
+                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.view_user_account_title_from_create_advert'), 'stepTitle' => trans('strings.option_isBackToTop_name'), 'infoCost' => $cost]));
                 } else {
                     $this->advertUpdate($advert, Invoice::STATE_BACKTOTOP, null);
                     return redirect()->back()->with('success', trans('strings.noPayment_backToTop_success'));
@@ -753,7 +753,7 @@ class AdvertController extends Controller
                     $advert->nextUrl = route('advert.reviewForPayment', ['invoiceId' => $invoice->id]);
                     $advert->save();
                     DB::commit();
-                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.option_isHighlight_name'), 'infoCost' => $cost]));
+                    return redirect(route('user.completeAccount', ['id' => $advert->id, 'title' => trans('strings.view_user_account_title_from_create_advert'), 'stepTitle' => trans('strings.option_isHighlight_name'), 'infoCost' => $cost]));
                 } else {
                     $this->advertUpdate($advert, Invoice::STATE_HIGHLIGHT, null);
                     return redirect()->back()->with('success', trans('strings.noPayment_highlight_success'));

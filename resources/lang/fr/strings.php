@@ -188,6 +188,10 @@ return [
     'form_label_message_input' => 'Votre message',
     'form_button_new_password' => 'Valider le nouveau mot de passe',
     'form_button_validation' => 'Soumettre',
+    'form_button_validation2' => 'Etape suivante',
+    'form_button_validation2b' => 'Valider mes informations',
+    'form_button_validation2c' => 'Paiement',
+    'form_button_validation2d' => 'Fin et Publication',
     'form_pointing_minimum_chars' => ' caractères minimum',
     'form_pointing_maximum_chars' => ' caractères maximum',
     'form_input_search_label' => 'Cherchez ...',
@@ -530,6 +534,7 @@ return [
     'view_pagination_next_label' => 'suivante',
 
     'view_user_account_title' => 'Votre compte destockeur ou soldeur pour vente en gros',
+    'view_user_account_title_from_create_advert' => 'Etape 2: Valider vos informations personnelles',
     'view_user_account_register_title' => 'S\'inscrire et vendre vos fins de stocks',
     'view_user_account_login_title' => 'S\'identifier pour vendre ou acheter en gros',
     'view_user_account_preferences_label' => 'Préférences',

@@ -390,7 +390,8 @@
                                         {{ strings.validationButtonLabel }}
                                     </h4>
                                     <div class="field">
-                                        <button type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ strings.validationButtonLabel }}</button>
+                                        <button v-if="isDelegation" type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ strings.validationButtonLabel }}</button>
+                                        <button v-else type="submit" :class="submitEnable ? 'ui blue right labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm" style="line-height: 0.85rem"><i class="right arrow icon"></i>{{ strings.validationButtonLabel2 }}<span style="font-size: 0.85rem; line-height: 0.85rem"><br />({{ strings.validationButtonLabel2b }})</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -541,7 +542,8 @@
                                 {{ strings.validationButtonLabel }}
                             </h4>
                             <div class="field">
-                                <button type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ strings.validationButtonLabel }}</button>
+                                <button v-if="isDelegation" type="submit" :class="submitEnable ? 'ui blue labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm"><i class="save icon"></i>{{ strings.validationButtonLabel }}</button>
+                                <button v-else type="submit" :class="submitEnable ? 'ui blue right labeled icon massive fluid button' : 'ui disabled labeled icon massive fluid button'" v-on:click="submitForm" style="line-height: 0.85rem"><i class="right arrow icon"></i>{{ strings.validationButtonLabel2 }}<span style="font-size: 0.85rem; line-height: 0.85rem"><br />({{ strings.validationButtonLabel2b }})</span></button>
                             </div>
                         </div>
                     </div>

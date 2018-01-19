@@ -2,7 +2,21 @@
     <div class="ui one column grid">
         <template v-if="advertAccountVerifiedStep">
             <div class="column">
-                <h2 class="ui header">{{ strings.contentHeader }}</h2>
+                <div class="ui grid">
+                    <div class="sixteen wide mobile only ten wide tablet only eight wide computer only column">
+                        <h2 class="ui header">
+                            {{ strings.contentHeader }}
+                        </h2>
+                    </div>
+                    <div class="sixteen wide mobile only six wide tablet only four wide computer only column">
+                        <button type="submit" :class="updateFails ? 'ui disabled button' : 'ui right labeled icon primary button'" v-on:click="submitForm">
+                            <i v-if="!updateFails" class="right arrow icon"></i>
+                            {{ updateFails ? strings.formValidationFailsButtonLabel : strings.formValidationButtonLabel }}
+                            <span v-if="parseFloat(this.advertCost) > 0" style="font-size: 0.85rem"><br />({{ strings.formValidationButtonLabelc }})</span>
+                            <span v-else style="font-size: 0.85rem"><br />({{ strings.formValidationButtonLabeld }})</span>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="mobile only tablet only column">
                 <steps-light
@@ -49,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="field">
+                <div class="field" v-if="!advertAccountVerifiedStep">
                     <a class="ui red button" :href="routeChangePassword">{{ strings.passwordChangeLabel }}</a>
                 </div>
                 <template v-if="!advertAccountVerifiedStep">
@@ -118,7 +132,12 @@
                     ></googleMap>
                 </div>
                 <div class="field" v-if="advertAccountVerifiedStep">
-                    <button type="submit" :class="updateFails ? 'ui disabled button' : 'ui primary button'" v-on:click="submitForm">{{ updateFails ? strings.formValidationFailsButtonLabel : strings.formValidationButtonLabel }}</button>
+                    <button type="submit" :class="updateFails ? 'ui disabled massive button' : 'ui right labeled icon primary fluid massive button'" v-on:click="submitForm">
+                        <i v-if="!updateFails" class="right arrow icon"></i>
+                        {{ updateFails ? strings.formValidationFailsButtonLabel : strings.formValidationButtonLabel }}
+                        <span v-if="parseFloat(this.advertCost) > 0" style="font-size: 0.85rem"><br />({{ strings.formValidationButtonLabelc }})</span>
+                        <span v-else style="font-size: 0.85rem"><br />({{ strings.formValidationButtonLabeld }})</span>
+                    </button>
                 </div>
             </div>
         </div>

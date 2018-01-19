@@ -188,6 +188,10 @@ return [
     'form_label_message_input' => 'Your message',
     'form_button_new_password' => 'Valide new password',
     'form_button_validation' => 'Send',
+    'form_button_validation2' => 'Next step',
+    'form_button_validation2b' => 'Informations Validation',
+    'form_button_validation2c' => 'Payment',
+    'form_button_validation2d' => 'End and Publication',
     'form_pointing_minimum_chars' => ' characters minimum',
     'form_pointing_maximum_chars' => ' characters maximum',
     'form_input_search_label' => 'Search issues...',
@@ -530,6 +534,7 @@ return [
     'view_pagination_next_label' => 'next',
 
     'view_user_account_title' => 'Your wholesale account',
+    'view_user_account_title_from_create_advert' => 'Step 2: Validation of my personnal informations',
     'view_user_account_register_title' => 'Register and Sell Your Discontinued Items',
     'view_user_account_login_title' => 'Sign in to sell or buy wholesale',
     'view_user_account_preferences_label' => 'Preferences',

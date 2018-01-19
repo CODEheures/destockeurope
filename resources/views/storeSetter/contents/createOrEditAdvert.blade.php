@@ -19,6 +19,8 @@
                                 'formGooglemapLabel' => trans('strings.form_googlemap_label'),
                                 'formPhotoSeparator' => trans('strings.form_file_add_photo_separator'),
                                 'validationButtonLabel' => trans('strings.form_button_validation'),
+                                'validationButtonLabel2' => trans('strings.form_button_validation2'),
+                                'validationButtonLabel2b' => trans('strings.form_button_validation2b'),
                                 'formPointingMinimumChars' => trans('strings.form_pointing_minimum_chars'),
                                 'formTotalQuantityLabel' => trans('strings.form_quantity_label'),
                                 'formLotMiniQuantityLabel' => trans('strings.form_lot_mini_label'),

@@ -65,6 +65,7 @@ class UserController extends Controller
     public function completeAccount($id, Request $request){
         LogsUtils::addStoreLog('Access complete account', $request);
         $title = $request->filled('title') ? $request->title : null;
+        $stepTitle = $request->filled('stepTitle') ? $request->stepTitle : null;
         $cost = $request->filled('infoCost') ? $request->infoCost : 0;
         $user = $this->auth->user();
         if(!is_null($user->avatar) && filter_var($user->avatar, FILTER_VALIDATE_URL)) {
@@ -79,7 +80,7 @@ class UserController extends Controller
         $advert = Advert::withTrashed()->find($id);
         if($advert && $advert->user->id === $user->id){
             LogsUtils::addStoreLog('Go to view account OK');
-            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title', 'cost', 'routeAvatar'));
+            return view('user.account', compact('user', 'ip', 'geolocType', 'zoomMap', 'advertAccountVerifiedStep', 'advert', 'title', 'stepTitle', 'cost', 'routeAvatar'));
         } else {
             if (!$advert){
                 LogsUtils::addStoreLog('Error advert not exist');
