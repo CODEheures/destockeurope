@@ -17,7 +17,7 @@
 <div class="invoice-title">
     <h2>
         {{ trans('strings.pdf_invoice_payed').' '. \App\Common\LocaleUtils::getTransDate($invoice->created_at) }}
-        <span class="detail">{{ trans('strings.pdf_invoice_transactionId', ['transactionid' => $invoice->transaction_id]) }}</span>
+        <span class="detail">{{ trans('strings.pdf_invoice_transactionId', ['transactionid' => (!is_null($invoice->transaction_id) ? $invoice->transaction_id : $invoice->captureId)]) }}</span>
     </h2>
 </div>
 @if($invoice->refunded)
@@ -26,4 +26,13 @@
         {{ trans('strings.pdf_invoice_refund').' '. \App\Common\LocaleUtils::getTransDate($invoice->updated_at) }}
     </h2>
 </div>
+@endif
+<!-- FOR OLD VERSIONS -->
+@if(!is_null($invoice->refundId))
+    <div class="invoice-title">
+        <h2>
+            {{ trans('strings.pdf_invoice_refund').' '. \App\Common\LocaleUtils::getTransDate($invoice->updated_at) }}
+            <span class="detail">{{ trans('strings.pdf_invoice_transactionId', ['transactionid' => $invoice->refundId]) }}</span>
+        </h2>
+    </div>
 @endif

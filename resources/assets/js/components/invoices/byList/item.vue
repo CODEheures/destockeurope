@@ -10,7 +10,7 @@
             {{ invoice.usermail }}
         </td>
         <td>
-            {{ invoice.transaction_id }}
+            {{ invoice.captureId === null ? invoice.transaction_id : invoice.captureId }}
         </td>
         <td>
             <i v-if="invoice.captured" class="circular check icon"></i>
@@ -22,7 +22,7 @@
             <i v-if="invoice.refunded" class="circular check icon"></i>
         </td>
         <td>
-            <template v-if="invoice.captured">
+            <template v-if="invoice.captured || invoice.captureId !== null">
                 <div class="ui buttons">
                     <a class="ui blue icon button" :href="invoice.url">{{ strings.seeInvoiceLabel }}</a>
                     <div class="or" :data-text="strings.orLabel"></div>
