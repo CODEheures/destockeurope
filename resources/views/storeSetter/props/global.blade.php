@@ -11,7 +11,7 @@
                                 'routeListCurrencies' => route('utils.getListCurrencies'),
                                 'routeListLocales' => route('utils.getListLocales'),
                                 'filterMinLengthSearch' => config('runtime.minLengthSearch'),
-                                'routeFacebookSharer' => $routeName == 'advert.show' ?  route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()])  : '',
+                                'routeFacebookSharer' => $routeName == 'advert.show' ?  route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()])  : route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale()]),
                                 'csrfToken' => csrf_token(),
                                 'withAdsense' => (bool)(env('APP_ADSENSE')),
                                 'defaultUrlImg' => asset('/images/600x600_fail.png'),

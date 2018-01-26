@@ -23,6 +23,15 @@
 {{ trans('strings.app_meta_description_home') }}
 @endif
 @endsection
+@section('opengraph')
+<meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
+<meta property="og:site_name" content="{{ config('app.name') }}">
+<meta property="og:title" content="{{ trans('strings.view_home_title') }}">
+<meta property="og:description" content="{{ trans('strings.app_meta_description_home') }}">
+<meta property="og:image" content="{{ asset('/images/facebookShare2.jpg') }}">
+<meta property="og:url" content="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale()]) }}">
+<meta property="og:type" content="website">
+@endsection
 
 @section('content')
 @include('storeSetter.contents.welcome1')

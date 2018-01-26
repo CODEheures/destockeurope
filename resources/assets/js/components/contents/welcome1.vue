@@ -62,8 +62,13 @@
                     ></advert-filter>
                 </div>
             </div>
-            <div class="sixteen wide column">
-                <h1 class="ui tiny blue header">{{ dataHeader }}</h1>
+            <div class="sixteen wide tablet thirteen wide computer column" style="display: flex; flex-flow: row nowrap; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                <h1 class="ui tiny blue header" style="margin-bottom: 0">{{ dataHeader }}</h1>
+                <div class="fb-share-button"
+                     :data-href="properties.routeFacebookSharer"
+                     data-layout="button"
+                     data-size="large"
+                ></div>
             </div>
             <div class="sixteen wide tablet thirteen wide computer column">
                 <div class="row">
