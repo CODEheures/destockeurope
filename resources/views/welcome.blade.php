@@ -29,6 +29,8 @@
 <meta property="og:title" content="{{ trans('strings.view_home_title') }}">
 <meta property="og:description" content="{{ trans('strings.app_meta_description_home') }}">
 <meta property="og:image" content="{{ asset('/images/facebookShare2.jpg') }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
 <meta property="og:url" content="{{ route('home', ['lang' => \Illuminate\Support\Facades\App::getLocale()]) }}">
 <meta property="og:type" content="website">
 @endsection

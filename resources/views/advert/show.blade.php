@@ -14,6 +14,8 @@
     <meta property="og:title" content="{{ $advert->title . ' ' . ($advert->isNegociated ? trans('strings.view_all_negociate') : (trans('strings.global_for') . ' ' . $advert->price_margin))}}">
     <meta property="og:description" content="{{ $advert->resume }}">
     <meta property="og:image" content="{{ $advert->getMainPictureUrl() }}">
+    <meta property="og:image:width" content="{!! (int)(config('pictures.formats')[0]['width']) !!}">
+    <meta property="og:image:height" content="{!! ((int)(config('pictures.formats')[0]['width']/env('IMAGE_RATIO'))) !!}">
     <meta property="og:url" content="{{ route('advert.show', ['slug' => $advert->slug, 'lang' => \Illuminate\Support\Facades\App::getLocale()]) }}">
     <meta property="og:type" content="product.item">
     <meta property="product:retailer_item_id" content="{{ $advert->user->compagnyName }}">
