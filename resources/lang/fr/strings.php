@@ -742,11 +742,12 @@ return [
     'dashboard_graph_avg_costs_label' => 'Vente moyenne',
     'dashboard_graph_views_title' => 'Total des Vues',
 
-    'country_italy' => 'italie;IT',
-    'country_germany' => 'allemagne;DE',
+    'country_europe' => 'europe;',
     'country_france' => 'france;FR',
-    'country_swiss' => 'suisse;CH',
     'country_belgium' => 'belgique;BE',
+    'country_germany' => 'allemagne;DE',
+    'country_italy' => 'italie;IT',
+    'country_swiss' => 'suisse;CH',
     'country_denmark' => 'danemark;DK',
     'country_netherlands' => 'pays bas;NL',
     'country_ireland' => 'irlande;IE',
@@ -771,7 +772,6 @@ return [
     'country_armenia' => 'arménie;AM',
     'country_bulgaria' => 'bulgarie;BG',
     'country_estonia' => 'estonie;EE',
-    'country_europe' => 'europe;',
 
     'pdf_invoice_vat_number' => 'TVA n°:',
     'pdf_invoice_emission' => 'Emise le',

@@ -90,8 +90,20 @@
     @include('layouts.footer.common')
     <!-- Scripts -->
     <script src="{{ mix("js/manifest.js") }}"></script>
-    <script src="{{ mix("js/vendor.js") }}"></script>
-    <script src="{{ mix("js/app.js") }}"></script>
+    <script type="text/javascript">
+      let vendorScript = document.createElement('script')
+      vendorScript.defer = true
+      vendorScript.async = true
+      vendorScript.setAttribute('src', '{{ mix("js/vendor.js") }}')
+      document.body.appendChild(vendorScript)
+      vendorScript.onload = function () {
+        let appScript = document.createElement('script')
+        appScript.defer = true
+        appScript.async = true
+        appScript.setAttribute('src', '{{ mix("js/app.js") }}')
+        document.body.appendChild(appScript)
+      }
+    </script>
     @yield('scripts')
     @include('includes.structuredDatas.logoLdScript')
     @include('includes.structuredDatas.socialsLdScript')

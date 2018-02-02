@@ -741,11 +741,12 @@ return [
     'dashboard_graph_avg_costs_label' => 'Average Sells',
     'dashboard_graph_views_title' => 'Total Views classified',
 
-    'country_italy' => 'italy;IT',
-    'country_germany' => 'germany;DE',
+    'country_europe' => 'europe;',
     'country_france' => 'france;FR',
-    'country_swiss' => 'swiss;CH',
     'country_belgium' => 'belgium;BE',
+    'country_germany' => 'germany;DE',
+    'country_italy' => 'italy;IT',
+    'country_swiss' => 'swiss;CH',
     'country_denmark' => 'denmark;DK',
     'country_netherlands' => 'netherlands;NL',
     'country_ireland' => 'ireland;IE',
@@ -770,7 +771,6 @@ return [
     'country_armenia' => 'armenia;AM',
     'country_bulgaria' => 'bulgaria;BG',
     'country_estonia' => 'estonia;EE',
-    'country_europe' => 'europe;',
 
     'pdf_invoice_vat_number' => 'VAT n°:',
     'pdf_invoice_emission' => 'Issued on',
