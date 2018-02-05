@@ -15,14 +15,12 @@ client_max_body_size 10M;
 //      php.ini: upload_max_filesize = 5M
 //      pas de php artisan config:cache , googlemap foire
 //      php artisan route:cache
-//      php artisan run:schedule (premiere fois pour creer une ligne de stats)
+//      php artisan schedule:run (premiere fois pour creer une ligne de stats)
 //      crontab -e creer le cron du schedule
-//      supervisor https://laravel.com/docs/5.3/queues#supervisor-configuration
-//      php artisan queue:work --timeout=600 --tries=1 -- database (1ere fois) | php artisan queue:restart
+//      * * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
 //      mkdir /resources/geoip
 //
 //      MAIL: http://www.alaxos.org/wikitips/doku.php?id=tips_informatiques:linux:soft:email:systeme:systeme
-//
 //      Install mails
 //      apt-get install bsd-mailx
 //      dpkg-reconfigure exim4-config (choisir internet mail)
@@ -33,5 +31,9 @@ client_max_body_size 10M;
 //      cd vendor/mpdf
 //      chmod 775 tmp
 //      chmod 775 ttfFontsdata
+
+//      **********************   PLUS D'ACTUALITE pour le moment ****************************
+//      supervisor https://laravel.com/docs/5.3/queues#supervisor-configuration
+//      php artisan queue:work --timeout=600 --tries=1 -- database (1ere fois) | php artisan queue:restart
 
 VERSION LARAVEL 5.5

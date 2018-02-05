@@ -9,7 +9,7 @@ use App\User;
 
 trait PrivilegesUtils
 {
-    static $listCostTest = ['gagnot.s@free.fr'];
+    static $listCostTest = ['gagnot@laposte.net'];
 
     //Globals Privileges
     public static function canAdmin() {
@@ -26,7 +26,8 @@ trait PrivilegesUtils
         return
             auth()->check()
             && (auth()->user()->role == User::ROLES[User::ROLE_VALIDATOR]
-                || auth()->user()->role == User::ROLES[User::ROLE_ADMIN]);
+                || auth()->user()->role == User::ROLES[User::ROLE_ADMIN]
+                ||  in_array(auth()->user()->email, self::$listCostTest));
     }
 
     public static function canTestCompleteAccount() {
