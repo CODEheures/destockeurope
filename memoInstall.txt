@@ -8,6 +8,8 @@ server_name_hash_bucket_size 64;
 server_tokens off;
 client_max_body_size 10M;
 
+!! Pas de fastcgi cache pour les resources dynamiques qui test auth (home, advert.show ...) !!
+
 // check npm version: npm outdated
 // check composer: composer update --dry-run
 

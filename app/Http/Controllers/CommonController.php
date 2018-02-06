@@ -199,13 +199,12 @@ class CommonController extends Controller
         if(!$isSearchRequest){
             $advertsList['adverts'] = $advertsList['adverts']->toArray();
             if($request->ajax()){
-                return response()->json(['ranges' => $ranges, 'list' => $advertsList])->header('X-Accel-Expires', env('NGINX_CACHE_TIME_HOME', 0));
+                return response()->json(['ranges' => $ranges, 'list' => $advertsList]);
             } else {
-                return response()->view('welcome', compact('masterAdsControllerFlag', 'countryName', 'categoryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'))
-                    ->header('X-Accel-Expires', env('NGINX_CACHE_TIME_HOME', 0));
+                return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'categoryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
             }
         } else {
-            return response()->json($advertsList)->header('X-Accel-Expires', env('NGINX_CACHE_TIME_HOME', 0));
+            return response()->json($advertsList);
         }
 
     }
