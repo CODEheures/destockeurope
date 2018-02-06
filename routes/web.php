@@ -169,7 +169,7 @@
         Route::get('/getHighlight/', ['as' => 'advert.getHighlight', 'uses' => 'AdvertController@getHighlight']);
     });
     Route::resource('advert', 'AdvertController', ['except' => ['show']]);
-    Route::get('/{slug}/{lang?}', ['as' => 'advert.show', 'uses' => 'AdvertController@show']);
+    Route::get('/adshow/{slug}/{lang?}', ['as' => 'advert.show', 'uses' => 'AdvertController@show']);
 
     Route::group(['prefix' => 'videos'] , function () {
         Route::put('/ticket', ['as' => 'videos.ticket', 'uses' => 'VideoController@ticket']);
