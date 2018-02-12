@@ -816,6 +816,30 @@ tarteaucitron.services.analytics = {
     }
 };
 
+// google analytics
+tarteaucitron.services.gtag = {
+    "key": "gtag",
+    "type": "analytic",
+    "name": "Google Analytics (gtag.js)",
+    "uri": "https://support.google.com/analytics/answer/6004245",
+    "needConsent": true,
+    "cookies": ['_ga', '_gat', '_gid', '__utma', '__utmb', '__utmc', '__utmt', '__utmz', '_gat_gtag_' + tarteaucitron.user.gtagUa.replace(/-/g, '_')],
+    "js": function () {
+        "use strict";
+        window.dataLayer = window.dataLayer || [];
+        
+        tarteaucitron.addScript('//www.googletagmanager.com/gtag/js?id=' + tarteaucitron.user.gtagUa, '', function () {
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', tarteaucitron.user.gtagUa);
+          
+            if (typeof tarteaucitron.user.gtagMore === 'function') {
+                tarteaucitron.user.gtagMore();
+            }
+        });
+    }
+};
+
 // google maps
 tarteaucitron.services.googlemaps = {
     "key": "googlemaps",
@@ -1632,6 +1656,53 @@ tarteaucitron.services.youtube = {
     }
 };
 
+// youtube playlist
+tarteaucitron.services.youtubeplaylist = {
+    "key": "youtubeplaylist",
+    "type": "video",
+    "name": "YouTube (playlist)",
+    "uri": "https://www.google.fr/intl/fr/policies/privacy/",
+    "needConsent": true,
+    "cookies": ['VISITOR_INFO1_LIVE', 'YSC', 'PREF', 'GEUP'],
+    "js": function () {
+        "use strict";
+        tarteaucitron.fallback(['youtube_playlist_player'], function (x) {
+            var playlist_id = x.getAttribute("playlistID"),
+                video_width = x.getAttribute("width"),
+                frame_width = 'width=',
+                video_height = x.getAttribute("height"),
+                frame_height = 'height=',
+                video_frame,
+                params = 'theme=' + x.getAttribute("theme") + '&rel=' + x.getAttribute("rel") + '&controls=' + x.getAttribute("controls") + '&showinfo=' + x.getAttribute("showinfo") + '&autoplay=' + x.getAttribute("autoplay");
+            
+            if (playlist_id === undefined) {
+                return "";
+            }
+            if (video_width !== undefined) {
+                frame_width += '"' + video_width + '" ';
+            } else {
+                frame_width += '"" ';
+            }
+            if (video_height !== undefined) {
+                frame_height +=  '"' + video_height + '" ';
+            } else {
+                frame_height += '"" ';
+            }
+            video_frame = '<iframe type="text/html" ' + frame_width + frame_height + ' src="//www.youtube-nocookie.com/embed/videoseries?list=' + playlist_id + '&' + params + '" frameborder="0"></iframe>';
+            return video_frame;
+        });
+    },
+    "fallback": function () {
+        "use strict";
+        var id = 'youtubeplaylist';
+        tarteaucitron.fallback(['youtube_playlist_player'], function (elem) {
+            elem.style.width = elem.getAttribute('width') + 'px';
+            elem.style.height = elem.getAttribute('height') + 'px';
+            return tarteaucitron.engage(id);
+        });
+    }
+};
+
 // zopim
 tarteaucitron.services.zopim = {
     "key": "zopim",
@@ -1648,3 +1719,55 @@ tarteaucitron.services.zopim = {
         tarteaucitron.addScript('//v2.zopim.com/?' + tarteaucitron.user.zopimID);
     }
 };
+
+// xiti smartTag
+tarteaucitron.services.xiti_smarttag = {
+    "key": "xiti_smarttag",
+    "type": "analytic",
+    "name": "Xiti (SmartTag)",
+    "uri": "http://www.atinternet.com/politique-du-respect-de-la-vie-privee/",
+    "needConsent": true,
+    "cookies": ["atidvisitor", "atreman", "atredir", "atsession", "atuserid", "attvtreman", "attvtsession"],
+    "js": function () {
+        "use strict";
+        if (tarteaucitron.user.xiti_smarttagLocalPath !== undefined) {
+            tarteaucitron.addScript(tarteaucitron.user.xiti_smarttagLocalPath, 'smarttag', null, null, "onload", "addTracker();");
+        } else {
+            var xitiSmarttagId = tarteaucitron.user.xiti_smarttagSiteId;
+            if (xitiSmarttagId === undefined) {
+                return;
+            }
+
+            tarteaucitron.addScript('//tag.aticdn.net/' + xitiSmarttagId + '/smarttag.js', 'smarttag', null, null, "onload", "addTracker();");
+        }
+    }
+};
+
+// facebook pixel
+tarteaucitron.services.facebookpixel = {
+    "key": "facebookpixel",
+    "type": "ads",
+    "name": "Facebook Pixel",
+    "uri": "https://fr-fr.facebook.com/business/help/www/651294705016616",
+    "needConsent": true,
+    "cookies": ['datr', 'fr', 'reg_ext_ref', 'reg_fb_gate', 'reg_fb_ref', 'sb', 'wd', 'x-src'],
+    "js": function () {
+        "use strict";
+        var n;
+        if(window.fbq)return;
+        n=window.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)} ;
+        if(!window._fbq)window._fbq=n;
+        n.push=n;
+        n.loaded=!0;
+        n.version='2.0';
+        n.queue=[];
+        tarteaucitron.addScript('https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', tarteaucitron.user.facebookpixelId);
+        fbq('track', 'PageView');
+
+        if (typeof tarteaucitron.user.facebookpixelMore === 'function') {
+            tarteaucitron.user.facebookpixelMore();
+        }
+    }
+};
+
