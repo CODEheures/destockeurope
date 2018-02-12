@@ -30,9 +30,9 @@
 
 
     @if(env('APP_ANALYTICS') && (is_null(config('runtime.stopAnalytics')) || config('runtime.stopAnalytics')==false))
-        tarteaucitron.user.analyticsUa = 'UA-98711623-1';
-        tarteaucitron.user.analyticsMore = function () { /* add here your optionnal ga.push() */ };
-        (tarteaucitron.job = tarteaucitron.job || []).push('analytics');
+        tarteaucitron.user.gtagUa = 'UA-98711623-1';
+        tarteaucitron.user.gtagMore = function () { /* add here your optionnal gtag() */ };
+        (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
     @endif
 
 </script>

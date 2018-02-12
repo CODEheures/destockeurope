@@ -15,6 +15,7 @@ client_max_body_size 10M;
 
 //
 //      php.ini: upload_max_filesize = 5M                                => !!!!! service php7.0-fpm restart !!!! <==
+//      max_execution_time = 60
 //      pas de php artisan config:cache , googlemap foire
 //      php artisan route:cache
 //      php artisan schedule:run (premiere fois pour creer une ligne de stats)
