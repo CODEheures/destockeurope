@@ -14,12 +14,12 @@
         "kalnoy/nestedset": "^4.3",
         "intervention/image": "^2.3",
         "iatstuti/laravel-cascade-soft-deletes": "1.*",
-        "vinkla/vimeo": "^3.5",
+        "vimeo/laravel": "^4.0",
         "pragmarx/firewall": "^2.0",
-        "codeheures/laravel-utils": "^1.0",
+        "codeheures/laravel-utils": "^1.2",
         "mpdf/mpdf": "^7.0",
         "sngrl/php-firebase-cloud-messaging": "dev-master",
-        "braintree/braintree_php" : "3.25.0"
+        "braintree/braintree_php" : "3.28.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

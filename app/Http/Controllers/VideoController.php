@@ -6,7 +6,7 @@ use App\Advert;
 use App\Persistent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Vinkla\Vimeo\VimeoManager;
+use Vimeo\Laravel\VimeoManager;
 
 class VideoController extends Controller
 {
@@ -33,18 +33,16 @@ class VideoController extends Controller
             return response(trans('strings.view_all_error_service_unavailable'),503);
         }
 
-        $response = $this->vimeoManager->request('/me/videos', ['type'=>'streaming', 'upgrade_to_1080' => false], 'POST');
-        if($response['status']==201){
+        $response = $this->vimeoManager->request('/me/videos', ['upload'=> ['approach'=>'tus', 'size'=> $size]], 'POST');
+        if($response['status']==200){
             session([
-                'completeVideoUpload' => $response['body']['complete_uri'],
-                'routePutVideo' => $response['body']['upload_link_secure'],
-                'getVideoUploadPerform' => $response['body']['upload_link_secure']
+                'completeVideoUpload' => $response['body']['uri'],
+                'routePatchVideo' => $response['body']['upload']['upload_link'],
             ]);
             return response()->json([
                 'routeCloseTicket' => route('videos.closeTicket'),
-                'completeVideoUpload' => $response['body']['complete_uri'],
-                'routePutVideo' => $response['body']['upload_link_secure'],
-                'getVideoUploadPerform' =>$response['body']['upload_link_secure']
+                'completeVideoUpload' => $response['body']['uri'],
+                'routePatchVideo' => $response['body']['upload']['upload_link'],
             ]);
         } else {
             return response(trans('strings.view_all_error_service_unavailable'),503);
@@ -56,33 +54,27 @@ class VideoController extends Controller
             return response('error',500);
         }
 
-        $response = $this->vimeoManager->request($request->completeVideoUpload, [], 'DELETE');
+        $videoId = str_replace('/videos/', '', $request->completeVideoUpload);
 
-        if(key_exists('Location',$response['headers'])){
-            $videoId = str_replace('/videos/', '', $response['headers']['Location']);
+        session()->forget('completeVideoUpload');
+        session()->forget('routePatchVideo');
+        session(['videoId' => $videoId]);
 
-            session()->forget('completeVideoUpload');
-            session()->forget('routePutVideo');
-            session()->forget('getVideoUploadPerform');
-            session(['videoId' => $videoId]);
+        Persistent::create([
+            'key' => 'videoId',
+            'value' => $videoId
+        ]);
 
-            Persistent::create([
-                'key' => 'videoId',
-                'value' => $videoId
-            ]);
-
-            $this->vimeoManager->request(
-                $response['headers']['Location'],
-                ['privacy' => [
-                    'download'=>false,
-                    'add'=>false,
-                    'comments'=>'nobody',
-                ]],
-                'PATCH'
-            );
-//            $this->vimeoManager->request($response['headers']['location'].'/privacy/domains/destockeurope.dev',[],'PUT');
-        }
-        return response($response['body'], $response['status'], $response['headers']);
+        $this->vimeoManager->request(
+            $request->completeVideoUpload,
+            ['privacy' => [
+                'download'=>false,
+                'add'=>false,
+                'comments'=>'nobody',
+            ]],
+            'PATCH'
+        );
+        return response()->json('ok', 200);
     }
 
     public function delTempoVideo($videoId) {
@@ -111,7 +103,7 @@ class VideoController extends Controller
             return response('error',500);
         } else {
             $response = $this->vimeoManager->request('/me/videos/'.session('videoId'),[],'GET');
-            return response()->json(['status'=>$response['body']['status']]);
+            return response()->json(['status'=>$response['body']['status'],'videoId' => session('videoId')]);
         }
     }
 }

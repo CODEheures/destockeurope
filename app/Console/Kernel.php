@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
             $result1='';
 
             try {
-                $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
+                $vimeoManager = resolve('Vimeo\Laravel\VimeoManager');
                 $advertManager = new AdvertsManager($vimeoManager);
                 $result1 = $advertManager->stopAdverts();
 
@@ -69,7 +69,7 @@ class Kernel extends ConsoleKernel
             $message = Carbon::now()->toDateTimeString();
             $result1 = '';
             try {
-                $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
+                $vimeoManager = resolve('Vimeo\Laravel\VimeoManager');
                 $advertManager = new AdvertsManager($vimeoManager);
                 $result1 = $advertManager->alertWaitingsAdverts();
                 $message = $message . ';' . $result1 .';';
@@ -106,7 +106,7 @@ class Kernel extends ConsoleKernel
                 $statManager = new StatsManager();
                 $statManager->getStats();
 
-                $vimeoManager = resolve('Vinkla\Vimeo\VimeoManager');
+                $vimeoManager = resolve('Vimeo\Laravel\VimeoManager');
                 $advertManager = new AdvertsManager($vimeoManager);
                 $purgeResult = $advertManager->purge();
                 $result3 = $advertManager->alertEndOfAdverts(env('ALERT_BEFORE_END_1'));

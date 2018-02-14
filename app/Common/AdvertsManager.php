@@ -10,7 +10,7 @@ use App\Persistent;
 use App\Picture;
 use App\User;
 use Carbon\Carbon;
-use Vinkla\Vimeo\VimeoManager;
+use Vimeo\Laravel\VimeoManager;
 
 class AdvertsManager
 {

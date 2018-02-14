@@ -16,7 +16,7 @@
             </div>
 
             <div class="sixteen wide column">
-                <form :id="'create_advert_form_'+_uid" class="ui form" :action="routeAdvertFormPost" method="post" @keydown.enter.prevent.stop>
+                <form :id="'create_advert_form_'+_uid" class="ui form" :action="routeAdvertFormPost" method="post">
                     <input type="hidden" name="_token" :value="properties.csrfToken"/>
                     <input v-if="isEditAdvert" type="hidden" name="_method" value="PATCH">
                     <input type="hidden" name="category" :value="categoryId"/>
@@ -64,7 +64,7 @@
                                     </div>
                                     <div :class="!isUrgent ? 'sixteen wide column' : 'fourteen wide column'">
                                         <h4 class="field">
-                                            <input name="title" type="text" :placeholder="strings.formTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid">
+                                            <input name="title" type="text" :placeholder="strings.formTitleLabel" v-model:value="title" :maxlength="formTitleMaxValid" @keydown.enter.prevent.stop>
                                             <transition name="p-fade">
                                                 <span class="ui red pointing basic label notransition" v-show="title.length<formTitleMinValid">{{ formTitleMinValid }}{{strings.formPointingMinimumChars }}</span>
                                             </transition>
@@ -101,7 +101,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="ui fluid input">
-                                                                    <input name="manu_ref" type="text" :placeholder="strings.formRefLabel" v-model:value="manuRef">
+                                                                    <input name="manu_ref" type="text" :placeholder="strings.formRefLabel" v-model:value="manuRef" @keydown.enter.prevent.stop>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -111,7 +111,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="ui fluid input">
-                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" @blur="setMaxLotMini"></number-input>
+                                                                    <number-input name="total_quantity" :min="1" :decimal="0" v-model="totalQuantity" @blur="setMaxLotMini" @keydown.enter.prevent.stop></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -121,7 +121,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="ui fluid input">
-                                                                    <number-input name="lot_mini_quantity" :min="1" :max="maxLotMini" :decimal="0" v-model="lotMiniQuantity"></number-input>
+                                                                    <number-input name="lot_mini_quantity" :min="1" :max="maxLotMini" :decimal="0" v-model="lotMiniQuantity" @keydown.enter.prevent.stop></number-input>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -133,10 +133,10 @@
                                                                 <div v-show="!isNegociated" class="ui blue tag label">
                                                                     <div class="ui right labeled input">
                                                                         <template v-if="isNegociated==0">
-                                                                            <number-input style="width: 90%"  name="price" :min="calcSubUnit" :decimal="subunit" v-model="price"></number-input>
+                                                                            <number-input style="width: 90%"  name="price" :min="calcSubUnit" :decimal="subunit" v-model="price" @keydown.enter.prevent.stop></number-input>
                                                                         </template>
                                                                         <template v-else>
-                                                                            <input  name="" type="number" value="0" disabled/>
+                                                                            <input  name="" type="number" value="0" disabled />
                                                                         </template>
                                                                         <div class="ui basic label">
                                                                             {{ currencySymbol }}
@@ -526,6 +526,8 @@
                                                             <transition name="p-fade">
                                                                 <span class="ui red pointing basic label notransition" v-show="description.length<formDescriptionMinValid">{{ formDescriptionMinValid }}{{strings.formPointingMinimumChars }}</span>
                                                             </transition>
+                                                            <label for="toto">toto</label>
+                                                            <textarea id="toto"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>

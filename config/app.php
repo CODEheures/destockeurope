@@ -166,9 +166,9 @@ return [
          * Package Service Providers...
          */
         Laravel\Socialite\SocialiteServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
-        Vinkla\Vimeo\VimeoServiceProvider::class,
-        Codeheures\LaravelUtils\LaravelUtilsServiceProvider::class,
+        // Intervention\Image\ImageServiceProvider::class,
+        // Vinkla\Vimeo\VimeoServiceProvider::class,
+        // Codeheures\LaravelUtils\LaravelUtilsServiceProvider::class,
         //Barryvdh\Debugbar\ServiceProvider::class,
         //Laravel\Scout\ScoutServiceProvider::class,
 

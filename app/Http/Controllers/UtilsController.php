@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Common\LocaleUtils;
 use App\Common\MoneyUtils;
-use Vinkla\Vimeo\VimeoManager;
+use Vimeo\Laravel\VimeoManager;
 
 class UtilsController extends Controller
 {

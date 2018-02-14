@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Mockery\Exception;
 use Mpdf\Mpdf;
-use Vinkla\Vimeo\VimeoManager;
+use Vimeo\Laravel\VimeoManager;
 use GuzzleHttp\Client as GuzzleClient;
 
 class AdminController extends Controller

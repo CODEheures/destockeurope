@@ -188,18 +188,19 @@
         let that = this
         this.cancelToken = Axios.CancelToken
         this.sourceCancelToken = this.cancelToken.source()
+
         Axios.request({
           cancelToken: that.sourceCancelToken.token,
-          url: routes.routePutVideo,
-          method: 'put',
+          url: routes.routePatchVideo,
+          method: 'patch',
           headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': that.fileToUpload.type,
-            'Content-Range': 'bytes ' + offset + '-' + (that.fileToUpload.size - 1) + '/' + that.fileToUpload.size
+            'Tus-Resumable': '1.0.0',
+            'Content-Type': 'application/offset+octet-stream',
+            'Upload-Offset': offset
           },
-          data: that.videoBlob.slice(offset, that.fileToUpload.size - 1),
+          data: that.videoBlob.slice(offset, that.fileToUpload.size),
           validateStatus (status) {
-            return status >= 200 && status < 400
+            return status === 204
           },
           onUploadProgress (progressEvent) {
             let perform = 100 * (offset + progressEvent.loaded) / progressEvent.total
@@ -210,50 +211,38 @@
           }
         })
           .then(function (response) {
-            if (response.status === 308) {
-              this.retry = this.retry + 1
-              if (this.retry < 10) {
-                setTimeout(function () {
-                  let calcOffset = that.extractPerformUpload(response.headers.range) + 1
-                  this.postVideo(routes, calcOffset)
-                }, this.retry * 1000)
+            if (response.status === 204) {
+              console.log('204', parseInt(response.headers['upload-offset']))
+              if (parseInt(response.headers['upload-offset']) === that.fileToUpload.size) {
+                that.closeTicket(routes.routeCloseTicket, routes.completeVideoUpload)
               }
               else {
-                that.resetUploadVideoState()
-                that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
+                let newOffset = parseInt(response.headers['upload-offset'])
+                that.postVideo(routes, newOffset)
               }
             }
             else {
-              that.closeTicket(routes.routeCloseTicket, routes.completeVideoUpload)
+              console.log('then bizarre', response)
             }
           })
           .catch(function () {
-            that.resetUploadVideoState()
-            that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
-          })
-      },
-      progressPostVideo (routeGetProgress) {
-        let that = this
-        Axios.request({
-          url: routeGetProgress,
-          method: 'put',
-          headers: {
-            'Content-Type': 'bytes */*'
-          },
-          validateStatus (status) {
-            return status === 308
-          }
-        })
-          .then(function (response) {
-            let perform = that.extractPerformUpload(response.headers.range)
-            $('#progress-' + this._uid).progress({
-              total: that.fileToUpload.size,
-              value: perform.toFixed(1)
+            // first get head status
+            Axios.request({
+              url: routes.routePatchVideo,
+              method: 'head',
+              validateStatus (status) {
+                return status === 200
+              }
             })
-            if (perform >= that.fileToUpload.size) {
-            }
-          })
-          .catch(function () {
+              .then(function (response) {
+                if (parseInt(response.headers['upload-offset']) === that.fileToUpload.size) {
+                  that.closeTicket(routes.routeCloseTicket, routes.completeVideoUpload)
+                }
+              })
+              .catch(function() {
+                that.resetUploadVideoState()
+                that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
+              })
           })
       },
       closeTicket (routeCloseTicket, routesCompleteVideoUpload) {
@@ -263,17 +252,12 @@
         Axios.patch(routeCloseTicket, {'completeVideoUpload': routesCompleteVideoUpload})
           .then(function (response) {
             that.onCloseTicket = false
-            let location = response.headers.location
-            that.videoId = location.substr(8)
+            that.videoId = routesCompleteVideoUpload.substr(8)
           })
           .catch(function () {
             that.onCloseTicket = false
             that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
           })
-      },
-      extractPerformUpload (range) {
-        let pos = range.lastIndexOf('-')
-        return parseInt(range.substr(pos + 1))
       },
       cancelUploadVideo () {
         this.sourceCancelToken.cancel()
