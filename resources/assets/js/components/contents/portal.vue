@@ -33,10 +33,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="ui horizontal divider"><h2 class="ui blue disabled sub header" style="font-size: 0.75rem;">{{ strings.divider }}</h2></div>
+                                <div class="ui horizontal divider"><p class="ui blue disabled sub header" style="font-size: 0.75rem;">{{ strings.divider }}</p></div>
                                 <div class="ui centered grid flags">
                                     <template v-for="country, key in dataCountries">
-                                        <h3 class="five wide mobile five wide tablet three wide computer center aligned column ripple-me" style="margin-bottom: 0; margin-top: 0">
+                                        <h2 class="five wide mobile five wide tablet three wide computer center aligned column ripple-me" style="margin-bottom: 0; margin-top: 0">
                                             <a :title="strings.header + ' - ' +  country.name" :href="getNextUrlForCountry('forLocation', country.name)" :data-country="country.code" :data-country-name="country.name" >
                                             <svg v-if="key=='italy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89.89 59.973" style="mix-blend-mode:multiply" :class="browser=='edge' ? 'shadow' : ''">
                                                 <path fill="#FFF" d="M.132 59.922L.083.1 30.018.05H89.79l.05 59.872"/>
@@ -1135,12 +1135,31 @@
                                             </svg>
                                             <span>{{ country.name }}</span>
                                         </a>
-                                        </h3>
+                                        </h2>
                                     </template>
                                 </div>
                             </div>
                             <div class="sixteen wide mobile eight wide tablet six wide computer column">
                                 <div class="ui grid" style="margin-top: 0">
+                                    <div class="sixteen wide column">
+                                        <div class="ui centered grid">
+                                            <template v-if="dataHighlightAdverts.length > 0">
+                                                <div class="sixteen wide column">
+                                                    <advert-highlight
+                                                      :advert="dataHighlightAdverts[0]"
+                                                    ></advert-highlight>
+                                                </div>
+                                            </template>
+
+                                            <template v-else>
+                                                <div class="sixteen wide column">
+                                                    <advert-highlight
+                                                      :advert="dataFakeHighlightAdvert"
+                                                    ></advert-highlight>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
                                     <div class="sixteen wide column">
                                         <div class="ui blue inverted newsletter segment">
                                             <div class="ui top right attached yellow label">{{strings.newsLetterTitle}}</div>
@@ -1186,9 +1205,11 @@
   export default {
     props: [
       'routeSubscribeNewsLetter',
+      'routeGetHighlight',
       'browser',
       'countries',
-      'filterLocationAccurateList'
+      'filterLocationAccurateList',
+      'fakeHighlightAdvert',
     ],
     computed: {
       dataCountries () {
@@ -1202,6 +1223,9 @@
       },
       strings () {
         return this.$store.state.strings['portal']
+      },
+      dataFakeHighlightAdvert () {
+        return JSON.parse(this.fakeHighlightAdvert)
       }
     },
     data () {
@@ -1215,13 +1239,24 @@
         dataEmail: '',
         dataName: '',
         dataPhone: '',
-        nextUrl: ''
+        nextUrl: '',
+        dataHighlightAdverts: []
       }
     },
     mounted () {
       this.nextUrl = this.properties.routeHome
+      this.getHighLightAdvert()
     },
     methods: {
+      getHighLightAdvert () {
+        let that = this
+        Axios.get(this.routeGetHighlight)
+          .then(function (response) {
+            that.dataHighlightAdverts = (response.data).adverts
+          })
+          .catch(function () {
+          })
+      },
       getNextUrl (paramName, paramValue) {
         return DestockTools.getNextUrl(this.nextUrl, paramName, paramValue, true)
       },

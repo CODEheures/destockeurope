@@ -19,9 +19,11 @@
 ></alert-top-fix>
 <portal
     route-subscribe-news-letter="{{ route('subscribeNewsLetter') }}"
+    route-get-highlight="{{ route('advert.getHighlight') }}"
     browser="{{ $browser }}"
     countries="{{ json_encode(\App\Common\LocaleUtils::getListCountries()) }}"
     filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
+    fake-highlight-advert="{{ json_encode(\App\Advert::getFakeAdvert()) }}"
 ></portal>
 @endsection
 

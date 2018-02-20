@@ -239,7 +239,7 @@
                   that.closeTicket(routes.routeCloseTicket, routes.completeVideoUpload)
                 }
               })
-              .catch(function() {
+              .catch(function () {
                 that.resetUploadVideoState()
                 that.$alertV({'message': that.strings.loadErrorMessage, 'type': 'error'})
               })

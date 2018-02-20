@@ -18,3 +18,4 @@
                 ])}}"
 ></store-strings-setter>
 @include('storeSetter.strings.generics.location-filter')
+@include('storeSetter.strings.adverts.advert-highlight')

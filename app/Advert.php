@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Common\CostUtils;
 use App\Common\MoneyUtils;
 use App\Common\PrivilegesUtils;
 use Carbon\Carbon;
@@ -372,6 +373,37 @@ class Advert extends Model {
             $newCoef = (100 - ($this->calcTotalFinalPrice()*100/($this->originalPriceWithMargin*$this->totalQuantity)));
             $this->globalDiscount = number_format($newCoef,2);
         }
+    }
+
+    public static function getFakeAdvert() {
+        $fakeCost = CostUtils::getCostIsHighlight(true);
+
+        $fakeHighlightAdvert = new Advert();
+        $fakeHighlightAdvert->isNegociated = false;
+        $fakeHighlightAdvert->title = trans('strings.view_home_fake_advert_title', ['price' => MoneyUtils::getPriceWithDecimal($fakeCost, 'EUR',true)]);
+        $fakeHighlightAdvert->price = $fakeCost;
+        $fakeHighlightAdvert->currency = 'EUR';
+        $fakeHighlightAdvert->totalQuantity = env('HIGHLIGHT_HOURS_DURATION');
+        $fakeHighlightAdvert->user_id = User::whereRole(User::ROLE_USER)->first()->id;
+        $fakeHighlightAdvert = $fakeHighlightAdvert->toArray();
+
+        $path = 'images/fake_advert_' . App::getLocale() . '.jpg';
+        if(file_exists(__DIR__ . '/../../public/'. $path)){
+            $pic_asset = asset($path);
+        } else {
+            $pic_asset = asset('images/fake_advert_en.jpg');
+        }
+        $fakeHighlightAdvertPicture = new Picture();
+        $fakeHighlightAdvertPicture->thumbUrl = $pic_asset;
+        $fakeHighlightAdvertPicture->normalUrl = $pic_asset;
+
+        $fakeHighlightAdvertPicture = $fakeHighlightAdvertPicture->toArray();
+        $fakeHighlightAdvert['pictures'][] = $fakeHighlightAdvertPicture;
+
+        $fakeHighlightAdvert['price_margin'] = $fakeHighlightAdvert['price'];
+        $fakeHighlightAdvert['url'] = route('mines');
+
+        return $fakeHighlightAdvert;
     }
 
     //Locals Scopes

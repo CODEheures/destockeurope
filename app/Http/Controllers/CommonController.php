@@ -118,33 +118,6 @@ class CommonController extends Controller
     public function home(Request $request) {
         $masterAdsControllerFlag = true;
 
-        $fakeCost = CostUtils::getCostIsHighlight(true);
-
-        $fakeHighlightAdvert = new Advert();
-        $fakeHighlightAdvert->isNegociated = false;
-        $fakeHighlightAdvert->title = trans('strings.view_home_fake_advert_title', ['price' => MoneyUtils::getPriceWithDecimal($fakeCost, 'EUR',true)]);
-        $fakeHighlightAdvert->price = $fakeCost;
-        $fakeHighlightAdvert->currency = 'EUR';
-        $fakeHighlightAdvert->totalQuantity = env('HIGHLIGHT_HOURS_DURATION');
-        $fakeHighlightAdvert->user_id = User::whereRole(User::ROLE_USER)->first()->id;
-        $fakeHighlightAdvert = $fakeHighlightAdvert->toArray();
-
-        $path = 'images/fake_advert_' . App::getLocale() . '.jpg';
-        if(file_exists(__DIR__ . '/../../../public/'. $path)){
-            $pic_asset = asset($path);
-        } else {
-            $pic_asset = asset('images/fake_advert_en.jpg');
-        }
-        $fakeHighlightAdvertPicture = new Picture();
-        $fakeHighlightAdvertPicture->thumbUrl = $pic_asset;
-        $fakeHighlightAdvertPicture->normalUrl = $pic_asset;
-
-        $fakeHighlightAdvertPicture = $fakeHighlightAdvertPicture->toArray();
-        $fakeHighlightAdvert['pictures'][] = $fakeHighlightAdvertPicture;
-
-        $fakeHighlightAdvert['price_margin'] = $fakeHighlightAdvert['price'];
-        $fakeHighlightAdvert['url'] = route('mines');
-
         $location = $request->filled('forLocation') ?  $request->forLocation : null;
 
         $countryName = null;
@@ -201,7 +174,7 @@ class CommonController extends Controller
             if($request->ajax()){
                 return response()->json(['ranges' => $ranges, 'list' => $advertsList]);
             } else {
-                return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'categoryName', 'fakeHighlightAdvert', 'ranges', 'advertsList'));
+                return view('welcome', compact('masterAdsControllerFlag', 'countryName', 'categoryName', 'ranges', 'advertsList'));
             }
         } else {
             return response()->json($advertsList);

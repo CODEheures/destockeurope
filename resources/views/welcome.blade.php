@@ -59,7 +59,7 @@
     masterads-width="{{ filter_var(config('runtime.masterAds'), FILTER_VALIDATE_BOOLEAN) && isset($masterAdsControllerFlag) ? config('runtime.widthUrlMasterAds') : 0 }}"
     filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
     ads-frenquency="{{ config('runtime.adsFrequency') }}"
-    fake-highlight-advert="{{ json_encode($fakeHighlightAdvert) }}"
+    fake-highlight-advert="{{ json_encode(\App\Advert::getFakeAdvert()) }}"
 ></welcome1>
 @endsection
 
