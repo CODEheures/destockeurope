@@ -134,6 +134,7 @@
             'type': 'serial',
             'categoryField': 'date',
             'dataDateFormat': 'YYYY-MM-DD',
+            'pathToImages': '/images/amcharts3/',
             'categoryAxis': {
               'parseDates': true
             },
@@ -197,6 +198,7 @@
           'type': 'serial',
           'categoryField': 'date',
           'dataDateFormat': 'YYYY-MM-DD',
+          'pathToImages': '/images/amcharts3/',
           'categoryAxis': {
             'parseDates': true,
             'gridPosition': 'start'
@@ -250,6 +252,7 @@
           'autoMarginOffset': 20,
           'mouseWheelZoomEnabled': true,
           'dataDateFormat': 'YYYY-MM-DD',
+          'pathToImages': '/images/amcharts3/',
           'valueAxes': [{
             'id': 'v1',
             'axisAlpha': 0,

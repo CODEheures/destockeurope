@@ -1,7 +1,7 @@
 <template>
     <div :id="_uid" class="ui fluid search filter">
         <div :class="!wantSearch ? 'ui fluid action left icon input' : 'ui fluid left icon input'">
-            <i class="marker icon"></i>
+            <i class="map marker alternate icon"></i>
             <input id="filter_location" :class="wantSearch==true ? 'prompt' : 'prompt disabled'" type="text" :placeholder="strings.placeHolder" v-on:autocompletechange="filterChange" :style="withNullBorderRadiusBottom ?  'border-bottom-left-radius: 0; border-bottom-right-radius: 0;':''">
             <button class="ui red icon button" v-if="!wantSearch" v-on:click="resetSearch(true)">
                 <i class="remove icon"></i>

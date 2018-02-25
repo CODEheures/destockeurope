@@ -730,6 +730,31 @@ img.lightbox {
   height: 100%;
 }
 
+#tarteaucitronPersonalize {
+  background: #4596ec !important;
+  border-radius: 10px;
+}
+
+#tarteaucitronAlertBig #tarteaucitronCloseAlert {
+  background: #d1ccb9 !important;
+  color: #ffffff !important;
+  font-size: 17px !important;
+  padding: 5px 10px !important;
+  border-radius: 10px;
+}
+
+#tarteaucitronAllAllowed, .tarteaucitronAllow {
+  background-color: #4596ec !important;
+}
+
+#tarteaucitronAllDenied, .tarteaucitronDeny {
+  background-color: #e52e2f !important;
+}
+
+.tac_activate {
+  background: #32368c !important;
+  border-radius: 5px;
+}
 //gestion masterads
 @media only screen and (min-width: $width-masterads){
   .main.container {

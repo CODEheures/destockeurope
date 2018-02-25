@@ -73,7 +73,7 @@
                                             <div class="card">
                                                 <div class="content">
                                                     <div class="header">
-                                                        <i class="green big protect icon" v-if="advert.user.isSupplier"></i>
+                                                        <i class="green big shield icon" v-if="advert.user.isSupplier"></i>
                                                         {{ advert.user.compagnyName }}
                                                     </div>
                                                 </div>

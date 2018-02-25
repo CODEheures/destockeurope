@@ -22,6 +22,8 @@
    *
    */
   import Player from '@vimeo/player'
+  import Swiper from 'swiper'
+
   export default {
     props: {
       options: {
@@ -53,7 +55,7 @@
     },
     mounted () {
       if (!this.swiper && typeof global.window !== 'undefined') {
-        this.swiper = new window.Swiper(this.$el, this.options)
+        this.swiper = new Swiper(this.$el, this.options)
       }
       this.updateDataPictures()
     },

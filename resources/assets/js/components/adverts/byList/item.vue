@@ -54,12 +54,12 @@
                                     </div>
                                     <div class="twelve wide right aligned column geodate-computer">
                                         <p>
-                                            <i class="green big protect icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>
+                                            <i class="green big shield icon" :title="strings.trustedProviderLabel" v-if="advert.is_delegation"></i>
                                             <i class="yellow big heart icon" v-if="advert.isUserOwner"></i><span v-if="advert.isUserOwner">{{ advert.bookmarkCount }}</span>
-                                            <i class="empty big heart yellow icon" v-on:click.prevent.stop="bookmarkMe" data-stop-ripple :data-id="dataAdvert.id" v-if="!dataAdvert.isUserOwner && !dataAdvert.isUserBookmark"></i>
+                                            <i class="big heart outline yellow icon" v-on:click.prevent.stop="bookmarkMe" data-stop-ripple :data-id="dataAdvert.id" v-if="!dataAdvert.isUserOwner && !dataAdvert.isUserBookmark"></i>
                                             <i class="big heart yellow icon" v-on:click.prevent.stop="unbookmarkMe" data-stop-ripple :data-id="dataAdvert.id" v-if="!dataAdvert.isUserOwner && dataAdvert.isUserBookmark"></i>
                                             <br /><i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
+                                            <i class="calendar alternate outline icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                             <i class="unhide icon"></i><span class="meta">{{ advert.views }}</span>
                                         </p>
                                     </div>
@@ -313,7 +313,7 @@
                             <div class="sixteen wide right aligned column geodate-computer">
                                 <p v-if="advert.isValid">
                                     <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                                    <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
+                                    <i class="calendar alternate outline icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                                 </p>
                             </div>
                         </div>
@@ -385,7 +385,7 @@
                     <div class="sixteen wide right aligned mobile only column geodate-mobile">
                         <p v-if="advert.isValid">
                             <i class="map signs icon"></i><span class="meta">{{ advert.geoloc }}</span>
-                            <i class="calendar icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
+                            <i class="calendar alternate outline icon"></i><span class="meta">{{ getMoment(advert.online_at) }}</span>
                         </p>
                     </div>
                 </div>

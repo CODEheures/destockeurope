@@ -1,6 +1,6 @@
 <template>
     <div :id="_uid" style="width: 100%">
-        <swiper-top class="gallery-top" :style="'height: ' + dataHeightTop + 'px;'"
+        <swiper-top class="gallery-top" :style="'height: ' + dataHeightTop + 'px;'" ref="swiperTop"
                 :options="swiperOptionTop"
                 :video-id="videoId"
                 :pictures="pictures"
@@ -8,7 +8,7 @@
                 :lazy-load="lazyLoad"
                 @openLightBox="$emit('openLightBox', $event)"
         ></swiper-top>
-        <swiper-thumbs class="gallery-thumbs" :style="'height: ' + dataHeightThumb + 'px;'"
+        <swiper-thumbs class="gallery-thumbs" :style="'height: ' + dataHeightThumb + 'px;'" ref="swiperThumbs"
                 :options="swiperOptionThumbs"
                 :video-id="videoId"
                 :pictures="pictures"
@@ -55,14 +55,20 @@
       swiperOptionTop () {
         return {
           name: 'swiperTop',
-          pagination: '.swiper-pagination',
-          nextButton: '.swiper-button-next',
-          prevButton: '.swiper-button-prev',
-          paginationType: 'progress',
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            type: 'progressbar'
+          },
           spaceBetween: 10,
           preloadImages: false,
           // Enable lazy loading
-          lazyLoading: true,
+          lazy: {
+            loadPrevNext: true
+          },
           observer: true,
           zoom: true
         }
@@ -85,12 +91,14 @@
       }
     },
     mounted () {
-      const swiperTop = this.$children.find((children) => children.options.name === 'swiperTop').swiper
-      const swiperThumbs = this.$children.find((children) => children.options.name === 'swiperThumbs').swiper
-      swiperTop.params.control = swiperThumbs
-      swiperThumbs.params.control = swiperTop
       this.dataHeightTop = $('#' + this._uid).width() / this.properties.imageRatio
       this.dataHeightThumb = this.dataHeightTop * 20 / 80
+      this.$nextTick(() => {
+        const swiperTop = this.$refs.swiperTop.swiper
+        const swiperThumbs = this.$refs.swiperThumbs.swiper
+        swiperTop.controller.control = swiperThumbs
+        swiperThumbs.controller.control = swiperTop
+      })
     }
   }
 </script>

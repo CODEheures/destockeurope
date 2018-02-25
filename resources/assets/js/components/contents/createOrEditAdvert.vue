@@ -86,7 +86,7 @@
                                         <div class="sixteen wide right aligned column geodate-computer">
                                             <p>
                                                 <i class="map signs icon"></i><span class="meta">{{ geoloc }}</span>
-                                                <i class="calendar icon"></i><span class="meta">{{ getMoment(Date.now()) }}</span>
+                                                <i class="calendar alternate outline icon"></i><span class="meta">{{ getMoment(Date.now()) }}</span>
                                                 <i class="unhide icon"></i><span class="meta">0</span>
                                             </p>
                                         </div>
@@ -190,7 +190,7 @@
                                             </span>
                                             <span>
                                                 <template v-if="categoryId===undefined || categoryId===null || categoryId ==''">
-                                                    <i class="red alarm outline large icon" :data-content="strings.categoryFieldRequired"></i>
+                                                    <i class="red bell outline large icon" :data-content="strings.categoryFieldRequired"></i>
                                                 </template>
                                                 <template v-else>
                                                     <i class="green checkmark large icon"></i>
@@ -225,7 +225,7 @@
                                     </span>
                                             <span>
                                         <template v-if="pictures.length===0">
-                                        <i class="red alarm outline large icon" :data-content="strings.photoFieldRequired"></i>
+                                        <i class="red bell outline large icon" :data-content="strings.photoFieldRequired"></i>
                                         </template>
                                         <template v-else>
                                             <i class="green checkmark large icon"></i>
@@ -443,7 +443,7 @@
                                         <div class="sixteen wide right aligned column geodate-computer">
                                             <p>
                                                 <i class="map signs icon"></i><span class="meta">{{ geoloc }}</span>
-                                                <i class="calendar icon"></i><span class="meta">{{ getMoment(Date.now()) }}</span>
+                                                <i class="calendar alternate outline icon"></i><span class="meta">{{ getMoment(Date.now()) }}</span>
                                                 <i class="unhide icon"></i><span class="meta">0</span>
                                             </p>
                                         </div>
@@ -813,7 +813,7 @@
         }
       })
       paramsAccordion.accordion('open', 0)
-      $('.red.alarm.outline.large.icon').popup()
+      $('.red.bell.outline.large.icon').popup()
     },
     updated () {
       let that = this

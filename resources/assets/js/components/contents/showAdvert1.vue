@@ -157,7 +157,7 @@
                             <div class="field" v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
                                 <button class="ui basic yellow icon fluid button"
                                     v-on:click="bookmarkMe()">
-                                    <i class="empty heart icon"></i>
+                                    <i class="heart outline icon"></i>
                                     {{ strings.bookmarkLabel }}
                                 </button>
                             </div>
@@ -197,7 +197,7 @@
             <div class="mobile only tablet only sixteen wide center aligned column"  v-if="userName != '' && !isUserOwner && !dataIsUserBookmark">
                 <button class="ui basic yellow icon fluid button"
                         v-on:click="bookmarkMe()">
-                    <i class="empty heart icon"></i>
+                    <i class="heart outline icon"></i>
                     {{ strings.bookmarkLabel }}
                 </button>
             </div>

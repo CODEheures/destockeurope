@@ -47,6 +47,7 @@
    * Events:
    *  @openLightBox: emit when click on image to open a ligthBox
    */
+  import Swiper from 'swiper'
   export default {
     props: {
       options: {
@@ -90,7 +91,7 @@
     },
     mounted () {
       if (!this.swiper && typeof global.window !== 'undefined') {
-        this.swiper = new window.Swiper(this.$el, this.options)
+        this.swiper = new Swiper(this.$el, this.options)
       }
       this.updateDataPictures()
     },
@@ -118,6 +119,9 @@
           })
         }
         this.dataPictures = pictures
+        this.$nextTick(() => {
+          this.swiper.lazy.loadInSlide(0)
+        })
       }
     }
   }

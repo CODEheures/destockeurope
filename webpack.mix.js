@@ -27,6 +27,7 @@ mix// .js('resources/assets/js/sw.js', 'public')
   .copy('resources/assets/pace/pace.min.js', 'public/js/pace.min.js')
   .copy('resources/assets/pace/pace-theme-flash.css', 'public/css/pace-theme.css')
   .copy('resources/assets/mailingResources/', 'public/mailingResources', false)
+  .copy('node_modules/amcharts3/amcharts/images', 'public/images/amcharts3', false)
 
 if (mix.inProduction()) {
   mix.version()

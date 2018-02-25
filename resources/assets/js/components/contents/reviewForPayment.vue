@@ -102,7 +102,7 @@
                                         <label>{{ strings.paymentCardExpirationLabel }}</label>
                                         <div class="ui labeled input braintree">
                                             <div class="ui label">
-                                                <i class="calendar icon"></i>
+                                                <i class="calendar alternate outline icon"></i>
                                             </div>
                                             <div id="expiration-date" class="form-card-control"></div>
                                         </div>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="geoloc" class="ui icon info message" data-lng="" data-lat="" data-geoloc="" v-on:geochange="latLngChange">
-            <i class="marker icon"></i>
+            <i class="map marker alternate icon"></i>
             <div class="content">
                 <div class="header"></div>
                 <p>{{ strings.geolocHelpMsg }}</p>
