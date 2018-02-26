@@ -24,7 +24,7 @@ mix// .js('resources/assets/js/sw.js', 'public')
     }
   })
   .js('resources/assets/js/app.js', 'public/js')
-  .extract(['vue', 'vuex', 'vue-focus', 'lodash', 'moment', 'url', 'axios', 'swiper', '@vimeo/player'])
+  // .extract(['vue', 'vuex', 'vue-focus', 'lodash', 'moment', 'url', 'axios', 'swiper', '@vimeo/player'])
   .sass('resources/assets/sass/pdf.scss', 'public/css')
   .sass('resources/assets/sass/app.scss', 'public/css')
   .combine([

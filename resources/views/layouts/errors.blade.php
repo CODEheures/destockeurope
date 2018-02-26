@@ -72,8 +72,8 @@
 
 <!-- footer -->
 @include('layouts.footer.common')
-<script src="{{ mix("js/manifest.js") }}"></script>
-<script src="{{ mix("js/vendor.js") }}"></script>
+{{--<script src="{{ mix("js/manifest.js") }}"></script>--}}
+{{--<script src="{{ mix("js/vendor.js") }}"></script>--}}
 <script src="{{ mix("js/app.js") }}"></script>
 @include('errors.script')
 @include('includes.structuredDatas.logoLdScript')
