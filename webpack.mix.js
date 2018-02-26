@@ -11,6 +11,18 @@ let mix = require('laravel-mix')
  |
  */
 
+mix.options({
+  uglify: {
+    uglifyOptions: {
+      ie8: false,
+      ecma: 5,
+      mangle: {
+        safari10: true
+      }
+    }
+  }
+})
+
 mix// .js('resources/assets/js/sw.js', 'public')
   .js('resources/assets/js/app.js', 'public/js')
   .extract(['vue', 'vue-focus', 'jquery', 'lodash', 'moment', 'url', 'axios', 'swiper', 'ion-rangeslider', '@vimeo/player', 'amcharts3'])
