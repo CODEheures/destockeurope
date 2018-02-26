@@ -35,6 +35,13 @@
 <meta property="og:type" content="website">
 @endsection
 
+@section('libraries')
+    <!-- ion range slider -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/js/ion.rangeSlider.min.js" integrity="sha256-GGaHen9mYvJ38qyPttMXoqnMfEGpc5QgjPcWp5u4oBM=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.min.css" integrity="sha256-rLxtUobhp345FlKKF5jGqmYe10rPQq7oof6uQbM4bRE=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.skinFlat.min.css" integrity="sha256-Svhn+gXMfPYdonnGxiBD2bzawTxp7l6YgZcozZEsFJ0=" crossorigin="anonymous" />
+@endsection
+
 @section('content')
 @include('storeSetter.contents.welcome1')
 <alert-top-fix

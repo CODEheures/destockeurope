@@ -12,22 +12,31 @@ let mix = require('laravel-mix')
  */
 
 mix// .js('resources/assets/js/sw.js', 'public')
+  .webpackConfig({
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader'
+        }
+      ]
+    }
+  })
   .js('resources/assets/js/app.js', 'public/js')
-  .extract(['vue', 'vue-focus', 'jquery', 'lodash', 'moment', 'url', 'axios', 'swiper', 'ion-rangeslider', '@vimeo/player', 'amcharts3'])
+  .extract(['vue', 'vuex', 'vue-focus', 'lodash', 'moment', 'url', 'axios', 'swiper', '@vimeo/player'])
   .sass('resources/assets/sass/pdf.scss', 'public/css')
   .sass('resources/assets/sass/app.scss', 'public/css')
   .combine([
     'resources/assets/css/motionControlFont.css',
-    'resources/assets/semantic/dist/semantic.min.css',
-    'resources/assets/css/ion.rangeSlider.css',
-    'resources/assets/css/ion.rangeSlider.skinFlat.css',
     'resources/assets/css/swiper.css',
     'resources/assets/ripple/ripple.css'
   ], 'public/css/vendor.css')
   .copy('resources/assets/pace/pace.min.js', 'public/js/pace.min.js')
   .copy('resources/assets/pace/pace-theme-flash.css', 'public/css/pace-theme.css')
-  .copy('resources/assets/mailingResources/', 'public/mailingResources', false)
-  .copy('node_modules/amcharts3/amcharts/images', 'public/images/amcharts3', false)
+  .copy('resources/assets/semantic/dist/semantic.min.js', 'public/js/semantic.min.js')
+  .copy('resources/assets/semantic/dist/semantic.min.css', 'public/css/semantic.min.css')
+  .copy('resources/assets/semantic/dist/themes/', 'public/css/themes', false)
 
 if (mix.inProduction()) {
   mix.version()

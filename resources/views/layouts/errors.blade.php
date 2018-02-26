@@ -7,6 +7,8 @@
     <meta name="description" content="{{ trans('strings.app_meta_description_portal') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    @include('layouts.head.globalLibraries')
+    @yield('libraries')
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">
     @yield('css')

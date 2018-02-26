@@ -15,6 +15,8 @@
     <meta property="og:image" content="{{ \Illuminate\Support\Facades\Request::getFacadeRoot()->url() }}/android-chrome-512x512.png">
     <!-- PACE LOADER -->
     @include('includes.paceLoader.headers')
+    @include('layouts.head.globalLibraries')
+    @yield('libraries')
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix("css/vendor.css") }}">
     <link rel="stylesheet" href="{{ mix("css/app.css") }}">

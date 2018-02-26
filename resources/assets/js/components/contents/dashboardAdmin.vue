@@ -134,7 +134,7 @@
             'type': 'serial',
             'categoryField': 'date',
             'dataDateFormat': 'YYYY-MM-DD',
-            'pathToImages': '/images/amcharts3/',
+            'pathToImages': 'https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.12/images/',
             'categoryAxis': {
               'parseDates': true
             },
@@ -198,7 +198,7 @@
           'type': 'serial',
           'categoryField': 'date',
           'dataDateFormat': 'YYYY-MM-DD',
-          'pathToImages': '/images/amcharts3/',
+          'pathToImages': 'https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.12/images/',
           'categoryAxis': {
             'parseDates': true,
             'gridPosition': 'start'
@@ -252,7 +252,7 @@
           'autoMarginOffset': 20,
           'mouseWheelZoomEnabled': true,
           'dataDateFormat': 'YYYY-MM-DD',
-          'pathToImages': '/images/amcharts3/',
+          'pathToImages': 'https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.12/images/',
           'valueAxes': [{
             'id': 'v1',
             'axisAlpha': 0,
