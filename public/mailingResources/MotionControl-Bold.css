@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'MotionControl-Bold';
+    src: url(https://destockeurope.com/css/fonts/MotionControl-Bold.eot);
+    src: url(https://destockeurope.com/css/fonts/MotionControl-Bold.otf) format('truetype'),
+    url(https://destockeurope.com/css/fonts/MotionControl-Bold.woff) format('woff'),
+    url(https://destockeurope.com/css/fonts/MotionControl-Bold.eot?#iefix) format('embedded-opentype'),
+    url(https://destockeurope.com/css/fonts/MotionControl-Bold.svg) format('svg');
+    font-weight: bold;
+    font-style: normal;
+}

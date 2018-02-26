@@ -16,36 +16,6 @@ body.yellowbg.pushable {
   height: auto !important;
 }
 
-.irs-line-mid,
-.irs-line-left,
-.irs-line-right,
-.irs-bar,
-.irs-bar-edge,
-.irs-slider {
-  background: url(../images/sprite-skin-flat.png) repeat-x;
-}
-
-.irs-line-left {
-  background-position: 0 -30px;
-}
-.irs-line-mid {
-  background-position: 0 0;
-}
-.irs-line-right {
-  background-position: 100% -30px;
-}
-
-.irs-bar {
-  background-position: 0 -60px;
-}
-.irs-bar-edge {
-  background-position: 0 -90px;
-}
-
-.irs-slider {
-  background-position: 0 -120px;
-}
-
 #alert-top-fixed {
   display: block;
   line-height: 1rem;
