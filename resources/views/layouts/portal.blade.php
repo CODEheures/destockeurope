@@ -79,6 +79,7 @@
                             <horizontal-234x60></horizontal-234x60>
                         </div>
                     </div>
+                    @include('includes.alertTopFix')
                     @yield('content')
                 </div>
             </div>

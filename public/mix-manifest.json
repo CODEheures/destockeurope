@@ -1,10 +1,10 @@
 {
-    "/js/app.js": "/js/app.js?id=074516338df105f204fa",
-    "/css/pdf.css": "/css/pdf.css?id=407854f2d830a1e3a669",
-    "/css/app.css": "/css/app.css?id=03f1e616477d4598ce15",
-    "/js/vendor.js": "/js/vendor.js?id=0e4c7734df110b437ffd",
-    "/js/manifest.js": "/js/manifest.js?id=2d315777967b6001bcf1",
-    "/css/vendor.css": "/css/vendor.css?id=579a5c0ed8ac9a5d4eda",
-    "/js/pace.min.js": "/js/pace.min.js?id=24d2d5e3e331c4efa3cd",
-    "/css/pace-theme.css": "/css/pace-theme.css?id=7c4284519e9dec9571a1"
+    "/js/app.js": "/js/app.js",
+    "/css/pdf.css": "/css/pdf.css",
+    "/css/app.css": "/css/app.css",
+    "/js/vendor.js": "/js/vendor.js",
+    "/js/manifest.js": "/js/manifest.js",
+    "/css/vendor.css": "/css/vendor.css",
+    "/js/pace.min.js": "/js/pace.min.js",
+    "/css/pace-theme.css": "/css/pace-theme.css"
 }
