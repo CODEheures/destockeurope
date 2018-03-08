@@ -22,8 +22,11 @@
     <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     @include('includes.destockShareVar.script')
+    @yield('asyncScriptsList')
     @include('includes.serviceWorker.registerWithFirebase')
     @include('layouts.head.cookiesAndServices')
+    @include('includes.structuredDatas.logoLdScript')
+    @include('includes.structuredDatas.socialsLdScript')
     @yield('headscripts')
 </head>
 <body class="yellowbg">
@@ -65,11 +68,6 @@
 
 
     <!-- Scripts -->
-    <script src="{{ mix("js/manifest.js") }}"></script>
-    <script src="{{ mix("js/vendor.js") }}"></script>
-    <script src="{{ mix("js/app.js") }}"></script>
-    @yield('scripts')
-    @include('includes.structuredDatas.logoLdScript')
-    @include('includes.structuredDatas.socialsLdScript')
+    <script src="/js/start.js" async defer></script>
 </body>
 </html>

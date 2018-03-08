@@ -13,7 +13,3 @@
     ></dashboard-admin>
 
 @endsection
-
-@section('scripts')
-
-@endsection

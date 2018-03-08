@@ -35,6 +35,10 @@
 <meta property="og:type" content="website">
 @endsection
 
+@section('asyncScriptsList')
+    @include('plugins.googleMap.autocomplete.script')
+@endsection
+
 @section('content')
 @include('storeSetter.contents.welcome1')
 <welcome1
@@ -55,8 +59,4 @@
     ads-frenquency="{{ config('runtime.adsFrequency') }}"
     fake-highlight-advert="{{ json_encode(\App\Advert::getFakeAdvert()) }}"
 ></welcome1>
-@endsection
-
-@section('scripts')
-@include('plugins.googleMap.autocomplete.script')
 @endsection

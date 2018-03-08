@@ -1,5 +1,8 @@
 @extends('layouts.errors')
 
+@section('asyncScriptsList')
+    @include('errors.script')
+@endsection
 
 @section('icon')
     help

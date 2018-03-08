@@ -4,6 +4,10 @@
 {{ trans('strings.view_user_account_title')  }}
 @endsection
 
+@section('asyncScriptsList')
+    @include('plugins.googleMap.map.script')
+@endsection
+
 @section('content')
    @include('storeSetter.contents.user-account')
     <user-account
@@ -38,8 +42,4 @@
             form-registration-number-max-valid="{{ config('db_limits.users.maxRegistrationNumber') }}"
     ></user-account>
 
-@endsection
-
-@section('scripts')
-    @include('plugins.googleMap.map.script')
 @endsection

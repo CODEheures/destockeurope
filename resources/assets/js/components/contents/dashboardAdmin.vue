@@ -76,6 +76,7 @@
    */
   import moment from 'moment'
   import Axios from 'axios'
+  import { focus } from 'vue-focus'
   export default {
     directives: {focus: focus},
     props: {

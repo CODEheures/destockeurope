@@ -22,8 +22,11 @@
     @include('layouts.favicons.fav')
     <!-- Scripts -->
     @include('includes.destockShareVar.script')
+    @yield('asyncScriptsList')
     @include('includes.serviceWorker.register')
     @include('layouts.head.cookiesAndServices')
+    @include('includes.structuredDatas.logoLdScript')
+    @include('includes.structuredDatas.socialsLdScript')
     @yield('headscripts')
 </head>
 <body class="portal yellowbg">
@@ -90,11 +93,6 @@
     <!-- footer -->
     @include('layouts.footer.common')
     <!-- Scripts -->
-    <script src="{{ mix("js/manifest.js") }}"></script>
-    <script src="{{ mix("js/vendor.js") }}"></script>
-    <script src="{{ mix("js/app.js") }}"></script>
-    @yield('scripts')
-    @include('includes.structuredDatas.logoLdScript')
-    @include('includes.structuredDatas.socialsLdScript')
+    <script src="/js/start.js" async defer></script>
 </body>
 </html>

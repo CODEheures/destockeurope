@@ -4,6 +4,10 @@
 {{ trans('strings.view_advert_create_title')  }}
 @endsection
 
+@section('asyncScriptsList')
+    @include('plugins.googleMap.map.script')
+@endsection
+
 @section('content')
     @include('storeSetter.contents.createOrEditAdvert')
     <create-or-edit-advert-form
@@ -34,8 +38,4 @@
             session-video-id="{{ session()->has('videoId') ? session('videoId') : null }}"
     ></create-or-edit-advert-form>
 
-@endsection
-
-@section('scripts')
-    @include('plugins.googleMap.map.script')
 @endsection

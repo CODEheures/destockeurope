@@ -13,7 +13,10 @@
     @include('layouts.favicons.fav')
     <!-- Scripts -->
     @include('includes.destockShareVar.script')
+    @yield('asyncScriptsList')
     @include('includes.serviceWorker.register')
+    @include('includes.structuredDatas.logoLdScript')
+    @include('includes.structuredDatas.socialsLdScript')
 </head>
 <body class="portal yellowbg">
 <div id="app">
@@ -70,12 +73,7 @@
 
 <!-- footer -->
 @include('layouts.footer.common')
-<script src="{{ mix("js/manifest.js") }}"></script>
-<script src="{{ mix("js/vendor.js") }}"></script>
-<script src="{{ mix("js/app.js") }}"></script>
-@include('errors.script')
-@include('includes.structuredDatas.logoLdScript')
-@include('includes.structuredDatas.socialsLdScript')
+<script src="/js/start.js" async defer></script>
 </body>
 </html>
 

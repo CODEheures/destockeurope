@@ -25,7 +25,10 @@ mix.options({
 
 mix// .js('resources/assets/js/sw.js', 'public')
   .js('resources/assets/js/app.js', 'public/js')
-  .extract(['vue', 'vue-focus', 'jquery', 'lodash', 'moment', 'url', 'axios', 'swiper', 'ion-rangeslider', '@vimeo/player', 'amcharts3'])
+  .extract(['vue', 'vue-focus', 'jquery', 'lodash', 'moment', 'url', 'axios', 'swiper', './resources/assets/semantic/dist/semantic', 'ion-rangeslider', '@vimeo/player', 'amcharts3'])
+  .autoload({
+    jquery: ['$', 'window.jQuery', 'jQuery']
+  })
   .sass('resources/assets/sass/pdf.scss', 'public/css')
   .sass('resources/assets/sass/app.scss', 'public/css')
   .combine([
@@ -36,9 +39,10 @@ mix// .js('resources/assets/js/sw.js', 'public')
     'resources/assets/css/swiper.css',
     'resources/assets/ripple/ripple.css'
   ], 'public/css/vendor.css')
+  .copy('resources/assets/js/start.js', 'public/js')
+  .copy('resources/assets/js/errors.js', 'public/js')
   .copy('resources/assets/pace/pace.min.js', 'public/js/pace.min.js')
   .copy('resources/assets/pace/pace-theme-flash.css', 'public/css/pace-theme.css')
-  .copy('resources/assets/mailingResources/', 'public/mailingResources', false)
   .copy('node_modules/amcharts3/amcharts/images', 'public/images/amcharts3', false)
 
 if (mix.inProduction()) {

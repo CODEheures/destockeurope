@@ -8,6 +8,10 @@
 {{ trans('strings.app_meta_description_portal') }}
 @endsection
 
+@section('asyncScriptsList')
+    @include('plugins.googleMap.autocomplete.script')
+@endsection
+
 @section('content')
 <!-- main page -->
 @include('storeSetter.contents.portal')
@@ -19,8 +23,4 @@
     filter-location-accurate-list="{{ json_encode(\App\Common\GeoManager::$accurate) }}"
     fake-highlight-advert="{{ json_encode(\App\Advert::getFakeAdvert()) }}"
 ></portal>
-@endsection
-
-@section('scripts')
-@include('plugins.googleMap.autocomplete.script')
 @endsection

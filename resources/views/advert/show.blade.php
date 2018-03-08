@@ -8,6 +8,11 @@
 {{ trans('strings.app_meta_description_advert', ['category' => $advert->category->description[\Illuminate\Support\Facades\App::getLocale()], 'title' => $advert->title, 'price' => $advert->price_margin]) }}
 @endsection
 
+@section('headscripts')
+    @include('includes.structuredDatas.productLdScript')
+    @include('includes.structuredDatas.breadcrumbLdScript')
+@endsection
+
 @section('opengraph')
     <meta property="fb:app_id" content="{{ env('FACEBOOK_CLIENT_ID') }}">
     <meta property="og:site_name" content="{{ config('app.name') }}">
@@ -50,9 +55,4 @@
             form-compagny-name-max-valid="{{ config('db_limits.users.maxCompagnyName') }}"
     ></show-advert1>
 
-@endsection
-
-@section('scripts')
-    @include('includes.structuredDatas.productLdScript')
-    @include('includes.structuredDatas.breadcrumbLdScript')
 @endsection

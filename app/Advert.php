@@ -388,7 +388,7 @@ class Advert extends Model {
         $fakeHighlightAdvert = $fakeHighlightAdvert->toArray();
 
         $path = 'images/fake_advert_' . App::getLocale() . '.jpg';
-        if(file_exists(__DIR__ . '/../../public/'. $path)){
+        if(file_exists(__DIR__ . '/../public/'. $path)){
             $pic_asset = asset($path);
         } else {
             $pic_asset = asset('images/fake_advert_en.jpg');

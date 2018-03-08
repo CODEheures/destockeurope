@@ -1,3 +1,5 @@
+window.$ = require('jquery')
+
 // Globals Vars and requires
 import { DestockMap } from './destockMap'
 
@@ -10,8 +12,6 @@ window.initMap = function () {
   window.destockMap = new DestockMap()
 }
 
-window.$ = window.jQuery = require('jquery')
-
 require('../semantic/dist/semantic')
 require('ion-rangeslider')
 require('amcharts3/amcharts/amcharts')
@@ -19,5 +19,5 @@ require('amcharts3/amcharts/gauge')
 require('amcharts3/amcharts/serial')
 require('amcharts3/amcharts/themes/light')
 require('../ripple/ripple')
-require('vue-focus')
+// require('vue-focus')
 require('./myjs')
