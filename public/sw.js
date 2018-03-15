@@ -18,7 +18,7 @@ cloudMessaging.setBackgroundMessageHandler(function (payload) {
   return self.registration.showNotification()
 })
 
-let version = 'v15::'
+let version = 'v16::'
 let myCache = version + 'pages'
 let preCaches = [
   '/js/start.js',
@@ -110,11 +110,14 @@ self.addEventListener('fetch', function (event) {
           ) {
             caches
               .open(myCache)
-              .then(function add (cache) {
+              .then(function (cache) {
                 cache.put(event.request, response.clone())
+                return response
               })
           }
-          return response
+          else {
+            return response
+          }
         }
 
         /* When this method is called, it means we were unable to produce a response
