@@ -18,7 +18,7 @@ cloudMessaging.setBackgroundMessageHandler(function (payload) {
   return self.registration.showNotification()
 })
 
-let version = 'v16::'
+let version = 'v17::'
 let myCache = version + 'pages'
 let preCaches = [
   '/js/start.js',
@@ -95,6 +95,7 @@ self.addEventListener('fetch', function (event) {
         return cached || networked
 
         function fetchedFromNetwork (response) {
+          let cacheCopy = response.clone()
           if (
             event.request.url.indexOf('.css') !== -1 ||
             (event.request.url.indexOf('.js') !== -1 && event.request.url.indexOf('sw.js') === -1) ||
@@ -111,7 +112,7 @@ self.addEventListener('fetch', function (event) {
             caches
               .open(myCache)
               .then(function (cache) {
-                cache.put(event.request, response.clone())
+                cache.put(event.request, cacheCopy)
                 return response
               })
           }
