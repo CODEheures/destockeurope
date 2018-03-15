@@ -18,9 +18,28 @@ cloudMessaging.setBackgroundMessageHandler(function (payload) {
   return self.registration.showNotification()
 })
 
-let version = 'v14::'
+let version = 'v15::'
+let myCache = version + 'pages'
+let preCaches = [
+  '/js/start.js',
+  '/js/manifest.js',
+  '/js/vendor.js',
+  '/js/app.js',
+  '/css/vendor.css',
+  '/css/app.css'
+]
 
+self.addEventListener('install', function (evt) {
+  console.log('The service worker is being installed.')
+
+  evt.waitUntil(caches.open(myCache).then(function (cache) {
+    cache.addAll(preCaches)
+  }))
+})
+
+// Manage cache versions
 self.addEventListener('activate', function activator (event) {
+  // Delete old storage when activate
   event.waitUntil(
     caches.keys().then(function (keys) {
       return Promise.all(keys
@@ -73,46 +92,28 @@ self.addEventListener('fetch', function (event) {
         /* We return the cached response immediately if there is one, and fall
          back to waiting on the network as usual.
          */
-        if (
-          event.request.url.indexOf('.css') !== -1 ||
-          (event.request.url.indexOf('.js') !== -1 && event.request.url.indexOf('sw.js') === -1) ||
-          event.request.url.indexOf('.woff') !== -1 ||
-          event.request.url.indexOf('.woff2') !== -1 ||
-          event.request.url.indexOf('.ttf') !== -1 ||
-          event.request.url.indexOf('.jpg') !== -1 ||
-          event.request.url.indexOf('.png') !== -1 ||
-          event.request.url.indexOf('.svg') !== -1 ||
-          event.request.url.indexOf('.json') !== -1 ||
-          event.request.url.indexOf('/images/') !== -1 ||
-          event.request.url.indexOf('/static') !== -1
-        ) {
-          // console.log('cache first for: ', event.request.url);
-          return cached || networked
-        }
-        else {
-          // console.log('network first for: ', event.request.url);
-          return networked
-        }
-        function fetchedFromNetwork (response) {
-          /* We copy the response before replying to the network request.
-           This is the response that will be stored on the ServiceWorker cache.
-           */
-          let cacheCopy = response.clone()
-          caches
-          // We open a cache to store the response for this request.
-            .open(version + 'pages')
-            .then(function add (cache) {
-              /* We store the response for this request. It'll later become
-               available to caches.match(event.request) calls, when looking
-               for cached responses.
-               */
-              cache.put(event.request, cacheCopy)
-            })
-            .then(function () {
-              // console.log('WORKER: fetch response stored in cache.', event.request.url);
-            })
+        return cached || networked
 
-          // Return the response so that the promise is settled in fulfillment.
+        function fetchedFromNetwork (response) {
+          if (
+            event.request.url.indexOf('.css') !== -1 ||
+            (event.request.url.indexOf('.js') !== -1 && event.request.url.indexOf('sw.js') === -1) ||
+            event.request.url.indexOf('.woff') !== -1 ||
+            event.request.url.indexOf('.woff2') !== -1 ||
+            event.request.url.indexOf('.ttf') !== -1 ||
+            event.request.url.indexOf('.jpg') !== -1 ||
+            event.request.url.indexOf('.png') !== -1 ||
+            event.request.url.indexOf('.svg') !== -1 ||
+            event.request.url.indexOf('.json') !== -1 ||
+            event.request.url.indexOf('/images/') !== -1 ||
+            event.request.url.indexOf('/static') !== -1
+          ) {
+            caches
+              .open(myCache)
+              .then(function add (cache) {
+                cache.put(event.request, response.clone())
+              })
+          }
           return response
         }
 
@@ -137,7 +138,7 @@ self.addEventListener('fetch', function (event) {
           /* Here we're creating a response programmatically. The first parameter is the
            response body, and the second one defines the options for the response.
            */
-          return cached || new Response('<h1>Service Unavailable</h1>', {
+          return cached || new Response('<h1>Network is down</h1>', {
             status: 503,
             statusText: 'Service Unavailable',
             headers: new Headers({
