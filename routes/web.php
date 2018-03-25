@@ -124,6 +124,7 @@
         Route::patch('phone', ['as' => 'user.phone', 'uses' => 'UserController@setPhone']);
         Route::patch('compagny-name', ['as' => 'user.compagnyName', 'uses' => 'UserController@setCompagnyName']);
         Route::patch('registration-number', ['as' => 'user.registrationNumber', 'uses' => 'UserController@setRegistrationNumber']);
+        Route::patch('alerts', ['as' => 'user.alerts', 'uses' => 'UserController@setAlerts']);
     });
 
     //Utils

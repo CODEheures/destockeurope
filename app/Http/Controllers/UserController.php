@@ -105,7 +105,10 @@ class UserController extends Controller
             'lng' => $user->longitude,
             'lat' => $user->latitude,
             'geoloc' => $user->geoloc,
-            'vatIdentifier' => $user->vatIdentifier
+            'vatIdentifier' => $user->vatIdentifier,
+            'alert_before_end_1' => $user->alert_before_end1,
+            'alert_before_end_2' => $user->alert_before_end2,
+            'alert_end' => $user->alert_end
         ]);
     }
 
@@ -259,5 +262,36 @@ class UserController extends Controller
             return response(trans('strings.view_user_account_registration_patch_error'), 409);
         }
 
+    }
+
+    /**
+     * Set the phone User Attribute
+     *
+     * @param UpdatePhoneRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function setAlerts(Request $request) {
+        if ($request->filled('value')
+            && is_array($request->value)
+            && array_key_exists('alertBeforeEnd1', $request->value)
+            && array_key_exists('alertBeforeEnd2', $request->value)
+            && array_key_exists('alertEnd', $request->value)
+            && is_bool($request->value['alertBeforeEnd1'])
+            && is_bool($request->value['alertBeforeEnd2'])
+            && is_bool($request->value['alertEnd'])
+        ) {
+            try {
+                $user = $this->auth->user();
+                $user->alert_before_end1 = $request->value['alertBeforeEnd1'];
+                $user->alert_before_end2 = $request->value['alertBeforeEnd2'];
+                $user->alert_end = $request->value['alertEnd'];
+                $user->save();
+                return response('ok', 200);
+            } catch (\Exception $e) {
+                return response(trans('strings.view_user_account_locale_patch_error'), 409);
+            }
+        } else {
+            return response(trans('strings.view_user_account_locale_patch_error'), 409);
+        }
     }
 }

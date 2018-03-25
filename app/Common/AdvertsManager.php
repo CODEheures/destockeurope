@@ -200,14 +200,21 @@ class AdvertsManager
             $alertEndOfAdverts = $advertZero ? $advertZero : Advert::eligibleForMailRenew($days)->get();
 
             foreach ($alertEndOfAdverts as $advert){
-                $counter++;
+                $user = $advert->user;
+                if (
+                    ($days == env('ALERT_BEFORE_END_1') && $user->alert_before_end1)
+                    || ($days == env('ALERT_BEFORE_END_2') && $user->alert_before_end2)
+                    || ($days == 0 && $user->alert_end)
+                ) {
+                    $counter++;
 
-                config(['runtime.locale' => $advert->user->locale]);
-                $runTimeLocale = \Locale::getPrimaryLanguage(config('runtime.locale'));
-                LocaleUtils::setAppLocale($runTimeLocale);
+                    config(['runtime.locale' => $user->locale]);
+                    $runTimeLocale = \Locale::getPrimaryLanguage(config('runtime.locale'));
+                    LocaleUtils::setAppLocale($runTimeLocale);
 
-                $recipient = $advert->user;
-                $recipient->notify(new AlertObsoleteAdvert($advert, $days));
+                    $recipient = $user;
+                    $recipient->notify(new AlertObsoleteAdvert($advert, $days));
+                }
                 $advert->lastObsoleteMail = $days;
                 $advert->timestamps = false;
                 $advert->save();

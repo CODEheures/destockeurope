@@ -66,27 +66,44 @@
                 <div class="field" v-if="!advertAccountVerifiedStep">
                     <a class="ui red button" :href="routeChangePassword">{{ strings.passwordChangeLabel }}</a>
                 </div>
-                <template v-if="!advertAccountVerifiedStep">
-                    <h4 class="ui horizontal divider header"><i class="options icon"></i> {{ strings.accountPreferencesLabel }} </h4>
-                    <div class="field">
-                        <div class="two fields">
-                            <div class="field">
-                                <h5>{{ strings.localesFirstMenuName }}</h5>
-                                <locales-dropdown-2
-                                        :old-locale="''"
-                                        @localeChoice="localeChoice"
-                                ></locales-dropdown-2>
-                            </div>
-                            <div class="field">
-                                <h5>{{ strings.currenciesFirstMenuName }}</h5>
-                                <currencies-dropdown-2
-                                        :old-currency="''"
-                                        @currencyChoice="currencyChoice($event.cur)"
-                                ></currencies-dropdown-2>
-                            </div>
+                <h4 class="ui horizontal divider header"><i class="options icon"></i> {{ strings.accountPreferencesLabel }} </h4>
+                <div class="field" v-if="!advertAccountVerifiedStep">
+                    <div class="two fields">
+                        <div class="field">
+                            <h5>{{ strings.localesFirstMenuName }}</h5>
+                            <locales-dropdown-2
+                              :old-locale="''"
+                              @localeChoice="localeChoice"
+                            ></locales-dropdown-2>
+                        </div>
+                        <div class="field">
+                            <h5>{{ strings.currenciesFirstMenuName }}</h5>
+                            <currencies-dropdown-2
+                              :old-currency="''"
+                              @currencyChoice="currencyChoice($event.cur)"
+                            ></currencies-dropdown-2>
                         </div>
                     </div>
-                </template>
+                </div>
+                <h5>{{ strings.alertsFirstMenuName }}</h5>
+                <div class="field">
+                    <div :id="'alertBeforeEnd1-'+_uid" class="ui checkbox">
+                        <input type="checkbox" name="alertBeforeEnd1" v-model:value="dataAlertBeforeEnd1" v-on:change="updateAlerts()">
+                        <label>{{ strings.alertBeforeEnd1Label }}</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div :id="'alertBeforeEnd2-'+_uid" class="ui checkbox">
+                        <input type="checkbox" name="alertBeforeEnd2" v-model:value="dataAlertBeforeEnd2" v-on:change="updateAlerts()">
+                        <label>{{ strings.alertBeforeEnd2Label }}</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div :id="'alertEnd-'+_uid" class="ui checkbox">
+                        <input type="checkbox" name="alertEnd" v-model:value="dataAlertEnd" v-on:change="updateAlerts()">
+                        <label>{{ strings.alertEndLabel }}</label>
+                    </div>
+                </div>
                 <h4 class="ui horizontal divider header">
                     <i class="industry icon"></i>
                     {{ strings.compagnyDivider }}
@@ -199,6 +216,7 @@
       'routeAvatar',
       'routeNextUrl',
       'routePrices',
+      'routeUserSetAlerts',
       // vue vars
       'userEmail',
       'userName',
@@ -209,6 +227,9 @@
       'compagnyName',
       'registrationNumber',
       'vatIdentifier',
+      'alertBeforeEnd1',
+      'alertBeforeEnd2',
+      'alertEnd',
       'advertAccountVerifiedStep',
       'advertCost',
       'formPhoneMaxValid',
@@ -241,6 +262,9 @@
         dataCompagnyName: this.compagnyName,
         dataRegistrationNumber: this.registrationNumber,
         dataVatIdentifier: this.vatIdentifier,
+        dataAlertBeforeEnd1: false,
+        dataAlertBeforeEnd2: false,
+        dataAlertEnd: false,
         focused: {},
         blured: {},
         steps: [],
@@ -283,6 +307,9 @@
       sessionStorage.setItem('lng', this.longitude)
       sessionStorage.setItem('geoloc', this.geoloc)
       if (this.firstGeoloc === '1') { this.dataFirstGeoloc = true }
+      if (this.alertBeforeEnd1 === '1') { this.dataAlertBeforeEnd1 = true }
+      if (this.alertBeforeEnd2 === '1') { this.dataAlertBeforeEnd2 = true }
+      if (this.alertEnd === '1') { this.dataAlertEnd = true }
     },
     methods: {
       currencyChoice (cur) {
@@ -360,6 +387,9 @@
         }
         else if (inputName === 'phone') {
           updateRoute = this.routeUserSetPhone
+        }
+        else if (inputName === 'alerts') {
+          updateRoute = this.routeUserSetAlerts
         }
         Axios.patch(updateRoute, {'value': value})
           .then(function (response) {
@@ -452,6 +482,9 @@
         if ($in.input === $out.input && $in.value !== $out.value) {
           this.updateAccount($out.input, $out.value)
         }
+      },
+      updateAlerts () {
+        this.updateAccount('alerts', {'alertBeforeEnd1': this.dataAlertBeforeEnd1, 'alertBeforeEnd2': this.dataAlertBeforeEnd2, 'alertEnd': this.dataAlertEnd})
       }
     }
   }

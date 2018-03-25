@@ -35,7 +35,11 @@
                                 'stepTwoDescription' => trans('strings.view_advert_steps_2_description'),
                                 'stepThreeDescription' => trans('strings.view_advert_steps_3_description'),
                                 'localesFirstMenuName' => trans('strings.view_user_account_locale_dropdown_label'),
-                                'currenciesFirstMenuName' => trans('strings.view_user_account_currency_dropdown_label')
+                                'currenciesFirstMenuName' => trans('strings.view_user_account_currency_dropdown_label'),
+                                'alertsFirstMenuName' => trans('strings.view_user_account_alerts_label'),
+                                'alertBeforeEnd1Label' => trans('strings.view_user_account_alert_before_end1_label'),
+                                'alertBeforeEnd2Label' => trans('strings.view_user_account_alert_before_end2_label'),
+                                'alertEndLabel' => trans('strings.view_user_account_alert_end_label'),
                         ]
                 ])}}"
 ></store-strings-setter>

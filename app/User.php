@@ -49,7 +49,10 @@ class User extends Authenticatable
         'requesterNumber',
         'latitude',
         'longitude',
-        'geoloc'
+        'geoloc',
+        'alert_before_end1',
+        'alert_before_end2',
+        'alert_end'
     ];
 
     /**
@@ -61,6 +64,9 @@ class User extends Authenticatable
     protected $appends = array('isSupplier', 'rolesList', 'urlSetRole', 'urlDelete', 'isRemovable');
     protected $casts = [
         'confirmed' => 'Boolean',
+        'alert_before_end1' => 'Boolean',
+        'alert_before_end2' => 'Boolean',
+        'alert_end' => 'Boolean'
     ];
     protected $hidden = [
         'password', 'remember_token', 'role', 'rolesList', 'urlSetRole'
