@@ -41,6 +41,7 @@ class CommonController extends Controller
             'cgu',
             'diffusionRules',
             'cgv',
+            'policies',
             'help',
             'contact',
             'contactPost',
@@ -266,6 +267,14 @@ class CommonController extends Controller
      */
     public function cgv(){
         return view('global.cgv');
+    }
+
+    /**
+     * Return view of POLICIES
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function policies(){
+        return view('global.policies');
     }
 
     /**

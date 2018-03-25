@@ -10,6 +10,7 @@
                                 'formPasswordLabel' => trans('strings.form_label_password'),
                                 'formPasswordConfirmLabel' => trans('strings.form_label_confimr_password'),
                                 'formCguCheckLabel' => trans('strings.auth_register_cgu_check', ['link' => route('cgu')]),
+                                'formCguCheckLabel2' => trans('strings.auth_register_cgu_check2', ['link2' => route('policies')]),
                                 'formNewsletterCheckLabel' => trans('strings.auth_register_newsletter_check'),
                                 'formButtonLabel' => trans('strings.menu_register'),
                                 'dividerLabel' => trans('strings.divider_register'),

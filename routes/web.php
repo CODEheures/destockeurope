@@ -18,7 +18,7 @@
     Route::get('/main/{lang?}', 'CommonController@main')->name('main');
     Route::get('/home/{lang?}', 'CommonController@home')->name('home');
     Route::post('/subscribeNewsLetter', 'CommonController@subscribeNewsLetter')->name('subscribeNewsLetter');
-    Route::get('/unsubscribeNewsLetter', 'CommonController@getUnsubscribeNewsLetter')->name('unsubscribeNewsLetter');
+    Route::get('/unsubscribeNewsLetter/{lang?}', 'CommonController@getUnsubscribeNewsLetter')->name('unsubscribeNewsLetter');
     Route::post('/unsubscribeNewsLetter', 'CommonController@postUnsubscribeNewsLetter')->name('postUnsubscribeNewsLetter');
     Route::get('/mines', ['as' => 'mines', 'uses' => 'CommonController@mines']);
     Route::get('/bookmarks', ['as' => 'bookmarks', 'uses' => 'CommonController@bookmarks']);
@@ -34,6 +34,7 @@
     Route::get('/cgu/{lang?}', 'CommonController@cgu')->name('cgu');
     Route::get('/diffusionRules/{lang?}', 'CommonController@diffusionRules')->name('diffusionRules');
     Route::get('/cgv/{lang?}', 'CommonController@cgv')->name('cgv');
+    Route::get('/policies/{lang?}', 'CommonController@policies')->name('policies');
 
     Route::get('/help/{lang?}', 'CommonController@help')->name('help');
     Route::get('/contact/{lang?}', 'CommonController@contact')->name('contact');

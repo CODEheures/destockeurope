@@ -9,7 +9,10 @@
                     <div class="required field">
                         <div id="cguCheckBox" class="ui checkbox">
                             <input type="checkbox" name="cgu" autofocus>
-                            <label>{{ dataCguText }} <a :href="dataCguHref" target="_blank">{{ dataCguA }}</a></label>
+                            <label>
+                                {{ dataCguText }} <a :href="dataCguHref" target="_blank">{{ dataCguA }}</a>
+                                {{ dataCguText2 }} <a :href="dataCguHref2" target="_blank">{{ dataCguA2 }}</a>
+                            </label>
                         </div>
                     </div>
                     <div class="field">
@@ -109,6 +112,18 @@
       },
       dataCguHref () {
         let htmlObject = $('<p>' + this.strings.formCguCheckLabel + '</p>')
+        return htmlObject[0].firstElementChild.href
+      },
+      dataCguText2 () {
+        let htmlObject = $('<p>' + this.strings.formCguCheckLabel2 + '</p>')
+        return htmlObject[0].firstChild.data
+      },
+      dataCguA2 () {
+        let htmlObject = $('<p>' + this.strings.formCguCheckLabel2 + '</p>')
+        return htmlObject[0].firstElementChild.innerHTML
+      },
+      dataCguHref2 () {
+        let htmlObject = $('<p>' + this.strings.formCguCheckLabel2 + '</p>')
         return htmlObject[0].firstElementChild.href
       }
     },

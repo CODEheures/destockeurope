@@ -40,8 +40,6 @@
 
                         {!! trans('cg.u.responsabilityDestock') !!}
 
-                        {!! trans('cg.u.cookies') !!}
-
                         {!! trans('cg.u.modification') !!}
 
                         {!! trans('cg.u.juridiction') !!}

@@ -1174,7 +1174,11 @@
                                                 <div class="field">
                                                     <input type="text" name="phone" :placeholder="strings.newsLetterPhonePlaceHolder" v-model="dataPhone">
                                                 </div>
-                                                <button v-on:click.stop.prevent="subscribeNewsletter" class="ui button" type="submit">{{ strings.newsLetterButtonLabel }}</button>
+                                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                                    <button v-on:click.stop.prevent="subscribeNewsletter" class="ui button" type="submit">{{ strings.newsLetterButtonLabel }}</button>
+                                                    <a :href="routeUnsubscribeNewsLetter" style="color: white; align-self: flex-end;">{{ strings.newsLetterUnsubscribeLinkLabel }} </a>
+                                                </div>
+
                                             </form>
                                         </div>
                                     </div>
@@ -1205,6 +1209,7 @@
   export default {
     props: [
       'routeSubscribeNewsLetter',
+      'routeUnsubscribeNewsLetter',
       'routeGetHighlight',
       'browser',
       'countries',

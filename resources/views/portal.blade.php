@@ -17,6 +17,7 @@
 @include('storeSetter.contents.portal')
 <portal
     route-subscribe-news-letter="{{ route('subscribeNewsLetter') }}"
+    route-unsubscribe-news-letter="{{ route('unsubscribeNewsLetter') }}"
     route-get-highlight="{{ route('advert.getHighlight') }}"
     browser="{{ $browser }}"
     countries="{{ json_encode(\App\Common\LocaleUtils::getListCountries()) }}"

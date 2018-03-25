@@ -41,51 +41,51 @@ return [
             <a href="'. route('cgu').'">'. route('cgu').'</a>
         </p>',
 
-    'personnalDatas' => '
-        <h2 class="ui dividing header">Données à caractère personnel</h2>
-        <p>
-            En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6
-            janvier 1978, la loi n° 2004-801 du 6 août 2004, l\'article L. 226-13 du Code pénal et la
-            Directive Européenne du 24 octobre 1995.
-        </p>
-        <p>
-            A l\'occasion de l\'utilisation du Site Internet, peuvent êtres recueillies :
-            l\'URL des liens par l\'intermédiaire desquels l\'utilisateur a accédé au Site
-            Internet, le fournisseur d\'accès de l\'utilisateur, l\'adresse de protocole
-            Internet (IP) de l\'utilisateur.
-        </p>
-        <p>
-            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' garantit que toutes les données à caractère
-            personnel au sens de la loi n°78-17 du 6 janvier 1978 modifiée quelle pourrait
-            collecter dans le cadre de la fourniture du Service
-            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', le sont dans le cadre d\'un traitement
-            strictement nécessaire à la fourniture dudit Service
-            '. env('LEGAL_COMPAGNY_PSEUDONAME'). '.
-        </p>
-        <p>
-            Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978
-            relative à l’informatique, aux fichiers et aux libertés, tout utilisateur dispose d’un droit
-            d’accès, de rectification et d’opposition aux données personnelles le concernant, en
-            effectuant sa demande écrite et signée, accompagnée d’une copie du titre d’identité avec
-            signature du titulaire de la pièce, en précisant l’adresse à laquelle la réponse doit être
-            envoyée.
-        </p>
-        <p>
-            Aucune information personnelle de l\'utilisateur du Site Internet n\'est publiée à
-            l\'insu de l\'utilisateur, échangée, transférée, cédée ou vendue sur un support quelconque à
-            des tiers. Seule l\'hypothèse du rachat de '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' et de ses droits
-            permettrait la transmission des dites informations à l\'éventuel acquéreur qui serait à son
-            tour tenu de la même obligation de conservation et de modification des données vis à vis de
-            l\'utilisateur du Site Internet.
-        </p>
-        <p>
-            Le site susnommé est déclaré à la CNIL sous le numéro '. env('LEGAL_CNIL_NUMBER') .'.
-        </p>
-        <p>
-            Les bases de données sont protégées par les dispositions de la loi du 1er juillet 1998
-            transposant la directive 96/9 du 11 mars 1996 relative à la protection juridique des bases
-            de données.
-        </p>',
+//    'personnalDatas' => '
+//        <h2 class="ui dividing header">Données à caractère personnel</h2>
+//        <p>
+//            En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6
+//            janvier 1978, la loi n° 2004-801 du 6 août 2004, l\'article L. 226-13 du Code pénal et la
+//            Directive Européenne du 24 octobre 1995.
+//        </p>
+//        <p>
+//            A l\'occasion de l\'utilisation du Site Internet, peuvent êtres recueillies :
+//            l\'URL des liens par l\'intermédiaire desquels l\'utilisateur a accédé au Site
+//            Internet, le fournisseur d\'accès de l\'utilisateur, l\'adresse de protocole
+//            Internet (IP) de l\'utilisateur.
+//        </p>
+//        <p>
+//            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' garantit que toutes les données à caractère
+//            personnel au sens de la loi n°78-17 du 6 janvier 1978 modifiée quelle pourrait
+//            collecter dans le cadre de la fourniture du Service
+//            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ', le sont dans le cadre d\'un traitement
+//            strictement nécessaire à la fourniture dudit Service
+//            '. env('LEGAL_COMPAGNY_PSEUDONAME'). '.
+//        </p>
+//        <p>
+//            Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978
+//            relative à l’informatique, aux fichiers et aux libertés, tout utilisateur dispose d’un droit
+//            d’accès, de rectification et d’opposition aux données personnelles le concernant, en
+//            effectuant sa demande écrite et signée, accompagnée d’une copie du titre d’identité avec
+//            signature du titulaire de la pièce, en précisant l’adresse à laquelle la réponse doit être
+//            envoyée.
+//        </p>
+//        <p>
+//            Aucune information personnelle de l\'utilisateur du Site Internet n\'est publiée à
+//            l\'insu de l\'utilisateur, échangée, transférée, cédée ou vendue sur un support quelconque à
+//            des tiers. Seule l\'hypothèse du rachat de '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' et de ses droits
+//            permettrait la transmission des dites informations à l\'éventuel acquéreur qui serait à son
+//            tour tenu de la même obligation de conservation et de modification des données vis à vis de
+//            l\'utilisateur du Site Internet.
+//        </p>
+//        <p>
+//            Le site susnommé est déclaré à la CNIL sous le numéro '. env('LEGAL_CNIL_NUMBER') .'.
+//        </p>
+//        <p>
+//            Les bases de données sont protégées par les dispositions de la loi du 1er juillet 1998
+//            transposant la directive 96/9 du 11 mars 1996 relative à la protection juridique des bases
+//            de données.
+//        </p>',
 
     'contact' => '
         <h2 class="ui dividing header">Nous joindre</h2>

@@ -35,7 +35,8 @@ return [
     'menu_logout' => 'Se déconnecter',
     'menu_register' => 'S\'enregistrer',
     'menu_subscribe' => 'S\'inscrire',
-    'menu_unsubscibeNewsLetter' => 'Se désinscire de la newsletter',
+    'menu_unsubscibeNewsLetter' => 'Se désinscrire de la newsletter',
+    'menu_unsubscibeNewsLetter_short' => 'Se désinscrire',
     'menu_account' => 'Mon compte',
     'menu_category' => 'Catégories',
     'menu_parameters' => 'Paramètres Application',
@@ -264,7 +265,8 @@ return [
     'request_password_confirmed' => 'Votre mot de passe et sa confirmation ne correspondent pas',
     'request_password_min' => 'Votre mot de passe est trop court (minimun :chars caracteres)',
 
-    'auth_register_cgu_check' => 'J`accepte les <a href=":link">Conditions générales d\'utilisation</a>',
+    'auth_register_cgu_check' => 'J\'accepte les <a href=":link">Conditions générales d\'utilisation</a>',
+    'auth_register_cgu_check2' => ' et confirme avoir pris connaissance de notre politique <a href=":link2">vie privée et cookies</a>',
     'auth_register_newsletter_check' => 'Je souhaite recevoir tous les bons plan en m\'inscrivant à la newsletter',
     'auth_register_success' => 'Votre compte est créé. Merci de le valider en cliquant le lien reçu à votre adresse email (Vérifier dans le dossier spam/indésirables si vous ne voyez pas l\'email). ',
     'auth_register_resend_token' => 'Le lien de confirmation de votre email vous a été renvoyé.',
@@ -696,6 +698,7 @@ return [
     'footer_list_7_1' => 'Aide',
     'footer_list_7_2' => 'Nous contacter',
     'footer_list_7_3' => 'Tarifs',
+    'footer_list_7_4' => 'Gerer mes cookies',
 
     'january' => 'janvier',
     'february' => 'fevrier',

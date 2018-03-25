@@ -8,6 +8,7 @@
                                 'newsLetterTitle' => trans('strings.view_portal_newsletter_title'),
                                 'newsLetterDescription' => trans('strings.view_portal_newsletter_description'),
                                 'newsLetterButtonLabel' => trans('strings.menu_subscribe'),
+                                'newsLetterUnsubscribeLinkLabel' => trans('strings.menu_unsubscibeNewsLetter_short'),
                                 'newsLetterEmailPlaceHolder' => trans('strings.form_label_email'),
                                 'newsLetterPhonePlaceHolder' => trans('strings.form_label_phone'),
                                 'newsLetterNamePlaceHolder' => trans('strings.form_label_name'),

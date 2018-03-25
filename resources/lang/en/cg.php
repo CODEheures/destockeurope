@@ -768,26 +768,6 @@ return [
                 to request its agreement on the identity of these third parties.
             </p>',
 
-        'cookies' => '
-            <h2  class="ui dividing header">Article 8: Cookies</h2>
-            <p>
-                Browsing the Website is likely to cause the installation of cookie(s) on the user\'s computer. A cookie 
-                is a small file, which does not allow user identification but records information about a computer\'s 
-                navigation on a site. The data thus obtained are intended to facilitate the subsequent navigation on 
-                the site, and are also intended to permit various measures of attendance.
-            </p>
-            <p>
-                Refusal to install a cookie may result in the inability to access certain services. The user can however
-                 configure his computer as follows, to refuse the installation of cookies:
-            </p>
-            <ul>
-                <li>Under Internet Explorer: tool tab (pictogram in the form of a cog in the top right) / internet options. Click Confidentiality and choose Block All Cookies. Confirm with OK.</li>
-                <li>Under Firefox: At the top of the browser window, click the Firefox button, then go to the Options tab. Click on the Privacy tab. Set the Retention rules to: use the custom settings for the history. Finally uncheck it to disable cookies.</li>
-                <li>Under Safari: Click at the top right of the browser on the menu pictogram (symbolized by a cog). Select Settings. Click Show Advanced Settings. In the "Privacy" section, click Content Settings. In the "Cookies" section, you can block cookies.</li>
-                <li>Under Chrome: Click on the upper right of the browser on the menu pictogram (symbolized by three horizontal lines). Select Settings. Click Show Advanced Settings. In the "Privacy" section, click Preferences. In the "Privacy" tab, you can block cookies.</li>
-            </ul>
-            <p><a href="javascript:tarteaucitron.userInterface.openPanel();">Ccookies Mananger</a></p>',
-
         'modification' => '
             <h2  class="ui dividing header">Article 9: Modification of the service '. env('LEGAL_COMPAGNY_PSEUDONAME').'</h2>
             <p>

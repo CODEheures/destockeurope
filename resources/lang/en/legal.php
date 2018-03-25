@@ -39,42 +39,42 @@ return [
             <a href="'. route('cgu').'">'. route('cgu').'</a>
         </p>',
 
-    'personnalDatas' => '
-        <h2 class="ui dividing header">Personal datas</h2>
-        <p>
-            In France, personal data are protected by Act No. 78-87 of 6 January 1978, Law No. 2004-801 of 6 August 2004
-            , Article L. 226-13 of the Criminal Code and the European 24 October 1995.
-        </p>
-        <p>
-            When using the Website, the following may be collected: the URL of the links through which the user has 
-            accessed the Website, the user\'s access provider, the protocol address (IP) of the user.
-        </p>
-        <p>
-            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' ensures that all personal data within the meaning of Law No 78-17 of 
-            6 January 1978 as amended may be collected in connection with the provision of the Service 
-            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' shall be in the context of a treatment strictly necessary for the 
-            provision of the said Service '. env('LEGAL_COMPAGNY_PSEUDONAME').'.
-        </p>
-        <p>
-            In accordance with the provisions of Article 38 et seq. Of Law 78-17 of 6 January 1978 relating to data 
-            processing, files and freedoms, every user has the right to access, rectify and oppose personal data In 
-            writing and signed, accompanied by a copy of the identity document with the signature of the holder of the 
-            exhibit, specifying the address to which the reply should be sent.
-        </p>
-        <p>
-            No personal information of the user of the Website is published without the knowledge of the user, 
-            exchanged, transferred, transferred or sold on any medium to third parties. Only the assumption of the
-            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' and of its rights would allow the transmission of said information 
-            to the potential purchaser who would in turn be required to keep the data and keep it alive with respect 
-            to the user of the Website.
-        </p>
-        <p>
-            The above-mentioned site is declared to the CNIL under number '. env('LEGAL_CNIL_NUMBER') .'.
-        </p>
-        <p>
-            The databases are protected by the provisions of the law of 1 July 1998 transposing Directive 96/9 of 11 
-            March 1996 on the legal protection of databases.
-        </p>',
+//    'personnalDatas' => '
+//        <h2 class="ui dividing header">Personal datas</h2>
+//        <p>
+//            In France, personal data are protected by Act No. 78-87 of 6 January 1978, Law No. 2004-801 of 6 August 2004
+//            , Article L. 226-13 of the Criminal Code and the European 24 October 1995.
+//        </p>
+//        <p>
+//            When using the Website, the following may be collected: the URL of the links through which the user has
+//            accessed the Website, the user\'s access provider, the protocol address (IP) of the user.
+//        </p>
+//        <p>
+//            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' ensures that all personal data within the meaning of Law No 78-17 of
+//            6 January 1978 as amended may be collected in connection with the provision of the Service
+//            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' shall be in the context of a treatment strictly necessary for the
+//            provision of the said Service '. env('LEGAL_COMPAGNY_PSEUDONAME').'.
+//        </p>
+//        <p>
+//            In accordance with the provisions of Article 38 et seq. Of Law 78-17 of 6 January 1978 relating to data
+//            processing, files and freedoms, every user has the right to access, rectify and oppose personal data In
+//            writing and signed, accompanied by a copy of the identity document with the signature of the holder of the
+//            exhibit, specifying the address to which the reply should be sent.
+//        </p>
+//        <p>
+//            No personal information of the user of the Website is published without the knowledge of the user,
+//            exchanged, transferred, transferred or sold on any medium to third parties. Only the assumption of the
+//            '. env('LEGAL_COMPAGNY_PSEUDONAME'). ' and of its rights would allow the transmission of said information
+//            to the potential purchaser who would in turn be required to keep the data and keep it alive with respect
+//            to the user of the Website.
+//        </p>
+//        <p>
+//            The above-mentioned site is declared to the CNIL under number '. env('LEGAL_CNIL_NUMBER') .'.
+//        </p>
+//        <p>
+//            The databases are protected by the provisions of the law of 1 July 1998 transposing Directive 96/9 of 11
+//            March 1996 on the legal protection of databases.
+//        </p>',
 
     'contact' => '
         <h2 class="ui dividing header">Contact US</h2>

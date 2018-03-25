@@ -71,7 +71,7 @@
                 <a class="item" href="{{ route('cgu') }}">{{ trans('strings.footer_list_6_2') }}</a>
                 <a class="item" href="{{ route('diffusionRules') }}">{{ trans('strings.footer_list_6_3') }}</a>
                 <a class="item" href="{{ route('cgv') }}">{{ trans('strings.footer_list_6_4') }}</a>
-                {{--<a class="item" href="#">{{ trans('strings.footer_list_6_5') }}</a>--}}
+                <a class="item" href="{{ route('policies') }}">{{ trans('strings.footer_list_6_5') }}</a>
                 {{--<a class="item" href="#">{{ trans('strings.footer_list_6_6') }}</a>--}}
             </div>
         </div>
@@ -80,6 +80,7 @@
             <div class="ui link list">
                 <a class="item" href="{{ route('help') }}">{{ trans('strings.footer_list_7_1') }}</a>
                 <a class="item" href="{{ route('contact') }}">{{ trans('strings.footer_list_7_2') }}</a>
+                <a class="item" href="javascript:tarteaucitron.userInterface.openPanel();">{{ trans('strings.footer_list_7_4') }}</a>
                 <a class="item" href="{{ route('prices') }}">{{ trans('strings.footer_list_7_3') }}</a>
             </div>
         </div>

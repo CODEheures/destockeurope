@@ -36,6 +36,7 @@ return [
     'menu_register' => 'Register',
     'menu_subscribe' => 'Subscribe',
     'menu_unsubscibeNewsLetter' => 'Unsubscribe newsletter',
+    'menu_unsubscibeNewsLetter_short' => 'Unsubscribe',
     'menu_account' => 'My account',
     'menu_category' => 'Categories',
     'menu_parameters' => 'Application parameters',
@@ -265,6 +266,7 @@ return [
     'request_password_min' => 'Your password is to short (minimun :chars characters)',
 
     'auth_register_cgu_check' => 'I accept the <a href=":link">General terms of use</a>',
+    'auth_register_cgu_check2' => ' and confirm have read about <a href=":link2">private policie</a>',
     'auth_register_newsletter_check' => 'I would like to receive all the good news by subscribing to the newsletter',
     'auth_register_success' => 'Your account is create. Thank you validate it by clicking the link received in your email address (Check spam directory if you don\'t find it).',
     'auth_register_resend_token' => 'Confirmation link send to your e-mail.',
@@ -695,6 +697,7 @@ return [
     'footer_list_7_1' => 'Help',
     'footer_list_7_2' => 'Contact Us',
     'footer_list_7_3' => 'Prices',
+    'footer_list_7_4' => 'Gerer mes cookies',
 
     'january' => 'january',
     'february' => 'february',
